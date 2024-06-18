@@ -8,14 +8,14 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
+internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
 {
     internal            int                         Count => map.Count;
     private readonly    Dictionary<TValue, IdArray> map;
     private readonly    IdArrayHeap                 arrayHeap;
     
 #region general
-    internal InvertedIndex() {
+    internal HasValueIndex() {
         map         = new Dictionary<TValue, IdArray>(GetEqualityComparer());
         arrayHeap   = new IdArrayHeap();
     }

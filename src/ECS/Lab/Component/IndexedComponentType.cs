@@ -54,7 +54,7 @@ internal readonly struct IndexedComponentType
     
     internal static ComponentIndex CreateInvertedIndex<TValue>()
     {
-        return new InvertedIndex<TValue>();
+        return new HasValueIndex<TValue>();
     }
 }
 

@@ -132,7 +132,7 @@ public static class Test_Lab
     }
     
     /// <summary>
-    /// Cover <see cref="Friflo.Engine.ECS.Index.InvertedIndex{TValue}.Add{TComponent}"/>
+    /// Cover <see cref="HasValueIndex{TValue}.Add{TComponent}"/>
     /// </summary>
     [Test]
     public static void Test_Index_Component_Update()
@@ -220,7 +220,7 @@ public static class Test_Lab
         
         entity.AddComponent(new IndexedName { name = "added" });
         
-        var index = (InvertedIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
+        var index = (HasValueIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
         index.Add(1, new IndexedName { name = "added" });
         AreEqual(1, index.Count);
     }
@@ -230,7 +230,7 @@ public static class Test_Lab
     {
         var world   = new EntityStore();
         
-        var index = (InvertedIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
+        var index = (HasValueIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
         AreEqual(0, index.Count);
         index.RemoveComponentValue(1, "missing");   // add key with default IdArray
         AreEqual(1, index.Count);
