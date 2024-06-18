@@ -41,7 +41,7 @@ internal struct IndexedEntity : IIndexedComponent<Entity> {
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 [SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations")]
-public static class Test_Lab
+public static class Test_Index
 {
     [Test]
     public static void Test_Index_Component_Add_Remove()
@@ -193,6 +193,7 @@ public static class Test_Lab
         
         var target4 = world.CreateEntity(4);
         var target5 = world.CreateEntity(5);
+        var target6 = world.CreateEntity(6);
         
         entity1.AddComponent(new IndexedEntity { entity = target4 });
         entity2.AddComponent(new IndexedEntity { entity = target5 });
@@ -206,10 +207,22 @@ public static class Test_Lab
         AreEqual(new int [] { 1, 2, 3 },    query2.Entities.ToIds());
         
         var references4 = target4.GetForeignEntities<IndexedEntity>();
-        AreEqual(new int [] { 1 },          references4.Ids.ToArray());
+        AreEqual(new int [] { 1       },    references4.Ids.ToArray());
         
         var references5 = target5.GetForeignEntities<IndexedEntity>();
-        AreEqual(new int [] { 2, 3 },       references5.Ids.ToArray());
+        AreEqual(new int [] { 2, 3    },   references5.Ids.ToArray());
+        
+        entity2.AddComponent(new IndexedEntity { entity = target6 });
+        references5 = target5.GetForeignEntities<IndexedEntity>();
+        AreEqual(new int [] { 3       },   references5.Ids.ToArray());
+        
+        entity2.AddComponent(new IndexedEntity { entity = target6 });
+        references5 = target5.GetForeignEntities<IndexedEntity>();
+        AreEqual(new int [] { 3       },   references5.Ids.ToArray());
+        
+        entity3.RemoveComponent<IndexedEntity>();
+        references5 = target5.GetForeignEntities<IndexedEntity>();
+        AreEqual(new int [] {         },   references5.Ids.ToArray());
     }
     
     [Test]
@@ -255,7 +268,7 @@ public static class Test_Lab
     private static GetIndexedValue<T,V> CreateGetValue<T,V>() where T : struct, IComponent
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        var method          = typeof(Test_Lab).GetMethod(nameof(GetIndexedComponentValue), flags);
+        var method          = typeof(Test_Index).GetMethod(nameof(GetIndexedComponentValue), flags);
         var genericMethod   = method!.MakeGenericMethod(typeof(T), typeof(V));
         
         var genericDelegate = Delegate.CreateDelegate(typeof(GetIndexedValue<T,V>), genericMethod);
