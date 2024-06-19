@@ -25,17 +25,17 @@ public struct ComponentWithGenerics : IComponent
 // ------------------------------------------------------------------------------------------------------
 // [Generic components and tags types are not supported and throw exception on usage. · Issue #53]
 // https://github.com/friflo/Friflo.Json.Fliox/issues/53
-[GenericInstanceType(typeof(int))]
+[GenericInstanceType("comp-int", typeof(int))]
 public struct GenericComponent<T> : IComponent {
     public T value;
 }
 
-[GenericInstanceType(typeof(int))]
-[GenericInstanceType(typeof(string))]
+[GenericInstanceType("comp-int",    typeof(int))]
+[GenericInstanceType("comp-string", typeof(string))]
 // ReSharper disable once UnusedTypeParameter
 public struct GenericTag<T> : ITag { }
 
-[GenericInstanceType(typeof(int), typeof(bool))]
+[GenericInstanceType("tag2-bool", typeof(int), typeof(bool))]
 // ReSharper disable twice UnusedTypeParameter
 public struct GenericTag2<T1, T2> : ITag { }
 

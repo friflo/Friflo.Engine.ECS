@@ -37,14 +37,13 @@ public static class Test_Components
             entity.AddComponent(new GenericComponent<long>());    
         });
         var inner = e!.InnerException as InvalidOperationException;
-        AreEqual("Missing attribute [GenericInstanceType(typeof(Int64))] for generic IComponent type: Tests.ECS.GenericComponent`1[System.Int64]", inner!.Message);
-
+        AreEqual("Missing attribute [GenericInstanceType(\"<key>\", typeof(Int64))] for generic IComponent type: Tests.ECS.GenericComponent`1[System.Int64]", inner!.Message);
 
         e = Throws<TypeInitializationException>(() => {
             entity.AddTag<GenericTag2<int, string>>();    
         });
         inner = e!.InnerException as InvalidOperationException;
-        AreEqual("Missing attribute [GenericInstanceType(typeof(Int32), typeof(String))] for generic ITag type: Tests.ECS.GenericTag2`2[System.Int32,System.String]", inner!.Message);
+        AreEqual("Missing attribute [GenericInstanceType(\"<key>\", typeof(Int32), typeof(String))] for generic ITag type: Tests.ECS.GenericTag2`2[System.Int32,System.String]", inner!.Message);
     }
 }
 

@@ -155,34 +155,37 @@ internal sealed class AssemblyLoader
         var types = assembly.GetTypes();
         foreach (var type in types)
         {
-            if (type.IsGenericType) {
-                continue;
-            }
             bool isValueType    = type.IsValueType;
             bool isClass        = type.IsClass;
             if (!isValueType && !isClass) {
                 continue;
             }
-            if (isValueType && typeof(ITag).IsAssignableFrom(type)) {
+            if (type.IsGenericType) continue; // todo remove
+            if (isValueType) {
+                if (typeof(ITag).IsAssignableFrom(type))
+                {
+                    if (type.IsGenericType) {
+                        if (SchemaUtils.GetGenericInstanceTypes(type, out _) == null) {
+                            continue;
+                        }
+                    }
+                    componentTypes.Add(type);
+                    continue;
+                }
+                if (typeof(IComponent).IsAssignableFrom(type)) {
+                    if (type.IsGenericType) {
+                        if (SchemaUtils.GetGenericInstanceTypes(type, out _) == null) {
+                            continue;
+                        }
+                    }
+                    componentTypes.Add(type);
+                    continue;
+                }
+            }
+            if (isClass && type.IsSubclassOf(typeof(Script))) {
                 componentTypes.Add(type);
                 continue;
             }
-            AddComponentType(componentTypes, type);
-        }
-    }
-    
-    private static void AddComponentType(List<Type> componentTypes, Type type)
-    {
-        if (type.IsValueType)
-        {
-            if (typeof(IComponent).IsAssignableFrom(type)) {
-                componentTypes.Add(type);
-            }
-            return;
-        }
-        if (type.IsSubclassOf(typeof(Script)))
-        {
-            componentTypes.Add(type);
         }
     }
 }

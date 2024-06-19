@@ -49,7 +49,7 @@ public sealed class ComponentSymbolAttribute : Attribute {
 
 [AttributeUsage(AttributeTargets.Struct, AllowMultiple = true)]
 public sealed class GenericInstanceTypeAttribute : Attribute {
-    public GenericInstanceTypeAttribute (Type type) { }
-    public GenericInstanceTypeAttribute (Type type1, Type type2) { }
-    public GenericInstanceTypeAttribute (Type type1, Type type2, Type type3) { }
+    public GenericInstanceTypeAttribute (string componentKey, Type type) { }
+    public GenericInstanceTypeAttribute (string componentKey, Type type1, Type type2) { }
+    public GenericInstanceTypeAttribute (string componentKey, Type type1, Type type2, Type type3) { }
 }

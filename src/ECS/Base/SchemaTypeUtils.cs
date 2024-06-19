@@ -50,6 +50,6 @@ internal static class SchemaTypeUtils
             sb.Append(arg.Name);
             sb.Append(')');
         }
-        return new InvalidOperationException($"Missing attribute [GenericInstanceType({sb})] for generic {typeBase} type: {type}");
+        return new InvalidOperationException($"Missing attribute [GenericInstanceType(\"<key>\", {sb})] for generic {typeBase} type: {type}");
     }
 }
