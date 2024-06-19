@@ -43,11 +43,42 @@ public static class Test_Components
         entity.AddTag<GenericTag<int>>();
         IsTrue(entity.Tags.Has<GenericTag<int>>());
         
+        entity.AddTag<GenericTag<string>>();
+        IsTrue(entity.Tags.Has<GenericTag<string>>());
+        
         entity.AddTag<GenericTag2<int,bool>>();
         IsTrue(entity.Tags.Has<GenericTag2<int,bool>>());
         
         entity.AddTag<GenericTag3<int,int,int>>();
         IsTrue(entity.Tags.Has<GenericTag3<int,int,int>>());
+    }
+    
+    [Test]
+    public static void Test_Generic_Component_keys()
+    {
+        var schema  = EntityStore.GetEntitySchema();
+        
+        var componentType = schema.ComponentTypeByType[typeof(GenericComponent<int>)];
+        AreEqual("comp-int", componentType.ComponentKey);
+        
+        componentType = schema.ComponentTypeByType[typeof(GenericComponent<string>)];
+        AreEqual("comp-string", componentType.ComponentKey);
+
+        
+        componentType = schema.ComponentTypeByType[typeof(GenericComponent3<int,int,int>)];
+        AreEqual("comp-3", componentType.ComponentKey);
+        
+        var tagType = schema.TagTypeByType[typeof(GenericTag<int>)];
+        AreEqual("tag-int", tagType.TagName);
+        
+        tagType = schema.TagTypeByType[typeof(GenericTag<string>)];
+        AreEqual("tag-string", tagType.TagName);
+        
+        tagType = schema.TagTypeByType[typeof(GenericTag2<int,bool>)];
+        AreEqual("generic-tag2", tagType.TagName);
+        
+        tagType = schema.TagTypeByType[typeof(GenericTag3<int,int,int>)];
+        AreEqual("generic-tag3", tagType.TagName);
     }
     
     [Test]

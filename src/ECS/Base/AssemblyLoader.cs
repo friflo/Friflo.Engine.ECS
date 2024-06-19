@@ -184,12 +184,11 @@ internal sealed class AssemblyLoader
             componentTypes.Add(type);
             return;
         }
-        var genericTypes = SchemaUtils.GetGenericInstanceTypes(type, out _);
-        if (genericTypes == null) {
-            return;
+        var genericTypes = SchemaUtils.GetGenericInstanceTypes(type);
+        foreach (var genericType in genericTypes) {
+            var genType = type.MakeGenericType(genericType.types);
+            componentTypes.Add(genType);
         }
-        var genType = type.MakeGenericType(genericTypes);
-        componentTypes.Add(genType);
     }
 }
 

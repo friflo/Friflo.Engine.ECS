@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using Friflo.Engine.ECS.Index;
 using Friflo.Json.Fliox.Mapper;
@@ -103,7 +104,13 @@ internal static class SchemaUtils
     internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex)
         where T : struct, IComponent
     {
-        var componentKey = GetComponentKey(typeof(T));
+        string componentKey;
+        var type = typeof(T);
+        if (type.IsGenericType) {
+            componentKey = GetGenericComponentKey(type);
+        } else {
+            componentKey = GetComponentKey(type);
+        }
         return new ComponentType<T>(componentKey, structIndex, typeStore);
     }
     
@@ -126,22 +133,28 @@ internal static class SchemaUtils
         return type.Name;
     }
     
-    internal static Type[] GetGenericInstanceTypes(Type type, out string key)
+    internal static GenericInstanceType[] GetGenericInstanceTypes(Type type)
     {
+        var list = new List<GenericInstanceType>();
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType != typeof(GenericInstanceTypeAttribute)) {
                 continue;
             }
             var args = attr.ConstructorArguments;
-            switch (args.Count) {
-                case 2: key = (string)args[0].Value;    return new [] { (Type)args[1].Value };
-                case 3: key = (string)args[0].Value;    return new [] { (Type)args[1].Value, (Type)args[2].Value };
-                case 4: key = (string)args[0].Value;    return new [] { (Type)args[1].Value, (Type)args[2].Value, (Type)args[3].Value };
-            }
-            key = null;
-            return null;
+            GenericInstanceType.Add(list, args);
         }
-        key = null;
+        return list.ToArray();
+    }
+    
+    private static string GetGenericComponentKey(Type type)
+    {
+        var genericInstanceTypes    = GetGenericInstanceTypes(type);
+        var findTypes               = type.GenericTypeArguments;
+        foreach (var genericType in genericInstanceTypes) {
+            if (findTypes.SequenceEqual(genericType.types)) {
+                return genericType.key;
+            }
+        }
         return null;
     }
     
@@ -202,7 +215,13 @@ internal static class SchemaUtils
     internal static TagType CreateTagType<T>(int tagIndex)
         where T : struct, ITag
     {
-        var tagName = GetTagName(typeof(T));
+        string tagName;
+        var type = typeof(T);
+        if (type.IsGenericType) {
+            tagName = GetGenericComponentKey(type);            
+        } else {
+            tagName = GetTagName(type);
+        }
         return new TagType(tagName, typeof(T), tagIndex);
     }
     
@@ -218,3 +237,23 @@ internal static class SchemaUtils
         return type.Name;
     }    
 }
+
+internal readonly struct GenericInstanceType
+{
+    internal readonly string key;
+    internal readonly Type[] types;
+    
+    private GenericInstanceType(string key, Type[] types) {
+        this.key    = key;
+        this.types  = types;
+    }
+    
+    internal static void Add(List<GenericInstanceType> list, IList<CustomAttributeTypedArgument> args)
+    {
+        switch (args.Count) {
+            case 2: list.Add(new GenericInstanceType((string)args[0].Value, new [] { (Type)args[1].Value                                           })); break;
+            case 3: list.Add(new GenericInstanceType((string)args[0].Value, new [] { (Type)args[1].Value, (Type)args[2].Value                      })); break;
+            case 4: list.Add(new GenericInstanceType((string)args[0].Value, new [] { (Type)args[1].Value, (Type)args[2].Value, (Type)args[3].Value })); break;
+        }
+    }
+} 
