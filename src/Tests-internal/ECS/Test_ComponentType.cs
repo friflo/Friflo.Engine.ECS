@@ -68,6 +68,16 @@ public static class Test_ComponentType
         AreEqual(typeof(TestTag),   types[0].Type);
         AreEqual(typeof(TestTag2),  types[1].Type);
     }
+    
+    [Test]
+    public static void Test_ComponentType_not_found()
+    {
+        var e = SchemaTypeUtils.ComponentTypeException(typeof(int), nameof(IComponent));
+        AreEqual("IComponent type not found: System.Int32", e.Message);
+        
+        IsNull(SchemaUtils.GetGenericComponentKey(typeof(int)));
+    }
+    
 }
 
 }

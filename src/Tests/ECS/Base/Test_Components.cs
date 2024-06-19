@@ -99,6 +99,14 @@ public static class Test_Components
         inner = e!.InnerException as InvalidOperationException;
         AreEqual("Missing attribute [GenericInstanceType(\"<key>\", typeof(Int32), typeof(String))] for generic ITag type: Tests.ECS.GenericTag2`2[System.Int32,System.String]", inner!.Message);
     }
+    
+    [Test]
+    public static void Test_Generic_Component_coverage()
+    {
+        _ = new GenericInstanceTypeAttribute("abc", typeof(int));
+        _ = new GenericInstanceTypeAttribute("abc", typeof(int), typeof(int));
+        _ = new GenericInstanceTypeAttribute("abc", typeof(int), typeof(int), typeof(int));
+    }
 }
 
 }

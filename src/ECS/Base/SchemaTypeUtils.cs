@@ -33,7 +33,7 @@ internal static class SchemaTypeUtils
         return schema.ScriptTypeByType[type].ScriptIndex;
     }
     
-    private static InvalidOperationException ComponentTypeException(Type type, string typeBase)
+    internal static InvalidOperationException ComponentTypeException(Type type, string typeBase)
     {
         if (!type.IsGenericType) {
             return new InvalidOperationException($"{typeBase} type not found: {type}");

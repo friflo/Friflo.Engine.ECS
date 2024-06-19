@@ -146,7 +146,7 @@ internal static class SchemaUtils
         return list.ToArray();
     }
     
-    private static string GetGenericComponentKey(Type type)
+    internal static string GetGenericComponentKey(Type type)
     {
         var genericInstanceTypes    = GetGenericInstanceTypes(type);
         var findTypes               = type.GenericTypeArguments;
@@ -155,7 +155,7 @@ internal static class SchemaUtils
                 return genericType.key;
             }
         }
-        return null;
+        return null; // cannot be reached - only in internal tests
     }
     
     internal static void GetComponentSymbol(Type type, out string name, out SymbolColor? color)

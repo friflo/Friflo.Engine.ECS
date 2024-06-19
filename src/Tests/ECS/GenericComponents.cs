@@ -47,6 +47,7 @@ public struct GenericTag<T> : ITag { }
 [GenericInstanceType("generic-tag2", typeof(int), typeof(bool))]
 public struct GenericTag2<T1, T2> : ITag { }
 
+[CodeCoverageTest]
 [GenericInstanceType("generic-tag3", typeof(int), typeof(int), typeof(int))]
 public struct GenericTag3<T1, T2, T3> : ITag { }
 
