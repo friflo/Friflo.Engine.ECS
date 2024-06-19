@@ -126,6 +126,23 @@ internal static class SchemaUtils
         return type.Name;
     }
     
+    internal static Type[] GetGenericInstanceType(Type type)
+    {
+        foreach (var attr in type.CustomAttributes) {
+            if (attr.AttributeType != typeof(GenericInstanceTypeAttribute)) {
+                continue;
+            }
+            var args = attr.ConstructorArguments;
+            switch (args.Count) {
+                case 1: return new [] { (Type)args[0].Value };
+                case 2: return new [] { (Type)args[0].Value, (Type)args[1].Value };
+                case 3: return new [] { (Type)args[0].Value, (Type)args[1].Value, (Type)args[2].Value };
+            }
+            return null;
+        }
+        return null;
+    }
+    
     internal static void GetComponentSymbol(Type type, out string name, out SymbolColor? color)
     {
         name    = null;

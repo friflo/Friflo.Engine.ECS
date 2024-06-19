@@ -45,3 +45,11 @@ public sealed class ComponentKeyAttribute : Attribute {
 public sealed class ComponentSymbolAttribute : Attribute {
     public ComponentSymbolAttribute (string name, string color = null) { }
 }
+
+
+[AttributeUsage(AttributeTargets.Struct, AllowMultiple = true)]
+public sealed class GenericInstanceTypeAttribute : Attribute {
+    public GenericInstanceTypeAttribute (Type type) { }
+    public GenericInstanceTypeAttribute (Type type1, Type type2) { }
+    public GenericInstanceTypeAttribute (Type type1, Type type2, Type type3) { }
+}
