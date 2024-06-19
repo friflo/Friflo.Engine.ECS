@@ -160,33 +160,36 @@ internal sealed class AssemblyLoader
             if (!isValueType && !isClass) {
                 continue;
             }
-            if (type.IsGenericType) continue; // todo remove
             if (isValueType) {
-                if (typeof(ITag).IsAssignableFrom(type))
-                {
-                    if (type.IsGenericType) {
-                        if (SchemaUtils.GetGenericInstanceTypes(type, out _) == null) {
-                            continue;
-                        }
-                    }
-                    componentTypes.Add(type);
+                if (typeof(ITag).IsAssignableFrom(type)) {
+                    AddType(type, componentTypes);
                     continue;
                 }
                 if (typeof(IComponent).IsAssignableFrom(type)) {
-                    if (type.IsGenericType) {
-                        if (SchemaUtils.GetGenericInstanceTypes(type, out _) == null) {
-                            continue;
-                        }
-                    }
-                    componentTypes.Add(type);
+                    AddType(type, componentTypes);
                     continue;
                 }
             }
             if (isClass && type.IsSubclassOf(typeof(Script))) {
                 componentTypes.Add(type);
-                continue;
             }
         }
+    }
+    
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "Not called for NativeAOT")]
+    private static void AddType(Type type, List<Type> componentTypes)
+    {
+        if (!type.IsGenericType) {
+            componentTypes.Add(type);
+            return;
+        }
+        var genericTypes = SchemaUtils.GetGenericInstanceTypes(type, out _);
+        if (genericTypes == null) {
+            return;
+        }
+        var genType = type.MakeGenericType(genericTypes);
+        componentTypes.Add(genType);
     }
 }
 
