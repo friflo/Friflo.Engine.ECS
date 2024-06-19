@@ -47,11 +47,11 @@ public sealed class ComponentSymbolAttribute : Attribute {
 }
 
 /// <summary>
-/// The attribute is required to register specific type instances of generic component and tags types.<br/>
+/// The attribute is required to register specific type instances of generic component and tags types.
 /// See example in remarks.
 /// </summary>
 /// <remarks>
-/// The following example registers a specific generic component instance <c>GenericComponent&lt;int></c><br/>
+/// The following example registers a specific generic component instance <c>GenericComponent&lt;int></c>.<br/>
 /// The key used for JSON serialization is <c>"comp-int"</c>.
 /// <code>
 ///     [GenericInstanceType("comp-int", typeof(int))] 
@@ -62,7 +62,12 @@ public sealed class ComponentSymbolAttribute : Attribute {
 /// </remarks>
 [AttributeUsage(AttributeTargets.Struct, AllowMultiple = true)]
 public sealed class GenericInstanceTypeAttribute : Attribute {
+    /// <summary> Register generic component / tag type with one generic parameter. </summary>
     public GenericInstanceTypeAttribute (string componentKey, Type type) { }
+    
+    /// <summary> Register generic component / tag type with two generic parameters. </summary>
     public GenericInstanceTypeAttribute (string componentKey, Type type1, Type type2) { }
+    
+    /// <summary> Register generic component / tag type with three generic parameters. </summary>
     public GenericInstanceTypeAttribute (string componentKey, Type type1, Type type2, Type type3) { }
 }
