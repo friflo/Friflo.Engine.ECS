@@ -1,4 +1,5 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
@@ -43,7 +44,7 @@ public static class Test_Entities
         store.CreateEntity(42);
 
         // --- Length: 0
-        var entities0 = new Entities(store, 0);
+        var entities0 = new Entities(store);
         AreEqual("Entity[0]", entities0.ToString());
         AreEqual(0,     entities0.Count);
         AreEqual(0,     entities0.Count);
@@ -60,6 +61,7 @@ public static class Test_Entities
         AreEqual("Entity[1]", entities1.ToString());
         AreEqual(1, entities1.Count);
         AreEqual(1,     entities1.Count);
+        AreSame (store, entities1.EntityStore);
         AreSame (store, entities1[0].Store);
         AreEqual(42,    entities1[0].Id);
         
@@ -75,6 +77,7 @@ public static class Test_Entities
         AreEqual("Entity[2]", entities2.ToString());
         AreEqual(2, entities2.Count);
         AreEqual(2,     entities2.Count);
+        
         AreSame (store, entities2[0].Store);
         AreEqual(1,     entities2[0].Id);
         AreEqual(2,     entities2[1].Id);
@@ -87,6 +90,30 @@ public static class Test_Entities
             }
         }
         AreEqual(2, count);
+    }
+    
+    [Test]
+    public static void Test_Entities_exceptions()
+    {
+        var store = new EntityStore();
+        
+        var entities = new Entities(store);
+        Throws<IndexOutOfRangeException>(() => {
+            _ = entities[-1];
+        });
+        
+        Throws<IndexOutOfRangeException>(() => {
+            _ = entities[0];
+        });
+        
+        entities = new Entities(store, 42);
+        Throws<IndexOutOfRangeException>(() => {
+            _ = entities[1];
+        });
+        
+        Throws<InvalidOperationException>(() => {
+            _ = new Entities(store, null, 0, 0);
+        });
     }
 }
 

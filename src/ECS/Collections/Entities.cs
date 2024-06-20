@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -18,7 +19,7 @@ public struct Entities : IReadOnlyList<Entity>
 #region properties
     public              int                 Count       => count;
     public              EntityStore         EntityStore => store;
-    public              ReadOnlySpan<int>   Ids         => id == 0 ? new ReadOnlySpan<int>(ids, start, count) : MemoryMarshal.CreateReadOnlySpan(ref id, 1);
+    public              ReadOnlySpan<int>   Ids         => ids != null ? new ReadOnlySpan<int>(ids, start, count) : MemoryMarshal.CreateReadOnlySpan(ref id, 1);
     
     public   override   string              ToString()  => $"Entity[{count}]";
     #endregion
@@ -33,23 +34,30 @@ public struct Entities : IReadOnlyList<Entity>
     
 #region general
     internal Entities(EntityStore store, int[] ids, int start, int count) {
-        this.ids    = ids;
+        this.ids    = ids ?? throw new InvalidOperationException("expect ids != null");
         this.store  = store;
         this.start  = start;
         this.count  = count;
     }
     
+    internal Entities(EntityStore store) {
+        ids         = Array.Empty<int>();
+        this.store  = store;
+    }
+    
     internal Entities(EntityStore store, int id) {
         this.store  = store;
         this.id     = id;
-        count       = id == 0 ? 0 : 1;
+        count       = 1;
     }
     
     public Entity this[int index] {
         get {
-            if (id == 0) {
+            if (ids != null) {
                 return new Entity(store, ids[start + index]);
             }
+            // case: count == 1
+            if (index != 0) throw new IndexOutOfRangeException();
             return new Entity(store, id);
         }
     }
@@ -89,9 +97,9 @@ public struct EntityEnumerator : IEnumerator<Entity>
     // --- IEnumerator
     public          void         Reset()    => index = start;
 
-    readonly object  IEnumerator.Current    => new Entity(store, id == 0 ? ids[index] : id);
+    readonly object  IEnumerator.Current    => new Entity(store, ids != null ? ids[index] : id);
 
-    public   Entity              Current    => new Entity(store, id == 0 ? ids[index] : id);
+    public   Entity              Current    => new Entity(store, ids != null ? ids[index] : id);
     
     // --- IEnumerator
     public bool MoveNext()

@@ -36,7 +36,7 @@ internal sealed class IdArrayHeap
     {
         var count = array.count;
         switch (count) {
-            case 0: return  new Entities(store, 0);
+            case 0: return  new Entities(store);
             case 1: return  new Entities(store, array.start);
         }
         var curPoolIndex  = PoolIndex(count);
