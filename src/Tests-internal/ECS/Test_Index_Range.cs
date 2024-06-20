@@ -153,8 +153,6 @@ public static class Test_Index_Range
         SortedListUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
         AreEqual(0, map.Count);
     }
-    
-    
 }
 
 }

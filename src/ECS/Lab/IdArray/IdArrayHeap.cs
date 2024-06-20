@@ -4,22 +4,27 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable ConvertIfStatementToSwitchStatement
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class IdArrayHeap
+internal readonly struct IdArrayHeap
 {
+#region properties
     public              int             Count               => GetCount();
-    
     public   override   string          ToString()          => $"count: {Count}";
-    internal            IdArrayPool     GetPool(int index)  => pools[index] ??= new IdArrayPool(index);
+    #endregion
     
+#region fields
     private  readonly   IdArrayPool[]   pools;
+    #endregion
     
-    internal IdArrayHeap() {
+    public IdArrayHeap() {
         pools = new IdArrayPool[32];
     }
+
+    internal IdArrayPool GetPool(int index) => pools[index] ??= new IdArrayPool(index);
     
     private int GetCount()
     {
