@@ -256,6 +256,17 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_exceptions()
+    {
+        var store = new EntityStore();
+        var query = store.Query().ValueInRange<IndexedInt, int>(1,2);
+        var e = Throws<NotSupportedException>(() => {
+            _ = query.Count;
+        });
+        AreEqual("ValueInRange() not supported by HasValueIndex`1", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Index_already_removed()
     {
         var map = new Dictionary<string, IdArray>();

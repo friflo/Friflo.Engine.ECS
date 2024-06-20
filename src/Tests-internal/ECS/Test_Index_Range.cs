@@ -1,6 +1,7 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
+using Tests.ECS;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -9,7 +10,7 @@ using static NUnit.Framework.Assert;
 namespace Internal.ECS {
 public static class Test_Index_Range
 {
-    
+    [CodeCoverageTest]
     [ComponentIndex(typeof(ValueInRangeIndex<>))]
     private struct IndexedIntRange : IIndexedComponent<int> {
         public      int     GetIndexedValue() => value;
@@ -91,6 +92,13 @@ public static class Test_Index_Range
         AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 1       }, query1.Entities.ToIds());
         AreEqual(0, query2.Entities.Count);     AreEqual(new int[] {         }, query2.Entities.ToIds());
     }
+    
+    [Test]
+    public static void Test_Index_Range_coverage() {
+        _ = new ComponentIndexAttribute(null);    
+    }
+    
+    
 }
 
 }
