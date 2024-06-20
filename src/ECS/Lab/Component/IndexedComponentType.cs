@@ -18,9 +18,9 @@ internal readonly struct IndexedComponentType
         this.createIndex    = createIndex;
     }
     
-    internal ComponentIndex CreateComponentIndex(EntityStore store)
+    internal ComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
     {
-        var obj     = createIndex.Invoke(null, null);
+        var obj     = createIndex.Invoke(null, new object[] { componentType });
         var index   = (ComponentIndex)obj!;
         index.store = store;
         return index;
@@ -52,8 +52,16 @@ internal readonly struct IndexedComponentType
         return method?.MakeGenericMethod(valueType);
     }
     
-    internal static ComponentIndex CreateInvertedIndex<TValue>()
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")]
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")]
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2072", Justification = "TODO")]
+    internal static ComponentIndex CreateInvertedIndex<TValue>(ComponentType componentType)
     {
+        var indexType = ComponentIndexAttribute.GetComponentIndex(componentType.Type);
+        if (indexType != null) {
+            var genericType = indexType.MakeGenericType(new Type[] { typeof(TValue) });
+            return(ComponentIndex)Activator.CreateInstance(genericType);
+        }
         if (typeof(TValue) == typeof(Entity)) {
             return new HasEntityIndex();    
         }

@@ -247,7 +247,7 @@ public static class Test_Index
         AreEqual(1, map.Count);
     }
     
-    private static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
+    internal static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
     
     [Test]
     public static void Test_AvoidBoxing()

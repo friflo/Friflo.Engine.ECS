@@ -175,6 +175,11 @@ public class QueryFilter
         return this;
     }
     
+    internal QueryFilter ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue> {
+        AddValueCondition(new ValueInRangeCondition<TComponent, TValue>(min, max));
+        return this;
+    }
+    
     private void AddValueCondition(ValueCondition valueCondition) {
         valueConditions ??= new List<ValueCondition>();
         valueConditions.Add(valueCondition);

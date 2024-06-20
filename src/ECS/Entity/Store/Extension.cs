@@ -68,7 +68,7 @@ internal partial struct StoreExtension
         var indexes         = new ComponentIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
         componentIndexes    = indexes;
         foreach (var type in schema.indexedComponents) {
-            indexes[type.componentType.StructIndex] = type.CreateComponentIndex(store);
+            indexes[type.componentType.StructIndex] = type.CreateComponentIndex(store, type.componentType);
         }
     }
     

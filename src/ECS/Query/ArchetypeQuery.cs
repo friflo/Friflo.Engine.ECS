@@ -131,7 +131,10 @@ public class ArchetypeQuery
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
-    internal ArchetypeQuery HasValue<TComponent,TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> { Filter.HasValue<TComponent, TValue>(value);  return this; }
+    internal ArchetypeQuery HasValue    <TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue>
+    { Filter.HasValue<TComponent, TValue>(value);      return this; }
+    internal ArchetypeQuery ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
+    { Filter.ValueInRange<TComponent, TValue>(min, max);  return this; }
     
     internal void SetHasAllComponents       (in ComponentTypes types) => Filter.AllComponents(types);
     internal void SetHasAnyComponents       (in ComponentTypes types) => Filter.AnyComponents(types);
@@ -294,10 +297,7 @@ public class ArchetypeQuery
         idSet.Clear();
         // --- add all matching ids
         foreach (var condition in Filter.valueConditions) {
-            var matches = condition.GetMatchingEntities(entityStore);
-            foreach (var id in matches.Ids) {
-                idSet.Add(id);
-            }
+            condition.AddMatchingEntities(entityStore, idSet);
         }
         var nodes           = entityStore.nodes;
         var nextArchetypes  = archetypes;
@@ -343,10 +343,7 @@ public class ArchetypeQuery
         idSet.Clear();
         // --- add all matching ids
         foreach (var condition in Filter.valueConditions) {
-            var matches = condition.GetMatchingEntities(entityStore);
-            foreach (var id in matches.Ids) {
-                idSet.Add(id);
-            }
+            condition.AddMatchingEntities(entityStore, idSet);
         }
         var nodes   = entityStore.nodes;
         var count   = 0;
