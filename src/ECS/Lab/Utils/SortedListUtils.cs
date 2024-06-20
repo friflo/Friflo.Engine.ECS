@@ -15,7 +15,7 @@ internal static class SortedListUtils
         var idSpan = ids.GetIdSpan(arrayHeap);
         var index = idSpan.IndexOf(id);
         if (index == -1) {
-            return;
+            return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
         if (ids.Count == 1) {
             map.Remove(value);

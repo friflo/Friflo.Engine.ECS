@@ -1,4 +1,5 @@
-﻿using Friflo.Engine.ECS;
+﻿using System.Collections.Generic;
+using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
 using Tests.ECS;
@@ -129,6 +130,15 @@ public static class Test_Index_Range
     [Test]
     public static void Test_Index_Range_coverage() {
         _ = new ComponentIndexAttribute(null);    
+    }
+    
+    [Test]
+    public static void Test_Index_Range_already_removed()
+    {
+        var map = new SortedList<string, IdArray>();
+        var arrayHeap = new IdArrayHeap();
+        SortedListUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
+        AreEqual(0, map.Count);
     }
     
     
