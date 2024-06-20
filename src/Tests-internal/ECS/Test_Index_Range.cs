@@ -1,6 +1,7 @@
 ﻿using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantExplicitArrayCreation
@@ -10,7 +11,7 @@ public static class Test_Index_Range
 {
     
     [ComponentIndex(typeof(ValueInRangeIndex<>))]
-    internal struct IndexedIntRange : IIndexedComponent<int> {
+    private struct IndexedIntRange : IIndexedComponent<int> {
         public      int     GetIndexedValue() => value;
         internal    int     value;
     
@@ -18,7 +19,7 @@ public static class Test_Index_Range
     }
     
     [Test]
-    public static void Test_Index_Range_Add_Remove()
+    public static void Test_Index_Range_Query()
     {
         var world = new EntityStore();
         var entity1 = world.CreateEntity(new Position());
@@ -47,6 +48,15 @@ public static class Test_Index_Range
         AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 1, 2    }, query2.Entities.ToIds());
         AreEqual(3, query3.Entities.Count);     AreEqual(new int[] { 1, 2, 3 }, query3.Entities.ToIds());
         AreEqual(0, query4.Entities.Count);     AreEqual(new int[] {         }, query4.Entities.ToIds());
+        
+        var start = Mem.GetAllocatedBytes();
+        Mem.AreEqual(0, query0.Entities.Count);
+        Mem.AreEqual(1, query1.Entities.Count);
+        Mem.AreEqual(2, query2.Entities.Count);
+        Mem.AreEqual(3, query3.Entities.Count);
+        Mem.AreEqual(0, query4.Entities.Count);
+        Mem.AssertNoAlloc(start);
+        
     }
 }
 
