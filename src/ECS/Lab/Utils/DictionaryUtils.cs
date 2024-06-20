@@ -7,9 +7,8 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal static class IndexUtils
+internal static class DictionaryUtils
 {
-#region Dictionary<,>
     internal static void RemoveComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, IdArrayHeap arrayHeap)
     {
 #if NET6_0_OR_GREATER
@@ -44,34 +43,4 @@ internal static class IndexUtils
         ids.AddId(id, arrayHeap);
         MapUtils.Set(map, value, ids);
     }
-    #endregion
-    
-#region SortedSet<,>
-    internal static void RemoveComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, IdArrayHeap arrayHeap)
-    {
-        map.TryGetValue(value, out var ids);
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        var index = idSpan.IndexOf(id);
-        if (index == -1) {
-            return;
-        }
-        if (ids.Count == 1) {
-            map.Remove(value);
-            return;
-        }
-        ids.RemoveAt(index, arrayHeap);
-        map[value] = ids;
-    }
-    
-    internal static void AddComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, IdArrayHeap arrayHeap)
-    {
-        map.TryGetValue(value, out var ids);
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        if (idSpan.IndexOf(id) != -1) {
-            return;
-        }
-        ids.AddId(id, arrayHeap);
-        map[value] = ids;
-    }
-    #endregion
 }

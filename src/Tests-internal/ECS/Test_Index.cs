@@ -271,7 +271,7 @@ public static class Test_Index
     {
         var map = new Dictionary<string, IdArray>();
         var arrayHeap = new IdArrayHeap();
-        IndexUtils.RemoveComponentValue(1, "missing", map, arrayHeap);   // add key with default IdArray
+        DictionaryUtils.RemoveComponentValue(1, "missing", map, arrayHeap);   // add key with default IdArray
         AreEqual(1, map.Count);
     }
     
