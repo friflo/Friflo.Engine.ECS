@@ -37,9 +37,8 @@ public static class Test_Index_Range
         var query4 = world.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(900, 999);
         {
             int count = 0;
-            query3.ForEachEntity((ref IndexedIntRange _, ref Position _, Entity _) => {
-                // AreEqual(++count, entity.Id); // TODO set start in MoveNext() new ChunkEntities (...)
-                ++count;
+            query3.ForEachEntity((ref IndexedIntRange _, ref Position _, Entity entity) => {
+                AreEqual(++count, entity.Id);
             });
             AreEqual(3, count);
         }

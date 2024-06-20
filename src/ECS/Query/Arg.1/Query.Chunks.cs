@@ -131,7 +131,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
         int count       = archetype.entityCount;
             
         var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count);
-        var entities    = new ChunkEntities(archetype, count);
+        var entities    = new ChunkEntities(archetype,              count, 0);
         chunks          = new Chunks<T1>(chunk1, entities);
         return true;  
     }

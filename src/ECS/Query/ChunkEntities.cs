@@ -55,10 +55,11 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
     #endregion
     
-    internal ChunkEntities(Archetype archetype, int componentLen) {
+    internal ChunkEntities(Archetype archetype, int componentLen, int start) {
         Archetype   = archetype;
         entityIds   = archetype.entityIds;
         Length      = componentLen;
+        this.start  = start;
     }
     
     internal ChunkEntities(in ChunkEntities entities, int start, int componentLen, int taskIndex) {

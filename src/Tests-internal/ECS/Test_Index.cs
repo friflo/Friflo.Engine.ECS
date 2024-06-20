@@ -61,11 +61,11 @@ public static class Test_Index
         var entity1 = entities[1];
         var entity2 = entities[2];
         
-        entity0.AddComponent(new IndexedName   { name   = "find-me" });
-        entity1.AddComponent(new IndexedInt    { value  = 123       });
-        entity2.AddComponent(new IndexedName   { name   = "find-me" });
-        entity2.AddComponent(new IndexedInt    { value  = 123       });
-    //  entities[1].AddComponent(new AttackComponent { target = target }); // todo throws NotImplementedException : to avoid excessive boxing. ...
+        entity0.AddComponent(new IndexedName    { name   = "find-me" });
+        entity1.AddComponent(new IndexedInt     { value  = 123       });
+        entity2.AddComponent(new IndexedName    { name   = "find-me" });
+        entity2.AddComponent(new IndexedInt     { value  = 123       });
+        entity2.AddComponent(new AttackComponent{ target = target    });
         
         var query1  = world.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");
         var query2  = world.Query<Position,    IndexedInt>().   HasValue<IndexedInt,    int>   (123);
@@ -73,34 +73,44 @@ public static class Test_Index
                                                                 HasValue<IndexedInt,    int>   (123);
         var query4  = world.Query().                            HasValue<IndexedName,   string>("find-me").
                                                                 HasValue<IndexedInt,    int>   (123);
+        var query5  = world.Query<Position, AttackComponent>(). HasValue<AttackComponent, Entity>(target);
         
-        var query5  = world.Query<Position, AttackComponent>().HasValue<AttackComponent, Entity>(target);
         {
             int count = 0;
-            query1.ForEachEntity((ref Position _, ref IndexedName indexedName, Entity _) => {
-                count++;
+            query1.ForEachEntity((ref Position _, ref IndexedName indexedName, Entity entity) => {
+                switch (count++) {
+                    case 0: AreEqual(11, entity.Id); break;
+                    case 1: AreEqual(13, entity.Id); break;
+                }
                 AreEqual("find-me", indexedName.name);
             });
             AreEqual(2, count);
         } { 
             int count = 0;
-            query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity _) => {
-                count++;
+            query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity entity) => {
+                switch (count++) {
+                    case 0: AreEqual(12, entity.Id); break;
+                    case 1: AreEqual(13, entity.Id); break;
+                }
                 AreEqual(123, indexedInt.value);
             });
             AreEqual(2, count);
         } { 
             var count = 0;
-            query3.ForEachEntity((ref IndexedName _, ref IndexedInt _, Entity _) => {
+            query3.ForEachEntity((ref IndexedName _, ref IndexedInt _, Entity entity) => {
+                AreEqual(13, entity.Id);
                 count++;
             });
             AreEqual(1, count);
-
+        } {
+            var count = 0;
+            query5.ForEachEntity((ref Position _, ref AttackComponent attack, Entity entity) => {
+                count++;
+                AreEqual(13,     entity.Id);
+                AreEqual(target, attack.target);
+            });
+            AreEqual(1, count);
         }
-        query5.ForEachEntity((ref Position _, ref AttackComponent attack, Entity _) => {
-            AreEqual(target, attack.target);
-        });
-        
         AreEqual(2, query1.Entities.Count);     AreEqual(new int[] { 11, 13 },      query1.Entities.ToIds());
         AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 12, 13 },      query2.Entities.ToIds());
         AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 13 },          query3.Entities.ToIds());

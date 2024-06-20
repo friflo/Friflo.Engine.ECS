@@ -71,7 +71,7 @@ public static class Test_Query
         for (int n = 1; n <= 10; n++) {
             type.CreateEntity(n);
         }
-        var entities = new ChunkEntities(type, 10);
+        var entities = new ChunkEntities(type, 10, 0);
         int id = 1;
         foreach (var entity in entities) {
             Assert.AreEqual(id++, entity.Id);
@@ -91,7 +91,7 @@ public static class Test_Query
         for (int n = 1; n <= 10; n++) {
             type.CreateEntity(n);
         }
-        var entities = new ChunkEntities(type, 10);
+        var entities = new ChunkEntities(type, 10, 0);
         int id = 1;
         for (int n = 0; n < 10; n++) {
             Assert.AreEqual(id, entities[n]);

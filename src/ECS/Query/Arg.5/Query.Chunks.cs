@@ -182,7 +182,7 @@ public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<Chunks<T1, T2, T
         var chunk3      = new Chunk<T3>(chunks3.components, copyT3, count);
         var chunk4      = new Chunk<T4>(chunks4.components, copyT4, count);
         var chunk5      = new Chunk<T5>(chunks5.components, copyT5, count);
-        var entities    = new ChunkEntities(archetype, count);
+        var entities    = new ChunkEntities(archetype,              count, 0);
         chunks          = new Chunks<T1, T2, T3, T4, T5>(chunk1, chunk2, chunk3, chunk4, chunk5, entities);
         return true;  
     }
