@@ -110,7 +110,7 @@ public static class Test_Index_Range
         entity2.AddComponent(new IndexedIntRange { value  = 200 });
         entity3.AddComponent(new IndexedIntRange { value  = 200 });
         entity4.AddComponent(new IndexedIntRange { value  = 300 });
-        entity4.AddComponent(new IndexedIntRange { value  = 300 }); // cover add same component again
+        entity4.AddComponent(new IndexedIntRange { value  = 300 }); // cover add same component value again
         
         var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
         var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(200, 400);
@@ -130,6 +130,19 @@ public static class Test_Index_Range
     [Test]
     public static void Test_Index_Range_coverage() {
         _ = new ComponentIndexAttribute(null);    
+    }
+    
+    [Test]
+    public static void Test_Index_Range_already_added()
+    {
+        var world   = new EntityStore();
+        var entity  = world.CreateEntity(1);
+        
+        entity.AddComponent(new IndexedIntRange { value =  456 });
+        
+        var index = (ValueInRangeIndex<int>)world.extension.componentIndexes[StructInfo<IndexedIntRange>.Index];
+        index.Add(1, new IndexedIntRange { value = 456 });
+        AreEqual(1, index.Count);
     }
     
     [Test]

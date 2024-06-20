@@ -38,7 +38,7 @@ internal static class DictionaryUtils
 #endif
         var idSpan = ids.GetIdSpan(arrayHeap);
         if (idSpan.IndexOf(id) != -1) {
-            return;
+            return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
         ids.AddId(id, arrayHeap);
         MapUtils.Set(map, value, ids);

@@ -8,6 +8,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class ValueInRangeIndex<TValue>  : ComponentIndex<TValue>
 {
+    internal            int                         Count       => map.Count;
     private readonly    SortedList<TValue, IdArray> map         = new();
     private readonly    IdArrayHeap                 arrayHeap   = new();
     

@@ -30,7 +30,7 @@ internal static class SortedListUtils
         map.TryGetValue(value, out var ids);
         var idSpan = ids.GetIdSpan(arrayHeap);
         if (idSpan.IndexOf(id) != -1) {
-            return;
+            return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
         ids.AddId(id, arrayHeap);
         map[value] = ids;
