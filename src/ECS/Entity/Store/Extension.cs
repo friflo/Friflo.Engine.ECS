@@ -50,7 +50,7 @@ internal partial struct StoreExtension
     #endregion
     
 #region component indices
-    internal    readonly                ComponentIndex[]        componentIndexes;           //  8
+    internal    readonly                ComponentIndex[]        indexes;                    //  8
     #endregion
     
     internal StoreExtension(PidType pidType, EntityStore store)
@@ -65,10 +65,10 @@ internal partial struct StoreExtension
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
         entityScriptCount   = 1;
         var schema          = EntityStoreBase.Static.EntitySchema;
-        var indexes         = new ComponentIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
-        componentIndexes    = indexes;
+        var componentIndexes= new ComponentIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
+        indexes = componentIndexes;
         foreach (var type in schema.indexedComponents) {
-            indexes[type.componentType.StructIndex] = type.CreateComponentIndex(store, type.componentType);
+            componentIndexes[type.componentType.StructIndex] = type.CreateComponentIndex(store, type.componentType);
         }
     }
     

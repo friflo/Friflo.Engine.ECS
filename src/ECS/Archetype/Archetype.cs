@@ -217,7 +217,7 @@ public sealed class Archetype
         in Tags             tags,
            EntityStoreBase  store)
     {
-        var indexes         = (store as EntityStore)?.extension.componentIndexes;    // would be nice to avoid cast
+        var indexes         = (store as EntityStore)?.extension.indexes;    // would be nice to avoid cast
         var length          = componentTypes.Count;
         var componentHeaps  = new StructHeap[length];
         int n = 0;

@@ -250,7 +250,7 @@ public static class Test_Index
         
         entity.AddComponent(new IndexedName { name = "added" });
         
-        var index = (HasValueIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
+        var index = (HasValueIndex<string>)world.extension.indexes[StructInfo<IndexedName>.Index];
         index.Add(1, new IndexedName { name = "added" });
         AreEqual(1, index.Count);
     }
