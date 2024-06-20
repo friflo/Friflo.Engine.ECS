@@ -8,25 +8,30 @@ using System.Reflection;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
+internal delegate ComponentIndex CreateIndex(Type indexType);
+
 internal readonly struct IndexedComponentType
 {
     internal readonly ComponentType componentType;
-    private  readonly MethodInfo    createIndex;
+    private  readonly CreateIndex   createIndex;
+    private  readonly Type          indexType;
     
-    private IndexedComponentType(ComponentType componentType, MethodInfo createIndex) {
+    private IndexedComponentType(ComponentType componentType, CreateIndex createIndex, Type indexType) {
         this.componentType  = componentType;
         this.createIndex    = createIndex;
+        this.indexType      = indexType;
     }
     
-    internal ComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
+    internal ComponentIndex CreateComponentIndex(EntityStore store)
     {
-        var obj     = createIndex.Invoke(null, new object[] { componentType });
-        var index   = (ComponentIndex)obj!;
+        var index   = createIndex(indexType);
         index.store = store;
         return index;
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")] // TODO
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
     internal static void AddIndexedComponentType(SchemaTypes schemaTypes, ComponentType componentType)
     {
         var interfaces = componentType.Type.GetInterfaces();
@@ -37,30 +42,32 @@ internal readonly struct IndexedComponentType
             if (genericType != typeof(IIndexedComponent<>)) {
                 continue;
             }
-            var valueType               = i.GenericTypeArguments[0];
+            var valueType   = i.GenericTypeArguments[0];
+            var indexType   = ComponentIndexAttribute.GetComponentIndex(componentType.Type);
+            Type genericIndexType = null;
+            if (indexType != null) {
+                genericIndexType = indexType.MakeGenericType(new Type[] { valueType });
+            }
             var createIndex             = MakeCreateIndex(valueType);
-            var indexedComponentType    = new IndexedComponentType(componentType, createIndex);
+            var indexedComponentType    = new IndexedComponentType(componentType, createIndex, genericIndexType);
             schemaTypes.indexedComponents.Add(indexedComponentType);
         }
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
-    private static MethodInfo MakeCreateIndex(Type valueType)
+    private static CreateIndex MakeCreateIndex(Type valueType)
     {
         const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        var method = typeof(IndexedComponentType).GetMethod(nameof(CreateInvertedIndex), flags);
-        return method?.MakeGenericMethod(valueType);
+        var methodInfo      = typeof(IndexedComponentType).GetMethod(nameof(CreateInvertedIndex), flags);
+        var genericMethod   = methodInfo?.MakeGenericMethod(valueType);
+        return (CreateIndex)Delegate.CreateDelegate(typeof(CreateIndex), null, genericMethod!);
     }
     
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")]
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")]
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2072", Justification = "TODO")]
-    internal static ComponentIndex CreateInvertedIndex<TValue>(ComponentType componentType)
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2067", Justification = "TODO")]
+    internal static ComponentIndex CreateInvertedIndex<TValue>(Type indexType)
     {
-        var indexType = ComponentIndexAttribute.GetComponentIndex(componentType.Type);
         if (indexType != null) {
-            var genericType = indexType.MakeGenericType(new Type[] { typeof(TValue) });
-            return(ComponentIndex)Activator.CreateInstance(genericType);
+            return(ComponentIndex)Activator.CreateInstance(indexType);
         }
         if (typeof(TValue) == typeof(Entity)) {
             return new HasEntityIndex();    
