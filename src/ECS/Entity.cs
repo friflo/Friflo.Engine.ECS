@@ -671,7 +671,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </summary>
     internal Entities GetForeignEntities<TComponent>() where TComponent: struct, IIndexedComponent<Entity> {
         var index = (ComponentIndex<Entity>)store.extension.componentIndexes[StructInfo<TComponent>.Index];
-        return index.GetMatchingEntities(this);
+        return index.GetHasValueEntities(this);
     }
     #endregion
 

@@ -22,7 +22,7 @@ internal abstract class ComponentIndex
 
 internal abstract class ComponentIndex<TValue> : ComponentIndex
 {
-    internal abstract   Entities    GetMatchingEntities    (TValue value);
+    internal abstract   Entities    GetHasValueEntities    (TValue value);
     internal virtual    void        AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) => throw NotSupportedException("ValueInRange()");
 }
 

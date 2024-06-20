@@ -261,6 +261,6 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     internal Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)extension.componentIndexes[StructInfo<TComponent>.Index];
-        return index.GetMatchingEntities(value);
+        return index.GetHasValueEntities(value);
     }
 }

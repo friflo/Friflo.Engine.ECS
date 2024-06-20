@@ -38,7 +38,7 @@ internal sealed class HasEntityIndex : ComponentIndex<Entity>
     #endregion
     
 #region get matches
-    internal override Entities GetMatchingEntities(Entity value)
+    internal override Entities GetHasValueEntities(Entity value)
     {
         map.TryGetValue(value.Id, out var ids);
         return arrayHeap.GetEntities(store, ids);
