@@ -94,6 +94,34 @@ public static class Test_Index_Range
     }
     
     [Test]
+    public static void Test_Index_Range_Update_Remove()
+    {
+        var store = new EntityStore();
+        var entity1 = store.CreateEntity(new Position());
+        var entity2 = store.CreateEntity(new Position());
+        var entity3 = store.CreateEntity(new Position());
+        
+        entity1.AddComponent(new IndexedIntRange { value  = 100 });
+        entity2.AddComponent(new IndexedIntRange { value  = 200 });
+        entity3.AddComponent(new IndexedIntRange { value  = 300 });
+        entity3.AddComponent(new IndexedIntRange { value  = 300 });
+        
+        var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
+        var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(200, 400);
+        
+        AreEqual(3, query1.Entities.Count);     AreEqual(new int[] { 1, 2, 3 }, query1.Entities.ToIds());
+        AreEqual(2, query2.Entities.Count);     AreEqual(new int[] {    2, 3 }, query2.Entities.ToIds());
+        
+        entity1.AddComponent(new IndexedIntRange { value  = 400 });
+        AreEqual(2, query1.Entities.Count);     AreEqual(new int[] {    2, 3 }, query1.Entities.ToIds());
+        AreEqual(3, query2.Entities.Count);     AreEqual(new int[] { 2, 3, 1 }, query2.Entities.ToIds());
+        
+        entity2.RemoveComponent<IndexedIntRange>();
+        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] {       3 }, query1.Entities.ToIds());
+        AreEqual(2, query2.Entities.Count);     AreEqual(new int[] {    3, 1 }, query2.Entities.ToIds());
+    }
+    
+    [Test]
     public static void Test_Index_Range_coverage() {
         _ = new ComponentIndexAttribute(null);    
     }
