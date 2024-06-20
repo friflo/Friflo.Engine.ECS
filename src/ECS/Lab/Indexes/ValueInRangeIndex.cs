@@ -46,9 +46,6 @@ internal sealed class ValueInRangeIndex<TValue>  : ComponentIndex<TValue>
     
     internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet)
     {
-        if (map.Count == 0) {
-            return;
-        }
         var keys        = map.Keys;
         int lowerIndex  = RangeUtils<TValue>.LowerBound(keys, min);
         int upperIndex  = RangeUtils<TValue>.UpperBound(keys, max);

@@ -23,6 +23,15 @@ public static class Test_Index_Range
     public static void Test_Index_Range_Query_ValueInRange()
     {
         var store = new EntityStore();
+        
+        var query0 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(0,    99);
+        var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 100);
+        var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 200);
+        var query3 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
+        var query4 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(900, 999);
+        
+        AreEqual(0, query1.Entities.Count);
+        
         var entity1 = store.CreateEntity(new Position());
         var entity2 = store.CreateEntity(new Position());
         var entity3 = store.CreateEntity(new Position());
@@ -35,12 +44,6 @@ public static class Test_Index_Range
         AreEqual(1, result.Count);     AreEqual(new int[] { 1 },    result.Ids.ToArray());
         result     = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(42);
         AreEqual(0, result.Count);     AreEqual(new int[] { },      result.Ids.ToArray());
-        
-        var query0 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(0,    99);
-        var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 100);
-        var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 200);
-        var query3 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
-        var query4 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(900, 999);
         {
             int count = 0;
             query3.ForEachEntity((ref IndexedIntRange _, ref Position _, Entity entity) => {
