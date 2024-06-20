@@ -19,7 +19,7 @@ public static class Test_Index_Range
     }
     
     [Test]
-    public static void Test_Index_Range_Query()
+    public static void Test_Index_Range_Query_ValueInRange()
     {
         var world = new EntityStore();
         var entity1 = world.CreateEntity(new Position());
@@ -56,6 +56,35 @@ public static class Test_Index_Range
         Mem.AreEqual(0, query4.Entities.Count);
         Mem.AssertNoAlloc(start);
         
+    }
+    
+    [Test]
+    public static void Test_Index_Range_Query_HasValue()
+    {
+        var world = new EntityStore();
+        var entity1 = world.CreateEntity(new Position());
+        
+        entity1.AddComponent(new IndexedIntRange { value  = 100 });
+        
+        var query1 = world.Query<IndexedIntRange, Position>().HasValue<IndexedIntRange, int>(100);
+        var query2 = world.Query<IndexedIntRange, Position>().HasValue<IndexedIntRange, int>(42);
+        {
+            int count = 0;
+            query1.ForEachEntity((ref IndexedIntRange intRange, ref Position _, Entity entity) => {
+                AreEqual(1,   entity.Id);
+                AreEqual(100, intRange.value);
+                ++count;
+            });
+            AreEqual(1, count);
+        } {
+            int count = 0;
+            query2.ForEachEntity((ref IndexedIntRange _, ref Position _, Entity _) => {
+                ++count;
+            });
+            AreEqual(0, count);
+        }
+        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 1       }, query1.Entities.ToIds());
+        AreEqual(0, query2.Entities.Count);     AreEqual(new int[] {         }, query2.Entities.ToIds());
     }
 }
 
