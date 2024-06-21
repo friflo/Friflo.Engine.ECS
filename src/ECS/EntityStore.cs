@@ -150,7 +150,7 @@ public sealed partial class EntityStore : EntityStoreBase
     public EntityStore(PidType pidType)
     {
         intern              = new Intern(pidType);
-        extension           = new StoreExtension(pidType, this);
+        extension           = new StoreExtension(pidType);
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         idBuffer            = new int[1];
@@ -260,7 +260,11 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Executes in O(1) with default index. O(log n) when using <see cref="ValueInRangeIndex{TValue}"/>. 
     /// </summary>
     internal Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
-        var index = (ComponentIndex<TValue>)extension.indexes[StructInfo<TComponent>.Index];
+        var index = (ComponentIndex<TValue>)GetIndex(StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(value);
+    }
+    
+    internal ComponentIndex GetIndex(int index) {
+        return extension.indexes[index].GetIndex(this);
     }
 }

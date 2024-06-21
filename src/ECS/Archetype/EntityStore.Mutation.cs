@@ -37,7 +37,7 @@ public partial class EntityStoreBase
             ((StructHeap<T>)oldHeap).StashComponent(compIndex);
             added   = false;
             action  = ComponentChangedAction.Update;
-            info.index?.Update(id, component, oldHeap);
+            if (info.hasIndex) info.UpdateIndex(store, id, component);
             goto AssignComponent;
         }
         // --- case: archetype doesn't contain component type   => change entity archetype
@@ -48,7 +48,7 @@ public partial class EntityStoreBase
         action              = ComponentChangedAction.Add;
         archIndex           = arch.archIndex;
         info                = arch.heapMap[structIndex];
-        info.index?.Add(id, component);
+        if (info.hasIndex) info.AddIndex(store, id, component);
         
     AssignComponent:  // --- assign passed component value
         var heap            = (StructHeap<T>)info.heap;
@@ -78,7 +78,7 @@ public partial class EntityStoreBase
             return false;
         }
         ((StructHeap<T>)heap).StashComponent(compIndex);
-        info.index?.Remove<T>(id, heap);
+        if (info.hasIndex) info.RemoveIndex<T>(store, id);
         var newArchetype = GetArchetypeWithout(store, arch, structIndex);
 
         // --- change entity archetype

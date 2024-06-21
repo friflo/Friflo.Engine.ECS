@@ -8,9 +8,9 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
 {
-    internal            int                         Count => map.Count;
-    private readonly    Dictionary<TValue, IdArray> map         = new();
-    private readonly    IdArrayHeap                 arrayHeap   = new();
+    internal override   int                         Count       => map.Count;
+    private  readonly   Dictionary<TValue, IdArray> map         = new();
+    private  readonly   IdArrayHeap                 arrayHeap   = new();
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)

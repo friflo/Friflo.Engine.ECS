@@ -21,7 +21,7 @@ internal sealed class ValueInRangeCondition<TComponent, TValue> : ValueCondition
     
     internal override void AddMatchingEntities(EntityStore store, HashSet<int> idSet)
     {
-        var index = (ComponentIndex<TValue>)store.extension.indexes[StructInfo<TComponent>.Index];
+        var index = (ComponentIndex<TValue>)store.GetIndex(StructInfo<TComponent>.Index);
         index.AddValueInRangeEntities(min, max, idSet);
     }
 }

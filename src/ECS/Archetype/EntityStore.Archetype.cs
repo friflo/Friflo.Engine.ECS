@@ -34,7 +34,7 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, componentTypes, tags, this);
+        var archetype   = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
         AddArchetype(this, archetype);
         return archetype;
     }
@@ -75,7 +75,7 @@ public partial class EntityStoreBase
         var config          = GetArchetypeConfig(store);
         var componentTypes  = current.componentTypes;
         componentTypes.bitSet.SetBit(structIndex);
-        var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags, store);
+        var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags);
         AddArchetype(store, archetype);
         return archetype;
     }
@@ -90,7 +90,7 @@ public partial class EntityStoreBase
         var config          = GetArchetypeConfig(store);
         var componentTypes  = archetype.componentTypes;
         componentTypes.bitSet.ClearBit(structIndex);
-        var result = Archetype.CreateWithComponentTypes(config, componentTypes, archetype.tags, store);
+        var result = Archetype.CreateWithComponentTypes(config, componentTypes, archetype.tags);
         AddArchetype(store, result);
         return result;
     }
@@ -105,7 +105,7 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config  = GetArchetypeConfig(store);
-        var result  = Archetype.CreateWithComponentTypes(config, archetype.componentTypes, tags, store);
+        var result  = Archetype.CreateWithComponentTypes(config, archetype.componentTypes, tags);
         AddArchetype(store, result);
         return result;
     }
@@ -126,7 +126,7 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, key.componentTypes, key.tags, this);
+        var archetype   = Archetype.CreateWithComponentTypes(config, key.componentTypes, key.tags);
         AddArchetype(this, archetype);
         return archetype;
     }
@@ -147,7 +147,7 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, key.componentTypes, key.tags, this);
+        var archetype   = Archetype.CreateWithComponentTypes(config, key.componentTypes, key.tags);
         AddArchetype(this, archetype);
         return archetype;
     }

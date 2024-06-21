@@ -9,6 +9,8 @@ namespace Friflo.Engine.ECS.Index;
 
 internal abstract class ComponentIndex
 {
+    internal abstract int Count { get; }
+
     internal EntityStore store; // could be made readonly
     
     internal abstract void Add   <TComponent>(int id, in TComponent component)                  where TComponent : struct, IComponent;
@@ -42,5 +44,31 @@ internal sealed class ComponentIndexAttribute : Attribute
             return (Type) arg[0].Value;
         }
         return null;
+    }
+}
+
+internal struct StoreIndex
+{
+    /// <summary> component index created on demand. </summary>
+    private             ComponentIndex          index;
+    internal readonly   IndexedComponentType    type;
+
+    public override string ToString() {
+        if (type.componentType == null) {
+            return null;
+        }
+        var name = type.componentType.Name;
+        if (index == null) {
+            return name;
+        }
+        return $"{name} - {index.GetType().Name} count: {index.Count}";
+    }
+
+    internal StoreIndex(IndexedComponentType type) {
+        this.type   = type;
+    }
+    
+    internal ComponentIndex GetIndex(EntityStore store) {
+        return index ??= type.CreateComponentIndex(store);
     }
 }

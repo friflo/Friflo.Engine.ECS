@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Friflo.Engine.ECS.Index;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -173,7 +172,7 @@ public sealed class Archetype
     /// <summary>
     /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
     /// </summary>
-    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags, ComponentIndex[] indexes)
+    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
         memory.capacity = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
@@ -187,12 +186,13 @@ public sealed class Archetype
         componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
+        var indexes     = entityStore?.extension.indexes;
         for (int pos = 0; pos < componentCount; pos++)
         {
             var heap    = heaps[pos];
-            var index   = indexes?[heap.structIndex];
             heap.SetArchetypeDebug(this);
-            heapMap[heap.structIndex] = new HeapInfo(heap, index);
+            var hasIndex = indexes?[heap.structIndex].type.componentType != null;
+            heapMap[heap.structIndex]   = new HeapInfo(heap, hasIndex);
             SetStandardComponentHeaps(heap, ref std);
         }
     }
@@ -214,17 +214,15 @@ public sealed class Archetype
     internal static Archetype CreateWithComponentTypes(
         in ArchetypeConfig  config,
         in ComponentTypes   componentTypes,
-        in Tags             tags,
-           EntityStoreBase  store)
+        in Tags             tags)
     {
-        var indexes         = (store as EntityStore)?.extension.indexes;    // would be nice to avoid cast
         var length          = componentTypes.Count;
         var componentHeaps  = new StructHeap[length];
         int n = 0;
         foreach (var componentType in componentTypes) {
             componentHeaps[n++] = componentType.CreateHeap();
         }
-        return new Archetype(config, componentHeaps, tags, indexes);
+        return new Archetype(config, componentHeaps, tags);
     }
     #endregion
 

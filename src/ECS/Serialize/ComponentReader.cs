@@ -272,7 +272,7 @@ internal sealed class ComponentReader
             return archetypeKey.archetype;
         }
         var config          = EntityStoreBase.GetArchetypeConfig(store);
-        var newArchetype    = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags, store);
+        var newArchetype    = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags);
         EntityStoreBase.AddArchetype(store, newArchetype);
         return newArchetype;
     }

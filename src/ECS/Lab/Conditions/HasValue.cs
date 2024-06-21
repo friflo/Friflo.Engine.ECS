@@ -17,7 +17,7 @@ internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition
     
     internal override void AddMatchingEntities(EntityStore store, HashSet<int> idSet)
     {
-        var index = (ComponentIndex<TValue>)store.extension.indexes[StructInfo<TComponent>.Index];
+        var index = (ComponentIndex<TValue>)store.GetIndex(StructInfo<TComponent>.Index);
         var entities = index.GetHasValueEntities(value);
         foreach (var id in entities.Ids) {
             idSet.Add(id);
