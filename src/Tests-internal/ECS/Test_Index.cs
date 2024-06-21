@@ -246,14 +246,14 @@ public static class Test_Index
     [Test]
     public static void Test_Index_support_null()
     {
-        var world   = new EntityStore();
-        var entity1 = world.CreateEntity();
-        var entity2 = world.CreateEntity();
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
         entity1.AddComponent(new IndexedName { name = null });
         entity2.AddComponent(new IndexedName { name = null });
         
         var start = Mem.GetAllocatedBytes();
-        var result = world.GetEntitiesWithComponentValue<IndexedName, string>(null);
+        var result = store.GetEntitiesWithComponentValue<IndexedName, string>(null);
         Mem.AssertNoAlloc(start);
         
         AreEqual(2, result.Count);
@@ -261,24 +261,24 @@ public static class Test_Index
         AreEqual(2, result[1].Id);
         
         entity2.RemoveComponent<IndexedName>();
-        result = world.GetEntitiesWithComponentValue<IndexedName, string>(null);
+        result = store.GetEntitiesWithComponentValue<IndexedName, string>(null);
         AreEqual(1, result.Count);
     }
     
     [Test]
     public static void Test_Index_ValueStructIndex()
     {
-        var world   = new EntityStore();
-        var entity1 = world.CreateEntity();
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
         entity1.AddComponent(new IndexedInt { value = 123 });
         entity1.AddComponent(new IndexedInt { value = 123 }); // add same component value again
-        var result = world.GetEntitiesWithComponentValue<IndexedInt, int>(123);
+        var result = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
         AreEqual(1, result.Count);
         
         entity1.AddComponent(new IndexedInt { value = 456 });
-        result = world.GetEntitiesWithComponentValue<IndexedInt, int>(456);
+        result = store.GetEntitiesWithComponentValue<IndexedInt, int>(456);
         AreEqual(1, result.Count);
-        result = world.GetEntitiesWithComponentValue<IndexedInt, int>(123);
+        result = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
         AreEqual(0, result.Count);
     }
     
@@ -296,14 +296,14 @@ public static class Test_Index
     [Test]
     public static void Test_Index_already_added()
     {
-        var world   = new EntityStore();
-        var entity1 = world.CreateEntity(1);
-        var entity2 = world.CreateEntity(2);
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
         
         entity1.AddComponent(new IndexedName { name = "added" });
         entity2.AddComponent(new IndexedName { name = null });
         
-        var index = (ValueClassIndex<string>)StoreIndex.GetIndex(world, StructInfo<IndexedName>.Index);
+        var index = (ValueClassIndex<string>)StoreIndex.GetIndex(store, StructInfo<IndexedName>.Index);
         index.Add(1, new IndexedName { name = "added" });
         index.Add(2, new IndexedName { name = null    });
 
