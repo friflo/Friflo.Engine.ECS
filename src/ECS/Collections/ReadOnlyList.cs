@@ -47,8 +47,8 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     #endregion
 
 #region private fields
-    internal T[] array; 
-    internal int count;
+    internal T[] array;     //  8
+    internal int count;     //  4
     #endregion
     
 #region internal mutations

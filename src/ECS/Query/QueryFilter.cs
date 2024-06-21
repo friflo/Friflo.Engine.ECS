@@ -2,11 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using Friflo.Engine.ECS.Index;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -63,11 +63,11 @@ public class QueryFilter
     [Browse(Never)] private     int             anyComponentsCount;         //   8
     [Browse(Never)] private     int             allComponentsCount;         //   8
     
-                private         bool            withoutDisabled;            //   1  if true (default) entity must be enabled
-                internal        int             version;                    //   4  incremented if filter changes
-                private         bool            frozen;                     //   1  if true the filter cannot be changed anymore
+    private                     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
+    internal                    int             version;                    //   4  incremented if filter changes
+    private                     bool            frozen;                     //   1  if true the filter cannot be changed anymore
                     
-                internal   List<ValueCondition> valueConditions;            //   8
+    internal       ReadOnlyList<ValueCondition> valueConditions;            //  16
     #endregion
     
     
@@ -77,11 +77,13 @@ public class QueryFilter
         withoutDisabled = true;
         withoutAnyTags  = EntityUtils.Disabled;
         Condition       = new FilterCondition(this); 
+        valueConditions = new ReadOnlyList<ValueCondition>(Array.Empty<ValueCondition>());
     }
     
     internal QueryFilter(in Tags allTags) {
         this.allTags    = allTags;
         Condition       = new FilterCondition(this);
+        valueConditions = new ReadOnlyList<ValueCondition>(Array.Empty<ValueCondition>());
     }
     #endregion
 
@@ -181,7 +183,6 @@ public class QueryFilter
     }
     
     private void AddValueCondition(ValueCondition valueCondition) {
-        valueConditions ??= new List<ValueCondition>();
         valueConditions.Add(valueCondition);
     }
     #endregion

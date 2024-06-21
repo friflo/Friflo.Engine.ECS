@@ -248,7 +248,7 @@ public class ArchetypeQuery
             archetypeCount      = 0;
             lastArchetypeCount  = 0;
         }
-        if (Filter.valueConditions != null) {
+        if (Filter.valueConditions.Count > 0) {
             return GetValueConditionArchetypes();
         }
         if (store.ArchetypeCount == lastArchetypeCount) {
@@ -334,7 +334,7 @@ public class ArchetypeQuery
     
     private int GetEntityCount()
     {
-        if (Filter.valueConditions == null) {
+        if (Filter.valueConditions.Count == 0) {
             return Archetype.GetEntityCount(GetArchetypesSpan());
         }
         // --- get number of entities of a query with value conditions
