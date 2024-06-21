@@ -275,6 +275,18 @@ public static class Test_Index
         AreEqual(1, map.Count);
     }
     
+    [Test]
+    public static void Test_Index_StoreIndex_ToString()
+    {
+        var store   = new EntityStore();
+        var indexes = store.extension.indexes;
+        AreEqual(null,          indexes[StructInfo<Position>.Index].ToString());
+        AreEqual("IndexedName", indexes[StructInfo<IndexedName>.Index].ToString());
+        var entity = store.CreateEntity();
+        entity.AddComponent(new IndexedName { name = "test" });
+        AreEqual("IndexedName - HasValueIndex`1 count: 1", indexes[StructInfo<IndexedName>.Index].ToString());
+    }
+    
     internal static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
     
     [Test]
