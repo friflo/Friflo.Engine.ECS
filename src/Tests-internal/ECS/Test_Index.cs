@@ -330,6 +330,9 @@ public static class Test_Index
         
         entity1.AddComponent(new IndexedEntity { entity = entity2 });
         AreEqual("IndexedEntity - EntityIndex count: 1", indexes[StructInfo<IndexedEntity>.Index].ToString());
+        
+        entity1.AddComponent(new IndexedInt { value = 42 });
+        AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexes[StructInfo<IndexedInt>.Index].ToString());
     }
     
     internal static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
