@@ -10,20 +10,42 @@ internal struct StoreIndex
     
     /// <summary> component index created on demand. </summary>
     private             ComponentIndex  index;          //  8
+    
+    /// <summary> only stored for debugging </summary>
     private  readonly   int             structIndex;    //  4
 
-    internal StoreIndex(int structIndex) {
+    private StoreIndex(int structIndex) {
         this.structIndex = structIndex;
     }
     
     internal static ComponentIndex GetIndex(EntityStore store, int structIndex)
     {
-        var index = store.extension.indexes[structIndex].index;
-        if (index != null) {
-            return index;
+        var indexMap = store.extension.indexMap; 
+        if (indexMap != null) {
+            var index = indexMap[structIndex].index;
+            if (index != null) {
+                return index;
+            }
+            return indexMap[structIndex].index = CreateIndex(store, structIndex);
         }
+        indexMap = store.extension.indexMap = CreateStoreIndexMap();
+        return indexMap[structIndex].index  = CreateIndex(store, structIndex);
+    }
+    
+    private static ComponentIndex CreateIndex(EntityStore store, int structIndex)
+    {
         var type = EntityStoreBase.Static.EntitySchema.indexedComponentMap[structIndex];
-        return store.extension.indexes[structIndex].index = type.CreateComponentIndex(store);
+        return type.CreateComponentIndex(store);
+    }
+    
+    private static StoreIndex[] CreateStoreIndexMap()
+    {
+        var schema          = EntityStoreBase.Static.EntitySchema;
+        var storeIndexes    = new StoreIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
+        foreach (var type in schema.indexedComponents) {
+            storeIndexes[type.componentType.StructIndex] = new StoreIndex(type.componentType.StructIndex);
+        }
+        return storeIndexes;
     }
     
     private string GetString()

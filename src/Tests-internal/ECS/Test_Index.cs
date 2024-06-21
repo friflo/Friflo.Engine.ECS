@@ -324,21 +324,23 @@ public static class Test_Index
     [Test]
     public static void Test_Index_StoreIndex_ToString()
     {
-        var store   = new EntityStore();
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
-        var indexes = store.extension.indexes;
-        AreEqual(null,          indexes[StructInfo<Position>.Index].ToString());
-        
-        AreEqual("IndexedName", indexes[StructInfo<IndexedName>.Index].ToString());
+        var store       = new EntityStore();
+        var entity1     = store.CreateEntity();
+        var entity2     = store.CreateEntity();
         entity1.AddComponent(new IndexedName { name = "test" });
-        AreEqual("IndexedName - ValueClassIndex`1 count: 1", indexes[StructInfo<IndexedName>.Index].ToString());
+        
+        var indexMap    = store.extension.indexMap;
+        AreEqual(null,          indexMap[StructInfo<Position>.Index].ToString());
+        
+        AreEqual("IndexedEntity", indexMap[StructInfo<IndexedEntity>.Index].ToString());
+
+        AreEqual("IndexedName - ValueClassIndex`1 count: 1", indexMap[StructInfo<IndexedName>.Index].ToString());
         
         entity1.AddComponent(new IndexedEntity { entity = entity2 });
-        AreEqual("IndexedEntity - EntityIndex count: 1", indexes[StructInfo<IndexedEntity>.Index].ToString());
+        AreEqual("IndexedEntity - EntityIndex count: 1", indexMap[StructInfo<IndexedEntity>.Index].ToString());
         
         entity1.AddComponent(new IndexedInt { value = 42 });
-        AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexes[StructInfo<IndexedInt>.Index].ToString());
+        AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexMap[StructInfo<IndexedInt>.Index].ToString());
     }
     
     internal static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
