@@ -69,6 +69,9 @@ internal struct StoreIndex
     }
     
     internal ComponentIndex GetIndex(EntityStore store) {
-        return index ??= type.CreateComponentIndex(store);
+        if (index != null) {
+            return index;
+        }
+        return index = type.CreateComponentIndex(store);
     }
 }

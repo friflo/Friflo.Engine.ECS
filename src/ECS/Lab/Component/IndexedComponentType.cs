@@ -13,7 +13,10 @@ internal delegate ComponentIndex CreateIndex(Type indexType);
 internal readonly struct IndexedComponentType
 {
     internal readonly ComponentType componentType;  //  8
+    
+    /// <summary> If generic delegate of <see cref="CreateInvertedIndex{TValue}"/> </summary>
     private  readonly CreateIndex   createIndex;    //  8
+    
     private  readonly Type          indexType;      //  8
     
     private IndexedComponentType(ComponentType componentType, CreateIndex createIndex, Type indexType) {
