@@ -12,9 +12,9 @@ internal delegate ComponentIndex CreateIndex(Type indexType);
 
 internal readonly struct IndexedComponentType
 {
-    internal readonly ComponentType componentType;
-    private  readonly CreateIndex   createIndex;
-    private  readonly Type          indexType;
+    internal readonly ComponentType componentType;  //  8
+    private  readonly CreateIndex   createIndex;    //  8
+    private  readonly Type          indexType;      //  8
     
     private IndexedComponentType(ComponentType componentType, CreateIndex createIndex, Type indexType) {
         this.componentType  = componentType;

@@ -50,8 +50,8 @@ internal sealed class ComponentIndexAttribute : Attribute
 internal struct StoreIndex
 {
     /// <summary> component index created on demand. </summary>
-    private             ComponentIndex          index;
-    internal readonly   IndexedComponentType    type;
+    private             ComponentIndex          index;  //  8
+    internal readonly   IndexedComponentType    type;   // 24
 
     public override string ToString() {
         if (type.componentType == null) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
@@ -273,6 +274,16 @@ public static class Test_Index
         var arrayHeap = new IdArrayHeap();
         DictionaryUtils.RemoveComponentValue(1, "missing", map, arrayHeap);   // add key with default IdArray
         AreEqual(1, map.Count);
+    }
+    
+    [Test]
+    public static void Test_Index_size_of()
+    {
+        var size = Marshal.SizeOf(typeof(StoreIndex));
+        AreEqual(32, size);
+        
+        size = Marshal.SizeOf(typeof(HeapInfo));
+        AreEqual(24, size);
     }
     
     [Test]

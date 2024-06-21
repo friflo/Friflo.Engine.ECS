@@ -15,10 +15,10 @@ namespace Friflo.Engine.ECS;
 
 internal struct HeapInfo
 {
-    internal readonly   StructHeap          heap;
+    internal readonly   StructHeap          heap;       //  8
     /// <summary> component index created on demand. </summary>
-    private             ComponentIndex      index;
-    internal readonly   bool                hasIndex;
+    private             ComponentIndex      index;      //  8
+    internal readonly   bool                hasIndex;   //  1
         
     internal HeapInfo(StructHeap heap, bool hasIndex) {
         this.heap       = heap;
