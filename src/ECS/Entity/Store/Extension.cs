@@ -50,7 +50,7 @@ internal partial struct StoreExtension
     #endregion
     
 #region component indices
-    internal    readonly                StoreIndex[]            indexes;                    //  8
+    internal    readonly                StoreIndex[]            indexes;                    //  8   - component indexes created on demand
     #endregion
     
     internal StoreExtension(PidType pidType)
