@@ -34,8 +34,6 @@ internal readonly struct IndexedComponentType
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")] // TODO
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
     internal static void AddIndexedComponentType(SchemaTypes schemaTypes, ComponentType componentType)
     {
         var interfaces = componentType.Type.GetInterfaces();
@@ -46,16 +44,31 @@ internal readonly struct IndexedComponentType
             if (genericType != typeof(IIndexedComponent<>)) {
                 continue;
             }
-            var valueType   = i.GenericTypeArguments[0];
-            var indexType   = ComponentIndexAttribute.GetComponentIndex(componentType.Type);
-            Type genericIndexType = null;
-            if (indexType != null) {
-                genericIndexType = indexType.MakeGenericType(new Type[] { valueType });
-            }
+            var valueType               = i.GenericTypeArguments[0];
+            var indexType               = MakeIndexType(valueType, componentType.Type);
             var createIndex             = MakeCreateIndex(valueType);
-            var indexedComponentType    = new IndexedComponentType(componentType, createIndex, genericIndexType);
+            var indexedComponentType    = new IndexedComponentType(componentType, createIndex, indexType);
             schemaTypes.indexedComponents.Add(indexedComponentType);
         }
+    }
+    
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")] // TODO
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
+    private static Type MakeIndexType(Type valueType, Type componentType)
+    {
+        if (valueType == typeof(Entity)) {
+            return null;
+        }
+        var indexType   = ComponentIndexAttribute.GetComponentIndex(componentType);
+        var typeArgs    = new [] { valueType };
+        if (indexType != null) {
+            return indexType.                   MakeGenericType(typeArgs);
+        }
+        if (valueType.IsClass) {
+            return typeof(HasValueClassIndex<>).MakeGenericType(typeArgs);
+        }
+        return typeof(HasValueStructIndex<>).   MakeGenericType(typeArgs);
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
@@ -76,7 +89,7 @@ internal readonly struct IndexedComponentType
         if (typeof(TValue) == typeof(Entity)) {
             return new HasEntityIndex();    
         }
-        return new HasValueIndex<TValue>();
+        throw new InvalidOperationException("unexpected index type");
     }
 }
 

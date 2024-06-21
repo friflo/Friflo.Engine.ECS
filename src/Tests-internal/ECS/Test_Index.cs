@@ -142,7 +142,7 @@ public static class Test_Index
     }
     
     /// <summary>
-    /// Cover <see cref="HasValueIndex{TValue}.Add{TComponent}"/>
+    /// Cover <see cref="HasValueStructIndex{TValue}.Add{TComponent}"/>
     /// </summary>
     [Test]
     public static void Test_Index_Component_Update()
@@ -250,7 +250,7 @@ public static class Test_Index
         
         entity.AddComponent(new IndexedName { name = "added" });
         
-        var index = (HasValueIndex<string>)StoreIndex.GetIndex(world, StructInfo<IndexedName>.Index);
+        var index = (HasValueClassIndex<string>)StoreIndex.GetIndex(world, StructInfo<IndexedName>.Index);
         index.Add(1, new IndexedName { name = "added" });
         AreEqual(1, index.Count);
     }
@@ -263,7 +263,7 @@ public static class Test_Index
         var e = Throws<NotSupportedException>(() => {
             _ = query.Count;
         });
-        AreEqual("ValueInRange() not supported by HasValueIndex`1", e!.Message);
+        AreEqual("ValueInRange() not supported by HasValueStructIndex`1", e!.Message);
     }
     
     [Test]
@@ -286,7 +286,7 @@ public static class Test_Index
         
         AreEqual("IndexedName", indexes[StructInfo<IndexedName>.Index].ToString());
         entity1.AddComponent(new IndexedName { name = "test" });
-        AreEqual("IndexedName - HasValueIndex`1 count: 1", indexes[StructInfo<IndexedName>.Index].ToString());
+        AreEqual("IndexedName - HasValueClassIndex`1 count: 1", indexes[StructInfo<IndexedName>.Index].ToString());
         
         entity1.AddComponent(new IndexedEntity { entity = entity2 });
         AreEqual("IndexedEntity - HasEntityIndex count: 1", indexes[StructInfo<IndexedEntity>.Index].ToString());
