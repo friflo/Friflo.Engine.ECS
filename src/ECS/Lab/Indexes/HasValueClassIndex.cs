@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
@@ -11,13 +12,14 @@ internal sealed class HasValueClassIndex<TValue>  : ComponentIndex<TValue> where
     internal override   int                         Count       => map.Count;
     private  readonly   Dictionary<TValue, IdArray> map         = new();
     private  readonly   IdArrayHeap                 arrayHeap   = new();
+    private             IdArray                     nullValue;
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
-        DictionaryUtils.AddComponentValue    (id, value, map, arrayHeap);
+        AddComponentValue    (id, value);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
@@ -27,22 +29,50 @@ internal sealed class HasValueClassIndex<TValue>  : ComponentIndex<TValue> where
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
-        DictionaryUtils.RemoveComponentValue (id, oldValue, map, arrayHeap);
-        DictionaryUtils.AddComponentValue    (id, value,    map, arrayHeap);
+        RemoveComponentValue (id, oldValue);
+        AddComponentValue    (id, value);
     }
 
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        DictionaryUtils.RemoveComponentValue (id, value, map, arrayHeap);
+        RemoveComponentValue (id, value);
+    }
+    #endregion
+    
+#region null handling
+    private void AddComponentValue(int id, in TValue value)
+    {
+        if (value != null) {
+            DictionaryUtils.AddComponentValue (id, value, map, arrayHeap);
+            return;
+        }
+        var idSpan = nullValue.GetIdSpan(arrayHeap);
+        if (idSpan.IndexOf(id) != -1) return; // unexpected. Better safe than sorry. Used belts with suspenders :)
+        nullValue.AddId(id, arrayHeap);
+    }
+    
+    private void RemoveComponentValue(int id, in TValue value)
+    {
+        if (value != null) {
+            DictionaryUtils.RemoveComponentValue (id, value, map, arrayHeap);
+            return;
+        }
+        var idSpan  = nullValue.GetIdSpan(arrayHeap);
+        var index   = idSpan.IndexOf(id);
+        if (index == -1) return; // unexpected. Better safe than sorry. Used belts with suspenders :)
+        nullValue.RemoveAt(index, arrayHeap);
     }
     #endregion
     
 #region get matches
     internal override Entities GetHasValueEntities(TValue value)
     {
-        map.TryGetValue(value, out var ids);
-        return arrayHeap.GetEntities(store, ids);
+        if (value != null) {
+            map.TryGetValue(value, out var ids);
+            return arrayHeap.GetEntities(store, ids);
+        }
+        return arrayHeap.GetEntities(store, nullValue);
     }
     #endregion
 }

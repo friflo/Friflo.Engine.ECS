@@ -5,6 +5,7 @@ using System.Reflection;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantExplicitArrayCreation
@@ -240,6 +241,24 @@ public static class Test_Index
         entity3.RemoveComponent<IndexedEntity>();
         references5 = target5.GetForeignEntities<IndexedEntity>();
         AreEqual(new int [] {         },   references5.Ids.ToArray());
+    }
+    
+    [Test]
+    public static void Test_Index_support_null()
+    {
+        var world   = new EntityStore();
+        var entity1 = world.CreateEntity();
+        var entity2 = world.CreateEntity();
+        entity1.AddComponent(new IndexedName { name = null });
+        entity2.AddComponent(new IndexedName { name = null });
+        
+        var start = Mem.GetAllocatedBytes();
+        var result = world.GetEntitiesWithComponentValue<IndexedName, string>(null);
+        Mem.AssertNoAlloc(start);
+        
+        AreEqual(2, result.Count);
+        AreEqual(1, result[0].Id);
+        AreEqual(2, result[1].Id);
     }
     
     [Test]
