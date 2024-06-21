@@ -259,6 +259,27 @@ public static class Test_Index
         AreEqual(2, result.Count);
         AreEqual(1, result[0].Id);
         AreEqual(2, result[1].Id);
+        
+        entity2.RemoveComponent<IndexedName>();
+        result = world.GetEntitiesWithComponentValue<IndexedName, string>(null);
+        AreEqual(1, result.Count);
+    }
+    
+    [Test]
+    public static void Test_Index_ValueStructIndex()
+    {
+        var world   = new EntityStore();
+        var entity1 = world.CreateEntity();
+        entity1.AddComponent(new IndexedInt { value = 123 });
+        entity1.AddComponent(new IndexedInt { value = 123 }); // add same component value again
+        var result = world.GetEntitiesWithComponentValue<IndexedInt, int>(123);
+        AreEqual(1, result.Count);
+        
+        entity1.AddComponent(new IndexedInt { value = 456 });
+        result = world.GetEntitiesWithComponentValue<IndexedInt, int>(456);
+        AreEqual(1, result.Count);
+        result = world.GetEntitiesWithComponentValue<IndexedInt, int>(123);
+        AreEqual(0, result.Count);
     }
     
     [Test]
