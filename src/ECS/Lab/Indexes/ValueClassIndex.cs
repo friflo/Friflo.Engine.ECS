@@ -52,7 +52,7 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
         nullValue.AddId(id, arrayHeap);
     }
     
-    private void RemoveComponentValue(int id, in TValue value)
+    internal void RemoveComponentValue(int id, in TValue value)
     {
         if (value != null) {
             DictionaryUtils.RemoveComponentValue (id, value, map, arrayHeap);

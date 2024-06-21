@@ -283,6 +283,17 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_exceptions()
+    {
+        var store = new EntityStore();
+        var query = store.Query().ValueInRange<IndexedInt, int>(1,2);
+        var e = Throws<NotSupportedException>(() => {
+            _ = query.Count;
+        });
+        AreEqual("ValueInRange() not supported by ValueStructIndex`1", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Index_already_added()
     {
         var world   = new EntityStore();
@@ -296,23 +307,14 @@ public static class Test_Index
     }
     
     [Test]
-    public static void Test_Index_exceptions()
-    {
-        var store = new EntityStore();
-        var query = store.Query().ValueInRange<IndexedInt, int>(1,2);
-        var e = Throws<NotSupportedException>(() => {
-            _ = query.Count;
-        });
-        AreEqual("ValueInRange() not supported by ValueStructIndex`1", e!.Message);
-    }
-    
-    [Test]
     public static void Test_Index_already_removed()
     {
-        var map = new Dictionary<string, IdArray>();
-        var arrayHeap = new IdArrayHeap();
-        DictionaryUtils.RemoveComponentValue(1, "missing", map, arrayHeap);   // add key with default IdArray
-        AreEqual(1, map.Count);
+        var index = new ValueClassIndex<string>();
+        index.RemoveComponentValue(1, "missing");   // add key with default IdArray
+        AreEqual(1, index.Count);
+        
+        index.RemoveComponentValue(2, null);
+        AreEqual(1, index.Count);
     }
     
     [Test]
