@@ -3,32 +3,27 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
-
-internal delegate ComponentIndex CreateIndex(Type indexType);
 
 internal readonly struct IndexedComponentType
 {
     /// <summary> Not null in case component is indexed. </summary>
     internal readonly ComponentType componentType;  //  8
     
-    /// <summary> If generic delegate of <see cref="CreateInvertedIndex{TValue}"/> </summary>
-    private  readonly CreateIndex   createIndex;    //  8
-    
     private  readonly Type          indexType;      //  8
     
-    private IndexedComponentType(ComponentType componentType, CreateIndex createIndex, Type indexType) {
+    private IndexedComponentType(ComponentType componentType, Type indexType) {
         this.componentType  = componentType;
-        this.createIndex    = createIndex;
         this.indexType      = indexType;
     }
     
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     internal ComponentIndex CreateComponentIndex(EntityStore store)
     {
-        var index   = createIndex(indexType);
+        var obj     = Activator.CreateInstance(indexType);
+        var index   = (ComponentIndex)obj!;
         index.store = store;
         return index;
     }
@@ -46,8 +41,7 @@ internal readonly struct IndexedComponentType
             }
             var valueType               = i.GenericTypeArguments[0];
             var indexType               = MakeIndexType(valueType, componentType.Type);
-            var createIndex             = MakeCreateIndex(valueType);
-            var indexedComponentType    = new IndexedComponentType(componentType, createIndex, indexType);
+            var indexedComponentType    = new IndexedComponentType(componentType, indexType);
             schemaTypes.indexedComponents.Add(indexedComponentType);
         }
     }
@@ -58,38 +52,17 @@ internal readonly struct IndexedComponentType
     private static Type MakeIndexType(Type valueType, Type componentType)
     {
         if (valueType == typeof(Entity)) {
-            return null;
+            return typeof(EntityIndex);
         }
         var indexType   = ComponentIndexAttribute.GetComponentIndex(componentType);
         var typeArgs    = new [] { valueType };
         if (indexType != null) {
-            return indexType.                   MakeGenericType(typeArgs);
+            return indexType.                MakeGenericType(typeArgs);
         }
         if (valueType.IsClass) {
             return typeof(ValueClassIndex<>).MakeGenericType(typeArgs);
         }
         return typeof(ValueStructIndex<>).   MakeGenericType(typeArgs);
-    }
-    
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
-    private static CreateIndex MakeCreateIndex(Type valueType)
-    {
-        const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        var methodInfo      = typeof(IndexedComponentType).GetMethod(nameof(CreateInvertedIndex), flags);
-        var genericMethod   = methodInfo?.MakeGenericMethod(valueType);
-        return (CreateIndex)Delegate.CreateDelegate(typeof(CreateIndex), null, genericMethod!);
-    }
-    
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2067", Justification = "TODO")]
-    internal static ComponentIndex CreateInvertedIndex<TValue>(Type indexType)
-    {
-        if (indexType != null) {
-            return(ComponentIndex)Activator.CreateInstance(indexType);
-        }
-        if (typeof(TValue) == typeof(Entity)) {
-            return new EntityIndex();    
-        }
-        throw new InvalidOperationException("unexpected index type");
     }
 }
 
