@@ -6,23 +6,14 @@ namespace Friflo.Engine.ECS.Index;
 
 internal struct StoreIndex
 {
+    public   override   string          ToString()  => GetString();
+    
     /// <summary> component index created on demand. </summary>
-    private             ComponentIndex          index;  //  8
-    internal readonly   IndexedComponentType    type;   // 24
+    private             ComponentIndex  index;          //  8
+    private  readonly   int             structIndex;    //  4
 
-    public override string ToString() {
-        if (type.componentType == null) {
-            return null;
-        }
-        var name = type.componentType.Name;
-        if (index == null) {
-            return name;
-        }
-        return $"{name} - {index.GetType().Name} count: {index.Count}";
-    }
-
-    internal StoreIndex(IndexedComponentType type) {
-        this.type   = type;
+    internal StoreIndex(int structIndex) {
+        this.structIndex = structIndex;
     }
     
     internal static ComponentIndex GetIndex(EntityStore store, int structIndex)
@@ -31,7 +22,20 @@ internal struct StoreIndex
         if (index != null) {
             return index;
         }
-        ref var storeIndex      = ref store.extension.indexes[structIndex];
-        return storeIndex.index = storeIndex.type.CreateComponentIndex(store);
+        var type = EntityStoreBase.Static.EntitySchema.indexedComponentMap[structIndex];
+        return store.extension.indexes[structIndex].index = type.CreateComponentIndex(store);
+    }
+    
+    private string GetString()
+    {
+        var type = EntityStoreBase.Static.EntitySchema.indexedComponentMap[structIndex];
+        if (type.componentType == null) {
+            return null;
+        }
+        var name = type.componentType.Name;
+        if (index == null) {
+            return name;
+        }
+        return $"{name} - {index.GetType().Name} count: {index.Count}";
     }
 }
