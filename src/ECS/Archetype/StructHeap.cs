@@ -48,7 +48,7 @@ internal struct HeapInfo
     
     private static ComponentIndex CreateIndex(EntityStoreBase store, int structIndex) {
         var entityStore = (EntityStore)store;
-        return entityStore.extension.indexes[structIndex].GetIndex(entityStore);
+        return StoreIndex.GetIndex(entityStore, structIndex);
     }
 }
 

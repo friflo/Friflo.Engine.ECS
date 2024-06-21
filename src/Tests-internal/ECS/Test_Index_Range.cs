@@ -140,7 +140,7 @@ public static class Test_Index_Range
         
         entity.AddComponent(new IndexedIntRange { value =  456 });
         
-        var index = (ValueInRangeIndex<int>)world.GetIndex(StructInfo<IndexedIntRange>.Index);
+        var index = (ValueInRangeIndex<int>)StoreIndex.GetIndex(world, StructInfo<IndexedIntRange>.Index);
         index.Add(1, new IndexedIntRange { value = 456 });
         AreEqual(1, index.Count);
     }

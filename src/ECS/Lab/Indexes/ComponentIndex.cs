@@ -68,10 +68,13 @@ internal struct StoreIndex
         this.type   = type;
     }
     
-    internal ComponentIndex GetIndex(EntityStore store) {
+    internal static ComponentIndex GetIndex(EntityStore store, int structIndex)
+    {
+        var index = store.extension.indexes[structIndex].index;
         if (index != null) {
             return index;
         }
-        return index = type.CreateComponentIndex(store);
+        ref var storeIndex      = ref store.extension.indexes[structIndex];
+        return storeIndex.index = storeIndex.type.CreateComponentIndex(store);
     }
 }

@@ -670,7 +670,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// Executes in O(1) with default index. O(log n) when using <see cref="ValueInRangeIndex{TValue}"/>. 
     /// </summary>
     internal Entities GetForeignEntities<TComponent>() where TComponent: struct, IIndexedComponent<Entity> {
-        var index = (ComponentIndex<Entity>)store.GetIndex(StructInfo<TComponent>.Index);
+        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(this);
     }
     #endregion

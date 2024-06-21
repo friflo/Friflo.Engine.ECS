@@ -260,11 +260,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Executes in O(1) with default index. O(log n) when using <see cref="ValueInRangeIndex{TValue}"/>. 
     /// </summary>
     internal Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
-        var index = (ComponentIndex<TValue>)GetIndex(StructInfo<TComponent>.Index);
+        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(value);
-    }
-    
-    internal ComponentIndex GetIndex(int index) {
-        return extension.indexes[index].GetIndex(this);
     }
 }
