@@ -6,7 +6,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class ValueInRangeIndex<TValue>  : ComponentIndex<TValue>
+internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
 {
     internal override   int                         Count       => map.Count;
     private  readonly   SortedList<TValue, IdArray> map         = new();

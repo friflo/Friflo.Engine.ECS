@@ -6,7 +6,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class HasValueStructIndex<TValue>  : ComponentIndex<TValue> where TValue : struct
+internal sealed class ValueStructIndex<TValue>  : ComponentIndex<TValue> where TValue : struct
 {
     internal override   int                         Count       => map.Count;
     private  readonly   Dictionary<TValue, IdArray> map         = new();

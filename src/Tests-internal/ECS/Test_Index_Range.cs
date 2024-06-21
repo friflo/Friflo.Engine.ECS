@@ -12,7 +12,7 @@ namespace Internal.ECS {
 public static class Test_Index_Range
 {
     [CodeCoverageTest]
-    [ComponentIndex(typeof(ValueInRangeIndex<>))]
+    [ComponentIndex(typeof(RangeIndex<>))]
     private struct IndexedIntRange : IIndexedComponent<int> {
         public      int     GetIndexedValue() => value;
         internal    int     value;
@@ -140,7 +140,7 @@ public static class Test_Index_Range
         
         entity.AddComponent(new IndexedIntRange { value =  456 });
         
-        var index = (ValueInRangeIndex<int>)StoreIndex.GetIndex(store, StructInfo<IndexedIntRange>.Index);
+        var index = (RangeIndex<int>)StoreIndex.GetIndex(store, StructInfo<IndexedIntRange>.Index);
         index.Add(1, new IndexedIntRange { value = 456 });
         AreEqual(1, index.Count);
     }

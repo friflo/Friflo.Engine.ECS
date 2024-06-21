@@ -667,7 +667,7 @@ public readonly struct Entity : IEquatable<Entity>
 #region Lab
     /// <summary>
     /// Return the entities referencing this entity using a <see cref="Entity"/> component index.<br/>
-    /// Executes in O(1) with default index. O(log n) when using <see cref="ValueInRangeIndex{TValue}"/>. 
+    /// Executes in O(1) with default index. O(log n) when using <see cref="RangeIndex{TValue}"/>. 
     /// </summary>
     internal Entities GetForeignEntities<TComponent>() where TComponent: struct, IIndexedComponent<Entity> {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);

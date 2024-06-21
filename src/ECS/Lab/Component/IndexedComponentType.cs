@@ -66,9 +66,9 @@ internal readonly struct IndexedComponentType
             return indexType.                   MakeGenericType(typeArgs);
         }
         if (valueType.IsClass) {
-            return typeof(HasValueClassIndex<>).MakeGenericType(typeArgs);
+            return typeof(ValueClassIndex<>).MakeGenericType(typeArgs);
         }
-        return typeof(HasValueStructIndex<>).   MakeGenericType(typeArgs);
+        return typeof(ValueStructIndex<>).   MakeGenericType(typeArgs);
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
@@ -87,7 +87,7 @@ internal readonly struct IndexedComponentType
             return(ComponentIndex)Activator.CreateInstance(indexType);
         }
         if (typeof(TValue) == typeof(Entity)) {
-            return new HasEntityIndex();    
+            return new EntityIndex();    
         }
         throw new InvalidOperationException("unexpected index type");
     }
