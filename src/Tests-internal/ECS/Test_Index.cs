@@ -297,13 +297,17 @@ public static class Test_Index
     public static void Test_Index_already_added()
     {
         var world   = new EntityStore();
-        var entity  = world.CreateEntity(1);
+        var entity1 = world.CreateEntity(1);
+        var entity2 = world.CreateEntity(2);
         
-        entity.AddComponent(new IndexedName { name = "added" });
+        entity1.AddComponent(new IndexedName { name = "added" });
+        entity2.AddComponent(new IndexedName { name = null });
         
         var index = (ValueClassIndex<string>)StoreIndex.GetIndex(world, StructInfo<IndexedName>.Index);
         index.Add(1, new IndexedName { name = "added" });
-        AreEqual(1, index.Count);
+        index.Add(2, new IndexedName { name = null    });
+
+        AreEqual(2, index.Count);
     }
     
     [Test]

@@ -9,7 +9,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TValue : class
 {
-    internal override   int                         Count       => map.Count;
+    internal override   int                         Count       => map.Count + (nullValue.count > 0 ? 1 : 0);
     private  readonly   Dictionary<TValue, IdArray> map         = new();
     private  readonly   IdArrayHeap                 arrayHeap   = new();
     private             IdArray                     nullValue;
