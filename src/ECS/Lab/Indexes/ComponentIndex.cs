@@ -9,9 +9,11 @@ namespace Friflo.Engine.ECS.Index;
 
 internal abstract class ComponentIndex
 {
-    internal abstract int Count { get; }
+    internal abstract   int     Count { get; }
+    public   override   string  ToString() => GetString();
 
-    internal EntityStore store; // could be made readonly
+    internal EntityStore    store;          // could be made readonly
+    internal ComponentType  componentType;  // only for debugging
     
     internal abstract void Add   <TComponent>(int id, in TComponent component)                  where TComponent : struct, IComponent;
     internal abstract void Update<TComponent>(int id, in TComponent component, StructHeap heap) where TComponent : struct, IComponent;
@@ -19,6 +21,10 @@ internal abstract class ComponentIndex
     
     internal NotSupportedException NotSupportedException(string name) {
         return new NotSupportedException($"{name} not supported by {GetType().Name}");
+    }
+    
+    private string GetString() {
+        return $"{componentType.Name} - {GetType().Name} count: {Count}";
     }
 }
 

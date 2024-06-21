@@ -330,9 +330,7 @@ public static class Test_Index
         entity1.AddComponent(new IndexedName { name = "test" });
         
         var indexMap    = store.extension.indexMap;
-        AreEqual(null,          indexMap[StructInfo<Position>.Index].ToString());
-        
-        AreEqual("IndexedEntity", indexMap[StructInfo<IndexedEntity>.Index].ToString());
+        AreEqual(null,          indexMap[StructInfo<Position>.Index]);
 
         AreEqual("IndexedName - ValueClassIndex`1 count: 1", indexMap[StructInfo<IndexedName>.Index].ToString());
         

@@ -22,9 +22,10 @@ internal readonly struct IndexedComponentType
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     internal ComponentIndex CreateComponentIndex(EntityStore store)
     {
-        var obj     = Activator.CreateInstance(indexType);
-        var index   = (ComponentIndex)obj!;
-        index.store = store;
+        var obj             = Activator.CreateInstance(indexType);
+        var index           = (ComponentIndex)obj!;
+        index.store         = store;
+        index.componentType = componentType;
         return index;
     }
     
