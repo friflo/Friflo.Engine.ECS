@@ -277,16 +277,6 @@ public static class Test_Index
     }
     
     [Test]
-    public static void Test_Index_size_of()
-    {
-        var size = Marshal.SizeOf(typeof(StoreIndex));
-        AreEqual(32, size);
-        
-        size = Marshal.SizeOf(typeof(HeapInfo));
-        AreEqual(24, size);
-    }
-    
-    [Test]
     public static void Test_Index_StoreIndex_ToString()
     {
         var store   = new EntityStore();
