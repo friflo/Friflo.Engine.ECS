@@ -46,14 +46,14 @@ public static class Test_Index
     [Test]
     public static void Test_Index_Component_Add_Remove()
     {
-        var world = new EntityStore();
-        var targets = new EntityList(world);
+        var store = new EntityStore();
+        var targets = new EntityList(store);
         for (int n = 0; n < 10; n++) {
-            targets.Add(world.CreateEntity());
+            targets.Add(store.CreateEntity());
         }
         var entities = new List<Entity>();
         for (int n = 0; n < 10; n++) {
-            var entity = world.CreateEntity(new Position(n, 0, 0), new AttackComponent{target = targets[n]});
+            var entity = store.CreateEntity(new Position(n, 0, 0), new AttackComponent{target = targets[n]});
             entities.Add(entity);
         }
         Entity target = targets[0];
@@ -67,13 +67,13 @@ public static class Test_Index
         entity2.AddComponent(new IndexedInt     { value  = 123       });
         entity2.AddComponent(new AttackComponent{ target = target    });
         
-        var query1  = world.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");
-        var query2  = world.Query<Position,    IndexedInt>().   HasValue<IndexedInt,    int>   (123);
-        var query3  = world.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me").
+        var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");
+        var query2  = store.Query<Position,    IndexedInt>().   HasValue<IndexedInt,    int>   (123);
+        var query3  = store.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me").
                                                                 HasValue<IndexedInt,    int>   (123);
-        var query4  = world.Query().                            HasValue<IndexedName,   string>("find-me").
+        var query4  = store.Query().                            HasValue<IndexedName,   string>("find-me").
                                                                 HasValue<IndexedInt,    int>   (123);
-        var query5  = world.Query<Position, AttackComponent>(). HasValue<AttackComponent, Entity>(target);
+        var query5  = store.Query<Position, AttackComponent>(). HasValue<AttackComponent, Entity>(target);
         
         {
             int count = 0;

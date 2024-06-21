@@ -135,12 +135,12 @@ public static class Test_Index_Range
     [Test]
     public static void Test_Index_Range_already_added()
     {
-        var world   = new EntityStore();
-        var entity  = world.CreateEntity(1);
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(1);
         
         entity.AddComponent(new IndexedIntRange { value =  456 });
         
-        var index = (ValueInRangeIndex<int>)StoreIndex.GetIndex(world, StructInfo<IndexedIntRange>.Index);
+        var index = (ValueInRangeIndex<int>)StoreIndex.GetIndex(store, StructInfo<IndexedIntRange>.Index);
         index.Add(1, new IndexedIntRange { value = 456 });
         AreEqual(1, index.Count);
     }
