@@ -23,9 +23,9 @@ public sealed partial class EntityStore
     /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
     /// </summary>
     /// <remarks>
-    /// To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
-    /// <br/>
-    /// In case the indexed component uses a <see cref="RangeIndex{TValue}"/> returned values are ordered.<br/>
+    /// - The collection changes when indexed component values are updated, removed or added.<br/>
+    /// - To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
+    /// - In case the indexed component uses a <see cref="RangeIndex{TValue}"/> collection values are ordered.<br/>
     /// </remarks>
     internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TIndexedComponent, TValue>() where TIndexedComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TIndexedComponent>.Index);
