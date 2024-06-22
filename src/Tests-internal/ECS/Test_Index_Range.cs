@@ -156,7 +156,13 @@ public static class Test_Index_Range
         SortedListUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
         AreEqual(0, map.Count);
     }
+
     
+    // Indexing using range index currently allocates memory when using value types like int.
+    // One reason is that SortedList<,>.TryGetValue() does boxing when using:
+    // Array.BinarySearch<T>(T[] array, int index, int length, T value, IComparer<T>? comparer).
+    // E.g. BinarySearch<> does boxing at
+    // https://github.com/dotnet/corert/blob/master/src/System.Private.CoreLib/shared/System/Collections/Generic/ArraySortHelper.cs#L353
     // [Test]
     public static void Test_Index_Allocation()
     {
