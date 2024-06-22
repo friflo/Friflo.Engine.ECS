@@ -13,7 +13,7 @@ internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
     internal override   int                         Count       => map.Count;
     private  readonly   SortedList<TValue, IdArray> map         = new();
     private  readonly   IdArrayHeap                 arrayHeap   = new();
-    private             ReadOnlyCollection<TValue>  keyCollection;     
+    private             ReadOnlyCollection<TValue>  keyCollection;
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)

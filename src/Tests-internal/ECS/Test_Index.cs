@@ -222,9 +222,20 @@ public static class Test_Index
         var target5 = store.CreateEntity(5);
         var target6 = store.CreateEntity(6);
         
-        entity1.AddComponent(new IndexedEntity { entity = target4 });
-        entity2.AddComponent(new IndexedEntity { entity = target5 });
-        entity3.AddComponent(new IndexedEntity { entity = target5 });
+        var values = store.GetIndexedComponentValues<IndexedEntity, Entity>();
+        
+        entity1.AddComponent(new IndexedEntity { entity = target4 });   AreEqual(1, values.Count);
+        entity2.AddComponent(new IndexedEntity { entity = target5 });   AreEqual(2, values.Count);
+        entity3.AddComponent(new IndexedEntity { entity = target5 });   AreEqual(2, values.Count);
+
+        int count = 0;
+        foreach (var entity in values) {
+            switch (count++) {
+                case 0: AreEqual(4, entity.Id); break;
+                case 1: AreEqual(5, entity.Id); break;
+            } 
+        }
+        AreEqual(2, count);
         
         var query1  = store.Query().HasValue<IndexedEntity,   Entity>(target4);
         var query2  = store.Query().HasValue<IndexedEntity,   Entity>(target4).
@@ -239,15 +250,15 @@ public static class Test_Index
         var references5 = target5.GetForeignEntities<IndexedEntity>();
         AreEqual(new int [] { 2, 3    },   references5.Ids.ToArray());
         
-        entity2.AddComponent(new IndexedEntity { entity = target6 });
+        entity2.AddComponent(new IndexedEntity { entity = target6 });   AreEqual(3, values.Count);
         references5 = target5.GetForeignEntities<IndexedEntity>();
         AreEqual(new int [] { 3       },   references5.Ids.ToArray());
         
-        entity2.AddComponent(new IndexedEntity { entity = target6 });
+        entity2.AddComponent(new IndexedEntity { entity = target6 });   AreEqual(3, values.Count);
         references5 = target5.GetForeignEntities<IndexedEntity>();
         AreEqual(new int [] { 3       },   references5.Ids.ToArray());
         
-        entity3.RemoveComponent<IndexedEntity>();
+        entity3.RemoveComponent<IndexedEntity>();                       AreEqual(2, values.Count);
         references5 = target5.GetForeignEntities<IndexedEntity>();
         AreEqual(new int [] {         },   references5.Ids.ToArray());
     }

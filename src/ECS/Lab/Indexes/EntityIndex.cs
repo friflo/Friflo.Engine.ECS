@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 
 // ReSharper disable InlineTemporaryVariable
@@ -11,8 +10,9 @@ namespace Friflo.Engine.ECS.Index;
 internal sealed class EntityIndex : ComponentIndex<Entity>
 {
     internal override   int                         Count       => map.Count;
-    private  readonly   Dictionary<int, IdArray>    map         = new();
+    internal readonly   Dictionary<int, IdArray>    map         = new();
     private  readonly   IdArrayHeap                 arrayHeap   = new();
+    private             EntityIndexValues           keyCollection;
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
@@ -49,7 +49,6 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
         return arrayHeap.GetEntities(store, ids);
     }
     
-    internal override IReadOnlyCollection<Entity> IndexedComponentValues => throw new NotImplementedException();
-
+    internal override IReadOnlyCollection<Entity> IndexedComponentValues => keyCollection ??= new EntityIndexValues(this);
     #endregion
 }
