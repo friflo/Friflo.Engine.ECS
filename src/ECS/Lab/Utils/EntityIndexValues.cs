@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,7 +19,7 @@ internal sealed class EntityIndexValues : IReadOnlyCollection<Entity>
     }
 
     public IEnumerator<Entity> GetEnumerator() => new EntityIndexValuesEnumerator(entityIndex);
-    IEnumerator    IEnumerable.GetEnumerator() => new EntityIndexValuesEnumerator(entityIndex);
+    IEnumerator    IEnumerable.GetEnumerator() => throw new NotImplementedException();
 }
 
 internal sealed class EntityIndexValuesEnumerator : IEnumerator<Entity>
@@ -28,7 +29,7 @@ internal sealed class EntityIndexValuesEnumerator : IEnumerator<Entity>
     
     internal EntityIndexValuesEnumerator(EntityIndex entityIndex) {
         enumerator  = entityIndex.map.Keys.GetEnumerator();
-        store       = entityIndex.store; 
+        store       = entityIndex.store;
     }
 
     // --- IDisposable
@@ -36,8 +37,8 @@ internal sealed class EntityIndexValuesEnumerator : IEnumerator<Entity>
 
     // --- IEnumerator
     public  bool    MoveNext()          => enumerator.MoveNext();
-    public  void    Reset()             => ((IEnumerator)enumerator).Reset();
-            object  IEnumerator.Current => new Entity(store, enumerator.Current);
+    public  void    Reset()             => throw new NotImplementedException();
+            object  IEnumerator.Current => throw new NotImplementedException();
 
     // --- IEnumerator<>
     public  Entity  Current             => new Entity(store, enumerator.Current);

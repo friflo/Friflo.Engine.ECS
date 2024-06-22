@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -359,6 +360,25 @@ public static class Test_Index
         
         entity1.AddComponent(new IndexedInt { value = 42 });
         AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexMap[StructInfo<IndexedInt>.Index].ToString());
+    }
+    
+    [Test]
+    public static void Test_Index_EntityIndexValue()
+    {
+        var index       = new EntityIndex();
+        var values      = new EntityIndexValues(index) as IEnumerable;
+
+        Throws<NotImplementedException>(() => {
+            // ReSharper disable once NotDisposedResource
+            values.GetEnumerator();
+        });
+        IEnumerator e = new EntityIndexValuesEnumerator(index);
+        Throws<NotImplementedException>(() => {
+            _ = e.Current;
+        });
+        Throws<NotImplementedException>(() => {
+            e.Reset();
+        });
     }
     
     internal static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
