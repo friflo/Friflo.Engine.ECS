@@ -12,8 +12,8 @@ internal static class SortedListUtils
     internal static void RemoveComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, IdArrayHeap arrayHeap)
     {
         map.TryGetValue(value, out var ids);
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        var index = idSpan.IndexOf(id);
+        var idSpan  = ids.GetIdSpan(arrayHeap);
+        var index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }

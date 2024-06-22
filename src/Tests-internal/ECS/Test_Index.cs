@@ -315,10 +315,10 @@ public static class Test_Index
     {
         var index = new ValueClassIndex<string>();
         index.RemoveComponentValue(1, "missing");   // add key with default IdArray
-        AreEqual(1, index.Count);
+        AreEqual(0, index.Count);
         
         index.RemoveComponentValue(2, null);
-        AreEqual(1, index.Count);
+        AreEqual(0, index.Count);
     }
     
     [Test]
