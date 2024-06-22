@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
@@ -27,8 +28,10 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
         if (oldValue.Id == value.Id) {
             return;
         }
-        DictionaryUtils.RemoveComponentValue (id, oldValue.Id, map, arrayHeap);
-        DictionaryUtils.AddComponentValue    (id, value.   Id, map, arrayHeap);
+        var localHeap = arrayHeap;
+        var localMap  = map;
+        DictionaryUtils.RemoveComponentValue (id, oldValue.Id, localMap, localHeap);
+        DictionaryUtils.AddComponentValue    (id, value.   Id, localMap, localHeap);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap heap)
