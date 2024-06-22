@@ -37,9 +37,11 @@ public static class Test_Index_Range
         var entity2 = store.CreateEntity(new Position());
         var entity3 = store.CreateEntity(new Position());
         
-        entity1.AddComponent(new IndexedIntRange { value  = 100 });
-        entity2.AddComponent(new IndexedIntRange { value  = 200 });
-        entity3.AddComponent(new IndexedIntRange { value  = 300 });
+        var values = store.GetIndexedComponentValues<IndexedIntRange, int>();
+
+        entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual(1, values.Count);
+        entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual(2, values.Count);
+        entity3.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual(3, values.Count);
         
         var result = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(100);
         AreEqual(1, result.Count);     AreEqual(new int[] { 1 },    result.Ids.ToArray());
@@ -106,11 +108,12 @@ public static class Test_Index_Range
         var entity3 = store.CreateEntity(new Position());
         var entity4 = store.CreateEntity(new Position());
         
-        entity1.AddComponent(new IndexedIntRange { value  = 100 });
-        entity2.AddComponent(new IndexedIntRange { value  = 200 });
-        entity3.AddComponent(new IndexedIntRange { value  = 200 });
-        entity4.AddComponent(new IndexedIntRange { value  = 300 });
-        entity4.AddComponent(new IndexedIntRange { value  = 300 }); // cover add same component value again
+        var values = store.GetIndexedComponentValues<IndexedIntRange, int>();
+        entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual(1, values.Count);
+        entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual(2, values.Count);
+        entity3.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual(2, values.Count);
+        entity4.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual(3, values.Count);
+        entity4.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual(3, values.Count); // cover add same component value again
         
         var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
         var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(200, 400);
@@ -118,11 +121,11 @@ public static class Test_Index_Range
         AreEqual(4, query1.Entities.Count);     AreEqual(new int[] { 1, 2, 3, 4 }, query1.Entities.ToIds());
         AreEqual(3, query2.Entities.Count);     AreEqual(new int[] {    2, 3, 4 }, query2.Entities.ToIds());
         
-        entity1.AddComponent(new IndexedIntRange { value  = 400 });
+        entity1.AddComponent(new IndexedIntRange { value  = 400 });     AreEqual(3, values.Count);
         AreEqual(3, query1.Entities.Count);     AreEqual(new int[] {    2, 3, 4 }, query1.Entities.ToIds());
         AreEqual(4, query2.Entities.Count);     AreEqual(new int[] { 2, 3, 4, 1 }, query2.Entities.ToIds());
         
-        entity2.RemoveComponent<IndexedIntRange>();
+        entity2.RemoveComponent<IndexedIntRange>();                          AreEqual(3, values.Count);
         AreEqual(2, query1.Entities.Count);     AreEqual(new int[] {       3, 4 }, query1.Entities.ToIds());
         AreEqual(3, query2.Entities.Count);     AreEqual(new int[] {    3, 4, 1 }, query2.Entities.ToIds());
     }

@@ -74,5 +74,7 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
         }
         return arrayHeap.GetEntities(store, nullValue);
     }
+    
+    internal override IReadOnlyCollection<TValue> IndexedComponentValues => map.Keys;
     #endregion
 }

@@ -263,4 +263,18 @@ public sealed partial class EntityStore : EntityStoreBase
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(value);
     }
+    
+    /// <summary>
+    /// Returns a collection of all indexed component values of the passed <typeparamref name="TIndexedComponent"/>.<br/>
+    /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
+    /// </summary>
+    /// <remarks>
+    /// To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
+    /// <br/>
+    /// In case the indexed component uses a <see cref="RangeIndex{TValue}"/> returned values are ordered.<br/>
+    /// </remarks>
+    internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TIndexedComponent, TValue>() where TIndexedComponent: struct, IIndexedComponent<TValue> {
+        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TIndexedComponent>.Index);
+        return index.IndexedComponentValues;
+    }
 }

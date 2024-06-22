@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable InlineTemporaryVariable
@@ -47,5 +48,8 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
         map.TryGetValue(value.Id, out var ids);
         return arrayHeap.GetEntities(store, ids);
     }
+    
+    internal override IReadOnlyCollection<Entity> IndexedComponentValues => throw new NotImplementedException();
+
     #endregion
 }

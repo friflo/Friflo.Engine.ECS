@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
@@ -62,10 +63,13 @@ public static class Test_Index
         var entity1 = entities[1];
         var entity2 = entities[2];
         
-        entity0.AddComponent(new IndexedName    { name   = "find-me" });
-        entity1.AddComponent(new IndexedInt     { value  = 123       });
-        entity2.AddComponent(new IndexedName    { name   = "find-me" });
-        entity2.AddComponent(new IndexedInt     { value  = 123       });
+        var nameValues  = store.GetIndexedComponentValues<IndexedName, string>();
+        var intValues   = store.GetIndexedComponentValues<IndexedInt, int>();
+        
+        entity0.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, nameValues.Count);
+        entity1.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, intValues.Count);
+        entity2.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, nameValues.Count);
+        entity2.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, intValues.Count);
         entity2.AddComponent(new AttackComponent{ target = target    });
         
         var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");
@@ -117,25 +121,25 @@ public static class Test_Index
         AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 13 },          query3.Entities.ToIds());
         AreEqual(3, query4.Entities.Count);     AreEqual(new int[] { 11, 13, 12 },  query4.Entities.ToIds());
         
-        entity2.RemoveComponent<IndexedName>();
+        entity2.RemoveComponent<IndexedName>();                             AreEqual(1, nameValues.Count);
         AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 11 },          query1.Entities.ToIds());
         AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 12, 13 },      query2.Entities.ToIds());
         AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
         AreEqual(3, query4.Entities.Count);     AreEqual(new int[] { 11, 12, 13 },  query4.Entities.ToIds());
         
-        entity2.RemoveComponent<IndexedInt>();
+        entity2.RemoveComponent<IndexedInt>();                              AreEqual(1, intValues.Count);
         AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 11 },          query1.Entities.ToIds());
         AreEqual(1, query2.Entities.Count);     AreEqual(new int[] { 12 },          query2.Entities.ToIds());
         AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
         AreEqual(2, query4.Entities.Count);     AreEqual(new int[] { 11, 12 },      query4.Entities.ToIds());
         
-        entity1.RemoveComponent<IndexedInt>();
+        entity1.RemoveComponent<IndexedInt>();                              AreEqual(0, intValues.Count);
         AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 11 },          query1.Entities.ToIds());
         AreEqual(0, query2.Entities.Count);     AreEqual(new int[] { },             query2.Entities.ToIds());
         AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
         AreEqual(1, query4.Entities.Count);     AreEqual(new int[] { 11 },          query4.Entities.ToIds());
         
-        entity0.RemoveComponent<IndexedName>();
+        entity0.RemoveComponent<IndexedName>();                             AreEqual(0, nameValues.Count);
         AreEqual(0, query1.Entities.Count);     AreEqual(new int[] { },             query1.Entities.ToIds());
         AreEqual(0, query2.Entities.Count);     AreEqual(new int[] { },             query2.Entities.ToIds());
         AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
@@ -158,11 +162,16 @@ public static class Test_Index
         var entity1 = entities[0];
         var entity2 = entities[1];
         var entity3 = entities[2];
+        var nameValues  = store.GetIndexedComponentValues<IndexedName, string>();
+        var intValues   = store.GetIndexedComponentValues<IndexedInt, int>();
         
-        entity1.AddComponent(new IndexedName   { name   = "find-me1" });
-        entity2.AddComponent(new IndexedInt    { value  = 123       });
-        entity3.AddComponent(new IndexedName   { name   = "find-me1" });
-        entity3.AddComponent(new IndexedInt    { value  = 123       });
+        entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual(1, nameValues.Count);
+        entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual(1, intValues.Count);
+        entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual(1, nameValues.Count);
+        entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual(1, nameValues.Count);
+
+        AreEqual("find-me1",    nameValues.First());
+        AreEqual(123,           intValues.First());
         
         var result = store.GetEntitiesWithComponentValue<IndexedName, string>("find-me1");
         AreEqual(2, result.Count);     AreEqual(new int[] { 1, 3 },    result.Ids.ToArray());
@@ -180,13 +189,13 @@ public static class Test_Index
         AreEqual(2, query3.Entities.Count);     AreEqual(new int[] { 1, 3 },        query3.Entities.ToIds());
         
         // Add same value of indexed component again
-        entity1.AddComponent(new IndexedName   { name   = "find-me1" });
+        entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual(1, nameValues.Count);
         AreEqual(2, query1.Entities.Count);     AreEqual(new int[] { 1, 3 },    query1.Entities.ToIds());
         AreEqual(1, query2.Entities.Count);     AreEqual(new int[] { 3    },    query2.Entities.ToIds());
         AreEqual(2, query3.Entities.Count);     AreEqual(new int[] { 1, 3 },    query3.Entities.ToIds());
         
         // Update value of indexed component
-        entity1.AddComponent(new IndexedName   { name   = "find-me2" });
+        entity1.AddComponent(new IndexedName   { name   = "find-me2" });    AreEqual(2, nameValues.Count);
         AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 3 },       query1.Entities.ToIds());
         AreEqual(1, query2.Entities.Count);     AreEqual(new int[] { 3 },       query2.Entities.ToIds());
         AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 3 },       query3.Entities.ToIds());

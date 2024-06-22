@@ -47,5 +47,7 @@ internal sealed class ValueStructIndex<TValue>  : ComponentIndex<TValue> where T
         map.TryGetValue(value, out var ids);
         return arrayHeap.GetEntities(store, ids);
     }
+    
+    internal override IReadOnlyCollection<TValue> IndexedComponentValues => map.Keys;
     #endregion
 }
