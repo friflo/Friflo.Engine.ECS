@@ -178,7 +178,7 @@ public static class Test_Index_Range
         var store       = new EntityStore();
         var entities    = new List<Entity>();
         var values      = store.GetIndexedComponentValues<IndexedStringRange, string>();
-        var strings     = new string[500];
+        var strings     = new string[count];
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }
