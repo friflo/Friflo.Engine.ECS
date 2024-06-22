@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Engine.ECS.Index;
 using Friflo.Engine.ECS.Serialize;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
@@ -254,27 +253,4 @@ public sealed partial class EntityStore : EntityStoreBase
         return false;
     }
     #endregion
-    
-    /// <summary>
-    /// Return the entities with the passed component value.<br/>
-    /// Executes in O(1) with default index. O(log n) when using <see cref="RangeIndex{TValue}"/>. 
-    /// </summary>
-    internal Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
-        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
-        return index.GetHasValueEntities(value);
-    }
-    
-    /// <summary>
-    /// Returns a collection of all indexed component values of the passed <typeparamref name="TIndexedComponent"/>.<br/>
-    /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
-    /// </summary>
-    /// <remarks>
-    /// To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
-    /// <br/>
-    /// In case the indexed component uses a <see cref="RangeIndex{TValue}"/> returned values are ordered.<br/>
-    /// </remarks>
-    internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TIndexedComponent, TValue>() where TIndexedComponent: struct, IIndexedComponent<TValue> {
-        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TIndexedComponent>.Index);
-        return index.IndexedComponentValues;
-    }
 }
