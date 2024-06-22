@@ -156,6 +156,31 @@ public static class Test_Index_Range
         SortedListUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
         AreEqual(0, map.Count);
     }
+    
+    // [Test]
+    public static void Test_Index_Allocation()
+    {
+        var count       = 500;
+        var store       = new EntityStore();
+        var entities    = new List<Entity>();
+        var values      = store.GetIndexedComponentValues<IndexedIntRange, int>();
+        for (int n = 1; n <= count; n++) {
+            entities.Add(store.CreateEntity());
+        }
+        for (int n = 0; n < count; n++) {
+            entities[n].AddComponent(new IndexedIntRange { value = n });
+        }
+        for (int n = 0; n < count; n++) {
+            entities[n].RemoveComponent<IndexedIntRange>();
+        }
+        AreEqual(0, values.Count);
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < count; n++) {
+            entities[n].AddComponent(new IndexedIntRange { value = n });
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(count, values.Count);
+    }
 }
 
 }
