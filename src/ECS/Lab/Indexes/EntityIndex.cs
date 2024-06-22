@@ -16,15 +16,15 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(component);
+        var value = IndexUtils<TComponent,Entity>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
         DictionaryUtils.AddComponentValue    (id, value.Id, map, arrayHeap);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
     {
-        var oldValue = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        var value    = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(component);
+        var oldValue = IndexUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value    = IndexUtils<TComponent,Entity>.GetIndexedValue(component);
         if (oldValue.Id == value.Id) {
             return;
         }
@@ -36,7 +36,7 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
     
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
-        var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value = IndexUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
         DictionaryUtils.RemoveComponentValue (id, value.Id, map, arrayHeap);
     }
     #endregion

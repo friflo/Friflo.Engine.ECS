@@ -16,15 +16,15 @@ internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
+        var value = IndexUtils<TComponent,TValue>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
         SortedListUtils.AddComponentValue    (id, value, map, arrayHeap);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
     {
-        var oldValue = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        var value    = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
+        var oldValue = IndexUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value    = IndexUtils<TComponent,TValue>.GetIndexedValue(component);
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
@@ -36,7 +36,7 @@ internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
 
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value = IndexUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
         SortedListUtils.RemoveComponentValue (id, value, map, arrayHeap);
     }
     #endregion
