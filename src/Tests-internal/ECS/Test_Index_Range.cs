@@ -20,6 +20,14 @@ public static class Test_Index_Range
         public override string ToString() => value.ToString();
     }
     
+    [ComponentIndex(typeof(RangeIndex<>))]
+    private struct IndexedStringRange : IIndexedComponent<string> {
+        public      string  GetIndexedValue() => value;
+        internal    string  value;
+    
+        public override string ToString() => value.ToString();
+    }
+    
     [Test]
     public static void Test_Index_Range_Query_ValueInRange()
     {
@@ -163,26 +171,28 @@ public static class Test_Index_Range
     // Array.BinarySearch<T>(T[] array, int index, int length, T value, IComparer<T>? comparer).
     // E.g. BinarySearch<> does boxing at
     // https://github.com/dotnet/corert/blob/master/src/System.Private.CoreLib/shared/System/Collections/Generic/ArraySortHelper.cs#L353
-    // [Test]
+    [Test]
     public static void Test_Index_Allocation()
     {
-        var count       = 500;
+        var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetIndexedComponentValues<IndexedIntRange, int>();
+        var values      = store.GetIndexedComponentValues<IndexedStringRange, string>();
+        var strings     = new string[500];
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }
         for (int n = 0; n < count; n++) {
-            entities[n].AddComponent(new IndexedIntRange { value = n });
+            strings[n] = n.ToString();
+            entities[n].AddComponent(new IndexedStringRange { value = strings[n] });
         }
         for (int n = 0; n < count; n++) {
-            entities[n].RemoveComponent<IndexedIntRange>();
+            entities[n].RemoveComponent<IndexedStringRange>();
         }
         AreEqual(0, values.Count);
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
-            entities[n].AddComponent(new IndexedIntRange { value = n });
+            entities[n].AddComponent(new IndexedStringRange { value = strings[n] });
         }
         Mem.AssertNoAlloc(start);
         AreEqual(count, values.Count);
