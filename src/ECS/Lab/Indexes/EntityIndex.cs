@@ -23,15 +23,15 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
     {
-        var oldValue = IndexUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        var value    = IndexUtils<TComponent,Entity>.GetIndexedValue(component);
-        if (oldValue.Id == value.Id) {
+        var oldValue = IndexUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash).Id;
+        var value    = IndexUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+        if (oldValue == value) {
             return;
         }
         var localHeap = arrayHeap;
         var localMap  = map;
-        DictionaryUtils.RemoveComponentValue (id, oldValue.Id, localMap, localHeap);
-        DictionaryUtils.AddComponentValue    (id, value.   Id, localMap, localHeap);
+        DictionaryUtils.RemoveComponentValue (id, oldValue, localMap, localHeap);
+        DictionaryUtils.AddComponentValue    (id, value,    localMap, localHeap);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap heap)
