@@ -11,8 +11,8 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
 {
     internal override   int                         Count       => map.Count + (nullValue.count > 0 ? 1 : 0);
     private  readonly   Dictionary<TValue, IdArray> map         = new();
-    private  readonly   IdArrayHeap                 arrayHeap   = new();
     private             IdArray                     nullValue;
+
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
@@ -44,7 +44,7 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
     private void AddComponentValue(int id, in TValue value)
     {
         if (value != null) {
-            DictionaryUtils.AddComponentValue (id, value, map, arrayHeap);
+            DictionaryUtils.AddComponentValue (id, value, map, this);
             return;
         }
         var idSpan = nullValue.GetIdSpan(arrayHeap);
@@ -55,7 +55,7 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
     internal void RemoveComponentValue(int id, in TValue value)
     {
         if (value != null) {
-            DictionaryUtils.RemoveComponentValue (id, value, map, arrayHeap);
+            DictionaryUtils.RemoveComponentValue (id, value, map, this);
             return;
         }
         var idSpan  = nullValue.GetIdSpan(arrayHeap);
@@ -66,6 +66,8 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
     #endregion
     
 #region get matches
+    internal override IReadOnlyCollection<TValue> IndexedComponentValues => map.Keys;
+    
     internal override Entities GetHasValueEntities(TValue value)
     {
         if (value != null) {
@@ -75,6 +77,8 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
         return arrayHeap.GetEntities(store, nullValue);
     }
     
-    internal override IReadOnlyCollection<TValue> IndexedComponentValues => map.Keys;
+    internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) {
+        SortUtils<TValue>.AddValueInRangeEntities(min, max, idSet, map, this);
+    }
     #endregion
 }

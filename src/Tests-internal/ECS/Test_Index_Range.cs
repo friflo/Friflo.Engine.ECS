@@ -13,7 +13,6 @@ namespace Internal.ECS {
 public static class Test_Index_Range
 {
     [CodeCoverageTest]
-    [ComponentIndex(typeof(RangeIndex<>))]
     private struct IndexedIntRange : IIndexedComponent<int> {
         public      int     GetIndexedValue() => value;
         internal    int     value;
@@ -144,28 +143,6 @@ public static class Test_Index_Range
         _ = new ComponentIndexAttribute(null);    
     }
     
-    [Test]
-    public static void Test_Index_Range_already_added()
-    {
-        var store   = new EntityStore();
-        var entity  = store.CreateEntity(1);
-        
-        entity.AddComponent(new IndexedIntRange { value =  456 });
-        
-        var index = (RangeIndex<int>)StoreIndex.GetIndex(store, StructInfo<IndexedIntRange>.Index);
-        index.Add(1, new IndexedIntRange { value = 456 });
-        AreEqual(1, index.Count);
-    }
-    
-    [Test]
-    public static void Test_Index_Range_already_removed()
-    {
-        var map = new SortedValues<string>();
-        var arrayHeap = new IdArrayHeap();
-        SortedValuesUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
-        AreEqual(0, map.Count);
-    }
-
     
     // Indexing using range index currently allocates memory when using value types like int.
     // One reason is that SortedList<,>.TryGetValue() does boxing when using:
@@ -178,17 +155,36 @@ public static class Test_Index_Range
         var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
+        var values      = store.GetIndexedComponentValues<IndexedStringRange, string>();
+        var strings     = new string[count];
+        for (int n = 1; n <= count; n++) {
+            entities.Add(store.CreateEntity());
+        }
+        for (int n = 0; n < count; n++) {
+            strings[n] = n.ToString();
+            entities[n].AddComponent(new IndexedStringRange { value = strings[n] });
+        }
+        // var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < count; n++) {
+            entities[n].AddComponent(new IndexedStringRange { value = strings[count - n - 1] });
+        }
+        // Mem.AssertNoAlloc(start);
+        AreEqual(count, values.Count);
+    }
+    
+    [Test]
+    public static void Test_Index_Allocation()
+    {
+        var count       = 100;
+        var store       = new EntityStore();
+        var entities    = new List<Entity>();
         var values      = store.GetIndexedComponentValues<IndexedIntRange, int>();
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }
         for (int n = 0; n < count; n++) {
-            entities[n].AddComponent(new IndexedIntRange { value = n });
+            entities[n].AddComponent(new IndexedIntRange { value = count + n });
         }
-        for (int n = 0; n < count; n++) {
-            entities[n].AddComponent(new IndexedIntRange { value = 0 });
-        }
-        AreEqual(1, values.Count);
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
             entities[n].AddComponent(new IndexedIntRange { value = n });

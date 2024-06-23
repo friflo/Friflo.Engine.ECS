@@ -9,11 +9,17 @@ namespace Friflo.Engine.ECS.Index;
 
 internal abstract class ComponentIndex
 {
-    internal abstract   int     Count { get; }
-    public   override   string  ToString() => GetString();
-
-    internal EntityStore    store;          // could be made readonly
-    internal ComponentType  componentType;  // only for debugging
+#region properties    
+    internal  abstract  int             Count { get; }
+    public    override  string          ToString() => GetString();
+    #endregion
+    
+#region fields
+    internal  readonly  IdArrayHeap     arrayHeap   = new();
+    internal            EntityStore     store;          // could be made readonly
+    internal            ComponentType   componentType;  // only for debugging
+    internal            bool            modified;
+    #endregion
     
     internal abstract void Add   <TComponent>(int id, in TComponent component)                  where TComponent : struct, IComponent;
     internal abstract void Update<TComponent>(int id, in TComponent component, StructHeap heap) where TComponent : struct, IComponent;
@@ -30,7 +36,9 @@ internal abstract class ComponentIndex
 
 internal abstract class ComponentIndex<TValue> : ComponentIndex
 {
+    internal            TValue[]                    sortBuffer  = Array.Empty<TValue>();
+    
+    internal abstract   IReadOnlyCollection<TValue> IndexedComponentValues        { get; }
     internal abstract   Entities                    GetHasValueEntities    (TValue value);
     internal virtual    void                        AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) => throw NotSupportedException("ValueInRange()");
-    internal abstract   IReadOnlyCollection<TValue> IndexedComponentValues        { get; }
 }

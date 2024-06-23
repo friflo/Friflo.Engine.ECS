@@ -11,7 +11,7 @@ public sealed partial class EntityStore
 {
     /// <summary>
     /// Return the entities with the passed component value.<br/>
-    /// Executes in O(1) with default index. O(log n) when using <see cref="RangeIndex{TValue}"/>. 
+    /// Executes in O(1) with default index. 
     /// </summary>
     internal Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
@@ -25,7 +25,6 @@ public sealed partial class EntityStore
     /// <remarks>
     /// - The collection changes when indexed component values are updated, removed or added.<br/>
     /// - To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
-    /// - In case the indexed component uses a <see cref="RangeIndex{TValue}"/> collection values are sorted.<br/>
     /// </remarks>
     internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TIndexedComponent, TValue>() where TIndexedComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TIndexedComponent>.Index);
