@@ -9,9 +9,11 @@ namespace Friflo.Engine.ECS.Index;
 
 internal struct MapItem<TValue> : IEquatable<MapItem<TValue>>
 {
-    internal readonly   TValue  key;
+    internal            TValue  key;
     internal            IdArray ids;
-    
+
+    public   override   string  ToString() => $"{key} - {ids}";
+
     internal MapItem(TValue key) {
         this.key    = key;
     }

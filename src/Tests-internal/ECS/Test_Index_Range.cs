@@ -178,22 +178,20 @@ public static class Test_Index_Range
         var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetIndexedComponentValues<IndexedStringRange, string>();
-        var strings     = new string[count];
+        var values      = store.GetIndexedComponentValues<IndexedIntRange, int>();
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }
         for (int n = 0; n < count; n++) {
-            strings[n] = n.ToString();
-            entities[n].AddComponent(new IndexedStringRange { value = strings[n] });
+            entities[n].AddComponent(new IndexedIntRange { value = n });
         }
         for (int n = 0; n < count; n++) {
-            entities[n].RemoveComponent<IndexedStringRange>();
+            entities[n].AddComponent(new IndexedIntRange { value = 0 });
         }
-        AreEqual(0, values.Count);
+        AreEqual(1, values.Count);
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
-            entities[n].AddComponent(new IndexedStringRange { value = strings[n] });
+            entities[n].AddComponent(new IndexedIntRange { value = n });
         }
         Mem.AssertNoAlloc(start);
         AreEqual(count, values.Count);
