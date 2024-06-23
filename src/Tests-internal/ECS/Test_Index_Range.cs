@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
@@ -25,7 +26,7 @@ public static class Test_Index_Range
         public      string  GetIndexedValue() => value;
         internal    string  value;
     
-        public override string ToString() => value.ToString();
+        public override string ToString() => value;
     }
     
     [Test]
@@ -172,7 +173,7 @@ public static class Test_Index_Range
     // E.g. BinarySearch<> does boxing at
     // https://github.com/dotnet/corert/blob/master/src/System.Private.CoreLib/shared/System/Collections/Generic/ArraySortHelper.cs#L353
     [Test]
-    public static void Test_Index_Allocation()
+    public static void Test_Index_Range_Allocation()
     {
         var count       = 100;
         var store       = new EntityStore();
@@ -196,6 +197,17 @@ public static class Test_Index_Range
         }
         Mem.AssertNoAlloc(start);
         AreEqual(count, values.Count);
+    }
+    
+    [Test]
+    public static void Test_Index_Range_Array_BinarySearch()
+    {
+        var values = new int [] { 1, 2, 3, 4,    6, 7, 8, 9, 10 };
+        Array.BinarySearch(values, 0, values.Length, 5); // force one time allocations
+        var start = Mem.GetAllocatedBytes();
+        var index = Array.BinarySearch(values, 0, values.Length, 5);
+        Mem.AssertNoAlloc(start);
+        AreEqual(-5, index);
     }
 }
 
