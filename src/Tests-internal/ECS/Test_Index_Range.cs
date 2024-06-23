@@ -160,9 +160,9 @@ public static class Test_Index_Range
     [Test]
     public static void Test_Index_Range_already_removed()
     {
-        var map = new SortedList<string, IdArray>();
+        var map = new SortedValues<string>();
         var arrayHeap = new IdArrayHeap();
-        SortedListUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
+        SortedValuesUtils.RemoveComponentValue(1, "missing", map, arrayHeap);
         AreEqual(0, map.Count);
     }
 

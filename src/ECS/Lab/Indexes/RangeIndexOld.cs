@@ -3,12 +3,14 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
+[ExcludeFromCodeCoverage] // not used - kept only for reference
+internal sealed class RangeIndexOld<TValue>  : ComponentIndex<TValue>
 {
     internal override   int                         Count       => map.Count;
     private  readonly   SortedList<TValue, IdArray> map         = new();
@@ -70,6 +72,7 @@ internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
     #endregion
 }
 
+[ExcludeFromCodeCoverage] // not used - kept only for reference
 internal static class RangeUtils<TValue>
 {
     private static readonly Comparer<TValue> Comparer = Comparer<TValue>.Default; 
