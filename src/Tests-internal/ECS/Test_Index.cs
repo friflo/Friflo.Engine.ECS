@@ -406,8 +406,8 @@ public static class Test_Index
     [Test]
     public static void Test_Index_Perf_Reference()
     {
-        int count       = 10;
-        // 1_000_000  #PC    Test_Index_Perf_Reference - count: 1000000 duration: 34 ms
+        int count       = 100;
+        // 1_000_000  #PC    Test_Index_Perf_Reference - count: 1000000 duration: 18 ms
         var store       = new EntityStore();
         var entities    = new List<Entity>();
         for (int n = 1; n <= count; n++) {
