@@ -151,9 +151,11 @@ public static class Test_Index
     public static void Test_Index_ValueInRange_ValueStructIndex()
     {
         var store = new EntityStore();
+        var values = store.GetIndexedComponentValues<IndexedInt, int>();
         for (int n = 1; n <= 10; n++) {
             var entity = store.CreateEntity(n);
             entity.AddComponent(new IndexedInt { value = n });
+            AreEqual(n, values.Count);
         }
         var query  = store.Query().ValueInRange<IndexedInt, int>(3, 8);
         AreEqual(6, query.Count);
@@ -164,9 +166,11 @@ public static class Test_Index
     public static void Test_Index_ValueInRange_ValueClassIndex()
     {
         var store = new EntityStore();
+        var values = store.GetIndexedComponentValues<IndexedName, string>();
         for (int n = 1; n <= 10; n++) {
             var entity = store.CreateEntity(n);
             entity.AddComponent(new IndexedName { name = n.ToString() });
+            AreEqual(n, values.Count);
         }
         var query  = store.Query().ValueInRange<IndexedName, string>("3", "8");
         AreEqual(6, query.Count);
