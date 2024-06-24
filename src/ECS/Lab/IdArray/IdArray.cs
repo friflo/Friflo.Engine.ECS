@@ -93,19 +93,15 @@ internal static class IdArrayExtensions {
     {
         var count = array.count;
         if (index < 0 || index >= count) throw new IndexOutOfRangeException();
-        if (count == 1) {
+        if (count == 1) {   // index is 0
             array = default;
             return;
         }
         var curStart = array.start;
-        if (count == 2) {
+        if (count == 2) {   // index is 0 or 1
             var pool = heap.GetPool(1);
             pool.DeleteArray(curStart, out var ids);
-            if (index == 0) {
-                array = new IdArray(ids[curStart + 1], 1);
-                return;
-            }
-            array = new IdArray(ids[curStart + 0], 1);
+            array = new IdArray(ids[curStart + 1 - index], 1);
             return;
         }
         var newCount        = count - 1;
