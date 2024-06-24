@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 ///     See <see cref="EntityStore.GetLinkedEntities{TComponent}"/>
 ///   </item>
 ///   <item>
-///     Filter entities in a query having a link to a specific entity.<br/>
+///     Filter entities in a query having a <see cref="ILinkComponent"/> to a specific entity.<br/>
 ///     See <see cref="ArchetypeQuery.HasValue{TComponent,TValue}"/>.
 ///   </item>
 /// </list>
