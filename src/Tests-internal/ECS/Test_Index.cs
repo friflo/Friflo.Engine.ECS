@@ -440,7 +440,7 @@ public static class Test_Index
         AreEqual("IndexedName - ValueClassIndex`1 count: 1", indexMap[StructInfo<IndexedName>.Index].ToString());
         
         entity1.AddComponent(new LinkComponent { entity = entity2 });
-        AreEqual("IndexedEntity - EntityIndex count: 1", indexMap[StructInfo<LinkComponent>.Index].ToString());
+        AreEqual("LinkComponent - EntityIndex count: 1", indexMap[StructInfo<LinkComponent>.Index].ToString());
         
         entity1.AddComponent(new IndexedInt { value = 42 });
         AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexMap[StructInfo<IndexedInt>.Index].ToString());
