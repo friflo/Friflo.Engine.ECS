@@ -18,6 +18,15 @@ internal static class SchemaTypeUtils
         throw ComponentTypeException(type, nameof(IComponent));
     }
     
+    internal static bool HasIndex(Type type)
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        if (schema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
+            return schema.indexedComponentMap[componentType.StructIndex].componentType != null;
+        }
+        return false;
+    }
+    
     internal static int GetTagIndex(Type type)
     {
         var schema = EntityStoreBase.Static.EntitySchema;

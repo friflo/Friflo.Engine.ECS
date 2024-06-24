@@ -15,11 +15,9 @@ namespace Friflo.Engine.ECS;
 internal readonly struct HeapInfo
 {
     internal readonly   StructHeap  heap;       //  8
-    internal readonly   bool        hasIndex;   //  1
         
-    internal HeapInfo(StructHeap heap, bool hasIndex) {
+    internal HeapInfo(StructHeap heap) {
         this.heap       = heap;
-        this.hasIndex   = hasIndex;
     }
 }
 

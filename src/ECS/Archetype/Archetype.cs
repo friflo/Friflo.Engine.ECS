@@ -187,13 +187,11 @@ public sealed class Archetype
         componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
-        var indexMap    = EntityStoreBase.Static.EntitySchema.indexedComponentMap;
         for (int pos = 0; pos < componentCount; pos++)
         {
             var heap    = heaps[pos];
             heap.SetArchetypeDebug(this);
-            var hasIndex                = indexMap[heap.structIndex].componentType != null;
-            heapMap[heap.structIndex]   = new HeapInfo(heap, hasIndex);
+            heapMap[heap.structIndex]   = new HeapInfo(heap);
             SetStandardComponentHeaps(heap, ref std);
         }
     }

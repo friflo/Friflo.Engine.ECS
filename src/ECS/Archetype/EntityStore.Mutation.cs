@@ -39,7 +39,7 @@ public partial class EntityStoreBase
             oldHeap.StashComponent(compIndex);
             added   = false;
             action  = ComponentChangedAction.Update;
-            if (info.hasIndex) StoreIndex.UpdateIndex(store, id, component, oldHeap);
+            if (StructInfo<T>.HasIndex) StoreIndex.UpdateIndex(store, id, component, oldHeap);
             newHeap = oldHeap;
             goto AssignComponent;
         }
@@ -51,7 +51,7 @@ public partial class EntityStoreBase
         action              = ComponentChangedAction.Add;
         archIndex           = arch.archIndex;
         info                = arch.heapMap[structIndex];
-        if (info.hasIndex) StoreIndex.AddIndex(store, id, component);
+        if (StructInfo<T>.HasIndex) StoreIndex.AddIndex(store, id, component);
         newHeap             = (StructHeap<T>)info.heap;
         
     AssignComponent:  // --- assign passed component value
@@ -81,7 +81,7 @@ public partial class EntityStoreBase
             return false;
         }
         heap.StashComponent(compIndex);
-        if (info.hasIndex) StoreIndex.RemoveIndex(store, id, heap);
+        if (StructInfo<T>.HasIndex) StoreIndex.RemoveIndex(store, id, heap);
         var newArchetype = GetArchetypeWithout(store, arch, structIndex);
 
         // --- change entity archetype
