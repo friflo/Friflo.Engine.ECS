@@ -36,7 +36,7 @@ internal struct IndexedInt : IIndexedComponent<int> {
     public override string ToString() => value.ToString();
 }
 
-internal struct IndexedEntity : IIndexedComponent<Entity> {
+internal struct LinkComponent : ILinkComponent {
     public      Entity  GetIndexedValue() => entity;
     internal    Entity  entity;
     
@@ -266,11 +266,11 @@ public static class Test_Index
         var target5 = store.CreateEntity(5);
         var target6 = store.CreateEntity(6);
         
-        var values = store.GetIndexedComponentValues<IndexedEntity, Entity>();
+        var values = store.GetIndexedComponentValues<LinkComponent, Entity>();
         
-        entity1.AddComponent(new IndexedEntity { entity = target4 });   AreEqual(1, values.Count);
-        entity2.AddComponent(new IndexedEntity { entity = target5 });   AreEqual(2, values.Count);
-        entity3.AddComponent(new IndexedEntity { entity = target5 });   AreEqual(2, values.Count);
+        entity1.AddComponent(new LinkComponent { entity = target4 });   AreEqual(1, values.Count);
+        entity2.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
+        entity3.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
 
         int count = 0;
         foreach (var entity in values) {
@@ -281,29 +281,29 @@ public static class Test_Index
         }
         AreEqual(2, count);
         
-        var query1  = store.Query().HasValue<IndexedEntity,   Entity>(target4);
-        var query2  = store.Query().HasValue<IndexedEntity,   Entity>(target4).
-                                    HasValue<IndexedEntity,   Entity>(target5);
+        var query1  = store.Query().HasValue<LinkComponent,   Entity>(target4);
+        var query2  = store.Query().HasValue<LinkComponent,   Entity>(target4).
+                                    HasValue<LinkComponent,   Entity>(target5);
         
         AreEqual("{ 1 }",           query1.Entities.ToStr());
         AreEqual("{ 1, 2, 3 }",     query2.Entities.ToStr());
         
-        var references4 = target4.GetForeignEntities<IndexedEntity>();
+        var references4 = target4.GetLinkedEntities<LinkComponent>();
         AreEqual("{ 1 }",           references4.Ids.ToStr());
         
-        var references5 = target5.GetForeignEntities<IndexedEntity>();
+        var references5 = target5.GetLinkedEntities<LinkComponent>();
         AreEqual("{ 2, 3 }",        references5.Ids.ToStr());
         
-        entity2.AddComponent(new IndexedEntity { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetForeignEntities<IndexedEntity>();
+        entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
+        references5 = target5.GetLinkedEntities<LinkComponent>();
         AreEqual("{ 3 }",           references5.Ids.ToStr());
         
-        entity2.AddComponent(new IndexedEntity { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetForeignEntities<IndexedEntity>();
+        entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
+        references5 = target5.GetLinkedEntities<LinkComponent>();
         AreEqual("{ 3 }",           references5.Ids.ToStr());
         
-        entity3.RemoveComponent<IndexedEntity>();                       AreEqual(2, values.Count);
-        references5 = target5.GetForeignEntities<IndexedEntity>();
+        entity3.RemoveComponent<LinkComponent>();                       AreEqual(2, values.Count);
+        references5 = target5.GetLinkedEntities<LinkComponent>();
         AreEqual("{ }",             references5.Ids.ToStr());
     }
     
@@ -439,8 +439,8 @@ public static class Test_Index
 
         AreEqual("IndexedName - ValueClassIndex`1 count: 1", indexMap[StructInfo<IndexedName>.Index].ToString());
         
-        entity1.AddComponent(new IndexedEntity { entity = entity2 });
-        AreEqual("IndexedEntity - EntityIndex count: 1", indexMap[StructInfo<IndexedEntity>.Index].ToString());
+        entity1.AddComponent(new LinkComponent { entity = entity2 });
+        AreEqual("IndexedEntity - EntityIndex count: 1", indexMap[StructInfo<LinkComponent>.Index].ToString());
         
         entity1.AddComponent(new IndexedInt { value = 42 });
         AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexMap[StructInfo<IndexedInt>.Index].ToString());

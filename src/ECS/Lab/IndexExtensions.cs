@@ -9,10 +9,10 @@ namespace Friflo.Engine.ECS;
 internal static class IndexExtensions
 {
     /// <summary>
-    /// Return the entities referencing this entity using a <see cref="Entity"/> component index.<br/>
-    /// Executes in O(1) with default index. 
+    /// Return the entities having a component link to this entity of the passed <see cref="ILinkComponent"/> type.<br/>
+    /// Executes in O(1). 
     /// </summary>
-    public static Entities GetForeignEntities<TComponent>(this Entity entity) where TComponent: struct, IIndexedComponent<Entity> {
+    public static Entities GetLinkedEntities<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(entity);
     }
