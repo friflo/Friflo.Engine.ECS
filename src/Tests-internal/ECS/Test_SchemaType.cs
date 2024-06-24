@@ -58,6 +58,13 @@ public static class Test_SchemaType
         }
         AreEqual(1, count);
     }
+    
+    [Test]
+    public static void Test_SchemaType_HasIndex()
+    {
+        IsFalse(SchemaTypeUtils.HasIndex(typeof(Position)));
+        IsFalse(SchemaTypeUtils.HasIndex(typeof(int)));
+    }
         
     [Test]
     public static void Test_SchemaType_Tags_Get_Perf()
