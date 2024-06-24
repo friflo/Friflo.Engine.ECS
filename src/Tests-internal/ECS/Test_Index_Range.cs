@@ -52,9 +52,9 @@ public static class Test_Index_Range
         entity3.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual(3, values.Count);
         
         var result = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(100);
-        AreEqual(1, result.Count);     AreEqual(new int[] { 1 },    result.Ids.ToArray());
+        AreEqual(1, result.Count);     AreEqual("{ 1 }",    result.Ids.ToStr());
         result     = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(42);
-        AreEqual(0, result.Count);     AreEqual(new int[] { },      result.Ids.ToArray());
+        AreEqual(0, result.Count);     AreEqual("{ }",      result.Ids.ToStr());
         {
             int count = 0;
             query3.ForEachEntity((ref IndexedIntRange _, ref Position _, Entity entity) => {
@@ -62,11 +62,11 @@ public static class Test_Index_Range
             });
             AreEqual(3, count);
         }
-        AreEqual(0, query0.Entities.Count);     AreEqual(new int[] {         }, query0.Entities.ToIds());
-        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 1       }, query1.Entities.ToIds());
-        AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 1, 2    }, query2.Entities.ToIds());
-        AreEqual(3, query3.Entities.Count);     AreEqual(new int[] { 1, 2, 3 }, query3.Entities.ToIds());
-        AreEqual(0, query4.Entities.Count);     AreEqual(new int[] {         }, query4.Entities.ToIds());
+        AreEqual(0, query0.Entities.Count);     AreEqual("{ }",         query0.Entities.ToStr());
+        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",       query1.Entities.ToStr());
+        AreEqual(2, query2.Entities.Count);     AreEqual("{ 1, 2 }",    query2.Entities.ToStr());
+        AreEqual(3, query3.Entities.Count);     AreEqual("{ 1, 2, 3 }", query3.Entities.ToStr());
+        AreEqual(0, query4.Entities.Count);     AreEqual("{ }",         query4.Entities.ToStr());
         
         var start = Mem.GetAllocatedBytes();
         Mem.AreEqual(0, query0.Entities.Count);
@@ -103,8 +103,8 @@ public static class Test_Index_Range
             });
             AreEqual(0, count);
         }
-        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 1       }, query1.Entities.ToIds());
-        AreEqual(0, query2.Entities.Count);     AreEqual(new int[] {         }, query2.Entities.ToIds());
+        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",   query1.Entities.ToStr());
+        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",     query2.Entities.ToStr());
     }
     
     [Test]
@@ -126,16 +126,16 @@ public static class Test_Index_Range
         var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
         var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(200, 400);
         
-        AreEqual(4, query1.Entities.Count);     AreEqual(new int[] { 1, 2, 3, 4 }, query1.Entities.ToIds());
-        AreEqual(3, query2.Entities.Count);     AreEqual(new int[] {    2, 3, 4 }, query2.Entities.ToIds());
+        AreEqual(4, query1.Entities.Count);     AreEqual("{ 1, 2, 3, 4 }",  query1.Entities.ToStr());
+        AreEqual(3, query2.Entities.Count);     AreEqual("{ 2, 3, 4 }",     query2.Entities.ToStr());
         
         entity1.AddComponent(new IndexedIntRange { value  = 400 });     AreEqual(3, values.Count);
-        AreEqual(3, query1.Entities.Count);     AreEqual(new int[] {    2, 3, 4 }, query1.Entities.ToIds());
-        AreEqual(4, query2.Entities.Count);     AreEqual(new int[] { 2, 3, 4, 1 }, query2.Entities.ToIds());
+        AreEqual(3, query1.Entities.Count);     AreEqual("{ 2, 3, 4 }",     query1.Entities.ToStr());
+        AreEqual(4, query2.Entities.Count);     AreEqual("{ 2, 3, 4, 1 }",  query2.Entities.ToStr());
         
         entity2.RemoveComponent<IndexedIntRange>();                          AreEqual(3, values.Count);
-        AreEqual(2, query1.Entities.Count);     AreEqual(new int[] {       3, 4 }, query1.Entities.ToIds());
-        AreEqual(3, query2.Entities.Count);     AreEqual(new int[] {    3, 4, 1 }, query2.Entities.ToIds());
+        AreEqual(2, query1.Entities.Count);     AreEqual("{ 3, 4 }",        query1.Entities.ToStr());
+        AreEqual(3, query2.Entities.Count);     AreEqual("{ 3, 4, 1 }",     query2.Entities.ToStr());
     }
     
     [Test]

@@ -129,7 +129,7 @@ public static class Test_ComponentReader
         var dataRoot    = new DataEntity { pid = 1, children = new List<long> { 2, 3, 4, 5 } };
         var root        = converter.DataEntityToEntity(dataRoot, store, out _);
         
-        AreEqual(new [] { 2, 3, 4, 5 }, root.ChildIds.ToArray());
+        AreEqual("{ 2, 3, 4, 5 }", root.ChildIds.ToStr());
         for (int n = 2; n <= 6; n++) {
             converter.DataEntityToEntity(new DataEntity { pid = n }, store, out _);
         }
@@ -138,7 +138,7 @@ public static class Test_ComponentReader
         dataRoot    = new DataEntity { pid = 1, children = new List<long> { 6, 4, 2, 5 } };
         root        = converter.DataEntityToEntity(dataRoot, store, out _);
         
-        AreEqual(new [] { 6, 4, 2, 5 }, root.ChildIds.ToArray());
+        AreEqual("{ 6, 4, 2, 5 }", root.ChildIds.ToStr());
         AreEqual(6,     store.Count);
     }
     

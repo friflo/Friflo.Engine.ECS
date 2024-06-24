@@ -229,12 +229,12 @@ public static class Test_Entity_Tree
                 case 1:     AreEqual("entity: 1 - event > Add Child[0] = 3",       args.ToString()); return;
             }
         });
-        AreEqual(new [] { 2, 3 }, root.ChildIds.ToArray());
+        AreEqual("{ 2, 3 }", root.ChildIds.ToStr());
         AreEqual(1, root.GetChildIndex(child3));
         root.InsertChild(0, child3);    // move child3 within root. index: 1 -> 0
         AreEqual(2, events.Seq);
         AreEqual(0, root.GetChildIndex(child3));
-        AreEqual(new [] { 3, 2 }, root.ChildIds.ToArray());
+        AreEqual("{ 3, 2 }", root.ChildIds.ToStr());
         
         events = SetHandlerSeq(store, (args, seq) => {
             switch (seq) {
@@ -244,7 +244,7 @@ public static class Test_Entity_Tree
         });
         root.InsertChild(0, subChild4);    // change subChild4 parent: child2 -> root
         AreEqual(2, events.Seq);
-        AreEqual(new [] { 4, 3, 2 }, root.ChildIds.ToArray());
+        AreEqual("{ 4, 3, 2 }", root.ChildIds.ToStr());
         
         Throws<IndexOutOfRangeException>(() => {
             root.InsertChild(100, subChild4);

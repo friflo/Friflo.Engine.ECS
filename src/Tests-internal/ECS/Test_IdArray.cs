@@ -22,34 +22,34 @@ namespace Internal.ECS
             var array   = new IdArray();
             AreEqual("count: 0", array.ToString());
             AreEqual(0, array.Count);
-            AreEqual(new int[] { }, array.GetIdSpan(heap).ToArray());
+            AreEqual("{ }", array.GetIdSpan(heap).ToStr());
 
             array.AddId(100, heap);
             AreEqual(1, array.Count);
             AreEqual("count: 1  id: 100", array.ToString());
             var span = array.GetIdSpan(heap);
-            AreEqual(new int[] { 100 }, span.ToArray());
+            AreEqual("{ 100 }", span.ToStr());
             AreEqual(0, heap.Count);
             
             array.AddId(101, heap);
             AreEqual(2, array.Count);
             AreEqual("count: 2  index: 1  start: 0", array.ToString());
-            AreEqual(new int[] { 100, 101 }, array.GetIdSpan(heap).ToArray());
+            AreEqual("{ 100, 101 }", array.GetIdSpan(heap).ToStr());
             AreEqual(1, heap.Count);
 
             array.AddId(102, heap);
             AreEqual(3, array.Count);
-            AreEqual(new int[] { 100, 101, 102 }, array.GetIdSpan(heap).ToArray());
+            AreEqual("{ 100, 101, 102 }", array.GetIdSpan(heap).ToStr());
             AreEqual(1, heap.Count);
             
             array.AddId(103, heap);
             AreEqual(4, array.Count);
-            AreEqual(new int[] { 100, 101, 102, 103 }, array.GetIdSpan(heap).ToArray());
+            AreEqual("{ 100, 101, 102, 103 }", array.GetIdSpan(heap).ToStr());
             AreEqual(1, heap.Count);
             
             array.AddId(104, heap);
             AreEqual(5, array.Count);
-            AreEqual(new int[] { 100, 101, 102, 103, 104 }, array.GetIdSpan(heap).ToArray());
+            AreEqual("{ 100, 101, 102, 103, 104 }", array.GetIdSpan(heap).ToStr());
             AreEqual(1, heap.Count);
             AreEqual("count: 1", heap.ToString());
             
@@ -74,7 +74,7 @@ namespace Internal.ECS
                 array.RemoveAt(0, heap);
                 AreEqual(1, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual(new int[] { 201 }, ids.ToArray());
+                AreEqual("{ 201 }", ids.ToStr());
                 AreEqual(0, heap.Count);
             } {
                 var array   = new IdArray();
@@ -83,7 +83,7 @@ namespace Internal.ECS
                 array.RemoveAt(1, heap);
                 AreEqual(1, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual(new int[] { 300 }, ids.ToArray());
+                AreEqual("{ 300 }", ids.ToStr());
                 AreEqual(0, heap.Count);
             } {
                 var array   = new IdArray();
@@ -93,7 +93,7 @@ namespace Internal.ECS
                 array.RemoveAt(0, heap);
                 AreEqual(2, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual(new int[] { 401, 402 }, ids.ToArray());
+                AreEqual("{ 401, 402 }", ids.ToStr());
                 AreEqual(1, heap.Count);
             } {
                 var array   = new IdArray();
@@ -103,7 +103,7 @@ namespace Internal.ECS
                 array.RemoveAt(2, heap);
                 AreEqual(2, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual(new int[] { 500, 501 }, ids.ToArray());
+                AreEqual("{ 500, 501 }", ids.ToStr());
                 AreEqual(2, heap.Count);
             } {
                 var array   = new IdArray();
@@ -114,7 +114,7 @@ namespace Internal.ECS
                 array.RemoveAt(0, heap);
                 AreEqual(3, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual(new int[] { 601, 602, 603 }, ids.ToArray());
+                AreEqual("{ 601, 602, 603 }", ids.ToStr());
                 AreEqual(3, heap.Count);
             } {
                 var array   = new IdArray();
@@ -125,7 +125,7 @@ namespace Internal.ECS
                 array.RemoveAt(3, heap);
                 AreEqual(3, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual(new int[] { 700, 701, 702 }, ids.ToArray());
+                AreEqual("{ 700, 701, 702 }", ids.ToStr());
                 AreEqual(4, heap.Count);
             }
         }
