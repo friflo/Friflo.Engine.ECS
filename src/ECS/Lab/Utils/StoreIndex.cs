@@ -43,8 +43,8 @@ internal static class StoreIndex
     
     private static ComponentIndex CreateIndex(EntityStore store, int structIndex)
     {
-        var type = EntityStoreBase.Static.EntitySchema.indexedComponentMap[structIndex];
-        return type.CreateComponentIndex(store);
+        var componentType = EntityStoreBase.Static.EntitySchema.components[structIndex];
+        return IndexedComponentType.CreateComponentIndex(store, componentType);
     }
     
     private static ComponentIndex[] CreateStoreIndexMap()

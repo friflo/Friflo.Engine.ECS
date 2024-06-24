@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Friflo.Engine.ECS.Index;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -66,8 +65,6 @@ public sealed class EntitySchema
     [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] internal readonly   ComponentType[]                     components;
-    [Browse(Never)] internal readonly   IndexedComponentType[]              indexedComponents;
-    [Browse(Never)] internal readonly   IndexedComponentType[]              indexedComponentMap;
     [Browse(Never)] internal readonly   ScriptType[]                        scripts;
     [Browse(Never)] internal readonly   TagType[]                           tags;
     [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
@@ -84,7 +81,6 @@ public sealed class EntitySchema
     internal EntitySchema(List<EngineDependant> dependants, SchemaTypes schemaTypes)
     {
         var componentList           = schemaTypes.components;
-        var indexedComponentList    = schemaTypes.indexedComponents;
         var scriptList              = schemaTypes.scripts;
         var tagList                 = schemaTypes.tags;
         
@@ -97,8 +93,6 @@ public sealed class EntitySchema
         tagTypeByType           = new Dictionary<Type,   TagType>   (count);
         maxStructIndex          = componentList.Count + 1;
         components              = new ComponentType[maxStructIndex];
-        indexedComponents       = new IndexedComponentType[indexedComponentList.Count];
-        indexedComponentMap     = new IndexedComponentType[maxStructIndex];
         scripts                 = new ScriptType[scriptList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
 
@@ -118,11 +112,7 @@ public sealed class EntitySchema
             components              [componentType.StructIndex] =   componentType;
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];
-        var index = 0;
-        foreach (var type in indexedComponentList) {
-            indexedComponents[index++]                          = type;
-            indexedComponentMap[type.componentType.StructIndex] = type;
-        }
+
         foreach (var scriptType in scriptList) {
             var key = scriptType.ComponentKey;
             if (!schemaTypeByKey.   TryAdd(key,                     scriptType)) {

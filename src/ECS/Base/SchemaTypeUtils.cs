@@ -22,7 +22,7 @@ internal static class SchemaTypeUtils
     {
         var schema = EntityStoreBase.Static.EntitySchema;
         if (schema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
-            return schema.indexedComponentMap[componentType.StructIndex].componentType != null;
+            return componentType.IndexType != null;
         }
         return false;
     }

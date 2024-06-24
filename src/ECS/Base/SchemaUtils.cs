@@ -16,7 +16,6 @@ namespace Friflo.Engine.ECS;
 internal sealed class SchemaTypes
 {
     internal readonly   List<ComponentType>         components          = new ();
-    internal readonly   List<IndexedComponentType>  indexedComponents   = new ();
     internal readonly   List<ScriptType>            scripts             = new ();
     internal readonly   List<TagType>               tags                = new ();
 }
@@ -77,12 +76,12 @@ internal static class SchemaUtils
             {
                 // type: IComponent
                 var structIndex     = schemaTypes.components.Count + 1;
-                var createParams    = new object[] { typeStore, structIndex };
+                var indexType       = IndexedComponentType.GetIndexType(type);
+                var createParams    = new object[] { typeStore, structIndex, indexType };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 schemaTypes.components.Add(componentType);
-                IndexedComponentType.AddIndexedComponentType(schemaTypes, componentType);
                 return componentType;
             }
         } else {
@@ -101,7 +100,7 @@ internal static class SchemaUtils
         throw new InvalidOperationException($"Cannot create SchemaType for Type: {type}");
     }
     
-    internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex)
+    internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex, Type indexType)
         where T : struct, IComponent
     {
         string componentKey;
@@ -111,7 +110,7 @@ internal static class SchemaUtils
         } else {
             componentKey = GetComponentKey(type);
         }
-        return new ComponentType<T>(componentKey, structIndex, typeStore);
+        return new ComponentType<T>(componentKey, structIndex, indexType, typeStore);
     }
     
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore, int scriptIndex)

@@ -24,6 +24,8 @@ public abstract class ComponentType : SchemaType
     /// <summary> The size in bytes of the <see cref="IComponent"/> struct. </summary>
     public   readonly   int         StructSize;     //  4
     
+    public   readonly   Type        IndexType;      //  8
+    
     internal abstract   StructHeap          CreateHeap();
     internal abstract   bool                RemoveEntityComponent  (Entity entity);
     internal abstract   bool                AddEntityComponent     (Entity entity);
@@ -32,12 +34,13 @@ public abstract class ComponentType : SchemaType
     internal abstract   BatchComponent      CreateBatchComponent();
     internal abstract   ComponentCommands   CreateComponentCommands();
     
-    protected ComponentType(string componentKey, int structIndex, Type type, int byteSize)
+    protected ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize)
         : base (componentKey, type, Component)
     {
         StructIndex = structIndex;
         IsBlittable = GetBlittableType(type) == BlittableType.Blittable;
         StructSize  = byteSize;
+        IndexType   = indexType;
     }
 }
 
@@ -69,8 +72,8 @@ internal sealed class ComponentType<T> : ComponentType
     private  readonly   TypeStore       typeStore;
     #endregion
 
-    internal ComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, structIndex, typeof(T), ByteSize)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, TypeStore typeStore)
+        : base(componentKey, structIndex, typeof(T), indexType, ByteSize)
     {
         this.typeStore = typeStore;
     }

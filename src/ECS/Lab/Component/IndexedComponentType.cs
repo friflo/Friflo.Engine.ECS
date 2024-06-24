@@ -7,32 +7,22 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal readonly struct IndexedComponentType
+internal static class IndexedComponentType
 {
-    /// <summary> Not null in case component is indexed. </summary>
-    internal readonly ComponentType componentType;  //  8
-    
-    private  readonly Type          indexType;      //  8
-    
-    private IndexedComponentType(ComponentType componentType, Type indexType) {
-        this.componentType  = componentType;
-        this.indexType      = indexType;
-    }
-    
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
-    internal ComponentIndex CreateComponentIndex(EntityStore store)
+    internal static ComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
     {
-        var obj             = Activator.CreateInstance(indexType);
+        var obj             = Activator.CreateInstance(componentType.IndexType);
         var index           = (ComponentIndex)obj!;
         index.store         = store;
         index.componentType = componentType;
         return index;
     }
     
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO
-    internal static void AddIndexedComponentType(SchemaTypes schemaTypes, ComponentType componentType)
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
+    internal static Type GetIndexType(Type componentType)
     {
-        var interfaces = componentType.Type.GetInterfaces();
+        var interfaces = componentType.GetInterfaces();
         foreach (var i in interfaces)
         {
             if (!i.IsGenericType) continue;
@@ -40,11 +30,10 @@ internal readonly struct IndexedComponentType
             if (genericType != typeof(IIndexedComponent<>)) {
                 continue;
             }
-            var valueType               = i.GenericTypeArguments[0];
-            var indexType               = MakeIndexType(valueType, componentType.Type);
-            var indexedComponentType    = new IndexedComponentType(componentType, indexType);
-            schemaTypes.indexedComponents.Add(indexedComponentType);
+            var valueType = i.GenericTypeArguments[0];
+            return MakeIndexType(valueType, componentType);
         }
+        return null;
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")] // TODO
