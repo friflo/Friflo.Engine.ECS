@@ -57,7 +57,7 @@ public partial class EntityStoreBase
         var newHeapMap  = newArchetype.heapMap;
         var components  = batch.batchComponents;
         foreach (var componentType in batch.componentsAdd) {
-            newHeapMap[componentType.StructIndex].heap.SetBatchComponent(components, compIndex);
+            newHeapMap[componentType.StructIndex].SetBatchComponent(components, compIndex);
         }
         
         // ----------- Send events for all batch commands. See: SEND_EVENT notes
@@ -85,7 +85,7 @@ public partial class EntityStoreBase
         foreach (var componentType in batch.componentsAdd)
         {
             var structIndex = componentType.StructIndex;
-            var structHeap  = oldHeapMap[structIndex].heap;
+            var structHeap  = oldHeapMap[structIndex];
             ComponentChangedAction action;
             if (structHeap == null) {
                 action = ComponentChangedAction.Add;
@@ -105,7 +105,7 @@ public partial class EntityStoreBase
         foreach (var componentType in batch.componentsRemove)
         {
             var structIndex = componentType.StructIndex;
-            var oldHeap     = oldHeapMap[structIndex].heap;
+            var oldHeap     = oldHeapMap[structIndex];
             if (oldHeap == null) {
                 continue;
             }

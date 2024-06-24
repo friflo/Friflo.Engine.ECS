@@ -114,7 +114,7 @@ public readonly struct EntityComponent
     }
     
     internal IComponent GetValue() {
-        return entity.archetype.heapMap[type.StructIndex].heap.GetComponentDebug(entity.compIndex);
+        return entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
     }
 }
 

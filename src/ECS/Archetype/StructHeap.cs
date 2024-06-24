@@ -12,14 +12,6 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal readonly struct HeapInfo
-{
-    internal readonly   StructHeap  heap;       //  8
-        
-    internal HeapInfo(StructHeap heap) {
-        this.heap       = heap;
-    }
-}
 
 /// <remarks>
 /// <b>Note:</b> Should not contain any other fields. Reasons:<br/>

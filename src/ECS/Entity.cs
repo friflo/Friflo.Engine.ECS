@@ -316,18 +316,18 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Return true if the entity contains a component of the given type.</summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructInfo<T>.Index].heap != null;
+    public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructInfo<T>.Index] != null;
 
     /// <summary>Return the component of the given type as a reference.</summary>
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T   GetComponent<T>()   where T : struct, IComponent
-    => ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index].heap).components[compIndex];
+    => ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
     
     /// <remarks>Executes in O(1)</remarks>
     public bool     TryGetComponent<T>(out T result) where T : struct, IComponent
     {
-        var heap = archetype.heapMap[StructInfo<T>.Index].heap;
+        var heap = archetype.heapMap[StructInfo<T>.Index];
         if (heap == null) {
             result = default;
             return false;
@@ -534,7 +534,7 @@ public readonly struct Entity : IEquatable<Entity>
     
     internal bool TryGetTreeNode(out TreeNode node)
     {
-        var heap = archetype.heapMap[StructInfo<TreeNode>.Index].heap;
+        var heap = archetype.heapMap[StructInfo<TreeNode>.Index];
         if (heap == null) {
             node = default;
             return false;
@@ -543,10 +543,10 @@ public readonly struct Entity : IEquatable<Entity>
         return true;
     }
     
-    internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNode>.Index].heap != null;
+    internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNode>.Index] != null;
     
     internal  ref TreeNode   GetTreeNode()
-        => ref ((StructHeap<TreeNode>)archetype.heapMap[StructInfo<TreeNode>.Index].heap).components[compIndex];
+        => ref ((StructHeap<TreeNode>)archetype.heapMap[StructInfo<TreeNode>.Index]).components[compIndex];
     #endregion
 
 

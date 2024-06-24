@@ -23,7 +23,7 @@ public static partial class EntityExtensions
         var oldHeapMap  = oldType.heapMap;
         foreach (var addTypeIndex in indexes)
         {
-            var oldHeap = oldHeapMap[addTypeIndex].heap;
+            var oldHeap = oldHeapMap[addTypeIndex];
             if (oldHeap == null) {
                 continue;
             }
@@ -48,7 +48,7 @@ public static partial class EntityExtensions
         var id          = entity.Id;
         foreach (var addTypeIndex in indexes)
         {
-            var oldHeap = oldHeapMap[addTypeIndex].heap;
+            var oldHeap = oldHeapMap[addTypeIndex];
             var action  = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
             componentAdded(new ComponentChanged (store, id, action, addTypeIndex, oldHeap));
         }
@@ -65,7 +65,7 @@ public static partial class EntityExtensions
         var oldHeapMap = oldType.heapMap;
         foreach (var removeTypeIndex in removeComponents)
         {
-            oldHeapMap[removeTypeIndex].heap?.StashComponent(oldCompIndex);
+            oldHeapMap[removeTypeIndex]?.StashComponent(oldCompIndex);
         }
     }
     
@@ -86,7 +86,7 @@ public static partial class EntityExtensions
         var id          = entity.Id;
         foreach (var removeTypeIndex in removeComponents)
         {
-            var oldHeap = oldHeapMap[removeTypeIndex].heap;
+            var oldHeap = oldHeapMap[removeTypeIndex];
             if (oldHeap == null) {
                 continue;
             }
@@ -104,7 +104,7 @@ public static partial class EntityExtensions
         }
         var heapMap = type.heapMap;
         foreach (var structIndex in indexes) {
-            heapMap[structIndex].heap?.StashComponent(compIndex);
+            heapMap[structIndex]?.StashComponent(compIndex);
         }
     }
     
@@ -141,7 +141,7 @@ public static partial class EntityExtensions
         }
         var heapMap = type.heapMap;
         foreach (var index in indexes) {
-            componentAdded(new ComponentChanged (store, entity.Id, ComponentChangedAction.Update, index, heapMap[index].heap));    
+            componentAdded(new ComponentChanged (store, entity.Id, ComponentChangedAction.Update, index, heapMap[index]));    
         }
     }
     #endregion

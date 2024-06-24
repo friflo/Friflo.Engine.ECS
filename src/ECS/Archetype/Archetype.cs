@@ -80,7 +80,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32   - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="EntitySchema.CheckStructIndex"/></remarks>
-    [Browse(Never)] internal readonly   HeapInfo[]          heapMap;        //  8   - never null. Length always = maxStructIndex. Used for heap lookup
+    [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8   - never null. Length always = maxStructIndex. Used for heap lookup
     [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8   - containing EntityStoreBase
     [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8   - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4   - archetype index in EntityStore.archs[]
@@ -183,7 +183,7 @@ public sealed class Archetype
         componentCount  = heaps.Length;
         structHeaps     = heaps;
         entityIds       = new int [memory.capacity];
-        heapMap         = new HeapInfo[config.maxStructIndex];
+        heapMap         = new StructHeap[config.maxStructIndex];
         componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
@@ -191,7 +191,7 @@ public sealed class Archetype
         {
             var heap    = heaps[pos];
             heap.SetArchetypeDebug(this);
-            heapMap[heap.structIndex]   = new HeapInfo(heap);
+            heapMap[heap.structIndex] = heap;
             SetStandardComponentHeaps(heap, ref std);
         }
     }
@@ -239,7 +239,7 @@ public sealed class Archetype
         var sourceHeapMap   = sourceArch.heapMap;
         foreach (var targetHeap in targetArch.structHeaps)
         {
-            var sourceHeap = sourceHeapMap[targetHeap.structIndex].heap;
+            var sourceHeap = sourceHeapMap[targetHeap.structIndex];
             if (sourceHeap != null) {
                 // case: sourceArch and targetArch contain component type   => copy component to targetHeap.
                 sourceHeap.CopyComponentTo(sourceIndex, targetHeap, targetIndex);

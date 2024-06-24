@@ -131,7 +131,7 @@ public sealed class RawEntityStore : EntityStoreBase
         where T : struct, IComponent
     {
         ref var entity  = ref entities[id];
-        var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructInfo<T>.Index].heap;
+        var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructInfo<T>.Index];
         return ref heap.components[entity.compIndex];
     }
     

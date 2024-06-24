@@ -61,7 +61,7 @@ public static class EntityUtils
     /// So avoid using this method whenever possible. Use <see cref="Entity.GetComponent{T}"/> instead.
     /// </summary>
     public static  IComponent   GetEntityComponent    (Entity entity, ComponentType componentType) {
-        return entity.archetype.heapMap[componentType.StructIndex].heap.GetComponentDebug(entity.compIndex);
+        return entity.archetype.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)

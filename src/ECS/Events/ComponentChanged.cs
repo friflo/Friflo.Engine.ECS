@@ -127,7 +127,7 @@ public readonly struct  ComponentChanged
             case ComponentChangedAction.Update:
                 if (typeof(T) == ComponentType.Type) {
                     var entity = Entity;
-                    return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex].heap).components[entity.compIndex];
+                    return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).components[entity.compIndex];
                 }
                 throw TypeException("Component<T>() - expect component Type: ", typeof(T));
         }
@@ -169,7 +169,7 @@ public readonly struct  ComponentChanged
             case ComponentChangedAction.Add: 
             case ComponentChangedAction.Update:
                 var entity = Entity;
-                return entity.archetype.heapMap[ComponentType.StructIndex].heap.GetComponentDebug(entity.compIndex);
+                return entity.archetype.heapMap[ComponentType.StructIndex].GetComponentDebug(entity.compIndex);
         }
         return null;
     }

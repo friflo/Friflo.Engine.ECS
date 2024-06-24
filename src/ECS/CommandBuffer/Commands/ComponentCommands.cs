@@ -90,7 +90,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             }
             // set new component value for Add & Update commands
             ref var node    = ref nodes[command.entityId];
-            var heap        = node.archetype.heapMap[index].heap;
+            var heap        = node.archetype.heapMap[index];
             if (heap == null) {
                 // case: RemoveComponent<>() was called after AddComponent<>() or SetComponent<>() on same entity
                 continue;
