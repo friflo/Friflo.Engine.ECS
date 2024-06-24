@@ -114,7 +114,7 @@ namespace Internal.ECS
                 array.RemoveAt(0, heap);
                 AreEqual(3, array.Count);
                 var ids     = array.GetIdSpan(heap);
-                AreEqual("{ 601, 602, 603 }", ids.ToStr());
+                AreEqual("{ 603, 601, 602 }", ids.ToStr());
                 AreEqual(3, heap.Count);
             } {
                 var array   = new IdArray();

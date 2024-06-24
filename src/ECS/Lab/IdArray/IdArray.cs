@@ -81,9 +81,11 @@ internal static class IdArrayExtensions {
         curPool.DeleteArray(curStart, out var curIds);
         var newPool     = heap.GetPool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
-        for (int n = 0; n < count; n++) {
-            newIds[newStart + n] = curIds[curStart + n]; 
-        }
+        
+        var source  = new ReadOnlySpan<int> (curIds, curStart, count);
+        var target  = new Span<int>         (newIds, newStart, count);
+        source.CopyTo(target);
+
         newIds[newStart + count] = id;
         array = new IdArray(newStart, newCount);
     }
@@ -112,23 +114,25 @@ internal static class IdArrayExtensions {
         var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
         var curPool         = heap.GetPool(curPoolIndex);
         if (newPoolIndex == curPoolIndex) {
-            var ids = curPool.Ids;
-            var end = count + curStart;
-            for (int n = curStart + index + 1; n < end; n++) {
-                ids[n - 1] = ids[n];
-            }
+            // move last id to deleted index
+            var ids                 = curPool.Ids;
+            ids[curStart + index]   = ids[curStart + count - 1];
             array = new IdArray(curStart, newCount);
             return;
         }
         curPool.DeleteArray(curStart, out var curIds);
         var newPool     = heap.GetPool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
-        for (int n = 0; n < index; n++) {
-            newIds[newStart + n]     = curIds[curStart + n]; 
-        }
-        for (int n = index + 1; n < count; n++) {
-            newIds[newStart + n - 1] = curIds[curStart + n];    
-        }
+        
+        var source  = new ReadOnlySpan<int> (curIds, curStart, index);
+        var target  = new Span<int>         (newIds, newStart, index);
+        source.CopyTo(target);
+
+        var rest    = newCount - index;
+        source      = new ReadOnlySpan<int> (curIds, curStart + index + 1, rest);
+        target      = new Span<int>         (newIds, newStart + index,     rest);
+        source.CopyTo(target);
+        
         array = new IdArray(newStart, newCount);
     }
 } 
