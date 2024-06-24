@@ -23,16 +23,38 @@ public sealed partial class EntityStore
     /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
     /// </summary>
     /// <remarks>
-    /// - The collection changes when indexed component values are updated, removed or added.<br/>
-    /// - To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
-    /// - If <typeparamref name="TValue"/> is a class all collection values are not null.
-    ///   Use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/> to check if null is referenced.<br/>
+    /// <list type="bullet">
+    ///   <item>
+    ///     The collection changes when indexed component values are updated, removed or added.
+    ///   </item>
+    ///   <item>
+    ///     To get the entities having a specific component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.
+    ///   </item>
+    ///   <item>
+    ///     If <typeparamref name="TValue"/> is a class all collection values are not null.<br/>
+    ///     Use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/> to check if null is referenced.
+    ///   </item>
+    /// </list>
     /// </remarks>
     internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TComponent, TValue>() where TComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
     
+    /// <summary>
+    /// Returns all entities linked by the specified <see cref="ILinkComponent"/> type.<br/>
+    /// Executes in O(1). Each entity in the returned list is unique. See remarks for additional infos.
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    ///   <item>
+    ///     The collection changes when component link values are updated, removed or added.
+    ///   </item>
+    ///   <item>
+    ///     To get the entities linking a specific entity use <see cref="IndexExtensions.GetLinkingEntities{TComponent}"/>.<br/>
+    ///   </item>
+    /// </list>
+    /// </remarks>
     internal IReadOnlyCollection<Entity> GetLinkedEntities<TComponent>() where TComponent: struct, ILinkComponent {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;

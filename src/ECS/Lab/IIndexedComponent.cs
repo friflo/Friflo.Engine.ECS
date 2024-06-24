@@ -5,7 +5,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Is used to define a component type having a single indexed field / property.<br/>
+/// Is used to define a component type having a single indexed field / property.
 /// </summary>
 /// <remarks>
 /// This component type enables:
@@ -32,25 +32,3 @@ internal interface IIndexedComponent<out TValue> : IComponent
 {
     TValue GetIndexedValue();
 }
-
-/// <summary>
-/// Is used to define a component type having a link to another <see cref="Entity"/>.<br/>
-/// </summary>
-/// <remarks>
-/// This component type enables:
-/// <list type="bullet">
-///   <item>
-///     Return all entities having a <see cref="ILinkComponent"/> to a specific entity.<br/>
-///     See <see cref="IndexExtensions.GetLinkingEntities{TComponent}"/>
-///   </item>
-///   <item>
-///     Return all entities linked by a specific <see cref="ILinkComponent"/> type.<br/>
-///     See <see cref="EntityStore.GetLinkedEntities{TComponent}"/>
-///   </item>
-///   <item>
-///     Filter entities in a query having a link to a specific entity.<br/>
-///     See <see cref="ArchetypeQuery.HasValue{TComponent,TValue}"/>.
-///   </item>
-/// </list>
-/// </remarks>
-internal interface ILinkComponent : IIndexedComponent<Entity> { }

@@ -266,7 +266,7 @@ public static class Test_Index
         var target5 = store.CreateEntity(5);
         var target6 = store.CreateEntity(6);
         
-        var values = store.GetIndexedComponentValues<LinkComponent, Entity>();
+        var values = store.GetLinkedEntities<LinkComponent>();
         
         entity1.AddComponent(new LinkComponent { entity = target4 });   AreEqual(1, values.Count);
         entity2.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
