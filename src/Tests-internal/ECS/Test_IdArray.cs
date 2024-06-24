@@ -168,6 +168,9 @@ namespace Internal.ECS
             Throws<IndexOutOfRangeException>(() => {
                 array.RemoveAt(0, heap);    
             });
+            Throws<IndexOutOfRangeException>(() => {
+                array.RemoveAt(-1, heap);    
+            });
         }
         
         [Test]

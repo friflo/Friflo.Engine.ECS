@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -78,6 +80,12 @@ public static class Test_ComponentType
         IsNull(SchemaUtils.GetGenericComponentKey(typeof(int)));
     }
     
+    [Test]
+    public static void Test_ComponentType_GenericInstanceType_Add_coverage()
+    {
+        // throws no exception
+        GenericInstanceType.Add(new List<GenericInstanceType>(), new List<CustomAttributeTypedArgument>());
+    }
 }
 
 }

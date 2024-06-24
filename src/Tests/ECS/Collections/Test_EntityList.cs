@@ -38,6 +38,10 @@ public static class Test_EntityList
             list.Add(2);
         });
         AreEqual("id: 2. expect in [0, current max id: 1]", e!.Message);
+        e = Throws<ArgumentException>(() => {
+            list.Add(-1);
+        });
+        AreEqual("id: -1. expect in [0, current max id: 1]", e!.Message);
     }
     
     [Test]
