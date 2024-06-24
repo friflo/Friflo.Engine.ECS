@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 ///     See <see cref="EntityStore.GetIndexedComponentValues{TIndexedComponent,TValue}"/>.
 ///   </item>
 ///   <item>
-///     Filter entites in a query having a specific component value.<br/>
+///     Filter entities in a query having a specific component value.<br/>
 ///     See <see cref="ArchetypeQuery.HasValue{TComponent,TValue}"/>.
 ///   </item>
 ///   <item>
@@ -41,7 +41,15 @@ internal interface IIndexedComponent<out TValue> : IComponent
 /// <list type="bullet">
 ///   <item>
 ///     Return all entities having a <see cref="ILinkComponent"/> to a specific entity.<br/>
-///     See <see cref="IndexExtensions.GetLinkedEntities{TComponent}"/>
+///     See <see cref="IndexExtensions.GetLinkingEntities{TComponent}"/>
+///   </item>
+///   <item>
+///     Return all entities linked by a specific <see cref="ILinkComponent"/> type.<br/>
+///     See <see cref="EntityStore.GetLinkedEntities{TComponent}"/>
+///   </item>
+///   <item>
+///     Filter entities in a query having a link to a specific entity.<br/>
+///     See <see cref="ArchetypeQuery.HasValue{TComponent,TValue}"/>.
 ///   </item>
 /// </list>
 /// </remarks>

@@ -19,7 +19,7 @@ public sealed partial class EntityStore
     }
     
     /// <summary>
-    /// Returns a collection of all indexed component values of the passed <typeparamref name="TIndexedComponent"/>.<br/>
+    /// Returns a collection of all indexed component values of the passed <typeparamref name="TComponent"/> type.<br/>
     /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
     /// </summary>
     /// <remarks>
@@ -28,8 +28,13 @@ public sealed partial class EntityStore
     /// - If <typeparamref name="TValue"/> is a class all collection values are not null.
     ///   Use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/> to check if null is referenced.<br/>
     /// </remarks>
-    internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TIndexedComponent, TValue>() where TIndexedComponent: struct, IIndexedComponent<TValue> {
-        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TIndexedComponent>.Index);
+    internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TComponent, TValue>() where TComponent: struct, IIndexedComponent<TValue> {
+        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
+        return index.IndexedComponentValues;
+    }
+    
+    internal IReadOnlyCollection<Entity> GetLinkedEntities<TComponent>() where TComponent: struct, ILinkComponent {
+        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
 }

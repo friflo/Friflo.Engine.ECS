@@ -288,22 +288,22 @@ public static class Test_Index
         AreEqual("{ 1 }",           query1.Entities.ToStr());
         AreEqual("{ 1, 2, 3 }",     query2.Entities.ToStr());
         
-        var references4 = target4.GetLinkedEntities<LinkComponent>();
+        var references4 = target4.GetLinkingEntities<LinkComponent>();
         AreEqual("{ 1 }",           references4.Ids.ToStr());
         
-        var references5 = target5.GetLinkedEntities<LinkComponent>();
+        var references5 = target5.GetLinkingEntities<LinkComponent>();
         AreEqual("{ 2, 3 }",        references5.Ids.ToStr());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetLinkedEntities<LinkComponent>();
+        references5 = target5.GetLinkingEntities<LinkComponent>();
         AreEqual("{ 3 }",           references5.Ids.ToStr());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetLinkedEntities<LinkComponent>();
+        references5 = target5.GetLinkingEntities<LinkComponent>();
         AreEqual("{ 3 }",           references5.Ids.ToStr());
         
         entity3.RemoveComponent<LinkComponent>();                       AreEqual(2, values.Count);
-        references5 = target5.GetLinkedEntities<LinkComponent>();
+        references5 = target5.GetLinkingEntities<LinkComponent>();
         AreEqual("{ }",             references5.Ids.ToStr());
     }
     
