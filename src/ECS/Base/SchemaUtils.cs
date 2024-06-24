@@ -76,7 +76,7 @@ internal static class SchemaUtils
             {
                 // type: IComponent
                 var structIndex     = schemaTypes.components.Count + 1;
-                var indexType       = IndexedComponentType.GetIndexType(type);
+                var indexType       = ComponentIndexUtils.GetIndexType(type);
                 var createParams    = new object[] { typeStore, structIndex, indexType };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);

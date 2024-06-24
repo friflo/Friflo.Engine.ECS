@@ -127,7 +127,7 @@ A type initializer threw an exception. To determine which type, inspect the Inne
         }
         var components      = schemaTypes.components;
         var structIndex     = components.Count + 1;
-        var indexType       = IndexedComponentType.GetIndexType(typeof(T));
+        var indexType       = ComponentIndexUtils.GetIndexType(typeof(T));
         var componentType   = SchemaUtils.CreateComponentType<T>(typeStore, structIndex, indexType);
         components.Add(componentType);
         types.Add(componentType);

@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal static class IndexedComponentType
+internal static class ComponentIndexUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     internal static ComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
