@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -373,9 +374,10 @@ public static class Test_Index
     }
     
     [Test]
-    public static void Test_Index_Allocation()
+    public static void Test_Index_Perf()
     {
         int count       = 100;
+        // 1_000_000  #PC    Test_Index_Allocation - count: 1000000 duration: 176 ms
         var store       = new EntityStore();
         var entities    = new List<Entity>();
         var values      = store.GetIndexedComponentValues<IndexedInt, int>();
@@ -386,14 +388,17 @@ public static class Test_Index
             entities[n].AddComponent(new IndexedInt { value = n });
         }
         for (int n = 0; n < count; n++) {
-            entities[n].RemoveComponent<IndexedInt>();
+            entities[n].AddComponent(new IndexedInt { value = n + count });
         }
-        AreEqual(0, values.Count);
+        AreEqual(count, values.Count);
+        var sw = new Stopwatch();
+        sw.Start();
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
             entities[n].AddComponent(new IndexedInt { value = n });
         }
         Mem.AssertNoAlloc(start);
+        Console.WriteLine($"Test_Index_Allocation - count: {count} duration: {sw.ElapsedMilliseconds} ms");
         AreEqual(count, values.Count);
     }
     
