@@ -8,6 +8,7 @@ using System.Reflection;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
+using Tests.Examples;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -398,8 +399,31 @@ public static class Test_Index
             entities[n].AddComponent(new IndexedInt { value = n });
         }
         Mem.AssertNoAlloc(start);
-        Console.WriteLine($"Test_Index_Allocation - count: {count} duration: {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Test_Index_Perf - count: {count} duration: {sw.ElapsedMilliseconds} ms");
         AreEqual(count, values.Count);
+    }
+    
+    [Test]
+    public static void Test_Index_Perf_Reference()
+    {
+        int count       = 10;
+        // 1_000_000  #PC    Test_Index_Perf_Reference - count: 1000000 duration: 34 ms
+        var store       = new EntityStore();
+        var entities    = new List<Entity>();
+        for (int n = 1; n <= count; n++) {
+            entities.Add(store.CreateEntity());
+        }
+        for (int n = 0; n < count; n++) {
+            entities[n].AddComponent(new General.MyComponent { value = n });
+        }
+        var sw = new Stopwatch();
+        sw.Start();
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < count; n++) {
+            entities[n].AddComponent(new  General.MyComponent { value = n });
+        }
+        Mem.AssertNoAlloc(start);
+        Console.WriteLine($"Test_Index_Perf_Reference - count: {count} duration: {sw.ElapsedMilliseconds} ms");
     }
     
     [Test]
