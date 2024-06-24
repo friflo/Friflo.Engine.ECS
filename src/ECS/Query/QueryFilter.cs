@@ -183,6 +183,7 @@ public class QueryFilter
     }
     
     private void AddValueCondition(ValueCondition valueCondition) {
+        Change();
         valueConditions.Add(valueCondition);
     }
     #endregion
