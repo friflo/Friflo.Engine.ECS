@@ -170,6 +170,9 @@ public static class Test_Index_Range
         }
         // Mem.AssertNoAlloc(start);
         AreEqual(count, values.Count);
+        
+        var query = store.Query().ValueInRange<IndexedStringRange, string>("0", "z");
+        AreEqual(count, query.Count);
     }
     
     [Test]
@@ -191,6 +194,9 @@ public static class Test_Index_Range
         }
         Mem.AssertNoAlloc(start);
         AreEqual(count, values.Count);
+        
+        var query = store.Query().ValueInRange<IndexedIntRange, int>(10, 19);
+        AreEqual(10, query.Count);
     }
     
     [Test]

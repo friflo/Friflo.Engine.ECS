@@ -320,7 +320,6 @@ public class ArchetypeQuery
             if (nextCount == nextArchetypes.Length) {
                 var length = Math.Max(4, 2 * nextCount);
                 ArrayUtils.Resize(ref nextArchetypes, length);
-                ArrayUtils.Resize(ref nextPositions,  length);
             }
             nextArchetypes[nextCount]   = archetype;
             nextPositions [nextCount++] = node.compIndex;

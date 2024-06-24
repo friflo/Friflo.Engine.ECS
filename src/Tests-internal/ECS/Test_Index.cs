@@ -147,6 +147,43 @@ public static class Test_Index
         AreEqual(0, query4.Entities.Count);     AreEqual(new int[] { },             query4.Entities.ToIds());
     }
     
+    [Test]
+    public static void Test_Index_ValueInRange_ValueStructIndex()
+    {
+        var store = new EntityStore();
+        for (int n = 1; n <= 10; n++) {
+            var entity = store.CreateEntity(n);
+            entity.AddComponent(new IndexedInt { value = n });
+        }
+        var query  = store.Query().ValueInRange<IndexedInt, int>(3, 8);
+        AreEqual(6, query.Count);
+        AreEqual(new int[] { 3, 4, 5, 6, 7, 8 }, query.Entities.ToIds().ToArray());
+    }
+    
+    [Test]
+    public static void Test_Index_ValueInRange_ValueClassIndex()
+    {
+        var store = new EntityStore();
+        for (int n = 1; n <= 10; n++) {
+            var entity = store.CreateEntity(n);
+            entity.AddComponent(new IndexedName { name = n.ToString() });
+        }
+        var query  = store.Query().ValueInRange<IndexedName, string>("3", "8");
+        AreEqual(6, query.Count);
+        AreEqual(new int[] { 3, 4, 5, 6, 7, 8 }, query.Entities.ToIds().ToArray());
+    }
+    
+    [Test]
+    public static void Test_Index_ValueInRange_EntityIndex()
+    {
+        var store       = new EntityStore();
+        var entityIndex = new EntityIndex { store = store };
+        var e = Throws<NotSupportedException>(() => {
+            entityIndex.AddValueInRangeEntities(default, default, null);    
+        });
+        AreEqual("ValueInRange() not supported by EntityIndex", e!.Message);
+    }
+    
     /// <summary>
     /// Cover <see cref="ValueStructIndex{TValue}.Add{TComponent}"/>
     /// </summary>
