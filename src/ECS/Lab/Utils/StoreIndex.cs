@@ -6,6 +6,27 @@ namespace Friflo.Engine.ECS.Index;
 
 internal static class StoreIndex
 {
+    internal static void UpdateIndex<TComponent>(EntityStoreBase store, int id, in TComponent component, StructHeap<TComponent> heap)
+        where TComponent : struct, IComponent
+    {
+        var index = GetIndex((EntityStore)store, StructInfo<TComponent>.Index);
+        index.Update(id, component, heap);
+    }
+    
+    internal static void AddIndex<TComponent>(EntityStoreBase store, int id, in TComponent component)
+        where TComponent : struct, IComponent
+    {
+        var index = GetIndex((EntityStore)store, StructInfo<TComponent>.Index);
+        index.Add(id, component);
+    }
+    
+    internal static void RemoveIndex<TComponent>(EntityStoreBase store, int id, StructHeap<TComponent> heap)
+        where TComponent : struct, IComponent
+    {
+        var index = GetIndex((EntityStore)store, StructInfo<TComponent>.Index);
+        index.Remove(id, heap);
+    }
+    
     internal static ComponentIndex GetIndex(EntityStore store, int structIndex)
     {
         var indexMap = store.extension.indexMap; 

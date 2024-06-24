@@ -4,6 +4,7 @@
 
 // Hard rule: this file MUST NOT use type: Entity
 
+using Friflo.Engine.ECS.Index;
 using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -31,13 +32,15 @@ public partial class EntityStoreBase
         bool                    added;
 
         var info        = arch.heapMap[structIndex];
-        var oldHeap     = info.heap;
-        if (info.heap != null) {
+        var oldHeap     = (StructHeap<T>)info.heap;
+        StructHeap<T> newHeap;     
+        if (oldHeap != null) {
             // --- case: archetype contains the component type  => archetype remains unchanged
-            ((StructHeap<T>)oldHeap).StashComponent(compIndex);
+            oldHeap.StashComponent(compIndex);
             added   = false;
             action  = ComponentChangedAction.Update;
-            if (info.hasIndex) info.UpdateIndex(store, id, component);
+            if (info.hasIndex) StoreIndex.UpdateIndex(store, id, component, oldHeap);
+            newHeap = oldHeap;
             goto AssignComponent;
         }
         // --- case: archetype doesn't contain component type   => change entity archetype
@@ -48,11 +51,11 @@ public partial class EntityStoreBase
         action              = ComponentChangedAction.Add;
         archIndex           = arch.archIndex;
         info                = arch.heapMap[structIndex];
-        if (info.hasIndex) info.AddIndex(store, id, component);
+        if (info.hasIndex) StoreIndex.AddIndex(store, id, component);
+        newHeap             = (StructHeap<T>)info.heap;
         
     AssignComponent:  // --- assign passed component value
-        var heap            = (StructHeap<T>)info.heap;
-        heap.components[compIndex]  = component;
+        newHeap.components[compIndex]  = component;
         // Send event. See: SEND_EVENT notes
         var componentAdded = store.internBase.componentAdded;
         if (componentAdded == null) {
@@ -73,12 +76,12 @@ public partial class EntityStoreBase
         var arch    = archetype;
         var store   = arch.store;
         var info    = arch.heapMap[structIndex];
-        var heap    = info.heap; 
+        var heap    = (StructHeap<T>)info.heap; 
         if (heap == null) {
             return false;
         }
-        ((StructHeap<T>)heap).StashComponent(compIndex);
-        if (info.hasIndex) info.RemoveIndex<T>(store, id);
+        heap.StashComponent(compIndex);
+        if (info.hasIndex) StoreIndex.RemoveIndex(store, id, heap);
         var newArchetype = GetArchetypeWithout(store, arch, structIndex);
 
         // --- change entity archetype

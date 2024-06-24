@@ -10,6 +10,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file MUST NOT use type: Entity
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace

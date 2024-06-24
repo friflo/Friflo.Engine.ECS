@@ -20,9 +20,9 @@ internal sealed class ValueStructIndex<TValue>  : ComponentIndex<TValue> where T
         DictionaryUtils.AddComponentValue    (id, value, map, this);
     }
     
-    internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
+    internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldValue = IndexUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var oldValue = IndexUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         var value    = IndexUtils<TComponent,TValue>.GetIndexedValue(component);
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
@@ -32,9 +32,9 @@ internal sealed class ValueStructIndex<TValue>  : ComponentIndex<TValue> where T
         DictionaryUtils.AddComponentValue    (id, value,    localMap, this);
     }
 
-    internal override void Remove<TComponent>(int id, StructHeap heap)
+    internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var value = IndexUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value = IndexUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         DictionaryUtils.RemoveComponentValue (id, value, map, this);
     }
     #endregion

@@ -22,9 +22,9 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
         AddComponentValue    (id, value);
     }
     
-    internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
+    internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldValue = IndexUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var oldValue = IndexUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         var value    = IndexUtils<TComponent,TValue>.GetIndexedValue(component);
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
@@ -33,9 +33,9 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
         AddComponentValue    (id, value);
     }
 
-    internal override void Remove<TComponent>(int id, StructHeap heap)
+    internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var value = IndexUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value = IndexUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         RemoveComponentValue (id, value);
     }
     #endregion

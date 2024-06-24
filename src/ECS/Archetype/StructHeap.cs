@@ -3,7 +3,6 @@
 
 using System;
 using System.Text;
-using Friflo.Engine.ECS.Index;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -13,42 +12,14 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal struct HeapInfo
+internal readonly struct HeapInfo
 {
-    internal readonly   StructHeap          heap;       //  8
-    /// <summary> component index created on demand. </summary>
-    private             ComponentIndex      index;      //  8
-    internal readonly   bool                hasIndex;   //  1
+    internal readonly   StructHeap  heap;       //  8
+    internal readonly   bool        hasIndex;   //  1
         
     internal HeapInfo(StructHeap heap, bool hasIndex) {
         this.heap       = heap;
         this.hasIndex   = hasIndex;
-    }
-    
-    internal void UpdateIndex<TComponent>(EntityStoreBase store, int id, in TComponent component)
-        where TComponent : struct, IComponent
-    {
-        index ??= CreateIndex(store, StructInfo<TComponent>.Index);
-        index.Update(id, component, heap);
-    }
-    
-    internal void AddIndex<TComponent>(EntityStoreBase store, int id, in TComponent component)
-        where TComponent : struct, IComponent
-    {
-        index ??= CreateIndex(store, StructInfo<TComponent>.Index);
-        index.Add(id, component);
-    }
-    
-    internal void RemoveIndex<TComponent>(EntityStoreBase store, int id)
-        where TComponent : struct, IComponent
-    {
-        index ??= CreateIndex(store, StructInfo<TComponent>.Index);
-        index.Remove<TComponent>(id, heap);
-    }
-    
-    private static ComponentIndex CreateIndex(EntityStoreBase store, int structIndex) {
-        var entityStore = (EntityStore)store;
-        return StoreIndex.GetIndex(entityStore, structIndex);
     }
 }
 
