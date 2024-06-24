@@ -82,9 +82,8 @@ internal static class IdArrayExtensions {
         var newPool     = heap.GetPool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
         
-        var source  = new ReadOnlySpan<int> (curIds, curStart, count);
-        var target  = new Span<int>         (newIds, newStart, count);
-        source.CopyTo(target);
+        new ReadOnlySpan<int> (curIds, curStart, count).CopyTo(
+        new Span<int>         (newIds, newStart, count));
 
         newIds[newStart + count] = id;
         array = new IdArray(newStart, newCount);
@@ -124,14 +123,12 @@ internal static class IdArrayExtensions {
         var newPool     = heap.GetPool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
         
-        var source  = new ReadOnlySpan<int> (curIds, curStart, index);
-        var target  = new Span<int>         (newIds, newStart, index);
-        source.CopyTo(target);
-
-        var rest    = newCount - index;
-        source      = new ReadOnlySpan<int> (curIds, curStart + index + 1, rest);
-        target      = new Span<int>         (newIds, newStart + index,     rest);
-        source.CopyTo(target);
+        new ReadOnlySpan<int> (curIds, curStart,             index).CopyTo(
+        new Span<int>         (newIds, newStart,             index));
+        
+        var rest = newCount - index;
+        new ReadOnlySpan<int> (curIds, curStart + index + 1, rest).CopyTo(
+        new Span<int>         (newIds, newStart + index,     rest));
         
         array = new IdArray(newStart, newCount);
     }
