@@ -25,6 +25,8 @@ public sealed partial class EntityStore
     /// <remarks>
     /// - The collection changes when indexed component values are updated, removed or added.<br/>
     /// - To get the entities referenced by a component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.<br/>
+    /// - If <typeparamref name="TValue"/> is a class all collection values are not null.
+    ///   Use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/> to check if null is referenced.<br/>
     /// </remarks>
     internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TIndexedComponent, TValue>() where TIndexedComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TIndexedComponent>.Index);
