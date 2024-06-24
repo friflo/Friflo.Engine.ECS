@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using Friflo.Engine.ECS.Index;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
@@ -663,18 +662,6 @@ public readonly struct Entity : IEquatable<Entity>
     [Browse(Never)]
     public       DebugEventHandlers             DebugEventHandlers => EntityStore.GetEventHandlers(store, Id);
     #endregion
-
-#region Lab
-    /// <summary>
-    /// Return the entities referencing this entity using a <see cref="Entity"/> component index.<br/>
-    /// Executes in O(1) with default index. 
-    /// </summary>
-    internal Entities GetForeignEntities<TComponent>() where TComponent: struct, IIndexedComponent<Entity> {
-        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
-        return index.GetHasValueEntities(this);
-    }
-    #endregion
-
 
     // ------------------------------------ internal properties -----------------------------------
 #region internal properties
