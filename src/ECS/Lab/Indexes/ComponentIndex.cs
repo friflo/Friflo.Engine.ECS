@@ -11,7 +11,7 @@ internal abstract class ComponentIndex
 {
 #region properties    
     internal  abstract  int             Count { get; }
-    public    override  string          ToString() => GetString();
+    public    override  string          ToString() => $"{componentType.Name} - {GetType().Name} count: {Count}";
     #endregion
     
 #region fields
@@ -27,10 +27,6 @@ internal abstract class ComponentIndex
     
     internal NotSupportedException NotSupportedException(string name) {
         return new NotSupportedException($"{name} not supported by {GetType().Name}");
-    }
-    
-    private string GetString() {
-        return $"{componentType.Name} - {GetType().Name} count: {Count}";
     }
 }
 
