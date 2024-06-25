@@ -7,6 +7,9 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
+/// <summary>
+/// Base class to enable implementing custom component indexes.
+/// </summary>
 public abstract class ComponentIndex
 {
 #region properties    
@@ -30,6 +33,9 @@ public abstract class ComponentIndex
     }
 }
 
+/// <summary>
+/// Generic base class required to implement custom component indexes.
+/// </summary>
 public abstract class ComponentIndex<TValue> : ComponentIndex
 {
     internal            TValue[]                    sortBuffer  = Array.Empty<TValue>();

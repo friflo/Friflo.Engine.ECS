@@ -8,6 +8,10 @@ using System.Collections.Generic;
 
 namespace Friflo.Engine.ECS.Index;
 
+/// <summary>
+/// Provide extension methods to query all or a specific component values.<br/>
+/// Enables to query all or a specific entity links (relationships).
+/// </summary>
 public static class IndexExtensions
 {
 #region Entity
