@@ -8,7 +8,8 @@ using System.Collections.Generic;
 namespace Friflo.Engine.ECS.Index;
 
 /// <summary>
-/// Base class to enable implementing custom component indexes.
+/// Base class to enable implementing a custom component index.<br/>
+/// A custom component index can be implemented to optimize indexing or component queries for a specific component type.   
 /// </summary>
 public abstract class ComponentIndex
 {
@@ -34,7 +35,7 @@ public abstract class ComponentIndex
 }
 
 /// <summary>
-/// Generic base class required to implement custom component indexes.
+/// Generic base class required to implement a custom component index.
 /// </summary>
 public abstract class ComponentIndex<TValue> : ComponentIndex
 {

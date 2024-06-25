@@ -4,8 +4,11 @@
 using System;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
+/// <summary>
+/// Assigns a custom <see cref="ComponentIndex"/> to an attributed component type.
+/// </summary>
 [AttributeUsage(AttributeTargets.Struct)]
 public sealed class ComponentIndexAttribute : Attribute
 {
