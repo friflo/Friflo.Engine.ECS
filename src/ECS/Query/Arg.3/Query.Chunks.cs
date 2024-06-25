@@ -132,34 +132,50 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
     }
 
     [ExcludeFromCodeCoverage]
-    object IEnumerator.Current  => Current;
+    object IEnumerator.Current  => chunks;
     
     // --- IEnumerator
     public bool MoveNext()
     {
         Archetype archetype;
-        // --- skip archetypes without entities
-        do {
-           if (archetypePos >= archetypes.last) {  // last = length - 1
-               return false;
-           }
-           archetype    = archetypes.array[++archetypePos];
+        int count;
+        int start = 0;
+        var types = archetypes;
+        var pos   = archetypePos;
+        if (types.chunkPositions != null) {
+            goto SingleEntity;
         }
-        while (archetype.entityCount == 0);
-        
-        // --- set chunks of new archetype
+        do {
+            if (pos >= types.last) {  // last = length - 1
+                archetypePos = pos;
+                return false;
+            }
+            archetype   = types.array[++pos];
+            count       = archetype.entityCount;
+        }
+        while (count == 0); // skip archetypes without entities
+    SetChunks:
+        archetypePos    = pos;
         var heapMap     = archetype.heapMap;
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
         var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
         var chunks3     = (StructHeap<T3>)heapMap[structIndex3];
-        var count       = archetype.entityCount;
 
-        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count);
-        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count);
-        var chunk3      = new Chunk<T3>(chunks3.components, copyT3, count);
-        var entities    = new ChunkEntities(archetype,              count, 0);
+        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, start);
+        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count, start);
+        var chunk3      = new Chunk<T3>(chunks3.components, copyT3, count, start);
+        var entities    = new ChunkEntities(archetype,              count, start);
         chunks          = new Chunks<T1, T2, T3>(chunk1, chunk2, chunk3, entities);
-        return true;  
+        return true;
+    SingleEntity:
+        if (pos >= types.last) {
+            return false;
+        }
+        pos++;
+        start       = types.chunkPositions[pos];
+        archetype   = types.array         [pos];
+        count       = 1;
+        goto SetChunks;
     }
     
     // --- IDisposable

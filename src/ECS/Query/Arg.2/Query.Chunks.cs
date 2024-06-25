@@ -127,26 +127,24 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     public bool MoveNext()
     {
         Archetype archetype;
-        // --- skip archetypes without entities
         int count;
         int start = 0;
-        if (archetypes.chunkPositions != null) {
-            if (archetypePos >= archetypes.last) {  // last = length - 1
+        var types = archetypes;
+        var pos   = archetypePos;
+        if (types.chunkPositions != null) {
+            goto SingleEntity;
+        }
+        do {
+            if (pos >= types.last) {  // last = length - 1
+                archetypePos = pos;
                 return false;
             }
-            SetArchetypeComponent(out archetype, out start);
-            count = 1;
-        } else {
-            do {
-               if (archetypePos >= archetypes.last) {  // last = length - 1
-                   return false;
-               }
-               archetype    = archetypes.array[++archetypePos];
-               count        = archetype.entityCount;
-            }
-            while (count == 0);
+            archetype   = types.array[++pos];
+            count       = archetype.entityCount;
         }
-        // --- set chunks of new archetype
+        while (count == 0); // skip archetypes without entities
+    SetChunks:
+        archetypePos    = pos;
         var heapMap     = archetype.heapMap;
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
         var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
@@ -155,16 +153,17 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
         var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count, start);
         var entities    = new ChunkEntities(archetype,              count, start);
         chunks          = new Chunks<T1, T2>(chunk1, chunk2, entities);
-        return true;  
+        return true;
+    SingleEntity:
+        if (pos >= types.last) {
+            return false;
+        }
+        pos++;
+        start       = types.chunkPositions[pos];
+        archetype   = types.array         [pos];
+        count       = 1;
+        goto SetChunks;
     }
-    
-    private void SetArchetypeComponent(out Archetype archetype, out int start)
-    {
-        var pos     = ++archetypePos;
-        start       = archetypes.chunkPositions[pos];
-        archetype   = archetypes.array         [pos];
-    }
-    
     
     // --- IDisposable
     public void Dispose() { }

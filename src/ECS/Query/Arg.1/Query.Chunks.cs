@@ -116,24 +116,40 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
     public bool MoveNext()
     {
         Archetype archetype;
-        // --- skip archetypes without entities
+        int count;
+        int start = 0;
+        var types = archetypes;
+        var pos   = archetypePos;
+        if (types.chunkPositions != null) {
+            goto SingleEntity;
+        }
         do {
-            if (archetypePos >= archetypes.last) {  // last = length - 1
+            if (pos >= types.last) {  // last = length - 1
+                archetypePos = pos;
                 return false;
             }
-            archetype   = archetypes.array[++archetypePos];
+            archetype   = types.array[++pos];
+            count       = archetype.entityCount;
         }
-        while (archetype.entityCount == 0); 
-        
-        // --- set chunks of new archetype
+        while (count == 0); // skip archetypes without entities
+    SetChunks:
+        archetypePos    = pos;
         var heapMap     = archetype.heapMap;
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
-        int count       = archetype.entityCount;
             
-        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count);
-        var entities    = new ChunkEntities(archetype,              count, 0);
+        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, start);
+        var entities    = new ChunkEntities(archetype,              count, start);
         chunks          = new Chunks<T1>(chunk1, entities);
-        return true;  
+        return true;
+    SingleEntity:
+        if (pos >= types.last) {
+            return false;
+        }
+        pos++;
+        start       = types.chunkPositions[pos];
+        archetype   = types.array         [pos];
+        count       = 1;
+        goto SetChunks;
     }
     
     // --- IDisposable

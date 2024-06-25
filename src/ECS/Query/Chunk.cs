@@ -111,7 +111,7 @@ public readonly struct Chunk<T>
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
 
-    internal Chunk(T[] values, T[] copy, int length, int start = 0) {
+    internal Chunk(T[] values, T[] copy, int length, int start) {
         Length      = length;
         this.start  = start;
         if (copy == null) {
