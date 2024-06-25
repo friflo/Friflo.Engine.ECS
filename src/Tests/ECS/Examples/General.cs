@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Index;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 
@@ -147,6 +148,42 @@ public static void AddScript()
     // get script
     var myScript = entity.GetScript<MyScript>();
     Console.WriteLine($"data: {myScript.data}");        // > data: 123
+}
+
+public struct Player : IIndexedComponent<string>
+{
+    public  string  name;
+    public  string  GetIndexedValue() => name;
+}
+
+[Test]
+public static void FullTextSearch()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 1000; n++) {
+        var entity = store.CreateEntity();
+        entity.AddComponent(new Player { name = $"Player-{n}"});
+    }
+    var result = store.Query().HasValue<Player,string>("Player-1"); // executes in O(1)
+    Console.WriteLine($"found: {result.Count}");                    // > found: 1
+}
+
+public struct NetEntity : IIndexedComponent<int>
+{
+    public  int     netId;
+    public  int     GetIndexedValue() => netId;
+}
+
+[Test]
+public static void SearchComponentValue()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 1000; n++) {
+        var entity = store.CreateEntity();
+        entity.AddComponent(new NetEntity { netId = n });
+    }
+    var result = store.GetEntitiesWithComponentValue<NetEntity, int>(42);   // executes in O(1)
+    Console.WriteLine($"found: {result.Count}");                            // > found: 1
 }
 
 [Test]
