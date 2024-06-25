@@ -186,22 +186,23 @@ This features is work in progress. todo:
 
 New in **3.0.0-preview.1**
 
-Link relationships enables creating a *reference* from one entity to another.  
+Link relationships enable creating a *reference* from one entity to another.  
 This is accomplished by adding a link component to an entity referencing another entity as shown below.
 
 This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
 It uses the same data structures and algorithms as used for indexed components described above.  
 The main differences compared with **flecs** are:
 
-- The API is not very intuitive as it is different from the common use of components - imho.  
+- The API to create and query relations in **flecs** is very compact but not intuitive - imho.  
+  It is completely different from common component handling.
   See [flecs ⋅ Relationships](https://github.com/SanderMertens/flecs/blob/master/docs/Relationships.md)
 
-- It does not cause [archetype fragmentation](https://www.flecs.dev/flecs/md_docs_2Relationships.html#fragmentation).  
+- Adding, removing or updating a link does not cause [archetype fragmentation](https://www.flecs.dev/flecs/md_docs_2Relationships.html#fragmentation).  
   In **flecs** every relationship between two entities creates an individual archetype only containing a single entity / component.  
-  Assuming an archetype allocates 1000 bytes it allocates 1 GB memory for 1.000.000 relationships and archetypes randomly placed in memory.  
-  The more significant performance penalty is the side effect for queries. So many archetypes need to be iterated if they are query matches.
+  So each relationship allocates ~ 1000 bytes required by the archetype stored in the heap. Only for a simple link.  
+  The more significant performance penalty is the side effect for queries. Many archetypes need to be iterated if they are query matches.
 
-- Changing an entity link does not cause a structural change. In **flecs** an new archetype need to be created.
+- Changing an entity link does not cause a structural change. In **flecs** an new archetype needs to be created.
 
 The example shows how to create a follow component using another entity as target.
 
