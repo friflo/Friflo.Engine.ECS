@@ -59,6 +59,26 @@ public struct EnumComponent : IIndexedComponent<MyEnum> {
     public override string ToString() => value.ToString();
 }
 
+public struct ComparableEnum : IComparable<ComparableEnum> {
+    public      MyEnum  value;
+
+    public int CompareTo(ComparableEnum other) {
+        return value - other.value;
+    }
+    
+    public static implicit operator ComparableEnum(MyEnum value) => new ComparableEnum { value = value };
+}
+
+public struct ComparableEnumComponent : IIndexedComponent<ComparableEnum> {
+    public ComparableEnum value;
+
+    public ComparableEnum GetIndexedValue() {
+        return value;
+    }
+    
+    public override string ToString() => value.value.ToString();
+}
+
 
 
 [CodeCoverageTest]

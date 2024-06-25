@@ -84,6 +84,36 @@ public static class Test_Index_Types
         AreEqual(1, query1.Count);
         AreEqual(3, values.Count);
     }
+    
+   
+    [Test]
+    public static void Test_Index_Types_enum_comparable()
+    {
+        var store = new EntityStore();
+        var values = store.GetIndexedComponentValues<ComparableEnumComponent, ComparableEnum>();
+
+        var query1 = store.Query().HasValue    <ComparableEnumComponent, ComparableEnum>(MyEnum.E1);
+        var query2 = store.Query().ValueInRange<ComparableEnumComponent, ComparableEnum>(MyEnum.E1, MyEnum.E2);
+        
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        
+        entity1.AddComponent(new ComparableEnumComponent { value = MyEnum.E0 });
+        AreEqual(0, query1.Count);
+        AreEqual(0, query2.Count);
+        AreEqual(1, values.Count);
+
+        entity2.AddComponent(new ComparableEnumComponent { value = MyEnum.E1 });
+        AreEqual(1, query1.Count);
+        AreEqual(1, query2.Count);
+        AreEqual(2, values.Count);
+        
+        entity3.AddComponent(new ComparableEnumComponent { value = MyEnum.E2 });
+        AreEqual(1, query1.Count);
+        AreEqual(2, query2.Count);
+        AreEqual(3, values.Count);
+    }
 }
 
 }
