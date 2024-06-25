@@ -167,6 +167,7 @@ public static void FullTextSearch()
 ```
 This features is work in progress. TODO:
 
+- [ ] Update index by all methods adding, removing or updating an indexed component
 - [ ] Remove indexed component from index if entity is deleted
 
 <br/>
@@ -176,6 +177,21 @@ This features is work in progress. TODO:
 
 New in **3.0.0-preview.1**
 
+Link relationships enables creating a *reference* from one entity to another.  
+This is accomplished by adding a link component to an entity referencing another entity as shown below.
+
+This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
+The main differences are:
+
+- The API is not very intuitive as it is different from the common use of components - imho.  
+  See [flecs ⋅ Relationships](https://github.com/SanderMertens/flecs/blob/master/docs/Relationships.md)
+
+- It does not cause [archetype fragmentation](https://www.flecs.dev/flecs/md_docs_2Relationships.html#fragmentation).  
+  In **flecs** every relationship between two entities creates an individual archetype only containing a single entity / component.  
+  Assuming an archetype allocates 1000 bytes it allocates 1 GB memory for 1.000.000 relationships and archetypes randomly placed in memory.  
+  The more significant performance penalty is the side effect for queries. So many archetypes need to be iterated if they are query matches.
+
+- Changing an entity link does not cause a structural change. In **flecs** an new archetype need to be created.
 
 ```cs
 public struct FollowComponent : ILinkComponent
@@ -204,7 +220,9 @@ public static void Relationships()
 
 This features is work in progress. TODO:
 
-- [ ] Removed link relationship from index if entity is deleted
+- [ ] Update index by all methods adding, removing or updating a link component
+- [ ] Remove link component from index if entity is deleted
+- [ ] Remove link component from linking entity if linked entity is deleted
 
 <br/>
 
