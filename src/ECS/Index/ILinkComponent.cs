@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
 /// <summary>
 /// Is used to define a component type having a link to another <see cref="Entity"/>.
@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 ///   <item>
 ///     Return all entities linked by a specific <see cref="ILinkComponent"/> type.<br/>
-///     See <see cref="EntityStore.GetLinkedEntities{TComponent}"/>
+///     See <see cref="IndexExtensions.GetLinkedEntities{TComponent}"/>
 ///   </item>
 ///   <item>
 ///     Filter entities in a query having a <see cref="ILinkComponent"/> to a specific entity.<br/>

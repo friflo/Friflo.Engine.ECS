@@ -1,5 +1,6 @@
 ﻿using System;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

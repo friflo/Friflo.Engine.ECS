@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
 /// <summary>
 /// Is used to define a component type having a single indexed field / property.
@@ -12,11 +12,11 @@ namespace Friflo.Engine.ECS;
 /// <list type="bullet">
 ///   <item>
 ///     Return all entities with a component field of a specific value. <br/>
-///     See <see cref="EntityStore.GetEntitiesWithComponentValue{TIndexedComponent,TValue}"/>.
+///     See <see cref="IndexExtensions.GetEntitiesWithComponentValue{TIndexedComponent,TValue}"/>.
 ///   </item>
 ///   <item>
 ///     Return a collection of all unique component values.<br/>
-///     See <see cref="EntityStore.GetIndexedComponentValues{TIndexedComponent,TValue}"/>.
+///     See <see cref="IndexExtensions.GetIndexedComponentValues{TIndexedComponent,TValue}"/>.
 ///   </item>
 ///   <item>
 ///     Filter entities in a query having a specific component value.<br/>

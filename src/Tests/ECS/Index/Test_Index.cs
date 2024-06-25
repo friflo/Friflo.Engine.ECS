@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
 using Tests.Examples;
 using Tests.Utils;
