@@ -14,10 +14,11 @@ public static partial class Test_Index
         var query2  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<IndexedInt,    int>   (123);
         var query3  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<IndexedName,   string>("find-me").
                                                                               HasValue<IndexedInt,    int>   (123);
-        var query5  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<AttackComponent, Entity>(cx.target);
+        var query4  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<AttackComponent, Entity>(cx.target);
         cx.query1 = query1;
         cx.query2 = query2;
         cx.query3 = query3;
+        cx.query4 = query4;
         {
             int count = 0;
             query1.ForEachEntity((ref Position _, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
@@ -50,7 +51,7 @@ public static partial class Test_Index
             AreEqual(3, count);
         } {
             var count = 0;
-            query5.ForEachEntity((ref Position _, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
+            query4.ForEachEntity((ref Position _, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
                 count++;
                 AreEqual(13,        entity.Id);
                 AreEqual(cx.target, entity.GetComponent<AttackComponent>().target);

@@ -20,7 +20,6 @@ public struct AttackComponent : ILinkComponent {
     public      Entity  target;
 }
 
-
 public struct IndexedName : IIndexedComponent<string> {
     public      string  GetIndexedValue() => name;
     public      string  name;
@@ -48,6 +47,7 @@ internal class IndexContext
     internal ArchetypeQuery                 query1;
     internal ArchetypeQuery                 query2;
     internal ArchetypeQuery                 query3;
+    internal ArchetypeQuery                 query4;
     
     internal Entity                         entity0;
     internal Entity                         entity1;
@@ -102,26 +102,39 @@ public static partial class Test_Index
         AreEqual(2, cx.query1.Entities.Count);  AreEqual("{ 11, 13 }",      cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
         AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 13, 12 }",  cx.query3.Entities.ToStr());
+        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedName>();                          AreEqual(1, cx.nameValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
         AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 12, 13 }",  cx.query3.Entities.ToStr());
+        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedInt>();                           AreEqual(1, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(1, cx.query2.Entities.Count);  AreEqual("{ 12 }",          cx.query2.Entities.ToStr());
         AreEqual(2, cx.query3.Entities.Count);  AreEqual("{ 11, 12 }",      cx.query3.Entities.ToStr());
+        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
         
         cx.entity1.RemoveComponent<IndexedInt>();                           AreEqual(0, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(1, cx.query3.Entities.Count);  AreEqual("{ 11 }",          cx.query3.Entities.ToStr());
+        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
         
         cx.entity0.RemoveComponent<IndexedName>();                          AreEqual(0, cx.nameValues.Count);
         AreEqual(0, cx.query1.Entities.Count);  AreEqual("{ }",             cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
+        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg0()
+    {
+        var cx = Query_Setup();
+        QueryArg0(cx);
+        Query_Assertions(cx);
     }
     
     [Test]
