@@ -31,7 +31,7 @@ public readonly struct Chunk<T>
     where T : struct, IComponent
 {
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
-    public              Span<T>     Span            => new(values, start, Length);
+    public              Span<T>     Span        => new(values, start, Length);
     
     private  readonly   T[]         values;     //  8
     
@@ -132,7 +132,7 @@ public readonly struct Chunk<T>
     public ref T this[int index] {
         get {
             if (index < Length) {
-                return ref values[index];
+                return ref values[start + index];
             }
             throw new IndexOutOfRangeException();
         }
