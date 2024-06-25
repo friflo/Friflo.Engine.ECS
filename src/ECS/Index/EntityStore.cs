@@ -13,7 +13,7 @@ public sealed partial class EntityStore
     /// Return the entities with the passed component value.<br/>
     /// Executes in O(1) with default index. 
     /// </summary>
-    internal Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
+    public Entities GetEntitiesWithComponentValue<TComponent, TValue>(TValue value) where TComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(value);
     }
@@ -36,7 +36,7 @@ public sealed partial class EntityStore
     ///   </item>
     /// </list>
     /// </remarks>
-    internal IReadOnlyCollection<TValue> GetIndexedComponentValues<TComponent, TValue>() where TComponent: struct, IIndexedComponent<TValue> {
+    public IReadOnlyCollection<TValue> GetIndexedComponentValues<TComponent, TValue>() where TComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
@@ -55,7 +55,7 @@ public sealed partial class EntityStore
     ///   </item>
     /// </list>
     /// </remarks>
-    internal IReadOnlyCollection<Entity> GetLinkedEntities<TComponent>() where TComponent: struct, ILinkComponent {
+    public IReadOnlyCollection<Entity> GetLinkedEntities<TComponent>() where TComponent: struct, ILinkComponent {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(this, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }

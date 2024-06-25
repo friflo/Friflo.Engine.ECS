@@ -6,7 +6,7 @@ using Friflo.Engine.ECS.Index;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal static class IndexExtensions
+public static class IndexExtensions
 {
     /// <summary>
     /// Return the entities having a component link to this entity of the passed <see cref="ILinkComponent"/> type.<br/>

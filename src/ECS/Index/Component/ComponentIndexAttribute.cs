@@ -7,7 +7,7 @@ using System;
 namespace Friflo.Engine.ECS;
 
 [AttributeUsage(AttributeTargets.Struct)]
-internal sealed class ComponentIndexAttribute : Attribute
+public sealed class ComponentIndexAttribute : Attribute
 {
     // ReSharper disable once UnusedParameter.Local
     public ComponentIndexAttribute(Type type) { }

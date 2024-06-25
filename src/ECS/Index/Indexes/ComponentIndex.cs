@@ -7,7 +7,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal abstract class ComponentIndex
+public abstract class ComponentIndex
 {
 #region properties    
     internal  abstract  int             Count { get; }
@@ -30,7 +30,7 @@ internal abstract class ComponentIndex
     }
 }
 
-internal abstract class ComponentIndex<TValue> : ComponentIndex
+public abstract class ComponentIndex<TValue> : ComponentIndex
 {
     internal            TValue[]                    sortBuffer  = Array.Empty<TValue>();
     

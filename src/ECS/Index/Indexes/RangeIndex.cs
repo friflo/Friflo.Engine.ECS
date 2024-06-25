@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Friflo.Engine.ECS.Index;
 
 [ExcludeFromCodeCoverage] // not used - kept only for reference
-internal sealed class RangeIndex<TValue>  : ComponentIndex<TValue>
+public sealed class RangeIndex<TValue> : ComponentIndex<TValue>
 {
     internal override   int                         Count       => map.Count;
     private  readonly   SortedList<TValue, IdArray> map         = new();

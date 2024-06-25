@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
-using Tests.ECS;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS {
+namespace Tests.ECS.Index {
+    
 public static class Test_Index_Range
 {
     [CodeCoverageTest]

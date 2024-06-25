@@ -24,4 +24,4 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 /// </list>
 /// </remarks>
-internal interface ILinkComponent : IIndexedComponent<Entity> { }
+public interface ILinkComponent : IIndexedComponent<Entity> { }
