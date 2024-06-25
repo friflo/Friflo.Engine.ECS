@@ -53,6 +53,10 @@ public sealed partial class EntityStore
     ///   <item>
     ///     To get the entities linking a specific entity use <see cref="IndexExtensions.GetLinkingEntities{TComponent}"/>.<br/>
     ///   </item>
+    ///   <item>
+    ///     The method id a specialized version of <see cref="GetIndexedComponentValues{TComponent,TValue}"/><br/>
+    ///     using <c> TComponent = IIndexedComponent&lt;Entity></c> and <c>TValue = Entity</c>.  
+    ///   </item>
     /// </list>
     /// </remarks>
     public IReadOnlyCollection<Entity> GetLinkedEntities<TComponent>() where TComponent: struct, ILinkComponent {

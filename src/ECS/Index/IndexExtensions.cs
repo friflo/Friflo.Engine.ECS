@@ -12,6 +12,10 @@ public static class IndexExtensions
     /// Return the entities having a component link to this entity of the passed <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). 
     /// </summary>
+    /// <remarks>
+    /// The method id a specialized version of <see cref="EntityStore.GetEntitiesWithComponentValue{TComponent,TValue}"/><br/>
+    /// using <c> TComponent = IIndexedComponent&lt;Entity>, TValue = Entity</c> and <c>value = this</c>.  
+    /// </remarks>
     public static Entities GetLinkingEntities<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(entity);
