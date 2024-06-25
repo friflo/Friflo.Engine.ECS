@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
-using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
@@ -12,22 +11,6 @@ namespace Tests.ECS.Index {
     
 public static class Test_Index_Range
 {
-    [CodeCoverageTest]
-    private struct IndexedIntRange : IIndexedComponent<int> {
-        public      int     GetIndexedValue() => value;
-        internal    int     value;
-    
-        public override string ToString() => value.ToString();
-    }
-    
-    [ComponentIndex(typeof(RangeIndex<>))]
-    private struct IndexedStringRange : IIndexedComponent<string> {
-        public      string  GetIndexedValue() => value;
-        internal    string  value;
-    
-        public override string ToString() => value;
-    }
-    
     [Test]
     public static void Test_Index_Range_Query_ValueInRange()
     {
