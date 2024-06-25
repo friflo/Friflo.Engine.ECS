@@ -5,7 +5,8 @@
 namespace Friflo.Engine.ECS.Index;
 
 /// <summary>
-/// Is used to define a component type having a single indexed field / property.
+/// Is used to define a component type having a single indexed field / property.<br/>
+/// Components values can be queried with <c>HasValue()</c> in a <c>Query()</c> or with <c>ValueInRange()</c>
 /// </summary>
 /// <remarks>
 /// This component type enables:

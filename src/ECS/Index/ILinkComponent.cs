@@ -5,7 +5,8 @@
 namespace Friflo.Engine.ECS.Index;
 
 /// <summary>
-/// Is used to define a component type having a link relationship to another <see cref="Entity"/>.
+/// Is used to define a component type having a link relationship to another <see cref="Entity"/>.<br/>
+/// Specific component links can be queried with <c>HasValue()</c> in a <c>Query()</c>.
 /// </summary>
 /// <remarks>
 /// This component type enables:
