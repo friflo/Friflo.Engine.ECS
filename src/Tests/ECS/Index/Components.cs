@@ -1,4 +1,6 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using System.Globalization;
+using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 
 // ReSharper disable InconsistentNaming
@@ -29,6 +31,35 @@ public struct LinkComponent : ILinkComponent {
 
     public override string ToString() => entity.ToString();
 }
+
+public struct GuidComponent : IIndexedComponent<Guid> {
+    public      Guid  GetIndexedValue() => guid;
+    public      Guid  guid;
+
+    public override string ToString() => guid.ToString();
+}
+
+public struct DateTimeComponent : IIndexedComponent<DateTime> {
+    public      DateTime  GetIndexedValue() => dateTime;
+    public      DateTime  dateTime;
+
+    public override string ToString() => dateTime.ToString(CultureInfo.InvariantCulture);
+}
+
+public enum MyEnum {
+    E0 = 0,
+    E1 = 1,
+    E2 = 2
+}
+
+public struct EnumComponent : IIndexedComponent<MyEnum> {
+    public      MyEnum  GetIndexedValue() => value;
+    public      MyEnum  value;
+
+    public override string ToString() => value.ToString();
+}
+
+
 
 [CodeCoverageTest]
 internal struct IndexedIntRange : IIndexedComponent<int> {
