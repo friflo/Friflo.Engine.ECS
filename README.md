@@ -42,6 +42,7 @@ dotnet add package Friflo.Engine.ECS
 * [Examples](#examples)
   - [Hello World](#hello-world)
   - [Search](#search)
+  - [Relationships](#relationships)
   - [Systems](#systems)
 * [Wiki](#wiki)
 * [Benchmarks](#ecs-benchmarks)
@@ -131,6 +132,8 @@ All query optimizations are using the same `query` but with different enumeratio
 
 ## **Search**
 
+New in **3.0.0-preview.1**
+
 The **Friflo.Engine.ECS** enables efficient search for indexed component values.  
 This enables full text search by using `string` as the indexed component type like in the example below.  
 A search for a specific value executes in O(1).
@@ -162,6 +165,46 @@ public static void FullTextSearch()
     Console.WriteLine($"unique names: {names.Count}");              // > unique names: 1000
 }
 ```
+This features is work in progress. TODO:
+
+- [ ] Remove indexed component from index if entity is deleted
+
+<br/>
+
+
+## **Relationships**
+
+New in **3.0.0-preview.1**
+
+
+```cs
+public struct FollowComponent : ILinkComponent
+{
+    public  Entity  target;
+    public  Entity  GetIndexedValue() => target;
+}
+
+public static void Relationships()
+{
+    var store    = new EntityStore();
+    var entities = new List<Entity>();
+    for (int n = 0; n < 2000; n++) {
+        entities.Add(store.CreateEntity());
+    }
+    for (int n = 0; n < 1000; n++) {
+        entities[n].AddComponent(new FollowComponent { target = entities[n + 1000] });
+    }
+    var followers = entities[0].GetLinkingEntities<FollowComponent>();  // executes in O(1)
+    Console.WriteLine($"followers: {followers.Count}");                 // > followers: 1
+    
+    var targets = store.GetLinkedEntities<FollowComponent>();           // executes in O(1)
+    Console.WriteLine($"unique targets: {targets.Count}");              // > unique targets: 1000
+}
+```
+
+This features is work in progress. TODO:
+
+- [ ] Removed link relationship from index if entity is deleted
 
 <br/>
 

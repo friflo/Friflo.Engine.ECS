@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
@@ -169,6 +170,30 @@ public static void FullTextSearch()
     
     var names = store.GetIndexedComponentValues<Player,string>();   // executes in O(1)
     Console.WriteLine($"unique names: {names.Count}");              // > unique names: 1000
+}
+
+public struct FollowComponent : ILinkComponent
+{
+    public  Entity  target;
+    public  Entity  GetIndexedValue() => target;
+}
+
+[Test]
+public static void Relationships()
+{
+    var store    = new EntityStore();
+    var entities = new List<Entity>();
+    for (int n = 0; n < 2000; n++) {
+        entities.Add(store.CreateEntity());
+    }
+    for (int n = 0; n < 1000; n++) {
+        entities[n].AddComponent(new FollowComponent { target = entities[n + 1000] });
+    }
+    var followers = entities[0].GetLinkingEntities<FollowComponent>();  // executes in O(1)
+    Console.WriteLine($"followers: {followers.Count}");                 // > followers: 1
+    
+    var targets = store.GetLinkedEntities<FollowComponent>();           // executes in O(1)
+    Console.WriteLine($"unique targets: {targets.Count}");              // > unique targets: 1000
 }
 
 [Test]
