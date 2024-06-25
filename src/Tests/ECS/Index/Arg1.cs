@@ -21,39 +21,39 @@ public static partial class Test_Index
         cx.query4 = query4;
         {
             int count = 0;
-            query1.ForEachEntity((ref Position _, Entity entity) => {
+            query1.ForEachEntity((ref Position pos, Entity entity) => {
                 switch (count++) {
-                    case 0: AreEqual(11, entity.Id); break;
-                    case 1: AreEqual(13, entity.Id); break;
+                    case 0: AreEqual(11, entity.Id); AreEqual(11f, pos.x); break;
+                    case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
                 }
                 AreEqual("find-me", entity.GetComponent<IndexedName>().name);
             });
             AreEqual(2, count);
         } { 
             int count = 0;
-            query2.ForEachEntity((ref Position _, Entity entity) => {
+            query2.ForEachEntity((ref Position pos, Entity entity) => {
                 switch (count++) {
-                    case 0: AreEqual(12, entity.Id); break;
-                    case 1: AreEqual(13, entity.Id); break;
+                    case 0: AreEqual(12, entity.Id); AreEqual(12f, pos.x); break;
+                    case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
                 }
                 AreEqual(123, entity.GetComponent<IndexedInt>().value);
             });
             AreEqual(2, count);
         } { 
             var count = 0;
-            query3.ForEachEntity((ref Position _, Entity entity) => {
+            query3.ForEachEntity((ref Position pos, Entity entity) => {
                 switch (count++) {
-                    case 0: AreEqual(11, entity.Id); break;
-                    case 1: AreEqual(13, entity.Id); break;
-                    case 2: AreEqual(12, entity.Id); break;
+                    case 0: AreEqual(11, entity.Id); AreEqual(11f, pos.x); break;
+                    case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
+                    case 2: AreEqual(12, entity.Id); AreEqual(12f, pos.x); break;
                 }
             });
             AreEqual(3, count);
         } {
             var count = 0;
-            query4.ForEachEntity((ref Position _, Entity entity) => {
+            query4.ForEachEntity((ref Position pos, Entity entity) => {
                 count++;
-                AreEqual(13,        entity.Id);
+                AreEqual(13,        entity.Id);     AreEqual(13f, pos.x);
                 AreEqual(cx.target, entity.GetComponent<AttackComponent>().target);
             });
             AreEqual(1, count);

@@ -73,7 +73,7 @@ public static partial class Test_Index
         var entities = new List<Entity>();
         for (int n = 0; n < 10; n++) {
             var entity = store.CreateEntity(
-                new Position(n, 0, 0),
+                new Position(11 + n, 0, 0),
                 new Rotation(),
                 new MyComponent1 { a = n },
                 new MyComponent2 { b = n },
