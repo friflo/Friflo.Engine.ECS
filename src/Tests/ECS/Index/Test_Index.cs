@@ -52,6 +52,7 @@ internal class IndexContext
     internal Entity                         entity0;
     internal Entity                         entity1;
     internal Entity                         entity2;
+    internal Entity                         entity3;
     internal Entity                         target;
     
     internal IReadOnlyCollection<string>    nameValues;
@@ -81,10 +82,11 @@ public static partial class Test_Index
                 new AttackComponent{target = targets[n]});
             entities.Add(entity);
         }
-        cx.target = targets[0];
-        cx.entity0 = entities[0];
-        cx.entity1 = entities[1];
-        cx.entity2 = entities[2];
+        cx.target   = targets[0];
+        cx.entity0  = entities[0];
+        cx.entity1  = entities[1];
+        cx.entity2  = entities[2];
+        cx.entity3  = entities[3];
         
         cx.nameValues  = store.GetIndexedComponentValues<IndexedName, string>();
         cx.intValues   = store.GetIndexedComponentValues<IndexedInt, int>();
@@ -94,6 +96,10 @@ public static partial class Test_Index
         cx.entity2.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, cx.nameValues.Count);
         cx.entity2.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, cx.intValues.Count);
         cx.entity2.AddComponent(new AttackComponent{ target = cx.target });
+        cx.entity3.AddComponent(new IndexedInt     { value  = 456       });    AreEqual(2, cx.intValues.Count);
+        
+        AreNotSame(cx.entity1.Archetype, cx.entity2.Archetype);
+        AreEqual  (2, cx.entity1.Archetype.Count); // ensure testing with an archetype containing multiple entities
         return cx;
     }
     
@@ -102,31 +108,31 @@ public static partial class Test_Index
         AreEqual(2, cx.query1.Entities.Count);  AreEqual("{ 11, 13 }",      cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
         AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 13, 12 }",  cx.query3.Entities.ToStr());
-        AreEqual(2, cx.query5.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query5.Entities.ToStr());
+        AreEqual(3, cx.query5.Entities.Count);  AreEqual("{ 12, 13, 14 }",      cx.query5.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedName>();                          AreEqual(1, cx.nameValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
         AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 12, 13 }",  cx.query3.Entities.ToStr());
-        AreEqual(2, cx.query5.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query5.Entities.ToStr());
+        AreEqual(3, cx.query5.Entities.Count);  AreEqual("{ 12, 13, 14 }",  cx.query5.Entities.ToStr());
         
-        cx.entity2.RemoveComponent<IndexedInt>();                           AreEqual(1, cx.intValues.Count);
+        cx.entity2.RemoveComponent<IndexedInt>();                           AreEqual(2, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(1, cx.query2.Entities.Count);  AreEqual("{ 12 }",          cx.query2.Entities.ToStr());
         AreEqual(2, cx.query3.Entities.Count);  AreEqual("{ 11, 12 }",      cx.query3.Entities.ToStr());
-        AreEqual(1, cx.query5.Entities.Count);  AreEqual("{ 12 }",          cx.query5.Entities.ToStr());
+        AreEqual(2, cx.query5.Entities.Count);  AreEqual("{ 12, 14 }",      cx.query5.Entities.ToStr());
         
-        cx.entity1.RemoveComponent<IndexedInt>();                           AreEqual(0, cx.intValues.Count);
+        cx.entity1.RemoveComponent<IndexedInt>();                           AreEqual(1, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(1, cx.query3.Entities.Count);  AreEqual("{ 11 }",          cx.query3.Entities.ToStr());
-        AreEqual(0, cx.query5.Entities.Count);  AreEqual("{ }",             cx.query5.Entities.ToStr());
+        AreEqual(1, cx.query5.Entities.Count);  AreEqual("{ 14 }",             cx.query5.Entities.ToStr());
         
         cx.entity0.RemoveComponent<IndexedName>();                          AreEqual(0, cx.nameValues.Count);
         AreEqual(0, cx.query1.Entities.Count);  AreEqual("{ }",             cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
-        AreEqual(0, cx.query5.Entities.Count);  AreEqual("{ }",             cx.query5.Entities.ToStr());
+        AreEqual(1, cx.query5.Entities.Count);  AreEqual("{ 14 }",          cx.query5.Entities.ToStr());
         
         AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
     }
@@ -209,9 +215,6 @@ public static partial class Test_Index
         AreEqual("{ 3, 4, 5, 6, 7, 8 }", query.Entities.ToStr());
     }
     
-    /// <summary>
-    /// Cover <see cref="ValueStructIndex{TValue}.Add{TComponent}"/>
-    /// </summary>
     [Test]
     public static void Test_Index_Component_Update()
     {

@@ -65,9 +65,24 @@ public static partial class Test_Index
                 switch (count++) {
                     case 0: AreEqual(12, entity.Id); AreEqual(12f, pos.x); break;
                     case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
+                    case 2: AreEqual(14, entity.Id); AreEqual(14f, pos.x); break;
                 }
             });
-            AreEqual(2, count);
+            AreEqual(3, count);
+        } {
+            var count = 0;
+            foreach (var (positions, _, entities) in query5.Chunks) {
+                AreEqual(1, positions.Length);
+                AreEqual(1, entities.Length);
+                var pos = positions[0]; // positions.start can be > 0
+                var id  = entities [0]; // entities.start  can be > 0
+                switch (count++) {
+                    case 0: AreEqual(12, id); AreEqual(12f, pos.x); break;
+                    case 1: AreEqual(13, id); AreEqual(13f, pos.x); break;
+                    case 2: AreEqual(14, id); AreEqual(14f, pos.x); break;
+                }
+            }
+            AreEqual(3, count);
         }
     }
 }
