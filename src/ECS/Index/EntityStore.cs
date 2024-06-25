@@ -55,7 +55,7 @@ public sealed partial class EntityStore
     ///   </item>
     ///   <item>
     ///     The method id a specialized version of <see cref="GetIndexedComponentValues{TComponent,TValue}"/><br/>
-    ///     using <c> TComponent = IIndexedComponent&lt;Entity></c> and <c>TValue = Entity</c>.  
+    ///     using <c> TComponent = ILinkComponent></c> and <c>TValue = Entity</c>.  
     ///   </item>
     /// </list>
     /// </remarks>
