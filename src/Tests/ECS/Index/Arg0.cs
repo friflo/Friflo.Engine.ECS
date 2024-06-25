@@ -1,5 +1,4 @@
 ﻿using Friflo.Engine.ECS;
-using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Index {
