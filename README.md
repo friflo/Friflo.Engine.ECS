@@ -41,6 +41,7 @@ dotnet add package Friflo.Engine.ECS
 * [Demos](#demos)
 * [Examples](#examples)
   - [Hello World](#hello-world)
+  - [Search](#search)
   - [Systems](#systems)
 * [Wiki](#wiki)
 * [Benchmarks](#ecs-benchmarks)
@@ -97,7 +98,8 @@ Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer
 [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
 Provide techniques how to improve ECS performance.
 
-## Hello World
+
+## **Hello World**
 
 The hello world examples demonstrates the creation of a world, some entities with components  
 and their movement using a simple `ForEachEntity()` call.  
@@ -124,9 +126,47 @@ See:
 [Query Vectorization - SIMD](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd).  
 All query optimizations are using the same `query` but with different enumeration techniques.
 
+<br/>
 
 
-## Systems
+## **Search**
+
+The **Friflo.Engine.ECS** enables efficient search for indexed component values.  
+This enables full text search by using `string` as the indexed component type like in the example below.  
+A search for a specific value executes in O(1).
+
+Indexed components provide the same functionality as normal components implementing `IComponent`.  
+They have the same behavior as normal components regarding structural changes.  
+Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
+Adding, removing or updating an indexed component updates the index.  
+These operations are executed also in O(1) but significant slower than non indexed counterparts ~10x.
+
+```cs
+public struct Player : IIndexedComponent<string>
+{
+    public  string  name;
+    public  string  GetIndexedValue() => name;
+}
+
+public static void FullTextSearch()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 1000; n++) {
+        var entity = store.CreateEntity();
+        entity.AddComponent(new Player { name = $"Player-{n}"});
+    }
+    var search = store.Query().HasValue<Player,string>("Player-1"); // executes in O(1)
+    Console.WriteLine($"found: {search.Count}");                    // > found: 1
+    
+    var names = store.GetIndexedComponentValues<Player,string>();   // executes in O(1)
+    Console.WriteLine($"unique names: {names.Count}");              // > unique names: 1000
+}
+```
+
+<br/>
+
+
+## **Systems**
 
 Systems are new in **Friflo.Engine.ECS v2.0.0**
 

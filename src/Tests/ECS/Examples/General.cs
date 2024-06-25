@@ -164,26 +164,11 @@ public static void FullTextSearch()
         var entity = store.CreateEntity();
         entity.AddComponent(new Player { name = $"Player-{n}"});
     }
-    var result = store.Query().HasValue<Player,string>("Player-1"); // executes in O(1)
-    Console.WriteLine($"found: {result.Count}");                    // > found: 1
-}
-
-public struct NetEntity : IIndexedComponent<int>
-{
-    public  int     netId;
-    public  int     GetIndexedValue() => netId;
-}
-
-[Test]
-public static void SearchComponentValue()
-{
-    var store   = new EntityStore();
-    for (int n = 0; n < 1000; n++) {
-        var entity = store.CreateEntity();
-        entity.AddComponent(new NetEntity { netId = n });
-    }
-    var result = store.GetEntitiesWithComponentValue<NetEntity, int>(42);   // executes in O(1)
-    Console.WriteLine($"found: {result.Count}");                            // > found: 1
+    var search = store.Query().HasValue<Player,string>("Player-1"); // executes in O(1)
+    Console.WriteLine($"found: {search.Count}");                    // > found: 1
+    
+    var names = store.GetIndexedComponentValues<Player,string>();   // executes in O(1)
+    Console.WriteLine($"unique names: {names.Count}");              // > unique names: 1000
 }
 
 [Test]
