@@ -5,9 +5,9 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS.Index {
 
 
-internal static class Test_Index_Args
+public static partial class Test_Index
 {
-    internal static void QueryArg2 (IndexContext cx)
+    private static void QueryArg2 (IndexContext cx)
     {
         var store = cx.store;
         var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");

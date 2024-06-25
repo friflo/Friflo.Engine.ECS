@@ -61,7 +61,7 @@ internal class IndexContext
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 [SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations")]
-public static class Test_Index
+public static partial class Test_Index
 {
     private static IndexContext Query_Setup()
     {
@@ -125,10 +125,10 @@ public static class Test_Index
     }
     
     [Test]
-    public static void Test_Index_Component_Add_Remove()
+    public static void Test_Index_Component_Add_Remove_Arg2()
     {
         var cx = Query_Setup();
-        Test_Index_Args.QueryArg2(cx);
+        QueryArg2(cx);
         Query_Assertions(cx);
     }
     
