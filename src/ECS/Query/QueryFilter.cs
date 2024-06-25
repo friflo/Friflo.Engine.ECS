@@ -171,13 +171,17 @@ public class QueryFilter
         withoutAnyComponents         = types;
         return this;
     }
+    #endregion
     
-    internal QueryFilter HasValue<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
+#region value condition filters
+    /// <summary> Include entities having a component with the specified value. </summary>
+    public QueryFilter HasValue<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
         AddValueCondition(new HasValueCondition<TComponent, TValue>(value));
         return this;
     }
     
-    internal QueryFilter ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue> {
+    /// <summary> Include entities having a component value in the specified range. </summary>
+    public QueryFilter ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue> {
         AddValueCondition(new ValueInRangeCondition<TComponent, TValue>(min, max));
         return this;
     }

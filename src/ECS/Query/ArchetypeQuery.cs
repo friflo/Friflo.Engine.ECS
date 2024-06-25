@@ -131,15 +131,20 @@ public class ArchetypeQuery
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
-    internal ArchetypeQuery HasValue    <TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue>
-    { Filter.HasValue<TComponent, TValue>(value);      return this; }
-    internal ArchetypeQuery ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
-    { Filter.ValueInRange<TComponent, TValue>(min, max);  return this; }
-    
     internal void SetHasAllComponents       (in ComponentTypes types) => Filter.AllComponents(types);
     internal void SetHasAnyComponents       (in ComponentTypes types) => Filter.AnyComponents(types);
     internal void SetWithoutAllComponents   (in ComponentTypes types) => Filter.WithoutAllComponents(types);
     internal void SetWithoutAnyComponents   (in ComponentTypes types) => Filter.WithoutAnyComponents(types);
+    #endregion
+    
+#region value conditions
+    /// <inheritdoc cref="QueryFilter.HasValue{TComponent,TValue}"/>
+    public ArchetypeQuery HasValue    <TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue>
+    { Filter.HasValue<TComponent, TValue>(value);      return this; }
+    
+    /// <inheritdoc cref="QueryFilter.ValueInRange{TComponent,TValue}"/>
+    public ArchetypeQuery ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
+    { Filter.ValueInRange<TComponent, TValue>(min, max);  return this; }
     #endregion
     
 #region general

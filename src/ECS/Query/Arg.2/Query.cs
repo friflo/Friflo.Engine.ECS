@@ -48,10 +48,12 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     /// <inheritdoc cref="ArchetypeQuery.WithoutAnyComponents"/>
     public new ArchetypeQuery<T1, T2> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
-    
-    internal new ArchetypeQuery<T1, T2> HasValue    <TComponent,TValue>(TValue value)           where TComponent : struct, IIndexedComponent<TValue>
+    /// <inheritdoc cref="QueryFilter.HasValue{TComponent,TValue}"/>
+    public new ArchetypeQuery<T1, T2> HasValue    <TComponent,TValue>(TValue value)           where TComponent : struct, IIndexedComponent<TValue>
     { base.HasValue    <TComponent, TValue>(value);    return this; }
-    internal new ArchetypeQuery<T1, T2> ValueInRange<TComponent,TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
+    
+    /// <inheritdoc cref="QueryFilter.ValueInRange{TComponent,TValue}"/>
+    public new ArchetypeQuery<T1, T2> ValueInRange<TComponent,TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
     { base.ValueInRange<TComponent, TValue>(min, max); return this; }
     
     

@@ -28,7 +28,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 /// </list>
 /// </remarks>
-internal interface IIndexedComponent<out TValue> : IComponent
+public interface IIndexedComponent<out TValue> : IComponent
 {
     TValue GetIndexedValue();
 }
