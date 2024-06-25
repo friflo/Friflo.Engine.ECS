@@ -48,7 +48,6 @@ internal class IndexContext
     internal ArchetypeQuery                 query1;
     internal ArchetypeQuery                 query2;
     internal ArchetypeQuery                 query3;
-    internal ArchetypeQuery                 query4;
     
     internal Entity                         entity0;
     internal Entity                         entity1;
@@ -73,7 +72,13 @@ public static partial class Test_Index
         }
         var entities = new List<Entity>();
         for (int n = 0; n < 10; n++) {
-            var entity = store.CreateEntity(new Position(n, 0, 0), new AttackComponent{target = targets[n]});
+            var entity = store.CreateEntity(
+                new Position(n, 0, 0),
+                new Rotation(),
+                new MyComponent1 { a = n },
+                new MyComponent2 { b = n },
+                new MyComponent3 { b = n },
+                new AttackComponent{target = targets[n]});
             entities.Add(entity);
         }
         cx.target = targets[0];
@@ -96,32 +101,35 @@ public static partial class Test_Index
     {
         AreEqual(2, cx.query1.Entities.Count);  AreEqual("{ 11, 13 }",      cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
-        AreEqual(1, cx.query3.Entities.Count);  AreEqual("{ 13 }",          cx.query3.Entities.ToStr());
-        AreEqual(3, cx.query4.Entities.Count);  AreEqual("{ 11, 13, 12 }",  cx.query4.Entities.ToStr());
+        AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 13, 12 }",  cx.query3.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedName>();                          AreEqual(1, cx.nameValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
-        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
-        AreEqual(3, cx.query4.Entities.Count);  AreEqual("{ 11, 12, 13 }",  cx.query4.Entities.ToStr());
+        AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 12, 13 }",  cx.query3.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedInt>();                           AreEqual(1, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(1, cx.query2.Entities.Count);  AreEqual("{ 12 }",          cx.query2.Entities.ToStr());
-        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
-        AreEqual(2, cx.query4.Entities.Count);  AreEqual("{ 11, 12 }",      cx.query4.Entities.ToStr());
+        AreEqual(2, cx.query3.Entities.Count);  AreEqual("{ 11, 12 }",      cx.query3.Entities.ToStr());
         
         cx.entity1.RemoveComponent<IndexedInt>();                           AreEqual(0, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
-        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
-        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 11 }",          cx.query4.Entities.ToStr());
+        AreEqual(1, cx.query3.Entities.Count);  AreEqual("{ 11 }",          cx.query3.Entities.ToStr());
         
         cx.entity0.RemoveComponent<IndexedName>();                          AreEqual(0, cx.nameValues.Count);
         AreEqual(0, cx.query1.Entities.Count);  AreEqual("{ }",             cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
-        AreEqual(0, cx.query4.Entities.Count);  AreEqual("{ }",             cx.query4.Entities.ToStr());
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg1()
+    {
+        var cx = Query_Setup();
+        QueryArg1(cx);
+        Query_Assertions(cx);
     }
     
     [Test]
@@ -129,6 +137,30 @@ public static partial class Test_Index
     {
         var cx = Query_Setup();
         QueryArg2(cx);
+        Query_Assertions(cx);
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg3()
+    {
+        var cx = Query_Setup();
+        QueryArg3(cx);
+        Query_Assertions(cx);
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg4()
+    {
+        var cx = Query_Setup();
+        QueryArg4(cx);
+        Query_Assertions(cx);
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg5()
+    {
+        var cx = Query_Setup();
+        QueryArg5(cx);
         Query_Assertions(cx);
     }
     

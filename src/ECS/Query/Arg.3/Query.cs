@@ -51,6 +51,14 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     /// <inheritdoc  cref="ArchetypeQuery.WithoutAnyComponents"/>
     public new ArchetypeQuery<T1, T2, T3> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
+    /// <inheritdoc cref="QueryFilter.HasValue{TComponent,TValue}"/>
+    public new ArchetypeQuery<T1, T2, T3> HasValue    <TComponent,TValue>(TValue value)           where TComponent : struct, IIndexedComponent<TValue>
+    { base.HasValue    <TComponent, TValue>(value);    return this; }
+    
+    /// <inheritdoc cref="QueryFilter.ValueInRange{TComponent,TValue}"/>
+    public new ArchetypeQuery<T1, T2, T3> ValueInRange<TComponent,TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
+    { base.ValueInRange<TComponent, TValue>(min, max); return this; }
+    
     /// <inheritdoc  cref="ArchetypeQuery.FreezeFilter"/>
     public new ArchetypeQuery<T1, T2, T3> FreezeFilter() { SetFreezeFilter();   return this; }
     
