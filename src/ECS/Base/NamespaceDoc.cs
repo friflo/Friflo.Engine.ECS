@@ -35,3 +35,11 @@ namespace Friflo.Engine.ECS.Systems {
     /// </summary>
     internal static class NamespaceDoc { }
 }
+
+namespace Friflo.Engine.ECS.Index {
+    /// <summary>
+    /// Enables search for indexed component values in O(1) for types: string, int, enum, float, Guid, DateTime, ... . <br/>
+    /// Support efficient entity relationships like entity links (foreign keys) and back links (JOIN's).
+    /// </summary>
+    internal static class NamespaceDoc { }
+}
