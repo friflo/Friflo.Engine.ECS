@@ -1,30 +1,13 @@
-﻿using System.Collections.Generic;
-using Friflo.Engine.ECS;
+﻿using Friflo.Engine.ECS;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Index {
 
-internal class IndexContext
-{
-    internal EntityStore                    store;
-    internal ArchetypeQuery                 query1;
-    internal ArchetypeQuery                 query2;
-    internal ArchetypeQuery                 query3;
-    internal ArchetypeQuery                 query4;
-    
-    internal Entity                         entity0;
-    internal Entity                         entity1;
-    internal Entity                         entity2;
-    internal Entity                         target;
-    
-    internal IReadOnlyCollection<string>    nameValues;
-    internal IReadOnlyCollection<int>       intValues;
-}
 
 internal static class Test_Index_Args
 {
-    internal static void QueryArgs2 (IndexContext cx)
+    internal static void QueryArg2 (IndexContext cx)
     {
         var store = cx.store;
         var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");

@@ -42,6 +42,22 @@ public struct LinkComponent : ILinkComponent {
     public override string ToString() => entity.ToString();
 }
 
+internal class IndexContext
+{
+    internal EntityStore                    store;
+    internal ArchetypeQuery                 query1;
+    internal ArchetypeQuery                 query2;
+    internal ArchetypeQuery                 query3;
+    internal ArchetypeQuery                 query4;
+    
+    internal Entity                         entity0;
+    internal Entity                         entity1;
+    internal Entity                         entity2;
+    internal Entity                         target;
+    
+    internal IReadOnlyCollection<string>    nameValues;
+    internal IReadOnlyCollection<int>       intValues;
+}
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 [SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations")]
@@ -112,7 +128,7 @@ public static class Test_Index
     public static void Test_Index_Component_Add_Remove()
     {
         var cx = Query_Setup();
-        Test_Index_Args.QueryArgs2(cx);
+        Test_Index_Args.QueryArg2(cx);
         Query_Assertions(cx);
     }
     
