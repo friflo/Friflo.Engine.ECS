@@ -139,11 +139,10 @@ This enables **full text search** by using `string` as the indexed component typ
 Any type can be used as indexed component type. E.g. int, long, float, Guid, DateTime, enum, ... .  
 A search for a specific value executes in O(1).
 
-Indexed components provide the same functionality as normal components implementing `IComponent`.  
-They have the same behavior as normal components regarding structural changes.  
+Indexed components provide the same functionality and behavior as normal components implementing `IComponent`.  
 Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
 Adding, removing or updating an indexed component updates the index.  
-These operations are executed also in O(1) but significant slower than the non indexed counterparts ~10x.
+These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.
 
 Indexed components can also be used for **range queries** in case the indexed component type implements `IComparable<>`.
 
@@ -221,13 +220,16 @@ public static void Relationships()
         entities.Add(store.CreateEntity());
     }
     for (int n = 0; n < 1000; n++) {
-        entities[n].AddComponent(new FollowComponent { target = entities[n + 1000] });
+        entities[n + 1000].AddComponent(new FollowComponent { target = entities[n] });
     }
-    var followers = entities[0].GetLinkingEntities<FollowComponent>();  // executes in O(1)
-    Console.WriteLine($"followers: {followers.Count}");                 // > followers: 1
+    var followers = entities[0].GetLinkingEntities<FollowComponent>();          // O(1)
+    Console.WriteLine($"followers: {followers.Count}");                         // > followers: 1
     
-    var targets = store.GetLinkedEntities<FollowComponent>();           // executes in O(1)
-    Console.WriteLine($"unique targets: {targets.Count}");              // > unique targets: 1000
+    var query = store.Query().HasValue<FollowComponent, Entity>(entities[0]);   // O(1)
+    Console.WriteLine($"query: {query.Count}");                                 // > query: 1
+    
+    var targets = store.GetLinkedEntities<FollowComponent>();                   // O(1)
+    Console.WriteLine($"unique targets: {targets.Count}");                      // > unique targets: 1000
 }
 ```
 

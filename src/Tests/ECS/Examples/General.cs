@@ -193,13 +193,16 @@ public static void Relationships()
         entities.Add(store.CreateEntity());
     }
     for (int n = 0; n < 1000; n++) {
-        entities[n].AddComponent(new FollowComponent { target = entities[n + 1000] });
+        entities[n + 1000].AddComponent(new FollowComponent { target = entities[n] });
     }
-    var followers = entities[0].GetLinkingEntities<FollowComponent>();  // executes in O(1)
-    Console.WriteLine($"followers: {followers.Count}");                 // > followers: 1
+    var followers = entities[0].GetLinkingEntities<FollowComponent>();          // O(1)
+    Console.WriteLine($"followers: {followers.Count}");                         // > followers: 1
     
-    var targets = store.GetLinkedEntities<FollowComponent>();           // executes in O(1)
-    Console.WriteLine($"unique targets: {targets.Count}");              // > unique targets: 1000
+    var query = store.Query().HasValue<FollowComponent, Entity>(entities[0]);   // O(1)
+    Console.WriteLine($"query: {query.Count}");                                 // > query: 1
+    
+    var targets = store.GetLinkedEntities<FollowComponent>();                   // O(1)
+    Console.WriteLine($"unique targets: {targets.Count}");                      // > unique targets: 1000
 }
 
 [Test]
