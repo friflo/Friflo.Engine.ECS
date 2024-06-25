@@ -182,7 +182,7 @@ This is accomplished by adding a link component to an entity referencing another
 
 This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
 It uses the same data structures and algorithms as used for indexed components described above.  
-The main differences are:
+The main differences compared with **flecs** are:
 
 - The API is not very intuitive as it is different from the common use of components - imho.  
   See [flecs ⋅ Relationships](https://github.com/SanderMertens/flecs/blob/master/docs/Relationships.md)
