@@ -48,6 +48,7 @@ internal class IndexContext
     internal ArchetypeQuery                 query2;
     internal ArchetypeQuery                 query3;
     internal ArchetypeQuery                 query4;
+    internal ArchetypeQuery                 query5;
     
     internal Entity                         entity0;
     internal Entity                         entity1;
@@ -102,30 +103,32 @@ public static partial class Test_Index
         AreEqual(2, cx.query1.Entities.Count);  AreEqual("{ 11, 13 }",      cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
         AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 13, 12 }",  cx.query3.Entities.ToStr());
-        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
+        AreEqual(2, cx.query5.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query5.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedName>();                          AreEqual(1, cx.nameValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
         AreEqual(3, cx.query3.Entities.Count);  AreEqual("{ 11, 12, 13 }",  cx.query3.Entities.ToStr());
-        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
+        AreEqual(2, cx.query5.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query5.Entities.ToStr());
         
         cx.entity2.RemoveComponent<IndexedInt>();                           AreEqual(1, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(1, cx.query2.Entities.Count);  AreEqual("{ 12 }",          cx.query2.Entities.ToStr());
         AreEqual(2, cx.query3.Entities.Count);  AreEqual("{ 11, 12 }",      cx.query3.Entities.ToStr());
-        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
+        AreEqual(1, cx.query5.Entities.Count);  AreEqual("{ 12 }",          cx.query5.Entities.ToStr());
         
         cx.entity1.RemoveComponent<IndexedInt>();                           AreEqual(0, cx.intValues.Count);
         AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(1, cx.query3.Entities.Count);  AreEqual("{ 11 }",          cx.query3.Entities.ToStr());
-        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
+        AreEqual(0, cx.query5.Entities.Count);  AreEqual("{ }",             cx.query5.Entities.ToStr());
         
         cx.entity0.RemoveComponent<IndexedName>();                          AreEqual(0, cx.nameValues.Count);
         AreEqual(0, cx.query1.Entities.Count);  AreEqual("{ }",             cx.query1.Entities.ToStr());
         AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
         AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
+        AreEqual(0, cx.query5.Entities.Count);  AreEqual("{ }",             cx.query5.Entities.ToStr());
+        
         AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 13 }",          cx.query4.Entities.ToStr());
     }
     
@@ -206,8 +209,6 @@ public static partial class Test_Index
         AreEqual(6, query.Count);
         AreEqual("{ 3, 4, 5, 6, 7, 8 }", query.Entities.ToStr());
     }
-    
-
     
     /// <summary>
     /// Cover <see cref="ValueStructIndex{TValue}.Add{TComponent}"/>
@@ -365,8 +366,6 @@ public static partial class Test_Index
         AreEqual(0, result.Count);
     }
     
-
-    
     [Test]
     public static void Test_Index_Perf()
     {
@@ -418,10 +417,6 @@ public static partial class Test_Index
         Mem.AssertNoAlloc(start);
         Console.WriteLine($"Test_Index_Perf_Reference - count: {count} duration: {sw.ElapsedMilliseconds} ms");
     }
-    
-
-    
-
 
     [Test]
     public static void Test_AvoidBoxing()

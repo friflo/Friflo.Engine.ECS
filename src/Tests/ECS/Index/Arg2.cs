@@ -15,10 +15,12 @@ public static partial class Test_Index
         var query3  = store.Query<Position, Rotation>().        HasValue<IndexedName,   string>("find-me").
                                                                 HasValue<IndexedInt,    int>   (123);
         var query4  = store.Query<Position, Rotation>().        HasValue<AttackComponent, Entity>(cx.target);
+        var query5  = store.Query<Position, Rotation>().        ValueInRange<IndexedInt, int>(100, 1000);
         cx.query1 = query1;
         cx.query2 = query2;
         cx.query3 = query3;
         cx.query4 = query4;
+        cx.query5 = query5;
         {
             int count = 0;
             query1.ForEachEntity((ref Position pos, ref Rotation _, Entity entity) => {
@@ -57,6 +59,15 @@ public static partial class Test_Index
                 AreEqual(cx.target, entity.GetComponent<AttackComponent>().target);
             });
             AreEqual(1, count);
+        } {
+            var count = 0;
+            query5.ForEachEntity((ref Position pos, ref Rotation _, Entity entity) => {
+                switch (count++) {
+                    case 0: AreEqual(12, entity.Id); AreEqual(12f, pos.x); break;
+                    case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
+                }
+            });
+            AreEqual(2, count);
         }
     }
 }
