@@ -181,6 +181,7 @@ Link relationships enables creating a *reference* from one entity to another.
 This is accomplished by adding a link component to an entity referencing another entity as shown below.
 
 This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
+It uses the same data structures and algorithms as used for indexed components described above.  
 The main differences are:
 
 - The API is not very intuitive as it is different from the common use of components - imho.  
@@ -192,6 +193,8 @@ The main differences are:
   The more significant performance penalty is the side effect for queries. So many archetypes need to be iterated if they are query matches.
 
 - Changing an entity link does not cause a structural change. In **flecs** an new archetype need to be created.
+
+The example shows how to create a follow component using another entity as target.
 
 ```cs
 public struct FollowComponent : ILinkComponent
