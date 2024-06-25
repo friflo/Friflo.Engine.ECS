@@ -15,7 +15,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Index {
 
-public struct AttackComponent : IIndexedComponent<Entity> {
+public struct AttackComponent : ILinkComponent {
     public      Entity  GetIndexedValue() => target;
     public      Entity  target;
 }
@@ -47,10 +47,10 @@ public struct LinkComponent : ILinkComponent {
 [SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations")]
 public static class Test_Index
 {
-    [Test]
-    public static void Test_Index_Component_Add_Remove()
+    private static IndexContext Query_Setup()
     {
         var store = new EntityStore();
+        var cx = new IndexContext { store = store };
         var targets = new EntityList(store);
         for (int n = 0; n < 10; n++) {
             targets.Add(store.CreateEntity());
@@ -60,92 +60,60 @@ public static class Test_Index
             var entity = store.CreateEntity(new Position(n, 0, 0), new AttackComponent{target = targets[n]});
             entities.Add(entity);
         }
-        Entity target = targets[0];
-        var entity0 = entities[0];
-        var entity1 = entities[1];
-        var entity2 = entities[2];
+        cx.target = targets[0];
+        cx.entity0 = entities[0];
+        cx.entity1 = entities[1];
+        cx.entity2 = entities[2];
         
-        var nameValues  = store.GetIndexedComponentValues<IndexedName, string>();
-        var intValues   = store.GetIndexedComponentValues<IndexedInt, int>();
+        cx.nameValues  = store.GetIndexedComponentValues<IndexedName, string>();
+        cx.intValues   = store.GetIndexedComponentValues<IndexedInt, int>();
         
-        entity0.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, nameValues.Count);
-        entity1.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, intValues.Count);
-        entity2.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, nameValues.Count);
-        entity2.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, intValues.Count);
-        entity2.AddComponent(new AttackComponent{ target = target    });
+        cx.entity0.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, cx.nameValues.Count);
+        cx.entity1.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, cx.intValues.Count);
+        cx.entity2.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual(1, cx.nameValues.Count);
+        cx.entity2.AddComponent(new IndexedInt     { value  = 123       });    AreEqual(1, cx.intValues.Count);
+        cx.entity2.AddComponent(new AttackComponent{ target = cx.target });
+        return cx;
+    }
+    
+    private static void Query_Assertions(IndexContext cx)
+    {
+        AreEqual(2, cx.query1.Entities.Count);  AreEqual("{ 11, 13 }",      cx.query1.Entities.ToStr());
+        AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
+        AreEqual(1, cx.query3.Entities.Count);  AreEqual("{ 13 }",          cx.query3.Entities.ToStr());
+        AreEqual(3, cx.query4.Entities.Count);  AreEqual("{ 11, 13, 12 }",  cx.query4.Entities.ToStr());
         
-        var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");
-        var query2  = store.Query<Position,    IndexedInt>().   HasValue<IndexedInt,    int>   (123);
-        var query3  = store.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me").
-                                                                HasValue<IndexedInt,    int>   (123);
-        var query4  = store.Query().                            HasValue<IndexedName,   string>("find-me").
-                                                                HasValue<IndexedInt,    int>   (123);
-        var query5  = store.Query<Position, AttackComponent>(). HasValue<AttackComponent, Entity>(target);
+        cx.entity2.RemoveComponent<IndexedName>();                          AreEqual(1, cx.nameValues.Count);
+        AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
+        AreEqual(2, cx.query2.Entities.Count);  AreEqual("{ 12, 13 }",      cx.query2.Entities.ToStr());
+        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
+        AreEqual(3, cx.query4.Entities.Count);  AreEqual("{ 11, 12, 13 }",  cx.query4.Entities.ToStr());
         
-        {
-            int count = 0;
-            query1.ForEachEntity((ref Position _, ref IndexedName indexedName, Entity entity) => {
-                switch (count++) {
-                    case 0: AreEqual(11, entity.Id); break;
-                    case 1: AreEqual(13, entity.Id); break;
-                }
-                AreEqual("find-me", indexedName.name);
-            });
-            AreEqual(2, count);
-        } { 
-            int count = 0;
-            query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity entity) => {
-                switch (count++) {
-                    case 0: AreEqual(12, entity.Id); break;
-                    case 1: AreEqual(13, entity.Id); break;
-                }
-                AreEqual(123, indexedInt.value);
-            });
-            AreEqual(2, count);
-        } { 
-            var count = 0;
-            query3.ForEachEntity((ref IndexedName _, ref IndexedInt _, Entity entity) => {
-                AreEqual(13, entity.Id);
-                count++;
-            });
-            AreEqual(1, count);
-        } {
-            var count = 0;
-            query5.ForEachEntity((ref Position _, ref AttackComponent attack, Entity entity) => {
-                count++;
-                AreEqual(13,     entity.Id);
-                AreEqual(target, attack.target);
-            });
-            AreEqual(1, count);
-        }
-        AreEqual(2, query1.Entities.Count);     AreEqual("{ 11, 13 }",      query1.Entities.ToStr());
-        AreEqual(2, query2.Entities.Count);     AreEqual("{ 12, 13 }",      query2.Entities.ToStr());
-        AreEqual(1, query3.Entities.Count);     AreEqual("{ 13 }",          query3.Entities.ToStr());
-        AreEqual(3, query4.Entities.Count);     AreEqual("{ 11, 13, 12 }",  query4.Entities.ToStr());
+        cx.entity2.RemoveComponent<IndexedInt>();                           AreEqual(1, cx.intValues.Count);
+        AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
+        AreEqual(1, cx.query2.Entities.Count);  AreEqual("{ 12 }",          cx.query2.Entities.ToStr());
+        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
+        AreEqual(2, cx.query4.Entities.Count);  AreEqual("{ 11, 12 }",      cx.query4.Entities.ToStr());
         
-        entity2.RemoveComponent<IndexedName>();                             AreEqual(1, nameValues.Count);
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 11 }",          query1.Entities.ToStr());
-        AreEqual(2, query2.Entities.Count);     AreEqual("{ 12, 13 }",      query2.Entities.ToStr());
-        AreEqual(0, query3.Entities.Count);     AreEqual("{ }",             query3.Entities.ToStr());
-        AreEqual(3, query4.Entities.Count);     AreEqual("{ 11, 12, 13 }",  query4.Entities.ToStr());
+        cx.entity1.RemoveComponent<IndexedInt>();                           AreEqual(0, cx.intValues.Count);
+        AreEqual(1, cx.query1.Entities.Count);  AreEqual("{ 11 }",          cx.query1.Entities.ToStr());
+        AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
+        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
+        AreEqual(1, cx.query4.Entities.Count);  AreEqual("{ 11 }",          cx.query4.Entities.ToStr());
         
-        entity2.RemoveComponent<IndexedInt>();                              AreEqual(1, intValues.Count);
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 11 }",          query1.Entities.ToStr());
-        AreEqual(1, query2.Entities.Count);     AreEqual("{ 12 }",          query2.Entities.ToStr());
-        AreEqual(0, query3.Entities.Count);     AreEqual("{ }",             query3.Entities.ToStr());
-        AreEqual(2, query4.Entities.Count);     AreEqual("{ 11, 12 }",      query4.Entities.ToStr());
-        
-        entity1.RemoveComponent<IndexedInt>();                              AreEqual(0, intValues.Count);
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 11 }",          query1.Entities.ToStr());
-        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",             query2.Entities.ToStr());
-        AreEqual(0, query3.Entities.Count);     AreEqual("{ }",             query3.Entities.ToStr());
-        AreEqual(1, query4.Entities.Count);     AreEqual("{ 11 }",          query4.Entities.ToStr());
-        
-        entity0.RemoveComponent<IndexedName>();                             AreEqual(0, nameValues.Count);
-        AreEqual(0, query1.Entities.Count);     AreEqual("{ }",             query1.Entities.ToStr());
-        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",             query2.Entities.ToStr());
-        AreEqual(0, query3.Entities.Count);     AreEqual("{ }",             query3.Entities.ToStr());
-        AreEqual(0, query4.Entities.Count);     AreEqual("{ }",             query4.Entities.ToStr());
+        cx.entity0.RemoveComponent<IndexedName>();                          AreEqual(0, cx.nameValues.Count);
+        AreEqual(0, cx.query1.Entities.Count);  AreEqual("{ }",             cx.query1.Entities.ToStr());
+        AreEqual(0, cx.query2.Entities.Count);  AreEqual("{ }",             cx.query2.Entities.ToStr());
+        AreEqual(0, cx.query3.Entities.Count);  AreEqual("{ }",             cx.query3.Entities.ToStr());
+        AreEqual(0, cx.query4.Entities.Count);  AreEqual("{ }",             cx.query4.Entities.ToStr());
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove()
+    {
+        var cx = Query_Setup();
+        Test_Index_Args.QueryArgs2(cx);
+        Query_Assertions(cx);
     }
     
     [Test]
