@@ -134,15 +134,18 @@ All query optimizations are using the same `query` but with different enumeratio
 
 New in **3.0.0-preview.1**
 
-The **Friflo.Engine.ECS** enables efficient search for indexed component values.  
-This enables full text search by using `string` as the indexed component type like in the example below.  
+**Friflo.Engine.ECS** enables efficient search of indexed component values.  
+This enables **full text search** by using `string` as the indexed component type like in the example below.  
+Any type can be used as indexed component type. E.g. int, long, float, Guid, DateTime, enum, ... .  
 A search for a specific value executes in O(1).
 
 Indexed components provide the same functionality as normal components implementing `IComponent`.  
 They have the same behavior as normal components regarding structural changes.  
 Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
 Adding, removing or updating an indexed component updates the index.  
-These operations are executed also in O(1) but significant slower than non indexed counterparts ~10x.
+These operations are executed also in O(1) but significant slower than the non indexed counterparts ~10x.
+
+Indexed components can also be used for **range queries** in case the indexed component type implements `IComparable<>`.
 
 ```cs
 public struct Player : IIndexedComponent<string>
@@ -151,21 +154,27 @@ public struct Player : IIndexedComponent<string>
     public  string  GetIndexedValue() => name;
 }
 
-public static void FullTextSearch()
+public static void IndexedComponents()
 {
     var store   = new EntityStore();
     for (int n = 0; n < 1000; n++) {
         var entity = store.CreateEntity();
-        entity.AddComponent(new Player { name = $"Player-{n}"});
+        entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
     }
-    var search = store.Query().HasValue<Player,string>("Player-1"); // executes in O(1)
-    Console.WriteLine($"found: {search.Count}");                    // > found: 1
+    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");  // O(1)
+    Console.WriteLine($"lookup: {lookup.Count}");                                   // > lookup: 1
     
-    var names = store.GetIndexedComponentValues<Player,string>();   // executes in O(1)
-    Console.WriteLine($"unique names: {names.Count}");              // > unique names: 1000
+    var query      = store.Query().HasValue    <Player,string>("Player-001");       // O(1)
+    Console.WriteLine($"query: {query.Count}");                                     // > query: 1
+    
+    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
+    Console.WriteLine($"range query: {rangeQuery.Count}");                          // > range query: 100
+    
+    var names = store.GetIndexedComponentValues<Player,string>();                   // O(1)
+    Console.WriteLine($"unique names: {names.Count}");                              // > unique names: 1000
 }
 ```
-This features is work in progress. TODO:
+This features is work in progress. todo:
 
 - [ ] Update index by all methods adding, removing or updating an indexed component
 - [ ] Remove indexed component from index if entity is deleted
@@ -221,11 +230,11 @@ public static void Relationships()
 }
 ```
 
-This features is work in progress. TODO:
+This features is work in progress. todo:
 
 - [ ] Update index by all methods adding, removing or updating a link component
 - [ ] Remove link component from index if entity is deleted
-- [ ] Remove link component from linking entity if linked entity is deleted
+- [ ] Remove link component from entity if linked entity is deleted
 
 <br/>
 

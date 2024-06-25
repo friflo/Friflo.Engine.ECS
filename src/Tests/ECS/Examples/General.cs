@@ -158,18 +158,24 @@ public struct Player : IIndexedComponent<string>
 }
 
 [Test]
-public static void FullTextSearch()
+public static void IndexedComponents()
 {
     var store   = new EntityStore();
     for (int n = 0; n < 1000; n++) {
         var entity = store.CreateEntity();
-        entity.AddComponent(new Player { name = $"Player-{n}"});
+        entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
     }
-    var search = store.Query().HasValue<Player,string>("Player-1"); // executes in O(1)
-    Console.WriteLine($"found: {search.Count}");                    // > found: 1
+    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");  // O(1)
+    Console.WriteLine($"lookup: {lookup.Count}");                                   // > lookup: 1
     
-    var names = store.GetIndexedComponentValues<Player,string>();   // executes in O(1)
-    Console.WriteLine($"unique names: {names.Count}");              // > unique names: 1000
+    var query      = store.Query().HasValue    <Player,string>("Player-001");       // O(1)
+    Console.WriteLine($"query: {query.Count}");                                     // > query: 1
+    
+    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
+    Console.WriteLine($"range query: {rangeQuery.Count}");                          // > range query: 100
+    
+    var names = store.GetIndexedComponentValues<Player,string>();                   // O(1)
+    Console.WriteLine($"unique names: {names.Count}");                              // > unique names: 1000
 }
 
 public struct FollowComponent : ILinkComponent
