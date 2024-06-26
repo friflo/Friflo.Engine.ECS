@@ -13,8 +13,8 @@ Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benc
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 
 ![new](docs/images/new.svg) released **Friflo.Engine.ECS v2.0.0**.  
-New features, performance improvements and bug fixes listed at 
-[Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
+Add [Systems](#systems), [Native AOT](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#native-aot) support,
+performance improvements and bug fixes. See [Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
 
 ![new](docs/images/new.svg) released **Friflo.Engine.ECS v3.0.0-preview.1**.  
 Add support for [Relationships](#relationships) and full-text [Search](#search).
