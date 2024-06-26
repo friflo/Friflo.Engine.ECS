@@ -17,7 +17,7 @@ public static class Test_Index_Types
         var guid2 = Guid.Parse("10000000-0000-0000-0000-000000000000");
         
         var store  = new EntityStore();
-        var values = store.GetIndexedComponentValues<GuidComponent, Guid>();
+        var values = store.GetAllIndexedComponentValues<GuidComponent, Guid>();
         
         var query0 = store.Query().HasValue    <GuidComponent, Guid>(guid1);
         var query1 = store.Query().ValueInRange<GuidComponent, Guid>(guid1, guid1);
@@ -41,7 +41,7 @@ public static class Test_Index_Types
         var date1 = new DateTime(2024, 6, 25);
         var date2 = new DateTime(2024, 6, 26);
         var store = new EntityStore();
-        var values = store.GetIndexedComponentValues<DateTimeComponent, DateTime>();
+        var values = store.GetAllIndexedComponentValues<DateTimeComponent, DateTime>();
         
         var query1 = store.Query().HasValue    <DateTimeComponent, DateTime>(date1);
         var query2 = store.Query().ValueInRange<DateTimeComponent, DateTime>(date1, date1);
@@ -64,7 +64,7 @@ public static class Test_Index_Types
     public static void Test_Index_Types_enum()
     {
         var store = new EntityStore();
-        var values = store.GetIndexedComponentValues<EnumComponent, MyEnum>();
+        var values = store.GetAllIndexedComponentValues<EnumComponent, MyEnum>();
 
         var query1 = store.Query().HasValue    <EnumComponent, MyEnum>(MyEnum.E1);
         
@@ -90,7 +90,7 @@ public static class Test_Index_Types
     public static void Test_Index_Types_enum_comparable()
     {
         var store = new EntityStore();
-        var values = store.GetIndexedComponentValues<ComparableEnumComponent, ComparableEnum>();
+        var values = store.GetAllIndexedComponentValues<ComparableEnumComponent, ComparableEnum>();
 
         var query1 = store.Query().HasValue    <ComparableEnumComponent, ComparableEnum>(MyEnum.E1);
         var query2 = store.Query().ValueInRange<ComparableEnumComponent, ComparableEnum>(MyEnum.E1, MyEnum.E2);

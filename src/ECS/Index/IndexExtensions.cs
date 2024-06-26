@@ -16,14 +16,14 @@ public static class IndexExtensions
 {
 #region Entity
     /// <summary>
-    /// Return the entities having a component link to this entity of the passed <see cref="ILinkComponent"/> type.<br/>
+    /// Return the entities with a component link to this entity of the passed <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). 
     /// </summary>
     /// <remarks>
     /// The method id a specialized version of <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/><br/>
     /// using <c> TComponent = IIndexedComponent&lt;Entity>, TValue = Entity</c> and <c>value = this</c>.  
     /// </remarks>
-    public static Entities GetLinkingEntities<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
+    public static Entities GetEntitiesWithLinkComponent<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(entity);
     }
@@ -57,7 +57,7 @@ public static class IndexExtensions
     ///   </item>
     /// </list>
     /// </remarks>
-    public static  IReadOnlyCollection<TValue> GetIndexedComponentValues<TComponent, TValue>(this EntityStore store) where TComponent: struct, IIndexedComponent<TValue> {
+    public static  IReadOnlyCollection<TValue> GetAllIndexedComponentValues<TComponent, TValue>(this EntityStore store) where TComponent: struct, IIndexedComponent<TValue> {
         var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
@@ -72,15 +72,15 @@ public static class IndexExtensions
     ///     The collection changes when component link values are updated, removed or added.
     ///   </item>
     ///   <item>
-    ///     To get the entities linking a specific entity use <see cref="IndexExtensions.GetLinkingEntities{TComponent}"/>.<br/>
+    ///     To get the entities linking a specific entity use <see cref="GetEntitiesWithLinkComponent{TComponent}"/>.<br/>
     ///   </item>
     ///   <item>
-    ///     The method id a specialized version of <see cref="GetIndexedComponentValues{TComponent,TValue}"/><br/>
+    ///     The method id a specialized version of <see cref="GetAllIndexedComponentValues{TComponent,TValue}"/><br/>
     ///     using <c> TComponent = ILinkComponent></c> and <c>TValue = Entity</c>.  
     ///   </item>
     /// </list>
     /// </remarks>
-    public static IReadOnlyCollection<Entity> GetLinkedEntities<TComponent>(this EntityStore store) where TComponent: struct, ILinkComponent {
+    public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store) where TComponent: struct, ILinkComponent {
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }

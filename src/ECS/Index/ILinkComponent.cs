@@ -13,11 +13,11 @@ namespace Friflo.Engine.ECS.Index;
 /// <list type="bullet">
 ///   <item>
 ///     Return all entities having a <see cref="ILinkComponent"/> to a specific entity.<br/>
-///     See <see cref="IndexExtensions.GetLinkingEntities{TComponent}"/>
+///     See <see cref="IndexExtensions.GetEntitiesWithLinkComponent{TComponent}"/>
 ///   </item>
 ///   <item>
 ///     Return all entities linked by a specific <see cref="ILinkComponent"/> type.<br/>
-///     See <see cref="IndexExtensions.GetLinkedEntities{TComponent}"/>
+///     See <see cref="IndexExtensions.GetAllLinkedEntities{TComponent}"/>
 ///   </item>
 ///   <item>
 ///     Filter entities in a query having a <see cref="ILinkComponent"/> to a specific entity.<br/>

@@ -174,7 +174,7 @@ public static void IndexedComponents()
     var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
     Console.WriteLine($"range query: {rangeQuery.Count}");                          // > range query: 100
     
-    var names = store.GetIndexedComponentValues<Player,string>();                   // O(1)
+    var names = store.GetAllIndexedComponentValues<Player,string>();                // O(1)
     Console.WriteLine($"unique names: {names.Count}");                              // > unique names: 1000
 }
 
@@ -195,13 +195,13 @@ public static void Relationships()
     for (int n = 0; n < 1000; n++) {
         entities[n + 1000].AddComponent(new FollowComponent { target = entities[n] });
     }
-    var followers = entities[0].GetLinkingEntities<FollowComponent>();          // O(1)
+    var followers = entities[0].GetEntitiesWithLinkComponent<FollowComponent>();// O(1)
     Console.WriteLine($"followers: {followers.Count}");                         // > followers: 1
     
     var query = store.Query().HasValue<FollowComponent, Entity>(entities[0]);   // O(1)
     Console.WriteLine($"query: {query.Count}");                                 // > query: 1
     
-    var targets = store.GetLinkedEntities<FollowComponent>();                   // O(1)
+    var targets = store.GetAllLinkedEntities<FollowComponent>();                // O(1)
     Console.WriteLine($"unique targets: {targets.Count}");                      // > unique targets: 1000
 }
 

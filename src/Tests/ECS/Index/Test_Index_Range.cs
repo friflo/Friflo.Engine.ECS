@@ -29,7 +29,7 @@ public static class Test_Index_Range
         var entity2 = store.CreateEntity(new Position());
         var entity3 = store.CreateEntity(new Position());
         
-        var values = store.GetIndexedComponentValues<IndexedIntRange, int>();
+        var values = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
 
         entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual(1, values.Count);
         entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual(2, values.Count);
@@ -100,7 +100,7 @@ public static class Test_Index_Range
         var entity3 = store.CreateEntity(new Position());
         var entity4 = store.CreateEntity(new Position());
         
-        var values = store.GetIndexedComponentValues<IndexedIntRange, int>();
+        var values = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
         entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual(1, values.Count);
         entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual(2, values.Count);
         entity3.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual(2, values.Count);
@@ -139,7 +139,7 @@ public static class Test_Index_Range
         var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetIndexedComponentValues<IndexedStringRange, string>();
+        var values      = store.GetAllIndexedComponentValues<IndexedStringRange, string>();
         var strings     = new string[count];
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
@@ -165,7 +165,7 @@ public static class Test_Index_Range
         var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetIndexedComponentValues<IndexedIntRange, int>();
+        var values      = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }
