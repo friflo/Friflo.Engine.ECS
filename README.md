@@ -168,7 +168,7 @@ public static void IndexedComponents()
     var query      = store.Query().HasValue    <Player,string>("Player-001");
     Console.WriteLine($"query: {query.Count}");                             // > query: 1
     
-    // range query returning all entities with a Player.name in the given range
+    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
     var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
     Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
     
@@ -194,7 +194,7 @@ This is accomplished by adding a link component to an entity referencing another
 In SQL terms: A link component contains a *secondary key* referencing an entity by id - the *primary key*.
 
 This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
-It uses the same data structures and algorithms as used for indexed components described above.  
+It uses the same data structures and algorithms used for indexed components described above.  
 The main differences compared with **flecs** are:
 
 - The API to create and query relations in **flecs** is very compact but not intuitive - imho.  
@@ -246,6 +246,9 @@ This features is work in progress. todo:
 - [ ] Update index by all methods adding, removing or updating a link component
 - [ ] Remove link component from index if entity is deleted
 - [ ] Remove link component from entity if linked entity is deleted
+
+Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
+for the challenge to improve the feature set and performance of this project!
 
 <br/>
 

@@ -173,7 +173,7 @@ public static void IndexedComponents()
     var query      = store.Query().HasValue    <Player,string>("Player-001");
     Console.WriteLine($"query: {query.Count}");                             // > query: 1
     
-    // range query returning all entities with a Player.name in the given range
+    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
     var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
     Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
     
