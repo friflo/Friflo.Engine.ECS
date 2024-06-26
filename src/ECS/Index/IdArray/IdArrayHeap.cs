@@ -64,7 +64,7 @@ internal readonly struct IdArrayHeap
     internal static int LeadingZeroCount(uint i)
     {
         if (i == 0) return 32;
-        ulong n = 1;
+        uint n = 1;
 
         if (i >> 16 == 0) { n += 16; i <<= 16; }
         if (i >> 24 == 0) { n +=  8; i <<=  8; }
