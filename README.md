@@ -206,7 +206,7 @@ for the challenge to improve the feature set and performance of this project!
 ![new](docs/images/new.svg) in **v3.0.0-preview.1**
 
 **Friflo.Engine.ECS** enables efficient search of indexed component values.  
-This enables **full text search** by using `string` as the indexed component type like in the example below.  
+This enables **full-text search** by using `string` as the indexed component type like in the example below.  
 Any type can be used as indexed component type. E.g. int, long, float, Guid, DateTime, enum, ... .  
 A search / query for a specific value executes in O(1).
 
@@ -215,7 +215,8 @@ Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikiped
 Adding, removing or updating an indexed component updates the index.  
 These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.
 
-Indexed components can also be used for **range queries** in case the indexed component type implements `IComparable<>`.
+In case the indexed component type implements `IComparable<>` like int, string, DateTime, ... range queries can be executed.  
+A range query returns all entities with a component value in the specified range. See example code.
 
 ```cs
 public struct Player : IIndexedComponent<string>
