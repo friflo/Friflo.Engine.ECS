@@ -14,17 +14,5 @@ public sealed class ComponentIndexAttribute : Attribute
 {
     // ReSharper disable once UnusedParameter.Local
     public ComponentIndexAttribute(Type type) { }
-    
-    internal static Type GetComponentIndex(Type type)
-    {
-        foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(ComponentIndexAttribute)) {
-                continue;
-            }
-            var arg = attr.ConstructorArguments;
-            return (Type) arg[0].Value;
-        }
-        return null;
-    }
 }
 

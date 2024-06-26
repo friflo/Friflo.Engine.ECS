@@ -44,7 +44,7 @@ internal static class ComponentIndexUtils
         if (valueType == typeof(Entity)) {
             return typeof(EntityIndex);
         }
-        var indexType   = ComponentIndexAttribute.GetComponentIndex(componentType);
+        var indexType   = GetComponentIndex(componentType);
         var typeArgs    = new [] { valueType };
         if (indexType != null) {
             return indexType.                MakeGenericType(typeArgs);
@@ -53,6 +53,18 @@ internal static class ComponentIndexUtils
             return typeof(ValueClassIndex<>).MakeGenericType(typeArgs);
         }
         return typeof(ValueStructIndex<>).   MakeGenericType(typeArgs);
+    }
+    
+    private static Type GetComponentIndex(Type type)
+    {
+        foreach (var attr in type.CustomAttributes) {
+            if (attr.AttributeType != typeof(ComponentIndexAttribute)) {
+                continue;
+            }
+            var arg = attr.ConstructorArguments;
+            return (Type) arg[0].Value;
+        }
+        return null;
     }
 }
 
