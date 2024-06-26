@@ -50,6 +50,6 @@ internal static class StoreIndex
     private static ComponentIndex[] CreateStoreIndexMap()
     {
         var schema = EntityStoreBase.Static.EntitySchema;
-        return new ComponentIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
+        return new ComponentIndex[schema.maxIndexedStructIndex];
     }
 }

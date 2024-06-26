@@ -14,8 +14,8 @@ namespace Friflo.Engine.ECS;
 
 internal readonly struct AssemblyType
 {
-    internal readonly Type type;
-    internal readonly int  assemblyIndex;
+    internal readonly   Type    type;
+    internal readonly   int     assemblyIndex;
     
     internal AssemblyType(Type type, int  assemblyIndex) {
         this.type           = type;
@@ -32,6 +32,7 @@ internal sealed class SchemaTypes
     internal readonly   List<ComponentType> components      = new ();
     internal readonly   List<ScriptType>    scripts         = new ();
     internal readonly   List<TagType>       tags            = new ();
+    internal            int                 indexCount;
     
     internal void AddSchemaType(Type type, int assemblyIndex)
     {
@@ -59,6 +60,7 @@ internal sealed class SchemaTypes
         for (int n = 0; n < assemblyCount; n++) {
             engineTypes[n] = new List<SchemaType>();
         }
+        OrderComponentTypes();
         foreach (var type in tagTypes) {
             var schemaType = CreateTagType(type.type);
             engineTypes[type.assemblyIndex].Add(schemaType);
@@ -76,6 +78,32 @@ internal sealed class SchemaTypes
             dependants[n] = new EngineDependant(assemblies[n], engineTypes[n]);
         }
         return dependants;
+    }
+    
+    private void OrderComponentTypes()
+    {
+        var count       = componentTypes.Count;
+        var isIndexType = new bool[count];
+        var buffer      = new AssemblyType[count];
+        indexCount      = 0;
+        for (int n = 0; n < count; n++) {
+            var type        = componentTypes[n];
+            buffer[n]       = type;
+            var isIndex     = ComponentIndexUtils.GetIndexType(type.type) != null;
+            isIndexType[n]  = isIndex;
+            if (isIndex) indexCount++;
+        }
+        componentTypes.Clear();
+        for (int n = 0; n < count; n++) {
+            if (isIndexType[n]) {
+                componentTypes.Add(buffer[n]);
+            }
+        }
+        for (int n = 0; n < count; n++) {
+            if (!isIndexType[n]) {
+                componentTypes.Add(buffer[n]);
+            }
+        }
     }
 
     private const BindingFlags Flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;

@@ -64,6 +64,7 @@ public sealed class EntitySchema
 #region private fields
     [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
+    [Browse(Never)] internal readonly   int                                 maxIndexedStructIndex; // :)
     [Browse(Never)] internal readonly   ComponentType[]                     components;
     [Browse(Never)] internal readonly   ScriptType[]                        scripts;
     [Browse(Never)] internal readonly   TagType[]                           tags;
@@ -80,10 +81,11 @@ public sealed class EntitySchema
 #region internal methods
     internal EntitySchema(EngineDependant[] dependants, SchemaTypes schemaTypes)
     {
-        var componentList           = schemaTypes.components;
-        var scriptList              = schemaTypes.scripts;
-        var tagList                 = schemaTypes.tags;
+        var componentList   = schemaTypes.components;
+        var scriptList      = schemaTypes.scripts;
+        var tagList         = schemaTypes.tags;
         
+        maxIndexedStructIndex   = schemaTypes.indexCount + 1;
         engineDependants        = dependants;
         int count               = componentList.Count + scriptList.Count;
         schemaTypeByKey         = new Dictionary<string, SchemaType>(count);
