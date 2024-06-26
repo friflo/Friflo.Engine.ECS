@@ -142,8 +142,10 @@ This is accomplished by adding a link component to an entity referencing another
 In SQL terms: A link component contains a *secondary key* field referencing an entity by id - the *primary key*.
 
 This implementation uses a different approach than **flecs** or other ECS implementations similar to **flecs**.  
-It uses the same data structures and algorithms used for indexed components. See [Search](#search).  
-The main differences compared with **flecs** are:
+It uses the same indexing mechanism as for indexed components. See [Search](#search).  
+*Performance:* Indexing 1000 different link components ~60 μs.
+
+The main differences compared to **flecs** are:
 
 - The API to create and query relations in **flecs** is very compact but not intuitive - imho.  
   It is completely different from common component handling.
@@ -154,7 +156,8 @@ The main differences compared with **flecs** are:
   So each relationship allocates ~ 1000 bytes required by the archetype stored in the heap. Only for a simple link.  
   The more significant performance penalty is the side effect in queries. Many archetypes need to be iterated if they are query matches.
 
-- Changing an entity link does not cause a structural change. In **flecs** an new archetype needs to be created.
+- Changing an entity link does not cause a structural change. In **flecs** an new archetype needs to be created.  
+  
 
 The example shows how to create a follow component using another entity as target.
 
@@ -213,7 +216,8 @@ A search / query for a specific value executes in O(1).
 Indexed components provide the same functionality and behavior as normal components implementing `IComponent`.  
 Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
 Adding, removing or updating an indexed component updates the index.  
-These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.
+These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.  
+*Performance:* Indexing 1000 different component values ~60 μs.
 
 In case the indexed component type implements `IComparable<>` like int, string, DateTime, ... range queries can be executed.  
 A range query returns all entities with a component value in the specified range. See example code.
