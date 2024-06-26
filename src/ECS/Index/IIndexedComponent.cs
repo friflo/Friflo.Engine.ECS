@@ -31,5 +31,8 @@ namespace Friflo.Engine.ECS.Index;
 /// </remarks>
 public interface IIndexedComponent<out TValue> : IComponent
 {
+    /// <summary>
+    /// Returns the value of the indexed component field. 
+    /// </summary>
     TValue GetIndexedValue();
 }
