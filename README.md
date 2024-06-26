@@ -16,6 +16,9 @@ See benchmark results - Mac Mini M2 - at the bottom of this page.
 New features, performance improvements and bug fixes listed at 
 [Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
 
+![new](docs/images/new.svg) released **Friflo.Engine.ECS v3.0.0-preview.1**.  
+Add support for [Relationships](#relationships) and full-text [Search](#search).
+
 *Feature highlights*
 - Simple API - no boilerplate.
 - High-performance 🔥 and compact ECS with low memory footprint.
@@ -132,7 +135,7 @@ All query optimizations are using the same `query` but with different enumeratio
 
 ## **Relationships**
 
-New in **3.0.0-preview.1**
+New in **v3.0.0-preview.1**
 
 Link relationships enable creating a *reference* from one entity to another.  
 This is accomplished by adding a link component to an entity referencing another entity as shown below.  
@@ -200,7 +203,7 @@ for the challenge to improve the feature set and performance of this project!
 
 ## **Search**
 
-New in **3.0.0-preview.1**
+New in **v3.0.0-preview.1**
 
 **Friflo.Engine.ECS** enables efficient search of indexed component values.  
 This enables **full text search** by using `string` as the indexed component type like in the example below.  
