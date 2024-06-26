@@ -174,8 +174,8 @@ public static void IndexedComponents()
     var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
     Console.WriteLine($"range query: {rangeQuery.Count}");                          // > range query: 100
     
-    var names = store.GetAllIndexedComponentValues<Player,string>();                // O(1)
-    Console.WriteLine($"unique names: {names.Count}");                              // > unique names: 1000
+    var allNames = store.GetAllIndexedComponentValues<Player,string>();             // O(1)
+    Console.WriteLine($"all names: {allNames.Count}");                              // > all names: 1000
 }
 
 public struct FollowComponent : ILinkComponent
@@ -187,22 +187,22 @@ public struct FollowComponent : ILinkComponent
 [Test]
 public static void Relationships()
 {
-    var store    = new EntityStore();
-    var entities = new List<Entity>();
-    for (int n = 0; n < 2000; n++) {
-        entities.Add(store.CreateEntity());
-    }
+    var store     = new EntityStore();
+    var targets   = new List<Entity>();
     for (int n = 0; n < 1000; n++) {
-        entities[n + 1000].AddComponent(new FollowComponent { target = entities[n] });
+        var target   = store.CreateEntity();
+        targets.Add(target);
+        var follower = store.CreateEntity();
+        follower.AddComponent(new FollowComponent { target = target });
     }
-    var followers = entities[0].GetEntitiesWithLinkComponent<FollowComponent>();// O(1)
-    Console.WriteLine($"followers: {followers.Count}");                         // > followers: 1
+    var followers = targets[0].GetEntitiesWithLinkComponent<FollowComponent>();     // O(1)
+    Console.WriteLine($"followers: {followers.Count}");                             // > followers: 1
     
-    var query = store.Query().HasValue<FollowComponent, Entity>(entities[0]);   // O(1)
-    Console.WriteLine($"query: {query.Count}");                                 // > query: 1
+    var query = store.Query().HasValue<FollowComponent, Entity>(targets[0]);        // O(1)
+    Console.WriteLine($"query: {query.Count}");                                     // > query: 1
     
-    var targets = store.GetAllLinkedEntities<FollowComponent>();                // O(1)
-    Console.WriteLine($"unique targets: {targets.Count}");                      // > unique targets: 1000
+    var allTargets = store.GetAllLinkedEntities<FollowComponent>();                 // O(1)
+    Console.WriteLine($"all targets: {allTargets.Count}");                          // > all targets: 1000
 }
 
 [Test]

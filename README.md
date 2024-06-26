@@ -186,7 +186,8 @@ This features is work in progress. todo:
 New in **3.0.0-preview.1**
 
 Link relationships enable creating a *reference* from one entity to another.  
-This is accomplished by adding a link component to an entity referencing another entity as shown below.
+This is accomplished by adding a link component to an entity referencing another entity as shown below.  
+In SQL terms: A link component contains a *secondary key* referencing an entity by id - the *primary key*.
 
 This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
 It uses the same data structures and algorithms as used for indexed components described above.  
@@ -199,7 +200,7 @@ The main differences compared with **flecs** are:
 - Adding, removing or updating a link does not cause [archetype fragmentation](https://www.flecs.dev/flecs/md_docs_2Relationships.html#fragmentation).  
   In **flecs** every relationship between two entities creates an individual archetype only containing a single entity / component.  
   So each relationship allocates ~ 1000 bytes required by the archetype stored in the heap. Only for a simple link.  
-  The more significant performance penalty is the side effect for queries. Many archetypes need to be iterated if they are query matches.
+  The more significant performance penalty is the side effect in queries. Many archetypes need to be iterated if they are query matches.
 
 - Changing an entity link does not cause a structural change. In **flecs** an new archetype needs to be created.
 

@@ -40,13 +40,13 @@ public static class IndexExtensions
     }
     
     /// <summary>
-    /// Returns a collection of all indexed component values of the passed <typeparamref name="TComponent"/> type.<br/>
+    /// Returns all indexed component values of the passed <typeparamref name="TComponent"/> type.<br/>
     /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
     /// </summary>
     /// <remarks>
     /// <list type="bullet">
     ///   <item>
-    ///     The collection changes when indexed component values are updated, removed or added.
+    ///     The returned collection changes when indexed component values are updated, removed or added.
     ///   </item>
     ///   <item>
     ///     To get the entities having a specific component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.
@@ -69,7 +69,7 @@ public static class IndexExtensions
     /// <remarks>
     /// <list type="bullet">
     ///   <item>
-    ///     The collection changes when component link values are updated, removed or added.
+    ///     The returned collection changes when component link values are updated, removed or added.
     ///   </item>
     ///   <item>
     ///     To get the entities linking a specific entity use <see cref="GetEntitiesWithLinkComponent{TComponent}"/>.<br/>
