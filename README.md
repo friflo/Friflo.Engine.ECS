@@ -41,8 +41,8 @@ dotnet add package Friflo.Engine.ECS
 * [Demos](#demos)
 * [Examples](#examples)
   - [Hello World](#hello-world)
-  - [Search](#search)
   - [Relationships](#relationships)
+  - [Search](#search)
   - [Systems](#systems)
 * [Wiki](#wiki)
 * [Benchmarks](#ecs-benchmarks)
@@ -130,71 +130,16 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **Search**
-
-New in **3.0.0-preview.1**
-
-**Friflo.Engine.ECS** enables efficient search of indexed component values.  
-This enables **full text search** by using `string` as the indexed component type like in the example below.  
-Any type can be used as indexed component type. E.g. int, long, float, Guid, DateTime, enum, ... .  
-A search for a specific value executes in O(1).
-
-Indexed components provide the same functionality and behavior as normal components implementing `IComponent`.  
-Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
-Adding, removing or updating an indexed component updates the index.  
-These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.
-
-Indexed components can also be used for **range queries** in case the indexed component type implements `IComparable<>`.
-
-```cs
-public struct Player : IIndexedComponent<string>
-{
-    public  string  name;
-    public  string  GetIndexedValue() => name;
-}
-
-public static void IndexedComponents()
-{
-    var store   = new EntityStore();
-    for (int n = 0; n < 1000; n++) {
-        var entity = store.CreateEntity();
-        entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
-    }
-    // get all entities where Player.name == "Player-001". O(1)
-    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");
-    Console.WriteLine($"lookup: {lookup.Count}");                           // > lookup: 1
-    
-    // return same result as lookup using a Query(). O(1)
-    var query      = store.Query().HasValue    <Player,string>("Player-001");
-    Console.WriteLine($"query: {query.Count}");                             // > query: 1
-    
-    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
-    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
-    Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
-    
-    // get all unique Player.name's. O(1)
-    var allNames = store.GetAllIndexedComponentValues<Player,string>();
-    Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
-}
-```
-This features is work in progress. todo:
-
-- [ ] Update index by all methods adding, removing or updating an indexed component
-- [ ] Remove indexed component from index if entity is deleted
-
-<br/>
-
-
 ## **Relationships**
 
 New in **3.0.0-preview.1**
 
 Link relationships enable creating a *reference* from one entity to another.  
 This is accomplished by adding a link component to an entity referencing another entity as shown below.  
-In SQL terms: A link component contains a *secondary key* referencing an entity by id - the *primary key*.
+In SQL terms: A link component contains a *secondary key* field referencing an entity by id - the *primary key*.
 
 This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
-It uses the same data structures and algorithms used for indexed components described above.  
+It uses the same data structures and algorithms used for indexed components. See [Search](#search).  
 The main differences compared with **flecs** are:
 
 - The API to create and query relations in **flecs** is very compact but not intuitive - imho.  
@@ -249,6 +194,61 @@ This features is work in progress. todo:
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
+
+<br/>
+
+
+## **Search**
+
+New in **3.0.0-preview.1**
+
+**Friflo.Engine.ECS** enables efficient search of indexed component values.  
+This enables **full text search** by using `string` as the indexed component type like in the example below.  
+Any type can be used as indexed component type. E.g. int, long, float, Guid, DateTime, enum, ... .  
+A search / query for a specific value executes in O(1).
+
+Indexed components provide the same functionality and behavior as normal components implementing `IComponent`.  
+Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
+Adding, removing or updating an indexed component updates the index.  
+These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.
+
+Indexed components can also be used for **range queries** in case the indexed component type implements `IComparable<>`.
+
+```cs
+public struct Player : IIndexedComponent<string>
+{
+    public  string  name;
+    public  string  GetIndexedValue() => name;
+}
+
+public static void IndexedComponents()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 1000; n++) {
+        var entity = store.CreateEntity();
+        entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
+    }
+    // get all entities where Player.name == "Player-001". O(1)
+    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");
+    Console.WriteLine($"lookup: {lookup.Count}");                           // > lookup: 1
+    
+    // return same result as lookup using a Query(). O(1)
+    var query      = store.Query().HasValue    <Player,string>("Player-001");
+    Console.WriteLine($"query: {query.Count}");                             // > query: 1
+    
+    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
+    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
+    Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
+    
+    // get all unique Player.name's. O(1)
+    var allNames = store.GetAllIndexedComponentValues<Player,string>();
+    Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
+}
+```
+This features is work in progress. todo:
+
+- [ ] Update index by all methods adding, removing or updating an indexed component
+- [ ] Remove indexed component from index if entity is deleted
 
 <br/>
 
