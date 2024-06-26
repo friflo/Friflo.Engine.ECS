@@ -78,13 +78,13 @@ public sealed class EntitySchema
     #endregion
     
 #region internal methods
-    internal EntitySchema(List<EngineDependant> dependants, SchemaTypes schemaTypes)
+    internal EntitySchema(EngineDependant[] dependants, SchemaTypes schemaTypes)
     {
         var componentList           = schemaTypes.components;
         var scriptList              = schemaTypes.scripts;
         var tagList                 = schemaTypes.tags;
         
-        engineDependants        = dependants.ToArray();
+        engineDependants        = dependants;
         int count               = componentList.Count + scriptList.Count;
         schemaTypeByKey         = new Dictionary<string, SchemaType>(count);
         scriptTypeByType        = new Dictionary<Type,   ScriptType>(count);

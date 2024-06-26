@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Friflo.Engine.ECS.Index;
 using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable UseRawString
@@ -18,7 +17,7 @@ public sealed class NativeAOT
     private             EntitySchema        entitySchema;
     private             bool                engineTypesRegistered;
         
-    private readonly    List<SchemaType>    types       = new();
+    private readonly    List<Type>          types       = new();
     private readonly    HashSet<Type>       typeSet     = new();
     private readonly    TypeStore           typeStore   = new TypeStore();
     private readonly    SchemaTypes         schemaTypes = new();
@@ -72,20 +71,19 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     private EntitySchema CreateSchemaInternal()
     {
         InitSchema();
-        var assemblies = new Dictionary<Assembly, List<SchemaType>>();
-        foreach (var schemaType in types) {
-            var assembly = schemaType.Type.Assembly;
-            if (!assemblies.TryGetValue(assembly, out var list)) {
-                list = new List<SchemaType>();
-                assemblies.Add(assembly, list);
+        
+        var assemblyMap = new Dictionary<Assembly, int>();
+        var assemblies  = new List<Assembly>();
+        foreach (var type in types) {
+            var assembly = type.Assembly;
+            if (!assemblyMap.TryGetValue(assembly, out int assemblyIndex)) {
+                assemblyIndex = assemblies.Count;
+                assemblyMap.Add(assembly, assemblyIndex);
+                assemblies.Add(assembly);
             }
-            list.Add(schemaType);
+            schemaTypes.AddSchemaType(type, assemblyIndex);
         }
-        var dependants  = new List<EngineDependant>();
-        foreach (var pair in assemblies) {
-            var dependant = new EngineDependant(pair.Key, pair.Value);
-            dependants.Add(dependant);
-        }
+        var dependants  = schemaTypes.CreateSchemaTypes(typeStore, assemblies);
         entitySchema    = new EntitySchema(dependants, schemaTypes);
         Instance        = this;
         return entitySchema;
@@ -122,40 +120,27 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     public void RegisterComponent<T>() where T : struct, IComponent 
     {
         InitSchema();
-        if (!typeSet.Add(typeof(T))) {
-            return;
+        if (typeSet.Add(typeof(T))) {
+            types.Add(typeof(T));
+            SchemaUtils.CreateComponentType<T>(typeStore, 0, null); // dummy call to prevent trimming required type info
         }
-        var components      = schemaTypes.components;
-        var structIndex     = components.Count + 1;
-        var indexType       = ComponentIndexUtils.GetIndexType(typeof(T));
-        var componentType   = SchemaUtils.CreateComponentType<T>(typeStore, structIndex, indexType);
-        components.Add(componentType);
-        types.Add(componentType);
     }
     
     public void RegisterTag<T>()  where T : struct, ITag 
     {
         InitSchema();
-        if (!typeSet.Add(typeof(T))) {
-            return;
+        if (typeSet.Add(typeof(T))) {
+            types.Add(typeof(T));
+            SchemaUtils.CreateTagType<T>(0);                        // dummy call to prevent trimming required type info
         }
-        var tags            = schemaTypes.tags;
-        var tagIndex        = tags.Count + 1;
-        var tagType         = SchemaUtils.CreateTagType<T>(tagIndex);
-        tags.Add(tagType);
-        types.Add(tagType);
     }
     
     public void RegisterScript<T>()  where T : Script, new()
     {
         InitSchema();
-        if (!typeSet.Add(typeof(T))) {
-            return;
+        if (typeSet.Add(typeof(T))) {
+            types.Add(typeof(T));
+            SchemaUtils.CreateScriptType<T>(typeStore, 0);          // dummy call to prevent trimming required type info
         }
-        var scripts         = schemaTypes.scripts;
-        var scriptIndex     = scripts.Count + 1;
-        var scriptType      = SchemaUtils.CreateScriptType<T>(typeStore, scriptIndex);
-        scripts.Add(scriptType);
-        types.Add(scriptType);
     }
 }

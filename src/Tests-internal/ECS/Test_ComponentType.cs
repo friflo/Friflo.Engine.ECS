@@ -31,6 +31,7 @@ public static class Test_ComponentType
         AreEqual(expect, e!.Message);
     }
     
+    /*
     /// <summary> cover <see cref="SchemaUtils.CreateSchemaType"/> </summary>
     [Test]
     public static void Test_ComponentType_CreateSchemaType()
@@ -45,7 +46,7 @@ public static class Test_ComponentType
             SchemaUtils.CreateSchemaType(typeof(Guid), null, schemaTypes);
         });
         AreEqual("Cannot create SchemaType for Type: System.Guid", e!.Message);
-    }
+    } */
     
     [Test]
     public static void Test_ComponentType_DebugView()

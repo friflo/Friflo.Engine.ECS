@@ -6,19 +6,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Friflo.Engine.ECS.Index;
 using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
-
-internal sealed class SchemaTypes
-{
-    internal readonly   List<ComponentType>         components          = new ();
-    internal readonly   List<ScriptType>            scripts             = new ();
-    internal readonly   List<TagType>               tags                = new ();
-}
 
 internal static class SchemaUtils
 {
@@ -38,66 +30,21 @@ internal static class SchemaUtils
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
         
-        var dependants  = assemblyLoader.dependants;
         var schemaTypes = new SchemaTypes();
         var types       = new List<Type>();
-        foreach (var assembly in assemblies) {
+        for (int n = 0; n < assemblies.Length; n++) {
+            var assembly = assemblies[n];
             AssemblyLoader.GetComponentTypes(assembly, types);
-            var engineTypes = new List<SchemaType>();
             foreach (var type in types) {
-                var schemaType = CreateSchemaType(type, typeStore, schemaTypes);
-                engineTypes.Add(schemaType);
+                schemaTypes.AddSchemaType(type, n);
             }
-            dependants.Add(new EngineDependant (assembly, engineTypes));
+        }
+        var dependants = schemaTypes.CreateSchemaTypes(typeStore, assemblies);
+        foreach (var dependant in dependants) {
+            assemblyLoader.dependants.Add(dependant);
         }
         Console.WriteLine(assemblyLoader);
         return new EntitySchema(dependants, schemaTypes);
-    }
-    
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Not called for NativeAOT")]
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
-    internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore, SchemaTypes schemaTypes)
-    {
-        const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        
-        if (type.IsValueType) {
-            if (typeof(ITag).IsAssignableFrom(type))
-            {
-                // type: ITag
-                var tagIndex        = schemaTypes.tags.Count + 1;
-                var createParams    = new object[] { tagIndex };
-                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
-                var genericMethod   = method!.MakeGenericMethod(type);
-                var tagType         = (TagType)genericMethod.Invoke(null, createParams);
-                schemaTypes.tags.Add(tagType);
-                return tagType;
-            }
-            if (typeof(IComponent).IsAssignableFrom(type))
-            {
-                // type: IComponent
-                var structIndex     = schemaTypes.components.Count + 1;
-                var indexType       = ComponentIndexUtils.GetIndexType(type);
-                var createParams    = new object[] { typeStore, structIndex, indexType };
-                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
-                var genericMethod   = method!.MakeGenericMethod(type);
-                var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
-                schemaTypes.components.Add(componentType);
-                return componentType;
-            }
-        } else {
-            if (type.IsSubclassOf(typeof(Script)))
-            {
-                // type: Script
-                var scriptIndex     = schemaTypes.scripts.Count + 1;
-                var createParams    = new object[] { typeStore, scriptIndex };
-                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);
-                var genericMethod   = method!.MakeGenericMethod(type);
-                var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);
-                schemaTypes.scripts.Add(scriptType);
-                return scriptType;
-            }
-        }
-        throw new InvalidOperationException($"Cannot create SchemaType for Type: {type}");
     }
     
     internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex, Type indexType)
