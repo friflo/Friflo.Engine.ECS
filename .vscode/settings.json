@@ -41,6 +41,7 @@
         "codecov",
         "Dependants",
         "Entitas",
+        "fenn",
         "Flecs",
         "globaltool",
         "Leopotam",
