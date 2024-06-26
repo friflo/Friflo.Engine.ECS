@@ -135,13 +135,13 @@ All query optimizations are using the same `query` but with different enumeratio
 
 ## **Relationships**
 
-New in **v3.0.0-preview.1**
+![new](docs/images/new.svg) in **v3.0.0-preview.1**
 
 Link relationships enable creating a *reference* from one entity to another.  
 This is accomplished by adding a link component to an entity referencing another entity as shown below.  
 In SQL terms: A link component contains a *secondary key* field referencing an entity by id - the *primary key*.
 
-This implementation uses a different approach than **flecs** or other C# implementations similar to **flecs**.  
+This implementation uses a different approach than **flecs** or other ECS implementations similar to **flecs**.  
 It uses the same data structures and algorithms used for indexed components. See [Search](#search).  
 The main differences compared with **flecs** are:
 
@@ -183,13 +183,13 @@ public static void Relationships()
     var query = store.Query().HasValue<FollowComponent, Entity>(targets[0]);
     Console.WriteLine($"query: {query.Count}");                             // > query: 1
     
-    // get all linked entities. O(1)
+    // get all entities linked by a FollowComponent. O(1)
     var allTargets = store.GetAllLinkedEntities<FollowComponent>();
     Console.WriteLine($"all targets: {allTargets.Count}");                  // > all targets: 1000
 }
 ```
 
-This features is work in progress. todo:
+This feature is work in progress. todo:
 
 - [ ] Update index by all methods adding, removing or updating a link component
 - [ ] Remove link component from index if entity is deleted
@@ -203,7 +203,7 @@ for the challenge to improve the feature set and performance of this project!
 
 ## **Search**
 
-New in **v3.0.0-preview.1**
+![new](docs/images/new.svg) in **v3.0.0-preview.1**
 
 **Friflo.Engine.ECS** enables efficient search of indexed component values.  
 This enables **full text search** by using `string` as the indexed component type like in the example below.  
@@ -248,7 +248,7 @@ public static void IndexedComponents()
     Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
 }
 ```
-This features is work in progress. todo:
+This feature is work in progress. todo:
 
 - [ ] Update index by all methods adding, removing or updating an indexed component
 - [ ] Remove indexed component from index if entity is deleted

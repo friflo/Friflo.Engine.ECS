@@ -207,7 +207,7 @@ public static void Relationships()
     var query = store.Query().HasValue<FollowComponent, Entity>(targets[0]);
     Console.WriteLine($"query: {query.Count}");                             // > query: 1
     
-    // get all linked entities. O(1)
+    // get all entities linked by a FollowComponent. O(1)
     var allTargets = store.GetAllLinkedEntities<FollowComponent>();
     Console.WriteLine($"all targets: {allTargets.Count}");                  // > all targets: 1000
 }
