@@ -191,6 +191,8 @@ public static void Relationships()
     Console.WriteLine($"all targets: {allTargets.Count}");                  // > all targets: 1000
 }
 ```
+The API related to link components is in namespace [Friflo.Engine.ECS.Index](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Friflo.Engine.ECS.Index.md).
+
 This feature is work in progress but ready to use.  
 The following operations will be executed by the ECS automatically. For now the application must execute them itself.
 
@@ -253,6 +255,8 @@ public static void IndexedComponents()
     Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
 }
 ```
+The API related to indexed components is in namespace [Friflo.Engine.ECS.Index](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Friflo.Engine.ECS.Index.md).
+
 This feature is work in progress but ready to use.  
 The following operations will be executed by the ECS automatically. For now the application must execute them itself.
 
