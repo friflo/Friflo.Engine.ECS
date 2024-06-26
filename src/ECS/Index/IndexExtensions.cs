@@ -76,7 +76,7 @@ public static class IndexExtensions
     ///   </item>
     ///   <item>
     ///     The method id a specialized version of <see cref="GetAllIndexedComponentValues{TComponent,TValue}"/><br/>
-    ///     using <c> TComponent = ILinkComponent></c> and <c>TValue = Entity</c>.  
+    ///     using <c> TComponent = ILinkComponent</c> and <c>TValue = Entity</c>.  
     ///   </item>
     /// </list>
     /// </remarks>
