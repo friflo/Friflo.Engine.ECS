@@ -188,8 +188,8 @@ public static void Relationships()
     Console.WriteLine($"all targets: {allTargets.Count}");                  // > all targets: 1000
 }
 ```
-
-This feature is work in progress. todo:
+This feature is work in progress but ready to use.  
+The following operations will be executed by the ECS automatically. For now the application must execute them itself.
 
 - [ ] Update index by all methods adding, removing or updating a link component
 - [ ] Remove link component from index if entity is deleted
@@ -249,7 +249,8 @@ public static void IndexedComponents()
     Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
 }
 ```
-This feature is work in progress. todo:
+This feature is work in progress but ready to use.  
+The following operations will be executed by the ECS automatically. For now the application must execute them itself.
 
 - [ ] Update index by all methods adding, removing or updating an indexed component
 - [ ] Remove indexed component from index if entity is deleted
