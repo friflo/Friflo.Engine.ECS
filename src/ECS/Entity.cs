@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Engine.ECS.Index;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
@@ -121,7 +122,7 @@ namespace Friflo.Engine.ECS;
 ///     <see cref="GetComponent{T}"/> - read / write<br/>
 ///     <see cref="TryGetComponent{T}"/>            <br/>
 ///     <see cref="AddComponent{T}()"/>             <br/>
-///     <see cref="RemoveComponent{T}"/>            <br/>
+///     <see cref="RemoveComponent{T}()"/>          <br/>
 /// </item>
 /// <item>  <b>components</b> · common              <br/>
 ///     <see cref="Name"/>                          <br/>
@@ -364,6 +365,10 @@ public readonly struct Entity : IEquatable<Entity>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructInfo<T>.Index);
+    }
+    
+    internal bool RemoveRelation<T, TValue>(TValue value) where T : struct, IRelationComponent<TValue> {
+        return RelationArchetype.RemoveRelation<T, TValue>(store, Id, value);
     }
     #endregion
 
@@ -609,7 +614,7 @@ public readonly struct Entity : IEquatable<Entity>
                                                                           remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
     /// <summary>
     /// Add / remove an event handler for <see cref="ComponentChanged"/> events triggered by: <br/>
-    /// <see cref="AddComponent{T}()"/> <br/> <see cref="RemoveComponent{T}"/>.<br/>
+    /// <see cref="AddComponent{T}()"/> <br/> <see cref="RemoveComponent{T}()"/>.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#event">Example.</a>
     /// </summary>
     public event Action<ComponentChanged>       OnComponentChanged      { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);

@@ -26,6 +26,8 @@ public abstract class ComponentType : SchemaType
     
     public   readonly   Type        IndexType;      //  8
     
+    internal readonly   Type        RelationType;     //  1
+    
     internal abstract   StructHeap          CreateHeap();
     internal abstract   bool                RemoveEntityComponent  (Entity entity);
     internal abstract   bool                AddEntityComponent     (Entity entity);
@@ -34,13 +36,14 @@ public abstract class ComponentType : SchemaType
     internal abstract   BatchComponent      CreateBatchComponent();
     internal abstract   ComponentCommands   CreateComponentCommands();
     
-    protected ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize)
+    protected ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize, Type relationType)
         : base (componentKey, type, Component)
     {
-        StructIndex = structIndex;
-        IsBlittable = GetBlittableType(type) == BlittableType.Blittable;
-        StructSize  = byteSize;
-        IndexType   = indexType;
+        StructIndex     = structIndex;
+        IsBlittable     = GetBlittableType(type) == BlittableType.Blittable;
+        StructSize      = byteSize;
+        IndexType       = indexType;
+        RelationType    = relationType;
     }
 }
 
@@ -50,9 +53,11 @@ internal static class StructInfo<T>
     // --- static internal
     // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_StructIndex()
     // readonly improves performance significant
-    internal static readonly    int     Index    = SchemaTypeUtils.GetStructIndex(typeof(T));
+    internal static readonly    int     Index       = SchemaTypeUtils.GetStructIndex(typeof(T));
     
-    internal static readonly    bool    HasIndex = SchemaTypeUtils.HasIndex(typeof(T));
+    internal static readonly    bool    HasIndex    = SchemaTypeUtils.HasIndex(typeof(T));
+    
+    internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T));
 }
 
 internal sealed class ComponentType<T> : ComponentType 
@@ -72,8 +77,8 @@ internal sealed class ComponentType<T> : ComponentType
     private  readonly   TypeStore       typeStore;
     #endregion
 
-    internal ComponentType(string componentKey, int structIndex, Type indexType, TypeStore typeStore)
-        : base(componentKey, structIndex, typeof(T), indexType, ByteSize)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, TypeStore typeStore, Type relationType)
+        : base(componentKey, structIndex, typeof(T), indexType, ByteSize, relationType)
     {
         this.typeStore = typeStore;
     }

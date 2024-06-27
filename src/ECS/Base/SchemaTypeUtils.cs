@@ -27,6 +27,15 @@ internal static class SchemaTypeUtils
         return false;
     }
     
+    internal static bool IsRelation(Type type)
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        if (schema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
+            return componentType.RelationType != null;
+        }
+        return false;
+    }
+    
     internal static int GetTagIndex(Type type)
     {
         var schema = EntityStoreBase.Static.EntitySchema;

@@ -170,6 +170,22 @@ public sealed class Archetype
         // tags             = default   // has no tags
     }
     
+    /// <summary> used by <see cref="RelationArchetype"/> </summary>
+    internal Archetype(in ArchetypeConfig config, StructHeap heap)
+    {
+        memory.capacity = ArchetypeUtils.MinCapacity;
+        memory.shrinkThreshold  = -1;
+        store           = config.store;
+        entityStore     = store as EntityStore;
+        archIndex       = config.archetypeIndex;
+        componentCount  = 1;
+        structHeaps     = new [] { heap };
+        entityIds       = new int [memory.capacity];
+        componentTypes  = new ComponentTypes(structHeaps);
+        key             = new ArchetypeKey(this);
+        heap.SetArchetypeDebug(this);
+    }
+    
     /// <summary>
     /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
     /// </summary>

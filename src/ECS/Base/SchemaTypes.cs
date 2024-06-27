@@ -127,7 +127,8 @@ internal sealed class SchemaTypes
     {
         var structIndex     = components.Count + 1;
         var indexType       = ComponentIndexUtils.GetIndexType(type);
-        var createParams    = new object[] { typeStore, structIndex, indexType };
+        var relationType    = RelationComponentUtils.GetRelationArchetype(type);
+        var createParams    = new object[] { typeStore, structIndex, indexType, relationType };
         var method          = typeof(SchemaUtils).GetMethod(nameof(SchemaUtils.CreateComponentType), Flags);
         var genericMethod   = method!.MakeGenericMethod(type);
         var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
