@@ -439,7 +439,7 @@ public static class Test_Entity_Tree
         AreEqual("id: 1  [EntityName]", entity.ToString());
         
         entity.DeleteEntity();
-        AreEqual("id: 1  (detached)",   entity.ToString());
+        AreEqual("id: 1  null",   entity.ToString());
     }
     
     [Test]
@@ -486,7 +486,7 @@ public static class Test_Entity_Tree
         AreEqual(0,         root.ChildCount);
         AreEqual(floating,  subChild.TreeMembership);
         IsNull  (child.Archetype);
-        AreEqual("id: 2  (detached)", child.ToString());
+        AreEqual("id: 2  null", child.ToString());
         IsTrue(subChild ==  store.GetEntityById(3));
         AreEqual(detached,  child.StoreOwnership);
         IsNull  (child.Archetype);

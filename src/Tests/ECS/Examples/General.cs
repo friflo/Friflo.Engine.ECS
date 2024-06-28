@@ -38,6 +38,16 @@ public static void CreateEntity()
 }
 
 [Test]
+public static void DeleteEntity()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    entity.DeleteEntity();
+    var isDeleted = entity.IsNull;
+    Console.WriteLine($"deleted: {isDeleted}");         // > deleted: True
+}
+
+[Test]
 public static void DisableEntity()
 {
     var store   = new EntityStore();

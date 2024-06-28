@@ -112,7 +112,7 @@ public static class EntityUtils
         sb.Append("id: ");
         sb.Append(id);
         if (archetype == null) {
-            sb.Append("  (detached)");
+            sb.Append("  null");
             return sb.ToString();
         }
         var entity = new Entity(archetype.entityStore, id);
