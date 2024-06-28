@@ -5,6 +5,7 @@
 // Hard rule: this file MUST NOT use type: Entity
 
 using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Relations;
 using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter

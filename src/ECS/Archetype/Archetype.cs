@@ -170,7 +170,7 @@ public sealed class Archetype
         // tags             = default   // has no tags
     }
     
-    /// <summary> used by <see cref="RelationsArchetype"/> </summary>
+    /// <summary> used by <see cref="ECS.Relations.RelationsArchetype"/> </summary>
     internal Archetype(in ArchetypeConfig config, StructHeap heap)
     {
         memory.capacity = ArchetypeUtils.MinCapacity;

@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS.Index;
+namespace Friflo.Engine.ECS;
 
 internal interface IRelationComponent<out TValue> : IComponent
 {

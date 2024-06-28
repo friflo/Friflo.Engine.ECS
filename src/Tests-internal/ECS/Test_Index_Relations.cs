@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
-using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Relations;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UnusedVariable
 // ReSharper disable AccessToModifiedClosure
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable RedundantExplicitArrayCreation
@@ -76,6 +77,9 @@ public static class Test_Index_Relations
         entity3.AddComponent(new AttackRelation { target = target10, speed = 10 });
         entity3.AddComponent(new AttackRelation { target = target11, speed = 11 });
         entity3.AddComponent(new AttackRelation { target = target12, speed = 12 });
+        
+        emptyRelations = entity0.GetRelations<AttackRelation, Entity>();
+        AreEqual(0, emptyRelations.Length);
         {
             var query = store.Query<AttackRelation>();
             int count = 0;
