@@ -10,7 +10,7 @@ internal static class RelationExtensions
     public static Relations<TComponent> GetRelations<TComponent, TValue>(this Entity entity) where TComponent : struct, IRelationComponent<TValue>
     {
         var index       = StructInfo<TComponent>.Index;
-        var relations   = (RelationArchetype<TComponent, TValue>)entity.Store.relationMap[index];
+        var relations   = (RelationsArchetype<TComponent, TValue>)entity.Store.relationsMap[index];
         if (relations != null) {
             return relations.GetRelations<TComponent>(entity);
         }
@@ -18,6 +18,6 @@ internal static class RelationExtensions
     }
     
     public static bool RemoveRelation<T, TValue>(this Entity entity, TValue value) where T : struct, IRelationComponent<TValue> {
-        return RelationArchetype.RemoveRelation<T, TValue>(entity.Store, entity.Id, value);
+        return RelationsArchetype.RemoveRelation<T, TValue>(entity.Store, entity.Id, value);
     }
 }

@@ -78,7 +78,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
-                    internal  readonly  RelationArchetype[]     relationMap;        //  8
+                    internal  readonly  RelationsArchetype[]    relationsMap;       //  8
     
                     private             InternBase              internBase;         // 40
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
@@ -132,7 +132,7 @@ public abstract partial class EntityStoreBase
         var config          = GetArchetypeConfig(this);
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
-        relationMap         = new RelationArchetype[config.maxStructIndex];
+        relationsMap        = new RelationsArchetype[config.maxStructIndex];
         AddArchetype(this, defaultArchetype);
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());

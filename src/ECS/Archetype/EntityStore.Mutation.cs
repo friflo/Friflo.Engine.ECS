@@ -31,7 +31,7 @@ public partial class EntityStoreBase
         ComponentChangedAction  action;
         bool                    added;
         if (StructInfo<T>.IsRelation) {
-            return RelationArchetype.AddRelation(store, id, component);
+            return RelationsArchetype.AddRelation(store, id, component);
         }
         var oldHeap = (StructHeap<T>)arch.heapMap[structIndex];
         StructHeap<T> newHeap;
