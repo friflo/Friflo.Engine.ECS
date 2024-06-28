@@ -94,7 +94,7 @@ public class QueryFilter
         frozen = true;
         return this;
     }
-
+    
 #region change tags filter
     /// <summary> Include entities containing all specified <paramref name="tags"/>. </summary>
     public QueryFilter AllTags(in Tags tags) {

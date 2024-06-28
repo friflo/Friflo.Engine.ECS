@@ -71,7 +71,9 @@ public partial class EntityStoreBase
         where T1: struct, IComponent
         where T2: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2>(this, signature, null);
+        var result = new ArchetypeQuery<T1, T2>(this, signature, null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -82,7 +84,9 @@ public partial class EntityStoreBase
         where T1: struct, IComponent
         where T2: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>(), null);
+        var result = new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>(), null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -93,7 +97,9 @@ public partial class EntityStoreBase
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        return new ArchetypeQuery<T1,T2>(this, Signature.Get<T1,T2>(), filter);
+        var result = new ArchetypeQuery<T1,T2>(this, Signature.Get<T1,T2>(), filter);
+        result.ValidateQuery();
+        return result;
     }
     #endregion
     
@@ -107,7 +113,9 @@ public partial class EntityStoreBase
         where T2: struct, IComponent
         where T3: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3>(this, signature, null);
+        var result = new ArchetypeQuery<T1, T2, T3>(this, signature, null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -119,7 +127,9 @@ public partial class EntityStoreBase
         where T2: struct, IComponent
         where T3: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>(), null);
+        var result = new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>(), null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -131,7 +141,9 @@ public partial class EntityStoreBase
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        return new ArchetypeQuery<T1,T2,T3>(this, Signature.Get<T1,T2,T3>(), filter);
+        var result = new ArchetypeQuery<T1,T2,T3>(this, Signature.Get<T1,T2,T3>(), filter);
+        result.ValidateQuery();
+        return result;
     }
     #endregion
     
@@ -146,7 +158,9 @@ public partial class EntityStoreBase
         where T3: struct, IComponent
         where T4: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4>(this, signature, null);
+        var result = new ArchetypeQuery<T1, T2, T3, T4>(this, signature, null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -159,7 +173,9 @@ public partial class EntityStoreBase
         where T3: struct, IComponent
         where T4: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>(), null);
+        var result = new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>(), null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -172,7 +188,9 @@ public partial class EntityStoreBase
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        return new ArchetypeQuery<T1,T2,T3,T4>(this, Signature.Get<T1,T2,T3,T4>(), filter);
+        var result = new ArchetypeQuery<T1,T2,T3,T4>(this, Signature.Get<T1,T2,T3,T4>(), filter);
+        result.ValidateQuery();
+        return result;
     }
     #endregion
     
@@ -187,7 +205,9 @@ public partial class EntityStoreBase
         where T4: struct, IComponent
         where T5: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature, null);
+        var result = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature, null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -201,7 +221,9 @@ public partial class EntityStoreBase
         where T4: struct, IComponent
         where T5: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>(), null);
+        var result = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>(), null);
+        result.ValidateQuery();
+        return result;
     }
     
     /// <summary>
@@ -215,7 +237,9 @@ public partial class EntityStoreBase
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        return new ArchetypeQuery<T1,T2,T3,T4,T5>(this, Signature.Get<T1,T2,T3,T4,T5>(), filter);
+        var result = new ArchetypeQuery<T1,T2,T3,T4,T5>(this, Signature.Get<T1,T2,T3,T4,T5>(), filter);
+        result.ValidateQuery();
+        return result;
     }
     #endregion
 }

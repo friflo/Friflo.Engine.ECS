@@ -181,8 +181,10 @@ public sealed class Archetype
         componentCount  = 1;
         structHeaps     = new [] { heap };
         entityIds       = new int [memory.capacity];
+        heapMap         = new StructHeap[config.maxStructIndex];
         componentTypes  = new ComponentTypes(structHeaps);
         key             = new ArchetypeKey(this);
+        heapMap[heap.structIndex] = heap;
         heap.SetArchetypeDebug(this);
     }
     

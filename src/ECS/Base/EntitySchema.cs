@@ -56,7 +56,7 @@ public sealed class EntitySchema
     
     /// <summary> A map to lookup <see cref="TagType"/>'s by <see cref="System.Type"/>. </summary>
     public   IReadOnlyDictionary<Type,   TagType>       TagTypeByType       => tagTypeByType;
-
+    
     public   override string                            ToString()          => GetString();
 
     #endregion
@@ -76,6 +76,7 @@ public sealed class EntitySchema
     // --- lookup: tags
     [Browse(Never)] internal readonly   Dictionary<string, TagType>         tagTypeByName;
     [Browse(Never)] private  readonly   Dictionary<Type,   TagType>         tagTypeByType;
+    [Browse(Never)] internal readonly   ComponentTypes                      relationTypes;
     #endregion
     
 #region internal methods
@@ -112,6 +113,9 @@ public sealed class EntitySchema
             }
             componentTypeByType.Add (componentType.Type,            componentType);
             components              [componentType.StructIndex] =   componentType;
+            if (componentType.RelationType != null) {
+                relationTypes.Add(new ComponentTypes(componentType));
+            }
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];
 

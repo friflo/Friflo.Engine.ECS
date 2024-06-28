@@ -85,6 +85,7 @@ public class ArchetypeQuery
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  16  ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      components;         //  32
     [Browse(Never)] private  readonly   bool                singleArchetype;    //   1  if true it returns only the entities a specific archetype
+    [Browse(Never)] private  readonly   ComponentType       relationQuery;      //   8
     #endregion
 
 #region tags
@@ -205,6 +206,7 @@ public class ArchetypeQuery
         components      = new ComponentTypes(indexes);
         signatureIndexes= indexes;
         Filter          = filter ?? new QueryFilter();
+        relationQuery   = GetRelationQuery(components);
     }
     
     /// <summary>
@@ -254,7 +256,7 @@ public class ArchetypeQuery
             archetypeCount      = 0;
             lastArchetypeCount  = 0;
         }
-        if (Filter.valueConditions.Count > 0) {
+        if (relationQuery != null || Filter.valueConditions.Count > 0) {
             return GetValueConditionArchetypes();
         }
         if (store.ArchetypeCount == lastArchetypeCount) {
@@ -269,12 +271,14 @@ public class ArchetypeQuery
         var nextArchetypes      = archetypes;
         var lastCount           = lastArchetypeCount;
         var nextCount           = archetypeCount;
+        var requiredComponents  = components;
+        requiredComponents.Remove(EntityStoreBase.Static.EntitySchema.relationTypes);
 
         for (int n = lastCount; n < newStoreLength; n++)
         {
             var archetype = storeArchetypes[n];
             // Filter conditions same as in IsMatch()
-            if (!archetype.componentTypes.HasAll(components)) {
+            if (!archetype.componentTypes.HasAll(requiredComponents)) {
                 continue;
             }
             if (!localFilter.IsTagsMatch(archetype.tags)) {
@@ -308,7 +312,7 @@ public class ArchetypeQuery
         var nodes           = entityStore.nodes;
         var nextArchetypes  = archetypes;
         var nextPositions   = chunkPositions;
-        var nextCount       = 0;
+        var count           = 0;
         
         // use nextPositions also to store ids temporarily
         CopyIds(idSet, ref nextPositions);
@@ -323,23 +327,26 @@ public class ArchetypeQuery
             if (!IsMatch(archetype.componentTypes, archetype.tags)) {
                 continue;
             }
-            if (nextCount == nextArchetypes.Length) {
-                var length = Math.Max(4, 2 * nextCount);
+            if (count == nextArchetypes.Length) {
+                var length = Math.Max(4, 2 * count);
                 ArrayUtils.Resize(ref nextArchetypes, length);
             }
-            nextArchetypes[nextCount]   = archetype;
-            nextPositions [nextCount++] = node.compIndex;
+            nextArchetypes[count]   = archetype;
+            nextPositions [count++] = node.compIndex;
+        }
+        if (relationQuery != null) {
+            AddRelationEntities(entityStore, ref count, ref nextPositions, ref nextArchetypes);
         }
         // --- order matters in case of parallel execution
         chunkPositions      = nextPositions;
         archetypes          = nextArchetypes;   // using changed (added) archetypes with old archetypeCount         => OK
-        archetypeCount      = nextCount;        // archetypes already changed                                       => OK
-        return new Archetypes(nextArchetypes, nextCount, nextPositions);
+        archetypeCount      = count;            // archetypes already changed                                       => OK
+        return new Archetypes(nextArchetypes, count, nextPositions);
     }
     
     private int GetEntityCount()
     {
-        if (Filter.valueConditions.Count == 0) {
+        if (relationQuery == null && Filter.valueConditions.Count == 0) {
             return Archetype.GetEntityCount(GetArchetypesSpan());
         }
         // --- get number of entities of a query with value conditions
@@ -362,6 +369,9 @@ public class ArchetypeQuery
             }
             count++;
         }
+        if (relationQuery != null) {
+            count += CountRelationEntities(entityStore);
+        }
         return count;
     }
     
@@ -376,13 +386,15 @@ public class ArchetypeQuery
             target[index++] = id;
         }
     }
-    
+
     /// <summary>
     /// Returns true if the passed <paramref name="componentTypes"/> and <paramref name="tags"/> matches the query filter.
     /// </summary>
     public bool IsMatch(in ComponentTypes componentTypes, in Tags tags)
     {
-        if (!componentTypes.HasAll(components)) {
+        var requiredComponents  = components;
+        requiredComponents.Remove(EntityStoreBase.Static.EntitySchema.relationTypes);
+        if (!componentTypes.HasAll(requiredComponents)) {
             return false;
         }
         if (!Filter.IsTagsMatch(tags)) {
@@ -440,6 +452,72 @@ public class ArchetypeQuery
             return eventFilter;
         }
         return eventFilter = new EventFilter(Store.EventRecorder);
+    }
+    #endregion
+    
+#region relations
+    private static ComponentType GetRelationQuery(in ComponentTypes componentTypes)
+    {
+        if (!componentTypes.HasAny(EntityStoreBase.Static.EntitySchema.relationTypes)) {
+            return null;
+        }
+        foreach (var componentType in componentTypes) {
+            if (componentType.RelationType == null) continue;
+            return componentType;
+        }
+        return null;
+    }
+    
+    private void AddRelationEntities(EntityStore entityStore, ref int count, ref int[] chunkPositions, ref Archetype[] archetypes)
+    {
+        var relations   = entityStore.relationMap[relationQuery.StructIndex];
+        var archetype   = relations.archetype;
+        var entityIds   = archetype.entityIds;
+        var nodes       = entityStore.nodes;
+        var entityCount = archetype.entityCount;
+        for (int n = 0; n < entityCount; n++)
+        {
+            var entityArchetype = nodes[entityIds[n]].archetype;
+            if (!IsMatch(entityArchetype.componentTypes, entityArchetype.tags)) {
+                continue;
+            }
+            if (count == chunkPositions.Length) {
+                ArrayUtils.Resize(ref chunkPositions, Math.Max(4, 2 * chunkPositions.Length));
+            }
+            if (count == archetypes.Length) {
+                ArrayUtils.Resize(ref archetypes,     Math.Max(4, 2 * archetypes.Length));
+            }
+            archetypes    [count] = archetype;
+            chunkPositions[count] = n; 
+            count++;
+        }
+    }
+    
+    private int CountRelationEntities(EntityStore entityStore)
+    {
+        int count = 0;
+        var relations   = entityStore.relationMap[relationQuery.StructIndex];
+        var archetype   = relations.archetype;
+        var entityIds   = archetype.entityIds;
+        var nodes       = entityStore.nodes;
+        var entityCount = archetype.entityCount;
+        for (int n = 0; n < entityCount; n++)
+        {
+            var entityArchetype = nodes[entityIds[n]].archetype;
+            if (!IsMatch(entityArchetype.componentTypes, entityArchetype.tags)) {
+                continue;
+            }
+            count++;
+        }
+        return count;
+    }
+    
+    internal void ValidateQuery()
+    {
+        if (relationQuery == null) {
+            return;
+        }
+        if (components.Count > 1) throw new InvalidOperationException("relation component query cannot have other query components");
     }
     #endregion
 }

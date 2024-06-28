@@ -12,6 +12,12 @@ namespace Friflo.Engine.ECS;
 
 internal abstract class RelationArchetype
 {
+    internal  readonly   Archetype  archetype;
+    
+    internal RelationArchetype(Archetype archetype) {
+        this.archetype  = archetype;
+    }
+    
     protected abstract bool AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
     
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component) where TComponent : struct, IComponent
@@ -46,6 +52,8 @@ internal abstract class RelationArchetype
 
 internal abstract class RelationArchetype<TValue> : RelationArchetype
 {
+    internal RelationArchetype(Archetype archetype) : base(archetype) {}
+    
     internal abstract bool RemoveRelation(int id, TValue value);
 }
     
@@ -54,15 +62,14 @@ internal abstract class RelationArchetype<TValue> : RelationArchetype
 /// </summary>
 internal sealed class RelationArchetype<TRelationComponent, TValue> : RelationArchetype<TValue> where TRelationComponent : struct, IRelationComponent<TValue>
 {
-    private  readonly   Archetype                       archetype;
+
     private  readonly   Dictionary<int, IdArray>        entityMap   = new ();
     private  readonly   IdArrayHeap                     idHeap      = new();
     private  readonly   StructHeap                      heap;
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
-    public RelationArchetype(Archetype archetype, StructHeap heap) {
+    public RelationArchetype(Archetype archetype, StructHeap heap) : base(archetype) {
         this.heap       = heap;
-        this.archetype  = archetype;
         heapGeneric     = (StructHeap<TRelationComponent>)heap;
     }
     
