@@ -16,4 +16,8 @@ internal static class RelationExtensions
         }
         return default;
     }
+    
+    public static bool RemoveRelation<T, TValue>(this Entity entity, TValue value) where T : struct, IRelationComponent<TValue> {
+        return RelationArchetype.RemoveRelation<T, TValue>(entity.Store, entity.Id, value);
+    }
 }

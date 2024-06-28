@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using Friflo.Engine.ECS.Index;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
@@ -365,10 +364,6 @@ public readonly struct Entity : IEquatable<Entity>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructInfo<T>.Index);
-    }
-    
-    internal bool RemoveRelation<T, TValue>(TValue value) where T : struct, IRelationComponent<TValue> {
-        return RelationArchetype.RemoveRelation<T, TValue>(store, Id, value);
     }
     #endregion
 
