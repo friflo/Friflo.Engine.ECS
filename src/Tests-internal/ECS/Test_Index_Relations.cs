@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
@@ -92,27 +94,94 @@ public static class Test_Index_Relations
             count = 0;
             foreach (var entity in query.Entities) {
                 count++;
+                var relationCount = 0;
                 var relations = entity.GetRelations<AttackRelation, Entity>();
                 switch (entity.Id) {
                     case 1:
                         AreEqual(1,  relations.Length);
                         AreEqual(42, relations[0].speed);
+                        foreach (var relation in relations) {
+                            switch (relationCount++) {
+                                case 0: AreEqual(42, relation.speed); break;
+                            }
+                        }
+                        AreEqual(1, relationCount);
                         break;
                     case 2:
                         AreEqual(2,  relations.Length);
                         AreEqual(20, relations[0].speed);
                         AreEqual(21, relations[1].speed);
+                        foreach (var relation in relations) {
+                            switch (relationCount++) {
+                                case 0: AreEqual(20, relation.speed); break;
+                                case 1: AreEqual(21, relation.speed); break;
+                            }
+                        }
+                        AreEqual(2, relationCount);
                         break;
                     case 3:
                         AreEqual(3,  relations.Length);
                         AreEqual(10, relations[0].speed);
                         AreEqual(11, relations[1].speed);
                         AreEqual(12, relations[2].speed);
+                        foreach (var relation in relations) {
+                            switch (relationCount++) {
+                                case 0: AreEqual(10, relation.speed); break;
+                                case 1: AreEqual(11, relation.speed); break;
+                                case 2: AreEqual(12, relation.speed); break;
+                            }
+                        }
+                        AreEqual(3, relationCount);
                         break;
                 }
             }
             AreEqual(6, count);
         }
+    }
+    
+    [Test]
+    public static void Test_Index_Relations_Enumerator()
+    {
+        var store    = new EntityStore();
+        var entity  = store.CreateEntity(2);
+
+        var target10 = store.CreateEntity();
+        var target11 = store.CreateEntity();
+        entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
+        entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
+        
+        var relations = entity.GetRelations<AttackRelation, Entity>();
+        
+        // --- IEnumerable<>
+        IEnumerable<AttackRelation> enumerable = relations;
+        var enumerator = enumerable.GetEnumerator();
+        using var enumerator1 = enumerator as IDisposable;
+        int count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(2, count);
+        
+        count = 0;
+        enumerator.Reset();
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(2, count);
+        
+        // --- IEnumerable
+        IEnumerable enumerable2 = relations;
+        count = 0;
+        foreach (var relation in enumerable2) {
+            count++;
+        }
+        AreEqual(2, count);
+    }
+    
+    [Test]
+    public static void Test_Index_Relations_query_exception()
+    {
+        var store    = new EntityStore();
         var e = Throws<InvalidOperationException>(() => {
             store.Query<AttackRelation, Position>();
         });

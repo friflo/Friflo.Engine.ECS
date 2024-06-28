@@ -42,7 +42,7 @@ internal readonly struct Relations<TComponent> : IEnumerable<TComponent>
     IEnumerator                           IEnumerable.GetEnumerator() => new RelationsEnumerator<TComponent>(this);
     
     // --- new
-    internal RelationsEnumerator<TComponent>          GetEnumerator() => new RelationsEnumerator<TComponent>(this);
+    public RelationsEnumerator<TComponent>          GetEnumerator() => new RelationsEnumerator<TComponent>(this);
 }
 
 
@@ -61,7 +61,7 @@ internal struct RelationsEnumerator<TComponent> : IEnumerator<TComponent>
         positions   = relations.positions;
         position    = relations.position;
         components  = relations.components;
-        start       = relations.start;
+        start       = relations.start - 1;
         last        = start + relations.Length;
         index       = start;
     }
