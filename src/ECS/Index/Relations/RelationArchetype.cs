@@ -73,6 +73,21 @@ internal sealed class RelationArchetype<TRelationComponent, TValue> : RelationAr
         heapGeneric     = (StructHeap<TRelationComponent>)heap;
     }
     
+    internal Relations<TComponent> GetRelations<TComponent>(Entity entity) where TComponent : struct, IComponent
+    {
+        entityMap.TryGetValue(entity.Id, out var array);
+
+        var count           = array.count;
+        var componentHeap   = (StructHeap<TComponent>)heap;
+        switch (count) {
+            case 0: return  new Relations<TComponent>();
+            case 1: return  new Relations<TComponent>(componentHeap.components, array.start);
+        }
+        var poolIndex   = IdArrayHeap.PoolIndex(count);
+        var positions   = idHeap.GetPool(poolIndex).Ids;
+        return new Relations<TComponent>(componentHeap.components, positions, array.start, array.count);
+    }
+    
 #region add component
 
 protected override bool AddComponent<TComponent>(int id, TComponent component)
