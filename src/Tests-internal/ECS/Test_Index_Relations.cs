@@ -147,10 +147,10 @@ public static class Test_Index_Relations
     public static void Test_Index_Relations_Enumerator()
     {
         var store    = new EntityStore();
-        var entity  = store.CreateEntity(2);
+        var entity  = store.CreateEntity(1);
 
-        var target10 = store.CreateEntity();
-        var target11 = store.CreateEntity();
+        var target10 = store.CreateEntity(10);
+        var target11 = store.CreateEntity(11);
         entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
         entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
         
@@ -180,6 +180,14 @@ public static class Test_Index_Relations
             count++;
         }
         AreEqual(2, count);
+        
+        var entity2  = store.CreateEntity(2);
+        enumerable2  = entity2.GetRelations<AttackRelation, Entity>();
+        count = 0;
+        foreach (var relation in enumerable2) {
+            count++;
+        }
+        AreEqual(0, count);
     }
     
     [Test]
