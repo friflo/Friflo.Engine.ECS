@@ -12,7 +12,8 @@ namespace Friflo.Engine.ECS.Relations;
 internal readonly struct Relations<TComponent> : IEnumerable<TComponent>
     where TComponent : struct, IComponent
 {
-    
+    public   override   string          ToString()  => $"Relations<{typeof(TComponent).Name}>[{Length}]";
+
     public   readonly   int             Length;     //  4
     internal readonly   int             start;      //  4
     internal readonly   int[]           positions;  //  8

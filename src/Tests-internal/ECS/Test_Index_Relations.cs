@@ -257,6 +257,29 @@ public static class Test_Index_Relations
     }
     
     [Test]
+    public static void Test_Index_Relations_adjust_position_on_remove_relation()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        entity1.AddComponent(new IntRelation { value = 1 });
+        entity1.AddComponent(new IntRelation { value = 2 });
+        // last relation IntRelation { value = 2 } at StructHeap<>.components[1] is moved to components[0]
+        // So its stored position need to be updated 
+        entity1.RemoveRelation<IntRelation, int>(1);
+        entity2.AddComponent(new IntRelation { value = 3 });
+        
+        var relations1 = entity1.GetRelations<IntRelation, int>();
+        var relations2 = entity2.GetRelations<IntRelation, int>();
+        AreEqual(1, relations1.Length);
+        AreEqual(2, relations1[0].value);
+        AreEqual(1, relations2.Length);
+        AreEqual(3, relations2[0].value);
+        
+        AreEqual("Relations<IntRelation>[1]", relations1.ToString());
+    }
+    
+    [Test]
     public static void Test_Index_Relations_int_relation()
     {
         var relationCount   = 10;

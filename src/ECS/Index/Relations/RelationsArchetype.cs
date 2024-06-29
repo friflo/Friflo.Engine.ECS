@@ -13,8 +13,8 @@ namespace Friflo.Engine.ECS.Relations;
 internal abstract class RelationsArchetype
 {
     internal  readonly  Archetype                   archetype;
-    internal  readonly  Dictionary<int, IdArray>    entityMap   = new ();
-    internal  readonly  IdArrayHeap                 idHeap      = new();
+    internal  readonly  Dictionary<int, IdArray>    entityMap           = new ();
+    internal  readonly  IdArrayHeap                 idHeap              = new();
     private   readonly  int                         indexBit;
     
     internal RelationsArchetype(ComponentType componentType, Archetype archetype) {
@@ -56,7 +56,7 @@ internal abstract class RelationsArchetype
     //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TValue>(archetype, heap);
     }
     
-#region non generic
+#region non generic add / remove
     internal int AddRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
@@ -70,6 +70,19 @@ internal abstract class RelationsArchetype
 
     internal void RemoveRelation(int id, int position, IdArray positions, int positionIndex)
     {
+        // --- adjust position in entityMap of last component
+        var lastPosition        = archetype.entityCount - 1;
+        var lastId              = archetype.entityIds[lastPosition];
+        entityMap.TryGetValue(lastId, out var curPositions);
+        var positionSpan        = curPositions.GetIdSpan(idHeap);
+        var curPositionIndex    = positionSpan.IndexOf(lastPosition);
+        curPositions.Set(curPositionIndex, position, idHeap);
+        // array with length == 1 is stored inplace
+        if (curPositions.count == 1) {
+            entityMap[lastId] = curPositions;
+        }
+        
+        // --- move last relation to position of removed relation
         Archetype.MoveLastComponentsTo(archetype, position);
         if (positions.count == 1) {
             entityMap.Remove(id);
@@ -123,7 +136,6 @@ internal sealed class RelationsArchetype<TRelationComponent, TValue> : Relations
     internal Relations<TComponent> GetRelations<TComponent>(Entity entity) where TComponent : struct, IComponent
     {
         entityMap.TryGetValue(entity.Id, out var array);
-
         var count           = array.count;
         var componentHeap   = (StructHeap<TComponent>)heap;
         switch (count) {
