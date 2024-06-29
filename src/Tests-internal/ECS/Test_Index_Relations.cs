@@ -259,29 +259,38 @@ public static class Test_Index_Relations
     [Test]
     public static void Test_Index_Relations_int_relation()
     {
-        var count   = 100;
-        var store   = new EntityStore();
-        var entity  = store.CreateEntity(1);
-
-        for (int n = 0; n < count; n++) {
-            entity.AddComponent(new IntRelation{ value = n });
+        var relationCount   = 10;
+        var entityCount     = 100;
+        var store           = new EntityStore();
+        var entities        = new List<Entity>();
+        for (int n = 0; n < entityCount; n++) {
+            entities.Add(store.CreateEntity());
         }
-        AreEqual($"Components: [] +{count}", entity.Components.ToString());
-        
-        for (int n = 0; n < count; n++) {
-            entity.RemoveRelation<IntRelation, int>(n);
+        foreach (var entity in entities) {
+            for (int n = 0; n < relationCount; n++) {
+                entity.AddComponent(new IntRelation{ value = n });
+            }
+            Mem.AreEqual($"Components: [] +{relationCount}", entity.Components.ToString());
         }
-        AreEqual("Components: []", entity.Components.ToString());
-        
+        foreach (var entity in entities) {
+            for (int n = 0; n < relationCount; n++) {
+                entity.RemoveRelation<IntRelation, int>(n);
+            }
+            Mem.AreEqual("Components: []", entity.Components.ToString());
+        }
         var start = Mem.GetAllocatedBytes();
-        for (int n = 0; n < count; n++) {
-            entity.AddComponent(new IntRelation{ value = n });
+        foreach (var entity in entities) {
+            for (int n = 0; n < relationCount; n++) {
+                entity.AddComponent(new IntRelation{ value = n });
+            }
+            Mem.AreEqual(relationCount, entity.Components.Count);
         }
-        Mem.AreEqual(count, entity.Components.Count);
-        for (int n = 0; n < count; n++) {
-            entity.RemoveRelation<IntRelation, int>(n);
+        foreach (var entity in entities) {
+            for (int n = 0; n < relationCount; n++) {
+                entity.RemoveRelation<IntRelation, int>(n);
+            }
+            Mem.AreEqual(0, entity.Components.Count);
         }
-        Mem.AreEqual(0, entity.Components.Count);
         Mem.AssertNoAlloc(start);
     }
     

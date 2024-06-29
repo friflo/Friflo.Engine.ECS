@@ -113,6 +113,7 @@ internal sealed class RelationsArchetype<TRelationComponent, TValue> : Relations
     
 #region add component
 
+/// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
 protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
         var relationValue = RelationUtils<TComponent, TValue>.GetRelationValue(component);
@@ -120,7 +121,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         entityMap.TryGetValue(id, out var positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
         var components2     = heapGeneric.components;
-        var components      = ((StructHeap<TComponent>)heap).components;
+        bool added          = true;
         int compIndex;
         for (int n = 0; n < positionSpan.Length; n++)
         {
@@ -128,13 +129,14 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         //  var relation    = RelationUtils<TComponent, TValue>.GetRelationValue(components[compIndex]);
             var relation    = components2[compIndex].GetRelation(); // no boxing
             if (EqualityComparer<TValue>.Default.Equals(relation, relationValue)) {
-                components[compIndex] = component;
-                return false;
+                added = false;
+                goto AssignComponent;
             }
         }
         compIndex = AddRelation(id, positions);
-        components[compIndex] = component;
-        return true;
+    AssignComponent:    
+        ((StructHeap<TComponent>)heap).components[compIndex] = component;
+        return added;
     }
     
     // non generic
@@ -151,6 +153,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     #endregion
 
 #region remove component
+    /// <returns>true if entity contained a relation of the given type before</returns>
     internal override bool RemoveRelation(int id, TValue value)
     {
         if (!entityMap.TryGetValue(id, out var positions)) {
