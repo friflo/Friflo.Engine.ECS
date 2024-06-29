@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Index;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
@@ -50,7 +51,6 @@ internal abstract class RelationsArchetype
         var heap            = componentType.CreateHeap();
         var config          = EntityStoreBase.GetArchetypeConfig(store);
         var archetype       = new Archetype(config, heap);
-        
         var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
         return store.relationsMap[structIndex] = (RelationsArchetype)obj;
     //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TValue>(archetype, heap);
@@ -70,27 +70,30 @@ internal abstract class RelationsArchetype
 
     internal void RemoveRelation(int id, int position, IdArray positions, int positionIndex)
     {
+        var type    = archetype;
+        var map     = entityMap;
+        
         // --- adjust position in entityMap of last component
-        var lastPosition        = archetype.entityCount - 1;
-        var lastId              = archetype.entityIds[lastPosition];
-        entityMap.TryGetValue(lastId, out var curPositions);
+        var lastPosition        = type.entityCount - 1;
+        var lastId              = type.entityIds[lastPosition];
+        map.TryGetValue(lastId, out var curPositions);
         var positionSpan        = curPositions.GetIdSpan(idHeap);
         var curPositionIndex    = positionSpan.IndexOf(lastPosition);
         curPositions.Set(curPositionIndex, position, idHeap);
-        // array with length == 1 is stored inplace
+        // array with length == 1 is stored in-place
         if (curPositions.count == 1) {
-            entityMap[lastId] = curPositions;
+            map[lastId] = curPositions;
         }
         
         // --- move last relation to position of removed relation
-        Archetype.MoveLastComponentsTo(archetype, position);
+        Archetype.MoveLastComponentsTo(type, position);
         if (positions.count == 1) {
-            entityMap.Remove(id);
-            archetype.entityStore.nodes[id].indexBits &= ~indexBit;
+            map.Remove(id);
+            type.entityStore.nodes[id].indexBits &= ~indexBit;
             return;
         }
         positions.RemoveAt(positionIndex, idHeap);
-        entityMap[id] = positions;
+        map[id] = positions;
     }
     #endregion
 }
@@ -102,15 +105,15 @@ internal abstract class RelationsArchetype<TValue> : RelationsArchetype
     internal abstract bool RemoveRelation(int id, TValue value);
 }
     
-/// <summary>
+
+
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-/// Instances created at <see cref="RelationsArchetype.GetRelationArchetype"/>
-/// </summary>
 internal sealed class RelationsArchetype<TRelationComponent, TValue> : RelationsArchetype<TValue> where TRelationComponent : struct, IRelationComponent<TValue>
 {
     private  readonly   StructHeap                      heap;
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
+    /// Instance created at <see cref="RelationsArchetype.GetRelationArchetype"/>
     public RelationsArchetype(ComponentType componentType, Archetype archetype, StructHeap heap) : base(componentType, archetype) {
         this.heap       = heap;
         heapGeneric     = (StructHeap<TRelationComponent>)heap;
