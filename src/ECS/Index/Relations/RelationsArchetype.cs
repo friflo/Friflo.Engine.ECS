@@ -120,22 +120,22 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     //  var relationValue = ((IRelationComponent<TValue>)component).GetRelation(); // boxing version
         entityMap.TryGetValue(id, out var positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
-        var components2     = heapGeneric.components;
+        var components      = heapGeneric.components;
         bool added          = true;
-        int compIndex;
+        int position;
         for (int n = 0; n < positionSpan.Length; n++)
         {
-            compIndex       = positionSpan[n];
+            position        = positionSpan[n];
         //  var relation    = RelationUtils<TComponent, TValue>.GetRelationValue(components[compIndex]);
-            var relation    = components2[compIndex].GetRelation(); // no boxing
+            var relation    = components[position].GetRelation(); // no boxing
             if (EqualityComparer<TValue>.Default.Equals(relation, relationValue)) {
                 added = false;
                 goto AssignComponent;
             }
         }
-        compIndex = AddRelation(id, positions);
-    AssignComponent:    
-        ((StructHeap<TComponent>)heap).components[compIndex] = component;
+        position = AddRelation(id, positions);
+    AssignComponent:
+        ((StructHeap<TComponent>)heap).components[position] = component;
         return added;
     }
     
@@ -145,10 +145,10 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         if (positions.count == 0) {
             archetype.entityStore.nodes[id].indexBits |= indexBit;
         }
-        int compIndex = Archetype.AddEntity(archetype, id);
-        positions.AddId(compIndex, idHeap);
+        int position = Archetype.AddEntity(archetype, id);
+        positions.AddId(position, idHeap);
         entityMap[id] = positions;
-        return compIndex;
+        return position;
     }
     #endregion
 
@@ -163,22 +163,22 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         var positionSpan    = positions.GetIdSpan(idHeap);
         for (int n = 0; n < positionSpan.Length; n++)
         {
-            var compIndex   = positionSpan[n];
+            var position    = positionSpan[n];
         //  var relation    = RelationUtils<TRelationComponent, TValue>.GetRelationValue(components[compIndex]);
-            var relation    = components[compIndex].GetRelation(); // no boxing
+            var relation    = components[position].GetRelation(); // no boxing
             if (!EqualityComparer<TValue>.Default.Equals(relation, value)) {
                 continue;
             }
-            RemoveRelation(id, compIndex, positions, n);
+            RemoveRelation(id, position, positions, n);
             return true;
         }
         return false;
     }
     
     // non generic
-    private void RemoveRelation(int id, int compIndex, IdArray positions, int positionIndex)
+    private void RemoveRelation(int id, int position, IdArray positions, int positionIndex)
     {
-        Archetype.MoveLastComponentsTo(archetype, compIndex);
+        Archetype.MoveLastComponentsTo(archetype, position);
         if (positions.count == 1) {
             entityMap.Remove(id);
             archetype.entityStore.nodes[id].indexBits &= ~indexBit;
