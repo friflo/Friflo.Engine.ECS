@@ -449,9 +449,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     #endregion
     
 #region internal methods
-    internal string GetString() => AppendTo(new StringBuilder()).ToString();
+    private string GetString() => AppendTo(new StringBuilder()).ToString();
     
-    private StringBuilder AppendTo(StringBuilder sb)
+    internal StringBuilder AppendTo(StringBuilder sb)
     {
         sb.Append("Components: [");
         var hasTypes    = false;

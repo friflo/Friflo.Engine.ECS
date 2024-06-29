@@ -12,10 +12,13 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal abstract class RelationsArchetype
 {
-    internal  readonly   Archetype  archetype;
+    internal  readonly  Archetype   archetype;
+    internal  readonly  int         indexBit;
     
-    internal RelationsArchetype(Archetype archetype) {
+    internal RelationsArchetype(ComponentType componentType, Archetype archetype) {
         this.archetype  = archetype;
+        var types   = new ComponentTypes(componentType);
+        indexBit    = (int)types.bitSet.l0;
     }
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
@@ -46,7 +49,7 @@ internal abstract class RelationsArchetype
         var config          = EntityStoreBase.GetArchetypeConfig(store);
         var archetype       = new Archetype(config, heap);
         
-        var obj             = Activator.CreateInstance(componentType.RelationType, archetype, heap);
+        var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
         return store.relationsMap[structIndex] = (RelationsArchetype)obj;
     //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TValue>(archetype, heap);
     }
@@ -54,13 +57,14 @@ internal abstract class RelationsArchetype
 
 internal abstract class RelationsArchetype<TValue> : RelationsArchetype
 {
-    internal RelationsArchetype(Archetype archetype) : base(archetype) {}
+    internal RelationsArchetype(ComponentType componentType, Archetype archetype) : base(componentType, archetype) {}
     
     internal abstract bool RemoveRelation(int id, TValue value);
 }
     
 /// <summary>
-/// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/>
+/// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
+/// Instances created at <see cref="RelationsArchetype.GetRelationArchetype"/>
 /// </summary>
 internal sealed class RelationsArchetype<TRelationComponent, TValue> : RelationsArchetype<TValue> where TRelationComponent : struct, IRelationComponent<TValue>
 {
@@ -70,7 +74,7 @@ internal sealed class RelationsArchetype<TRelationComponent, TValue> : Relations
     private  readonly   StructHeap                      heap;
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
-    public RelationsArchetype(Archetype archetype, StructHeap heap) : base(archetype) {
+    public RelationsArchetype(ComponentType componentType, Archetype archetype, StructHeap heap) : base(componentType, archetype) {
         this.heap       = heap;
         heapGeneric     = (StructHeap<TRelationComponent>)heap;
     }
@@ -136,6 +140,9 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     // non generic
     private int AddRelation(int id, IdArray positions)
     {
+        if (positions.count == 0) {
+            archetype.entityStore.nodes[id].indexBits |= indexBit;
+        }
         int compIndex = Archetype.AddEntity(archetype, id);
         positions.AddId(compIndex, idHeap);
         entityMap[id] = positions;
@@ -171,6 +178,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         Archetype.MoveLastComponentsTo(archetype, compIndex);
         if (positions.count == 1) {
             entityMap.Remove(id);
+            archetype.entityStore.nodes[id].indexBits &= ~indexBit;
             return;
         }
         positions.RemoveAt(positionIndex, idHeap);

@@ -90,7 +90,8 @@ internal sealed class SchemaTypes
         for (int n = 0; n < count; n++) {
             var type        = componentTypes[n];
             buffer[n]       = type;
-            var isIndex     = ComponentIndexUtils.GetIndexType(type.type) != null;
+            var isIndex     = ComponentIndexUtils.GetIndexType(type.type)            != null ||
+                              RelationComponentUtils.GetRelationArchetype(type.type) != null;
             isIndexType[n]  = isIndex;
             if (isIndex) indexCount++;
         }

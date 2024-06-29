@@ -34,15 +34,23 @@ public static class Test_Index_Relations
             
         var target10    = store.CreateEntity(10);
         var target11    = store.CreateEntity(11);
+        var components  = entity3.Components;
         IsTrue (entity3.AddComponent(new AttackRelation { target = target10, speed = 1 }));
+        AreEqual("Components: [] +1", components.ToString());
         IsTrue (entity3.AddComponent(new AttackRelation { target = target11, speed = 1  }));
+        AreEqual("Components: [] +2", components.ToString());
         IsFalse(entity3.AddComponent(new AttackRelation { target = target11, speed = 42  }));
+        AreEqual("Components: [] +2", components.ToString());
         
         IsTrue (entity3.RemoveRelation<AttackRelation, Entity>(target10));
+        AreEqual("Components: [] +1", components.ToString());
         IsFalse(entity3.RemoveRelation<AttackRelation, Entity>(target10));
+        AreEqual("Components: [] +1", components.ToString());
         
         IsTrue (entity3.RemoveRelation<AttackRelation, Entity>(target11));
+        AreEqual("Components: []", components.ToString());
         IsFalse(entity3.RemoveRelation<AttackRelation, Entity>(target11));
+        AreEqual("Components: []", components.ToString());
         
         var start = Mem.GetAllocatedBytes();
         entity3.AddComponent(new AttackRelation { target = target10, speed = 1 });
@@ -143,6 +151,7 @@ public static class Test_Index_Relations
         }
     }
     
+#pragma warning disable CS0618 // Type or member is obsolete
     [Test]
     public static void Test_Index_Relations_EntityComponents()
     {
@@ -156,6 +165,7 @@ public static class Test_Index_Relations
         AreEqual(1, components.Count);
 
         entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
+        AreEqual("Components: [Position] +1", components.ToString());
         AreEqual(2, components.Count);
         int count = 0;
         foreach (var component in components) {
@@ -171,6 +181,7 @@ public static class Test_Index_Relations
         }
         
         entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
+        AreEqual("Components: [Position] +2", components.ToString());
         AreEqual(3, components.Count);
         count = 0;
         foreach (var component in components) {

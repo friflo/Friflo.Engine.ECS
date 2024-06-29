@@ -11,30 +11,34 @@ namespace Friflo.Engine.ECS.Index;
 [ExcludeFromCodeCoverage] // not used - kept only for reference
 internal static class SortedListUtils
 {
-    internal static void RemoveComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, IdArrayHeap arrayHeap)
+    internal static void RemoveComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, ComponentIndex componentIndex)
     {
         map.TryGetValue(value, out var ids);
-        var idSpan  = ids.GetIdSpan(arrayHeap);
+        var idSpan  = ids.GetIdSpan(componentIndex.arrayHeap);
         var index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
         if (ids.Count == 1) {
             map.Remove(value);
+            componentIndex.store.nodes[id].indexBits &= ~componentIndex.indexBit;
             return;
         }
-        ids.RemoveAt(index, arrayHeap);
+        ids.RemoveAt(index, componentIndex.arrayHeap);
         map[value] = ids;
     }
     
-    internal static void AddComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, IdArrayHeap arrayHeap)
+    internal static void AddComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, ComponentIndex componentIndex)
     {
         map.TryGetValue(value, out var ids);
-        var idSpan = ids.GetIdSpan(arrayHeap);
+        var idSpan = ids.GetIdSpan(componentIndex.arrayHeap);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        ids.AddId(id, arrayHeap);
+        if (ids.Count == 0) {
+            componentIndex.store.nodes[id].indexBits |= componentIndex.indexBit;
+        }
+        ids.AddId(id, componentIndex.arrayHeap);
         map[value] = ids;
     }
 }

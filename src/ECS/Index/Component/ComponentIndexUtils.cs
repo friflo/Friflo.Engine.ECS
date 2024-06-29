@@ -16,6 +16,8 @@ internal static class ComponentIndexUtils
         var index           = (ComponentIndex)obj!;
         index.store         = store;
         index.componentType = componentType;
+        var types           = new ComponentTypes(componentType);
+        index.indexBit      = (int)types.bitSet.l0;
         return index;
     }
     

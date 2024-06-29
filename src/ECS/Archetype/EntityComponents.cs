@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -24,20 +25,35 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
 
     /// <summary>Return the number of <see cref="IComponent"/>'s of an entity.</summary>
     public              int     Count       => GetCount();
-    public   override   string  ToString()  => entity.archetype.componentTypes.GetString();
+    public   override   string  ToString()  => GetString();
     
     private int GetCount()
     {
-        var type            = entity.archetype;
-        var count           = type.componentCount; 
-        var relationsMap    = entity.store.relationsMap;
-        foreach (var componentType in EntityStoreBase.Static.EntitySchema.relationTypes)
+        var type        = entity.archetype;
+        var count       = type.componentCount; 
+        if (!GetRelationTypes(entity, out var relationTypes)) {
+            return count;
+        }
+        var relationsMap = entity.store.relationsMap;
+        foreach (var componentType in relationTypes)
         {
             var relations = relationsMap[componentType.StructIndex];
             if (relations == null) continue;
             count += relations.GetRelationCount(entity);
         }
         return count;
+    }
+    
+    internal static bool GetRelationTypes(Entity entity, out ComponentTypes relationTypes)
+    {
+        relationTypes   = default;
+        var indexBits   = entity.store.nodes[entity.Id].indexBits; 
+        if (indexBits == 0) {
+            return false;
+        }
+        var intersect           = indexBits & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;
+        relationTypes.bitSet.l0 = intersect;
+        return intersect != 0;
     }
     
     internal IComponent[] GetComponentArray()
@@ -52,6 +68,19 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
             components[n++] = component.GetValue();
         }
         return components;
+    }
+    
+    private string GetString()
+    {
+        var sb          = new StringBuilder();
+        var archetype   = entity.archetype;
+        archetype.componentTypes.AppendTo(sb);
+        var relationCount = Count - archetype.componentTypes.Count;
+        if (relationCount > 0) {
+            sb.Append(" +");
+            sb.Append(relationCount);
+        }
+        return sb.ToString();
     }
 
     // --- IEnumerable<>
@@ -85,12 +114,15 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
         foreach (var componentType in entity.archetype.componentTypes) {
             components[compIndex++] = new EntityComponent(entity, componentType);
         }
+        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
+            return;
+        }
         var relationsMap = entity.store.relationsMap;
-        foreach (var componentType in EntityStoreBase.Static.EntitySchema.relationTypes)
+        foreach (var componentType in relationTypes)
         {
             var relations = relationsMap[componentType.StructIndex];
             if (relations == null) continue;
-            int relationCount =  relations.GetRelationCount(entity);
+            int relationCount = relations.GetRelationCount(entity);
             for (int n = 0; n < relationCount; n++) {
                 components[compIndex++] = new EntityComponent(entity, componentType, relations, n);
             }

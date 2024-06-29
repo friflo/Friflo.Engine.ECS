@@ -20,6 +20,7 @@ internal static class DictionaryUtils
         if (ids.Count == 1) {
             componentIndex.modified = true; 
             map.Remove(value);
+            componentIndex.store.nodes[id].indexBits &= ~componentIndex.indexBit;
             return;
         }
         ids.RemoveAt(index, componentIndex.arrayHeap);
@@ -35,6 +36,7 @@ internal static class DictionaryUtils
         }
         if (ids.Count == 0) {
             componentIndex.modified = true;
+            componentIndex.store.nodes[id].indexBits |= componentIndex.indexBit;
         }
         ids.AddId(id, componentIndex.arrayHeap);
         map[value] = ids;
