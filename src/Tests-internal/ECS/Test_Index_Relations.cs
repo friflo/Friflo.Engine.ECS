@@ -144,6 +144,53 @@ public static class Test_Index_Relations
     }
     
     [Test]
+    public static void Test_Index_Relations_EntityComponents()
+    {
+        var store    = new EntityStore();
+        var target10 = store.CreateEntity(10);
+        var target11 = store.CreateEntity(11);
+        var entity      = store.CreateEntity(1);
+
+        var components = entity.Components;
+        entity.AddComponent(new Position());
+        AreEqual(1, components.Count);
+
+        entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
+        AreEqual(2, components.Count);
+        int count = 0;
+        foreach (var component in components) {
+            switch (count++) {
+                case 0:
+                    AreEqual(component.Type.Type, typeof(Position));
+                    break;
+                case 1:
+                    AreEqual(component.Type.Type, typeof(AttackRelation));
+                    AreEqual(20, ((AttackRelation)component.Value).speed );
+                    break;
+            }
+        }
+        
+        entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
+        AreEqual(3, components.Count);
+        count = 0;
+        foreach (var component in components) {
+            switch (count++) {
+                case 0:
+                    AreEqual(component.Type.Type, typeof(Position));
+                    break;
+                case 1:
+                    AreEqual(component.Type.Type, typeof(AttackRelation));
+                    AreEqual(20, ((AttackRelation)component.Value).speed );
+                    break;
+                case 2:
+                    AreEqual(component.Type.Type, typeof(AttackRelation));
+                    AreEqual(21, ((AttackRelation)component.Value).speed );
+                    break;
+            }
+        }
+    }
+    
+    [Test]
     public static void Test_Index_Relations_Enumerator()
     {
         var store    = new EntityStore();

@@ -18,7 +18,9 @@ internal abstract class RelationsArchetype
         this.archetype  = archetype;
     }
     
-    protected abstract bool AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
+    protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
+    internal  abstract int          GetRelationCount  (Entity entity);
+    internal  abstract IComponent   GetRelation       (Entity entity, int index);
     
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component) where TComponent : struct, IComponent
     {
@@ -71,6 +73,23 @@ internal sealed class RelationsArchetype<TRelationComponent, TValue> : Relations
     public RelationsArchetype(Archetype archetype, StructHeap heap) : base(archetype) {
         this.heap       = heap;
         heapGeneric     = (StructHeap<TRelationComponent>)heap;
+    }
+    
+    internal override int GetRelationCount  (Entity entity) {
+        entityMap.TryGetValue(entity.Id, out var array);
+        return array.count;
+    }
+    
+    internal override IComponent GetRelation(Entity entity, int index)
+    {
+        entityMap.TryGetValue(entity.Id, out var array);
+        var count = array.count;
+        if (count == 1) {
+            return heapGeneric.components[array.start];
+        }
+        var poolIndex   = IdArrayHeap.PoolIndex(count);
+        var positions   = idHeap.GetPool(poolIndex).Ids;
+        return heapGeneric.components[positions[index]];
     }
     
     internal Relations<TComponent> GetRelations<TComponent>(Entity entity) where TComponent : struct, IComponent
