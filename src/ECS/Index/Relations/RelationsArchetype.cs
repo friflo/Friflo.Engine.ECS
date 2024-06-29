@@ -12,8 +12,10 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal abstract class RelationsArchetype
 {
-    internal  readonly  Archetype   archetype;
-    internal  readonly  int         indexBit;
+    internal  readonly  Archetype                   archetype;
+    internal  readonly  Dictionary<int, IdArray>    entityMap   = new ();
+    internal  readonly  IdArrayHeap                 idHeap      = new();
+    private   readonly  int                         indexBit;
     
     internal RelationsArchetype(ComponentType componentType, Archetype archetype) {
         this.archetype  = archetype;
@@ -53,6 +55,31 @@ internal abstract class RelationsArchetype
         return store.relationsMap[structIndex] = (RelationsArchetype)obj;
     //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TValue>(archetype, heap);
     }
+    
+#region non generic
+    internal int AddRelation(int id, IdArray positions)
+    {
+        if (positions.count == 0) {
+            archetype.entityStore.nodes[id].indexBits |= indexBit;
+        }
+        int position = Archetype.AddEntity(archetype, id);
+        positions.AddId(position, idHeap);
+        entityMap[id] = positions;
+        return position;
+    }
+
+    internal void RemoveRelation(int id, int position, IdArray positions, int positionIndex)
+    {
+        Archetype.MoveLastComponentsTo(archetype, position);
+        if (positions.count == 1) {
+            entityMap.Remove(id);
+            archetype.entityStore.nodes[id].indexBits &= ~indexBit;
+            return;
+        }
+        positions.RemoveAt(positionIndex, idHeap);
+        entityMap[id] = positions;
+    }
+    #endregion
 }
 
 internal abstract class RelationsArchetype<TValue> : RelationsArchetype
@@ -68,9 +95,6 @@ internal abstract class RelationsArchetype<TValue> : RelationsArchetype
 /// </summary>
 internal sealed class RelationsArchetype<TRelationComponent, TValue> : RelationsArchetype<TValue> where TRelationComponent : struct, IRelationComponent<TValue>
 {
-
-    private  readonly   Dictionary<int, IdArray>        entityMap   = new ();
-    private  readonly   IdArrayHeap                     idHeap      = new();
     private  readonly   StructHeap                      heap;
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
@@ -138,18 +162,6 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         ((StructHeap<TComponent>)heap).components[position] = component;
         return added;
     }
-    
-    // non generic
-    private int AddRelation(int id, IdArray positions)
-    {
-        if (positions.count == 0) {
-            archetype.entityStore.nodes[id].indexBits |= indexBit;
-        }
-        int position = Archetype.AddEntity(archetype, id);
-        positions.AddId(position, idHeap);
-        entityMap[id] = positions;
-        return position;
-    }
     #endregion
 
 #region remove component
@@ -173,19 +185,6 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
             return true;
         }
         return false;
-    }
-    
-    // non generic
-    private void RemoveRelation(int id, int position, IdArray positions, int positionIndex)
-    {
-        Archetype.MoveLastComponentsTo(archetype, position);
-        if (positions.count == 1) {
-            entityMap.Remove(id);
-            archetype.entityStore.nodes[id].indexBits &= ~indexBit;
-            return;
-        }
-        positions.RemoveAt(positionIndex, idHeap);
-        entityMap[id] = positions;
     }
     #endregion
 }
