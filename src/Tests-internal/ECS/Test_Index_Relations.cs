@@ -23,6 +23,14 @@ internal struct AttackRelation : IRelationComponent<Entity>
     public override string ToString() => target.ToString();
 }
 
+internal struct IntRelation : IRelationComponent<int>
+{
+    public int value;
+    public int GetRelation() => value;
+
+    public override string ToString() => value.ToString();
+}
+
 
 public static class Test_Index_Relations
 {
@@ -246,6 +254,35 @@ public static class Test_Index_Relations
             count++;
         }
         AreEqual(0, count);
+    }
+    
+    [Test]
+    public static void Test_Index_Relations_int_relation()
+    {
+        var count   = 100;
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(1);
+
+        for (int n = 0; n < count; n++) {
+            entity.AddComponent(new IntRelation{ value = n });
+        }
+        AreEqual($"Components: [] +{count}", entity.Components.ToString());
+        
+        for (int n = 0; n < count; n++) {
+            entity.RemoveRelation<IntRelation, int>(n);
+        }
+        AreEqual("Components: []", entity.Components.ToString());
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < count; n++) {
+            entity.AddComponent(new IntRelation{ value = n });
+        }
+        Mem.AreEqual(count, entity.Components.Count);
+        for (int n = 0; n < count; n++) {
+            entity.RemoveRelation<IntRelation, int>(n);
+        }
+        Mem.AreEqual(0, entity.Components.Count);
+        Mem.AssertNoAlloc(start);
     }
     
     [Test]
