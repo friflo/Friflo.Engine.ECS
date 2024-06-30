@@ -29,7 +29,7 @@ internal abstract class EntityRelations
     }
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
-    internal  abstract IComponent   GetRelation             (int id, int index);
+    internal  abstract IComponent   GetRelationAt           (int id, int index);       
     
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
         where TComponent : struct, IComponent
@@ -48,6 +48,25 @@ internal abstract class EntityRelations
     internal int GetRelationCount(Entity entity) {
         relationPositions.TryGetValue(entity.Id, out var positions);
         return positions.count;
+    }
+    
+    internal static ref TComponent GetRelation<TComponent, TKey>(Entity entity, TKey key)
+        where TComponent : struct, IRelationComponent<TKey>
+    {
+        var relations = (EntityRelations<TComponent,TKey>)entity.Store.relationsMap[StructInfo<TComponent>.Index];
+        // throw NullReferenceException if relations not found
+        return ref relations.GetRelation<TComponent>(entity.Id, key);
+    }
+    
+    internal static bool TryGetRelation<TComponent, TKey>(Entity entity, TKey key, out TComponent value)
+        where TComponent : struct, IRelationComponent<TKey>
+    {
+        var relations = (EntityRelations<TComponent,TKey>)entity.Store.relationsMap[StructInfo<TComponent>.Index];
+        if (relations == null) {
+            value = default;    
+            return false;
+        }
+        return relations.TryGetRelation(entity.Id, key, out value);
     }
     
     internal static RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)

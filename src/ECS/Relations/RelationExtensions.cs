@@ -8,6 +8,18 @@ namespace Friflo.Engine.ECS;
 
 public static class RelationExtensions
 {
+    public static ref TComponent GetRelation<TComponent, TKey>(this Entity entity, TKey key)
+        where TComponent : struct, IRelationComponent<TKey>
+    {
+        return ref EntityRelations.GetRelation<TComponent, TKey>(entity, key);
+    }
+    
+    public static bool TryGetRelation<TComponent, TKey>(this Entity entity, TKey key, out TComponent value)
+        where TComponent : struct, IRelationComponent<TKey>
+    {
+        return EntityRelations.TryGetRelation(entity, key, out value);
+    }
+    
     /// <summary>
     /// Returns all unique relation components of the passed <paramref name="entity"/>.<br/>
     /// Executes in O(1). In case <typeparamref name="TComponent"/> is a <see cref="ILinkRelation"/> it returns all linked entities.

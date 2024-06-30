@@ -31,10 +31,10 @@ internal struct IntRelation : IRelationComponent<int>
 }
 
 internal enum InventoryItemType {
-    Axe,
-    Gun,
-    Sword,
-    Shield,
+    Axe     = 1,
+    Gun     = 2,
+    Sword   = 3,
+    Shield  = 4,
 }
 
 /// <summary> <see cref="IRelationComponent{TKey}"/> using an enum as relation key. </summary>
@@ -68,6 +68,27 @@ public static class Test_Relations
         var inventoryItems = entity.GetRelations<InventoryItem>();
         Mem.AreEqual(4, inventoryItems.Length);
         Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
+    public static void Test_Relations_GetRelation()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
+        
+        ref var axeRelation = ref entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe);
+        AreEqual(1, axeRelation.amount);
+        
+        IsTrue(entity.TryGetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe, out var value));
+        AreEqual(1, value.amount);
+        
+        IsFalse(entity.TryGetRelation(InventoryItemType.Shield, out value));
+        AreEqual(new InventoryItem(), value);
+        
+        Throws<NullReferenceException>(() => {
+            entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Shield);
+        });
     }
     
     
