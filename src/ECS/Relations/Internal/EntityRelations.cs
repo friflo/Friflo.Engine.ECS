@@ -36,10 +36,10 @@ internal abstract class EntityRelations
         return relations.AddComponent(id, component);
     }
     
-    internal static bool RemoveRelation<TComponent, TValue>(EntityStoreBase store, int id, TValue value)
-        where TComponent : struct, IRelationComponent<TValue>
+    internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey value)
+        where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TValue>)GetEntityRelations(store, StructInfo<TComponent>.Index);
+        var relations = (EntityRelations<TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
         return relations.RemoveRelation(id, value);
     }
     
@@ -76,7 +76,7 @@ internal abstract class EntityRelations
         var archetype       = new Archetype(config, heap);
         var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
         return store.relationsMap[structIndex] = (EntityRelations)obj;
-    //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TValue>(archetype, heap);
+    //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TKey>(archetype, heap);
     }
     
 #region non generic add / remove

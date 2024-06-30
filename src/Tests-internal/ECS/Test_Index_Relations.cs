@@ -17,7 +17,7 @@ internal struct AttackRelation : ILinkRelation
 {
     public int    speed;
     public Entity target;
-    public Entity GetRelation() => target;
+    public Entity GetRelationKey() => target;
 
     public override string ToString() => target.ToString();
 }
@@ -25,7 +25,7 @@ internal struct AttackRelation : ILinkRelation
 internal struct IntRelation : IRelationComponent<int>
 {
     public int value;
-    public int GetRelation() => value;
+    public int GetRelationKey() => value;
 
     public override string ToString() => value.ToString();
 }

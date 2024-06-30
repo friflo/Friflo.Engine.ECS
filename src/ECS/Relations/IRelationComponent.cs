@@ -8,7 +8,7 @@ internal interface IRelationComponent : IComponent
 {
 }
 
-internal interface IRelationComponent<out TValue> : IRelationComponent
+internal interface IRelationComponent<out TKey> : IRelationComponent
 {
-    TValue GetRelation();
+    TKey GetRelationKey();
 }

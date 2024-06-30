@@ -10,19 +10,19 @@ using Friflo.Engine.ECS.Index;
 namespace Friflo.Engine.ECS.Relations;
 
 
-internal abstract class EntityRelations<TValue> : EntityRelations
+internal abstract class EntityRelations<TKey> : EntityRelations
 {
     internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     { }
     
-    internal abstract bool RemoveRelation(int id, TValue value);
+    internal abstract bool RemoveRelation(int id, TKey value);
 }
     
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal sealed class EntityRelations<TRelationComponent, TValue> : EntityRelations<TValue>
-    where TRelationComponent : struct, IRelationComponent<TValue>
+internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelations<TKey>
+    where TRelationComponent : struct, IRelationComponent<TKey>
 {
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
@@ -50,8 +50,8 @@ internal sealed class EntityRelations<TRelationComponent, TValue> : EntityRelati
 /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
 protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
-        var relationValue   = RelationUtils<TComponent, TValue>.GetRelationValue(component);
-    //  var relationValue   = ((IRelationComponent<TValue>)component).GetRelation(); // boxing version
+        var relationKey     = RelationUtils<TComponent, TKey>.GetRelationKey(component);
+    //  var relationKey     = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
         entityMap.TryGetValue(id, out var positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
         var positionCount   = positions.count;
@@ -60,9 +60,9 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         int position;
         for (int n = 0; n < positionCount; n++) {
             position        = positionSpan[n];
-            var relation    = components[position].GetRelation(); // no boxing
-        //  var relation    = RelationUtils<TComponent, TValue>.GetRelationValue(((StructHeap<TComponent>)heap).components[position]);
-            if (EqualityComparer<TValue>.Default.Equals(relation, relationValue)) {
+            var relation    = components[position].GetRelationKey(); // no boxing
+        //  var relation    = RelationUtils<TComponent, TKey>.GetRelationKey(((StructHeap<TComponent>)heap).components[position]);
+            if (EqualityComparer<TKey>.Default.Equals(relation, relationKey)) {
                 added = false;
                 goto AssignComponent;
             }
@@ -76,7 +76,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
 
 #region remove component
     /// <returns>true if entity contained a relation of the given type before</returns>
-    internal override bool RemoveRelation(int id, TValue value)
+    internal override bool RemoveRelation(int id, TKey value)
     {
         if (!entityMap.TryGetValue(id, out var positions)) {
             return false;
@@ -86,9 +86,9 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         var positionCount   = positions.count;
         for (int n = 0; n < positionCount; n++) {
             var position    = positionSpan[n];
-        //  var relation    = RelationUtils<TRelationComponent, TValue>.GetRelationValue(components[position]);
-            var relation    = components[position].GetRelation(); // no boxing
-            if (!EqualityComparer<TValue>.Default.Equals(relation, value)) {
+        //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
+            var relation    = components[position].GetRelationKey(); // no boxing
+            if (!EqualityComparer<TKey>.Default.Equals(relation, value)) {
                 continue;
             }
             RemoveRelation(id, position, positions, n);

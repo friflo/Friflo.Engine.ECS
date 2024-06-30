@@ -11,29 +11,33 @@ namespace Friflo.Engine.ECS.Relations;
 internal static class RelationUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
-    internal static GetRelationValue<TComponent,TValue> CreateGetValue<TComponent,TValue>() where TComponent : struct, IComponent
+    internal static GetRelationKey<TComponent, TKey> CreateGetRelationKey<TComponent, TKey>()
+        where TComponent : struct, IComponent
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        var method          = typeof(RelationUtils).GetMethod(nameof(GetRelationComponentValue), flags);
-        var genericMethod   = method!.MakeGenericMethod(typeof(TComponent), typeof(TValue));
+        var method          = typeof(RelationUtils).GetMethod(nameof(GetRelationComponentKey), flags);
+        var genericMethod   = method!.MakeGenericMethod(typeof(TComponent), typeof(TKey));
         
-        var genericDelegate = Delegate.CreateDelegate(typeof(GetRelationValue<TComponent,TValue>), genericMethod);
-        return (GetRelationValue<TComponent,TValue>)genericDelegate;
+        var genericDelegate = Delegate.CreateDelegate(typeof(GetRelationKey<TComponent,TKey>), genericMethod);
+        return (GetRelationKey<TComponent,TKey>)genericDelegate;
     }
     
-    private static TValue GetRelationComponentValue<TComponent,TValue>(in TComponent component) where TComponent : struct, IRelationComponent<TValue> {
-        return component.GetRelation();
+    private static TKey GetRelationComponentKey<TComponent,TKey>(in TComponent component)
+        where TComponent : struct, IRelationComponent<TKey>
+    {
+        return component.GetRelationKey();
     }
 }
 
-internal static class RelationUtils<TComponent, TValue>  where TComponent : struct, IComponent
+internal static class RelationUtils<TComponent, TKey>
+    where TComponent : struct, IComponent
 {
     /// <summary> Returns the component value without boxing. </summary>
-    internal static readonly GetRelationValue<TComponent,TValue> GetRelationValue;
+    internal static readonly GetRelationKey<TComponent, TKey> GetRelationKey;
         
     static RelationUtils() {
-        GetRelationValue = RelationUtils.CreateGetValue<TComponent,TValue>();
+        GetRelationKey = RelationUtils.CreateGetRelationKey<TComponent,TKey>();
     }
 }
     
-internal delegate TValue GetRelationValue<TComponent, out TValue>(in TComponent component) where TComponent : struct, IComponent;
+internal delegate TKey GetRelationKey<TComponent, out TKey>(in TComponent component) where TComponent : struct, IComponent;

@@ -19,7 +19,7 @@ internal static class RelationExtensions
         return default;
     }
     
-    public static bool RemoveRelation<T, TValue>(this Entity entity, TValue value) where T : struct, IRelationComponent<TValue> {
-        return EntityRelations.RemoveRelation<T, TValue>(entity.Store, entity.Id, value);
+    public static bool RemoveRelation<T, TKey>(this Entity entity, TKey value) where T : struct, IRelationComponent<TKey> {
+        return EntityRelations.RemoveRelation<T, TKey>(entity.Store, entity.Id, value);
     }
 }
