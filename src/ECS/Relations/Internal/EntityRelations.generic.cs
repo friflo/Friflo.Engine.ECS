@@ -35,14 +35,14 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     
     internal override IComponent GetRelation(int id, int index)
     {
-        entityMap.TryGetValue(id, out var array);
-        var count = array.count;
+        relationPositions.TryGetValue(id, out var positions);
+        var count = positions.count;
         if (count == 1) {
-            return heapGeneric.components[array.start];
+            return heapGeneric.components[positions.start];
         }
-        var poolIndex   = IdArrayHeap.PoolIndex(count);
-        var positions   = idHeap.GetPool(poolIndex).Ids;
-        return heapGeneric.components[positions[index]];
+        var poolIndex       = IdArrayHeap.PoolIndex(count);
+        var poolPositions   = idHeap.GetPool(poolIndex).Ids;
+        return heapGeneric.components[poolPositions[index]];
     }
     
 #region add component
@@ -52,7 +52,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
         var relationKey     = RelationUtils<TComponent, TKey>.GetRelationKey(component);
     //  var relationKey     = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
-        entityMap.TryGetValue(id, out var positions);
+        relationPositions.TryGetValue(id, out var positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
         var positionCount   = positions.count;
         var components      = heapGeneric.components;
@@ -67,7 +67,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
                 goto AssignComponent;
             }
         }
-        position = AddRelation(id, positions);
+        position = SetRelationPositions(id, positions);
     AssignComponent:
         ((StructHeap<TComponent>)heap).components[position] = component;
         return added;
@@ -78,7 +78,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     /// <returns>true if entity contained a relation of the given type before</returns>
     internal override bool RemoveRelation(int id, TKey key)
     {
-        if (!entityMap.TryGetValue(id, out var positions)) {
+        if (!relationPositions.TryGetValue(id, out var positions)) {
             return false;
         }
         var components      = heapGeneric.components;
@@ -91,7 +91,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
             if (!EqualityComparer<TKey>.Default.Equals(relation, key)) {
                 continue;
             }
-            RemoveRelation(id, position, positions, n);
+            RemoveRelationPosition(id, position, positions, n);
             return true;
         }
         return false;

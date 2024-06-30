@@ -14,8 +14,8 @@ namespace Friflo.Engine.ECS.Relations;
 internal abstract class EntityRelations
 {
     internal  readonly  Archetype                   archetype;
-    internal  readonly  Dictionary<int, IdArray>    entityMap   = new ();
-    internal  readonly  IdArrayHeap                 idHeap      = new();
+    internal  readonly  Dictionary<int, IdArray>    relationPositions   = new ();
+    internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
     private   readonly  int                         indexBit;
     
@@ -44,8 +44,8 @@ internal abstract class EntityRelations
     }
     
     internal int GetRelationCount(Entity entity) {
-        entityMap.TryGetValue(entity.Id, out var array);
-        return array.count;
+        relationPositions.TryGetValue(entity.Id, out var positions);
+        return positions.count;
     }
     
     internal static RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
@@ -55,16 +55,16 @@ internal abstract class EntityRelations
         if (relations == null) {
             return default;
         }
-        relations.entityMap.TryGetValue(entity.Id, out var array);
-        var count           = array.count;
+        relations.relationPositions.TryGetValue(entity.Id, out var positions);
+        var count           = positions.count;
         var componentHeap   = (StructHeap<TComponent>)relations.heap;
         switch (count) {
             case 0: return  new RelationComponents<TComponent>();
-            case 1: return  new RelationComponents<TComponent>(componentHeap.components, array.start);
+            case 1: return  new RelationComponents<TComponent>(componentHeap.components, positions.start);
         }
-        var poolIndex   = IdArrayHeap.PoolIndex(count);
-        var positions   = relations.idHeap.GetPool(poolIndex).Ids;
-        return new RelationComponents<TComponent>(componentHeap.components, positions, array.start, array.count);
+        var poolIndex       = IdArrayHeap.PoolIndex(count);
+        var poolPositions   = relations.idHeap.GetPool(poolIndex).Ids;
+        return new RelationComponents<TComponent>(componentHeap.components, poolPositions, positions.start, positions.count);
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
@@ -83,22 +83,22 @@ internal abstract class EntityRelations
     //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TKey>(archetype, heap);
     }
     
-#region non generic add / remove
-    internal int AddRelation(int id, IdArray positions)
+#region non generic add / remove position
+    internal int SetRelationPositions(int id, IdArray positions)
     {
         if (positions.count == 0) {
             archetype.entityStore.nodes[id].indexBits |= indexBit;
         }
         int position = Archetype.AddEntity(archetype, id);
         positions.AddId(position, idHeap);
-        entityMap[id] = positions;
+        relationPositions[id] = positions;
         return position;
     }
 
-    internal void RemoveRelation(int id, int position, IdArray positions, int positionIndex)
+    internal void RemoveRelationPosition(int id, int position, IdArray positions, int positionIndex)
     {
         var type    = archetype;
-        var map     = entityMap;
+        var map     = relationPositions;
         
         // --- adjust position in entityMap of last component
         var lastPosition        = type.entityCount - 1;
