@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using Friflo.Engine.ECS.Relations;
 
 // ReSharper disable once CheckNamespace
@@ -8,6 +9,7 @@ namespace Friflo.Engine.ECS;
 
 public static class RelationExtensions
 {
+    /// <exception cref="KeyNotFoundException">The relation is not found at the passed entity.</exception>
     public static ref TComponent GetRelation<TComponent, TKey>(this Entity entity, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {

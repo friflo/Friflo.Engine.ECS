@@ -50,11 +50,18 @@ internal abstract class EntityRelations
         return positions.count;
     }
     
+    internal static KeyNotFoundException KeyNotFoundException(int id, object key)
+    {
+        return new KeyNotFoundException($"relation not found. key '{key}' id: {id}");        
+    }
+    
     internal static ref TComponent GetRelation<TComponent, TKey>(Entity entity, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
         var relations = (EntityRelations<TComponent,TKey>)entity.Store.relationsMap[StructInfo<TComponent>.Index];
-        // throw NullReferenceException if relations not found
+        if (relations == null) {
+            throw KeyNotFoundException(entity.Id, key);
+        }
         return ref relations.GetRelation<TComponent>(entity.Id, key);
     }
     

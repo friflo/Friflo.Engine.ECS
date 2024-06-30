@@ -78,6 +78,11 @@ public static class Test_Relations
         var entity  = store.CreateEntity();
         InventoryItem value;
         
+        var knf = Throws<KeyNotFoundException>(() => {
+            entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Sword);
+        });
+        AreEqual("relation not found. key 'Sword' id: 1", knf!.Message);
+        
         IsFalse (entity.TryGetRelation(InventoryItemType.Axe,    out value));
         AreEqual(new InventoryItem(), value);
         
@@ -97,9 +102,10 @@ public static class Test_Relations
         
         Mem.AssertNoAlloc(start);
         
-        Throws<NullReferenceException>(() => {
+        knf = Throws<KeyNotFoundException>(() => {
             entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Shield);
         });
+        AreEqual("relation not found. key 'Shield' id: 1", knf!.Message);
     }
     
     

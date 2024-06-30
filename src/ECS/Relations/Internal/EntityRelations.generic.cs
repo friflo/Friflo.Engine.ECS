@@ -61,7 +61,7 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
                 return ref ((StructHeap<TComponent>)heap).components[position];
             }
         }
-        throw new NullReferenceException();
+        throw KeyNotFoundException(id, key);
     }
     
     internal bool TryGetRelation<TComponent>(int id, TKey key, out TComponent value)
