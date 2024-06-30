@@ -11,6 +11,9 @@ namespace Friflo.Engine.ECS;
 /// A link relation enables:
 /// <list type="bullet">
 ///   <item>
+///     Add multiple link relations to an entity using <see cref="Entity.AddComponent{T}()"/>.
+///   </item>
+///   <item>
 ///     Return all links of an entity to other entities using <see cref="RelationExtensions.GetRelations{TComponent}"/>.
 ///   </item>
 ///   <item>

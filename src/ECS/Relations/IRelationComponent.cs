@@ -15,6 +15,9 @@ internal interface IRelationComponent : IComponent { }
 /// A relation component enables:
 /// <list type="bullet">
 ///   <item>
+///     Add multiple relation components to an entity using <see cref="Entity.AddComponent{T}()"/>.
+///   </item>
+///   <item>
 ///     Return all relation components of an entity using <see cref="RelationExtensions.GetRelations{TComponent}"/>.
 ///   </item>
 ///   <item>

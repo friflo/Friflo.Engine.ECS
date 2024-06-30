@@ -11,6 +11,9 @@ namespace Friflo.Engine.ECS.Index;
 /// This component type enables:
 /// <list type="bullet">
 ///   <item>
+///     Add an index component to an entity using <see cref="Entity.AddComponent{T}()"/>.
+///   </item>
+///   <item>
 ///     Return all entities with a component field of a specific value. <br/>
 ///     See <see cref="IndexExtensions.GetEntitiesWithComponentValue{TIndexedComponent,TValue}"/>.
 ///   </item>
