@@ -95,67 +95,70 @@ public static class Test_Relations
         
         emptyRelations = entity0.GetRelations<AttackRelation>();
         AreEqual(0, emptyRelations.Length);
-        {
-            var query = store.Query<AttackRelation>();
-            int count = 0;
-            query.ForEachEntity((ref AttackRelation relation, Entity entity) => {
-                switch (count++) {
-                    case 0: AreEqual(42, relation.speed); break;
-                    case 1: AreEqual(20, relation.speed); break;
-                    case 2: AreEqual(21, relation.speed); break;
-                    case 3: AreEqual(10, relation.speed); break;
-                    case 4: AreEqual(11, relation.speed); break;
-                    case 5: AreEqual(12, relation.speed); break;
-                }
-            });
-            AreEqual(6, count);
-            AreEqual(6, query.Count);
-            count = 0;
-            foreach (var entity in query.Entities) {
-                count++;
-                var relationCount = 0;
-                var relations = entity.GetRelations<AttackRelation>();
-                switch (entity.Id) {
-                    case 1:
-                        AreEqual(1,  relations.Length);
-                        AreEqual(42, relations[0].speed);
-                        foreach (var relation in relations) {
-                            switch (relationCount++) {
-                                case 0: AreEqual(42, relation.speed); break;
-                            }
-                        }
-                        AreEqual(1, relationCount);
-                        break;
-                    case 2:
-                        AreEqual(2,  relations.Length);
-                        AreEqual(20, relations[0].speed);
-                        AreEqual(21, relations[1].speed);
-                        foreach (var relation in relations) {
-                            switch (relationCount++) {
-                                case 0: AreEqual(20, relation.speed); break;
-                                case 1: AreEqual(21, relation.speed); break;
-                            }
-                        }
-                        AreEqual(2, relationCount);
-                        break;
-                    case 3:
-                        AreEqual(3,  relations.Length);
-                        AreEqual(10, relations[0].speed);
-                        AreEqual(11, relations[1].speed);
-                        AreEqual(12, relations[2].speed);
-                        foreach (var relation in relations) {
-                            switch (relationCount++) {
-                                case 0: AreEqual(10, relation.speed); break;
-                                case 1: AreEqual(11, relation.speed); break;
-                                case 2: AreEqual(12, relation.speed); break;
-                            }
-                        }
-                        AreEqual(3, relationCount);
-                        break;
-                }
+        
+        // --- query
+        var query = store.Query<AttackRelation>();
+        int count = 0;
+        query.ForEachEntity((ref AttackRelation relation, Entity entity) => {
+            switch (count++) {
+                case 0: Mem.AreEqual(42, relation.speed); break;
+                case 1: Mem.AreEqual(20, relation.speed); break;
+                case 2: Mem.AreEqual(21, relation.speed); break;
+                case 3: Mem.AreEqual(10, relation.speed); break;
+                case 4: Mem.AreEqual(11, relation.speed); break;
+                case 5: Mem.AreEqual(12, relation.speed); break;
             }
-            AreEqual(6, count);
+        });
+        Mem.AreEqual(6, count);
+        Mem.AreEqual(6, query.Count);
+        
+        var start = Mem.GetAllocatedBytes();
+        count = 0;
+        foreach (var entity in query.Entities) {
+            count++;
+            var relationCount = 0;
+            var relations = entity.GetRelations<AttackRelation>();
+            switch (entity.Id) {
+                case 1:
+                    Mem.AreEqual(1,  relations.Length);
+                    Mem.AreEqual(42, relations[0].speed);
+                    foreach (var relation in relations) {
+                        switch (relationCount++) {
+                            case 0: Mem.AreEqual(42, relation.speed); break;
+                        }
+                    }
+                    Mem.AreEqual(1, relationCount);
+                    break;
+                case 2:
+                    Mem.AreEqual(2,  relations.Length);
+                    Mem.AreEqual(20, relations[0].speed);
+                    Mem.AreEqual(21, relations[1].speed);
+                    foreach (var relation in relations) {
+                        switch (relationCount++) {
+                            case 0: Mem.AreEqual(20, relation.speed); break;
+                            case 1: Mem.AreEqual(21, relation.speed); break;
+                        }
+                    }
+                    Mem.AreEqual(2, relationCount);
+                    break;
+                case 3:
+                    Mem.AreEqual(3,  relations.Length);
+                    Mem.AreEqual(10, relations[0].speed);
+                    Mem.AreEqual(11, relations[1].speed);
+                    Mem.AreEqual(12, relations[2].speed);
+                    foreach (var relation in relations) {
+                        switch (relationCount++) {
+                            case 0: Mem.AreEqual(10, relation.speed); break;
+                            case 1: Mem.AreEqual(11, relation.speed); break;
+                            case 2: Mem.AreEqual(12, relation.speed); break;
+                        }
+                    }
+                    Mem.AreEqual(3, relationCount);
+                    break;
+            }
         }
+        Mem.AreEqual(6, count);
+        Mem.AssertNoAlloc(start);
     }
     
 #pragma warning disable CS0618 // Type or member is obsolete
