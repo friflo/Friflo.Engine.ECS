@@ -12,7 +12,9 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal abstract class EntityRelations<TValue> : EntityRelations
 {
-    internal EntityRelations(ComponentType componentType, Archetype archetype) : base(componentType, archetype) {}
+    internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
+        : base(componentType, archetype, heap)
+    { }
     
     internal abstract bool RemoveRelation(int id, TValue value);
 }
@@ -22,18 +24,18 @@ internal abstract class EntityRelations<TValue> : EntityRelations
 internal sealed class EntityRelations<TRelationComponent, TValue> : EntityRelations<TValue>
     where TRelationComponent : struct, IRelationComponent<TValue>
 {
-    private  readonly   StructHeap                      heap;
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
     /// Instance created at <see cref="EntityRelations.GetRelationArchetype"/>
-    public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap) : base(componentType, archetype) {
-        this.heap       = heap;
-        heapGeneric     = (StructHeap<TRelationComponent>)heap;
+    public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
+        : base(componentType, archetype, heap)
+    {
+       heapGeneric     = (StructHeap<TRelationComponent>)heap;
     }
     
-    internal override IComponent GetRelation(Entity entity, int index)
+    internal override IComponent GetRelation(int id, int index)
     {
-        entityMap.TryGetValue(entity.Id, out var array);
+        entityMap.TryGetValue(id, out var array);
         var count = array.count;
         if (count == 1) {
             return heapGeneric.components[array.start];
@@ -41,21 +43,6 @@ internal sealed class EntityRelations<TRelationComponent, TValue> : EntityRelati
         var poolIndex   = IdArrayHeap.PoolIndex(count);
         var positions   = idHeap.GetPool(poolIndex).Ids;
         return heapGeneric.components[positions[index]];
-    }
-    
-    internal RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
-        where TComponent : struct, IComponent
-    {
-        entityMap.TryGetValue(entity.Id, out var array);
-        var count           = array.count;
-        var componentHeap   = (StructHeap<TComponent>)heap;
-        switch (count) {
-            case 0: return  new RelationComponents<TComponent>();
-            case 1: return  new RelationComponents<TComponent>(componentHeap.components, array.start);
-        }
-        var poolIndex   = IdArrayHeap.PoolIndex(count);
-        var positions   = idHeap.GetPool(poolIndex).Ids;
-        return new RelationComponents<TComponent>(componentHeap.components, positions, array.start, array.count);
     }
     
 #region add component

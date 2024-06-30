@@ -11,7 +11,7 @@ internal static class RelationExtensions
         where TComponent : struct, IRelationComponent<TValue>
     {
         var index       = StructInfo<TComponent>.Index;
-        var relations   = (EntityRelations<TComponent, TValue>)entity.Store.relationsMap[index];
+        var relations   = entity.Store.relationsMap[index];
         if (relations != null) {
             return relations.GetRelations<TComponent>(entity);
         }

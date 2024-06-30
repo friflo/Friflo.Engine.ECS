@@ -16,24 +16,28 @@ internal abstract class EntityRelations
     internal  readonly  Archetype                   archetype;
     internal  readonly  Dictionary<int, IdArray>    entityMap   = new ();
     internal  readonly  IdArrayHeap                 idHeap      = new();
+    internal  readonly  StructHeap                  heap;
     private   readonly  int                         indexBit;
     
-    internal EntityRelations(ComponentType componentType, Archetype archetype) {
+    internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap) {
         this.archetype  = archetype;
+        this.heap       = heap;
         var types       = new ComponentTypes(componentType);
         indexBit        = (int)types.bitSet.l0;
     }
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
-    internal  abstract IComponent   GetRelation       (Entity entity, int index);
+    internal  abstract IComponent   GetRelation             (int id, int index);
     
-    internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component) where TComponent : struct, IComponent
+    internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
+        where TComponent : struct, IComponent
     {
         var relation = GetRelationArchetype(store, StructInfo<TComponent>.Index);
         return relation.AddComponent(id, component);
     }
     
-    internal static bool RemoveRelation<TComponent, TValue>(EntityStoreBase store, int id, TValue value)  where TComponent : struct, IRelationComponent<TValue>
+    internal static bool RemoveRelation<TComponent, TValue>(EntityStoreBase store, int id, TValue value)
+        where TComponent : struct, IRelationComponent<TValue>
     {
         var relation = (EntityRelations<TValue>)GetRelationArchetype(store, StructInfo<TComponent>.Index);
         return relation.RemoveRelation(id, value);
@@ -42,6 +46,21 @@ internal abstract class EntityRelations
     internal int GetRelationCount  (Entity entity) {
         entityMap.TryGetValue(entity.Id, out var array);
         return array.count;
+    }
+    
+    internal RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
+        where TComponent : struct, IComponent
+    {
+        entityMap.TryGetValue(entity.Id, out var array);
+        var count           = array.count;
+        var componentHeap   = (StructHeap<TComponent>)heap;
+        switch (count) {
+            case 0: return  new RelationComponents<TComponent>();
+            case 1: return  new RelationComponents<TComponent>(componentHeap.components, array.start);
+        }
+        var poolIndex   = IdArrayHeap.PoolIndex(count);
+        var positions   = idHeap.GetPool(poolIndex).Ids;
+        return new RelationComponents<TComponent>(componentHeap.components, positions, array.start, array.count);
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO

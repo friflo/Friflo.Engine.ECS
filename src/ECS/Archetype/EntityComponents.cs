@@ -194,7 +194,7 @@ public readonly struct EntityComponent
         if (entityRelations == null) {
             return entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
         }
-        return entityRelations.GetRelation(entity, relationsIndex);
+        return entityRelations.GetRelation(entity.Id, relationsIndex);
     }
 }
 
