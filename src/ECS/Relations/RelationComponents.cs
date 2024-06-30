@@ -16,7 +16,10 @@ internal readonly struct RelationComponents<TComponent> : IEnumerable<TComponent
     where TComponent : struct, IComponent
 {
     public   override   string          ToString()  => $"Relations<{typeof(TComponent).Name}>[{Length}]";
-    /// <summary> Return the number of relation components. </summary>
+    /// <summary>
+    /// Return the number of relation components.<br/>
+    /// Executes in O(1).
+    /// </summary>
     public   readonly   int             Length;     //  4
     internal readonly   int             start;      //  4
     internal readonly   int[]           positions;  //  8
@@ -37,7 +40,10 @@ internal readonly struct RelationComponents<TComponent> : IEnumerable<TComponent
         Length          = 1;
     }
     
-    /// <summary> Return the relation component at the given <paramref name="index"/>. </summary>
+    /// <summary>
+    /// Return the relation component at the given <paramref name="index"/>.<br/>
+    /// Executes in O(1).
+    /// </summary>
     public TComponent this[int index] => components[positions != null ? positions[index] : position];
        
     // --- IEnumerable<>
