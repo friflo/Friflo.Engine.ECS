@@ -368,10 +368,20 @@ public static class Test_Relations
     }
     
     [Test]
-    public static void Test_Relations_Remove_exception()
+    public static void Test_Relations_Entity_Component_methods()
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
+        
+        IsFalse(entity.HasComponent<IntRelation>());
+        
+        IsFalse(entity.TryGetComponent<IntRelation>(out var relation));
+        AreEqual(new IntRelation(), relation);
+        
+        Throws<NullReferenceException>(() => {
+            entity.GetComponent<IntRelation>();
+        });
+
         var e = Throws<ArgumentException>(() => {
             entity.RemoveComponent<IntRelation>();
         });
