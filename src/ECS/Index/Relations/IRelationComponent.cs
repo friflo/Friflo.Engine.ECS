@@ -4,7 +4,11 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal interface IRelationComponent<out TValue> : IComponent
+internal interface IRelationComponent : IComponent
+{
+}
+
+internal interface IRelationComponent<out TValue> : IRelationComponent
 {
     TValue GetRelation();
 }

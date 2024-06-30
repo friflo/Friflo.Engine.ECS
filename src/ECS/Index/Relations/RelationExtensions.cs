@@ -7,8 +7,8 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal static class RelationExtensions
 {
-    public static RelationComponents<TComponent> GetRelations<TComponent, TValue>(this Entity entity)
-        where TComponent : struct, IRelationComponent<TValue>
+    public static RelationComponents<TComponent> GetRelations<TComponent>(this Entity entity)
+        where TComponent : struct, IRelationComponent
     {
         var index       = StructInfo<TComponent>.Index;
         var relations   = entity.Store.relationsMap[index];

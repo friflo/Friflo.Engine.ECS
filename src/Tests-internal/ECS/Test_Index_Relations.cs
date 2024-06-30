@@ -73,7 +73,7 @@ public static class Test_Index_Relations
     {
         var store    = new EntityStore();
         var entity0  = store.CreateEntity(100);
-        var emptyRelations = entity0.GetRelations<AttackRelation, Entity>();
+        var emptyRelations = entity0.GetRelations<AttackRelation>();
         AreEqual(0, emptyRelations.Length);
         
         var entity1  = store.CreateEntity(1);
@@ -94,7 +94,7 @@ public static class Test_Index_Relations
         entity3.AddComponent(new AttackRelation { target = target11, speed = 11 });
         entity3.AddComponent(new AttackRelation { target = target12, speed = 12 });
         
-        emptyRelations = entity0.GetRelations<AttackRelation, Entity>();
+        emptyRelations = entity0.GetRelations<AttackRelation>();
         AreEqual(0, emptyRelations.Length);
         {
             var query = store.Query<AttackRelation>();
@@ -115,7 +115,7 @@ public static class Test_Index_Relations
             foreach (var entity in query.Entities) {
                 count++;
                 var relationCount = 0;
-                var relations = entity.GetRelations<AttackRelation, Entity>();
+                var relations = entity.GetRelations<AttackRelation>();
                 switch (entity.Id) {
                     case 1:
                         AreEqual(1,  relations.Length);
@@ -220,7 +220,7 @@ public static class Test_Index_Relations
         entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
         entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
         
-        var relations = entity.GetRelations<AttackRelation, Entity>();
+        var relations = entity.GetRelations<AttackRelation>();
         
         // --- IEnumerable<>
         IEnumerable<AttackRelation> enumerable = relations;
@@ -248,7 +248,7 @@ public static class Test_Index_Relations
         AreEqual(2, count);
         
         var entity2  = store.CreateEntity(2);
-        enumerable2  = entity2.GetRelations<AttackRelation, Entity>();
+        enumerable2  = entity2.GetRelations<AttackRelation>();
         count = 0;
         foreach (var relation in enumerable2) {
             count++;
@@ -269,8 +269,8 @@ public static class Test_Index_Relations
         entity1.RemoveRelation<IntRelation, int>(1);
         entity2.AddComponent(new IntRelation { value = 3 });
         
-        var relations1 = entity1.GetRelations<IntRelation, int>();
-        var relations2 = entity2.GetRelations<IntRelation, int>();
+        var relations1 = entity1.GetRelations<IntRelation>();
+        var relations2 = entity2.GetRelations<IntRelation>();
         AreEqual(1, relations1.Length);
         AreEqual(2, relations1[0].value);
         AreEqual(1, relations2.Length);
@@ -291,13 +291,13 @@ public static class Test_Index_Relations
         }
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                Mem.AreEqual(n, entity.GetRelations<IntRelation,int>().Length);
+                Mem.AreEqual(n, entity.GetRelations<IntRelation>().Length);
                 Mem.IsTrue(entity.AddComponent(new IntRelation{ value = n }));
             }
         }
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                Mem.AreEqual(relationCount - n, entity.GetRelations<IntRelation,int>().Length);
+                Mem.AreEqual(relationCount - n, entity.GetRelations<IntRelation>().Length);
                 Mem.IsTrue(entity.RemoveRelation<IntRelation, int>(n));
             }
         }
