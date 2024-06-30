@@ -133,7 +133,7 @@ public abstract partial class EntityStoreBase
         var config          = GetArchetypeConfig(this);
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
-        relationsMap        = new EntityRelations[config.maxStructIndex];
+        relationsMap        = new EntityRelations[config.schema.maxIndexedStructIndex];
         AddArchetype(this, defaultArchetype);
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());

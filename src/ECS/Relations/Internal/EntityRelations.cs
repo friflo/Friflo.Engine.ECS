@@ -13,6 +13,8 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal abstract class EntityRelations
 {
+    public    override  string                      ToString()          => $"relation count: {archetype.Count}";
+
     internal  readonly  Archetype                   archetype;
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new ();
     internal  readonly  IdArrayHeap                 idHeap              = new();

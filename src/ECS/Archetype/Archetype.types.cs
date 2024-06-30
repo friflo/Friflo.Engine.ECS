@@ -18,13 +18,13 @@ internal readonly struct ArchetypeConfig
 {
     internal readonly   EntityStoreBase store;
     internal readonly   int             archetypeIndex;
-    internal readonly   int             maxStructIndex;
+    internal readonly   EntitySchema    schema;
     
-    internal ArchetypeConfig(EntityStoreBase store, int archetypeIndex, int maxStructIndex)
+    internal ArchetypeConfig(EntityStoreBase store, int archetypeIndex, EntitySchema schema)
     {
         this.store          = store;
         this.archetypeIndex = archetypeIndex;
-        this.maxStructIndex = maxStructIndex;
+        this.schema         = schema;
     }
 }
 

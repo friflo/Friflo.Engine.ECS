@@ -182,7 +182,7 @@ public sealed class Archetype
         componentCount  = 1;
         structHeaps     = new [] { heap };
         entityIds       = new int [memory.capacity];
-        heapMap         = new StructHeap[config.maxStructIndex];
+        heapMap         = new StructHeap[config.schema.maxStructIndex];
         componentTypes  = new ComponentTypes(structHeaps);
         key             = new ArchetypeKey(this);
         heapMap[heap.structIndex] = heap;
@@ -202,7 +202,7 @@ public sealed class Archetype
         componentCount  = heaps.Length;
         structHeaps     = heaps;
         entityIds       = new int [memory.capacity];
-        heapMap         = new StructHeap[config.maxStructIndex];
+        heapMap         = new StructHeap[config.schema.maxStructIndex];
         componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);

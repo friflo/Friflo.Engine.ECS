@@ -16,8 +16,7 @@ public partial class EntityStoreBase
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
     internal static ArchetypeConfig GetArchetypeConfig(EntityStoreBase store) {
-        var maxStructIndex = Static.EntitySchema.maxStructIndex;
-        return new ArchetypeConfig (store, store.archsCount, maxStructIndex);
+        return new ArchetypeConfig (store, store.archsCount, Static.EntitySchema);
     }
     
     /// <summary>
