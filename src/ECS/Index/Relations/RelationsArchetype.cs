@@ -14,8 +14,8 @@ namespace Friflo.Engine.ECS.Relations;
 internal abstract class RelationsArchetype
 {
     internal  readonly  Archetype                   archetype;
-    internal  readonly  Dictionary<int, IdArray>    entityMap           = new ();
-    internal  readonly  IdArrayHeap                 idHeap              = new();
+    internal  readonly  Dictionary<int, IdArray>    entityMap   = new ();
+    internal  readonly  IdArrayHeap                 idHeap      = new();
     private   readonly  int                         indexBit;
     
     internal RelationsArchetype(ComponentType componentType, Archetype archetype) {
@@ -155,8 +155,8 @@ internal sealed class RelationsArchetype<TRelationComponent, TValue> : Relations
 /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
 protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
-        var relationValue = RelationUtils<TComponent, TValue>.GetRelationValue(component);
-    //  var relationValue = ((IRelationComponent<TValue>)component).GetRelation(); // boxing version
+        var relationValue   = RelationUtils<TComponent, TValue>.GetRelationValue(component);
+    //  var relationValue   = ((IRelationComponent<TValue>)component).GetRelation(); // boxing version
         entityMap.TryGetValue(id, out var positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
         var components      = heapGeneric.components;
@@ -165,8 +165,8 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         for (int n = 0; n < positionSpan.Length; n++)
         {
             position        = positionSpan[n];
-        //  var relation    = RelationUtils<TComponent, TValue>.GetRelationValue(components[compIndex]);
             var relation    = components[position].GetRelation(); // no boxing
+        //  var relation    = RelationUtils<TComponent, TValue>.GetRelationValue(((StructHeap<TComponent>)heap).components[position]);
             if (EqualityComparer<TValue>.Default.Equals(relation, relationValue)) {
                 added = false;
                 goto AssignComponent;
@@ -191,7 +191,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         for (int n = 0; n < positionSpan.Length; n++)
         {
             var position    = positionSpan[n];
-        //  var relation    = RelationUtils<TRelationComponent, TValue>.GetRelationValue(components[compIndex]);
+        //  var relation    = RelationUtils<TRelationComponent, TValue>.GetRelationValue(components[position]);
             var relation    = components[position].GetRelation(); // no boxing
             if (!EqualityComparer<TValue>.Default.Equals(relation, value)) {
                 continue;

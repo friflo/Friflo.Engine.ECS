@@ -10,6 +10,7 @@ using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -79,6 +80,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         if (relationCount > 0) {
             sb.Append(" +");
             sb.Append(relationCount);
+            sb.Append(" relations");
         }
         return sb.ToString();
     }

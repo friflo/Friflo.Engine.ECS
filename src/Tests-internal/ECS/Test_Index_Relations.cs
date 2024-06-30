@@ -44,16 +44,16 @@ public static class Test_Index_Relations
         var target11    = store.CreateEntity(11);
         var components  = entity3.Components;
         IsTrue (entity3.AddComponent(new AttackRelation { target = target10, speed = 1 }));
-        AreEqual("Components: [] +1", components.ToString());
+        AreEqual("Components: [] +1 relations", components.ToString());
         IsTrue (entity3.AddComponent(new AttackRelation { target = target11, speed = 1  }));
-        AreEqual("Components: [] +2", components.ToString());
+        AreEqual("Components: [] +2 relations", components.ToString());
         IsFalse(entity3.AddComponent(new AttackRelation { target = target11, speed = 42  }));
-        AreEqual("Components: [] +2", components.ToString());
+        AreEqual("Components: [] +2 relations", components.ToString());
         
         IsTrue (entity3.RemoveRelation<AttackRelation, Entity>(target10));
-        AreEqual("Components: [] +1", components.ToString());
+        AreEqual("Components: [] +1 relations", components.ToString());
         IsFalse(entity3.RemoveRelation<AttackRelation, Entity>(target10));
-        AreEqual("Components: [] +1", components.ToString());
+        AreEqual("Components: [] +1 relations", components.ToString());
         
         IsTrue (entity3.RemoveRelation<AttackRelation, Entity>(target11));
         AreEqual("Components: []", components.ToString());
@@ -166,14 +166,14 @@ public static class Test_Index_Relations
         var store    = new EntityStore();
         var target10 = store.CreateEntity(10);
         var target11 = store.CreateEntity(11);
-        var entity      = store.CreateEntity(1);
+        var entity   = store.CreateEntity(1);
 
         var components = entity.Components;
         entity.AddComponent(new Position());
         AreEqual(1, components.Count);
 
         entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
-        AreEqual("Components: [Position] +1", components.ToString());
+        AreEqual("Components: [Position] +1 relations", components.ToString());
         AreEqual(2, components.Count);
         int count = 0;
         foreach (var component in components) {
@@ -189,7 +189,7 @@ public static class Test_Index_Relations
         }
         
         entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
-        AreEqual("Components: [Position] +2", components.ToString());
+        AreEqual("Components: [Position] +2 relations", components.ToString());
         AreEqual(3, components.Count);
         count = 0;
         foreach (var component in components) {
@@ -291,26 +291,26 @@ public static class Test_Index_Relations
         }
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                entity.AddComponent(new IntRelation{ value = n });
+                Mem.AreEqual(n, entity.GetRelations<IntRelation,int>().Length);
+                Mem.IsTrue(entity.AddComponent(new IntRelation{ value = n }));
             }
-            Mem.AreEqual($"Components: [] +{relationCount}", entity.Components.ToString());
         }
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                entity.RemoveRelation<IntRelation, int>(n);
+                Mem.AreEqual(relationCount - n, entity.GetRelations<IntRelation,int>().Length);
+                Mem.IsTrue(entity.RemoveRelation<IntRelation, int>(n));
             }
-            Mem.AreEqual("Components: []", entity.Components.ToString());
         }
         var start = Mem.GetAllocatedBytes();
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                entity.AddComponent(new IntRelation{ value = n });
+                Mem.IsTrue(entity.AddComponent(new IntRelation{ value = n }));
             }
             Mem.AreEqual(relationCount, entity.Components.Count);
         }
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                entity.RemoveRelation<IntRelation, int>(n);
+                Mem.IsTrue(entity.RemoveRelation<IntRelation, int>(n));
             }
             Mem.AreEqual(0, entity.Components.Count);
         }
