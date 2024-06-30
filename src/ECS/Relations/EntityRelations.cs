@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Index;
 
 // ReSharper disable InlineTemporaryVariable
-// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
 internal abstract class EntityRelations
