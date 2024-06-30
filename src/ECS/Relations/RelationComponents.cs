@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS.Relations;
+namespace Friflo.Engine.ECS;
 
 internal readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
     where TComponent : struct, IComponent
