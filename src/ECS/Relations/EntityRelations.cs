@@ -32,15 +32,15 @@ internal abstract class EntityRelations
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
         where TComponent : struct, IComponent
     {
-        var relation = GetRelationArchetype(store, StructInfo<TComponent>.Index);
-        return relation.AddComponent(id, component);
+        var relations = GetEntityRelations(store, StructInfo<TComponent>.Index);
+        return relations.AddComponent(id, component);
     }
     
     internal static bool RemoveRelation<TComponent, TValue>(EntityStoreBase store, int id, TValue value)
         where TComponent : struct, IRelationComponent<TValue>
     {
-        var relation = (EntityRelations<TValue>)GetRelationArchetype(store, StructInfo<TComponent>.Index);
-        return relation.RemoveRelation(id, value);
+        var relations = (EntityRelations<TValue>)GetEntityRelations(store, StructInfo<TComponent>.Index);
+        return relations.RemoveRelation(id, value);
     }
     
     internal int GetRelationCount  (Entity entity) {
@@ -64,7 +64,7 @@ internal abstract class EntityRelations
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
-    private static EntityRelations GetRelationArchetype(EntityStoreBase store, int structIndex)
+    private static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
     {
         var relations = store.relationsMap[structIndex];
         if (relations != null) {

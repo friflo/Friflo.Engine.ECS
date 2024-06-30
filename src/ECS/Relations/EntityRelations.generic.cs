@@ -26,7 +26,7 @@ internal sealed class EntityRelations<TRelationComponent, TValue> : EntityRelati
 {
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
-    /// Instance created at <see cref="EntityRelations.GetRelationArchetype"/>
+    /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
     public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
