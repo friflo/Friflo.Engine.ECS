@@ -31,10 +31,10 @@ internal struct IntRelation : IRelationComponent<int>
 }
 
 
-public static class Test_Index_Relations
+public static class Test_Relations
 {
     [Test]
-    public static void Test_Index_Relations_add_remove()
+    public static void Test_Relations_add_remove()
     {
         var store       = new EntityStore();
         var entity3     = store.CreateEntity(3);
@@ -68,7 +68,7 @@ public static class Test_Index_Relations
     }
     
     [Test]
-    public static void Test_Index_Relations_query()
+    public static void Test_Relations_query()
     {
         var store    = new EntityStore();
         var entity0  = store.CreateEntity(100);
@@ -160,7 +160,7 @@ public static class Test_Index_Relations
     
 #pragma warning disable CS0618 // Type or member is obsolete
     [Test]
-    public static void Test_Index_Relations_EntityComponents()
+    public static void Test_Relations_EntityComponents()
     {
         var store    = new EntityStore();
         var target10 = store.CreateEntity(10);
@@ -209,7 +209,7 @@ public static class Test_Index_Relations
     }
     
     [Test]
-    public static void Test_Index_Relations_Enumerator()
+    public static void Test_Relations_Enumerator()
     {
         var store    = new EntityStore();
         var entity  = store.CreateEntity(1);
@@ -256,7 +256,7 @@ public static class Test_Index_Relations
     }
     
     [Test]
-    public static void Test_Index_Relations_adjust_position_on_remove_relation()
+    public static void Test_Relations_adjust_position_on_remove_relation()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity();
@@ -279,7 +279,7 @@ public static class Test_Index_Relations
     }
     
     [Test]
-    public static void Test_Index_Relations_int_relation()
+    public static void Test_Relations_int_relation()
     {
         var relationCount   = 10;
         var entityCount     = 100;
@@ -317,7 +317,7 @@ public static class Test_Index_Relations
     }
     
     [Test]
-    public static void Test_Index_Relations_query_exception()
+    public static void Test_Relations_query_exception()
     {
         var store    = new EntityStore();
         var e = Throws<InvalidOperationException>(() => {
