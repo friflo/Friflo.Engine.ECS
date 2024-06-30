@@ -32,7 +32,7 @@ internal static class RelationComponentUtils
     private static Type MakeIndexType(Type componentType, Type valueType)
     {
         var typeArgs    = new [] { componentType, valueType };
-        var type        = typeof(RelationsArchetype<,>).MakeGenericType(typeArgs);
+        var type        = typeof(EntityRelations<,>).MakeGenericType(typeArgs);
         return type;
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -170,7 +171,7 @@ public sealed class Archetype
         // tags             = default   // has no tags
     }
     
-    /// <summary> used by <see cref="ECS.Relations.RelationsArchetype"/> </summary>
+    /// <summary> used by <see cref="EntityRelations"/> </summary>
     internal Archetype(in ArchetypeConfig config, StructHeap heap)
     {
         memory.capacity = ArchetypeUtils.MinCapacity;
