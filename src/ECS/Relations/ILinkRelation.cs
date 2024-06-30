@@ -21,5 +21,5 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 /// </list>
 /// </remarks>
-internal interface ILinkRelation : IRelationComponent<Entity> {
+public interface ILinkRelation : IRelationComponent<Entity> {
 }

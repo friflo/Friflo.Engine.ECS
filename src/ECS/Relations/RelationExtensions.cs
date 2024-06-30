@@ -6,7 +6,7 @@ using Friflo.Engine.ECS.Relations;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal static class RelationExtensions
+public static class RelationExtensions
 {
     /// <summary>
     /// Returns all unique relation components of the passed <paramref name="entity"/>.<br/>

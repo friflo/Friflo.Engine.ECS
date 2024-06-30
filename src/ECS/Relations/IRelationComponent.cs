@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal interface IRelationComponent : IComponent { }
+public interface IRelationComponent : IComponent { }
 
 /// <summary>
 /// A relation component enables adding multiple components of the same type to an entity.<br/>
@@ -25,7 +25,7 @@ internal interface IRelationComponent : IComponent { }
 ///   </item>
 /// </list>
 /// </remarks>
-internal interface IRelationComponent<out TKey> : IRelationComponent
+public interface IRelationComponent<out TKey> : IRelationComponent
 {
     /// <summary>
     /// Returns the key of a unique relation component.
