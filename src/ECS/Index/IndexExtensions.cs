@@ -2,8 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using Friflo.Engine.ECS.Index;
 
-namespace Friflo.Engine.ECS.Index;
+// ReSharper disable once CheckNamespace
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Provide extension methods to query all or specific component values.<br/>

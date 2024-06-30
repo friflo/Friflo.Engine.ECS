@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Friflo.Engine.ECS;
-using Friflo.Engine.ECS.Index;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 

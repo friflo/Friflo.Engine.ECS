@@ -1,7 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-namespace Friflo.Engine.ECS.Index;
+// ReSharper disable once CheckNamespace
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A link component is a component type used to create a single link from one entity to another entity.<br/>

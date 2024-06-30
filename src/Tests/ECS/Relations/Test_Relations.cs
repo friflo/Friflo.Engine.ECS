@@ -11,7 +11,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS {
+namespace Tests.ECS.Relations {
 
 internal struct AttackRelation : ILinkRelation
 {
