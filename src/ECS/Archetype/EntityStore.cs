@@ -175,5 +175,12 @@ public abstract partial class EntityStoreBase
     internal static Exception   AddEntityAsChildToItselfException(int id) {
         return new InvalidOperationException($"Cannot add entity to itself as a child. id: {id}");
     }
+    
+    private static ArgumentException RemoveRelationException(int id, int structIndex) {
+        var componentType   = Static.EntitySchema.components[structIndex];
+        var type            = componentType.Name;
+        var keyType         = componentType.RelationKeyType.Name;
+        return new ArgumentException($"relation component must be removed with entity.{nameof(RelationExtensions.RemoveRelation)}<{type},{keyType}>(key). id: {id}");
+    }
     #endregion
 }

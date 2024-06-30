@@ -47,7 +47,7 @@ internal static class SchemaUtils
         return new EntitySchema(dependants, schemaTypes);
     }
     
-    internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex, Type indexType, Type relationType)
+    internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex, Type indexType, Type relationType, Type keyType)
         where T : struct, IComponent
     {
         string componentKey;
@@ -57,7 +57,7 @@ internal static class SchemaUtils
         } else {
             componentKey = GetComponentKey(type);
         }
-        return new ComponentType<T>(componentKey, structIndex, indexType, typeStore, relationType);
+        return new ComponentType<T>(componentKey, structIndex, indexType, typeStore, relationType, keyType);
     }
     
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore, int scriptIndex)

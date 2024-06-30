@@ -28,6 +28,8 @@ public abstract class ComponentType : SchemaType
     
     internal readonly   Type        RelationType;   //  8
     
+    internal readonly   Type        RelationKeyType;//  8
+    
     internal abstract   StructHeap          CreateHeap();
     internal abstract   bool                RemoveEntityComponent  (Entity entity);
     internal abstract   bool                AddEntityComponent     (Entity entity);
@@ -36,7 +38,7 @@ public abstract class ComponentType : SchemaType
     internal abstract   BatchComponent      CreateBatchComponent();
     internal abstract   ComponentCommands   CreateComponentCommands();
     
-    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize, Type relationType)
+    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize, Type relationType, Type keyType)
         : base (componentKey, type, Component)
     {
         StructIndex     = structIndex;
@@ -44,6 +46,7 @@ public abstract class ComponentType : SchemaType
         StructSize      = byteSize;
         IndexType       = indexType;
         RelationType    = relationType;
+        RelationKeyType = keyType;
     }
 }
 
@@ -77,8 +80,8 @@ internal sealed class ComponentType<T> : ComponentType
     private  readonly   TypeStore       typeStore;
     #endregion
 
-    internal ComponentType(string componentKey, int structIndex, Type indexType, TypeStore typeStore, Type relationType)
-        : base(componentKey, structIndex, typeof(T), indexType, ByteSize, relationType)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, TypeStore typeStore, Type relationType, Type keyType)
+        : base(componentKey, structIndex, typeof(T), indexType, ByteSize, relationType, keyType)
     {
         this.typeStore = typeStore;
     }

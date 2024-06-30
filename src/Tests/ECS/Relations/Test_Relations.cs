@@ -366,6 +366,18 @@ public static class Test_Relations
         });
         AreEqual("relation component query cannot have other query components", e!.Message);
     }
+    
+    [Test]
+    public static void Test_Relations_Remove_exception()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        var e = Throws<ArgumentException>(() => {
+            entity.RemoveComponent<IntRelation>();
+        });
+        AreEqual("relation component must be removed with entity.RemoveRelation<IntRelation,Int32>(key). id: 1", e!.Message);
+        entity.RemoveRelation<IntRelation,int>(42); // example
+    }
 }
 
 }

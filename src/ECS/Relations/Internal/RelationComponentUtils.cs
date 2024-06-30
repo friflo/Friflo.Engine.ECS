@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS.Relations;
 internal static class RelationComponentUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
-    internal static Type GetRelationArchetype(Type componentType)
+    internal static Type GetEntityRelationsType(Type componentType, out Type keyType)
     {
         var interfaces = componentType.GetInterfaces();
         foreach (var i in interfaces)
@@ -20,9 +20,10 @@ internal static class RelationComponentUtils
             if (genericType != typeof(IRelationComponent<>)) {
                 continue;
             }
-            var valueType = i.GenericTypeArguments[0];
-            return MakeIndexType(componentType, valueType);
+            keyType = i.GenericTypeArguments[0];
+            return MakeIndexType(componentType, keyType);
         }
+        keyType = null;
         return null;
     }
     

@@ -76,9 +76,9 @@ public partial class EntityStoreBase
     {
         var arch    = archetype;
         var store   = arch.store;
-        /* if (StructInfo<T>.IsRelation) {
-            return RelationArchetype.RemoveComponent<T>(store, id);
-        } */
+        if (StructInfo<T>.IsRelation) {
+            throw RemoveRelationException(id, structIndex);
+        }
         var heap    = (StructHeap<T>)arch.heapMap[structIndex];
         if (heap == null) {
             return false;
