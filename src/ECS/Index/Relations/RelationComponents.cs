@@ -9,7 +9,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
-internal readonly struct Relations<TComponent> : IEnumerable<TComponent>
+internal readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
     where TComponent : struct, IComponent
 {
     public   override   string          ToString()  => $"Relations<{typeof(TComponent).Name}>[{Length}]";
@@ -20,7 +20,7 @@ internal readonly struct Relations<TComponent> : IEnumerable<TComponent>
     internal readonly   TComponent[]    components; //  8
     internal readonly   int             position;   //  4
     
-    internal Relations(TComponent[] components, int[] positions, int start, int length)
+    internal RelationComponents(TComponent[] components, int[] positions, int start, int length)
     {
         this.components = components;
         this.positions  = positions;
@@ -28,7 +28,7 @@ internal readonly struct Relations<TComponent> : IEnumerable<TComponent>
         Length          = length;
     }
    
-    internal Relations(TComponent[] components, int position) {
+    internal RelationComponents(TComponent[] components, int position) {
         this.components = components;
         this.position   = position;
         Length          = 1;
@@ -58,7 +58,7 @@ internal struct RelationsEnumerator<TComponent> : IEnumerator<TComponent>
     private             int             index;
     
     
-    internal RelationsEnumerator(Relations<TComponent> relations) {
+    internal RelationsEnumerator(in RelationComponents<TComponent> relations) {
         positions   = relations.positions;
         position    = relations.position;
         components  = relations.components;
