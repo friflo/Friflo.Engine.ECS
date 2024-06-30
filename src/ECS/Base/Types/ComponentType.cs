@@ -36,7 +36,7 @@ public abstract class ComponentType : SchemaType
     internal abstract   BatchComponent      CreateBatchComponent();
     internal abstract   ComponentCommands   CreateComponentCommands();
     
-    protected ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize, Type relationType)
+    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize, Type relationType)
         : base (componentKey, type, Component)
     {
         StructIndex     = structIndex;
