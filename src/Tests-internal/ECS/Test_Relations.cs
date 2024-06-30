@@ -30,9 +30,47 @@ internal struct IntRelation : IRelationComponent<int>
     public override string ToString() => value.ToString();
 }
 
+internal enum InventoryItemType {
+    Axe,
+    Gun,
+    Sword,
+    Shield,
+}
+
+/// <summary> <see cref="IRelationComponent{TKey}"/> using an enum as relation key. </summary>
+internal struct InventoryItem : IRelationComponent<InventoryItemType>
+{
+    public InventoryItemType    type;
+    public int                  amount;
+    public InventoryItemType    GetRelationKey() => type;
+
+    public override string ToString() => type.ToString();
+}
+
 
 public static class Test_Relations
 {
+    [Test]
+    public static void Test_Relations_enum_relation()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Gun,       amount = 2 });
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Sword,     amount = 3 });
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Shield,    amount = 4 });
+        
+        var start = Mem.GetAllocatedBytes();
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 11 });
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Gun,       amount = 12 });
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Sword,     amount = 13 });
+        entity.AddComponent(new InventoryItem { type = InventoryItemType.Shield,    amount = 14 });
+        var inventoryItems = entity.GetRelations<InventoryItem>();
+        Mem.AreEqual(4, inventoryItems.Length);
+        Mem.AssertNoAlloc(start);
+    }
+    
+    
     [Test]
     public static void Test_Relations_add_remove()
     {
