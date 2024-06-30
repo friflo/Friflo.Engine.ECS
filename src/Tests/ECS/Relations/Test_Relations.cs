@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable UnusedVariable
 // ReSharper disable AccessToModifiedClosure
 // ReSharper disable UnusedParameter.Local
@@ -75,15 +76,20 @@ public static class Test_Relations
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
+        InventoryItem value;
+        
+        IsFalse (entity.TryGetRelation(InventoryItemType.Axe,    out value));
+        AreEqual(new InventoryItem(), value);
+        
         entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
         
         ref var axeRelation = ref entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe);
         AreEqual(1, axeRelation.amount);
         
-        IsTrue(entity.TryGetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe, out var value));
+        IsTrue  (entity.TryGetRelation(InventoryItemType.Axe,    out value));
         AreEqual(1, value.amount);
         
-        IsFalse(entity.TryGetRelation(InventoryItemType.Shield, out value));
+        IsFalse (entity.TryGetRelation(InventoryItemType.Shield, out value));
         AreEqual(new InventoryItem(), value);
         
         Throws<NullReferenceException>(() => {
