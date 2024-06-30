@@ -43,23 +43,27 @@ internal abstract class EntityRelations
         return relations.RemoveRelation(id, key);
     }
     
-    internal int GetRelationCount  (Entity entity) {
+    internal int GetRelationCount(Entity entity) {
         entityMap.TryGetValue(entity.Id, out var array);
         return array.count;
     }
     
-    internal RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
-        where TComponent : struct, IComponent
+    internal static RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
+        where TComponent : struct, IRelationComponent
     {
-        entityMap.TryGetValue(entity.Id, out var array);
+        var relations = entity.Store.relationsMap[StructInfo<TComponent>.Index];
+        if (relations == null) {
+            return default;
+        }
+        relations.entityMap.TryGetValue(entity.Id, out var array);
         var count           = array.count;
-        var componentHeap   = (StructHeap<TComponent>)heap;
+        var componentHeap   = (StructHeap<TComponent>)relations.heap;
         switch (count) {
             case 0: return  new RelationComponents<TComponent>();
             case 1: return  new RelationComponents<TComponent>(componentHeap.components, array.start);
         }
         var poolIndex   = IdArrayHeap.PoolIndex(count);
-        var positions   = idHeap.GetPool(poolIndex).Ids;
+        var positions   = relations.idHeap.GetPool(poolIndex).Ids;
         return new RelationComponents<TComponent>(componentHeap.components, positions, array.start, array.count);
     }
     

@@ -11,12 +11,7 @@ internal static class RelationExtensions
     public static RelationComponents<TComponent> GetRelations<TComponent>(this Entity entity)
         where TComponent : struct, IRelationComponent
     {
-        var index       = StructInfo<TComponent>.Index;
-        var relations   = entity.Store.relationsMap[index];
-        if (relations != null) {
-            return relations.GetRelations<TComponent>(entity);
-        }
-        return default;
+        return EntityRelations.GetRelations<TComponent>(entity);
     }
     
     public static bool RemoveRelation<T, TKey>(this Entity entity, TKey key) where T : struct, IRelationComponent<TKey> {
