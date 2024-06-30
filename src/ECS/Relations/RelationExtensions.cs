@@ -23,7 +23,9 @@ internal static class RelationExtensions
     /// Executes in O(N) N: number of relations of the specific entity.
     /// </summary>
     /// <returns>true if the entity contained a relation of the given type before. </returns>
-    public static bool RemoveRelation<T, TKey>(this Entity entity, TKey key) where T : struct, IRelationComponent<TKey> {
+    public static bool RemoveRelation<T, TKey>(this Entity entity, TKey key)
+        where T : struct, IRelationComponent<TKey>
+    {
         return EntityRelations.RemoveRelation<T, TKey>(entity.Store, entity.Id, key);
     }
     
@@ -32,7 +34,9 @@ internal static class RelationExtensions
     /// Executes in O(N) N: number of link relations of the specified entity.
     /// </summary>
     /// <returns>true if the entity contained a link relation of the given type before. </returns>
-    public static bool RemoveLinkRelation<T>(this Entity entity, Entity target) where T : struct, ILinkRelation {
+    public static bool RemoveLinkRelation<T>(this Entity entity, Entity target)
+        where T : struct, ILinkRelation
+    {
         return EntityRelations.RemoveRelation<T, Entity>(entity.Store, entity.Id, target);
     }
 }
