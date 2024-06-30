@@ -25,7 +25,7 @@ internal interface IRelationComponent : IComponent { }
 internal interface IRelationComponent<out TKey> : IRelationComponent
 {
     /// <summary>
-    /// Returns the key of a unique relation components.
+    /// Returns the key of a unique relation component.
     /// </summary>
     TKey GetRelationKey();
 }
