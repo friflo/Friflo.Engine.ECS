@@ -26,7 +26,7 @@ public abstract class ComponentType : SchemaType
     
     public   readonly   Type        IndexType;      //  8
     
-    internal readonly   Type        RelationType;     //  1
+    internal readonly   Type        RelationType;   //  8
     
     internal abstract   StructHeap          CreateHeap();
     internal abstract   bool                RemoveEntityComponent  (Entity entity);
