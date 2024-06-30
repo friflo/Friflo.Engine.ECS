@@ -4,7 +4,7 @@
 namespace Friflo.Engine.ECS.Index;
 
 /// <summary>
-/// Is used to define a component type having a link relationship to another <see cref="Entity"/>.<br/>
+/// A link component is a component type used to create a single link from one entity to another entity.<br/>
 /// Specific component links can be queried with <c>HasValue()</c> in a <c>Query()</c>.
 /// </summary>
 /// <remarks>

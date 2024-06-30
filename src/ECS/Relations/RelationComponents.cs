@@ -9,11 +9,14 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Contains the relation components of a specific entity returned by <see cref="RelationExtensions.GetRelations{TComponent}"/>.
+/// </summary>
 internal readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
     where TComponent : struct, IComponent
 {
     public   override   string          ToString()  => $"Relations<{typeof(TComponent).Name}>[{Length}]";
-
+    /// <summary> Return the number of relation components. </summary>
     public   readonly   int             Length;     //  4
     internal readonly   int             start;      //  4
     internal readonly   int[]           positions;  //  8
@@ -34,6 +37,7 @@ internal readonly struct RelationComponents<TComponent> : IEnumerable<TComponent
         Length          = 1;
     }
     
+    /// <summary> Return the relation component at the given <paramref name="index"/>. </summary>
     public TComponent this[int index] => components[positions != null ? positions[index] : position];
        
     // --- IEnumerable<>
