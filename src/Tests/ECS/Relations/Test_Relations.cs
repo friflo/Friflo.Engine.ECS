@@ -82,15 +82,20 @@ public static class Test_Relations
         AreEqual(new InventoryItem(), value);
         
         entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
+        entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe); // force one tim allocation
+        
+        var start = Mem.GetAllocatedBytes();
         
         ref var axeRelation = ref entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe);
-        AreEqual(1, axeRelation.amount);
+        Mem.AreEqual(1, axeRelation.amount);
         
-        IsTrue  (entity.TryGetRelation(InventoryItemType.Axe,    out value));
-        AreEqual(1, value.amount);
+        Mem.IsTrue  (entity.TryGetRelation(InventoryItemType.Axe,    out value));
+        Mem.AreEqual(1, value.amount);
         
-        IsFalse (entity.TryGetRelation(InventoryItemType.Shield, out value));
-        AreEqual(new InventoryItem(), value);
+        Mem.IsFalse (entity.TryGetRelation(InventoryItemType.Shield, out value));
+        Mem.AreEqual(0, (int)value.type);
+        
+        Mem.AssertNoAlloc(start);
         
         Throws<NullReferenceException>(() => {
             entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Shield);

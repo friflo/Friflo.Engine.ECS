@@ -84,6 +84,16 @@ public static class Mem
         throw new AssertionException("Expect: True\n  But was:  False\n");
     }
     
+    /// <summary>
+    /// Similar script as <see cref="Assert.IsFalse(System.Nullable{bool})"/> but without memory allocation.<br/>
+    /// </summary>
+    public static void IsFalse(bool value) {
+        if (!value) {
+            return;
+        }
+        throw new AssertionException("Expect: False\n  But was:  True\n");
+    }
+    
     public static bool IsDebug => IsDebugInternal();
     
     private static bool IsDebugInternal() {
