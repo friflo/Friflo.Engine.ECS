@@ -36,11 +36,11 @@ internal abstract class EntityRelations
         return relations.AddComponent(id, component);
     }
     
-    internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey value)
+    internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
         var relations = (EntityRelations<TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
-        return relations.RemoveRelation(id, value);
+        return relations.RemoveRelation(id, key);
     }
     
     internal int GetRelationCount  (Entity entity) {

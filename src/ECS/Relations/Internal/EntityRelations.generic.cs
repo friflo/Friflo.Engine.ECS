@@ -16,7 +16,7 @@ internal abstract class EntityRelations<TKey> : EntityRelations
         : base(componentType, archetype, heap)
     { }
     
-    internal abstract bool RemoveRelation(int id, TKey value);
+    internal abstract bool RemoveRelation(int id, TKey key);
 }
     
 
@@ -76,7 +76,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
 
 #region remove component
     /// <returns>true if entity contained a relation of the given type before</returns>
-    internal override bool RemoveRelation(int id, TKey value)
+    internal override bool RemoveRelation(int id, TKey key)
     {
         if (!entityMap.TryGetValue(id, out var positions)) {
             return false;
@@ -88,7 +88,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
             var position    = positionSpan[n];
         //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
             var relation    = components[position].GetRelationKey(); // no boxing
-            if (!EqualityComparer<TKey>.Default.Equals(relation, value)) {
+            if (!EqualityComparer<TKey>.Default.Equals(relation, key)) {
                 continue;
             }
             RemoveRelation(id, position, positions, n);
