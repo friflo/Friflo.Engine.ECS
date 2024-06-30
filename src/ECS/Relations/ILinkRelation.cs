@@ -8,13 +8,13 @@ namespace Friflo.Engine.ECS;
 /// A link relation is a component type used to create multiple links from one entity to other entities.
 /// </summary>
 /// <remarks>
-/// A link relationenables:
+/// A link relation enables:
 /// <list type="bullet">
 ///   <item>
-///     Return all link relations of an entity using <see cref="RelationExtensions.GetRelations{TComponent}"/>.
+///     Return all links of an entity to other entities using <see cref="RelationExtensions.GetRelations{TComponent}"/>.
 ///   </item>
 ///   <item>
-///     Remove a specific link relation to another entity with <see cref="RelationExtensions.RemoveLinkRelation{T}"/>.
+///     Remove a specific link to another entity with <see cref="RelationExtensions.RemoveLinkRelation{T}"/>.
 ///   </item>
 /// </list>
 /// </remarks>
