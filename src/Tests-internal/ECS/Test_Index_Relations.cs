@@ -13,7 +13,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS {
 
-internal struct AttackRelation : IRelationComponent<Entity>
+internal struct AttackRelation : ILinkRelation
 {
     public int    speed;
     public Entity target;

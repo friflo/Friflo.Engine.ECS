@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
 internal static class RelationUtils
