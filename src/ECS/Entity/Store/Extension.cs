@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -53,6 +54,10 @@ internal partial struct StoreExtension
     internal                            ComponentIndex[]        indexMap;                   //  8   - map and its component indexes created on demand
     #endregion
     
+#region entity relations
+    internal readonly                   EntityRelations[]       relationsMap;               //  8
+    #endregion
+    
     internal StoreExtension(PidType pidType)
     {
         parentMap = new Dictionary<int, int>();
@@ -64,6 +69,8 @@ internal partial struct StoreExtension
         scriptMap           = new Dictionary<int, int>();
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
         entityScriptCount   = 1;
+        var schema          = EntityStoreBase.Static.EntitySchema;
+        relationsMap        = new EntityRelations[schema.maxIndexedStructIndex];
     }
     
     internal void RemoveEntity(int id) {

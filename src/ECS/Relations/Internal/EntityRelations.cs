@@ -58,7 +58,7 @@ internal abstract class EntityRelations
     internal static ref TComponent GetRelation<TComponent, TKey>(Entity entity, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TComponent,TKey>)entity.Store.relationsMap[StructInfo<TComponent>.Index];
+        var relations = (EntityRelations<TComponent,TKey>)entity.Store.extension.relationsMap[StructInfo<TComponent>.Index];
         if (relations == null) {
             throw KeyNotFoundException(entity.Id, key);
         }
@@ -68,7 +68,7 @@ internal abstract class EntityRelations
     internal static bool TryGetRelation<TComponent, TKey>(Entity entity, TKey key, out TComponent value)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TComponent,TKey>)entity.Store.relationsMap[StructInfo<TComponent>.Index];
+        var relations = (EntityRelations<TComponent,TKey>)entity.Store.extension.relationsMap[StructInfo<TComponent>.Index];
         if (relations == null) {
             value = default;    
             return false;
@@ -79,7 +79,7 @@ internal abstract class EntityRelations
     internal static RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
         where TComponent : struct, IRelationComponent
     {
-        var relations = entity.Store.relationsMap[StructInfo<TComponent>.Index];
+        var relations = entity.Store.extension.relationsMap[StructInfo<TComponent>.Index];
         if (relations == null) {
             return default;
         }
@@ -98,7 +98,8 @@ internal abstract class EntityRelations
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     private static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
     {
-        var relations = store.relationsMap[structIndex];
+        var relationsMap    = ((EntityStore)store).extension.relationsMap;
+        var relations       = relationsMap[structIndex];
         if (relations != null) {
             return relations;
         }
@@ -107,7 +108,7 @@ internal abstract class EntityRelations
         var config          = EntityStoreBase.GetArchetypeConfig(store);
         var archetype       = new Archetype(config, heap);
         var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
-        return store.relationsMap[structIndex] = (EntityRelations)obj;
+        return relationsMap[structIndex] = (EntityRelations)obj;
     //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TKey>(archetype, heap);
     }
     

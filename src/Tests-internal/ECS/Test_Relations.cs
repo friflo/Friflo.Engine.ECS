@@ -23,7 +23,7 @@ public static class Test_Relations
         var entity  = store.CreateEntity();
         entity.AddComponent(new StringRelation { value = "test" });
         
-        var relations = store.relationsMap[StructInfo<StringRelation>.Index];
+        var relations = store.extension.relationsMap[StructInfo<StringRelation>.Index];
         AreEqual("relation count: 1", relations.ToString());
     }
 }

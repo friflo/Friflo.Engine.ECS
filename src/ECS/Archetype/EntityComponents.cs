@@ -35,7 +35,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         if (!GetRelationTypes(entity, out var relationTypes)) {
             return count;
         }
-        var relationsMap = entity.store.relationsMap;
+        var relationsMap = entity.store.extension.relationsMap;
         foreach (var componentType in relationTypes)
         {
             var relations = relationsMap[componentType.StructIndex];
@@ -119,7 +119,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
         if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
             return;
         }
-        var relationsMap = entity.store.relationsMap;
+        var relationsMap = entity.store.extension.relationsMap;
         foreach (var componentType in relationTypes)
         {
             var relations = relationsMap[componentType.StructIndex];

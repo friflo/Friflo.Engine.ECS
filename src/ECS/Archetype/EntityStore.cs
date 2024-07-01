@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Engine.ECS.Relations;
 using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -79,7 +78,6 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
-                    internal  readonly  EntityRelations[]       relationsMap;       //  8
     
                     private             InternBase              internBase;         // 40
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
@@ -133,7 +131,6 @@ public abstract partial class EntityStoreBase
         var config          = GetArchetypeConfig(this);
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
-        relationsMap        = new EntityRelations[config.schema.maxIndexedStructIndex];
         AddArchetype(this, defaultArchetype);
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
