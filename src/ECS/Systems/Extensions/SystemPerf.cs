@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static Friflo.Engine.ECS.Systems.SystemExtensions;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -86,7 +87,12 @@ internal readonly struct PerfResource
     
     public PerfResource () {
         time    = Stopwatch.GetTimestamp();
-        memory  = Platform.IsUnityRuntime ? 0 : GC.GetAllocatedBytesForCurrentThread();
+        memory  = GetAllocatedBytes();
+    }
+    
+    [ExcludeFromCodeCoverage]
+    internal static long GetAllocatedBytes() {
+        return Platform.IsUnityRuntime ? 0 : GC.GetAllocatedBytesForCurrentThread(); 
     }
 }
 

@@ -323,7 +323,7 @@ public class SystemGroup : BaseSystem, IEnumerable
         }
         var time                = Stopwatch.GetTimestamp();
         var duration            = time - start.time;
-        var memory              = Platform.IsUnityRuntime ? 0 : GC.GetAllocatedBytesForCurrentThread() - start.memory;
+        var memory              = PerfResource.GetAllocatedBytes() - start.memory;
         var history             = system.perf.history;
         var index               = system.perf.updateCount++ % history.Length;
         history[index]          = duration;
