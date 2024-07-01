@@ -168,7 +168,7 @@ public abstract class BaseSystem
             return index;
         }
         if (systemRoot != targetGroup.systemRoot) {
-            var expect = systemRoot?.Name;
+            var expect = systemRoot.Name;
             var msg = $"Expect {nameof(targetGroup)} == {nameof(SystemRoot)}. Expected: '{expect}' was: '{targetGroup.Name}'";
             throw new InvalidOperationException(msg);
         }
