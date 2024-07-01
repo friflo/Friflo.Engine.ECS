@@ -9,6 +9,10 @@ namespace Friflo.Engine.ECS;
 
 public static class RelationExtensions
 {
+    /// <summary>
+    /// Returns the relation of the <paramref name="entity"/> with the given <paramref name="key"/>.<br/>
+    /// Executes in O(N) N: number of entity relations.
+    /// </summary>
     /// <exception cref="KeyNotFoundException">The relation is not found at the passed entity.</exception>
     public static ref TComponent GetRelation<TComponent, TKey>(this Entity entity, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
@@ -16,6 +20,10 @@ public static class RelationExtensions
         return ref EntityRelations.GetRelation<TComponent, TKey>(entity, key);
     }
     
+    /// <summary>
+    /// Returns the relation of the <paramref name="entity"/> with the given <paramref name="key"/>.<br/>
+    /// Executes in O(N) N: number of entity relations.
+    /// </summary>
     public static bool TryGetRelation<TComponent, TKey>(this Entity entity, TKey key, out TComponent value)
         where TComponent : struct, IRelationComponent<TKey>
     {
