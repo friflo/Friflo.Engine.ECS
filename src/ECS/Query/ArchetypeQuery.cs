@@ -460,11 +460,12 @@ public class ArchetypeQuery
         if (!componentTypes.HasAny(EntityStoreBase.Static.EntitySchema.relationTypes)) {
             return null;
         }
+        ComponentType result = null;
         foreach (var componentType in componentTypes) {
             if (componentType.RelationType == null) continue;
-            return componentType;
+            result = componentType;
         }
-        return null;
+        return result;
     }
     
     private void AddRelationEntities(EntityStore entityStore, ref int count, ref int[] chunkPositions, ref Archetype[] archetypes)

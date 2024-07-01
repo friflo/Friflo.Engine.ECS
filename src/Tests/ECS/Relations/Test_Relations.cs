@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -235,6 +236,20 @@ public static class Test_Relations
         }
         Mem.AreEqual(6, count);
         Mem.AssertNoAlloc(start);
+        
+        // --- test with additional filter condition 
+        query.WithoutAnyComponents(ComponentTypes.Get<Position>());
+        AreEqual(3, query.Count);
+        count = 0;
+        foreach (var entity in query.Entities) {
+            var relations = entity.GetRelations<AttackRelation>();
+            switch (count++) {
+                case 0: Mem.AreEqual(1, relations.Length);  break;
+                case 1: Mem.AreEqual(2, relations.Length);  break;
+                case 2: Mem.AreEqual(2, relations.Length);  break;
+            }
+        }
+        Mem.AreEqual(3, count);
     }
     
 #pragma warning disable CS0618 // Type or member is obsolete
