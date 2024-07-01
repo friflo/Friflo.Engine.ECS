@@ -21,6 +21,10 @@ public interface IRelationComponent : IComponent { }
 ///     Return all relation components of an entity using <see cref="RelationExtensions.GetRelations{TComponent}"/>.
 ///   </item>
 ///   <item>
+///     Return a specific relation by key using  <see cref="RelationExtensions.GetRelation{TComponent,TKey}"/><br/>
+///     or <see cref="RelationExtensions.TryGetRelation{TComponent,TKey}"/>.
+///   </item>
+///   <item>
 ///     Remove a specific relation component by key using <see cref="RelationExtensions.RemoveRelation{T,TKey}"/>.
 ///   </item>
 /// </list>
