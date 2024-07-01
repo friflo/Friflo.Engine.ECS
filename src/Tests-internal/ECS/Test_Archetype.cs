@@ -120,6 +120,18 @@ public static class Test_Archetype
             _ = new ComponentTypes(indexes);
         });
     }
+    
+    
+    [Test]
+    public static void Test_Archetype_Equality()
+    {
+        var store       = new EntityStore();
+        var arch1       = store.GetArchetype(ComponentTypes.Get<Position>());
+        var arch2       = store.GetArchetype(ComponentTypes.Get<Rotation>());
+        var comparer    = ArchetypeKeyEqualityComparer.Instance;
+        
+        IsFalse(comparer.Equals(arch1.key, arch2.key));
+    }
 }
 
 }
