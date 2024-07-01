@@ -93,7 +93,7 @@ public struct RelationsEnumerator<TComponent> : IEnumerator<TComponent>
         index = start;
     }
     
-    object IEnumerator.Current => components[positions != null ? positions[index] : position];
+    object IEnumerator.Current => Current;
 
     // --- IDisposable
     public void Dispose() { }
