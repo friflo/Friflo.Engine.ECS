@@ -144,6 +144,9 @@ public abstract partial class EntityStoreBase
     
     
 #region exceptions
+    /// <summary>
+    /// Note: Should be called only in case the entity null check is negligible compared to total method execution.
+    /// </summary>
     internal static NullReferenceException EntityNullException(Entity entity) {
         return new NullReferenceException($"entity is null. id: {entity.Id}");
     }

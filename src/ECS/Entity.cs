@@ -277,7 +277,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
                     public  Entity              Parent { get {
-                        if (archetype == null) throw new NullReferenceException();
+                        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
                         return new Entity(store, store.GetInternalParentId(Id));
                     }}
 
@@ -343,6 +343,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
         return EntityStoreBase.AddComponent<T>(Id, StructInfo<T>.Index, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
     /// <summary>
@@ -353,6 +354,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
         return EntityStoreBase.AddComponent   (Id, StructInfo<T>.Index, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
     /// <summary>Remove the component of the given type from the entity.</summary>
@@ -363,6 +365,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
         return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructInfo<T>.Index);
     }
     #endregion
@@ -424,22 +427,26 @@ public readonly struct Entity : IEquatable<Entity>
     /// </summary>
     public bool AddTag<TTag>()    where TTag : struct, ITag {
         int index = 0;
-        return EntityStoreBase.AddTags   (archetype.store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
+        return EntityStoreBase.AddTags   (store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
     /// <summary>Add the given <paramref name="tags"/> to the entity.</summary>
     public bool AddTags(in Tags tags) {
         int index = 0;
-        return EntityStoreBase.AddTags   (archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
+        return EntityStoreBase.AddTags   (store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
     /// <summary>Add the given <typeparamref name="TTag"/> from the entity.</summary>
     public bool RemoveTag<TTag>() where TTag : struct, ITag {
         int index = 0;
-        return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
+        return EntityStoreBase.RemoveTags(store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
     /// <summary>Remove the given <paramref name="tags"/> from the entity.</summary>
     public bool RemoveTags(in Tags tags) {
         int index = 0;
-        return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
+        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
+        return EntityStoreBase.RemoveTags(store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
     
     /// <summary> Enable recursively all child entities of the <see cref="Entity"/>. </summary>

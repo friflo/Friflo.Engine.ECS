@@ -308,6 +308,52 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Test_Entity_NullReferenceException()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        entity.DeleteEntity();
+        var expect = "entity is null. id: 1";
+        
+        // --- components
+        var nre = Throws<NullReferenceException>(() => {
+            entity.AddComponent(new Position());    
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.AddComponent<Position>();    
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.RemoveComponent<Position>();    
+        });
+        AreEqual(expect, nre!.Message);
+        
+        // --- tags
+        nre = Throws<NullReferenceException>(() => {
+            entity.AddTag<TestTag>();    
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.AddTags(default);    
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.RemoveTag<TestTag>();    
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.RemoveTags(default);    
+        });
+        AreEqual(expect, nre!.Message);
+    }
+    
+    [Test]
     public static void Test_Entity_create_delete_Entity_events()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
