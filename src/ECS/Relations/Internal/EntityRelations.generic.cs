@@ -9,18 +9,8 @@ using Friflo.Engine.ECS.Index;
 namespace Friflo.Engine.ECS.Relations;
 
 
-internal abstract class EntityRelations<TKey> : EntityRelations
-{
-    internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
-        : base(componentType, archetype, heap)
-    { }
-    
-    internal abstract bool RemoveRelation(int id, TKey key);
-}
-    
-
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelations<TKey>
+internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelations
     where TRelationComponent : struct, IRelationComponent<TKey>
 {
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
@@ -29,7 +19,7 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
-       heapGeneric     = (StructHeap<TRelationComponent>)heap;
+       heapGeneric = (StructHeap<TRelationComponent>)heap;
     }
     
     private int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
@@ -101,11 +91,11 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
         position = SetRelationPositions(id, positions);
     AssignComponent:
         ((StructHeap<TComponent>)heap).components[position] = component;
-        return added; // 0043
+        return added;
     }
 
     /// <returns>true if entity contained a relation of the given type before</returns>
-    internal override bool RemoveRelation(int id, TKey key)
+    internal bool RemoveRelation(int id, TKey key)
     {
         var position = FindRelationPosition(id, key, out var positions, out int index);
         if (position >= 0) {

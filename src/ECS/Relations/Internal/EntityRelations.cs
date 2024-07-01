@@ -41,7 +41,7 @@ internal abstract class EntityRelations
     internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
+        var relations = (EntityRelations<TComponent,TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
         return relations.RemoveRelation(id, key);
     }
     
