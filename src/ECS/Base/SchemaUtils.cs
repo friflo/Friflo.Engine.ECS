@@ -22,11 +22,17 @@ internal static class SchemaUtils
         return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
     }
     
+    [ExcludeFromCodeCoverage]
     internal static EntitySchema RegisterSchemaTypes(TypeStore typeStore)
     {
         if (!RegisterComponentTypesByReflection()) {
             return NativeAOT.GetSchema();
         }
+        return RegisterTypes(typeStore);
+    }
+    
+    private static EntitySchema RegisterTypes(TypeStore typeStore)
+    {
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
         
