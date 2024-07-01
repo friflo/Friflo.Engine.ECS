@@ -112,7 +112,7 @@ internal abstract class EntityRelations
     }
     
 #region non generic add / remove position
-    internal int SetRelationPositions(int id, IdArray positions)
+    internal int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
             archetype.entityStore.nodes[id].indexBits |= indexBit;
@@ -123,7 +123,7 @@ internal abstract class EntityRelations
         return position;
     }
 
-    internal void RemoveRelationPosition(int id, int position, IdArray positions, int positionIndex)
+    internal void RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
     {
         var type    = archetype;
         var map     = relationPositions;

@@ -88,7 +88,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
             added = false;
             goto AssignComponent;
         }
-        position = SetRelationPositions(id, positions);
+        position = AddEntityRelation(id, positions);
     AssignComponent:
         ((StructHeap<TComponent>)heap).components[position] = component;
         return added;
@@ -99,7 +99,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
         var position = FindRelationPosition(id, key, out var positions, out int index);
         if (position >= 0) {
-            RemoveRelationPosition(id, position, positions, index);
+            RemoveEntityRelation(id, position, positions, index);
             return true;
         }
         return false;
