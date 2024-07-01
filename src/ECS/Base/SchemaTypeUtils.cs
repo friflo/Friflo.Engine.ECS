@@ -20,20 +20,14 @@ internal static class SchemaTypeUtils
     
     internal static bool HasIndex(Type type)
     {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        if (schema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
-            return componentType.IndexType != null;
-        }
-        return false;
+        var componentType = EntityStoreBase.Static.EntitySchema.ComponentTypeByType[type];
+        return componentType.IndexType != null;
     }
     
     internal static bool IsRelation(Type type)
     {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        if (schema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
-            return componentType.RelationType != null;
-        }
-        return false;
+        var componentType = EntityStoreBase.Static.EntitySchema.ComponentTypeByType[type];
+        return componentType.RelationType != null;
     }
     
     internal static int GetTagIndex(Type type)

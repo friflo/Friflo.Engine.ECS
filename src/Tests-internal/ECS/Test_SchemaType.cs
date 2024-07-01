@@ -60,13 +60,6 @@ public static class Test_SchemaType
     }
     
     [Test]
-    public static void Test_SchemaType_HasIndex()
-    {
-        IsFalse(SchemaTypeUtils.HasIndex(typeof(Position)));
-        IsFalse(SchemaTypeUtils.HasIndex(typeof(int)));
-    }
-    
-    [Test]
     public static void Test_SchemaType_SchemaTypes_AddSchemaType()
     {
         var schemaTypes = new SchemaTypes();

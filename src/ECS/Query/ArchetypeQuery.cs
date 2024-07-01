@@ -512,12 +512,13 @@ public class ArchetypeQuery
         return count;
     }
     
+    // Note: Currently called only for queries with two or more components
     internal void ValidateQuery()
     {
         if (relationQuery == null) {
             return;
         }
-        if (components.Count > 1) throw new InvalidOperationException("relation component query cannot have other query components");
+        throw new InvalidOperationException("relation component query cannot have other query components");
     }
     #endregion
 }
