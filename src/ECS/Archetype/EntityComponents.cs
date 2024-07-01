@@ -38,9 +38,8 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         var relationsMap = entity.store.extension.relationsMap;
         foreach (var componentType in relationTypes)
         {
-            var relations = relationsMap[componentType.StructIndex];
-            if (relations == null) continue;
-            count += relations.GetRelationCount(entity);
+            var relations = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
+            count        += relations.GetRelationCount(entity);
         }
         return count;
     }
@@ -122,9 +121,8 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
         var relationsMap = entity.store.extension.relationsMap;
         foreach (var componentType in relationTypes)
         {
-            var relations = relationsMap[componentType.StructIndex];
-            if (relations == null) continue;
-            int relationCount = relations.GetRelationCount(entity);
+            var relations       = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
+            int relationCount   = relations.GetRelationCount(entity);
             for (int n = 0; n < relationCount; n++) {
                 components[compIndex++] = new EntityComponent(entity, componentType, relations, n);
             }
