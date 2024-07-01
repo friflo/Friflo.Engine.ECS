@@ -32,6 +32,23 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
        heapGeneric     = (StructHeap<TRelationComponent>)heap;
     }
     
+    private int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
+    {
+        relationPositions.TryGetValue(id, out positions);
+        var positionSpan    = positions.GetIdSpan(idHeap);
+        var positionCount   = positions.count;
+        var components      = heapGeneric.components;
+        for (index = 0; index < positionCount; index++) {
+            var position    = positionSpan[index];
+            var relation    = components[position].GetRelationKey(); // no boxing
+            //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
+            if (EqualityComparer<TKey>.Default.Equals(relation, key)) {
+                return position;
+            }
+        }
+        return -1;
+    }
+    
 #region query
     internal override IComponent GetRelationAt(int id, int index)
     {
@@ -48,16 +65,9 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     internal ref TComponent GetRelation<TComponent>(int id, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        relationPositions.TryGetValue(id, out var positions);
-        var positionSpan    = positions.GetIdSpan(idHeap);
-        var positionCount   = positions.count;
-        var components      = heapGeneric.components;
-        for (int n = 0; n < positionCount; n++) {
-            var position    = positionSpan[n];
-            var relation    = components[position].GetRelationKey(); // no boxing
-            if (EqualityComparer<TKey>.Default.Equals(relation, key)) {
-                return ref ((StructHeap<TComponent>)heap).components[position];
-            }
+        var position = FindRelationPosition(id, key, out _, out _);
+        if (position >= 0) {
+            return ref ((StructHeap<TComponent>)heap).components[position];
         }
         throw KeyNotFoundException(id, key);
     }
@@ -65,17 +75,10 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     internal bool TryGetRelation<TComponent>(int id, TKey key, out TComponent value)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        relationPositions.TryGetValue(id, out var positions);
-        var positionSpan    = positions.GetIdSpan(idHeap);
-        var positionCount   = positions.count;
-        var components      = heapGeneric.components;
-        for (int n = 0; n < positionCount; n++) {
-            var position    = positionSpan[n];
-            var relation    = components[position].GetRelationKey(); // no boxing
-            if (EqualityComparer<TKey>.Default.Equals(relation, key)) {
-                value = ((StructHeap<TComponent>)heap).components[position];
-                return true;
-            }
+        var position = FindRelationPosition(id, key, out _, out _);
+        if (position >= 0) {
+            value = ((StructHeap<TComponent>)heap).components[position];
+            return true;
         }
         value = default;
         return false;
@@ -87,46 +90,26 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
 /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
 protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
-        var relationKey     = RelationUtils<TComponent, TKey>.GetRelationKey(component);
-    //  var relationKey     = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
-        relationPositions.TryGetValue(id, out var positions);
-        var positionSpan    = positions.GetIdSpan(idHeap);
-        var positionCount   = positions.count;
-        var components      = heapGeneric.components;
-        var added           = true;
-        int position;
-        for (int n = 0; n < positionCount; n++) {
-            position        = positionSpan[n];
-            var relation    = components[position].GetRelationKey(); // no boxing
-        //  var relation    = RelationUtils<TComponent, TKey>.GetRelationKey(((StructHeap<TComponent>)heap).components[position]);
-            if (EqualityComparer<TKey>.Default.Equals(relation, relationKey)) {
-                added = false;
-                goto AssignComponent;
-            }
+        var relationKey = RelationUtils<TComponent, TKey>.GetRelationKey(component);
+    //  var relationKey = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
+        var added       = true;
+        var position    = FindRelationPosition(id, relationKey, out var positions, out _);
+        if (position >= 0) {
+            added = false;
+            goto AssignComponent;
         }
         position = SetRelationPositions(id, positions);
     AssignComponent:
         ((StructHeap<TComponent>)heap).components[position] = component;
-        return added;
+        return added; // 0043
     }
 
     /// <returns>true if entity contained a relation of the given type before</returns>
     internal override bool RemoveRelation(int id, TKey key)
     {
-        if (!relationPositions.TryGetValue(id, out var positions)) {
-            return false;
-        }
-        var components      = heapGeneric.components;
-        var positionSpan    = positions.GetIdSpan(idHeap);
-        var positionCount   = positions.count;
-        for (int n = 0; n < positionCount; n++) {
-            var position    = positionSpan[n];
-        //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
-            var relation    = components[position].GetRelationKey(); // no boxing
-            if (!EqualityComparer<TKey>.Default.Equals(relation, key)) {
-                continue;
-            }
-            RemoveRelationPosition(id, position, positions, n);
+        var position = FindRelationPosition(id, key, out var positions, out int index);
+        if (position >= 0) {
+            RemoveRelationPosition(id, position, positions, index);
             return true;
         }
         return false;
