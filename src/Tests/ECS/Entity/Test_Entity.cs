@@ -351,6 +351,11 @@ public static class Test_Entity
             entity.RemoveTags(default);    
         });
         AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            store.CloneEntity(entity);    
+        });
+        AreEqual(expect, nre!.Message);
     }
     
     [Test]

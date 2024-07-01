@@ -84,8 +84,8 @@ public partial class EntityStore
     /// <returns></returns>
     public Entity CloneEntity(Entity entity)
     {
+        var archetype   = entity.archetype ?? throw EntityNullException(entity);
         var id          = NewId();
-        var archetype   = entity.archetype;
         CreateEntityInternal(archetype, id);
         var clone       = new Entity(this, id);
         
