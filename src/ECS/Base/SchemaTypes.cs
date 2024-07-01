@@ -15,11 +15,13 @@ namespace Friflo.Engine.ECS;
 
 internal readonly struct AssemblyType
 {
-    internal readonly   Type    type;
-    internal readonly   int     assemblyIndex;
+    internal readonly   Type            type;
+    internal readonly   int             assemblyIndex;
+    internal readonly   SchemaTypeKind  kind;
     
-    internal AssemblyType(Type type, int  assemblyIndex) {
+    internal AssemblyType(Type type, SchemaTypeKind  kind, int assemblyIndex) {
         this.type           = type;
+        this.kind           = kind;
         this.assemblyIndex  = assemblyIndex;
     }
 }
@@ -35,22 +37,18 @@ internal sealed class SchemaTypes
     internal readonly   List<TagType>       tags            = new ();
     internal            int                 indexCount;
     
-    internal void AddSchemaType(Type type, int assemblyIndex)
+    internal void AddSchemaType(AssemblyType type)
     {
-        if (type.IsValueType) {
-            if (typeof(ITag).IsAssignableFrom(type)) {
-                tagTypes      .Add(new AssemblyType(type, assemblyIndex));
-                return;
-            }
-            if (typeof(IComponent).IsAssignableFrom(type)) {
-                componentTypes.Add(new AssemblyType(type, assemblyIndex));
-                return;
-            }
-        } else {
-            if (type.IsSubclassOf(typeof(Script))) {
-                scriptTypes   .Add(new AssemblyType(type, assemblyIndex));
-                return;
-            }
+        switch (type.kind) {
+            case SchemaTypeKind.Component:
+                componentTypes.Add(type);
+                break;
+            case SchemaTypeKind.Tag:
+                tagTypes.Add(type);
+                break;
+            case SchemaTypeKind.Script:
+                scriptTypes.Add(type);
+                break;
         }
     }
 

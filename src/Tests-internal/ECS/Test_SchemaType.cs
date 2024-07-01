@@ -65,6 +65,14 @@ public static class Test_SchemaType
         IsFalse(SchemaTypeUtils.HasIndex(typeof(Position)));
         IsFalse(SchemaTypeUtils.HasIndex(typeof(int)));
     }
+    
+    [Test]
+    public static void Test_SchemaType_SchemaTypes_AddSchemaType()
+    {
+        var schemaTypes = new SchemaTypes();
+        var assemblyType = new AssemblyType(null, (SchemaTypeKind)255, 0);
+        schemaTypes.AddSchemaType(assemblyType);
+    }
         
     [Test]
     public static void Test_SchemaType_Tags_Get_Perf()

@@ -36,13 +36,13 @@ internal static class SchemaUtils
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
         
-        var schemaTypes = new SchemaTypes();
-        var types       = new List<Type>();
+        var schemaTypes     = new SchemaTypes();
+        var types           = new List<AssemblyType>();
         for (int n = 0; n < assemblies.Length; n++) {
             var assembly = assemblies[n];
-            AssemblyLoader.GetComponentTypes(assembly, types);
+            AssemblyLoader.GetComponentTypes(assembly, n, types);
             foreach (var type in types) {
-                schemaTypes.AddSchemaType(type, n);
+                schemaTypes.AddSchemaType(type);
             }
         }
         var dependants = schemaTypes.CreateSchemaTypes(typeStore, assemblies);

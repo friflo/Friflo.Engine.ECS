@@ -14,13 +14,14 @@ namespace Friflo.Engine.ECS;
 // ReSharper disable once InconsistentNaming
 public sealed class NativeAOT
 {
-    private             EntitySchema        entitySchema;
-    private             bool                engineTypesRegistered;
+    private             EntitySchema                entitySchema;
+    private             bool                        engineTypesRegistered;
         
-    private readonly    List<Type>          types       = new();
-    private readonly    HashSet<Type>       typeSet     = new();
-    private readonly    TypeStore           typeStore   = new TypeStore();
-    private readonly    SchemaTypes         schemaTypes = new();
+    private readonly    HashSet<Type>               typeSet     = new();
+    private readonly    TypeStore                   typeStore   = new TypeStore();
+    private readonly    SchemaTypes                 schemaTypes = new();
+    private readonly    Dictionary<Assembly, int>   assemblyMap = new();
+    private readonly    List<Assembly>              assemblies  = new();
     
     private static      NativeAOT           Instance;
     
@@ -71,18 +72,7 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     private EntitySchema CreateSchemaInternal()
     {
         InitSchema();
-        
-        var assemblyMap = new Dictionary<Assembly, int>();
-        var assemblies  = new List<Assembly>();
-        foreach (var type in types) {
-            var assembly = type.Assembly;
-            if (!assemblyMap.TryGetValue(assembly, out int assemblyIndex)) {
-                assemblyIndex = assemblies.Count;
-                assemblyMap.Add(assembly, assemblyIndex);
-                assemblies.Add(assembly);
-            }
-            schemaTypes.AddSchemaType(type, assemblyIndex);
-        }
+
         var dependants  = schemaTypes.CreateSchemaTypes(typeStore, assemblies);
         entitySchema    = new EntitySchema(dependants, schemaTypes);
         Instance        = this;
@@ -117,11 +107,22 @@ A type initializer threw an exception. To determine which type, inspect the Inne
         RegisterTag<Disabled>();
     }
     
+    private void AddType(Type type, SchemaTypeKind kind)
+    {
+        var assembly = type.Assembly;
+        if (!assemblyMap.TryGetValue(assembly, out int assemblyIndex)) {
+            assemblyIndex = assemblies.Count;
+            assemblyMap.Add(assembly, assemblyIndex);
+            assemblies.Add(assembly);
+        }
+        schemaTypes.AddSchemaType(new AssemblyType(type, kind, assemblyIndex));
+    }
+    
     public void RegisterComponent<T>() where T : struct, IComponent 
     {
         InitSchema();
         if (typeSet.Add(typeof(T))) {
-            types.Add(typeof(T));
+            AddType(typeof(T), SchemaTypeKind.Component);
             SchemaUtils.CreateComponentType<T>(typeStore, 0, null, null, null); // dummy call to prevent trimming required type info
         }
     }
@@ -130,7 +131,7 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     {
         InitSchema();
         if (typeSet.Add(typeof(T))) {
-            types.Add(typeof(T));
+            AddType(typeof(T), SchemaTypeKind.Tag);
             SchemaUtils.CreateTagType<T>(0);                        // dummy call to prevent trimming required type info
         }
     }
@@ -139,7 +140,7 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     {
         InitSchema();
         if (typeSet.Add(typeof(T))) {
-            types.Add(typeof(T));
+            AddType(typeof(T), SchemaTypeKind.Script);
             SchemaUtils.CreateScriptType<T>(typeStore, 0);          // dummy call to prevent trimming required type info
         }
     }

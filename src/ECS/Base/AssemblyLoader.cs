@@ -149,7 +149,7 @@ internal sealed class AssemblyLoader
     } */
    
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
-    internal static void GetComponentTypes(Assembly assembly, List<Type> componentTypes)
+    internal static void GetComponentTypes(Assembly assembly, int assemblyIndex, List<AssemblyType> componentTypes)
     {
         componentTypes.Clear();
         var types = assembly.GetTypes();
@@ -162,32 +162,32 @@ internal sealed class AssemblyLoader
             }
             if (isValueType) {
                 if (typeof(ITag).IsAssignableFrom(type)) {
-                    AddType(type, componentTypes);
+                    AddType(assemblyIndex, type, SchemaTypeKind.Tag, componentTypes);
                     continue;
                 }
                 if (typeof(IComponent).IsAssignableFrom(type)) {
-                    AddType(type, componentTypes);
+                    AddType(assemblyIndex, type, SchemaTypeKind.Component, componentTypes);
                     continue;
                 }
             }
             if (isClass && type.IsSubclassOf(typeof(Script))) {
-                componentTypes.Add(type);
+                componentTypes.Add(new AssemblyType(type, SchemaTypeKind.Script, assemblyIndex));
             }
         }
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "Not called for NativeAOT")]
-    private static void AddType(Type type, List<Type> componentTypes)
+    private static void AddType(int assemblyIndex, Type type, SchemaTypeKind kind, List<AssemblyType> componentTypes)
     {
         if (!type.IsGenericType) {
-            componentTypes.Add(type);
+            componentTypes.Add(new AssemblyType(type, kind, assemblyIndex));
             return;
         }
         var genericTypes = SchemaUtils.GetGenericInstanceTypes(type);
         foreach (var genericType in genericTypes) {
             var genType = type.MakeGenericType(genericType.types);
-            componentTypes.Add(genType);
+            componentTypes.Add(new AssemblyType(genType, kind, assemblyIndex));
         }
     }
 }
