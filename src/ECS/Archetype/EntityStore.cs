@@ -144,6 +144,10 @@ public abstract partial class EntityStoreBase
     
     
 #region exceptions
+    internal static NullReferenceException EntityNullException(Entity entity) {
+        return new NullReferenceException($"entity is null. id: {entity.Id}");
+    }
+
     internal static Exception   EntityDetachedException(string parameterName) {
         return ExceptionUtils.ArgumentException("entity is detached", parameterName);
     }

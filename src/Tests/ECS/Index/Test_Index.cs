@@ -343,6 +343,20 @@ public static partial class Test_Index
     }
     
     [Test]
+    public static void Test_Index_exceptions()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.DeleteEntity();
+        var expect = "entity is null. id: 1";
+        
+        var nre = Throws<NullReferenceException>(() => {
+            entity.GetEntityReferences<AttackComponent>();
+        });
+        AreEqual(expect, nre!.Message);
+    }
+    
+    [Test]
     public static void Test_Index_Perf()
     {
         int count       = 100;

@@ -25,7 +25,8 @@ public static class IndexExtensions
     /// using <c> TComponent = IIndexedComponent&lt;Entity>, TValue = Entity</c> and <c>value = this</c>.  
     /// </remarks>
     public static Entities GetEntityReferences<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
-        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.archetype.entityStore, StructInfo<TComponent>.Index);
+        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(entity);
     }
     #endregion

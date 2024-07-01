@@ -426,6 +426,40 @@ public static class Test_Relations
         AreEqual("relation component must be removed with entity.RemoveRelation<IntRelation,Int32>(key). id: 1", e!.Message);
         entity.RemoveRelation<IntRelation,int>(42); // example
     }
+    
+    [Test]
+    public static void Test_Relations_exceptions()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.DeleteEntity();
+        var expect = "entity is null. id: 1";
+        
+        var nre = Throws<NullReferenceException>(() => {
+            entity.GetRelations<IntRelation>();
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.GetRelation<IntRelation, int>(1);
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.TryGetRelation<IntRelation, int>(1, out _);
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.RemoveRelation<IntRelation, int>(1);
+        });
+        AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.RemoveLinkRelation<AttackRelation>(default);
+        });
+        AreEqual(expect, nre!.Message);
+    }
 }
 
 }
