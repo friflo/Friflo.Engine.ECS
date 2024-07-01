@@ -55,35 +55,35 @@ internal abstract class EntityRelations
         return new KeyNotFoundException($"relation not found. key '{key}' id: {id}");        
     }
     
-    internal static ref TComponent GetRelation<TComponent, TKey>(Entity entity, TKey key)
+    internal static ref TComponent GetRelation<TComponent, TKey>(EntityStore store, int id, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TComponent,TKey>)entity.Store.extension.relationsMap[StructInfo<TComponent>.Index];
+        var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap[StructInfo<TComponent>.Index];
         if (relations == null) {
-            throw KeyNotFoundException(entity.Id, key);
+            throw KeyNotFoundException(id, key);
         }
-        return ref relations.GetRelation<TComponent>(entity.Id, key);
+        return ref relations.GetRelation<TComponent>(id, key);
     }
     
-    internal static bool TryGetRelation<TComponent, TKey>(Entity entity, TKey key, out TComponent value)
+    internal static bool TryGetRelation<TComponent, TKey>(EntityStore store, int id, TKey key, out TComponent value)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TComponent,TKey>)entity.Store.extension.relationsMap[StructInfo<TComponent>.Index];
+        var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap[StructInfo<TComponent>.Index];
         if (relations == null) {
             value = default;    
             return false;
         }
-        return relations.TryGetRelation(entity.Id, key, out value);
+        return relations.TryGetRelation(id, key, out value);
     }
     
-    internal static RelationComponents<TComponent> GetRelations<TComponent>(Entity entity)
+    internal static RelationComponents<TComponent> GetRelations<TComponent>(EntityStore store, int id)
         where TComponent : struct, IRelationComponent
     {
-        var relations = entity.Store.extension.relationsMap[StructInfo<TComponent>.Index];
+        var relations = store.extension.relationsMap[StructInfo<TComponent>.Index];
         if (relations == null) {
             return default;
         }
-        relations.relationPositions.TryGetValue(entity.Id, out var positions);
+        relations.relationPositions.TryGetValue(id, out var positions);
         var count           = positions.count;
         var componentHeap   = (StructHeap<TComponent>)relations.heap;
         switch (count) {

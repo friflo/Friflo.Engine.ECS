@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS.Index;
 
@@ -18,12 +19,13 @@ public static class IndexExtensions
     /// Return the entities with a component link referencing this entity of the passed <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). 
     /// </summary>
+    /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <remarks>
     /// The method id a specialized version of <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/><br/>
     /// using <c> TComponent = IIndexedComponent&lt;Entity>, TValue = Entity</c> and <c>value = this</c>.  
     /// </remarks>
     public static Entities GetEntityReferences<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
-        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
+        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.archetype.entityStore, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(entity);
     }
     #endregion
