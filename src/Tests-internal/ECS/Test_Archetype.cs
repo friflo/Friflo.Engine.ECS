@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -107,6 +108,17 @@ public static class Test_Archetype
         obj.SetInternalField(nameof(SignatureIndexes.length), 11);
         var indexes = (SignatureIndexes)obj;
         AreEqual(-1, indexes.GetStructIndex(10));
+    }
+    
+    [Test]
+    public static void Test_Archetype_ComponentTypes_coverage()
+    {
+        object obj = new SignatureIndexes();
+        obj.SetInternalField(nameof(SignatureIndexes.length), 0);
+        var indexes = (SignatureIndexes)obj;
+        Throws<IndexOutOfRangeException>(() => {
+            _ = new ComponentTypes(indexes);
+        });
     }
 }
 

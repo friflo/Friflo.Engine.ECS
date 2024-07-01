@@ -68,7 +68,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             case 3: goto Type3;
             case 4: goto Type4;
             case 5: goto Type5;
-        //  default: throw new IndexOutOfRangeException(); // unreachable - already ensured at SignatureIndexes
+            default: throw new IndexOutOfRangeException(); // unreachable - already ensured at SignatureIndexes
         }
         Type5:   bitSet.SetBit(indexes.T5);
         Type4:   bitSet.SetBit(indexes.T4);
