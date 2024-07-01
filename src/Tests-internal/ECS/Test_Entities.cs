@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -90,6 +92,57 @@ public static class Test_Entities
             }
         }
         AreEqual(2, count);
+    }
+    
+    [Test]
+    public static void Test_Entities_Length_1()
+    {
+        var store       = new EntityStore();
+        var type        = store.CreateEntity(42).Archetype;
+        var entities = new Entities(store, 42);
+        AreEqual(1, entities.Count);
+        {
+            int count = 0;
+            foreach (var entity in entities) {
+                count++;
+                AreSame (store, entity.Store);
+                AreSame (type,  entity.Archetype);
+                AreEqual(42,    entities[0].Id);
+                AreEqual(42,    entity.Id);
+            }
+            AreEqual(1, count);
+        }
+        {
+            IEnumerable enumerable = entities;
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            using var enumerator1 = enumerator as IDisposable;
+            int count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+                var entity = (Entity)enumerator.Current!;
+                AreEqual(42, entity.Id);
+            }
+            AreEqual(1, count);
+                
+            count = 0;
+            enumerator.Reset();
+            while (enumerator.MoveNext()) {
+                count++;
+                var entity = (Entity)enumerator.Current!;
+                AreEqual(42, entity.Id);
+            }
+            AreEqual(1, count);
+        }
+        {
+            IEnumerable<Entity> enumerable = entities;
+            using var enumerator = enumerable.GetEnumerator();
+            int count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+                AreEqual(42, enumerator.Current.Id);
+            }
+            AreEqual(1, count);
+        }
     }
     
     [Test]
