@@ -174,13 +174,19 @@ public class QueryFilter
     #endregion
     
 #region value condition filters
-    /// <summary> Include entities having a component with the specified value. </summary>
+    /// <summary>
+    /// Include entities having a component with the specified value.<br/>
+    /// Executes in O(1).
+    /// </summary>
     public QueryFilter HasValue<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
         AddValueCondition(new HasValueCondition<TComponent, TValue>(value));
         return this;
     }
     
-    /// <summary> Include entities having a component value in the specified range. </summary>
+    /// <summary>
+    /// Include entities having a component value in the specified range.<br/>
+    /// Executes O(N ⋅ log N) N: all unique values.
+    /// </summary>
     public QueryFilter ValueInRange<TComponent, TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue> {
         AddValueCondition(new ValueInRangeCondition<TComponent, TValue>(min, max));
         return this;
