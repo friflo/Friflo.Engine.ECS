@@ -77,11 +77,11 @@ public static class RelationExtensions
     
 #region EntityStore
     // TODO should return Entity's
-    public static  IReadOnlyCollection<int> GetEntitiesWithRelations<TComponent>(this EntityStore store)
+    public static EntityReadOnlyCollection GetEntitiesWithRelations<TComponent>(this EntityStore store)
         where TComponent : struct, IRelationComponent
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
-        return relations.relationPositions.Keys;
+        return new EntityReadOnlyCollection(store, relations.relationPositions.Keys);
     }
     #endregion
 }

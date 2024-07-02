@@ -314,6 +314,53 @@ public static class Test_Relations
     }
     
     [Test]
+    public static void Test_Relations_EntityReadOnlyCollection() 
+    {
+        var store   = new EntityStore();
+        var entities = store.GetEntitiesWithRelations<IntRelation>();
+
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        
+        entity1.AddComponent(new IntRelation { value = 10 });
+        entity2.AddComponent(new IntRelation { value = 20 });
+        
+        AreEqual(2, entities.Count);
+        AreEqual("Entity[2]", entities.ToString());
+        {
+            int count = 0;
+            foreach (var entity in entities) {
+                switch (count++) {
+                    case 0: AreEqual(1, entity.Id); break;
+                    case 1: AreEqual(2, entity.Id); break;
+                }
+            }
+            AreEqual(2, count);
+        } {
+            int count = 0;
+            IEnumerable enumerable = entities;
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            using var enumerator1 = enumerator as IDisposable;
+            enumerator.Reset();
+            while (enumerator.MoveNext()) {
+                var entity = (Entity)enumerator.Current!;
+                switch (count++) {
+                    case 0: AreEqual(1, entity.Id); break;
+                    case 1: AreEqual(2, entity.Id); break;
+                }
+            }
+            AreEqual(2, count);
+        } {
+            int count = 0;
+            IEnumerable<Entity> enumerable = entities;
+            foreach (var entity in enumerable) {
+                count++; 
+            }
+            AreEqual(2, count);
+        }
+    }
+    
+    [Test]
     public static void Test_Relations_adjust_position_on_remove_relation()
     {
         var store   = new EntityStore();
