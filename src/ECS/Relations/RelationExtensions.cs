@@ -100,7 +100,7 @@ public static class RelationExtensions
     
     /// <summary>
     /// Iterates all entities including their relations of the specified <typeparamref name="TComponent"/> type.<br/>
-    /// Executes in O(1).
+    /// Executes in O(N) N: number of all entity relations. Most efficient way to iterate all.
     /// </summary>
     public static void ForAllEntityRelations<TComponent>(this EntityStore store, ForEachEntity<TComponent> lambda)
         where TComponent : struct, IRelationComponent
