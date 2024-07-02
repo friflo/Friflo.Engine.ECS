@@ -553,7 +553,9 @@ public partial class EntityStore
         entityCount--;
     //  var localNodes  = nodes;
         ref var node    = ref nodes[id];
-        
+        if (node.indexBits != 0) {
+            RemoveIndexedEntities(id, ref node);
+        }
         // --- mark its child nodes as floating
         ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
         foreach (var childId in entity.ChildIds) {
@@ -574,6 +576,18 @@ public partial class EntityStore
         }
         int curIndex = RemoveChildNode(parentId, id);
         OnChildNodeRemove(parentId, id, curIndex);
+    }
+    
+    private void RemoveIndexedEntities(int id, ref EntityNode node)
+    {
+        var componentTypes          = new ComponentTypes();
+        componentTypes.bitSet.l0    = node.indexBits;
+        node.indexBits              = 0;
+        var indexMap                = extension.indexMap;
+        foreach (var componentType in componentTypes) {
+            var index = indexMap[componentType.StructIndex];
+            index.RemoveEntity(id, node.archetype, node.compIndex);
+        }
     }
     
     private void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {

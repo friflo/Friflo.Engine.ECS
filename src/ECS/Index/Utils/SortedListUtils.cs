@@ -19,9 +19,9 @@ internal static class SortedListUtils
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
+        componentIndex.store.nodes[id].indexBits &= ~componentIndex.indexBit;
         if (ids.Count == 1) {
             map.Remove(value);
-            componentIndex.store.nodes[id].indexBits &= ~componentIndex.indexBit;
             return;
         }
         ids.RemoveAt(index, componentIndex.arrayHeap);
@@ -35,9 +35,7 @@ internal static class SortedListUtils
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        if (ids.Count == 0) {
-            componentIndex.store.nodes[id].indexBits |= componentIndex.indexBit;
-        }
+        componentIndex.store.nodes[id].indexBits |= componentIndex.indexBit;
         ids.AddId(id, componentIndex.arrayHeap);
         map[value] = ids;
     }

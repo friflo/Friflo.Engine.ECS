@@ -44,17 +44,17 @@ internal static class ComponentIndexUtils
     private static Type MakeIndexType(Type valueType, Type componentType)
     {
         if (valueType == typeof(Entity)) {
-            return typeof(EntityIndex);
+            return typeof(EntityIndex<>).MakeGenericType(new [] { componentType });
         }
         var indexType   = GetComponentIndex(componentType);
-        var typeArgs    = new [] { valueType };
+        var typeArgs    = new [] { componentType, valueType };
         if (indexType != null) {
-            return indexType.                MakeGenericType(typeArgs);
+            return indexType.                 MakeGenericType(typeArgs);
         }
         if (valueType.IsClass) {
-            return typeof(ValueClassIndex<>).MakeGenericType(typeArgs);
+            return typeof(ValueClassIndex<,>).MakeGenericType(typeArgs);
         }
-        return typeof(ValueStructIndex<>).   MakeGenericType(typeArgs);
+        return typeof(ValueStructIndex<,>).   MakeGenericType(typeArgs);
     }
     
     private static Type GetComponentIndex(Type type)

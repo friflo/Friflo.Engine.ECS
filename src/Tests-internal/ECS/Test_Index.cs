@@ -20,11 +20,11 @@ public static class Test_Index
     public static void Test_Index_ValueInRange_EntityIndex()
     {
         var store       = new EntityStore();
-        var entityIndex = new EntityIndex { store = store };
+        var entityIndex = new EntityIndex<AttackComponent> { store = store };
         var e = Throws<NotSupportedException>(() => {
             entityIndex.AddValueInRangeEntities(default, default, null);    
         });
-        AreEqual("ValueInRange() not supported by EntityIndex", e!.Message);
+        AreEqual("ValueInRange() not supported by EntityIndex`1", e!.Message);
     }
     
     [Test]
@@ -37,7 +37,7 @@ public static class Test_Index
         entity1.AddComponent(new IndexedName { name = "added" });
         entity2.AddComponent(new IndexedName { name = null });
         
-        var index = (ValueClassIndex<string>)StoreIndex.GetIndex(store, StructInfo<IndexedName>.Index);
+        var index = (ValueClassIndex<IndexedName,string>)StoreIndex.GetIndex(store, StructInfo<IndexedName>.Index);
         index.Add(1, new IndexedName { name = "added" });
         index.Add(2, new IndexedName { name = null    });
 
@@ -47,7 +47,7 @@ public static class Test_Index
     [Test]
     public static void Test_Index_already_removed()
     {
-        var index = new ValueClassIndex<string>();
+        var index = new ValueClassIndex<IndexedName,string>();
         index.RemoveComponentValue(1, "missing");   // add key with default IdArray
         AreEqual(0, index.Count);
         
@@ -65,19 +65,19 @@ public static class Test_Index
         
         var indexMap    = store.extension.indexMap;
 
-        AreEqual("IndexedName - ValueClassIndex`1 count: 1", indexMap[StructInfo<IndexedName>.Index].ToString());
+        AreEqual("IndexedName - ValueClassIndex`2 count: 1", indexMap[StructInfo<IndexedName>.Index].ToString());
         
         entity1.AddComponent(new LinkComponent { entity = entity2 });
-        AreEqual("LinkComponent - EntityIndex count: 1",     indexMap[StructInfo<LinkComponent>.Index].ToString());
+        AreEqual("LinkComponent - EntityIndex`1 count: 1",   indexMap[StructInfo<LinkComponent>.Index].ToString());
         
         entity1.AddComponent(new IndexedInt { value = 42 });
-        AreEqual("IndexedInt - ValueStructIndex`1 count: 1", indexMap[StructInfo<IndexedInt>.Index].ToString());
+        AreEqual("IndexedInt - ValueStructIndex`2 count: 1", indexMap[StructInfo<IndexedInt>.Index].ToString());
     }
     
     [Test]
     public static void Test_Index_EntityIndexValue()
     {
-        var index       = new EntityIndex();
+        var index       = new EntityIndex<AttackComponent>();
         var values      = new EntityIndexValues(index) as IEnumerable;
 
         Throws<NotImplementedException>(() => {

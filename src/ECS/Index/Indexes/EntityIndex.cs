@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class EntityIndex : ComponentIndex<Entity>
+internal abstract class EntityIndex : ComponentIndex<Entity>
 {
     internal override   int                         Count       => map.Count;
     internal readonly   Dictionary<int, IdArray>    map         = new();
@@ -49,4 +50,24 @@ internal sealed class EntityIndex : ComponentIndex<Entity>
     
     internal override IReadOnlyCollection<Entity> IndexedComponentValues => keyCollection ??= new EntityIndexValues(this);
     #endregion
+}
+
+internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
+    where TIndexedComponent : struct, IIndexedComponent<Entity>
+{
+    internal override void RemoveEntity(int id, Archetype archetype, int compIndex)
+    {
+        var localMap    = map;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var value       = components[compIndex].GetIndexedValue().Id;
+        localMap.TryGetValue(value, out var idArray);
+        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var index   = idSpan.IndexOf(id);
+        idArray.RemoveAt(index, arrayHeap);
+        if (idArray.Count == 0) {
+            localMap.Remove(value);
+        } else {
+            localMap[value] = idArray;
+        }
+    }
 }

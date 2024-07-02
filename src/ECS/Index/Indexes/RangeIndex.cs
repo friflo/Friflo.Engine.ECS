@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -14,7 +15,8 @@ namespace Friflo.Engine.ECS.Index;
 /// The default index executes in O(1) when adding, removing or updating indexed component values. 
 /// </summary>
 [ExcludeFromCodeCoverage] // not used - kept only for reference
-public sealed class RangeIndex<TValue> : ComponentIndex<TValue>
+public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue>
+    where TIndexedComponent : struct, IIndexedComponent<TValue>
 {
     internal override   int                         Count       => map.Count;
     private  readonly   SortedList<TValue, IdArray> map         = new();
@@ -44,6 +46,22 @@ public sealed class RangeIndex<TValue> : ComponentIndex<TValue>
     {
         var value = IndexUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         SortedListUtils.RemoveComponentValue (id, value, map, this);
+    }
+    
+    internal override void RemoveEntity(int id, Archetype archetype, int compIndex)
+    {
+        var localMap    = map;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var value       = components[compIndex].GetIndexedValue();
+        localMap.TryGetValue(value, out var idArray);
+        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var index   = idSpan.IndexOf(id);
+        idArray.RemoveAt(index, arrayHeap);
+        if (idArray.Count == 0) {
+            localMap.Remove(value);
+        } else {
+            localMap[value] = idArray;
+        }
     }
     #endregion
     

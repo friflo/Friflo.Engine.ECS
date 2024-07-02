@@ -89,7 +89,7 @@ internal struct IndexedIntRange : IIndexedComponent<int> {
     public override string ToString() => value.ToString();
 }
     
-[ComponentIndex(typeof(RangeIndex<>))]
+[ComponentIndex(typeof(RangeIndex<,>))]
 internal struct IndexedStringRange : IIndexedComponent<string> {
     public      string  GetIndexedValue() => value;
     internal    string  value;

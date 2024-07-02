@@ -7,7 +7,9 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TValue : class
+internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex<TValue>
+    where TIndexedComponent : struct, IIndexedComponent<TValue>
+    where TValue : class
 {
     internal override   int                         Count       => map.Count + (nullValue.count > 0 ? 1 : 0);
     private  readonly   Dictionary<TValue, IdArray> map         = new();
@@ -37,6 +39,22 @@ internal sealed class ValueClassIndex<TValue>  : ComponentIndex<TValue> where TV
     {
         var value = IndexUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         RemoveComponentValue (id, value);
+    }
+    
+    internal override void RemoveEntity(int id, Archetype archetype, int compIndex)
+    {
+        var localMap    = map;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var value       = components[compIndex].GetIndexedValue();
+        localMap.TryGetValue(value, out var idArray);
+        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var index   = idSpan.IndexOf(id);
+        idArray.RemoveAt(index, arrayHeap);
+        if (idArray.Count == 0) {
+            localMap.Remove(value);
+        } else {
+            localMap[value] = idArray;
+        }
     }
     #endregion
     

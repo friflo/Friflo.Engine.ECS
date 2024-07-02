@@ -17,10 +17,10 @@ internal static class DictionaryUtils
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
+        componentIndex.store.nodes[id].indexBits &= ~componentIndex.indexBit;
         if (ids.Count == 1) {
             componentIndex.modified = true; 
             map.Remove(value);
-            componentIndex.store.nodes[id].indexBits &= ~componentIndex.indexBit;
             return;
         }
         ids.RemoveAt(index, componentIndex.arrayHeap);
@@ -34,9 +34,9 @@ internal static class DictionaryUtils
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
+        componentIndex.store.nodes[id].indexBits |= componentIndex.indexBit;
         if (ids.Count == 0) {
             componentIndex.modified = true;
-            componentIndex.store.nodes[id].indexBits |= componentIndex.indexBit;
         }
         ids.AddId(id, componentIndex.arrayHeap);
         map[value] = ids;
