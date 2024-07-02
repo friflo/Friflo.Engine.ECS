@@ -15,14 +15,17 @@ internal abstract class EntityRelations
 {
     public    override  string                      ToString()          => $"relation count: {archetype.Count}";
 
+#region fields
     internal  readonly  Archetype                   archetype;
-    internal  readonly  EntityStore                 store;
+    private   readonly  EntityStore                 store;
     /// map: entity id -> relation positions
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
     private   readonly  int                         relationBit;
+    #endregion
     
+#region general
     internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap) {
         this.archetype  = archetype;
         store           = archetype.entityStore;
@@ -31,36 +34,55 @@ internal abstract class EntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    protected abstract bool         AddComponent<TComponent>(int id, TComponent component)              where TComponent : struct, IComponent;
+    protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent   GetRelationAt           (int id, int index);
     
-    internal  abstract void         ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda) where TComponent : struct, IRelationComponent;
-    
-    internal  abstract (Entities entities, Chunk<TComponent> relations)
-                                    GetAllEntityRelations<TComponent>()                                 where TComponent : struct, IRelationComponent;
-    
-    internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
-        where TComponent : struct, IComponent
+    internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {
-        var relations = GetEntityRelations(store, StructInfo<TComponent>.Index);
-        return relations.AddComponent(id, component);
+        return new KeyNotFoundException($"relation not found. key '{key}' id: {id}");        
     }
     
-    internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
+    internal static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
     {
-        var relations = (EntityRelations<TComponent,TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
-        return relations.RemoveRelation(id, key);
+        var relationsMap    = ((EntityStore)store).extension.relationsMap;
+        var relations       = relationsMap[structIndex];
+        if (relations != null) {
+            return relations;
+        }
+        var componentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
+        var heap            = componentType.CreateHeap();
+        var config          = EntityStoreBase.GetArchetypeConfig(store);
+        var archetype       = new Archetype(config, heap);
+        var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
+        return relationsMap[structIndex] = (EntityRelations)obj;
+        //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TKey>(archetype, heap);
     }
+    #endregion
     
+#region query
     internal int GetRelationCount(Entity entity) {
         relationPositions.TryGetValue(entity.Id, out var positions);
         return positions.count;
     }
     
-    internal static KeyNotFoundException KeyNotFoundException(int id, object key)
+    internal static RelationComponents<TComponent> GetRelations<TComponent>(EntityStore store, int id)
+        where TComponent : struct, IRelationComponent
     {
-        return new KeyNotFoundException($"relation not found. key '{key}' id: {id}");        
+        var relations = store.extension.relationsMap[StructInfo<TComponent>.Index];
+        if (relations == null) {
+            return default;
+        }
+        relations.relationPositions.TryGetValue(id, out var positions);
+        var count           = positions.count;
+        var componentHeap   = (StructHeap<TComponent>)relations.heap;
+        switch (count) {
+            case 0: return  new RelationComponents<TComponent>();
+            case 1: return  new RelationComponents<TComponent>(componentHeap.components, positions.start);
+        }
+        var poolIndex       = IdArrayHeap.PoolIndex(count);
+        var poolPositions   = relations.idHeap.GetPool(poolIndex).Ids;
+        return new RelationComponents<TComponent>(componentHeap.components, poolPositions, positions.start, positions.count);
     }
     
     internal static ref TComponent GetRelation<TComponent, TKey>(EntityStore store, int id, TKey key)
@@ -84,43 +106,41 @@ internal abstract class EntityRelations
         return relations.TryGetRelation(id, key, out value);
     }
     
-    internal static RelationComponents<TComponent> GetRelations<TComponent>(EntityStore store, int id)
-        where TComponent : struct, IRelationComponent
+    internal void ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda)  where TComponent : struct, IRelationComponent
     {
-        var relations = store.extension.relationsMap[StructInfo<TComponent>.Index];
-        if (relations == null) {
-            return default;
+        var components  = ((StructHeap<TComponent>)heap).components;
+        var count       = archetype.Count;
+        var ids         = archetype.entityIds;
+        var entityStore = store;
+        for (int n = 0; n < count; n++) {
+            lambda(ref components[n], new Entity(entityStore, ids[n]));
         }
-        relations.relationPositions.TryGetValue(id, out var positions);
-        var count           = positions.count;
-        var componentHeap   = (StructHeap<TComponent>)relations.heap;
-        switch (count) {
-            case 0: return  new RelationComponents<TComponent>();
-            case 1: return  new RelationComponents<TComponent>(componentHeap.components, positions.start);
-        }
-        var poolIndex       = IdArrayHeap.PoolIndex(count);
-        var poolPositions   = relations.idHeap.GetPool(poolIndex).Ids;
-        return new RelationComponents<TComponent>(componentHeap.components, poolPositions, positions.start, positions.count);
     }
     
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
-    internal static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
+    internal (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>() where TComponent : struct, IRelationComponent
     {
-        var relationsMap    = ((EntityStore)store).extension.relationsMap;
-        var relations       = relationsMap[structIndex];
-        if (relations != null) {
-            return relations;
-        }
-        var componentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
-        var heap            = componentType.CreateHeap();
-        var config          = EntityStoreBase.GetArchetypeConfig(store);
-        var archetype       = new Archetype(config, heap);
-        var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
-        return relationsMap[structIndex] = (EntityRelations)obj;
-    //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TKey>(archetype, heap);
+        int count       = archetype.Count;
+        var entities    = new Entities(store, archetype.entityIds, 0, count);
+        var components  = ((StructHeap<TComponent>)heap).components;
+        var chunk       = new Chunk<TComponent>(components, null, count, 0);
+        return (entities, chunk);
     }
+    #endregion
     
-#region non generic add / remove position
+#region mutation
+    internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
+        where TComponent : struct, IComponent
+    {
+        var relations = GetEntityRelations(store, StructInfo<TComponent>.Index);
+        return relations.AddComponent(id, component);
+    }
+        
+    internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey key)
+        where TComponent : struct, IRelationComponent<TKey>
+    {
+        var relations = (EntityRelations<TComponent,TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
+        return relations.RemoveRelation(id, key);
+    }
     
     internal int AddEntityRelation(int id, IdArray positions)
     {

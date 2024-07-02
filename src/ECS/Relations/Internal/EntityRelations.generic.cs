@@ -73,26 +73,6 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
         value = default;
         return false;
     }
-    
-    internal override void ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda)
-    {
-        var components  = ((StructHeap<TComponent>)heap).components;
-        var count       = archetype.Count;
-        var ids         = archetype.entityIds;
-        var entityStore = store;
-        for (int n = 0; n < count; n++) {
-            lambda(ref components[n], new Entity(entityStore, ids[n]));
-        }
-    }
-    
-    internal override (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>()
-    {
-        int count       = archetype.Count;
-        var entities    = new Entities(store, archetype.entityIds, 0, count);
-        var components  = ((StructHeap<TComponent>)heap).components;
-        var chunk       = new Chunk<TComponent>(components, null, count, 0);
-        return (entities, chunk);
-    }
     #endregion
     
 #region mutation
