@@ -123,13 +123,13 @@ public static class Test_Relations_Query
     [Test]
     public static void Test_Relations_ForAllEntityRelations_Perf()
     {
-        //  #PC: Test_Relations_ForAllEntityRelations_Perf - entities: 1000000  relationsPerEntity: 10  duration: 35 ms
+        //  #PC: Test_Relations_ForAllEntityRelations_Perf - entities: 1000000  relationsPerEntity: 10  duration: 30 ms
         int entityCount         = 100;
         int relationsPerEntity  = 10;
-        var store   = new EntityStore();
-        var type    = store.GetArchetype(default);
-        var entities = type.CreateEntities(entityCount);
-        foreach (var entity in entities) {
+        var store           = new EntityStore();
+        var type            = store.GetArchetype(default);
+        var createdEntities = type.CreateEntities(entityCount);
+        foreach (var entity in createdEntities) {
             for (int n = 0; n < relationsPerEntity; n++) {
                 entity.AddComponent(new IntRelation { value = n });
             }
@@ -148,7 +148,7 @@ public static class Test_Relations_Query
     [Test]
     public static void Test_Relations_GetAllEntityRelations_Perf()
     {
-        //  #PC: Test_Relations_GetAllEntityRelations_Perf - entities: 100  relationsPerEntity: 10  duration: 8 ms
+        //  #PC: Test_Relations_GetAllEntityRelations_Perf - entities: 1000000  relationsPerEntity: 10  duration: 6 ms
         int entityCount         = 100;
         int relationsPerEntity  = 10;
         var store           = new EntityStore();
