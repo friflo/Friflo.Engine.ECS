@@ -3,6 +3,7 @@
 
 using System;
 using System.Text;
+using Friflo.Engine.ECS.Utils;
 using static Friflo.Engine.ECS.NodeFlags;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -36,12 +37,15 @@ public struct EntityNode
 {
 #region public properties
     /// <summary>The <see cref="ECS.Archetype"/> storing the entity.</summary>
-                    public              Archetype   Archetype   =>  archetype;
+            public              Archetype       Archetype   =>  archetype;
     
     /// <summary>Internally used flags assigned to the entity.</summary>
-                    public              NodeFlags   Flags       =>  flags;
+            public              NodeFlags       Flags       =>  flags;
+    
+    /// <summary>Property only used to debug <see cref="indexBits"/>. </summary>
+            internal            ComponentTypes  IndexTypes  =>  new ComponentTypes{ bitSet = new BitSet { l0 = indexBits } };
                     
-                    public   override   string      ToString()  => GetString();
+            public   override   string          ToString()  => GetString();
     #endregion
     
 #region internal fields
@@ -53,7 +57,8 @@ public struct EntityNode
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal    NodeFlags       flags;              //  1
     
-                    internal    int             indexBits;          //  4
+    /// <summary> Use <see cref="IndexTypes"/> to see <see cref="ComponentTypes"/>. </summary>
+    [Browse(Never)] internal    int             indexBits;          //  4
     
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
                     internal    byte            signalTypeCount;    //  1   number of different signal types attached to the entity.

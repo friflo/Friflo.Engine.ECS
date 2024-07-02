@@ -92,6 +92,14 @@ public static class Test_Index
             e.Reset();
         });
     }
+    
+    [Test]
+    public static void Test_Index_EntityNode()
+    {
+        var types = ComponentTypes.Get<IndexedInt>();
+        var node  = new EntityNode { indexBits = (int)types.bitSet.l0 };
+        AreEqual("Components: [IndexedInt]", node.IndexTypes.ToString());
+    }
 }
 
 }
