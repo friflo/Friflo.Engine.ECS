@@ -554,7 +554,7 @@ public partial class EntityStore
     //  var localNodes  = nodes;
         ref var node    = ref nodes[id];
         if (node.indexBits != 0) {
-            RemoveEntityDependencies(id, ref node);
+            RemoveEntityDependencies(id, node);
         }
         // --- mark its child nodes as floating
         ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
@@ -578,13 +578,12 @@ public partial class EntityStore
         OnChildNodeRemove(parentId, id, curIndex);
     }
     
-    private void RemoveEntityDependencies(int id, ref EntityNode node)
+    private void RemoveEntityDependencies(int id, in EntityNode node)
     {
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();
         indexTypes.bitSet.l0    = Static.EntitySchema.indexTypes.   bitSet.l0 & node.indexBits; // intersect
         relationTypes.bitSet.l0 = Static.EntitySchema.relationTypes.bitSet.l0 & node.indexBits; // intersect
-        node.indexBits          = 0;
         
         // --- remove values of indexed components added to entity from ComponentIndex
         var indexMap = extension.indexMap;

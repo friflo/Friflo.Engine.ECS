@@ -62,6 +62,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
         } else {
             localMap[value] = idArray;
         }
+        store.nodes[id].indexBits &= ~indexBit;
     }
     #endregion
     

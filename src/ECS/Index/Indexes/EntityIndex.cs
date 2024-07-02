@@ -69,5 +69,6 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
         } else {
             localMap[value] = idArray;
         }
+        store.nodes[id].indexBits &= ~indexBit;
     }
 }
