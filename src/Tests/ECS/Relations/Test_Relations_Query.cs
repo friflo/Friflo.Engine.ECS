@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -117,6 +118,31 @@ public static class Test_Relations_Query
             }
         }
         Mem.AreEqual(3, count);
+    }
+    
+    [Test]
+    public static void Test_Relations_query_Perf()
+    {
+        //  #PC: Test_Relations_query_Perf - entities: 1000000  relationsPerEntity: 10  duration: 685 ms
+        int entityCount         = 100;
+        int relationsPerEntity  = 10;
+        var store   = new EntityStore();
+        var type    = store.GetArchetype(default);
+        var entities = type.CreateEntities(entityCount);
+        foreach (var entity in entities) {
+            for (int n = 0; n < relationsPerEntity; n++) {
+                entity.AddComponent(new IntRelation { value = n });
+            }
+        }
+        var query = store.Query<IntRelation>();
+        int count = 0;
+        var sw = new Stopwatch();
+        sw.Start();
+        query.ForEachEntity((ref IntRelation relation, Entity entity) => {
+            count++;
+        });
+        AreEqual(entityCount * relationsPerEntity, count);
+        Console.WriteLine($"Test_Relations_query_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
     }
     
     [Test]
