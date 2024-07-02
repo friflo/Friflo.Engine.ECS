@@ -76,6 +76,20 @@ public static class RelationExtensions
     #endregion
     
 #region EntityStore
+    /// <summary>
+    /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TComponent"/> type. 
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    ///   <item>
+    ///     The returned collection changes when relations are updated, removed or added.
+    ///   </item>
+    ///   <item>
+    ///     To get all entities including their relations - a cartesian join - use:<br/>
+    ///     <c>query = store.Query&lt;TComponent>();</c>
+    ///   </item>
+    /// </list>
+    /// </remarks>
     public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TComponent>(this EntityStore store)
         where TComponent : struct, IRelationComponent
     {

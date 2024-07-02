@@ -77,7 +77,7 @@ public static class IndexExtensions
     ///     To get the entities linking a specific entity use <see cref="GetEntityReferences{TComponent}"/>.<br/>
     ///   </item>
     ///   <item>
-    ///     The method id a specialized version of <see cref="GetAllIndexedComponentValues{TComponent,TValue}"/><br/>
+    ///     The method is a specialized version of <see cref="GetAllIndexedComponentValues{TComponent,TValue}"/><br/>
     ///     using <c> TComponent = ILinkComponent</c> and <c>TValue = Entity</c>.  
     ///   </item>
     /// </list>
