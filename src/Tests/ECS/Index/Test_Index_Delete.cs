@@ -1,5 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantExplicitArrayCreation
@@ -21,16 +22,16 @@ public static class Test_Index_Delete
         entity1.AddComponent(new IndexedInt { value = 10 });
         entity2.AddComponent(new IndexedInt { value = 10 });
         entity3.AddComponent(new IndexedInt { value = 20 });
-        AreEqual(2, values.Count);
+        AreEqual("{ 10, 20 }", values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual(2, values.Count);  // 10 is still indexed
+        AreEqual("{ 10, 20 }", values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual(1, values.Count);  // removed 10
+        AreEqual("{ 20 }", values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual(0, values.Count);  // removed 20
+        AreEqual("{ }", values.ToStr());
     }
     
     [Test]
@@ -45,16 +46,16 @@ public static class Test_Index_Delete
         entity1.AddComponent(new IndexedName { name = "abc" });
         entity2.AddComponent(new IndexedName { name = "abc" });
         entity3.AddComponent(new IndexedName { name = "xyz" });
-        AreEqual(2, values.Count);
+        AreEqual("{ abc, xyz }", values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual(2, values.Count);  // 10 is still indexed
+        AreEqual("{ abc, xyz }", values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual(1, values.Count);  // removed 10
+        AreEqual("{ xyz }", values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual(0, values.Count);  // removed 20
+        AreEqual("{ }", values.ToStr());
     }
     
     [Test]
@@ -66,24 +67,24 @@ public static class Test_Index_Delete
         var entity2 = store.CreateEntity();
         var entity3 = store.CreateEntity();
         
-        var target1 = store.CreateEntity();
-        var target2 = store.CreateEntity();
+        var target1 = store.CreateEntity(4);
+        var target2 = store.CreateEntity(5);
         
         var values  = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
         
         entity1.AddComponent(new AttackComponent { target = target1 });
         entity2.AddComponent(new AttackComponent { target = target1 });
         entity3.AddComponent(new AttackComponent { target = target2 });
-        AreEqual(2, values.Count);
+        AreEqual("{ 4, 5 }", values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual(2, values.Count);  // 10 is still indexed
+        AreEqual("{ 4, 5 }", values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual(1, values.Count);  // removed 10
+        AreEqual("{ 5 }", values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual(0, values.Count);  // removed 20
+        AreEqual("{ }", values.ToStr());
     }
     
     [Test]
@@ -101,16 +102,16 @@ public static class Test_Index_Delete
         entity1.AddComponent(new IndexedIntRange { value = 10 });
         entity2.AddComponent(new IndexedIntRange { value = 10 });
         entity3.AddComponent(new IndexedIntRange { value = 20 });
-        AreEqual(2, values.Count);
+        AreEqual("{ 10, 20 }", values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual(2, values.Count);  // 10 is still indexed
+        AreEqual("{ 10, 20 }", values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual(1, values.Count);  // removed 10
+        AreEqual("{ 20 }", values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual(0, values.Count);  // removed 20
+        AreEqual("{ }", values.ToStr());
     }
 }
 

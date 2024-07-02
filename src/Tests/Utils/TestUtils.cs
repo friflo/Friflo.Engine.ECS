@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using Friflo.Engine.ECS;
 
+// ReSharper disable UseMethodAny.2
 namespace Tests.Utils {
 
 public static class TestUtils
@@ -56,6 +58,34 @@ public static class TestUtils
         foreach (var id in entities) {
             if (sb.Length > 2) sb.Append(", ");
             sb.Append(id);
+        }
+        sb.Append(" }");
+        return sb.ToString();
+    }
+    
+    public static string ToStr<T>(this IEnumerable<T> enumerable)
+    {
+        var array = enumerable.ToArray();
+        if (array.Length == 0) return "{ }";
+        var sb = new StringBuilder();
+        sb.Append("{ ");
+        foreach (var item in array) {
+            if (sb.Length > 2) sb.Append(", ");
+            sb.Append(item);
+        }
+        sb.Append(" }");
+        return sb.ToString();
+    }
+    
+    public static string ToStr(this IEnumerable<Entity> entities)
+    {
+        var array = entities.ToArray();
+        if (array.Length == 0) return "{ }";
+        var sb = new StringBuilder();
+        sb.Append("{ ");
+        foreach (var entity in array) {
+            if (sb.Length > 2) sb.Append(", ");
+            sb.Append(entity.Id);
         }
         sb.Append(" }");
         return sb.ToString();
