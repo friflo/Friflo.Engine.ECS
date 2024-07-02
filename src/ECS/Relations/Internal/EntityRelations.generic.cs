@@ -84,6 +84,15 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
             lambda(ref components[n], new Entity(entityStore, ids[n]));
         }
     }
+    
+    internal override (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>()
+    {
+        int count       = archetype.Count;
+        var entities    = new Entities(store, archetype.entityIds, 0, count);
+        var components  = ((StructHeap<TComponent>)heap).components;
+        var chunk       = new Chunk<TComponent>(components, null, count, 0);
+        return (entities, chunk);
+    }
     #endregion
     
 #region mutation

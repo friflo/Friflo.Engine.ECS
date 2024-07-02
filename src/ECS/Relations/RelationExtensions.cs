@@ -99,14 +99,25 @@ public static class RelationExtensions
     }
     
     /// <summary>
-    /// Iterates all entities including their relations of the specified <typeparamref name="TComponent"/> type.<br/>
-    /// Executes in O(N) N: number of all entity relations. Most efficient way to iterate all.
+    /// Iterates all entity relations of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Executes in O(N) N: number of all entity relations.
     /// </summary>
     public static void ForAllEntityRelations<TComponent>(this EntityStore store, ForEachEntity<TComponent> lambda)
         where TComponent : struct, IRelationComponent
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
         relations.ForAllEntityRelations(lambda);
+    }
+    
+    /// <summary>
+    /// Return all entity relations  of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Executes in O(1).  Most efficient way to iterate all entity relations.
+    /// </summary>
+    public static (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>(this EntityStore store)
+        where TComponent : struct, IRelationComponent
+    {
+        var entityRelations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
+        return entityRelations.GetAllEntityRelations<TComponent>();
     }
     #endregion
 }

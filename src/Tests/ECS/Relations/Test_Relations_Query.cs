@@ -144,6 +144,35 @@ public static class Test_Relations_Query
         Console.WriteLine($"Test_Relations_ForAllEntityRelations_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
     }
     
+    /// Most efficient way to iterate all entity relations
+    [Test]
+    public static void Test_Relations_GetAllEntityRelations_Perf()
+    {
+        //  #PC: Test_Relations_GetAllEntityRelations_Perf - entities: 100  relationsPerEntity: 10  duration: 8 ms
+        int entityCount         = 100;
+        int relationsPerEntity  = 10;
+        var store           = new EntityStore();
+        var type            = store.GetArchetype(default);
+        var createdEntities = type.CreateEntities(entityCount);
+        foreach (var entity in createdEntities) {
+            for (int n = 0; n < relationsPerEntity; n++) {
+                entity.AddComponent(new IntRelation { value = n });
+            }
+        }
+        int count = 0;
+        var sw = new Stopwatch();
+        sw.Start();
+        var (entities, relations) = store.GetAllEntityRelations<IntRelation>();
+        int length = entities.Count;
+        for (int n = 0; n < length; n++) {
+            count++;
+            _ = entities[n];
+            _ = relations[n];
+        }
+        AreEqual(entityCount * relationsPerEntity, count);
+        Console.WriteLine($"Test_Relations_GetAllEntityRelations_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
     [Test]
     public static void Test_Relations_query_exception()
     {
