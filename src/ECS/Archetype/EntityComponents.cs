@@ -51,7 +51,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         if (indexBits == 0) {
             return false;
         }
-        var intersect           = indexBits & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;
+        var intersect = indexBits & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;
         relationTypes.bitSet.l0 = intersect;
         return intersect != 0;
     }

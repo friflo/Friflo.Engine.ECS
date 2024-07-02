@@ -580,11 +580,11 @@ public partial class EntityStore
     
     private void RemoveIndexedEntities(int id, ref EntityNode node)
     {
-        var componentTypes          = new ComponentTypes();
-        componentTypes.bitSet.l0    = node.indexBits;
-        node.indexBits              = 0;
-        var indexMap                = extension.indexMap;
-        foreach (var componentType in componentTypes) {
+        var indexTypes          = new ComponentTypes();
+        indexTypes.bitSet.l0    = Static.EntitySchema.indexTypes.bitSet.l0 & node.indexBits; // intersect
+        node.indexBits          = 0;
+        var indexMap            = extension.indexMap;
+        foreach (var componentType in indexTypes) {
             var index = indexMap[componentType.StructIndex];
             index.RemoveEntity(id, node.archetype, node.compIndex);
         }

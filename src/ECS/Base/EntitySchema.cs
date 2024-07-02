@@ -76,7 +76,9 @@ public sealed class EntitySchema
     // --- lookup: tags
     [Browse(Never)] internal readonly   Dictionary<string, TagType>         tagTypeByName;
     [Browse(Never)] private  readonly   Dictionary<Type,   TagType>         tagTypeByType;
+    // --- component type masks
     [Browse(Never)] internal readonly   ComponentTypes                      relationTypes;
+    [Browse(Never)] internal readonly   ComponentTypes                      indexTypes;
     #endregion
     
 #region internal methods
@@ -115,6 +117,9 @@ public sealed class EntitySchema
             components              [componentType.StructIndex] =   componentType;
             if (componentType.RelationType != null) {
                 relationTypes.Add(new ComponentTypes(componentType));
+            }
+            if (componentType.IndexType != null) {
+                indexTypes.Add(new ComponentTypes(componentType));
             }
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];
