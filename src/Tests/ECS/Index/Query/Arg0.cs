@@ -1,10 +1,10 @@
 ﻿using Friflo.Engine.ECS;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Index {
+namespace Tests.ECS.Index.Query {
 
 
-public static partial class Test_Index
+public static partial class Test_Index_Query
 {
 
     private static void QueryArg0 (IndexContext cx)
