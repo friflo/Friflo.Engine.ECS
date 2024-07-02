@@ -33,6 +33,7 @@ internal abstract class EntityRelations
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent   GetRelationAt           (int id, int index);
+    internal  abstract void         ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda) where TComponent : struct, IRelationComponent;
     
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
         where TComponent : struct, IComponent

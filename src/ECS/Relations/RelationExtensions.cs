@@ -87,7 +87,7 @@ public static class RelationExtensions
     ///   </item>
     ///   <item>
     ///     To get all entities including their relations - the cartesian product aka CROSS JOIN - use:<br/>
-    ///     <c>query = store.Query&lt;TComponent>();</c>
+    ///     <see cref="ForAllEntityRelations{TComponent}"/>
     ///   </item>
     /// </list>
     /// </remarks>
@@ -96,6 +96,17 @@ public static class RelationExtensions
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
         return new EntityReadOnlyCollection(store, relations.relationPositions.Keys);
+    }
+    
+    /// <summary>
+    /// Iterates all entities including their relations of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Executes in O(1).
+    /// </summary>
+    public static void ForAllEntityRelations<TComponent>(this EntityStore store, ForEachEntity<TComponent> lambda)
+        where TComponent : struct, IRelationComponent
+    {
+        var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
+        relations.ForAllEntityRelations(lambda);
     }
     #endregion
 }

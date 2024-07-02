@@ -121,9 +121,9 @@ public static class Test_Relations_Query
     }
     
     [Test]
-    public static void Test_Relations_query_Perf()
+    public static void Test_Relations_ForAllEntityRelations_Perf()
     {
-        //  #PC: Test_Relations_query_Perf - entities: 1000000  relationsPerEntity: 10  duration: 685 ms
+        //  #PC: Test_Relations_ForAllEntityRelations_Perf - entities: 1000000  relationsPerEntity: 10  duration: 35 ms
         int entityCount         = 100;
         int relationsPerEntity  = 10;
         var store   = new EntityStore();
@@ -134,15 +134,14 @@ public static class Test_Relations_Query
                 entity.AddComponent(new IntRelation { value = n });
             }
         }
-        var query = store.Query<IntRelation>();
         int count = 0;
         var sw = new Stopwatch();
         sw.Start();
-        query.ForEachEntity((ref IntRelation relation, Entity entity) => {
+        store.ForAllEntityRelations((ref IntRelation relation, Entity entity) => {
             count++;
         });
         AreEqual(entityCount * relationsPerEntity, count);
-        Console.WriteLine($"Test_Relations_query_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Test_Relations_ForAllEntityRelations_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
     }
     
     [Test]

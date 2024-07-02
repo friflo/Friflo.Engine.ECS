@@ -28,8 +28,7 @@ public static class Test_Relations_Delete
         AreEqual("{ 1, 2 }",    entities.ToStr());
         
         int count = 0;
-        var query = store.Query<IntRelation>();
-        query.ForEachEntity((ref IntRelation relation, Entity entity) => {
+        store.ForAllEntityRelations((ref IntRelation relation, Entity entity) => {
             switch (count++) {
                 case 0: AreEqual(1, entity.Id); AreEqual(10, relation.value); break;
                 case 1: AreEqual(1, entity.Id); AreEqual(20, relation.value); break;
