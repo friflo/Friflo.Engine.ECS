@@ -554,7 +554,7 @@ public partial class EntityStore
     //  var localNodes  = nodes;
         ref var node    = ref nodes[id];
         if (node.indexBits != 0) {
-            RemoveIndexedEntities(id, ref node);
+            RemoveEntityDependencies(id, ref node);
         }
         // --- mark its child nodes as floating
         ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
@@ -578,7 +578,7 @@ public partial class EntityStore
         OnChildNodeRemove(parentId, id, curIndex);
     }
     
-    private void RemoveIndexedEntities(int id, ref EntityNode node)
+    private void RemoveEntityDependencies(int id, ref EntityNode node)
     {
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();

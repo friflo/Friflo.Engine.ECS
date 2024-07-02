@@ -10,6 +10,7 @@ namespace Friflo.Engine.ECS;
 
 public static class RelationExtensions
 {
+#region Entity
     /// <summary>
     /// Returns the relation of the <paramref name="entity"/> with the given <paramref name="key"/>.<br/>
     /// Executes in O(N) N: number of entity relations.
@@ -72,4 +73,15 @@ public static class RelationExtensions
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.RemoveRelation<T, Entity>(entity.store, entity.Id, target);
     }
+    #endregion
+    
+#region EntityStore
+    // TODO should return Entity's
+    public static  IReadOnlyCollection<int> GetEntitiesWithRelations<TComponent>(this EntityStore store)
+        where TComponent : struct, IRelationComponent
+    {
+        var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
+        return relations.relationPositions.Keys;
+    }
+    #endregion
 }

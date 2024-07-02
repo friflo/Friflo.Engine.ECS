@@ -17,7 +17,7 @@ internal abstract class EntityRelations
 
     internal  readonly  Archetype                   archetype;
     /// map: entity id -> relation positions
-    internal  readonly  Dictionary<int, IdArray>    relationPositions   = new ();
+    internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
     private   readonly  int                         indexBit;
@@ -97,7 +97,7 @@ internal abstract class EntityRelations
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
-    private static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
+    internal static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
     {
         var relationsMap    = ((EntityStore)store).extension.relationsMap;
         var relations       = relationsMap[structIndex];
