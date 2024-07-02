@@ -1,4 +1,5 @@
-﻿using Friflo.Engine.ECS;
+﻿using System.Linq;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
@@ -22,15 +23,14 @@ public static class Test_Relations_Delete
         entity1.AddComponent(new IntRelation { value = 10 });
         entity1.AddComponent(new IntRelation { value = 20 });
         AreEqual("{ 1 }",       entities.ToStr());
-        foreach (var entity in entities) {
-            AreEqual(1, entity.Id);
-        }
         
         entity2.AddComponent(new IntRelation { value = 30 });
         AreEqual("{ 1, 2 }",    entities.ToStr());
         
         entity1.DeleteEntity();
         AreEqual("{ 2 }",       entities.ToStr());
+        var array = entities.ToArray();
+        AreEqual(30, array[0].GetRelation<IntRelation, int>(30).value);
         
         entity2.DeleteEntity();
         AreEqual("{ }",         entities.ToStr());
