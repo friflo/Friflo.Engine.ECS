@@ -86,8 +86,8 @@ public static class RelationExtensions
     ///     The returned collection changes when relations are updated, removed or added.
     ///   </item>
     ///   <item>
-    ///     To get all entities including their relations - the cartesian product aka CROSS JOIN - use:<br/>
-    ///     <see cref="ForAllEntityRelations{TComponent}"/>
+    ///     To get all entities including their relations (the cartesian product aka CROSS JOIN) use<br/>
+    ///     <see cref="GetAllEntityRelations{TComponent}"/>
     ///   </item>
     /// </list>
     /// </remarks>
