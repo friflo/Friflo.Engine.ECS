@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Examples;
@@ -60,14 +59,11 @@ public static class Test_Index
         var nameValues  = store.GetAllIndexedComponentValues<IndexedName, string>();
         var intValues   = store.GetAllIndexedComponentValues<IndexedInt, int>();
         
-        entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual(1, nameValues.Count);
-        entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual(1, intValues.Count);
-        entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual(1, nameValues.Count);
-        entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual(1, nameValues.Count);
+        entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.ToStr());
+        entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.ToStr());
+        entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.ToStr());
+        entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.ToStr());
 
-        AreEqual("find-me1",    nameValues.First());
-        AreEqual(123,           intValues.First());
-        
         var result = store.GetEntitiesWithComponentValue<IndexedName, string>("find-me1");
         AreEqual(2, result.Count);     AreEqual("{ 1, 3 }",    result.Ids.ToStr());
         result     = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
