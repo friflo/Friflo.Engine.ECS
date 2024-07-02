@@ -3,6 +3,8 @@
 
 using System;
 using System.Text;
+using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Relations;
 using Friflo.Engine.ECS.Utils;
 using static Friflo.Engine.ECS.NodeFlags;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -57,7 +59,11 @@ public struct EntityNode
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal    NodeFlags       flags;              //  1
     
-    /// <summary> Use <see cref="HasComponent"/> to see <see cref="ComponentTypes"/>. </summary>
+    /// <summary>
+    /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="ComponentIndex"/> instances.<br/> 
+    /// A bit is set if the entity has a component stored in the one of both component stores.
+    /// </summary>
+    /// <remarks>Use <see cref="HasComponent"/> to see <see cref="ComponentTypes"/> by name.</remarks>
     [Browse(Never)] internal    int             hasComponent;       //  4
     
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
