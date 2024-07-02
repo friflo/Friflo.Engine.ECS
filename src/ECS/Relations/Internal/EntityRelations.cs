@@ -74,15 +74,15 @@ internal abstract class EntityRelations
             return default;
         }
         relations.relationPositions.TryGetValue(id, out var positions);
-        var count           = positions.count;
-        var componentHeap   = (StructHeap<TComponent>)relations.heap;
+        var count       = positions.count;
+        var components  = ((StructHeap<TComponent>)relations.heap).components;
         switch (count) {
             case 0: return  new RelationComponents<TComponent>();
-            case 1: return  new RelationComponents<TComponent>(componentHeap.components, positions.start);
+            case 1: return  new RelationComponents<TComponent>(components, positions.start);
         }
         var poolIndex       = IdArrayHeap.PoolIndex(count);
         var poolPositions   = relations.idHeap.GetPool(poolIndex).Ids;
-        return new RelationComponents<TComponent>(componentHeap.components, poolPositions, positions.start, positions.count);
+        return new RelationComponents<TComponent>(components, poolPositions, positions.start, positions.count);
     }
     
     internal static ref TComponent GetRelation<TComponent, TKey>(EntityStore store, int id, TKey key)

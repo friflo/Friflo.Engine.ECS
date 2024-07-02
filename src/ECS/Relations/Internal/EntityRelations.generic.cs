@@ -43,13 +43,14 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     internal override IComponent GetRelationAt(int id, int index)
     {
         relationPositions.TryGetValue(id, out var positions);
-        var count = positions.count;
+        var count       = positions.count;
+        var components  = heapGeneric.components;
         if (count == 1) {
-            return heapGeneric.components[positions.start];
+            return components[positions.start];
         }
         var poolIndex       = IdArrayHeap.PoolIndex(count);
         var poolPositions   = idHeap.GetPool(poolIndex).Ids;
-        return heapGeneric.components[poolPositions[index]];
+        return components[poolPositions[index]];
     }
     
     internal ref TComponent GetRelation<TComponent>(int id, TKey key)
