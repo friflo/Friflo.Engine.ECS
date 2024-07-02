@@ -30,10 +30,10 @@ public static class Test_Relations_Delete
         AreEqual("{ 1, 2 }",    entities.ToStr());
         
         entity1.DeleteEntity();
-        // AreEqual("{ 2 }",       entities.ToStr());   // TODO
+        AreEqual("{ 2 }",       entities.ToStr());
         
         entity2.DeleteEntity();
-        // AreEqual("{ }",         entities.ToStr());   // TODO
+        AreEqual("{ }",         entities.ToStr());
     }
 }
 

@@ -76,7 +76,6 @@ public static class RelationExtensions
     #endregion
     
 #region EntityStore
-    // TODO should return Entity's
     public static EntityReadOnlyCollection GetEntitiesWithRelations<TComponent>(this EntityStore store)
         where TComponent : struct, IRelationComponent
     {

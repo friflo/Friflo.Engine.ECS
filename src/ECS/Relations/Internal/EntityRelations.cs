@@ -114,16 +114,6 @@ internal abstract class EntityRelations
     }
     
 #region non generic add / remove position
-    internal void RemoveEntity (int id)
-    {
-        relationPositions.TryGetValue(id, out var positions);
-        var positionSpan    = positions.GetIdSpan(idHeap);
-        var positionCount   = positions.count;
-        for (int index = 0; index < positionCount; index++) {
-            var position    = positionSpan[index];
-            RemoveEntityRelation(id, position, positions, index);
-        }
-    }
     
     internal int AddEntityRelation(int id, IdArray positions)
     {
@@ -135,8 +125,8 @@ internal abstract class EntityRelations
         relationPositions[id] = positions;
         return position;
     }
-
-    internal void RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
+    
+    internal IdArray RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
     {
         var type    = archetype;
         var map     = relationPositions;
@@ -158,10 +148,21 @@ internal abstract class EntityRelations
         if (positions.count == 1) {
             map.Remove(id);
             type.entityStore.nodes[id].indexBits &= ~indexBit;
-            return;
+            return default;
         }
         positions.RemoveAt(positionIndex, idHeap);
         map[id] = positions;
+        return positions;
+    }
+    
+    internal void RemoveEntity (int id)
+    {
+        relationPositions.TryGetValue(id, out var positions);
+        while (positions.count > 0) {
+            var lastIndex   = positions.count - 1;
+            int position    = positions.Get(lastIndex, idHeap);
+            positions       = RemoveEntityRelation(id, position, positions, lastIndex);
+        }
     }
     #endregion
 }

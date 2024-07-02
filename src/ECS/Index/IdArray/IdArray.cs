@@ -140,4 +140,15 @@ internal static class IdArrayExtensions {
         var curPool         = heap.GetPool(curPoolIndex);
         curPool.Ids[array.start + positionIndex] = value;
     }
+    
+    internal static int Get(this IdArray array, int positionIndex, IdArrayHeap heap)
+    {
+        int count = array.count;
+        if (count == 1) {   // index is 0
+            return array.start;
+        }
+        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
+        var curPool         = heap.GetPool(curPoolIndex);
+        return curPool.Ids[array.start + positionIndex];
+    }
 } 
