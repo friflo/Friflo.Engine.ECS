@@ -77,7 +77,8 @@ public static class RelationExtensions
     
 #region EntityStore
     /// <summary>
-    /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TComponent"/> type. 
+    /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Executes in O(1).
     /// </summary>
     /// <remarks>
     /// <list type="bullet">
