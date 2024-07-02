@@ -16,6 +16,7 @@ internal abstract class EntityRelations
     public    override  string                      ToString()          => $"relation count: {archetype.Count}";
 
     internal  readonly  Archetype                   archetype;
+    /// map: entity id -> relation positions
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new ();
     internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
@@ -29,7 +30,7 @@ internal abstract class EntityRelations
     }
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
-    internal  abstract IComponent   GetRelationAt           (int id, int index);       
+    internal  abstract IComponent   GetRelationAt           (int id, int index);
     
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
         where TComponent : struct, IComponent
@@ -113,6 +114,17 @@ internal abstract class EntityRelations
     }
     
 #region non generic add / remove position
+    internal void RemoveEntity (int id)
+    {
+        relationPositions.TryGetValue(id, out var positions);
+        var positionSpan    = positions.GetIdSpan(idHeap);
+        var positionCount   = positions.count;
+        for (int index = 0; index < positionCount; index++) {
+            var position    = positionSpan[index];
+            RemoveEntityRelation(id, position, positions, index);
+        }
+    }
+    
     internal int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {

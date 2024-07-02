@@ -581,12 +581,23 @@ public partial class EntityStore
     private void RemoveIndexedEntities(int id, ref EntityNode node)
     {
         var indexTypes          = new ComponentTypes();
-        indexTypes.bitSet.l0    = Static.EntitySchema.indexTypes.bitSet.l0 & node.indexBits; // intersect
+        var relationTypes       = new ComponentTypes();
+        indexTypes.bitSet.l0    = Static.EntitySchema.indexTypes.   bitSet.l0 & node.indexBits; // intersect
+        relationTypes.bitSet.l0 = Static.EntitySchema.relationTypes.bitSet.l0 & node.indexBits; // intersect
         node.indexBits          = 0;
-        var indexMap            = extension.indexMap;
+        
+        // --- remove values of indexed components added to entity from ComponentIndex
+        var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var index = indexMap[componentType.StructIndex];
             index.RemoveEntity(id, node.archetype, node.compIndex);
+        }
+        
+        // --- remove relations added to entity from EntityRelations
+        var relationsMap = extension.relationsMap;
+        foreach (var componentType in relationTypes) {
+            var relations = relationsMap[componentType.StructIndex];
+            relations.RemoveEntity(id);
         }
     }
     
