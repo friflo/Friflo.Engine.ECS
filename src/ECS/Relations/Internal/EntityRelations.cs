@@ -21,14 +21,14 @@ internal abstract class EntityRelations
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
-    private   readonly  int                         indexBit;
+    private   readonly  int                         relationBit;
     
     internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap) {
         this.archetype  = archetype;
         store           = archetype.entityStore;
         this.heap       = heap;
         var types       = new ComponentTypes(componentType);
-        indexBit        = (int)types.bitSet.l0;
+        relationBit     = (int)types.bitSet.l0;
     }
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component)              where TComponent : struct, IComponent;
@@ -125,7 +125,7 @@ internal abstract class EntityRelations
     internal int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
-            store.nodes[id].indexBits |= indexBit;
+            store.nodes[id].hasComponent |= relationBit;
         }
         int position = Archetype.AddEntity(archetype, id);
         positions.AddId(position, idHeap);
@@ -154,7 +154,7 @@ internal abstract class EntityRelations
         Archetype.MoveLastComponentsTo(type, position);
         if (positions.count == 1) {
             map.Remove(id);
-            store.nodes[id].indexBits &= ~indexBit;
+            store.nodes[id].hasComponent &= ~relationBit;
             return default;
         }
         positions.RemoveAt(positionIndex, idHeap);

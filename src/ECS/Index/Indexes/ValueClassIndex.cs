@@ -55,7 +55,7 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
         } else {
             localMap[value] = idArray;
         }
-        store.nodes[id].indexBits &= ~indexBit;
+        store.nodes[id].hasComponent &= ~indexBit;
     }
     #endregion
     

@@ -46,12 +46,12 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     
     internal static bool GetRelationTypes(Entity entity, out ComponentTypes relationTypes)
     {
-        relationTypes   = default;
-        var indexBits   = entity.store.nodes[entity.Id].indexBits; 
-        if (indexBits == 0) {
+        relationTypes    = default;
+        var hasComponent = entity.store.nodes[entity.Id].hasComponent; 
+        if (hasComponent == 0) {
             return false;
         }
-        var intersect = indexBits & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;
+        var intersect = hasComponent & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;
         relationTypes.bitSet.l0 = intersect;
         return intersect != 0;
     }

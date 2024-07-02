@@ -42,8 +42,8 @@ public struct EntityNode
     /// <summary>Internally used flags assigned to the entity.</summary>
             public              NodeFlags       Flags       =>  flags;
     
-    /// <summary>Property only used to debug <see cref="indexBits"/>. </summary>
-            internal            ComponentTypes  IndexTypes  =>  new ComponentTypes{ bitSet = new BitSet { l0 = indexBits } };
+    /// <summary>Property only used to debug <see cref="hasComponent"/>. </summary>
+            internal            ComponentTypes  HasComponent=>  new ComponentTypes{ bitSet = new BitSet { l0 = hasComponent } };
                     
             public   override   string          ToString()  => GetString();
     #endregion
@@ -57,8 +57,8 @@ public struct EntityNode
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal    NodeFlags       flags;              //  1
     
-    /// <summary> Use <see cref="IndexTypes"/> to see <see cref="ComponentTypes"/>. </summary>
-    [Browse(Never)] internal    int             indexBits;          //  4
+    /// <summary> Use <see cref="HasComponent"/> to see <see cref="ComponentTypes"/>. </summary>
+    [Browse(Never)] internal    int             hasComponent;       //  4
     
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
                     internal    byte            signalTypeCount;    //  1   number of different signal types attached to the entity.
