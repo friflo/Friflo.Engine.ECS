@@ -76,7 +76,7 @@ public static class RelationExtensions
     #endregion
     
 #region EntityStore
-    public static EntityReadOnlyCollection GetEntitiesWithRelations<TComponent>(this EntityStore store)
+    public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TComponent>(this EntityStore store)
         where TComponent : struct, IRelationComponent
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);

@@ -317,7 +317,7 @@ public static class Test_Relations
     public static void Test_Relations_EntityReadOnlyCollection() 
     {
         var store   = new EntityStore();
-        var entities = store.GetEntitiesWithRelations<IntRelation>();
+        var entities = store.GetAllEntitiesWithRelations<IntRelation>();
 
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);

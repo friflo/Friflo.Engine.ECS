@@ -14,7 +14,7 @@ public static class Test_Relations_Delete
     public static void Test_Relations_Delete_Int()
     {
         var store   = new EntityStore();
-        var entities = store.GetEntitiesWithRelations<IntRelation>();
+        var entities = store.GetAllEntitiesWithRelations<IntRelation>();
         AreEqual("{ }",         entities.ToStr());
 
         var entity1 = store.CreateEntity(1);
