@@ -16,6 +16,7 @@ internal abstract class EntityRelations
     public    override  string                      ToString()          => $"relation count: {archetype.Count}";
 
     internal  readonly  Archetype                   archetype;
+    internal  readonly  EntityStore                 store;
     /// map: entity id -> relation positions
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     internal  readonly  IdArrayHeap                 idHeap              = new();
@@ -24,6 +25,7 @@ internal abstract class EntityRelations
     
     internal EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap) {
         this.archetype  = archetype;
+        store           = archetype.entityStore;
         this.heap       = heap;
         var types       = new ComponentTypes(componentType);
         indexBit        = (int)types.bitSet.l0;
@@ -118,7 +120,7 @@ internal abstract class EntityRelations
     internal int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
-            archetype.entityStore.nodes[id].indexBits |= indexBit;
+            store.nodes[id].indexBits |= indexBit;
         }
         int position = Archetype.AddEntity(archetype, id);
         positions.AddId(position, idHeap);
@@ -147,7 +149,7 @@ internal abstract class EntityRelations
         Archetype.MoveLastComponentsTo(type, position);
         if (positions.count == 1) {
             map.Remove(id);
-            type.entityStore.nodes[id].indexBits &= ~indexBit;
+            store.nodes[id].indexBits &= ~indexBit;
             return default;
         }
         positions.RemoveAt(positionIndex, idHeap);
