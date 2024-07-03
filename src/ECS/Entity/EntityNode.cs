@@ -44,8 +44,8 @@ public struct EntityNode
     /// <summary>Internally used flags assigned to the entity.</summary>
             public              NodeFlags       Flags       =>  flags;
     
-    /// <summary>Property only used to debug <see cref="hasComponent"/>. </summary>
-            internal            ComponentTypes  HasComponent=>  new ComponentTypes{ bitSet = new BitSet { l0 = hasComponent } };
+    /// <summary>Property only used to see component names encoded by <see cref="references"/>. </summary>
+            internal            ComponentTypes  References  =>  new ComponentTypes{ bitSet = new BitSet { l0 = references } };
                     
             public   override   string          ToString()  => GetString();
     #endregion
@@ -61,10 +61,12 @@ public struct EntityNode
     
     /// <summary>
     /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="ComponentIndex"/> instances.<br/> 
-    /// A bit is set if the entity has a component stored in the one of both component stores.
+    /// A bit is set if the entity is referenced by<br/>
+    /// - either an entity relation set<br/>
+    /// - or an indexed component value.
     /// </summary>
-    /// <remarks>Use <see cref="HasComponent"/> to see <see cref="ComponentTypes"/> by name.</remarks>
-    [Browse(Never)] internal    int             hasComponent;       //  4
+    /// <remarks>Use <see cref="References"/> to see <see cref="ComponentTypes"/> by name.</remarks>
+    [Browse(Never)] internal    int             references;         //  4
     
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
                     internal    byte            signalTypeCount;    //  1   number of different signal types attached to the entity.

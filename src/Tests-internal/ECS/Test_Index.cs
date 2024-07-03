@@ -97,8 +97,8 @@ public static class Test_Index
     public static void Test_Index_EntityNode()
     {
         var types = ComponentTypes.Get<IndexedInt>();
-        var node  = new EntityNode { hasComponent = (int)types.bitSet.l0 };
-        AreEqual("Components: [IndexedInt]", node.HasComponent.ToString());
+        var node  = new EntityNode { references = (int)types.bitSet.l0 };
+        AreEqual("Components: [IndexedInt]", node.References.ToString());
     }
 }
 

@@ -553,7 +553,7 @@ public partial class EntityStore
         entityCount--;
     //  var localNodes  = nodes;
         ref var node    = ref nodes[id];
-        if (node.hasComponent != 0) {
+        if (node.references != 0) {
             RemoveEntityComponents(id, node);
         }
         // --- mark its child nodes as floating
@@ -583,8 +583,9 @@ public partial class EntityStore
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();
         var schema              = Static.EntitySchema;
-        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & node.hasComponent; // intersect
-        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & node.hasComponent; // intersect
+        var references          = node.references;
+        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & references; // intersect
+        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & references; // intersect
         
         // --- remove entity id from indexed component values
         var indexMap = extension.indexMap;

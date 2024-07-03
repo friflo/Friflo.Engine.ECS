@@ -18,7 +18,7 @@ internal abstract class EntityRelations
 #region fields
     internal  readonly  Archetype                   archetype;
     private   readonly  EntityStore                 store;
-    /// map: entity id -> positions in archtetype
+    /// map: entity id -> positions in archetype
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
@@ -145,7 +145,7 @@ internal abstract class EntityRelations
     internal int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
-            store.nodes[id].hasComponent |= relationBit;
+            store.nodes[id].references |= relationBit;
         }
         int position = Archetype.AddEntity(archetype, id);
         positions.AddId(position, idHeap);
@@ -174,7 +174,7 @@ internal abstract class EntityRelations
         Archetype.MoveLastComponentsTo(type, position);
         if (positions.count == 1) {
             map.Remove(id);
-            store.nodes[id].hasComponent &= ~relationBit;
+            store.nodes[id].references &= ~relationBit;
             return default;
         }
         positions.RemoveAt(positionIndex, idHeap);
