@@ -25,8 +25,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     {
         var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-        DictionaryUtils.AddComponentValue    (id, value, entityMap, this);
-        store.nodes[value].isLinked |= indexBit;
+        EntityIndexUtils.AddComponentValue    (id, value, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
@@ -36,24 +35,20 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
         if (oldValue == value) {
             return;
         }
-        var map = entityMap;
-        DictionaryUtils.RemoveComponentValue (id, oldValue, map, this);
-        DictionaryUtils.AddComponentValue    (id, value,    map, this);
-        var nodes = store.nodes;
-        nodes[oldValue].isLinked &= ~indexBit;
-        nodes[value]   .isLinked |=  indexBit;
+        EntityIndexUtils.RemoveComponentValue (id, oldValue, this);
+        EntityIndexUtils.AddComponentValue    (id, value,    this);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
         var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        DictionaryUtils.RemoveComponentValue (id, value, entityMap, this);
-        store.nodes[value].isLinked &= ~indexBit;
+        EntityIndexUtils.RemoveComponentValue (id, value, this);
     }
     
     internal void RemoveLinkComponents(int id)
     {
         entityMap.TryGetValue(id, out var idArray);
+        // TODO check if it necessary to make a copy of linkingEntityIds - e.g. by stackalloc 
         var linkingEntityIds  = idArray.GetIdSpan(idHeap);
         foreach (var linkingEntityId in linkingEntityIds)
         {
