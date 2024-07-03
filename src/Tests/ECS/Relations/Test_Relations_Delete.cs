@@ -11,7 +11,7 @@ namespace Tests.ECS.Relations {
 public static class Test_Relations_Delete
 {
     [Test]
-    public static void Test_Relations_Delete_Int()
+    public static void Test_Relations_Delete_int_relation()
     {
         var store       = new EntityStore();
         var allEntities = store.GetAllEntitiesWithRelations<IntRelation>();

@@ -19,6 +19,14 @@ internal struct IntRelation : IRelationComponent<int>
     public override string ToString() => value.ToString();
 }
 
+internal struct StringRelation : IRelationComponent<string>
+{
+    public string value;
+    public string GetRelationKey() => value;
+
+    public override string ToString() => value;
+}
+
 internal enum InventoryItemType {
     Axe     = 1,
     Gun     = 2,

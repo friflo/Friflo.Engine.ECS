@@ -314,6 +314,19 @@ public static class Test_Relations
         Mem.AssertNoAlloc(start);
     }
     
+    /// null is a valid relation key
+    [Test]
+    public static void Test_Relations_null_relation_key()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new StringRelation { value = null });
+        var relations = entity.GetRelations<StringRelation>();
+        AreEqual(1, relations.Length);
+        IsNull  (relations[0].value);
+        IsNull  (entity.GetRelation<StringRelation, string>(null).value);
+    }
+    
     [Test]
     public static void Test_Relations_Entity_Component_methods()
     {
@@ -337,7 +350,7 @@ public static class Test_Relations
     }
     
     [Test]
-    public static void Test_Relations_exceptions()
+    public static void Test_Relations_NullReferenceExceptions()
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
