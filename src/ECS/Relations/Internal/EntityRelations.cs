@@ -22,7 +22,7 @@ internal abstract class EntityRelations
     /// Single <see cref="StructHeap"/> stored in the <see cref="archetype"/>.
     internal  readonly  StructHeap                  heap;
     
-    /// map: entity id -> positions in <see cref="archetype"/>
+    /// map: entity id  ->  relation component positions in <see cref="archetype"/>
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     
     private   readonly  EntityStore                 store;
