@@ -16,12 +16,17 @@ internal abstract class EntityRelations
     public    override  string                      ToString()          => $"relation count: {archetype.Count}";
 
 #region fields
+    /// Single <see cref="Archetype"/> containing all relations of a specific <see cref="IRelationComponent{TKey}"/>
     internal  readonly  Archetype                   archetype;
-    private   readonly  EntityStore                 store;
-    /// map: entity id -> positions in archetype
-    internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
-    internal  readonly  IdArrayHeap                 idHeap              = new();
+    
+    /// Single <see cref="StructHeap"/> stored in the <see cref="archetype"/>.
     internal  readonly  StructHeap                  heap;
+    
+    /// map: entity id -> positions in <see cref="archetype"/>
+    internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
+    
+    private   readonly  EntityStore                 store;
+    internal  readonly  IdArrayHeap                 idHeap              = new();
     private   readonly  int                         relationBit;
     #endregion
     
@@ -155,16 +160,17 @@ internal abstract class EntityRelations
     
     internal IdArray RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
     {
-        var type    = archetype;
-        var map     = relationPositions;
+        var type        = archetype;
+        var map         = relationPositions;
+        var localIdHeap = idHeap;
         
         // --- adjust position in entityMap of last component
         var lastPosition        = type.entityCount - 1;
         var lastId              = type.entityIds[lastPosition];
         map.TryGetValue(lastId, out var curPositions);
-        var positionSpan        = curPositions.GetIdSpan(idHeap);
+        var positionSpan        = curPositions.GetIdSpan(localIdHeap);
         var curPositionIndex    = positionSpan.IndexOf(lastPosition);
-        curPositions.Set(curPositionIndex, position, idHeap);
+        curPositions.Set(curPositionIndex, position, localIdHeap);
         // array with length == 1 is stored in-place
         if (curPositions.count == 1) {
             map[lastId] = curPositions;
@@ -177,7 +183,7 @@ internal abstract class EntityRelations
             store.nodes[id].references &= ~relationBit;
             return default;
         }
-        positions.RemoveAt(positionIndex, idHeap);
+        positions.RemoveAt(positionIndex, localIdHeap);
         map[id] = positions;
         return positions;
     }

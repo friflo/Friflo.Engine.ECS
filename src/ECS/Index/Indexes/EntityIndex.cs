@@ -12,9 +12,12 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 {
     internal override   int                         Count       => map.Count;
     
+#region fields
     /// map: entity id -> entity ids
     internal readonly   Dictionary<int, IdArray>    map         = new();
+    
     private             EntityIndexValues           keyCollection;
+    #endregion
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)

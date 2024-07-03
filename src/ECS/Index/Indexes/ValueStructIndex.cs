@@ -13,9 +13,10 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     where TValue : struct
 {
     internal override   int                         Count       => map.Count;
-    
+#region fields
     /// map: indexed value -> entity ids
     private  readonly   Dictionary<TValue, IdArray> map         = new();
+    #endregion
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)

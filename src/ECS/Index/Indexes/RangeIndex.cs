@@ -20,9 +20,12 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
 {
     internal override   int                         Count       => map.Count;
     
+#region fields
     /// map: indexed value -> entity ids
     private  readonly   SortedList<TValue, IdArray> map         = new();
+    
     private             ReadOnlyCollection<TValue>  keyCollection;
+    #endregion
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)

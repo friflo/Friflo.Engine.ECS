@@ -13,9 +13,13 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
 {
     internal override   int                         Count       => map.Count + (nullValue.count > 0 ? 1 : 0);
     
+#region fields
     /// map: indexed value -> entity ids
     private  readonly   Dictionary<TValue, IdArray> map         = new();
+    
+    /// store entity ids for indexed value == null
     private             IdArray                     nullValue;
+    #endregion
 
     
 #region indexing

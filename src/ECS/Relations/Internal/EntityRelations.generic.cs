@@ -13,6 +13,7 @@ namespace Friflo.Engine.ECS.Relations;
 internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelations
     where TRelationComponent : struct, IRelationComponent<TKey>
 {
+    /// Single <see cref="StructHeap"/> stored in the <see cref="EntityRelations.archetype"/>.
     private  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
     /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
