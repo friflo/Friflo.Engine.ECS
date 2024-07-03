@@ -15,7 +15,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
 {
     internal override   int                         Count       => entityMap.Count;
 #region fields
-    /// map: indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> with the indexed value as key.
+    /// map:  indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> with the indexed value as key.
     private  readonly   Dictionary<TValue, IdArray> entityMap   = new();
     #endregion
     
@@ -60,7 +60,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
         } else {
             map[value] = idArray;
         }
-        store.nodes[id].references &= ~indexBit;
+        store.nodes[id].isOwner &= ~indexBit;
     }
     #endregion
     

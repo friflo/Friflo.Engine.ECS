@@ -22,7 +22,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
     internal override   int                         Count       => entityMap.Count;
     
 #region fields
-    /// map: indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> with the indexed value as key.
+    /// map:  indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> with the indexed value as key.
     private  readonly   SortedList<TValue, IdArray> entityMap   = new();
     
     private             ReadOnlyCollection<TValue>  keyCollection;
@@ -69,7 +69,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
         } else {
             map[value] = idArray;
         }
-        store.nodes[id].references &= ~indexBit;
+        store.nodes[id].isOwner &= ~indexBit;
     }
     #endregion
     

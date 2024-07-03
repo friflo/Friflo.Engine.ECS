@@ -19,7 +19,7 @@ internal static class DictionaryUtils
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        componentIndex.store.nodes[id].references &= ~componentIndex.indexBit;
+        componentIndex.store.nodes[id].isOwner &= ~componentIndex.indexBit;
         if (ids.Count == 1) {
             componentIndex.modified = true; 
             map.Remove(value);
@@ -37,7 +37,7 @@ internal static class DictionaryUtils
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        componentIndex.store.nodes[id].references |= componentIndex.indexBit;
+        componentIndex.store.nodes[id].isOwner |= componentIndex.indexBit;
         if (ids.Count == 0) {
             componentIndex.modified = true;
         }

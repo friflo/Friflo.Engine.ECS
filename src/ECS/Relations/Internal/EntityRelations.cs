@@ -22,7 +22,7 @@ internal abstract class EntityRelations
     /// Single <see cref="StructHeap"/> stored in the <see cref="archetype"/>.
     internal  readonly  StructHeap                  heap;
     
-    /// map: entity id  ->  relation component positions in <see cref="archetype"/>
+    /// map:  entity id  ->  relation component positions in <see cref="archetype"/>
     internal  readonly  Dictionary<int, IdArray>    positionMap = new();
     
     private   readonly  EntityStore                 store;
@@ -150,7 +150,7 @@ internal abstract class EntityRelations
     internal int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
-            store.nodes[id].references |= relationBit;
+            store.nodes[id].isOwner |= relationBit;
         }
         int position = Archetype.AddEntity(archetype, id);
         positions.AddId(position, idHeap);
@@ -180,7 +180,7 @@ internal abstract class EntityRelations
         Archetype.MoveLastComponentsTo(type, position);
         if (positions.count == 1) {
             map.Remove(id);
-            store.nodes[id].references &= ~relationBit;
+            store.nodes[id].isOwner &= ~relationBit;
             return default;
         }
         positions.RemoveAt(positionIndex, localIdHeap);

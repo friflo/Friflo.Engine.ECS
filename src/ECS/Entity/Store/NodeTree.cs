@@ -554,7 +554,7 @@ public partial class EntityStore
         entityCount--;
     //  var localNodes  = nodes;
         ref var node    = ref nodes[id];
-        if (node.references != 0) {
+        if (node.isOwner != 0) {
             RemoveEntityReferences(id, node);
         }
         if (node.isLinked != 0) {
@@ -587,9 +587,9 @@ public partial class EntityStore
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();
         var schema              = Static.EntitySchema;
-        var references          = node.references;
-        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & references; // intersect
-        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & references; // intersect
+        var isOwner             = node.isOwner;
+        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & isOwner; // intersect
+        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & isOwner; // intersect
         
         // --- remove entity id from indexed component values
         var indexMap = extension.indexMap;

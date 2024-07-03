@@ -44,8 +44,8 @@ public struct EntityNode
     /// <summary>Internally used flags assigned to the entity.</summary>
     public              NodeFlags       Flags       =>  flags;
     
-    /// <summary>Property only used to see component names encoded by <see cref="references"/>. </summary>
-    internal            ComponentTypes  References  =>  new ComponentTypes{ bitSet = new BitSet { l0 = references } };
+    /// <summary>Property only used to see component names encoded by <see cref="isOwner"/>. </summary>
+    internal            ComponentTypes  IsOwner     =>  new ComponentTypes{ bitSet = new BitSet { l0 = isOwner } };
     
     /// <summary>Property only used to see component names encoded by <see cref="isLinked"/>. </summary>
     internal            ComponentTypes  IsLinked    =>  new ComponentTypes{ bitSet = new BitSet { l0 = isLinked   } };
@@ -64,15 +64,15 @@ public struct EntityNode
     
     /// <summary>
     /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="ComponentIndex"/> instances.<br/> 
-    /// A bit is set if the entity is referenced by either an entity relation set or an indexed component value.
+    /// A bit is set if the entity is an owner of either an entity relation set or an indexed component value.
     /// </summary>
     /// <remarks>
-    /// Use <see cref="References"/> to see <see cref="ComponentTypes"/> by name.<br/>
+    /// Use <see cref="IsOwner"/> to see <see cref="ComponentTypes"/> by name.<br/>
     /// This masks prevents the insane cost when deleting an entity.<br/>
     /// Otherwise, all <see cref="EntityRelations"/> and <see cref="ComponentIndex"/> instances need to be iterated
     /// to check if the entity is a key in their Dictionary's and perform required cleanup.
     /// </remarks>
-    [Browse(Never)] internal    int             references;         //  4
+    [Browse(Never)] internal    int             isOwner;            //  4
     
     /// <summary>
     /// Bit mask for all <see cref="EntityIndex"/> instances.<br/> 

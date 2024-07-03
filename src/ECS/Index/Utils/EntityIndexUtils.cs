@@ -22,9 +22,9 @@ internal static class EntityIndexUtils
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        var nodes               =  componentIndex.store.nodes;
-        var complement          = ~componentIndex.indexBit;
-        nodes[id].references   &= complement;
+        var nodes           =  componentIndex.store.nodes;
+        var complement      = ~componentIndex.indexBit;
+        nodes[id].isOwner  &=  complement;
         if (ids.Count == 1) {
             nodes[link].isLinked   &= complement;
             componentIndex.modified = true;
@@ -44,11 +44,11 @@ internal static class EntityIndexUtils
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        var nodes               = componentIndex.store.nodes;
-        var indexBit            = componentIndex.indexBit;
-        nodes[id].references   |= indexBit;
+        var nodes           = componentIndex.store.nodes;
+        var indexBit        = componentIndex.indexBit;
+        nodes[id].isOwner  |= indexBit;
         if (ids.Count == 0) {
-            nodes[link].isLinked  |= indexBit;
+            nodes[link].isLinked   |= indexBit;
             componentIndex.modified = true;
         }
         ids.AddId(id, idHeap);
