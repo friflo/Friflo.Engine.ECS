@@ -96,9 +96,14 @@ public static class Test_Index
     [Test]
     public static void Test_Index_EntityNode()
     {
-        var types = ComponentTypes.Get<IndexedInt>();
-        var node  = new EntityNode { references = (int)types.bitSet.l0 };
-        AreEqual("Components: [IndexedInt]", node.References.ToString());
+        var indexedIntType  = ComponentTypes.Get<IndexedInt>();
+        var attackType      = ComponentTypes.Get<AttackComponent>();
+        var node  = new EntityNode {
+            references  = (int)indexedIntType.bitSet.l0,
+            isLinked    = (int)attackType.bitSet.l0,
+        };
+        AreEqual("Components: [IndexedInt]",        node.References.ToString());
+        AreEqual("Components: [AttackComponent]",   node.IsLinked.ToString());
     }
 }
 

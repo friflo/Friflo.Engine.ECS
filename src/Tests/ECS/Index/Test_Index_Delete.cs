@@ -96,19 +96,27 @@ public static class Test_Index_Delete
         var entity2 = store.CreateEntity();
         var entity3 = store.CreateEntity();
         
-        var target1 = store.CreateEntity(4);
-        var target2 = store.CreateEntity(5);
+        var target1 = store.CreateEntity(10);
+        var target2 = store.CreateEntity(11);
         
-        var values  = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
+        var targets = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
         
         entity1.AddComponent(new AttackComponent { target = target1 });
         entity2.AddComponent(new AttackComponent { target = target1 });
         entity3.AddComponent(new AttackComponent { target = target2 });
+        // --- initial targets state
+        AreEqual("{ 1, 2 }",    target1.GetEntityReferences<AttackComponent>().ToStr());
+        AreEqual("{ 3 }",       target2.GetEntityReferences<AttackComponent>().ToStr());
+        AreEqual("{ 10, 11 }",  targets.ToStr());
         
         target1.DeleteEntity();
-        // TODO add assertions
+        IsFalse (               entity1.HasComponent<AttackComponent>());
+        IsFalse (               entity2.HasComponent<AttackComponent>());
+        AreEqual("{ 11 }",      targets.ToStr());
+        
         target2.DeleteEntity();
-        // TODO add assertions
+        IsFalse (               entity3.HasComponent<AttackComponent>());
+        AreEqual("{ }",         targets.ToStr());
     }
     
     [Test]

@@ -39,15 +39,18 @@ public struct EntityNode
 {
 #region public properties
     /// <summary>The <see cref="ECS.Archetype"/> storing the entity.</summary>
-            public              Archetype       Archetype   =>  archetype;
+    public              Archetype       Archetype   =>  archetype;
     
     /// <summary>Internally used flags assigned to the entity.</summary>
-            public              NodeFlags       Flags       =>  flags;
+    public              NodeFlags       Flags       =>  flags;
     
     /// <summary>Property only used to see component names encoded by <see cref="references"/>. </summary>
-            internal            ComponentTypes  References  =>  new ComponentTypes{ bitSet = new BitSet { l0 = references } };
+    internal            ComponentTypes  References  =>  new ComponentTypes{ bitSet = new BitSet { l0 = references } };
+    
+    /// <summary>Property only used to see component names encoded by <see cref="isLinked"/>. </summary>
+    internal            ComponentTypes  IsLinked    =>  new ComponentTypes{ bitSet = new BitSet { l0 = isLinked   } };
                     
-            public   override   string          ToString()  => GetString();
+    public   override   string          ToString()  => GetString();
     #endregion
     
 #region internal fields
@@ -68,10 +71,17 @@ public struct EntityNode
     /// <remarks>Use <see cref="References"/> to see <see cref="ComponentTypes"/> by name.</remarks>
     [Browse(Never)] internal    int             references;         //  4
     
+    /// <summary>
+    /// Bit mask for all <see cref="EntityIndex"/> instances.<br/> 
+    /// A bit is set if the entity is linked by a <see cref="ILinkComponent"/>
+    /// </summary>
+    /// <remarks>Use <see cref="IsLinked"/> to see <see cref="ComponentTypes"/> by name.</remarks>
+    [Browse(Never)] internal    int             isLinked;           //  4
+    
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
                     internal    byte            signalTypeCount;    //  1   number of different signal types attached to the entity.
     
-                    internal    HasEventFlags   hasEvent;           //  1   bit is 1 in case an event handler is attached to the entity. 
+                    internal    HasEventFlags   hasEvent;           //  1   bit is 1 in case an event handler is attached to the entity.
     #endregion
     
 #region internal getter

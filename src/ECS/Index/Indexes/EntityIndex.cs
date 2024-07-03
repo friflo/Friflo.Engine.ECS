@@ -23,9 +23,10 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component);
+        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-        DictionaryUtils.AddComponentValue    (id, value.Id, entityMap, this);
+        DictionaryUtils.AddComponentValue    (id, value, entityMap, this);
+        store.nodes[value].isLinked |= indexBit;
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
@@ -38,12 +39,27 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
         var map = entityMap;
         DictionaryUtils.RemoveComponentValue (id, oldValue, map, this);
         DictionaryUtils.AddComponentValue    (id, value,    map, this);
+        var nodes = store.nodes;
+        nodes[oldValue].isLinked &= ~indexBit;
+        nodes[value]   .isLinked |=  indexBit;
     }
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash);
-        DictionaryUtils.RemoveComponentValue (id, value.Id, entityMap, this);
+        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        DictionaryUtils.RemoveComponentValue (id, value, entityMap, this);
+        store.nodes[value].isLinked &= ~indexBit;
+    }
+    
+    internal void RemoveLinkComponents(int id)
+    {
+        entityMap.TryGetValue(id, out var idArray);
+        var linkingEntityIds  = idArray.GetIdSpan(idHeap);
+        foreach (var linkingEntityId in linkingEntityIds)
+        {
+            var entity = new Entity(store, linkingEntityId);
+            EntityUtils.RemoveEntityComponent(entity, componentType);
+        }
     }
     #endregion
     

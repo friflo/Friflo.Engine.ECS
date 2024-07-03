@@ -4,6 +4,7 @@
 using System;
 using System.Text;
 using System.Threading;
+using Friflo.Engine.ECS.Index;
 using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable InlineTemporaryVariable
@@ -556,6 +557,9 @@ public partial class EntityStore
         if (node.references != 0) {
             RemoveEntityReferences(id, node);
         }
+        if (node.isLinked != 0) {
+            RemoveLinksToEntity(id, node);
+        }
         // --- mark its child nodes as floating
         ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
         foreach (var childId in entity.ChildIds) {
@@ -599,6 +603,19 @@ public partial class EntityStore
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
             relations.RemoveEntityRelations(id);
+        }
+    }
+    
+    private void RemoveLinksToEntity(int id, in EntityNode node)
+    {
+        var indexTypes          = new ComponentTypes();
+        indexTypes.bitSet.l0    = node.isLinked;
+        
+        // --- remove link components from entities linking the entity with the passed id
+        var indexMap = extension.indexMap;
+        foreach (var componentType in indexTypes) {
+            var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
+            entityIndex.RemoveLinkComponents(id);
         }
     }
     
