@@ -95,7 +95,7 @@ public static class Test_Relations_Delete
         
         entity1.DeleteEntity();
         AreEqual("{ 2 }",       allEntities.ToStr());
-        var array = allEntities.ToArray();
+        var array =             allEntities.ToArray();
         AreEqual(target3, array[0].GetRelation<AttackRelation, Entity>(target3).target);
         
         entity2.DeleteEntity();

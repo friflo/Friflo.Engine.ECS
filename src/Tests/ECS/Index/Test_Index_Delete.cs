@@ -22,16 +22,16 @@ public static class Test_Index_Delete
         entity1.AddComponent(new IndexedInt { value = 10 });
         entity2.AddComponent(new IndexedInt { value = 10 });
         entity3.AddComponent(new IndexedInt { value = 20 });
-        AreEqual("{ 10, 20 }", values.ToStr());
+        AreEqual("{ 10, 20 }",  values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual("{ 10, 20 }", values.ToStr());
+        AreEqual("{ 10, 20 }",  values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual("{ 20 }", values.ToStr());
+        AreEqual("{ 20 }",      values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual("{ }", values.ToStr());
+        AreEqual("{ }",         values.ToStr());
     }
     
     [Test]
@@ -46,16 +46,16 @@ public static class Test_Index_Delete
         entity1.AddComponent(new IndexedName { name = "abc" });
         entity2.AddComponent(new IndexedName { name = "abc" });
         entity3.AddComponent(new IndexedName { name = "xyz" });
-        AreEqual("{ abc, xyz }", values.ToStr());
+        AreEqual("{ abc, xyz }",    values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual("{ abc, xyz }", values.ToStr());
+        AreEqual("{ abc, xyz }",    values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual("{ xyz }", values.ToStr());
+        AreEqual("{ xyz }",         values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual("{ }", values.ToStr());
+        AreEqual("{ }",             values.ToStr());
     }
     
     [Test]
@@ -158,16 +158,16 @@ public static class Test_Index_Delete
         entity1.AddComponent(new IndexedIntRange { value = 10 });
         entity2.AddComponent(new IndexedIntRange { value = 10 });
         entity3.AddComponent(new IndexedIntRange { value = 20 });
-        AreEqual("{ 10, 20 }", values.ToStr());
+        AreEqual("{ 10, 20 }",  values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual("{ 10, 20 }", values.ToStr());
+        AreEqual("{ 10, 20 }",  values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual("{ 20 }", values.ToStr());
+        AreEqual("{ 20 }",      values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual("{ }", values.ToStr());
+        AreEqual("{ }",         values.ToStr());
     }
 }
 
