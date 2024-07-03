@@ -110,10 +110,11 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     internal ComponentEnumerator(in EntityComponents entityComponents)
     {
         var entity  = entityComponents.entity;
-        components  = new EntityComponent[entityComponents.Count];
+        var array   = new EntityComponent[entityComponents.Count];
+        components  = array;
         int compIndex = 0;
         foreach (var componentType in entity.archetype.componentTypes) {
-            components[compIndex++] = new EntityComponent(entity, componentType);
+            array[compIndex++] = new EntityComponent(entity, componentType);
         }
         if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
             return;
@@ -124,7 +125,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
             var relations       = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
             int relationCount   = relations.GetRelationCount(entity);
             for (int n = 0; n < relationCount; n++) {
-                components[compIndex++] = new EntityComponent(entity, componentType, relations, n);
+                array[compIndex++] = new EntityComponent(entity, componentType, relations, n);
             }
         }
     }
