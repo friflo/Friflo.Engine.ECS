@@ -582,21 +582,22 @@ public partial class EntityStore
     {
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();
-        indexTypes.bitSet.l0    = Static.EntitySchema.indexTypes.   bitSet.l0 & node.hasComponent; // intersect
-        relationTypes.bitSet.l0 = Static.EntitySchema.relationTypes.bitSet.l0 & node.hasComponent; // intersect
+        var schema              = Static.EntitySchema;
+        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & node.hasComponent; // intersect
+        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & node.hasComponent; // intersect
         
-        // --- remove values of indexed components added to entity from ComponentIndex
+        // --- remove entity id from indexed component values
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var index = indexMap[componentType.StructIndex];
-            index.RemoveEntity(id, node.archetype, node.compIndex);
+            index.RemoveEntityIndex(id, node.archetype, node.compIndex);
         }
         
-        // --- remove relations added to entity from EntityRelations
+        // --- remove all entity relations
         var relationsMap = extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
-            relations.RemoveEntity(id);
+            relations.RemoveEntityRelations(id);
         }
     }
     

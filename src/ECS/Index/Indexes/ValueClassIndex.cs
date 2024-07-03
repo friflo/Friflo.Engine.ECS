@@ -12,6 +12,8 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
     where TValue : class
 {
     internal override   int                         Count       => map.Count + (nullValue.count > 0 ? 1 : 0);
+    
+    /// map: indexed value -> entity ids
     private  readonly   Dictionary<TValue, IdArray> map         = new();
     private             IdArray                     nullValue;
 
@@ -41,7 +43,7 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
         RemoveComponentValue (id, value);
     }
     
-    internal override void RemoveEntity(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;

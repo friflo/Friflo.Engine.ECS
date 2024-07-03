@@ -19,7 +19,7 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
-       heapGeneric = (StructHeap<TRelationComponent>)heap;
+        heapGeneric = (StructHeap<TRelationComponent>)heap;
     }
     
     private int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)

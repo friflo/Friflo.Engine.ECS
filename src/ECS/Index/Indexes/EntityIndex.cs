@@ -11,6 +11,8 @@ namespace Friflo.Engine.ECS.Index;
 internal abstract class EntityIndex : ComponentIndex<Entity>
 {
     internal override   int                         Count       => map.Count;
+    
+    /// map: entity id -> entity ids
     internal readonly   Dictionary<int, IdArray>    map         = new();
     private             EntityIndexValues           keyCollection;
     
@@ -55,7 +57,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
     where TIndexedComponent : struct, IIndexedComponent<Entity>
 {
-    internal override void RemoveEntity(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;

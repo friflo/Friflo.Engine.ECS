@@ -18,7 +18,7 @@ internal abstract class EntityRelations
 #region fields
     internal  readonly  Archetype                   archetype;
     private   readonly  EntityStore                 store;
-    /// map: entity id -> relation positions
+    /// map: entity id -> positions in archtetype
     internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
     internal  readonly  IdArrayHeap                 idHeap              = new();
     internal  readonly  StructHeap                  heap;
@@ -182,7 +182,8 @@ internal abstract class EntityRelations
         return positions;
     }
     
-    internal void RemoveEntity (int id)
+    /// remove all entity relations
+    internal void RemoveEntityRelations (int id)
     {
         relationPositions.TryGetValue(id, out var positions);
         while (positions.count > 0) {

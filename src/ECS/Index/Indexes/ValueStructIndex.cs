@@ -13,6 +13,8 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     where TValue : struct
 {
     internal override   int                         Count       => map.Count;
+    
+    /// map: indexed value -> entity ids
     private  readonly   Dictionary<TValue, IdArray> map         = new();
     
 #region indexing
@@ -41,7 +43,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
         DictionaryUtils.RemoveComponentValue (id, value, map, this);
     }
     
-    internal override void RemoveEntity(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
