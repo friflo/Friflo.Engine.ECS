@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable ConvertIfStatementToSwitchStatement
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS.Index;
+namespace Friflo.Engine.ECS.Collections;
 
 internal readonly struct IdArrayHeap
 {

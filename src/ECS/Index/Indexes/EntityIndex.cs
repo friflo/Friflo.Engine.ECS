@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace

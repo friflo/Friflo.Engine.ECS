@@ -5,7 +5,7 @@ using System;
 using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS.Index;
+namespace Friflo.Engine.ECS.Collections;
 
 internal struct IdArray
 {

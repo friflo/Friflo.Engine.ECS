@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace

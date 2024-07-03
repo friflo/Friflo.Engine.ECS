@@ -5,7 +5,7 @@ using System;
 
 // ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS.Index;
+namespace Friflo.Engine.ECS.Collections;
 
 internal sealed class IdArrayPool
 {

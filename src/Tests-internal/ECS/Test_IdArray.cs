@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;

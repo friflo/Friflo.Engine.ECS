@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;

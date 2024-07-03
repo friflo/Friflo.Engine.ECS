@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
