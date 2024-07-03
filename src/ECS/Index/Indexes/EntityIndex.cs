@@ -23,15 +23,15 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexUtils<TComponent,Entity>.GetIndexedValue(component);
+        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
         DictionaryUtils.AddComponentValue    (id, value.Id, map, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldValue = IndexUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        var value    = IndexUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+        var oldValue = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        var value    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
         if (oldValue == value) {
             return;
         }
@@ -42,7 +42,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var value = IndexUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash);
+        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash);
         DictionaryUtils.RemoveComponentValue (id, value.Id, map, this);
     }
     #endregion
