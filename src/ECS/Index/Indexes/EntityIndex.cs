@@ -23,26 +23,26 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
-    //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-        EntityIndexUtils.AddComponentValue    (id, value, this);
+        var link = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+    //  var link = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
+        EntityIndexUtils.AddComponentValue    (id, link, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldValue = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        var value    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
-        if (oldValue == value) {
+        var oldLink = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        var link    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+        if (oldLink == link) {
             return;
         }
-        EntityIndexUtils.RemoveComponentValue (id, oldValue, this);
-        EntityIndexUtils.AddComponentValue    (id, value,    this);
+        EntityIndexUtils.RemoveComponentValue (id, oldLink, this);
+        EntityIndexUtils.AddComponentValue    (id, link,    this);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        EntityIndexUtils.RemoveComponentValue (id, value, this);
+        var link = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        EntityIndexUtils.RemoveComponentValue (id, link, this);
     }
     
     internal void RemoveLinkComponents(int id)

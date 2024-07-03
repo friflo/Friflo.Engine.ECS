@@ -12,11 +12,11 @@ namespace Friflo.Engine.ECS.Index;
 /// </summary>
 internal static class EntityIndexUtils
 {
-    internal static void RemoveComponentValue(int id, int value, EntityIndex componentIndex)
+    internal static void RemoveComponentValue(int id, int link, EntityIndex componentIndex)
     {
         var map     = componentIndex.entityMap;
         var idHeap  = componentIndex.idHeap;
-        map.TryGetValue(value, out var ids);
+        map.TryGetValue(link, out var ids);
         var idSpan  = ids.GetIdSpan(idHeap);
         var index   = idSpan.IndexOf(id);
         if (index == -1) {
@@ -25,20 +25,20 @@ internal static class EntityIndexUtils
         var nodes = componentIndex.store.nodes;
        nodes[id].references &= ~componentIndex.indexBit;
         if (ids.Count == 1) {
-            nodes[value].isLinked  &= ~componentIndex.indexBit;
+            nodes[link].isLinked  &= ~componentIndex.indexBit;
             componentIndex.modified =  true;
-            map.Remove(value);
+            map.Remove(link);
             return;
         }
         ids.RemoveAt(index, idHeap);
-        map[value] = ids;
+        map[link] = ids;
     }
     
-    internal static void AddComponentValue(int id, int value, EntityIndex componentIndex)
+    internal static void AddComponentValue(int id, int link, EntityIndex componentIndex)
     {
         var map     = componentIndex.entityMap;
         var idHeap  = componentIndex.idHeap;
-        map.TryGetValue(value, out var ids);
+        map.TryGetValue(link, out var ids);
         var idSpan = ids.GetIdSpan(idHeap);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
@@ -46,10 +46,10 @@ internal static class EntityIndexUtils
         var nodes = componentIndex.store.nodes;
         nodes[id].references |= componentIndex.indexBit;
         if (ids.Count == 0) {
-            nodes[value].isLinked  |= componentIndex.indexBit;
+            nodes[link].isLinked  |= componentIndex.indexBit;
             componentIndex.modified = true;
         }
         ids.AddId(id, idHeap);
-        map[value] = ids;
+        map[link] = ids;
     }
 }
