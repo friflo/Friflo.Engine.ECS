@@ -88,6 +88,30 @@ public static class Test_Index_Delete
     }
     
     [Test]
+    public static void Test_Index_Delete_linked_entities()
+    {
+        var store   = new EntityStore();
+        
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        var entity3 = store.CreateEntity();
+        
+        var target1 = store.CreateEntity(4);
+        var target2 = store.CreateEntity(5);
+        
+        var values  = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
+        
+        entity1.AddComponent(new AttackComponent { target = target1 });
+        entity2.AddComponent(new AttackComponent { target = target1 });
+        entity3.AddComponent(new AttackComponent { target = target2 });
+        
+        target1.DeleteEntity();
+        // TODO add assertions
+        target2.DeleteEntity();
+        // TODO add assertions
+    }
+    
+    [Test]
     public static void Test_Index_Delete_Range()
     {
         var store   = new EntityStore();

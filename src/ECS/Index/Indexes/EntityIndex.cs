@@ -11,11 +11,11 @@ namespace Friflo.Engine.ECS.Index;
 
 internal abstract class EntityIndex : ComponentIndex<Entity>
 {
-    internal override   int                         Count       => map.Count;
+    internal override   int                         Count       => entityMap.Count;
     
 #region fields
-    /// map: entity id -> entity ids
-    internal readonly   Dictionary<int, IdArray>    map         = new();
+    /// map: indexed / linked entity (id)  ->  entities (ids) containing <see cref="ILinkComponent"/> referencing the indexed entity
+    internal readonly   Dictionary<int, IdArray>    entityMap   = new();
     
     private             EntityIndexValues           keyCollection;
     #endregion
@@ -25,7 +25,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     {
         var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-        DictionaryUtils.AddComponentValue    (id, value.Id, map, this);
+        DictionaryUtils.AddComponentValue    (id, value.Id, entityMap, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
@@ -35,22 +35,22 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
         if (oldValue == value) {
             return;
         }
-        var localMap  = map;
-        DictionaryUtils.RemoveComponentValue (id, oldValue, localMap, this);
-        DictionaryUtils.AddComponentValue    (id, value,    localMap, this);
+        var map = entityMap;
+        DictionaryUtils.RemoveComponentValue (id, oldValue, map, this);
+        DictionaryUtils.AddComponentValue    (id, value,    map, this);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
         var value = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash);
-        DictionaryUtils.RemoveComponentValue (id, value.Id, map, this);
+        DictionaryUtils.RemoveComponentValue (id, value.Id, entityMap, this);
     }
     #endregion
     
 #region get matches
     internal override Entities GetHasValueEntities(Entity value)
     {
-        map.TryGetValue(value.Id, out var ids);
+        entityMap.TryGetValue(value.Id, out var ids);
         return idHeap.GetEntities(store, ids);
     }
     
@@ -63,18 +63,18 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
 {
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
-        var localMap    = map;
-        var heap        = idHeap;
-        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
-        var value       = components[compIndex].GetIndexedValue().Id;
-        localMap.TryGetValue(value, out var idArray);
+        var map             = entityMap;
+        var heap            = idHeap;
+        var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var linkedEntity    = components[compIndex].GetIndexedValue().Id;
+        map.TryGetValue(linkedEntity, out var idArray);
         var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
-            localMap.Remove(value);
+            map.Remove(linkedEntity);
         } else {
-            localMap[value] = idArray;
+            map[linkedEntity] = idArray;
         }
         store.nodes[id].references &= ~indexBit;
     }

@@ -13,10 +13,10 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     where TIndexedComponent : struct, IIndexedComponent<TValue>
     where TValue : struct
 {
-    internal override   int                         Count       => map.Count;
+    internal override   int                         Count       => entityMap.Count;
 #region fields
-    /// map: indexed value -> entity ids
-    private  readonly   Dictionary<TValue, IdArray> map         = new();
+    /// map: indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> referencing the indexed value.
+    private  readonly   Dictionary<TValue, IdArray> entityMap   = new();
     #endregion
     
 #region indexing
@@ -24,7 +24,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     {
         var value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
-        DictionaryUtils.AddComponentValue    (id, value, map, this);
+        DictionaryUtils.AddComponentValue    (id, value, entityMap, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
@@ -34,7 +34,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
-        var localMap  = map;
+        var localMap  = entityMap;
         DictionaryUtils.RemoveComponentValue (id, oldValue, localMap, this);
         DictionaryUtils.AddComponentValue    (id, value,    localMap, this);
     }
@@ -42,39 +42,39 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
         var value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
-        DictionaryUtils.RemoveComponentValue (id, value, map, this);
+        DictionaryUtils.RemoveComponentValue (id, value, entityMap, this);
     }
     
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
-        var localMap    = map;
+        var map         = entityMap;
         var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         var value       = components[compIndex].GetIndexedValue();
-        localMap.TryGetValue(value, out var idArray);
+        map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
-            localMap.Remove(value);
+            map.Remove(value);
         } else {
-            localMap[value] = idArray;
+            map[value] = idArray;
         }
         store.nodes[id].references &= ~indexBit;
     }
     #endregion
     
 #region get matches
-    internal override IReadOnlyCollection<TValue> IndexedComponentValues => map.Keys;
+    internal override IReadOnlyCollection<TValue> IndexedComponentValues => entityMap.Keys;
     
     internal override Entities GetHasValueEntities(TValue value)
     {
-        map.TryGetValue(value, out var ids);
+        entityMap.TryGetValue(value, out var ids);
         return idHeap.GetEntities(store, ids);
     }
     
     internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) {
-        SortUtils<TValue>.AddValueInRangeEntities(min, max, idSet, map, this);
+        SortUtils<TValue>.AddValueInRangeEntities(min, max, idSet, entityMap, this);
     }
     #endregion
 }

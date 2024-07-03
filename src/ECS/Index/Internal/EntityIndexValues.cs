@@ -29,7 +29,7 @@ internal sealed class EntityIndexValuesEnumerator : IEnumerator<Entity>
     private readonly    EntityStore                                         store;
     
     internal EntityIndexValuesEnumerator(EntityIndex entityIndex) {
-        enumerator  = entityIndex.map.Keys.GetEnumerator();
+        enumerator  = entityIndex.entityMap.Keys.GetEnumerator();
         store       = entityIndex.store;
     }
 

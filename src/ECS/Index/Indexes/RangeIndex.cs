@@ -19,11 +19,11 @@ namespace Friflo.Engine.ECS.Index;
 public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
 {
-    internal override   int                         Count       => map.Count;
+    internal override   int                         Count       => entityMap.Count;
     
 #region fields
-    /// map: indexed value -> entity ids
-    private  readonly   SortedList<TValue, IdArray> map         = new();
+    /// map: indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> referencing the indexed value.
+    private  readonly   SortedList<TValue, IdArray> entityMap   = new();
     
     private             ReadOnlyCollection<TValue>  keyCollection;
     #endregion
@@ -33,7 +33,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
     {
         var value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
-        SortedListUtils.AddComponentValue    (id, value, map, this);
+        SortedListUtils.AddComponentValue    (id, value, entityMap, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
@@ -43,31 +43,31 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
-        var localMap  = map;
-        SortedListUtils.RemoveComponentValue (id, oldValue, localMap, this);
-        SortedListUtils.AddComponentValue    (id, value,    localMap, this);
+        var map = entityMap;
+        SortedListUtils.RemoveComponentValue (id, oldValue, map, this);
+        SortedListUtils.AddComponentValue    (id, value,    map, this);
     }
 
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
         var value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
-        SortedListUtils.RemoveComponentValue (id, value, map, this);
+        SortedListUtils.RemoveComponentValue (id, value, entityMap, this);
     }
     
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
-        var localMap    = map;
+        var map         = entityMap;
         var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         var value       = components[compIndex].GetIndexedValue();
-        localMap.TryGetValue(value, out var idArray);
+        map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
-            localMap.Remove(value);
+            map.Remove(value);
         } else {
-            localMap[value] = idArray;
+            map[value] = idArray;
         }
         store.nodes[id].references &= ~indexBit;
     }
@@ -76,19 +76,19 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
 #region get matches
     internal override Entities GetHasValueEntities(TValue value)
     {
-        map.TryGetValue(value, out var ids);
+        entityMap.TryGetValue(value, out var ids);
         return idHeap.GetEntities(store, ids);
     }
     
     internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet)
     {
-        var keys        = map.Keys;
+        var keys        = entityMap.Keys;
         var heap        = idHeap;
         var localStore  = store;
         int lowerIndex  = RangeUtils<TValue>.LowerBound(keys, min);
         int upperIndex  = RangeUtils<TValue>.UpperBound(keys, max);
         
-        var values = map.Values;
+        var values = entityMap.Values;
         for (int n = lowerIndex; n < upperIndex; n++) {
             var idArray = values[n];
             var entities = heap.GetEntities(localStore, idArray);
@@ -98,7 +98,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
         }
     }
     
-    internal override IReadOnlyCollection<TValue> IndexedComponentValues => keyCollection ??= new ReadOnlyCollection<TValue>(map.Keys);
+    internal override IReadOnlyCollection<TValue> IndexedComponentValues => keyCollection ??= new ReadOnlyCollection<TValue>(entityMap.Keys);
     #endregion
 }
 
