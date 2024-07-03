@@ -11,8 +11,9 @@ internal static class DictionaryUtils
 {
     internal static void RemoveComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, ComponentIndex componentIndex)
     {
+        var idHeap  = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);
-        var idSpan  = ids.GetIdSpan(componentIndex.arrayHeap);
+        var idSpan  = ids.GetIdSpan(idHeap);
         var index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
@@ -23,14 +24,15 @@ internal static class DictionaryUtils
             map.Remove(value);
             return;
         }
-        ids.RemoveAt(index, componentIndex.arrayHeap);
+        ids.RemoveAt(index, idHeap);
         map[value] = ids;
     }
     
     internal static void AddComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, ComponentIndex componentIndex)
     {
+        var idHeap = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);
-        var idSpan = ids.GetIdSpan(componentIndex.arrayHeap);
+        var idSpan = ids.GetIdSpan(idHeap);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
@@ -38,7 +40,7 @@ internal static class DictionaryUtils
         if (ids.Count == 0) {
             componentIndex.modified = true;
         }
-        ids.AddId(id, componentIndex.arrayHeap);
+        ids.AddId(id, idHeap);
         map[value] = ids;
     }
 }

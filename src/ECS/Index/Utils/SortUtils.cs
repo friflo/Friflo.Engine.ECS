@@ -28,12 +28,12 @@ internal static class SortUtils<TValue>
         }
         int minIndex    = LowerBound(buffer, count, min);
         int maxIndex    = UpperBound(buffer, count, max);
-        var arrayHeap   = componentIndex.arrayHeap;
+        var idHeap      = componentIndex.idHeap;
         
         for (int index = minIndex; index < maxIndex; index++)
         {
             var ids     = map[buffer[index]];
-            var idSpan  = ids.GetIdSpan(arrayHeap);
+            var idSpan  = ids.GetIdSpan(idHeap);
             foreach (var id in idSpan) {
                 idSet.Add(id);
             }

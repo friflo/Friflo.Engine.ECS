@@ -47,12 +47,13 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
+        var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         var value       = components[compIndex].GetIndexedValue();
         localMap.TryGetValue(value, out var idArray);
-        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
-        idArray.RemoveAt(index, arrayHeap);
+        idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             localMap.Remove(value);
         } else {
@@ -68,7 +69,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     internal override Entities GetHasValueEntities(TValue value)
     {
         map.TryGetValue(value, out var ids);
-        return arrayHeap.GetEntities(store, ids);
+        return idHeap.GetEntities(store, ids);
     }
     
     internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) {

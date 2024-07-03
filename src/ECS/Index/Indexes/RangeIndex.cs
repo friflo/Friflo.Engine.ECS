@@ -56,12 +56,13 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
+        var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         var value       = components[compIndex].GetIndexedValue();
         localMap.TryGetValue(value, out var idArray);
-        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
-        idArray.RemoveAt(index, arrayHeap);
+        idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             localMap.Remove(value);
         } else {
@@ -75,19 +76,21 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
     internal override Entities GetHasValueEntities(TValue value)
     {
         map.TryGetValue(value, out var ids);
-        return arrayHeap.GetEntities(store, ids);
+        return idHeap.GetEntities(store, ids);
     }
     
     internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet)
     {
         var keys        = map.Keys;
+        var heap        = idHeap;
+        var localStore  = store;
         int lowerIndex  = RangeUtils<TValue>.LowerBound(keys, min);
         int upperIndex  = RangeUtils<TValue>.UpperBound(keys, max);
         
         var values = map.Values;
         for (int n = lowerIndex; n < upperIndex; n++) {
             var idArray = values[n];
-            var entities = arrayHeap.GetEntities(store, idArray);
+            var entities = heap.GetEntities(localStore, idArray);
             foreach (var id in entities.Ids) {
                 idSet.Add(id);
             }

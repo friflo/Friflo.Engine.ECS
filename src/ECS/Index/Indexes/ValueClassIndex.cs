@@ -50,12 +50,13 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
+        var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         var value       = components[compIndex].GetIndexedValue();
         localMap.TryGetValue(value, out var idArray);
-        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
-        idArray.RemoveAt(index, arrayHeap);
+        idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             localMap.Remove(value);
         } else {
@@ -72,9 +73,10 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
             DictionaryUtils.AddComponentValue (id, value, map, this);
             return;
         }
-        var idSpan = nullValue.GetIdSpan(arrayHeap);
+        var heap    = idHeap;
+        var idSpan  = nullValue.GetIdSpan(heap);
         if (idSpan.IndexOf(id) != -1) return; // unexpected. Better safe than sorry. Used belts with suspenders :)
-        nullValue.AddId(id, arrayHeap);
+        nullValue.AddId(id, heap);
     }
     
     internal void RemoveComponentValue(int id, in TValue value)
@@ -83,10 +85,11 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
             DictionaryUtils.RemoveComponentValue (id, value, map, this);
             return;
         }
-        var idSpan  = nullValue.GetIdSpan(arrayHeap);
+        var heap    = idHeap;
+        var idSpan  = nullValue.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
         if (index == -1) return; // unexpected. Better safe than sorry. Used belts with suspenders :)
-        nullValue.RemoveAt(index, arrayHeap);
+        nullValue.RemoveAt(index, heap);
     }
     #endregion
     
@@ -95,11 +98,13 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
     
     internal override Entities GetHasValueEntities(TValue value)
     {
+        var heap        = idHeap;
+        var localStore  = store;
         if (value != null) {
             map.TryGetValue(value, out var ids);
-            return arrayHeap.GetEntities(store, ids);
+            return heap.GetEntities(localStore, ids);
         }
-        return arrayHeap.GetEntities(store, nullValue);
+        return heap.GetEntities(localStore, nullValue);
     }
     
     internal override void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) {

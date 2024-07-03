@@ -19,7 +19,7 @@ public abstract class ComponentIndex
     #endregion
     
 #region fields
-    internal  readonly  IdArrayHeap     arrayHeap   = new();
+    internal  readonly  IdArrayHeap     idHeap   = new();
     internal            EntityStore     store;          // could be made readonly
     internal            ComponentType   componentType;
     internal            int             indexBit;

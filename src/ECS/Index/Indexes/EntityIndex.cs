@@ -50,7 +50,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     internal override Entities GetHasValueEntities(Entity value)
     {
         map.TryGetValue(value.Id, out var ids);
-        return arrayHeap.GetEntities(store, ids);
+        return idHeap.GetEntities(store, ids);
     }
     
     internal override IReadOnlyCollection<Entity> IndexedComponentValues => keyCollection ??= new EntityIndexValues(this);
@@ -63,12 +63,13 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
     internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
     {
         var localMap    = map;
+        var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         var value       = components[compIndex].GetIndexedValue().Id;
         localMap.TryGetValue(value, out var idArray);
-        var idSpan  = idArray.GetIdSpan(arrayHeap);
+        var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);
-        idArray.RemoveAt(index, arrayHeap);
+        idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             localMap.Remove(value);
         } else {
