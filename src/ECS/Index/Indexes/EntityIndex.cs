@@ -14,7 +14,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     internal override   int                         Count       => entityMap.Count;
     
 #region fields
-    /// map: indexed / linked entity (id)  ->  entities (ids) containing <see cref="ILinkComponent"/> referencing the indexed entity
+    /// map: indexed / linked entity (id)  ->  entities (ids) containing <see cref="ILinkComponent"/> referencing the indexed / linked entity.
     internal readonly   Dictionary<int, IdArray>    entityMap   = new();
     
     private             EntityIndexValues           keyCollection;
