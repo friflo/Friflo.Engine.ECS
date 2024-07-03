@@ -14,9 +14,9 @@ public static class Test_Index_Delete
     public static void Test_Index_Delete_Value()
     {
         var store   = new EntityStore();
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
-        var entity3 = store.CreateEntity();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
         var values  = store.GetAllIndexedComponentValues<IndexedInt, int>();
         
         entity1.AddComponent(new IndexedInt { value = 10 });
@@ -38,9 +38,9 @@ public static class Test_Index_Delete
     public static void Test_Index_Delete_Class()
     {
         var store   = new EntityStore();
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
-        var entity3 = store.CreateEntity();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
         var values  = store.GetAllIndexedComponentValues<IndexedName, string>();
         
         entity1.AddComponent(new IndexedName { name = "abc" });
@@ -63,28 +63,28 @@ public static class Test_Index_Delete
     {
         var store   = new EntityStore();
         
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
-        var entity3 = store.CreateEntity();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
         
-        var target1 = store.CreateEntity(4);
-        var target2 = store.CreateEntity(5);
+        var target1 = store.CreateEntity(10);
+        var target2 = store.CreateEntity(11);
         
         var values  = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
         
         entity1.AddComponent(new AttackComponent { target = target1 });
         entity2.AddComponent(new AttackComponent { target = target1 });
         entity3.AddComponent(new AttackComponent { target = target2 });
-        AreEqual("{ 4, 5 }", values.ToStr());
+        AreEqual("{ 10, 11 }",  values.ToStr());
         
         entity1.DeleteEntity();
-        AreEqual("{ 4, 5 }", values.ToStr());
+        AreEqual("{ 10, 11 }",  values.ToStr());
         
         entity2.DeleteEntity();
-        AreEqual("{ 5 }", values.ToStr());
+        AreEqual("{ 11 }",      values.ToStr());
         
         entity3.DeleteEntity();
-        AreEqual("{ }", values.ToStr());
+        AreEqual("{ }",         values.ToStr());
     }
     
     [Test]
@@ -92,9 +92,9 @@ public static class Test_Index_Delete
     {
         var store   = new EntityStore();
         
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
-        var entity3 = store.CreateEntity();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
         
         var target1 = store.CreateEntity(10);
         var target2 = store.CreateEntity(11);
@@ -120,13 +120,37 @@ public static class Test_Index_Delete
     }
     
     [Test]
+    public static void Test_Index_Delete_self_referencing_entity()
+    {
+        var store   = new EntityStore();
+        
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+       
+        var targets = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
+        
+        entity1.AddComponent(new AttackComponent { target = entity1 });
+        entity2.AddComponent(new AttackComponent { target = entity1 });
+        entity3.AddComponent(new AttackComponent { target = entity1 });
+        // --- initial targets state
+        AreEqual("{ 1, 2, 3 }", entity1.GetEntityReferences<AttackComponent>().ToStr());
+        AreEqual("{ 1 }",       targets.ToStr());
+        
+        entity1.DeleteEntity();
+        IsFalse (               entity2.HasComponent<AttackComponent>());
+        IsFalse (               entity3.HasComponent<AttackComponent>());
+        AreEqual("{ }",         targets.ToStr());
+    }
+    
+    [Test]
     public static void Test_Index_Delete_Range()
     {
         var store   = new EntityStore();
         
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
-        var entity3 = store.CreateEntity();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
         
         
         var values  = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
