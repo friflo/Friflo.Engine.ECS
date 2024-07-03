@@ -25,7 +25,7 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     
     private int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
     {
-        relationPositions.TryGetValue(id, out positions);
+        positionMap.TryGetValue(id, out positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
         var positionCount   = positions.count;
         var components      = heapGeneric.components;
@@ -43,7 +43,7 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
 #region query
     internal override IComponent GetRelationAt(int id, int index)
     {
-        relationPositions.TryGetValue(id, out var positions);
+        positionMap.TryGetValue(id, out var positions);
         var count       = positions.count;
         var components  = heapGeneric.components;
         if (count == 1) {

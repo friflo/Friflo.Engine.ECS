@@ -95,7 +95,7 @@ public static class RelationExtensions
         where TComponent : struct, IRelationComponent
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
-        return new EntityReadOnlyCollection(store, relations.relationPositions.Keys);
+        return new EntityReadOnlyCollection(store, relations.positionMap.Keys);
     }
     
     /// <summary>

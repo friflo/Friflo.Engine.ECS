@@ -23,10 +23,10 @@ internal abstract class EntityRelations
     internal  readonly  StructHeap                  heap;
     
     /// map: entity id  ->  relation component positions in <see cref="archetype"/>
-    internal  readonly  Dictionary<int, IdArray>    relationPositions   = new();
+    internal  readonly  Dictionary<int, IdArray>    positionMap = new();
     
     private   readonly  EntityStore                 store;
-    internal  readonly  IdArrayHeap                 idHeap              = new();
+    internal  readonly  IdArrayHeap                 idHeap      = new();
     private   readonly  int                         relationBit;
     #endregion
     
@@ -67,7 +67,7 @@ internal abstract class EntityRelations
     
 #region query
     internal int GetRelationCount(Entity entity) {
-        relationPositions.TryGetValue(entity.Id, out var positions);
+        positionMap.TryGetValue(entity.Id, out var positions);
         return positions.count;
     }
     
@@ -78,7 +78,7 @@ internal abstract class EntityRelations
         if (relations == null) {
             return default;
         }
-        relations.relationPositions.TryGetValue(id, out var positions);
+        relations.positionMap.TryGetValue(id, out var positions);
         var count       = positions.count;
         var components  = ((StructHeap<TComponent>)relations.heap).components;
         switch (count) {
@@ -154,14 +154,14 @@ internal abstract class EntityRelations
         }
         int position = Archetype.AddEntity(archetype, id);
         positions.AddId(position, idHeap);
-        relationPositions[id] = positions;
+        positionMap[id] = positions;
         return position;
     }
     
     internal IdArray RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
     {
         var type        = archetype;
-        var map         = relationPositions;
+        var map         = positionMap;
         var localIdHeap = idHeap;
         
         // --- adjust position in entityMap of last component
@@ -191,7 +191,7 @@ internal abstract class EntityRelations
     /// remove all entity relations
     internal void RemoveEntityRelations (int id)
     {
-        relationPositions.TryGetValue(id, out var positions);
+        positionMap.TryGetValue(id, out var positions);
         while (positions.count > 0) {
             var lastIndex   = positions.count - 1;
             int position    = positions.Get(lastIndex, idHeap);
