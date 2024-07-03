@@ -4,27 +4,27 @@ namespace Tests.ECS.Relations {
 
 internal struct AttackRelation : ILinkRelation
 {
-    public int    speed;
-    public Entity target;
-    public Entity GetRelationKey() => target;
+    public          int     speed;
+    public          Entity  target;
+    public          Entity  GetRelationKey()    => target;
 
-    public override string ToString() => target.ToString();
+    public override string  ToString()          => target.ToString();
 }
 
 internal struct IntRelation : IRelationComponent<int>
 {
-    public int value;
-    public int GetRelationKey() => value;
+    public          int     value;
+    public          int     GetRelationKey()    => value;
 
-    public override string ToString() => value.ToString();
+    public override string  ToString()          => value.ToString();
 }
 
 internal struct StringRelation : IRelationComponent<string>
 {
-    public string value;
-    public string GetRelationKey() => value;
+    public          string  value;
+    public          string  GetRelationKey()    => value;
 
-    public override string ToString() => value;
+    public override string  ToString()          => value;
 }
 
 internal enum InventoryItemType {
@@ -37,11 +37,11 @@ internal enum InventoryItemType {
 /// <summary> <see cref="IRelationComponent{TKey}"/> using an enum as relation key. </summary>
 internal struct InventoryItem : IRelationComponent<InventoryItemType>
 {
-    public InventoryItemType    type;
-    public int                  amount;
-    public InventoryItemType    GetRelationKey() => type;
+    public          InventoryItemType   type;
+    public          int                 amount;
+    public          InventoryItemType   GetRelationKey()    => type;
 
-    public override string ToString() => type.ToString();
+    public override string              ToString()          => type.ToString();
 }
 
 }

@@ -7,43 +7,45 @@ using Friflo.Engine.ECS.Index;
 namespace Tests.ECS.Index {
     
 public struct AttackComponent : ILinkComponent {
-    public      Entity  GetIndexedValue() => target;
-    public      Entity  target;
+    public          Entity      target;
+    public          Entity      GetIndexedValue()   => target;
+    
+    public override string      ToString()          => target.ToString();
 }
 
 public struct IndexedName : IIndexedComponent<string> {
-    public      string  GetIndexedValue() => name;
-    public      string  name;
+    public          string      name;
+    public          string      GetIndexedValue()   => name;
 
-    public override string ToString() => name;
+    public override string      ToString()          => name;
 }
 
 public struct IndexedInt : IIndexedComponent<int> {
-    public      int     GetIndexedValue() => value;
-    public      int     value;
+    public          int         value;
+    public          int         GetIndexedValue()   => value;
 
-    public override string ToString() => value.ToString();
+    public override string      ToString()          => value.ToString();
 }
 
 public struct LinkComponent : ILinkComponent {
-    public      Entity  GetIndexedValue() => entity;
-    public      Entity  entity;
+    public          Entity      entity;
+    public          Entity      GetIndexedValue()   => entity;
 
-    public override string ToString() => entity.ToString();
+    public override string      ToString()          => entity.ToString();
 }
 
 public struct GuidComponent : IIndexedComponent<Guid> {
-    public      Guid  GetIndexedValue() => guid;
-    public      Guid  guid;
+    public          Guid        guid;
+    public          Guid        GetIndexedValue()   => guid;
 
-    public override string ToString() => guid.ToString();
+    public override string      ToString()          => guid.ToString();
 }
 
 public struct DateTimeComponent : IIndexedComponent<DateTime> {
-    public      DateTime  GetIndexedValue() => dateTime;
-    public      DateTime  dateTime;
+    public          DateTime    dateTime;
+    public          DateTime    GetIndexedValue()   => dateTime;
 
-    public override string ToString() => dateTime.ToString(CultureInfo.InvariantCulture);
+    public override string      ToString()          => dateTime.ToString(CultureInfo.InvariantCulture);
 }
 
 public enum MyEnum {
@@ -53,47 +55,44 @@ public enum MyEnum {
 }
 
 public struct EnumComponent : IIndexedComponent<MyEnum> {
-    public      MyEnum  GetIndexedValue() => value;
-    public      MyEnum  value;
+    public          MyEnum      value;
+    public          MyEnum      GetIndexedValue()   => value;
 
-    public override string ToString() => value.ToString();
+    public override string      ToString()          => value.ToString();
 }
 
 public struct ComparableEnum : IComparable<ComparableEnum> {
-    public      MyEnum  value;
+    public          MyEnum      value;
 
-    public int CompareTo(ComparableEnum other) {
-        return value - other.value;
-    }
+    public override string      ToString()                      => value.ToString();
+    public          int         CompareTo(ComparableEnum other) => value - other.value;
+    
     
     public static implicit operator ComparableEnum(MyEnum value) => new ComparableEnum { value = value };
 }
 
 public struct ComparableEnumComponent : IIndexedComponent<ComparableEnum> {
-    public ComparableEnum value;
-
-    public ComparableEnum GetIndexedValue() {
-        return value;
-    }
+    public          ComparableEnum  value;
+    public          ComparableEnum  GetIndexedValue()   => value;
     
-    public override string ToString() => value.value.ToString();
+    public override string          ToString()          => value.value.ToString();
 }
 
 
 
 [CodeCoverageTest]
 internal struct IndexedIntRange : IIndexedComponent<int> {
-    public      int     GetIndexedValue() => value;
-    internal    int     value;
+    internal        int         value;
+    public          int         GetIndexedValue()   => value;
     
-    public override string ToString() => value.ToString();
+    public override string      ToString()          => value.ToString();
 }
     
 [ComponentIndex(typeof(RangeIndex<,>))]
 internal struct IndexedStringRange : IIndexedComponent<string> {
-    public      string  GetIndexedValue() => value;
-    internal    string  value;
+    internal        string      value;
+    public          string      GetIndexedValue()   => value;
     
-    public override string ToString() => value;
+    public override string      ToString()          => value;
 }
 }
