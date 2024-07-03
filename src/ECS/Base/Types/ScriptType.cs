@@ -19,12 +19,15 @@ internal delegate object CloneScript(object instance);
 /// </summary>
 public abstract class ScriptType : SchemaType
 {
+#region fields
     /// <summary> Ihe index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Scripts"/>. </summary>
     public   readonly   int             ScriptIndex;    //  4
     /// <summary> Return true if <see cref="Script"/>'s of this type can be copied. </summary>
     public   readonly   bool            IsBlittable;    //  4
     private  readonly   CloneScript     cloneScript;    //  8
+    #endregion
     
+#region methods
     internal abstract   Script          CreateScript();
     internal abstract   void            ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
@@ -50,6 +53,7 @@ public abstract class ScriptType : SchemaType
         var clone = cloneScript(original);
         return (Script)clone;
     }
+    #endregion
 }
 
 /// <remarks>
@@ -82,6 +86,7 @@ internal sealed class ScriptType<T> : ScriptType
     private readonly    TypeStore       typeStore;
     #endregion
     
+#region methods
     internal ScriptType(string scriptComponentKey, int scriptIndex, TypeStore typeStore)
         : base(scriptComponentKey, scriptIndex, typeof(T))
     {
@@ -101,4 +106,5 @@ internal sealed class ScriptType<T> : ScriptType
         script = reader.ReadMapper(TypeMapper, json);
         entity.archetype.entityStore.extension.AppendScript(entity, script);
     }
+    #endregion
 }

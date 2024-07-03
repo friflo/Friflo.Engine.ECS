@@ -27,6 +27,7 @@ internal enum BlittableType
 /// </summary>
 public abstract class SchemaType
 {
+#region fields
     /// <summary>
     /// If <see cref="Kind"/> is a <see cref="Component"/> or a <see cref="Script"/> the key assigned
     /// with <see cref="ComponentKeyAttribute"/>.<br/>
@@ -65,7 +66,9 @@ public abstract class SchemaType
     public   readonly   SymbolColor?    SymbolColor;        // 12  
     
     internal readonly   Bytes           componentKeyBytes;  // 16
+    #endregion
         
+#region methods
     internal SchemaType(string componentKey, Type type, SchemaTypeKind kind)
     {
         ComponentKey    = componentKey;
@@ -159,6 +162,7 @@ public abstract class SchemaType
         }
         return BlittableType.Blittable;
     }
+    #endregion
 }
 
 /// <summary>

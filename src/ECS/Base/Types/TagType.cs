@@ -13,11 +13,15 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public sealed class TagType : SchemaType 
 {
+#region fields
     /// <summary> The key name of an <see cref="ITag"/> used for JSON serialization. </summary>
     public   readonly   string  TagName;        //  8
     /// <summary> The index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Tags"/>. </summary>
     public   readonly   int     TagIndex;       //  4
-    
+    #endregion
+
+#region methods
+
     public  override    string  ToString() => $"tag: [#{Name}]";
     
     internal TagType(string tagName, Type type, int tagIndex)
@@ -26,6 +30,7 @@ public sealed class TagType : SchemaType
         TagName    = tagName;
         TagIndex   = tagIndex;
     }
+    #endregion
 }
 
 internal static class TagInfo<T>

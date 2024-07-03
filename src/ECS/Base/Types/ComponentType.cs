@@ -17,6 +17,7 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public abstract class ComponentType : SchemaType
 {
+#region fields
     /// <summary> The index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Components"/>. </summary>
     public   readonly   int         StructIndex;    //  4
     /// <summary> Return true if <see cref="IComponent"/>'s of this type can be copied. </summary>
@@ -29,7 +30,9 @@ public abstract class ComponentType : SchemaType
     internal readonly   Type        RelationType;   //  8
     
     internal readonly   Type        RelationKeyType;//  8
-    
+    #endregion
+
+#region methods
     internal abstract   StructHeap          CreateHeap();
     internal abstract   bool                RemoveEntityComponent  (Entity entity);
     internal abstract   bool                AddEntityComponent     (Entity entity);
@@ -48,6 +51,7 @@ public abstract class ComponentType : SchemaType
         RelationType    = relationType;
         RelationKeyType = keyType;
     }
+    #endregion
 }
 
 internal static class StructInfo<T>
