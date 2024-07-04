@@ -105,6 +105,28 @@ public static class Test_Relations_Delete
         entity2.DeleteEntity();                                             //  10             11
         AreEqual("{ }",         sourceNodes.ToStr());                       //  12
     }
+    
+    [Test]
+    public static void Test_Relations_Delete_Entity_target()
+    {
+        var store       = new EntityStore();
+        var sourceNodes = store.GetAllEntitiesWithRelations<AttackRelation>();
+        AreEqual("{ }",         sourceNodes.ToStr());
+        
+        var entity1     = store.CreateEntity(1);
+        var entity2     = store.CreateEntity(2);
+        var entity3     = store.CreateEntity(3);                            //  1      2      3
+        AreEqual("{ }",         sourceNodes.ToStr());
+        
+        entity1.AddComponent(new AttackRelation { target = entity2 });      //  1 ---> 2      3
+        AreEqual("{ 1 }",       sourceNodes.ToStr());
+        
+        entity3.AddComponent(new AttackRelation { target = entity2 });      //  1 ---> 2 <--- 3
+        AreEqual("{ 1, 3 }",    sourceNodes.ToStr());
+        
+        entity2.DeleteEntity();                                             //  1             3
+        // AreEqual("{ }",         sourceNodes.ToStr()); TODO
+    }
 }
 
 }
