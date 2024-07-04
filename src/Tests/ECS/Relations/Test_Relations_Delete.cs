@@ -58,30 +58,33 @@ public static class Test_Relations_Delete
     public static void Test_Relations_Delete_Entity_relations()
     {
         var store       = new EntityStore();
-        var allEntities = store.GetAllEntitiesWithRelations<AttackRelation>();
-        AreEqual("{ }",         allEntities.ToStr());
+        var sourceNodes = store.GetAllEntitiesWithRelations<AttackRelation>();
+        AreEqual("{ }",         sourceNodes.ToStr());
         
-        var target1 = store.CreateEntity(10);
-        var target2 = store.CreateEntity(11);
-        var target3 = store.CreateEntity(12);
+        var target10    = store.CreateEntity(10);
+        var target11    = store.CreateEntity(11);
+        var target12    = store.CreateEntity(12);
 
-        var entity1 = store.CreateEntity(1);
-        var entity2 = store.CreateEntity(2);
+        var entity1     = store.CreateEntity(1);
+        var entity2     = store.CreateEntity(2);                            //  10      1      11
+        AreEqual("{ }",         sourceNodes.ToStr());                       //  12      2 
         
-        entity1.AddComponent(new AttackRelation { target = target1 });
-        entity1.AddComponent(new AttackRelation { target = target2 });
-        AreEqual("{ 1 }",       allEntities.ToStr());
+        entity1.AddComponent(new AttackRelation { target = target10 });     //  10 <--- 1      11
+        AreEqual("{ 1 }",       sourceNodes.ToStr());                       //  12      2 
         
-        entity2.AddComponent(new AttackRelation { target = target3 });
-        AreEqual("{ 1, 2 }",    allEntities.ToStr());
+        entity1.AddComponent(new AttackRelation { target = target11 });     //  10 <--- 1 ---> 11
+        AreEqual("{ 1 }",       sourceNodes.ToStr());                       //  12
+        
+        entity2.AddComponent(new AttackRelation { target = target12 });     //  10 <--- 1 ---> 11
+        AreEqual("{ 1, 2 }",    sourceNodes.ToStr());                       //  12 <--- 2
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
         store.ForAllEntityRelations((ref AttackRelation relation, Entity entity) => {
             switch (count++) {
-                case 0: AreEqual(1, entity.Id); AreEqual(target1, relation.target); break;
-                case 1: AreEqual(1, entity.Id); AreEqual(target2, relation.target); break;
-                case 2: AreEqual(2, entity.Id); AreEqual(target3, relation.target); break;
+                case 0: AreEqual(1, entity.Id); AreEqual(target10, relation.target); break;
+                case 1: AreEqual(1, entity.Id); AreEqual(target11, relation.target); break;
+                case 2: AreEqual(2, entity.Id); AreEqual(target12, relation.target); break;
             }
         });
         AreEqual(3, count);
@@ -89,17 +92,18 @@ public static class Test_Relations_Delete
         // --- version: get all entity relations in O(1)
         var (entities, relations) = store.GetAllEntityRelations<AttackRelation>();
         AreEqual(3, entities.Count); AreEqual(3,  relations.Length);
-        AreEqual(1, entities[0].Id); AreEqual(target1, relations[0].target);
-        AreEqual(1, entities[1].Id); AreEqual(target2, relations[1].target);
-        AreEqual(2, entities[2].Id); AreEqual(target3, relations[2].target);
+        AreEqual(1, entities[0].Id); AreEqual(target10, relations[0].target);
+        AreEqual(1, entities[1].Id); AreEqual(target11, relations[1].target);
+        AreEqual(2, entities[2].Id); AreEqual(target12, relations[2].target);
         
-        entity1.DeleteEntity();
-        AreEqual("{ 2 }",       allEntities.ToStr());
-        var array =             allEntities.ToArray();
-        AreEqual(target3, array[0].GetRelation<AttackRelation, Entity>(target3).target);
+        entity1.DeleteEntity();                                             //  10             11
+        AreEqual("{ 2 }",       sourceNodes.ToStr());                       //  12 <--- 2
         
-        entity2.DeleteEntity();
-        AreEqual("{ }",         allEntities.ToStr());
+        var array =             sourceNodes.ToArray();
+        AreEqual(target12, array[0].GetRelation<AttackRelation, Entity>(target12).target);
+        
+        entity2.DeleteEntity();                                             //  10             11
+        AreEqual("{ }",         sourceNodes.ToStr());                       //  12
     }
 }
 
