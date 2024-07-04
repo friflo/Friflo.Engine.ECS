@@ -83,28 +83,25 @@ public static class Test_Relations_Delete
         // --- version: iterate all entity relations in O(N)
         store.ForAllEntityRelations((ref AttackRelation relation, Entity entity) => {
             switch (count++) {
-                case 0: AreEqual(1, entity.Id); AreEqual(target10, relation.target); break;
-                case 1: AreEqual(1, entity.Id); AreEqual(target11, relation.target); break;
-                case 2: AreEqual(2, entity.Id); AreEqual(target12, relation.target); break;
+                case 0: AreEqual(1, entity.Id); AreEqual(10, relation.target.Id); break;
+                case 1: AreEqual(1, entity.Id); AreEqual(11, relation.target.Id); break;
+                case 2: AreEqual(2, entity.Id); AreEqual(12, relation.target.Id); break;
             }
         });
         AreEqual(3, count);
         
         // --- version: get all entity relations in O(1)
         var (entities, relations) = store.GetAllEntityRelations<AttackRelation>();
-        AreEqual(3, entities.Count); AreEqual(3,  relations.Length);
-        AreEqual(1, entities[0].Id); AreEqual(target10, relations[0].target);
-        AreEqual(1, entities[1].Id); AreEqual(target11, relations[1].target);
-        AreEqual(2, entities[2].Id); AreEqual(target12, relations[2].target);
+        AreEqual("{ 1, 1, 2 }",     entities.Debug());
+        AreEqual("{ 10, 11, 12 }",  relations.Debug());
         
-        entity1.DeleteEntity();                                             //  10           11
+        entity1.DeleteEntity();                                             //  10     -     11
         AreEqual("{ 2 }",       sourceNodes.Debug());                       //  12  🡐  2
         
-        var array =             sourceNodes.ToArray();
-        AreEqual(target12, array[0].GetRelation<AttackRelation, Entity>(target12).target);
+        AreEqual(12, sourceNodes.First().GetRelation<AttackRelation, Entity>(target12).target.Id);
         
-        entity2.DeleteEntity();                                             //  10           11
-        AreEqual("{ }",         sourceNodes.Debug());                       //  12
+        entity2.DeleteEntity();                                             //  10     -     11
+        AreEqual("{ }",         sourceNodes.Debug());                       //  12     -
     }
     
     [Test]
@@ -130,7 +127,7 @@ public static class Test_Relations_Delete
         AreEqual("{ 1, 2, 3 }", entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
         AreEqual("{ 2 }",       entity3.GetRelations<AttackRelation>().Debug());
         
-        entity2.DeleteEntity();                                                                 //  1            3
+        entity2.DeleteEntity();                                                                 //  1     -      3
         AreEqual("{ }",         entity1.GetRelations<AttackRelation>().Debug());                //
         AreEqual("{ }",         entity3.GetRelations<AttackRelation>().Debug());
     }

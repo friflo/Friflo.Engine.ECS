@@ -38,4 +38,18 @@ public static class CollectionExtensions
         sb.Append(" }");
         return sb.ToString();
     }
+    
+    public static string Debug<T>(this Chunk<T> chunk)
+        where T : struct, IComponent
+    {
+        if (chunk.Length == 0) return "{ }";
+        var sb = new StringBuilder();
+        sb.Append("{ ");
+        foreach (var item in chunk.Span) {
+            if (sb.Length > 2) sb.Append(", ");
+            sb.Append(item);
+        }
+        sb.Append(" }");
+        return sb.ToString();
+    }
 }

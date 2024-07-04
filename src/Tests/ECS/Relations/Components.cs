@@ -8,7 +8,7 @@ public struct AttackRelation : ILinkRelation
     public          Entity  target;
     public          Entity  GetRelationKey()    => target;
 
-    public override string  ToString()          => target.ToString();
+    public override string  ToString()          => target.Id.ToString();
 }
 
 internal struct IntRelation : IRelationComponent<int>

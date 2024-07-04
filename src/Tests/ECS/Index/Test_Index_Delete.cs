@@ -81,16 +81,16 @@ public static class Test_Index_Delete
         AreEqual("{ 3 }",       entity11.GetLinkComponentReferences<AttackComponent>().Debug());    //  3  🡒  11
         AreEqual("{ 10, 11 }",  values.Debug());
         
-        entity1.DeleteEntity();                                                                     //        10  🡐  2
+        entity1.DeleteEntity();                                                                     //  -     10  🡐  2
         AreEqual("{ 2 }",       entity10.GetLinkComponentReferences<AttackComponent>().Debug());    //  3  🡒  11
         AreEqual("{ 10, 11 }",  values.Debug());                                    
         
-        entity2.DeleteEntity();                                                                     //        10
+        entity2.DeleteEntity();                                                                     //  -     10     -
         AreEqual("{ }",         entity10.GetLinkComponentReferences<AttackComponent>().Debug());    //  3  🡒  11
         AreEqual("{ 11 }",      values.Debug());                                    
         
-        entity3.DeleteEntity();                                                                     //        10
-        AreEqual("{ }",         entity11.GetLinkComponentReferences<AttackComponent>().Debug());    //        11
+        entity3.DeleteEntity();                                                                     //  -     10     -
+        AreEqual("{ }",         entity11.GetLinkComponentReferences<AttackComponent>().Debug());    //  -     11
         AreEqual("{ }",         values.Debug());                                    
     }
     
@@ -116,13 +116,13 @@ public static class Test_Index_Delete
         AreEqual("{ 3 }",       target11.GetLinkComponentReferences<AttackComponent>().Debug());
         AreEqual("{ 10, 11 }",  targets.Debug());
         
-        target10.DeleteEntity();                                                                    //  1             2
+        target10.DeleteEntity();                                                                    //  1      -      2
         IsFalse (               entity1.HasComponent<AttackComponent>());                           //  3  🡒  11
         IsFalse (               entity2.HasComponent<AttackComponent>());
         AreEqual("{ 11 }",      targets.Debug());
         
-        target11.DeleteEntity();                                                                    //  1             2
-        IsFalse (               entity3.HasComponent<AttackComponent>());                           //  3
+        target11.DeleteEntity();                                                                    //  1      -      2
+        IsFalse (               entity3.HasComponent<AttackComponent>());                           //  3      -
         AreEqual("{ }",         targets.Debug());
     }
     
@@ -145,7 +145,7 @@ public static class Test_Index_Delete
         AreEqual("{ 1, 2, 3 }", entity1.GetLinkComponentReferences<AttackComponent>().Debug());
         AreEqual("{ 1 }",       targets.Debug());
         
-        entity1.DeleteEntity();                                                                 //  2            3
+        entity1.DeleteEntity();                                                                 //  2     -      3
         IsFalse (               entity2.HasComponent<AttackComponent>());                       //
         IsFalse (               entity3.HasComponent<AttackComponent>());
         AreEqual("{ }",         targets.Debug());
