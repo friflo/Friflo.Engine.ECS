@@ -137,6 +137,16 @@ internal abstract class EntityRelations
         var chunk       = new Chunk<TComponent>(components, null, count, 0);
         return (entities, chunk);
     }
+    
+    internal static Entities GetLinkRelationReferences(EntityStore store, int id, int structIndex)
+    {
+        var relations = store.extension.relationsMap[structIndex];
+        if (relations == null) {
+            return default;
+        }
+        relations.linkEntityMap.TryGetValue(id, out var ids);
+        return relations.linkIdsHeap.GetEntities(store, ids);
+    }
     #endregion
     
 #region mutation

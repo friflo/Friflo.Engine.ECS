@@ -73,6 +73,11 @@ public static class RelationExtensions
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.RemoveRelation<T, Entity>(entity.store, entity.Id, target);
     }
+    
+    public static Entities GetLinkRelationReferences<TComponent>(this Entity entity) where TComponent: struct, IRelationComponent {
+        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        return EntityRelations.GetLinkRelationReferences(entity.store, entity.Id, StructInfo<TComponent>.Index);
+    }
     #endregion
     
 #region EntityStore
