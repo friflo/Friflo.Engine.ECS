@@ -4,6 +4,9 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Text;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -39,6 +42,37 @@ public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
         this.position   = position;
         Length          = 1;
     }
+
+    // ReSharper disable twice StaticMemberInGenericType
+    private static readonly bool        isEntity;
+    private static readonly MethodInfo  GetRelationKey = MakeGetRelationKey(out isEntity);
+    
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2090", Justification = "Only for debugging")]
+    private static MethodInfo MakeGetRelationKey(out bool isEntity)
+    {
+        var methodInfo  = typeof(TComponent).GetMethod("GetRelationKey")!;
+        isEntity        = methodInfo.ReturnType == typeof(Entity);
+        return methodInfo;
+    }
+    
+    public string Debug()
+    {
+        if (Length == 0) return "{ }";
+        var sb          = new StringBuilder();
+        sb.Append("{ ");
+        foreach (var component in this) {
+            if (sb.Length > 2) sb.Append(", ");
+            var key = GetRelationKey.Invoke(component, null)!;
+            if (isEntity) {
+                sb.Append(((Entity)key).Id);
+            } else {
+                sb.Append(key);
+            }
+        }
+        sb.Append(" }");
+        return sb.ToString();
+    }
+    
     
     /// <summary>
     /// Return the relation component at the given <paramref name="index"/>.<br/>

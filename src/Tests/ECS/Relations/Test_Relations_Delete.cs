@@ -21,9 +21,11 @@ public static class Test_Relations_Delete
         
         entity1.AddComponent(new IntRelation { value = 10 });
         entity1.AddComponent(new IntRelation { value = 20 });
+        AreEqual("{ 10, 20 }",  entity1.GetRelations<IntRelation>().Debug());
         AreEqual("{ 1 }",       allEntities.Debug());
         
         entity2.AddComponent(new IntRelation { value = 30 });
+        AreEqual("{ 30 }",      entity2.GetRelations<IntRelation>().Debug());
         AreEqual("{ 1, 2 }",    allEntities.Debug());
         
         int count = 0;
@@ -118,19 +120,19 @@ public static class Test_Relations_Delete
         
         entity1.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2     3
         AreEqual("{ 1 }",       entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //
-        AreEqual(1,             entity1.GetRelations<AttackRelation>().Length);
+        AreEqual("{ 2 }",       entity1.GetRelations<AttackRelation>().Debug());
         
         entity2.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2     3
         AreEqual("{ 1, 2 }",    entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
-        AreEqual(1,             entity2.GetRelations<AttackRelation>().Length);
+        AreEqual("{ 2 }",       entity2.GetRelations<AttackRelation>().Debug());
         
         entity3.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2  🡐  3
         AreEqual("{ 1, 2, 3 }", entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
-        AreEqual(1,             entity3.GetRelations<AttackRelation>().Length);
+        AreEqual("{ 2 }",       entity3.GetRelations<AttackRelation>().Debug());
         
         entity2.DeleteEntity();                                                                 //  1            3
-        AreEqual(0,             entity1.GetRelations<AttackRelation>().Length);                 //
-        AreEqual(0,             entity3.GetRelations<AttackRelation>().Length);
+        AreEqual("{ }",         entity1.GetRelations<AttackRelation>().Debug());                //
+        AreEqual("{ }",         entity3.GetRelations<AttackRelation>().Debug());
     }
 }
 
