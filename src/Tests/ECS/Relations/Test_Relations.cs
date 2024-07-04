@@ -92,21 +92,21 @@ public static class Test_Relations
         IsFalse(entity3.AddRelation(new AttackRelation { target = target11, speed = 42  }));
         AreEqual("Components: [] +2 relations", components.ToString());
         
-        IsTrue (entity3.RemoveLinkRelation<AttackRelation>(target10));
+        IsTrue (entity3.RemoveRelation<AttackRelation>(target10));
         AreEqual("Components: [] +1 relations", components.ToString());
-        IsFalse(entity3.RemoveLinkRelation<AttackRelation>(target10));
+        IsFalse(entity3.RemoveRelation<AttackRelation>(target10));
         AreEqual("Components: [] +1 relations", components.ToString());
         
-        IsTrue (entity3.RemoveLinkRelation<AttackRelation>(target11));
+        IsTrue (entity3.RemoveRelation<AttackRelation>(target11));
         AreEqual("Components: []", components.ToString());
-        IsFalse(entity3.RemoveLinkRelation<AttackRelation>(target11));
+        IsFalse(entity3.RemoveRelation<AttackRelation>(target11));
         AreEqual("Components: []", components.ToString());
         
         var start = Mem.GetAllocatedBytes();
         entity3.AddRelation(new AttackRelation { target = target10, speed = 1 });
         entity3.AddRelation(new AttackRelation { target = target11, speed = 1 });
-        entity3.RemoveLinkRelation<AttackRelation>(target11);
-        entity3.RemoveLinkRelation<AttackRelation>(target10);
+        entity3.RemoveRelation<AttackRelation>(target11);
+        entity3.RemoveRelation<AttackRelation>(target10);
         Mem.AssertNoAlloc(start);
     }
 
@@ -380,7 +380,7 @@ public static class Test_Relations
         AreEqual(expect, nre!.Message);
         
         nre = Throws<NullReferenceException>(() => {
-            entity.RemoveLinkRelation<AttackRelation>(default);
+            entity.RemoveRelation<AttackRelation>(default);
         });
         AreEqual(expect, nre!.Message);
         
