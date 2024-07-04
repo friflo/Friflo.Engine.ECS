@@ -48,7 +48,7 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
         RemoveComponentValue (id, value);
     }
     
-    internal override void RemoveEntityComponent(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityFromIndex(int id, Archetype archetype, int compIndex)
     {
         var map         = entityMap;
         var heap        = idHeap;

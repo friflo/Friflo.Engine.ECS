@@ -31,8 +31,9 @@ public abstract class ComponentIndex
     internal abstract void Update<TComponent>   (int id, in TComponent component, StructHeap<TComponent> heap) where TComponent : struct, IComponent;
     internal abstract void Remove<TComponent>   (int id,                          StructHeap<TComponent> heap) where TComponent : struct, IComponent;
     
-    /// remove indexed component from entity
-    internal abstract void RemoveEntityComponent(int id, Archetype archetype, int compIndex);
+    /// Remove entity id from indexed component value.<br/>
+    /// The component is removed by <see cref="Entity.DeleteEntity"/> shortly after.
+    internal abstract void RemoveEntityFromIndex(int id, Archetype archetype, int compIndex);
     
     internal NotSupportedException NotSupportedException(string name) {
         return new NotSupportedException($"{name} not supported by {GetType().Name}");

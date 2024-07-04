@@ -591,14 +591,13 @@ public partial class EntityStore
         indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & isOwner; // intersect
         relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & isOwner; // intersect
         
-        // --- remove entity id from indexed component values
+        // --- remove entity id from component index
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
-            var index = indexMap[componentType.StructIndex];
-            index.RemoveEntityComponent(id, node.archetype, node.compIndex);
+            var componentIndex = indexMap[componentType.StructIndex];
+            componentIndex.RemoveEntityFromIndex(id, node.archetype, node.compIndex);
         }
-        
-        // --- remove all entity relations
+        // --- remove entity relations from entity
         var relationsMap = extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];

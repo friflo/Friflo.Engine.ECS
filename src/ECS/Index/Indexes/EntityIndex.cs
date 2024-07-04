@@ -72,7 +72,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
     where TIndexedComponent : struct, IIndexedComponent<Entity>
 {
-    internal override void RemoveEntityComponent(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityFromIndex(int id, Archetype archetype, int compIndex)
     {
         var map             = entityMap;
         var heap            = idHeap;
