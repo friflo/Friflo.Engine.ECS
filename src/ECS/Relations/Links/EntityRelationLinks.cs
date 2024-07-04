@@ -52,14 +52,14 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         return false;
     }
     
-    internal override void RemoveLinkRelations(int target)
+    internal override void RemoveLinkRelations(int targetId)
     {
-        linkEntityMap.TryGetValue(target, out var ids);
-        var idSpan  = ids.GetIdSpan(linkIdsHeap);
+        linkEntityMap.TryGetValue(targetId, out var sourceIds);
+        var sourceIdSpan = sourceIds.GetIdSpan(linkIdsHeap);
         // TODO check if it necessary to make a copy of idSpan - e.g. by stackalloc
-        foreach (var source in idSpan) {
-            var entity = new Entity(store, target);
-            RemoveRelation(source, entity);
+        foreach (var sourceId in sourceIdSpan) {
+            var target = new Entity(store, targetId);
+            RemoveRelation(sourceId, target);
         }
     }
     #endregion
