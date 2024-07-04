@@ -87,7 +87,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         if (components == null) {
             int count = indexTypes.Count;
             foreach (var componentType in relationTypes) {
-                var references  = EntityRelations.GetRelationReferences(entity.store, entity.Id, componentType.StructIndex);
+                var references  = EntityRelations.GetRelationReferences(store, id, componentType.StructIndex);
                 count          += references.Count;
             }
             return count;
@@ -97,10 +97,11 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
             components[index++] = new EntityComponent(entity, componentType);
         }
         foreach (var componentType in relationTypes) {
-            var references      = EntityRelations.GetRelationReferences(entity.store, entity.Id, componentType.StructIndex);
+            var references      = EntityRelations.GetRelationReferences(store, id, componentType.StructIndex);
             var relations       = relationsMap[componentType.StructIndex];
-            for (int n = 0; n < references.Count; n++) {
-                components[index++] = new EntityComponent(entity, componentType, relations, n);
+            int relationIndex   = 0;
+            foreach (var reference in references) {
+                components[index++] = new EntityComponent(new Entity(store, reference.Id), componentType, relations, relationIndex++);
             }
         }
         return index;
@@ -179,6 +180,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
         var count   = entityComponents.GetReferences(null);
         if (count == 0) {
             components = Array.Empty<EntityComponent>();
+            return;
         }
         components  = new EntityComponent[count];
         entityComponents.GetReferences(components);

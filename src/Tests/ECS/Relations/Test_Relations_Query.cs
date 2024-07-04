@@ -186,7 +186,7 @@ public static class Test_Relations_Query
 
 #pragma warning disable CS0618 // Type or member is obsolete
 
-    // [Test]
+    [Test]
     public static void Test_Relations_Entity_References()
     {
         var store   = new EntityStore();
@@ -199,19 +199,18 @@ public static class Test_Relations_Query
         entity2.AddComponent(new AttackComponent { target = entity1 });
         AreEqual(1, entity1.References.Count);
         
-        entity2.AddRelation(new AttackRelation { target = entity1 });
+        entity2.AddRelation(new AttackRelation   { target = entity1, speed = 11 });
         AreEqual(2, entity1.References.Count);
         
-        entity3.AddRelation(new AttackRelation { target = entity1 });
+        entity3.AddRelation(new AttackRelation   { target = entity1, speed = 22  });
         AreEqual(3, entity1.References.Count);
         
         int count = 0;
         foreach (var component in entity1.References) {
             switch (count++) {
-                case 0: AreEqual(new AttackComponent { target = entity1 }, component.Value);    break;
-
-                case 1: AreEqual(new AttackRelation  { target = entity1 }, component.Value);    break;
-                case 2: AreEqual(new AttackRelation  { target = entity1 }, component.Value);    break;
+            //  case 0: AreEqual(new AttackComponent { target = entity1 }, component.Value);    break; // TODO
+                case 1: AreEqual(11, ((AttackRelation)component.Value).speed);   break;
+                case 2: AreEqual(22, ((AttackRelation)component.Value).speed);   break;
             }
         }
         AreEqual(3, count);
