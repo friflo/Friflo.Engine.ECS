@@ -23,6 +23,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
         heapGeneric = (StructHeap<TRelationComponent>)heap;
     }
     
+    /// Executes in O(M)  M: number of entity relations
     protected int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
     {
         positionMap.TryGetValue(id, out positions);

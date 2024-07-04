@@ -175,6 +175,7 @@ internal abstract class EntityRelations
         return position;
     }
     
+    /// Executes in O(M)  M: max(number of entity relations)
     protected IdArray RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
     {
         var type        = archetype;
