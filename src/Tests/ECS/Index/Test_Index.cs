@@ -135,22 +135,22 @@ public static class Test_Index
         AreEqual("{ 1 }",           query1.Entities.Debug());
         AreEqual("{ 1, 2, 3 }",     query2.Entities.Debug());
         
-        var references4 = target4.GetLinkComponentReferences<LinkComponent>();
+        var references4 = target4.GetEntityReferences<LinkComponent>();
         AreEqual("{ 1 }",           references4.Ids.Debug());
         
-        var references5 = target5.GetLinkComponentReferences<LinkComponent>();
+        var references5 = target5.GetEntityReferences<LinkComponent>();
         AreEqual("{ 2, 3 }",        references5.Ids.Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetLinkComponentReferences<LinkComponent>();
+        references5 = target5.GetEntityReferences<LinkComponent>();
         AreEqual("{ 3 }",           references5.Ids.Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetLinkComponentReferences<LinkComponent>();
+        references5 = target5.GetEntityReferences<LinkComponent>();
         AreEqual("{ 3 }",           references5.Ids.Debug());
         
         entity3.RemoveComponent<LinkComponent>();                       AreEqual(2, values.Count);
-        references5 = target5.GetLinkComponentReferences<LinkComponent>();
+        references5 = target5.GetEntityReferences<LinkComponent>();
         AreEqual("{ }",             references5.Ids.Debug());
     }
     
@@ -202,7 +202,7 @@ public static class Test_Index
         var expect = "entity is null. id: 1";
         
         var nre = Throws<NullReferenceException>(() => {
-            entity.GetLinkComponentReferences<AttackComponent>();
+            entity.GetEntityReferences<AttackComponent>();
         });
         AreEqual(expect, nre!.Message);
     }

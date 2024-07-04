@@ -110,23 +110,23 @@ public static class Test_Relations_Delete
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         var entity3     = store.CreateEntity(3);
-                                                                                                //  1     2     3
-        AreEqual("{ }",         entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //
+                                                                                        //  1     2     3
+        AreEqual("{ }",         entity2.GetEntityReferences<AttackRelation>().Debug()); //
         
-        entity1.AddRelation(new AttackRelation { target = entity2 });                           //  1  🡒  2     3
-        AreEqual("{ 1 }",       entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //
+        entity1.AddRelation(new AttackRelation { target = entity2 });                   //  1  🡒  2     3
+        AreEqual("{ 1 }",       entity2.GetEntityReferences<AttackRelation>().Debug()); //
         AreEqual("{ 2 }",       entity1.GetRelations<AttackRelation>().Debug());
         
-        entity2.AddRelation(new AttackRelation { target = entity2 });                           //  1  🡒  2     3
-        AreEqual("{ 1, 2 }",    entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
+        entity2.AddRelation(new AttackRelation { target = entity2 });                   //  1  🡒  2     3
+        AreEqual("{ 1, 2 }",    entity2.GetEntityReferences<AttackRelation>().Debug()); //        ⮍
         AreEqual("{ 2 }",       entity2.GetRelations<AttackRelation>().Debug());
         
-        entity3.AddRelation(new AttackRelation { target = entity2 });                           //  1  🡒  2  🡐  3
-        AreEqual("{ 1, 2, 3 }", entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
+        entity3.AddRelation(new AttackRelation { target = entity2 });                   //  1  🡒  2  🡐  3
+        AreEqual("{ 1, 2, 3 }", entity2.GetEntityReferences<AttackRelation>().Debug()); //        ⮍
         AreEqual("{ 2 }",       entity3.GetRelations<AttackRelation>().Debug());
         
-        entity2.DeleteEntity();                                                                 //  1     -      3
-        AreEqual("{ }",         entity1.GetRelations<AttackRelation>().Debug());                //
+        entity2.DeleteEntity();                                                         //  1     -      3
+        AreEqual("{ }",         entity1.GetRelations<AttackRelation>().Debug());        //
         AreEqual("{ }",         entity3.GetRelations<AttackRelation>().Debug());
     }
 }

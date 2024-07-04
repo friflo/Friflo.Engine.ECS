@@ -90,7 +90,7 @@ public static class RelationExtensions
     /// Executes in O(1).
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static Entities GetLinkRelationReferences<TComponent>(this Entity entity) where TComponent: struct, IRelationComponent {
+    public static Entities GetEntityReferences<TComponent>(this Entity entity) where TComponent: struct, IRelationComponent {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.GetLinkRelationReferences(entity.store, entity.Id, StructInfo<TComponent>.Index);
     }

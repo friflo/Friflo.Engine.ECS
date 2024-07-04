@@ -390,7 +390,7 @@ public static class Test_Relations
         AreEqual(expect, nre!.Message);
         
         nre = Throws<NullReferenceException>(() => {
-            entity.GetLinkRelationReferences<AttackRelation>();
+            entity.GetEntityReferences<AttackRelation>();
         });
         AreEqual(expect, nre!.Message);
     }
