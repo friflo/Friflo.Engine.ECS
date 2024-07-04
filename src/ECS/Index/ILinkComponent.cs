@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 ///   <item>
 ///     Return all entities having a <see cref="ILinkComponent"/> to a specific entity.<br/>
-///     See <see cref="IndexExtensions.GetEntityReferences{TComponent}"/>
+///     See <see cref="IndexExtensions.GetLinkComponentReferences{TComponent}"/>
 ///   </item>
 ///   <item>
 ///     Return all entities linked by a specific <see cref="ILinkComponent"/> type.<br/>

@@ -209,7 +209,7 @@ public static void Relationships()
         follower.AddComponent(new FollowComponent { target = target });
     }
     // get all entities where FollowComponent.target == targets[0]. O(1)
-    var followers = targets[0].GetEntityReferences<FollowComponent>();
+    var followers = targets[0].GetLinkComponentReferences<FollowComponent>();
     Console.WriteLine($"followers: {followers.Count}");                     // > followers: 1
     
     // return same result as followers using a Query(). O(1)
