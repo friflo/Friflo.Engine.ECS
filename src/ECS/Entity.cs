@@ -183,7 +183,9 @@ public readonly struct Entity : IEquatable<Entity>
     public              long                    Pid             => store.IdToPid(Id);
 
     /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
-    public              EntityComponents        Components      => new EntityComponents(this);
+    public              EntityComponents        Components      => new EntityComponents(this, false);
+    
+    public              EntityComponents        References      => new EntityComponents(this, true);
     
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
     public              Scripts                 Scripts         => new Scripts(EntityUtils.GetScripts(this));

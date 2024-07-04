@@ -139,7 +139,7 @@ internal abstract class EntityRelations
         return (entities, chunk);
     }
     
-    internal static Entities GetLinkRelationReferences(EntityStore store, int id, int structIndex)
+    internal static Entities GetRelationReferences(EntityStore store, int id, int structIndex)
     {
         var relations = store.extension.relationsMap[structIndex];
         if (relations == null) {
