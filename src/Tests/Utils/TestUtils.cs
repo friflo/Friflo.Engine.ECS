@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -37,7 +36,7 @@ public static class TestUtils
         return stopwatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
     }
     
-    public static string ToStr(this QueryEntities entities)
+    public static string Debug(this QueryEntities entities)
     {
         if (entities.Count == 0) return "{ }";
         var sb = new StringBuilder();
@@ -50,7 +49,7 @@ public static class TestUtils
         return sb.ToString();
     }
     
-    public static string ToStr(this ReadOnlySpan<int> entities)
+    public static string Debug(this ReadOnlySpan<int> entities)
     {
         if (entities.Length == 0) return "{ }";
         var sb = new StringBuilder();
@@ -58,34 +57,6 @@ public static class TestUtils
         foreach (var id in entities) {
             if (sb.Length > 2) sb.Append(", ");
             sb.Append(id);
-        }
-        sb.Append(" }");
-        return sb.ToString();
-    }
-    
-    public static string ToStr<T>(this IEnumerable<T> enumerable)
-    {
-        var array = enumerable.ToArray();
-        if (array.Length == 0) return "{ }";
-        var sb = new StringBuilder();
-        sb.Append("{ ");
-        foreach (var item in array) {
-            if (sb.Length > 2) sb.Append(", ");
-            sb.Append(item);
-        }
-        sb.Append(" }");
-        return sb.ToString();
-    }
-    
-    public static string ToStr(this IEnumerable<Entity> entities)
-    {
-        var array = entities.ToArray();
-        if (array.Length == 0) return "{ }";
-        var sb = new StringBuilder();
-        sb.Append("{ ");
-        foreach (var entity in array) {
-            if (sb.Length > 2) sb.Append(", ");
-            sb.Append(entity.Id);
         }
         sb.Append(" }");
         return sb.ToString();

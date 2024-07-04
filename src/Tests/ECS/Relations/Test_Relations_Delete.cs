@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -15,17 +14,17 @@ public static class Test_Relations_Delete
     {
         var store       = new EntityStore();
         var allEntities = store.GetAllEntitiesWithRelations<IntRelation>();
-        AreEqual("{ }",         allEntities.ToStr());
+        AreEqual("{ }",         allEntities.Debug());
 
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
         entity1.AddComponent(new IntRelation { value = 10 });
         entity1.AddComponent(new IntRelation { value = 20 });
-        AreEqual("{ 1 }",       allEntities.ToStr());
+        AreEqual("{ 1 }",       allEntities.Debug());
         
         entity2.AddComponent(new IntRelation { value = 30 });
-        AreEqual("{ 1, 2 }",    allEntities.ToStr());
+        AreEqual("{ 1, 2 }",    allEntities.Debug());
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
@@ -46,12 +45,12 @@ public static class Test_Relations_Delete
         AreEqual(2, entities[2].Id); AreEqual(30, relations[2].value);
         
         entity1.DeleteEntity();
-        AreEqual("{ 2 }",       allEntities.ToStr());
+        AreEqual("{ 2 }",       allEntities.Debug());
         var array = allEntities.ToArray();
         AreEqual(30, array[0].GetRelation<IntRelation, int>(30).value);
         
         entity2.DeleteEntity();
-        AreEqual("{ }",         allEntities.ToStr());
+        AreEqual("{ }",         allEntities.Debug());
     }
     
     [Test]
@@ -59,7 +58,7 @@ public static class Test_Relations_Delete
     {
         var store       = new EntityStore();
         var sourceNodes = store.GetAllEntitiesWithRelations<AttackRelation>();
-        AreEqual("{ }",         sourceNodes.ToStr());
+        AreEqual("{ }",         sourceNodes.Debug());
         
         var target10    = store.CreateEntity(10);
         var target11    = store.CreateEntity(11);
@@ -67,16 +66,16 @@ public static class Test_Relations_Delete
 
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);                            //  10      1      11
-        AreEqual("{ }",         sourceNodes.ToStr());                       //  12      2 
+        AreEqual("{ }",         sourceNodes.Debug());                       //  12      2 
         
         entity1.AddComponent(new AttackRelation { target = target10 });     //  10 <--- 1      11
-        AreEqual("{ 1 }",       sourceNodes.ToStr());                       //  12      2 
+        AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12      2 
         
         entity1.AddComponent(new AttackRelation { target = target11 });     //  10 <--- 1 ---> 11
-        AreEqual("{ 1 }",       sourceNodes.ToStr());                       //  12
+        AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12
         
         entity2.AddComponent(new AttackRelation { target = target12 });     //  10 <--- 1 ---> 11
-        AreEqual("{ 1, 2 }",    sourceNodes.ToStr());                       //  12 <--- 2
+        AreEqual("{ 1, 2 }",    sourceNodes.Debug());                       //  12 <--- 2
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
@@ -97,13 +96,13 @@ public static class Test_Relations_Delete
         AreEqual(2, entities[2].Id); AreEqual(target12, relations[2].target);
         
         entity1.DeleteEntity();                                             //  10             11
-        AreEqual("{ 2 }",       sourceNodes.ToStr());                       //  12 <--- 2
+        AreEqual("{ 2 }",       sourceNodes.Debug());                       //  12 <--- 2
         
         var array =             sourceNodes.ToArray();
         AreEqual(target12, array[0].GetRelation<AttackRelation, Entity>(target12).target);
         
         entity2.DeleteEntity();                                             //  10             11
-        AreEqual("{ }",         sourceNodes.ToStr());                       //  12
+        AreEqual("{ }",         sourceNodes.Debug());                       //  12
     }
     
     [Test]
@@ -114,26 +113,26 @@ public static class Test_Relations_Delete
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         var entity3     = store.CreateEntity(3);                                                //  1     2     3
-        AreEqual("{ }",         entity2.GetLinkRelationReferences<AttackRelation>().Debug);     //
+        AreEqual("{ }",         entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //
         var sourceNodes = store.GetAllEntitiesWithRelations<AttackRelation>();
         
         entity1.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2     3
-        AreEqual("{ 1 }",       sourceNodes.ToStr());                                           //
-        AreEqual("{ 1 }",       entity2.GetLinkRelationReferences<AttackRelation>().Debug);
+        AreEqual("{ 1 }",       sourceNodes.Debug());                                           //
+        AreEqual("{ 1 }",       entity2.GetLinkRelationReferences<AttackRelation>().Debug());
         AreEqual(1,             entity1.GetRelations<AttackRelation>().Length);
         
         entity2.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2     3
-        AreEqual("{ 1, 2 }",    sourceNodes.ToStr());                                           //        ⮍
-        AreEqual("{ 1, 2 }",    entity2.GetLinkRelationReferences<AttackRelation>().Debug);
+        AreEqual("{ 1, 2 }",    sourceNodes.Debug());                                           //        ⮍
+        AreEqual("{ 1, 2 }",    entity2.GetLinkRelationReferences<AttackRelation>().Debug());
         AreEqual(1,             entity2.GetRelations<AttackRelation>().Length);
         
         entity3.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2  🡐  3
-        AreEqual("{ 1, 2, 3 }", sourceNodes.ToStr());                                           //        ⮍
-        AreEqual("{ 1, 2, 3 }", entity2.GetLinkRelationReferences<AttackRelation>().Debug);
+        AreEqual("{ 1, 2, 3 }", sourceNodes.Debug());                                           //        ⮍
+        AreEqual("{ 1, 2, 3 }", entity2.GetLinkRelationReferences<AttackRelation>().Debug());
         AreEqual(1,             entity3.GetRelations<AttackRelation>().Length);
         
         entity2.DeleteEntity();                                                                 //  1            3
-        AreEqual("{ }",         sourceNodes.ToStr());                                           //
+        AreEqual("{ }",         sourceNodes.Debug());                                           //
         AreEqual(0, entity1.GetRelations<AttackRelation>().Length);
         AreEqual(0, entity3.GetRelations<AttackRelation>().Length);
     }

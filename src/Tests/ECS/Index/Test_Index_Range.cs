@@ -31,14 +31,14 @@ public static class Test_Index_Range
         
         var values = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
 
-        entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual("{ 100 }",             values.ToStr());
-        entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.ToStr());
-        entity3.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.ToStr());
+        entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual("{ 100 }",             values.Debug());
+        entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.Debug());
+        entity3.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.Debug());
         
         var result = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(100);
-        AreEqual(1, result.Count);     AreEqual("{ 1 }",    result.Ids.ToStr());
+        AreEqual(1, result.Count);     AreEqual("{ 1 }",    result.Ids.Debug());
         result     = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(42);
-        AreEqual(0, result.Count);     AreEqual("{ }",      result.Ids.ToStr());
+        AreEqual(0, result.Count);     AreEqual("{ }",      result.Ids.Debug());
         {
             int count = 0;
             query3.ForEachEntity((ref IndexedIntRange _, ref Position _, Entity entity) => {
@@ -46,11 +46,11 @@ public static class Test_Index_Range
             });
             AreEqual(3, count);
         }
-        AreEqual(0, query0.Entities.Count);     AreEqual("{ }",         query0.Entities.ToStr());
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",       query1.Entities.ToStr());
-        AreEqual(2, query2.Entities.Count);     AreEqual("{ 1, 2 }",    query2.Entities.ToStr());
-        AreEqual(3, query3.Entities.Count);     AreEqual("{ 1, 2, 3 }", query3.Entities.ToStr());
-        AreEqual(0, query4.Entities.Count);     AreEqual("{ }",         query4.Entities.ToStr());
+        AreEqual(0, query0.Entities.Count);     AreEqual("{ }",         query0.Entities.Debug());
+        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",       query1.Entities.Debug());
+        AreEqual(2, query2.Entities.Count);     AreEqual("{ 1, 2 }",    query2.Entities.Debug());
+        AreEqual(3, query3.Entities.Count);     AreEqual("{ 1, 2, 3 }", query3.Entities.Debug());
+        AreEqual(0, query4.Entities.Count);     AreEqual("{ }",         query4.Entities.Debug());
         
         var start = Mem.GetAllocatedBytes();
         Mem.AreEqual(0, query0.Entities.Count);
@@ -87,8 +87,8 @@ public static class Test_Index_Range
             });
             AreEqual(0, count);
         }
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",   query1.Entities.ToStr());
-        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",     query2.Entities.ToStr());
+        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",   query1.Entities.Debug());
+        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",     query2.Entities.Debug());
     }
     
     [Test]
@@ -101,25 +101,25 @@ public static class Test_Index_Range
         var entity4 = store.CreateEntity(new Position());
         
         var values = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
-        entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual("{ 100 }",             values.ToStr());
-        entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.ToStr());
-        entity3.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.ToStr());
-        entity4.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.ToStr());
-        entity4.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.ToStr()); // cover add same component value again
+        entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual("{ 100 }",             values.Debug());
+        entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.Debug());
+        entity3.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.Debug());
+        entity4.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.Debug());
+        entity4.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.Debug()); // cover add same component value again
         
         var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 300);
         var query2 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(200, 400);
         
-        AreEqual(4, query1.Entities.Count);     AreEqual("{ 1, 2, 3, 4 }",  query1.Entities.ToStr());
-        AreEqual(3, query2.Entities.Count);     AreEqual("{ 2, 3, 4 }",     query2.Entities.ToStr());
+        AreEqual(4, query1.Entities.Count);     AreEqual("{ 1, 2, 3, 4 }",  query1.Entities.Debug());
+        AreEqual(3, query2.Entities.Count);     AreEqual("{ 2, 3, 4 }",     query2.Entities.Debug());
         
-        entity1.AddComponent(new IndexedIntRange { value  = 400 });     AreEqual("{ 400, 200, 300 }", values.ToStr());
-        AreEqual(3, query1.Entities.Count);     AreEqual("{ 2, 3, 4 }",     query1.Entities.ToStr());
-        AreEqual(4, query2.Entities.Count);     AreEqual("{ 2, 3, 4, 1 }",  query2.Entities.ToStr());
+        entity1.AddComponent(new IndexedIntRange { value  = 400 });     AreEqual("{ 400, 200, 300 }", values.Debug());
+        AreEqual(3, query1.Entities.Count);     AreEqual("{ 2, 3, 4 }",     query1.Entities.Debug());
+        AreEqual(4, query2.Entities.Count);     AreEqual("{ 2, 3, 4, 1 }",  query2.Entities.Debug());
         
-        entity2.RemoveComponent<IndexedIntRange>();                     AreEqual("{ 400, 200, 300 }", values.ToStr());
-        AreEqual(2, query1.Entities.Count);     AreEqual("{ 3, 4 }",        query1.Entities.ToStr());
-        AreEqual(3, query2.Entities.Count);     AreEqual("{ 3, 4, 1 }",     query2.Entities.ToStr());
+        entity2.RemoveComponent<IndexedIntRange>();                     AreEqual("{ 400, 200, 300 }", values.Debug());
+        AreEqual(2, query1.Entities.Count);     AreEqual("{ 3, 4 }",        query1.Entities.Debug());
+        AreEqual(3, query2.Entities.Count);     AreEqual("{ 3, 4, 1 }",     query2.Entities.Debug());
     }
     
     [Test]

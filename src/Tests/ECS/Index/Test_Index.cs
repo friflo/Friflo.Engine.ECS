@@ -25,7 +25,7 @@ public static class Test_Index
         }
         var query  = store.Query().ValueInRange<IndexedInt, int>(3, 8);
         AreEqual(6, query.Count);
-        AreEqual("{ 3, 4, 5, 6, 7, 8 }", query.Entities.ToStr());
+        AreEqual("{ 3, 4, 5, 6, 7, 8 }", query.Entities.Debug());
     }
     
     [Test]
@@ -40,7 +40,7 @@ public static class Test_Index
         }
         var query  = store.Query().ValueInRange<IndexedName, string>("3", "8");
         AreEqual(6, query.Count);
-        AreEqual("{ 3, 4, 5, 6, 7, 8 }", query.Entities.ToStr());
+        AreEqual("{ 3, 4, 5, 6, 7, 8 }", query.Entities.Debug());
     }
     
     [Test]
@@ -59,46 +59,46 @@ public static class Test_Index
         var nameValues  = store.GetAllIndexedComponentValues<IndexedName, string>();
         var intValues   = store.GetAllIndexedComponentValues<IndexedInt, int>();
         
-        entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.ToStr());
-        entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.ToStr());
-        entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.ToStr());
-        entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.ToStr());
+        entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.Debug());
+        entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.Debug());
+        entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.Debug());
+        entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.Debug());
 
         var result = store.GetEntitiesWithComponentValue<IndexedName, string>("find-me1");
-        AreEqual(2, result.Count);     AreEqual("{ 1, 3 }",    result.Ids.ToStr());
+        AreEqual(2, result.Count);     AreEqual("{ 1, 3 }",    result.Ids.Debug());
         result     = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
-        AreEqual(2, result.Count);     AreEqual("{ 2, 3 }",    result.Ids.ToStr());
+        AreEqual(2, result.Count);     AreEqual("{ 2, 3 }",    result.Ids.Debug());
         result     = store.GetEntitiesWithComponentValue<IndexedInt, int>(42);
-        AreEqual(0, result.Count);     AreEqual("{ }",          result.Ids.ToStr());
+        AreEqual(0, result.Count);     AreEqual("{ }",          result.Ids.Debug());
 
         var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me1");
         var query2  = store.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me1");
         var query3  = store.Query().                            HasValue<IndexedName,   string>("find-me1");
         
-        AreEqual(2, query1.Entities.Count);     AreEqual("{ 1, 3 }",        query1.Entities.ToStr());
-        AreEqual(1, query2.Entities.Count);     AreEqual("{ 3 }",           query2.Entities.ToStr());
-        AreEqual(2, query3.Entities.Count);     AreEqual("{ 1, 3 }",        query3.Entities.ToStr());
+        AreEqual(2, query1.Entities.Count);     AreEqual("{ 1, 3 }",        query1.Entities.Debug());
+        AreEqual(1, query2.Entities.Count);     AreEqual("{ 3 }",           query2.Entities.Debug());
+        AreEqual(2, query3.Entities.Count);     AreEqual("{ 1, 3 }",        query3.Entities.Debug());
         
         // Add same value of indexed component again
         entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual(1, nameValues.Count);
-        AreEqual(2, query1.Entities.Count);     AreEqual("{ 1, 3 }",        query1.Entities.ToStr());
-        AreEqual(1, query2.Entities.Count);     AreEqual("{ 3 }",           query2.Entities.ToStr());
-        AreEqual(2, query3.Entities.Count);     AreEqual("{ 1, 3 }",        query3.Entities.ToStr());
+        AreEqual(2, query1.Entities.Count);     AreEqual("{ 1, 3 }",        query1.Entities.Debug());
+        AreEqual(1, query2.Entities.Count);     AreEqual("{ 3 }",           query2.Entities.Debug());
+        AreEqual(2, query3.Entities.Count);     AreEqual("{ 1, 3 }",        query3.Entities.Debug());
         
         // Update value of indexed component
         entity1.AddComponent(new IndexedName   { name   = "find-me2" });    AreEqual(2, nameValues.Count);
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 3 }",           query1.Entities.ToStr());
-        AreEqual(1, query2.Entities.Count);     AreEqual("{ 3 }",           query2.Entities.ToStr());
-        AreEqual(1, query3.Entities.Count);     AreEqual("{ 3 }",           query3.Entities.ToStr());
+        AreEqual(1, query1.Entities.Count);     AreEqual("{ 3 }",           query1.Entities.Debug());
+        AreEqual(1, query2.Entities.Count);     AreEqual("{ 3 }",           query2.Entities.Debug());
+        AreEqual(1, query3.Entities.Count);     AreEqual("{ 3 }",           query3.Entities.Debug());
 
         // --- change queries
         query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me2");
         query2  = store.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me2");
         query3  = store.Query().                            HasValue<IndexedName,   string>("find-me2");
         
-        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",           query1.Entities.ToStr());
-        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",             query2.Entities.ToStr());
-        AreEqual(1, query3.Entities.Count);     AreEqual("{ 1 }",           query3.Entities.ToStr());
+        AreEqual(1, query1.Entities.Count);     AreEqual("{ 1 }",           query1.Entities.Debug());
+        AreEqual(0, query2.Entities.Count);     AreEqual("{ }",             query2.Entities.Debug());
+        AreEqual(1, query3.Entities.Count);     AreEqual("{ 1 }",           query3.Entities.Debug());
     }
     
     [Test]
@@ -132,26 +132,26 @@ public static class Test_Index
         var query2  = store.Query().HasValue<LinkComponent,   Entity>(target4).
                                     HasValue<LinkComponent,   Entity>(target5);
         
-        AreEqual("{ 1 }",           query1.Entities.ToStr());
-        AreEqual("{ 1, 2, 3 }",     query2.Entities.ToStr());
+        AreEqual("{ 1 }",           query1.Entities.Debug());
+        AreEqual("{ 1, 2, 3 }",     query2.Entities.Debug());
         
         var references4 = target4.GetLinkComponentReferences<LinkComponent>();
-        AreEqual("{ 1 }",           references4.Ids.ToStr());
+        AreEqual("{ 1 }",           references4.Ids.Debug());
         
         var references5 = target5.GetLinkComponentReferences<LinkComponent>();
-        AreEqual("{ 2, 3 }",        references5.Ids.ToStr());
+        AreEqual("{ 2, 3 }",        references5.Ids.Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
         references5 = target5.GetLinkComponentReferences<LinkComponent>();
-        AreEqual("{ 3 }",           references5.Ids.ToStr());
+        AreEqual("{ 3 }",           references5.Ids.Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
         references5 = target5.GetLinkComponentReferences<LinkComponent>();
-        AreEqual("{ 3 }",           references5.Ids.ToStr());
+        AreEqual("{ 3 }",           references5.Ids.Debug());
         
         entity3.RemoveComponent<LinkComponent>();                       AreEqual(2, values.Count);
         references5 = target5.GetLinkComponentReferences<LinkComponent>();
-        AreEqual("{ }",             references5.Ids.ToStr());
+        AreEqual("{ }",             references5.Ids.Debug());
     }
     
     [Test]

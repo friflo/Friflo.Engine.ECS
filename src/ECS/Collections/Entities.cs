@@ -21,7 +21,6 @@ public struct Entities : IReadOnlyList<Entity>
     public              int                 Count       => count;
     public              EntityStore         EntityStore => store;
     public              ReadOnlySpan<int>   Ids         => ids != null ? new ReadOnlySpan<int>(ids, start, count) : MemoryMarshal.CreateReadOnlySpan(ref id, 1);
-    public              string              Debug       => GetDebug();
     public   override   string              ToString()  => $"Entity[{count}]";
     #endregion
 
@@ -63,7 +62,7 @@ public struct Entities : IReadOnlyList<Entity>
         }
     }
     
-    private string GetDebug()
+    public string Debug()
     {
         if (count == 0) return "{ }";
         var sb = new StringBuilder();

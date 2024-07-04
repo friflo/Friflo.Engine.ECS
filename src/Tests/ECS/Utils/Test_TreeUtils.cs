@@ -337,15 +337,15 @@ public static class Test_TreeUtils
         var tree        = new ExplorerItemTree(root, "test-tree");
         var item3       = tree.GetItemById(3);
         var items       = new [] { item3 };
-        AreEqual("{ 2, 3 }",   root.ChildIds.ToStr());
+        AreEqual("{ 2, 3 }",   root.ChildIds.Debug());
      
         // move item3 up
         TreeUtils.MoveExplorerItemsUp(items, 1);
-        AreEqual("{ 3, 2 }",   root.ChildIds.ToStr());
+        AreEqual("{ 3, 2 }",   root.ChildIds.Debug());
         
         // move item3 up - already on top => index stay unchanged
         TreeUtils.MoveExplorerItemsUp(items, 1);
-        AreEqual("{ 3, 2 }",   root.ChildIds.ToStr());
+        AreEqual("{ 3, 2 }",   root.ChildIds.Debug());
     }
     
     /// <summary> Cover <see cref="TreeUtils.MoveExplorerItemsDown"/> </summary>
@@ -364,15 +364,15 @@ public static class Test_TreeUtils
         var tree        = new ExplorerItemTree(root, "test-tree");
         var item2       = tree.GetItemById(2);
         var items       = new [] { item2 };
-        AreEqual("{ 2, 3 }",   root.ChildIds.ToStr());
+        AreEqual("{ 2, 3 }",   root.ChildIds.Debug());
      
         // move item2 down
         TreeUtils.MoveExplorerItemsDown(items, 1);
-        AreEqual("{ 3, 2 }",   root.ChildIds.ToStr());
+        AreEqual("{ 3, 2 }",   root.ChildIds.Debug());
         
         // move item2 down - already on bottom => index stay unchanged
         TreeUtils.MoveExplorerItemsDown(items, 1);
-        AreEqual("{ 3, 2 }",   root.ChildIds.ToStr());
+        AreEqual("{ 3, 2 }",   root.ChildIds.Debug());
     }
     
     [Test]
