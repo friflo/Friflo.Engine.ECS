@@ -381,6 +381,11 @@ public static class Test_Relations
             entity.RemoveLinkRelation<AttackRelation>(default);
         });
         AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.GetLinkRelationReferences<AttackRelation>();
+        });
+        AreEqual(expect, nre!.Message);
     }
 }
 

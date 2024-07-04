@@ -13,7 +13,8 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal abstract class EntityRelations
 {
-    public    override  string                      ToString()          => $"relation count: {archetype.Count}";
+    internal            int                         Count       => archetype.Count;
+    public    override  string                      ToString()  => $"relation count: {archetype.Count}";
 
 #region fields
     /// Single <see cref="Archetype"/> containing all relations of a specific <see cref="IRelationComponent{TKey}"/>
@@ -26,7 +27,7 @@ internal abstract class EntityRelations
     internal  readonly  Dictionary<int, IdArray>    positionMap = new();
     
     internal  readonly  EntityStore                 store;
-    internal  readonly  IdArrayHeap                 idHeap    = new();
+    internal  readonly  IdArrayHeap                 idHeap      = new();
     internal  readonly  int                         relationBit;
     
     //  --- link relations
@@ -45,9 +46,9 @@ internal abstract class EntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
+    internal  abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent   GetRelationAt           (int id, int index);
-    internal  virtual  void         RemoveLinksWithTarget   (int targetId) => throw new NotImplementedException();
+    internal  virtual  void         RemoveLinksWithTarget   (int targetId) => throw new InvalidOperationException($"type: {GetType().Name}");
     
     internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {

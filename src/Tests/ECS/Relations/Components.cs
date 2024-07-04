@@ -2,7 +2,7 @@
 
 namespace Tests.ECS.Relations {
 
-internal struct AttackRelation : ILinkRelation
+public struct AttackRelation : ILinkRelation
 {
     public          int     speed;
     public          Entity  target;

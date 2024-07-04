@@ -24,7 +24,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
 #region mutation
 
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    protected override bool AddComponent<TComponent>(int id, TComponent component)
+    internal override bool AddComponent<TComponent>(int id, TComponent component)
     {
         Entity target   = RelationUtils<TComponent, Entity>.GetRelationKey(component);
         var added       = true;
