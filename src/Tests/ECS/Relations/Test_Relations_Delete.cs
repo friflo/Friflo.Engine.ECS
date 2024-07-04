@@ -41,11 +41,9 @@ public static class Test_Relations_Delete
         
         // --- version: get all entity relations in O(1)
         var (entities, relations) = store.GetAllEntityRelations<IntRelation>();
-        AreEqual(3, entities.Count); AreEqual(3,  relations.Length);
-        AreEqual(1, entities[0].Id); AreEqual(10, relations[0].value);
-        AreEqual(1, entities[1].Id); AreEqual(20, relations[1].value);
-        AreEqual(2, entities[2].Id); AreEqual(30, relations[2].value);
-        
+        AreEqual("{ 1, 1, 2 }",     entities.Debug());
+        AreEqual("{ 10, 20, 30 }",  relations.Debug());
+            
         entity1.DeleteEntity();
         AreEqual("{ 2 }",       allEntities.Debug());
         var array = allEntities.ToArray();
@@ -96,12 +94,12 @@ public static class Test_Relations_Delete
         AreEqual("{ 10, 11, 12 }",  relations.Debug());
         
         entity1.DeleteEntity();                                             //  10     -     11
-        AreEqual("{ 2 }",       sourceNodes.Debug());                       //  12  🡐  2
+        AreEqual("{ 2 }",           sourceNodes.Debug());                   //  12  🡐  2
         
         AreEqual(12, sourceNodes.First().GetRelation<AttackRelation, Entity>(target12).target.Id);
         
         entity2.DeleteEntity();                                             //  10     -     11
-        AreEqual("{ }",         sourceNodes.Debug());                       //  12     -
+        AreEqual("{ }",             sourceNodes.Debug());                   //  12     -
     }
     
     [Test]
