@@ -30,11 +30,12 @@ internal static class RelationComponentUtils
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")] // TODO
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
-    private static Type MakeIndexType(Type componentType, Type valueType)
+    private static Type MakeIndexType(Type componentType, Type keyType)
     {
-        var typeArgs    = new [] { componentType, valueType };
-        var type        = typeof(EntityRelations<,>).MakeGenericType(typeArgs);
-        return type;
+        if (keyType == typeof(Entity)) {
+            return typeof(EntityRelationLinks<>).MakeGenericType(new [] { componentType });
+        }
+        return typeof(EntityRelations<,>).MakeGenericType(new [] { componentType, keyType });
     }
 }
 

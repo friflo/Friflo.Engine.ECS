@@ -125,7 +125,7 @@ public static class Test_Relations_Delete
         AreEqual("{ 1, 3 }",    sourceNodes.ToStr());
         
         entity2.DeleteEntity();                                             //  1             3
-        // AreEqual("{ }",         sourceNodes.ToStr()); TODO
+        AreEqual("{ }",         sourceNodes.ToStr());
     }
 }
 

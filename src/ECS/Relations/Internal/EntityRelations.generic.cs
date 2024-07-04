@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS.Relations;
 
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelations
+internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     where TRelationComponent : struct, IRelationComponent<TKey>
 {
     /// Single <see cref="StructHeap"/> stored in the <see cref="EntityRelations.archetype"/>.
@@ -23,7 +23,7 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
         heapGeneric = (StructHeap<TRelationComponent>)heap;
     }
     
-    private int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
+    protected int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
     {
         positionMap.TryGetValue(id, out positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
@@ -79,8 +79,8 @@ internal sealed class EntityRelations<TRelationComponent, TKey> : EntityRelation
     
 #region mutation
 
-/// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-protected override bool AddComponent<TComponent>(int id, TComponent component)
+    /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
+    protected override bool AddComponent<TComponent>(int id, TComponent component)
     {
         var relationKey = RelationUtils<TComponent, TKey>.GetRelationKey(component);
     //  var relationKey = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
@@ -97,7 +97,7 @@ protected override bool AddComponent<TComponent>(int id, TComponent component)
     }
 
     /// <returns>true if entity contained a relation of the given type before</returns>
-    internal bool RemoveRelation(int id, TKey key)
+    internal virtual bool RemoveRelation(int id, TKey key)
     {
         var position = FindRelationPosition(id, key, out var positions, out int index);
         if (position >= 0) {

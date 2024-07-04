@@ -14,7 +14,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     internal override   int                         Count       => entityMap.Count;
     
 #region fields
-    /// map:  indexed / linked entity (id)  ->  entities (ids) containing <see cref="ILinkComponent"/> referencing the indexed / linked entity.
+    /// map:  indexed / linked entity (id)  ->  entities (ids) containing a <see cref="ILinkComponent"/> referencing the indexed / linked entity.
     internal readonly   Dictionary<int, IdArray>    entityMap   = new();
     
     private             EntityIndexValues           keyCollection;
@@ -23,26 +23,26 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var link = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
-    //  var link = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-        EntityIndexUtils.AddComponentValue    (id, link, this);
+        var target = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+    //  var target = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
+        EntityIndexUtils.AddComponentValue    (id, target, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldLink = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        var link    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
-        if (oldLink == link) {
+        var oldTarget = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        var target    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+        if (oldTarget == target) {
             return;
         }
-        EntityIndexUtils.RemoveComponentValue (id, oldLink, this);
-        EntityIndexUtils.AddComponentValue    (id, link,    this);
+        EntityIndexUtils.RemoveComponentValue (id, oldTarget, this);
+        EntityIndexUtils.AddComponentValue    (id, target,    this);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var link = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        EntityIndexUtils.RemoveComponentValue (id, link, this);
+        var target = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        EntityIndexUtils.RemoveComponentValue (id, target, this);
     }
     
     internal void RemoveLinkComponents(int id)

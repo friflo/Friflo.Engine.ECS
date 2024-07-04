@@ -609,13 +609,23 @@ public partial class EntityStore
     private void RemoveLinksToEntity(int id, in EntityNode node)
     {
         var indexTypes          = new ComponentTypes();
-        indexTypes.bitSet.l0    = node.isLinked;
+        var relationTypes       = new ComponentTypes();
+        var schema              = Static.EntitySchema;
+        var isLinked            = node.isLinked;
+        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & isLinked; // intersect
+        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & isLinked; // intersect
         
         // --- remove link components from entities linking the entity with the passed id
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
             entityIndex.RemoveLinkComponents(id);
+        }
+        // --- TODO
+        var relationsMap = extension.relationsMap;
+        foreach (var componentType in relationTypes) {
+            var relations = relationsMap[componentType.StructIndex];
+            relations.RemoveLinkRelations(id);
         }
     }
     

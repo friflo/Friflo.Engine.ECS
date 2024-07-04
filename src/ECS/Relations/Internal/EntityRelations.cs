@@ -25,9 +25,15 @@ internal abstract class EntityRelations
     /// map:  entity id  ->  relation component positions in <see cref="archetype"/>
     internal  readonly  Dictionary<int, IdArray>    positionMap = new();
     
-    private   readonly  EntityStore                 store;
-    internal  readonly  IdArrayHeap                 idHeap      = new();
-    private   readonly  int                         relationBit;
+    internal  readonly  EntityStore                 store;
+    internal  readonly  IdArrayHeap                 idHeap    = new();
+    internal  readonly  int                         relationBit;
+    
+    //  --- link relations
+    /// map:  indexed / linked entity (id)  ->  entities (ids) containing a <see cref="ILinkRelation"/> referencing the indexed / linked entity.
+    internal            Dictionary<int, IdArray>    entityMap;
+    
+    internal            IdArrayHeap                 linkHeap;
     #endregion
     
 #region general
@@ -41,6 +47,7 @@ internal abstract class EntityRelations
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent   GetRelationAt           (int id, int index);
+    internal  virtual  void         RemoveLinkRelations     (int target) => throw new NotImplementedException();
     
     internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {
@@ -147,7 +154,7 @@ internal abstract class EntityRelations
         return relations.RemoveRelation(id, key);
     }
     
-    internal int AddEntityRelation(int id, IdArray positions)
+    protected int AddEntityRelation(int id, IdArray positions)
     {
         if (positions.count == 0) {
             store.nodes[id].isOwner |= relationBit;
@@ -158,7 +165,7 @@ internal abstract class EntityRelations
         return position;
     }
     
-    internal IdArray RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
+    protected IdArray RemoveEntityRelation(int id, int position, IdArray positions, int positionIndex)
     {
         var type        = archetype;
         var map         = positionMap;

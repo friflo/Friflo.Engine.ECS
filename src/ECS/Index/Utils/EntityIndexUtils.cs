@@ -12,11 +12,11 @@ namespace Friflo.Engine.ECS.Index;
 /// </summary>
 internal static class EntityIndexUtils
 {
-    internal static void RemoveComponentValue(int id, int link, EntityIndex componentIndex)
+    internal static void RemoveComponentValue(int id, int target, EntityIndex componentIndex)
     {
         var map     = componentIndex.entityMap;
         var idHeap  = componentIndex.idHeap;
-        map.TryGetValue(link, out var ids);
+        map.TryGetValue(target, out var ids);
         var idSpan  = ids.GetIdSpan(idHeap);
         var index   = idSpan.IndexOf(id);
         if (index == -1) {
@@ -26,20 +26,20 @@ internal static class EntityIndexUtils
         var complement      = ~componentIndex.indexBit;
         nodes[id].isOwner  &=  complement;
         if (ids.Count == 1) {
-            nodes[link].isLinked   &= complement;
+            nodes[target].isLinked   &= complement;
             componentIndex.modified = true;
-            map.Remove(link);
+            map.Remove(target);
             return;
         }
         ids.RemoveAt(index, idHeap);
-        map[link] = ids;
+        map[target] = ids;
     }
     
-    internal static void AddComponentValue(int id, int link, EntityIndex componentIndex)
+    internal static void AddComponentValue(int id, int target, EntityIndex componentIndex)
     {
         var map     = componentIndex.entityMap;
         var idHeap  = componentIndex.idHeap;
-        map.TryGetValue(link, out var ids);
+        map.TryGetValue(target, out var ids);
         var idSpan = ids.GetIdSpan(idHeap);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
@@ -48,10 +48,10 @@ internal static class EntityIndexUtils
         var indexBit        = componentIndex.indexBit;
         nodes[id].isOwner  |= indexBit;
         if (ids.Count == 0) {
-            nodes[link].isLinked   |= indexBit;
+            nodes[target].isLinked   |= indexBit;
             componentIndex.modified = true;
         }
         ids.AddId(id, idHeap);
-        map[link] = ids;
+        map[target] = ids;
     }
 }
