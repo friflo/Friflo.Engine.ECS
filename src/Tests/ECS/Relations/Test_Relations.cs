@@ -25,15 +25,17 @@ public static class Test_Relations
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Gun,       amount = 2 });
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Sword,     amount = 3 });
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Shield,    amount = 4 });
+        var inventoryItems = entity.GetRelations<InventoryItem>();
+        AreEqual("{ Axe, Gun, Sword, Shield }", inventoryItems.Debug());
         
         var start = Mem.GetAllocatedBytes();
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Axe,       amount = 11 });
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Gun,       amount = 12 });
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Sword,     amount = 13 });
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Shield,    amount = 14 });
-        var inventoryItems = entity.GetRelations<InventoryItem>();
-        Mem.AreEqual(4, inventoryItems.Length);
+        inventoryItems = entity.GetRelations<InventoryItem>();
         Mem.AssertNoAlloc(start);
+        AreEqual("{ Axe, Gun, Sword, Shield }", inventoryItems.Debug());
     }
     
     [Test]
@@ -266,14 +268,9 @@ public static class Test_Relations
         entity1.RemoveRelation<IntRelation, int>(1);
         entity2.AddRelation(new IntRelation { value = 3 });
         
-        var relations1 = entity1.GetRelations<IntRelation>();
-        var relations2 = entity2.GetRelations<IntRelation>();
-        AreEqual(1, relations1.Length);
-        AreEqual(2, relations1[0].value);
-        AreEqual(1, relations2.Length);
-        AreEqual(3, relations2[0].value);
-        
-        AreEqual("Relations<IntRelation>[1]", relations1.ToString());
+        AreEqual("{ 2 }",                       entity1.GetRelations<IntRelation>().Debug());
+        AreEqual("{ 3 }",                       entity2.GetRelations<IntRelation>().Debug());
+        AreEqual("Relations<IntRelation>[1]",   entity1.GetRelations<IntRelation>().ToString());
     }
     
     [Test]
@@ -321,9 +318,7 @@ public static class Test_Relations
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
         entity.AddRelation(new StringRelation { value = null });
-        var relations = entity.GetRelations<StringRelation>();
-        AreEqual(1, relations.Length);
-        IsNull  (relations[0].value);
+        AreEqual("{  }", entity.GetRelations<StringRelation>().Debug());
         IsNull  (entity.GetRelation<StringRelation, string>(null).value);
     }
     

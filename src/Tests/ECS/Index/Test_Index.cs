@@ -64,12 +64,9 @@ public static class Test_Index
         entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.Debug());
         entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.Debug());
 
-        var result = store.GetEntitiesWithComponentValue<IndexedName, string>("find-me1");
-        AreEqual(2, result.Count);     AreEqual("{ 1, 3 }",    result.Ids.Debug());
-        result     = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
-        AreEqual(2, result.Count);     AreEqual("{ 2, 3 }",    result.Ids.Debug());
-        result     = store.GetEntitiesWithComponentValue<IndexedInt, int>(42);
-        AreEqual(0, result.Count);     AreEqual("{ }",          result.Ids.Debug());
+        AreEqual("{ 1, 3 }",store.GetEntitiesWithComponentValue<IndexedName, string>("find-me1").Debug());
+        AreEqual("{ 2, 3 }",store.GetEntitiesWithComponentValue<IndexedInt, int>(123).Debug());
+        AreEqual("{ }",     store.GetEntitiesWithComponentValue<IndexedInt, int>(42).Debug());
 
         var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me1");
         var query2  = store.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me1");
@@ -132,26 +129,20 @@ public static class Test_Index
         var query2  = store.Query().HasValue<LinkComponent,   Entity>(target4).
                                     HasValue<LinkComponent,   Entity>(target5);
         
-        AreEqual("{ 1 }",           query1.Entities.Debug());
-        AreEqual("{ 1, 2, 3 }",     query2.Entities.Debug());
+        AreEqual("{ 1 }",       query1.Entities.Debug());
+        AreEqual("{ 1, 2, 3 }", query2.Entities.Debug());
         
-        var references4 = target4.GetEntityReferences<LinkComponent>();
-        AreEqual("{ 1 }",           references4.Ids.Debug());
-        
-        var references5 = target5.GetEntityReferences<LinkComponent>();
-        AreEqual("{ 2, 3 }",        references5.Ids.Debug());
+        AreEqual("{ 1 }",       target4.GetEntityReferences<LinkComponent>().Debug());
+        AreEqual("{ 2, 3 }",    target5.GetEntityReferences<LinkComponent>().Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetEntityReferences<LinkComponent>();
-        AreEqual("{ 3 }",           references5.Ids.Debug());
+        AreEqual("{ 3 }",       target5.GetEntityReferences<LinkComponent>().Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        references5 = target5.GetEntityReferences<LinkComponent>();
-        AreEqual("{ 3 }",           references5.Ids.Debug());
+        AreEqual("{ 3 }",       target5.GetEntityReferences<LinkComponent>().Debug());
         
         entity3.RemoveComponent<LinkComponent>();                       AreEqual(2, values.Count);
-        references5 = target5.GetEntityReferences<LinkComponent>();
-        AreEqual("{ }",             references5.Ids.Debug());
+        AreEqual("{ }",         target5.GetEntityReferences<LinkComponent>().Debug());
     }
     
     [Test]

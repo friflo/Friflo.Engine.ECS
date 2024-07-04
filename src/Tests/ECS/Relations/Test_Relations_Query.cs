@@ -112,9 +112,9 @@ public static class Test_Relations_Query
         foreach (var entity in query.Entities) {
             var relations = entity.GetRelations<AttackRelation>();
             switch (count++) {
-                case 0: Mem.AreEqual(1, relations.Length);  break;
-                case 1: Mem.AreEqual(2, relations.Length);  break;
-                case 2: Mem.AreEqual(2, relations.Length);  break;
+                case 0: AreEqual("{ 4 }",       relations.Debug());  break;
+                case 1: AreEqual("{ 4, 5 }",    relations.Debug());  break;
+                case 2: AreEqual("{ 4, 5 }",    relations.Debug());  break;
             }
         }
         Mem.AreEqual(3, count);
