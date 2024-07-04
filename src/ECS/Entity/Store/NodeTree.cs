@@ -595,7 +595,7 @@ public partial class EntityStore
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var index = indexMap[componentType.StructIndex];
-            index.RemoveEntityIndex(id, node.archetype, node.compIndex);
+            index.RemoveEntityComponent(id, node.archetype, node.compIndex);
         }
         
         // --- remove all entity relations
@@ -619,13 +619,13 @@ public partial class EntityStore
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
-            entityIndex.RemoveLinkComponents(id);
+            entityIndex.RemoveLinksWithTarget(id);
         }
         // --- remove link relations from entities having the passed entity id as target
         var relationsMap = extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
-            relations.RemoveLinkRelations(id);
+            relations.RemoveLinksWithTarget(id);
         }
     }
     

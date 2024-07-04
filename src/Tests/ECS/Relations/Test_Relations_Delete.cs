@@ -126,6 +126,8 @@ public static class Test_Relations_Delete
         
         entity2.DeleteEntity();                                             //  1             3
         AreEqual("{ }",         sourceNodes.ToStr());
+        AreEqual(0, entity1.GetRelations<AttackRelation>().Count());
+        AreEqual(0, entity3.GetRelations<AttackRelation>().Count());
     }
 }
 

@@ -45,9 +45,9 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
         EntityIndexUtils.RemoveComponentValue (id, target, this);
     }
     
-    internal void RemoveLinkComponents(int id)
+    internal void RemoveLinksWithTarget(int targetId)
     {
-        entityMap.TryGetValue(id, out var idArray);
+        entityMap.TryGetValue(targetId, out var idArray);
         // TODO check if it necessary to make a copy of linkingEntityIds - e.g. by stackalloc 
         var linkingEntityIds  = idArray.GetIdSpan(idHeap);
         foreach (var linkingEntityId in linkingEntityIds)
@@ -72,7 +72,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
     where TIndexedComponent : struct, IIndexedComponent<Entity>
 {
-    internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityComponent(int id, Archetype archetype, int compIndex)
     {
         var map             = entityMap;
         var heap            = idHeap;

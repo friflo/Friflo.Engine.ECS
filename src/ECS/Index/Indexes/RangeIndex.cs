@@ -54,7 +54,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
         SortedListUtils.RemoveComponentValue (id, value, entityMap, this);
     }
     
-    internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityComponent(int id, Archetype archetype, int compIndex)
     {
         var map         = entityMap;
         var heap        = idHeap;

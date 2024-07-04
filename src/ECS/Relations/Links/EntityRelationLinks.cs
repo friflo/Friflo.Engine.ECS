@@ -52,11 +52,12 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         return false;
     }
     
-    internal override void RemoveLinkRelations(int targetId)
+    internal override void RemoveLinksWithTarget(int targetId)
     {
         linkEntityMap.TryGetValue(targetId, out var sourceIds);
         var sourceIdSpan = sourceIds.GetIdSpan(linkIdsHeap);
         // TODO check if it necessary to make a copy of idSpan - e.g. by stackalloc
+        // TODO optimize removing link relations. Currently O(N^2). Possible O(N). N: number of entity relations
         foreach (var sourceId in sourceIdSpan) {
             var target = new Entity(store, targetId);
             RemoveRelation(sourceId, target);

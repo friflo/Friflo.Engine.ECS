@@ -47,7 +47,7 @@ internal abstract class EntityRelations
     
     protected abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent   GetRelationAt           (int id, int index);
-    internal  virtual  void         RemoveLinkRelations     (int targetId) => throw new NotImplementedException();
+    internal  virtual  void         RemoveLinksWithTarget   (int targetId) => throw new NotImplementedException();
     
     internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {

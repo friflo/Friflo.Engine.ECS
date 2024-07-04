@@ -45,7 +45,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
         DictionaryUtils.RemoveComponentValue (id, value, entityMap, this);
     }
     
-    internal override void RemoveEntityIndex(int id, Archetype archetype, int compIndex)
+    internal override void RemoveEntityComponent(int id, Archetype archetype, int compIndex)
     {
         var map         = entityMap;
         var heap        = idHeap;

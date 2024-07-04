@@ -27,12 +27,12 @@ public abstract class ComponentIndex
     internal            bool            modified;
     #endregion
     
-    internal abstract void Add   <TComponent>(int id, in TComponent component)                              where TComponent : struct, IComponent;
-    internal abstract void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap) where TComponent : struct, IComponent;
-    internal abstract void Remove<TComponent>(int id,                          StructHeap<TComponent> heap) where TComponent : struct, IComponent;
+    internal abstract void Add   <TComponent>   (int id, in TComponent component)                              where TComponent : struct, IComponent;
+    internal abstract void Update<TComponent>   (int id, in TComponent component, StructHeap<TComponent> heap) where TComponent : struct, IComponent;
+    internal abstract void Remove<TComponent>   (int id,                          StructHeap<TComponent> heap) where TComponent : struct, IComponent;
     
-    /// remove entity id from indexed component value
-    internal abstract void RemoveEntityIndex (int id, Archetype archetype, int compIndex);
+    /// remove indexed component from entity
+    internal abstract void RemoveEntityComponent(int id, Archetype archetype, int compIndex);
     
     internal NotSupportedException NotSupportedException(string name) {
         return new NotSupportedException($"{name} not supported by {GetType().Name}");
