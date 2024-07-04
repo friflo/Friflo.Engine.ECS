@@ -68,14 +68,14 @@ public static class Test_Relations_Delete
         var entity2     = store.CreateEntity(2);                            //  10      1      11
         AreEqual("{ }",         sourceNodes.Debug());                       //  12      2 
         
-        entity1.AddComponent(new AttackRelation { target = target10 });     //  10 <--- 1      11
+        entity1.AddComponent(new AttackRelation { target = target10 });     //  10  🡐  1      11
         AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12      2 
         
-        entity1.AddComponent(new AttackRelation { target = target11 });     //  10 <--- 1 ---> 11
+        entity1.AddComponent(new AttackRelation { target = target11 });     //  10  🡐  1  🡒  11
         AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12
         
-        entity2.AddComponent(new AttackRelation { target = target12 });     //  10 <--- 1 ---> 11
-        AreEqual("{ 1, 2 }",    sourceNodes.Debug());                       //  12 <--- 2
+        entity2.AddComponent(new AttackRelation { target = target12 });     //  10  🡐  1  🡒  11
+        AreEqual("{ 1, 2 }",    sourceNodes.Debug());                       //  12  🡐  2
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
@@ -95,13 +95,13 @@ public static class Test_Relations_Delete
         AreEqual(1, entities[1].Id); AreEqual(target11, relations[1].target);
         AreEqual(2, entities[2].Id); AreEqual(target12, relations[2].target);
         
-        entity1.DeleteEntity();                                             //  10             11
-        AreEqual("{ 2 }",       sourceNodes.Debug());                       //  12 <--- 2
+        entity1.DeleteEntity();                                             //  10           11
+        AreEqual("{ 2 }",       sourceNodes.Debug());                       //  12  🡐  2
         
         var array =             sourceNodes.ToArray();
         AreEqual(target12, array[0].GetRelation<AttackRelation, Entity>(target12).target);
         
-        entity2.DeleteEntity();                                             //  10             11
+        entity2.DeleteEntity();                                             //  10           11
         AreEqual("{ }",         sourceNodes.Debug());                       //  12
     }
     
