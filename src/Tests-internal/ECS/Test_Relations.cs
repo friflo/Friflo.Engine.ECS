@@ -24,7 +24,7 @@ public static class Test_Relations
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
-        entity.AddComponent(new StringRelation { value = "test" });
+        entity.AddRelation(new StringRelation { value = "test" });
         
         var relations = store.extension.relationsMap[StructInfo<StringRelation>.Index];
         AreEqual("relation count: 1", relations.ToString());
@@ -35,7 +35,7 @@ public static class Test_Relations
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
-        entity.AddComponent(new StringRelation { value = "test" });
+        entity.AddRelation(new StringRelation { value = "test" });
         
         var relations = store.extension.relationsMap[StructInfo<StringRelation>.Index];
         var e = Throws<InvalidOperationException>(() => {
@@ -50,7 +50,7 @@ public static class Test_Relations
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
-        entity1.AddComponent(new AttackRelation { target = entity2 });
+        entity1.AddRelation(new AttackRelation { target = entity2 });
         
         var relations = (EntityRelationLinks<AttackRelation>)store.extension.relationsMap[StructInfo<AttackRelation>.Index];
         LinkRelationUtils.AddComponentValue(1, 2, relations);

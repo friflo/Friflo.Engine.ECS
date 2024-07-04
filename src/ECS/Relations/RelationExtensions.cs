@@ -49,16 +49,27 @@ public static class RelationExtensions
     }
     
     /// <summary>
+    /// Add the relation component with the specified <typeparamref name="TComponent"/> type to the entity.<br/>
+    /// Executes in O(1)
+    /// </summary>
+    /// <exception cref="NullReferenceException">If the entity is null.</exception>
+    /// <returns>true - relation is newly added to the entity.<br/> false - relation is updated.</returns>
+    public static bool AddRelation<TComponent>(this Entity entity, in TComponent component) where TComponent : struct, IRelationComponent {
+        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        return EntityRelations.AddRelation(entity.store, entity.Id, component);
+    }
+    
+    /// <summary>
     /// Removes the relation component with the specified <paramref name="key"/> from an entity.<br/>
     /// Executes in O(N) N: number of relations of the specific entity.
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true if the entity contained a relation of the given type before. </returns>
-    public static bool RemoveRelation<T, TKey>(this Entity entity, TKey key)
-        where T : struct, IRelationComponent<TKey>
+    public static bool RemoveRelation<TComponent, TKey>(this Entity entity, TKey key)
+        where TComponent : struct, IRelationComponent<TKey>
     {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity); 
-        return EntityRelations.RemoveRelation<T, TKey>(entity.store, entity.Id, key);
+        return EntityRelations.RemoveRelation<TComponent, TKey>(entity.store, entity.Id, key);
     }
     
     /// <summary>

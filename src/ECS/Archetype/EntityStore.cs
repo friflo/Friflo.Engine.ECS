@@ -180,11 +180,17 @@ public abstract partial class EntityStoreBase
         return new InvalidOperationException($"Cannot add entity to itself as a child. id: {id}");
     }
     
+    private static ArgumentException AddRelationException(int id, int structIndex) {
+        var componentType   = Static.EntitySchema.components[structIndex];
+        var type            = componentType.Name;
+        return new ArgumentException($"relation component must be added with:  entity.{nameof(RelationExtensions.AddRelation)}(new {type}());  id: {id}");
+    }
+    
     private static ArgumentException RemoveRelationException(int id, int structIndex) {
         var componentType   = Static.EntitySchema.components[structIndex];
         var type            = componentType.Name;
         var keyType         = componentType.RelationKeyType.Name;
-        return new ArgumentException($"relation component must be removed with entity.{nameof(RelationExtensions.RemoveRelation)}<{type},{keyType}>(key). id: {id}");
+        return new ArgumentException($"relation component must be removed with:  entity.{nameof(RelationExtensions.RemoveRelation)}<{type},{keyType}>(key);  id: {id}");
     }
     #endregion
 }

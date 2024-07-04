@@ -21,16 +21,16 @@ public static class Test_Relations
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Gun,       amount = 2 });
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Sword,     amount = 3 });
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Shield,    amount = 4 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Gun,       amount = 2 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Sword,     amount = 3 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Shield,    amount = 4 });
         
         var start = Mem.GetAllocatedBytes();
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 11 });
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Gun,       amount = 12 });
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Sword,     amount = 13 });
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Shield,    amount = 14 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Axe,       amount = 11 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Gun,       amount = 12 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Sword,     amount = 13 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Shield,    amount = 14 });
         var inventoryItems = entity.GetRelations<InventoryItem>();
         Mem.AreEqual(4, inventoryItems.Length);
         Mem.AssertNoAlloc(start);
@@ -51,7 +51,7 @@ public static class Test_Relations
         IsFalse (entity.TryGetRelation(InventoryItemType.Axe,    out value));
         AreEqual(new InventoryItem(), value);
         
-        entity.AddComponent(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
+        entity.AddRelation(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
         entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe); // force one tim allocation
         
         var start = Mem.GetAllocatedBytes();
@@ -83,11 +83,11 @@ public static class Test_Relations
         var target10    = store.CreateEntity(10);
         var target11    = store.CreateEntity(11);
         var components  = entity3.Components;
-        IsTrue (entity3.AddComponent(new AttackRelation { target = target10, speed = 1 }));
+        IsTrue (entity3.AddRelation(new AttackRelation { target = target10, speed = 1 }));
         AreEqual("Components: [] +1 relations", components.ToString());
-        IsTrue (entity3.AddComponent(new AttackRelation { target = target11, speed = 1  }));
+        IsTrue (entity3.AddRelation(new AttackRelation { target = target11, speed = 1  }));
         AreEqual("Components: [] +2 relations", components.ToString());
-        IsFalse(entity3.AddComponent(new AttackRelation { target = target11, speed = 42  }));
+        IsFalse(entity3.AddRelation(new AttackRelation { target = target11, speed = 42  }));
         AreEqual("Components: [] +2 relations", components.ToString());
         
         IsTrue (entity3.RemoveLinkRelation<AttackRelation>(target10));
@@ -101,8 +101,8 @@ public static class Test_Relations
         AreEqual("Components: []", components.ToString());
         
         var start = Mem.GetAllocatedBytes();
-        entity3.AddComponent(new AttackRelation { target = target10, speed = 1 });
-        entity3.AddComponent(new AttackRelation { target = target11, speed = 1 });
+        entity3.AddRelation(new AttackRelation { target = target10, speed = 1 });
+        entity3.AddRelation(new AttackRelation { target = target11, speed = 1 });
         entity3.RemoveLinkRelation<AttackRelation>(target11);
         entity3.RemoveLinkRelation<AttackRelation>(target10);
         Mem.AssertNoAlloc(start);
@@ -122,7 +122,7 @@ public static class Test_Relations
         entity.AddComponent(new Position());
         AreEqual(1, components.Count);
 
-        entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
+        entity.AddRelation(new AttackRelation { target = target10, speed = 20 });
         AreEqual("Components: [Position] +1 relations", components.ToString());
         AreEqual(2, components.Count);
         int count = 0;
@@ -138,7 +138,7 @@ public static class Test_Relations
             }
         }
         
-        entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
+        entity.AddRelation(new AttackRelation { target = target11, speed = 21 });
         AreEqual("Components: [Position] +2 relations", components.ToString());
         AreEqual(3, components.Count);
         count = 0;
@@ -167,8 +167,8 @@ public static class Test_Relations
 
         var target10 = store.CreateEntity(10);
         var target11 = store.CreateEntity(11);
-        entity.AddComponent(new AttackRelation { target = target10, speed = 20 });
-        entity.AddComponent(new AttackRelation { target = target11, speed = 21 });
+        entity.AddRelation(new AttackRelation { target = target10, speed = 20 });
+        entity.AddRelation(new AttackRelation { target = target11, speed = 21 });
         
         var relations = entity.GetRelations<AttackRelation>();
         
@@ -215,8 +215,8 @@ public static class Test_Relations
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
-        entity1.AddComponent(new IntRelation { value = 10 });
-        entity2.AddComponent(new IntRelation { value = 20 });
+        entity1.AddRelation(new IntRelation { value = 10 });
+        entity2.AddRelation(new IntRelation { value = 20 });
         
         AreEqual(2, entities.Count);
         AreEqual("Entity[2]", entities.ToString());
@@ -259,12 +259,12 @@ public static class Test_Relations
         var store   = new EntityStore();
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
-        entity1.AddComponent(new IntRelation { value = 1 });
-        entity1.AddComponent(new IntRelation { value = 2 });
+        entity1.AddRelation(new IntRelation { value = 1 });
+        entity1.AddRelation(new IntRelation { value = 2 });
         // last relation IntRelation { value = 2 } at StructHeap<>.components[1] is moved to components[0]
         // So its stored position need to be updated 
         entity1.RemoveRelation<IntRelation, int>(1);
-        entity2.AddComponent(new IntRelation { value = 3 });
+        entity2.AddRelation(new IntRelation { value = 3 });
         
         var relations1 = entity1.GetRelations<IntRelation>();
         var relations2 = entity2.GetRelations<IntRelation>();
@@ -289,7 +289,7 @@ public static class Test_Relations
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
                 Mem.AreEqual(n, entity.GetRelations<IntRelation>().Length);
-                Mem.IsTrue(entity.AddComponent(new IntRelation{ value = n }));
+                Mem.IsTrue(entity.AddRelation(new IntRelation{ value = n }));
             }
         }
         foreach (var entity in entities) {
@@ -301,7 +301,7 @@ public static class Test_Relations
         var start = Mem.GetAllocatedBytes();
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
-                Mem.IsTrue(entity.AddComponent(new IntRelation{ value = n }));
+                Mem.IsTrue(entity.AddRelation(new IntRelation{ value = n }));
             }
             Mem.AreEqual(relationCount, entity.Components.Count);
         }
@@ -320,7 +320,7 @@ public static class Test_Relations
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
-        entity.AddComponent(new StringRelation { value = null });
+        entity.AddRelation(new StringRelation { value = null });
         var relations = entity.GetRelations<StringRelation>();
         AreEqual(1, relations.Length);
         IsNull  (relations[0].value);
@@ -345,8 +345,15 @@ public static class Test_Relations
         var e = Throws<ArgumentException>(() => {
             entity.RemoveComponent<IntRelation>();
         });
-        AreEqual("relation component must be removed with entity.RemoveRelation<IntRelation,Int32>(key). id: 1", e!.Message);
+        AreEqual("relation component must be removed with:  entity.RemoveRelation<IntRelation,Int32>(key);  id: 1", e!.Message);
         entity.RemoveRelation<IntRelation,int>(42); // example
+        
+        e = Throws<ArgumentException>(() => {
+            entity.AddComponent(new IntRelation());
+        });
+        AreEqual("relation component must be added with:  entity.AddRelation(new IntRelation());  id: 1", e!.Message);
+        entity.AddRelation(new IntRelation()); // example
+        
     }
     
     [Test]

@@ -28,15 +28,15 @@ public static class Test_Relations_Query
         var target11 = store.CreateEntity();
         var target12 = store.CreateEntity();
         
-        entity1.AddComponent(new AttackRelation { target = target10, speed = 42 });
+        entity1.AddRelation(new AttackRelation { target = target10, speed = 42 });
         
-        entity2.AddComponent(new AttackRelation { target = target10, speed = 20 });
-        entity2.AddComponent(new AttackRelation { target = target11, speed = 21 });
+        entity2.AddRelation(new AttackRelation { target = target10, speed = 20 });
+        entity2.AddRelation(new AttackRelation { target = target11, speed = 21 });
         
         entity3.AddComponent(new Position());
-        entity3.AddComponent(new AttackRelation { target = target10, speed = 10 });
-        entity3.AddComponent(new AttackRelation { target = target11, speed = 11 });
-        entity3.AddComponent(new AttackRelation { target = target12, speed = 12 });
+        entity3.AddRelation(new AttackRelation { target = target10, speed = 10 });
+        entity3.AddRelation(new AttackRelation { target = target11, speed = 11 });
+        entity3.AddRelation(new AttackRelation { target = target12, speed = 12 });
         
         emptyRelations = entity0.GetRelations<AttackRelation>();
         AreEqual(0, emptyRelations.Length);
@@ -131,7 +131,7 @@ public static class Test_Relations_Query
         var createdEntities = type.CreateEntities(entityCount);
         foreach (var entity in createdEntities) {
             for (int n = 0; n < relationsPerEntity; n++) {
-                entity.AddComponent(new IntRelation { value = n });
+                entity.AddRelation(new IntRelation { value = n });
             }
         }
         int count = 0;
@@ -156,7 +156,7 @@ public static class Test_Relations_Query
         var createdEntities = type.CreateEntities(entityCount);
         foreach (var entity in createdEntities) {
             for (int n = 0; n < relationsPerEntity; n++) {
-                entity.AddComponent(new IntRelation { value = n });
+                entity.AddRelation(new IntRelation { value = n });
             }
         }
         int count = 0;

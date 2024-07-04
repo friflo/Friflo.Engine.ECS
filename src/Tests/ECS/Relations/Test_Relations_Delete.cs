@@ -19,12 +19,12 @@ public static class Test_Relations_Delete
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
-        entity1.AddComponent(new IntRelation { value = 10 });
-        entity1.AddComponent(new IntRelation { value = 20 });
+        entity1.AddRelation(new IntRelation { value = 10 });
+        entity1.AddRelation(new IntRelation { value = 20 });
         AreEqual("{ 10, 20 }",  entity1.GetRelations<IntRelation>().Debug());
         AreEqual("{ 1 }",       allEntities.Debug());
         
-        entity2.AddComponent(new IntRelation { value = 30 });
+        entity2.AddRelation(new IntRelation { value = 30 });
         AreEqual("{ 30 }",      entity2.GetRelations<IntRelation>().Debug());
         AreEqual("{ 1, 2 }",    allEntities.Debug());
         
@@ -70,13 +70,13 @@ public static class Test_Relations_Delete
         var entity2     = store.CreateEntity(2);                            //  10      1      11
         AreEqual("{ }",         sourceNodes.Debug());                       //  12      2 
         
-        entity1.AddComponent(new AttackRelation { target = target10 });     //  10  🡐  1      11
+        entity1.AddRelation(new AttackRelation { target = target10 });      //  10  🡐  1      11
         AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12      2 
         
-        entity1.AddComponent(new AttackRelation { target = target11 });     //  10  🡐  1  🡒  11
+        entity1.AddRelation(new AttackRelation { target = target11 });      //  10  🡐  1  🡒  11
         AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12
         
-        entity2.AddComponent(new AttackRelation { target = target12 });     //  10  🡐  1  🡒  11
+        entity2.AddRelation(new AttackRelation { target = target12 });      //  10  🡐  1  🡒  11
         AreEqual("{ 1, 2 }",    sourceNodes.Debug());                       //  12  🡐  2
         
         int count = 0;
@@ -118,15 +118,15 @@ public static class Test_Relations_Delete
                                                                                                 //  1     2     3
         AreEqual("{ }",         entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //
         
-        entity1.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2     3
+        entity1.AddRelation(new AttackRelation { target = entity2 });                           //  1  🡒  2     3
         AreEqual("{ 1 }",       entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //
         AreEqual("{ 2 }",       entity1.GetRelations<AttackRelation>().Debug());
         
-        entity2.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2     3
+        entity2.AddRelation(new AttackRelation { target = entity2 });                           //  1  🡒  2     3
         AreEqual("{ 1, 2 }",    entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
         AreEqual("{ 2 }",       entity2.GetRelations<AttackRelation>().Debug());
         
-        entity3.AddComponent(new AttackRelation { target = entity2 });                          //  1  🡒  2  🡐  3
+        entity3.AddRelation(new AttackRelation { target = entity2 });                           //  1  🡒  2  🡐  3
         AreEqual("{ 1, 2, 3 }", entity2.GetLinkRelationReferences<AttackRelation>().Debug());   //        ⮍
         AreEqual("{ 2 }",       entity3.GetRelations<AttackRelation>().Debug());
         

@@ -5,7 +5,6 @@
 // Hard rule: this file MUST NOT use type: Entity
 
 using Friflo.Engine.ECS.Index;
-using Friflo.Engine.ECS.Relations;
 using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -32,7 +31,7 @@ public partial class EntityStoreBase
         ComponentChangedAction  action;
         bool                    added;
         if (StructInfo<T>.IsRelation) {
-            return EntityRelations.AddRelation(store, id, component);
+            throw AddRelationException(id, structIndex);
         }
         var oldHeap = (StructHeap<T>)arch.heapMap[structIndex];
         StructHeap<T> newHeap;
