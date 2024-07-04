@@ -115,19 +115,25 @@ public static class Test_Relations_Delete
         
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
-        var entity3     = store.CreateEntity(3);                            //  1      2      3
+        var entity3     = store.CreateEntity(3);                            //  1     2     3
         AreEqual("{ }",         sourceNodes.ToStr());
         
-        entity1.AddComponent(new AttackRelation { target = entity2 });      //  1 ---> 2      3
+        entity1.AddComponent(new AttackRelation { target = entity2 });      //  1  🡒  2     3
         AreEqual("{ 1 }",       sourceNodes.ToStr());
+        AreEqual(1, entity1.GetRelations<AttackRelation>().Length);
         
-        entity3.AddComponent(new AttackRelation { target = entity2 });      //  1 ---> 2 <--- 3
-        AreEqual("{ 1, 3 }",    sourceNodes.ToStr());
+        entity2.AddComponent(new AttackRelation { target = entity2 });      //  1  🡒  2     3
+        AreEqual("{ 1, 2 }",    sourceNodes.ToStr());                       //        ⮍
+        AreEqual(1, entity2.GetRelations<AttackRelation>().Length);
+        
+        entity3.AddComponent(new AttackRelation { target = entity2 });      //  1  🡒  2  🡐  3
+        AreEqual("{ 1, 2, 3 }", sourceNodes.ToStr());                       //        ⮍
+        AreEqual(1, entity3.GetRelations<AttackRelation>().Length);
         
         entity2.DeleteEntity();                                             //  1             3
         AreEqual("{ }",         sourceNodes.ToStr());
-        AreEqual(0, entity1.GetRelations<AttackRelation>().Count());
-        AreEqual(0, entity3.GetRelations<AttackRelation>().Count());
+        AreEqual(0, entity1.GetRelations<AttackRelation>().Length);
+        AreEqual(0, entity3.GetRelations<AttackRelation>().Length);
     }
 }
 
