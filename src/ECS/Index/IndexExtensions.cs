@@ -16,7 +16,7 @@ public static class IndexExtensions
 {
 #region Entity
     /// <summary>
-    /// Return the entities with a component link referencing this entity of the passed <see cref="ILinkComponent"/> type.<br/>
+    /// Return the entities with a link component referencing this entity of the passed <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). 
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>

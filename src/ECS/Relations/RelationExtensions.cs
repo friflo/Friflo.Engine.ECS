@@ -74,6 +74,11 @@ public static class RelationExtensions
         return EntityRelations.RemoveRelation<T, Entity>(entity.store, entity.Id, target);
     }
     
+    /// <summary>
+    /// Return the entities with a link relation link referencing this entity of the passed <see cref="IRelationComponent"/> type.<br/>
+    /// Executes in O(1).
+    /// </summary>
+    /// <exception cref="NullReferenceException">If the entity is null.</exception>
     public static Entities GetLinkRelationReferences<TComponent>(this Entity entity) where TComponent: struct, IRelationComponent {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.GetLinkRelationReferences(entity.store, entity.Id, StructInfo<TComponent>.Index);

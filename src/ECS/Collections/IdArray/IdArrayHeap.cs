@@ -46,7 +46,7 @@ internal readonly struct IdArrayHeap
         }
         var curPoolIndex  = PoolIndex(count);
         var ids           = GetPool(curPoolIndex).Ids;
-        return              new Entities(store, ids, array.start, count);
+        return new Entities(store, ids, array.start, count);
     }
 
     internal static int PoolIndex(int count)
