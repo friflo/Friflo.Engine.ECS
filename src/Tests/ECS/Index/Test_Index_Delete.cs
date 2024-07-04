@@ -105,8 +105,8 @@ public static class Test_Index_Delete
         entity2.AddComponent(new AttackComponent { target = target1 });
         entity3.AddComponent(new AttackComponent { target = target2 });
         // --- initial targets state
-        AreEqual("{ 1, 2 }",    target1.GetLinkComponentReferences<AttackComponent>().ToStr());
-        AreEqual("{ 3 }",       target2.GetLinkComponentReferences<AttackComponent>().ToStr());
+        AreEqual("{ 1, 2 }",    target1.GetLinkComponentReferences<AttackComponent>().Debug);
+        AreEqual("{ 3 }",       target2.GetLinkComponentReferences<AttackComponent>().Debug);
         AreEqual("{ 10, 11 }",  targets.ToStr());
         
         target1.DeleteEntity();
@@ -134,7 +134,7 @@ public static class Test_Index_Delete
         entity2.AddComponent(new AttackComponent { target = entity1 });
         entity3.AddComponent(new AttackComponent { target = entity1 });
         // --- initial targets state
-        AreEqual("{ 1, 2, 3 }", entity1.GetLinkComponentReferences<AttackComponent>().ToStr());
+        AreEqual("{ 1, 2, 3 }", entity1.GetLinkComponentReferences<AttackComponent>().Debug);
         AreEqual("{ 1 }",       targets.ToStr());
         
         entity1.DeleteEntity();

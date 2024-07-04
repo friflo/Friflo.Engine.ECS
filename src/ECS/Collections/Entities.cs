@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -20,7 +21,7 @@ public struct Entities : IReadOnlyList<Entity>
     public              int                 Count       => count;
     public              EntityStore         EntityStore => store;
     public              ReadOnlySpan<int>   Ids         => ids != null ? new ReadOnlySpan<int>(ids, start, count) : MemoryMarshal.CreateReadOnlySpan(ref id, 1);
-    
+    public              string              Debug       => GetDebug();
     public   override   string              ToString()  => $"Entity[{count}]";
     #endregion
 
@@ -60,6 +61,19 @@ public struct Entities : IReadOnlyList<Entity>
             if (index != 0) throw new IndexOutOfRangeException();
             return new Entity(store, id);
         }
+    }
+    
+    private string GetDebug()
+    {
+        if (count == 0) return "{ }";
+        var sb = new StringBuilder();
+        sb.Append("{ ");
+        foreach (var entity in this) {
+            if (sb.Length > 2) sb.Append(", ");
+            sb.Append(entity.Id);
+        }
+        sb.Append(" }");
+        return sb.ToString();
     }
     #endregion
 
