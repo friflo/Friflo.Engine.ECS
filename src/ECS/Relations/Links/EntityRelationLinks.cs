@@ -17,8 +17,8 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     public EntityRelationLinks(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
-        entityMap   = new Dictionary<int, IdArray>();
-        linkHeap    = new IdArrayHeap();
+        linkEntityMap   = new Dictionary<int, IdArray>();
+        linkIdsHeap     = new IdArrayHeap();
     }
     
 #region mutation
@@ -54,12 +54,12 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     
     internal override void RemoveLinkRelations(int target)
     {
-        entityMap.TryGetValue(target, out var ids);
-        var idSpan  = ids.GetIdSpan(linkHeap);
-        for (int n = idSpan.Length - 1; n >= 0; n--) {
-            int source = idSpan[n];
-            RemoveRelation(source, new Entity(store, target));
-            ids.RemoveAt(n, linkHeap);  // TODO remove ids at once
+        linkEntityMap.TryGetValue(target, out var ids);
+        var idSpan  = ids.GetIdSpan(linkIdsHeap);
+        // TODO check if it necessary to make a copy of idSpan - e.g. by stackalloc
+        foreach (var source in idSpan) {
+            var entity = new Entity(store, target);
+            RemoveRelation(source, entity);
         }
     }
     #endregion

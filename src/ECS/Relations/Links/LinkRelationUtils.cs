@@ -12,16 +12,15 @@ internal static class LinkRelationUtils
 {
     internal static void RemoveComponentValue(int id, int target, EntityRelations componentIndex)
     {
-        var map         = componentIndex.entityMap;
-        var linkHeap    = componentIndex.linkHeap;
+        var map         = componentIndex.linkEntityMap;
+        var linkHeap    = componentIndex.linkIdsHeap;
         map.TryGetValue(target, out var ids);
         var idSpan  = ids.GetIdSpan(linkHeap);
         var index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        var nodes           =  componentIndex.store.nodes;
-    //  nodes[id].isOwner  &=  complement;
+        var nodes =  componentIndex.store.nodes;
         if (ids.Count == 1) {
             nodes[target].isLinked   &= ~componentIndex.relationBit;
             map.Remove(target);
@@ -33,15 +32,14 @@ internal static class LinkRelationUtils
     
     internal static void AddComponentValue(int id, int target, EntityRelations componentIndex)
     {
-        var map         = componentIndex.entityMap;
-        var linkHeap    = componentIndex.linkHeap;
+        var map         = componentIndex.linkEntityMap;
+        var linkHeap    = componentIndex.linkIdsHeap;
         map.TryGetValue(target, out var ids);
         var idSpan = ids.GetIdSpan(linkHeap);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
-        var nodes           = componentIndex.store.nodes;
-    //  nodes[id].isOwner  |= indexBit;
+        var nodes = componentIndex.store.nodes;
         if (ids.Count == 0) {
             nodes[target].isLinked   |= componentIndex.relationBit;
         }

@@ -128,6 +128,20 @@ internal static class IdArrayExtensions {
         
         array = new IdArray(newStart, newCount);
     }
+    
+    /*
+    internal static void Clear(this ref IdArray array, IdArrayHeap heap)
+    {
+        int count = array.count;
+        if (count <= 1) {   // index is 0
+            array = default;
+            return;
+        }
+        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
+        var curPool         = heap.GetPool(curPoolIndex);
+        curPool.DeleteArray(array.start, out _);
+        array = default;
+    } */
 
     internal static void Set(this ref IdArray array, int positionIndex, int value, IdArrayHeap heap)
     {

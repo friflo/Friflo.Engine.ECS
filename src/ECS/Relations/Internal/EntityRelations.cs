@@ -31,9 +31,9 @@ internal abstract class EntityRelations
     
     //  --- link relations
     /// map:  indexed / linked entity (id)  ->  entities (ids) containing a <see cref="ILinkRelation"/> referencing the indexed / linked entity.
-    internal            Dictionary<int, IdArray>    entityMap;
+    internal            Dictionary<int, IdArray>    linkEntityMap;
     
-    internal            IdArrayHeap                 linkHeap;
+    internal            IdArrayHeap                 linkIdsHeap;
     #endregion
     
 #region general
