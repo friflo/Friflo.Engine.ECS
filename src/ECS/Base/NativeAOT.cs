@@ -123,7 +123,7 @@ A type initializer threw an exception. To determine which type, inspect the Inne
         InitSchema();
         if (typeSet.Add(typeof(T))) {
             AddType(typeof(T), SchemaTypeKind.Component);
-            SchemaUtils.CreateComponentType<T>(typeStore, 0, null, null, null); // dummy call to prevent trimming required type info
+            SchemaUtils.CreateComponentType<T>(typeStore, 0, null, null, null, null); // dummy call to prevent trimming required type info
         }
     }
     

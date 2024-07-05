@@ -79,6 +79,8 @@ public sealed class EntitySchema
     // --- component type masks
     [Browse(Never)] internal readonly   ComponentTypes                      relationTypes;
     [Browse(Never)] internal readonly   ComponentTypes                      indexTypes;
+    [Browse(Never)] internal readonly   ComponentTypes                      linkComponentTypes;
+    [Browse(Never)] internal readonly   ComponentTypes                      linkRelationTypes;
     #endregion
     
 #region internal methods
@@ -117,9 +119,15 @@ public sealed class EntitySchema
             components              [componentType.StructIndex] =   componentType;
             if (componentType.RelationType != null) {
                 relationTypes.Add(new ComponentTypes(componentType));
+                if (componentType.RelationKeyType == typeof(Entity)) {
+                    linkRelationTypes.Add(new ComponentTypes(componentType));
+                }
             }
             if (componentType.IndexType != null) {
                 indexTypes.Add(new ComponentTypes(componentType));
+                if (componentType.IndexValueType == typeof(Entity)) {
+                    linkComponentTypes.Add(new ComponentTypes(componentType));
+                }
             }
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];

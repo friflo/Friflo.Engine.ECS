@@ -42,12 +42,15 @@ internal readonly struct EntityInfo
     private string GetString()
     {
         var incomingLinks = entity.CountAllIncomingLinks();
-        if (incomingLinks == 0) {
+        var outgoingLinks = entity.CountAllOutgoingLinks();
+        if (incomingLinks == 0 && outgoingLinks == 0) {
             return "";
         }
         var sb = new StringBuilder();
-        sb.Append("incoming links: ");
+        sb.Append("links incoming: ");
         sb.Append(incomingLinks);
+        sb.Append(" outgoing: ");
+        sb.Append(outgoingLinks);
         return sb.ToString();
     }
 }

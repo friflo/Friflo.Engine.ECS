@@ -27,7 +27,9 @@ public static class Test_EntityLinks
         entity2.AddRelation (new AttackRelation  { target = entity1, speed = 5 });
         entity3.AddRelation (new AttackRelation  { target = entity1, speed = 6 });
         
-        AreEqual("incoming links: 6", entity1.Info.ToString());
+        AreEqual("links incoming: 6 outgoing: 0", entity1.Info.ToString());
+        AreEqual("links incoming: 0 outgoing: 3", entity2.Info.ToString());
+        AreEqual("links incoming: 0 outgoing: 3", entity3.Info.ToString());
         links = entity1.Info.AllIncomingLinks;
 
         var debugView = new EntityLinksDebugView(links);

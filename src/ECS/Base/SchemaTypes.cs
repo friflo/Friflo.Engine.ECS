@@ -88,7 +88,7 @@ internal sealed class SchemaTypes
         for (int n = 0; n < count; n++) {
             var type        = componentTypes[n];
             buffer[n]       = type;
-            var isIndex     = ComponentIndexUtils.GetIndexType(type.type)                     != null ||
+            var isIndex     = ComponentIndexUtils.GetIndexType(type.type, out _)              != null ||
                               RelationComponentUtils.GetEntityRelationsType(type.type, out _) != null;
             isIndexType[n]  = isIndex;
             if (isIndex) indexCount++;
@@ -126,9 +126,9 @@ internal sealed class SchemaTypes
     private SchemaType CreateComponentType(Type type, TypeStore typeStore)
     {
         var structIndex     = components.Count + 1;
-        var indexType       = ComponentIndexUtils.GetIndexType(type);
+        var indexType       = ComponentIndexUtils.GetIndexType(type, out var indexValueType);
         var relationType    = RelationComponentUtils.GetEntityRelationsType(type, out Type keyType);
-        var createParams    = new object[] { typeStore, structIndex, indexType, relationType, keyType };
+        var createParams    = new object[] { typeStore, structIndex, indexType, indexValueType, relationType, keyType };
         var method          = typeof(SchemaUtils).GetMethod(nameof(SchemaUtils.CreateComponentType), Flags);
         var genericMethod   = method!.MakeGenericMethod(type);
         var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);

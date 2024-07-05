@@ -22,7 +22,7 @@ internal static class ComponentIndexUtils
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
-    internal static Type GetIndexType(Type componentType)
+    internal static Type GetIndexType(Type componentType, out Type valueType)
     {
         var interfaces = componentType.GetInterfaces();
         foreach (var i in interfaces)
@@ -32,9 +32,10 @@ internal static class ComponentIndexUtils
             if (genericType != typeof(IIndexedComponent<>)) {
                 continue;
             }
-            var valueType = i.GenericTypeArguments[0];
+            valueType = i.GenericTypeArguments[0];
             return MakeIndexType(valueType, componentType);
         }
+        valueType = null;
         return null;
     }
     

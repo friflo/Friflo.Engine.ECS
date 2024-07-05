@@ -27,6 +27,8 @@ public abstract class ComponentType : SchemaType
     
     public   readonly   Type        IndexType;      //  8
     
+    internal readonly   Type        IndexValueType; //  8
+    
     internal readonly   Type        RelationType;   //  8
     
     internal readonly   Type        RelationKeyType;//  8
@@ -41,13 +43,14 @@ public abstract class ComponentType : SchemaType
     internal abstract   BatchComponent      CreateBatchComponent();
     internal abstract   ComponentCommands   CreateComponentCommands();
     
-    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, int byteSize, Type relationType, Type keyType)
+    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, Type indexValueType, int byteSize, Type relationType, Type keyType)
         : base (componentKey, type, Component)
     {
         StructIndex     = structIndex;
         IsBlittable     = GetBlittableType(type) == BlittableType.Blittable;
         StructSize      = byteSize;
         IndexType       = indexType;
+        IndexValueType  = indexValueType;
         RelationType    = relationType;
         RelationKeyType = keyType;
     }
@@ -84,8 +87,8 @@ internal sealed class ComponentType<T> : ComponentType
     private  readonly   TypeStore       typeStore;
     #endregion
 
-    internal ComponentType(string componentKey, int structIndex, Type indexType, TypeStore typeStore, Type relationType, Type keyType)
-        : base(componentKey, structIndex, typeof(T), indexType, ByteSize, relationType, keyType)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType, TypeStore typeStore, Type relationType, Type keyType)
+        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, ByteSize, relationType, keyType)
     {
         this.typeStore = typeStore;
     }

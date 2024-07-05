@@ -14,7 +14,7 @@ namespace Tests.ECS {
 public static class Test_EntityLinks
 {
     [Test]
-    public static void Test_EntityLinks_All()
+    public static void Test_EntityLinks_AllIncomingLinks()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -88,7 +88,7 @@ public static class Test_EntityLinks
     }
     
     [Test]
-    public static void Test_EntityLinks_LinkComponent()
+    public static void Test_EntityLinks_IncomingLinkComponent()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -140,7 +140,7 @@ public static class Test_EntityLinks
     }
     
     [Test]
-    public static void Test_EntityLinks_LinkRelation()
+    public static void Test_EntityLinks_IncomingLinkRelation()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -173,6 +173,30 @@ public static class Test_EntityLinks
         AreEqual(1,             refs11.Count);
         AreEqual(3,             refs11[0].Entity.Id);
         AreEqual(103,           refs11[0].Component.speed);
+    }
+    
+    [Test]
+    public static void Test_EntityLinks_AllOutgoingLinks()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        AreEqual(0, entity1.CountAllOutgoingLinks());
+        
+        entity1.AddComponent<Position>();
+        entity1.AddComponent(new IndexedInt());
+        entity1.AddRelation(new IntRelation());
+        AreEqual(0, entity1.CountAllOutgoingLinks());
+        
+        entity1.AddComponent(new AttackComponent());
+        AreEqual(1, entity1.CountAllOutgoingLinks());
+        
+        entity1.AddRelation(new AttackRelation { target = entity2 });
+        AreEqual(2, entity1.CountAllOutgoingLinks());
+        
+        entity1.AddRelation(new AttackRelation { target = entity3 });
+        AreEqual(3, entity1.CountAllOutgoingLinks());
     }
     
 }
