@@ -25,18 +25,30 @@ namespace Friflo.Engine.ECS;
 internal readonly struct EntityInfo
 {
 #region properties
-    internal            long                Pid             => entity.Pid;
-    internal            bool                Enabled         => entity.Enabled;
-    internal            string              JSON            => EntityUtils.EntityToJSON(entity);
-    internal            DebugEventHandlers  EventHandlers   => EntityStore.GetEventHandlers(entity.store, entity.Id);
-    internal            EntityLinks         IncomingLinks   => entity.GetAllIncomingLinks();   
-    public   override   string              ToString()      => "";
+    internal            long                Pid                 => entity.Pid;
+    internal            bool                Enabled             => entity.Enabled;
+    internal            string              JSON                => EntityUtils.EntityToJSON(entity);
+    internal            DebugEventHandlers  EventHandlers       => EntityStore.GetEventHandlers(entity.store, entity.Id);
+    internal            EntityLinks         AllIncomingLinks    => entity.GetAllIncomingLinks();   
+    public   override   string              ToString()          => GetString();
     #endregion
 
     [Browse(Never)] private readonly Entity entity;
     
     internal EntityInfo(Entity entity) {
         this.entity = entity;
+    }
+    
+    private string GetString()
+    {
+        var incomingLinks = entity.CountAllIncomingLinks();
+        if (incomingLinks == 0) {
+            return "";
+        }
+        var sb = new StringBuilder();
+        sb.Append("incoming links: ");
+        sb.Append(incomingLinks);
+        return sb.ToString();
     }
 }
 

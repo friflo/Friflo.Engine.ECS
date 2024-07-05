@@ -32,7 +32,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         throw KeyNotFoundException(id, target);
     }
     
-    internal override void AddLinkRelations(int target, List<EntityLink> result)
+    internal override void AddIncomingRelations(int target, List<EntityLink> result)
     {
         linkEntityMap.TryGetValue(target, out var sourceIds);
         var sourceIdSpan    = sourceIds.GetIdSpan(linkIdsHeap);

@@ -13,18 +13,22 @@ public static partial class EntityExtensions
 {
     private static readonly List<EntityLink> LinkBuffer = new ();
     
-    public static EntityLinks GetAllIncomingLinks(this Entity entity)
+    internal static void GetIncomingLinkTypes(Entity target, out ComponentTypes indexTypes, out ComponentTypes relationTypes)
     {
-        var store               = entity.store;
-        var target              = entity.Id;
-        var isLinked            = store.nodes[target].isLinked;
-        var indexTypes          = new ComponentTypes();
-        var relationTypes       = new ComponentTypes();
+        var store               = target.store;
+        var isLinked            = store.nodes[target.Id].isLinked;
+        indexTypes              = new ComponentTypes();
+        relationTypes           = new ComponentTypes();
         var schema              = EntityStoreBase.Static.EntitySchema;
-
         indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & isLinked; // intersect
         relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & isLinked; // intersect
-        
+    }
+    
+    public static EntityLinks GetAllIncomingLinks(this Entity entity)
+    {
+        GetIncomingLinkTypes(entity, out var indexTypes, out var relationTypes);
+        var store   = entity.store;
+        var target  = entity.Id;
         LinkBuffer.Clear();
         
         // --- add all link components
@@ -44,10 +48,34 @@ public static partial class EntityExtensions
         var relationsMap = store.extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
-            relations.AddLinkRelations(entity.Id, LinkBuffer);
+            relations.AddIncomingRelations(entity.Id, LinkBuffer);
         }
         var links = LinkBuffer.ToArray();
         return new EntityLinks(entity, links);
+    }
+    
+    public static int CountAllIncomingLinks(this Entity entity)
+    {
+        GetIncomingLinkTypes(entity, out var indexTypes, out var relationTypes);
+        var store   = entity.store;
+        LinkBuffer.Clear();
+        
+        int count = 0;
+        // --- count all incoming link components
+        var indexMap = store.extension.indexMap;
+        foreach (var componentType in indexTypes)
+        {
+            var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
+            entityIndex.entityMap.TryGetValue(entity.Id, out var idArray);
+            count += idArray.Count;
+        }
+        // --- count all incoming link relations
+        var relationsMap = store.extension.relationsMap;
+        foreach (var componentType in relationTypes) {
+            var relations   = relationsMap[componentType.StructIndex];
+            count          += relations.CountIncomingLinks(entity.Id);
+        }
+        return count;
     }
 
     

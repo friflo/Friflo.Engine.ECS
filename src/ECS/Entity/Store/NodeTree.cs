@@ -555,10 +555,10 @@ public partial class EntityStore
     //  var localNodes  = nodes;
         ref var node    = ref nodes[id];
         if (node.isOwner != 0) {
-            RemoveEntityReferences(id, node);
+            RemoveEntityReferences(entity, node);
         }
         if (node.isLinked != 0) {
-            RemoveLinksToEntity(id, node);
+            RemoveLinksToEntity(entity);
         }
         // --- mark its child nodes as floating
         ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
@@ -582,7 +582,7 @@ public partial class EntityStore
         OnChildNodeRemove(parentId, id, curIndex);
     }
     
-    private void RemoveEntityReferences(int id, in EntityNode node)
+    private void RemoveEntityReferences(Entity entity, in EntityNode node)
     {
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();
@@ -595,36 +595,31 @@ public partial class EntityStore
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var componentIndex = indexMap[componentType.StructIndex];
-            componentIndex.RemoveEntityFromIndex(id, node.archetype, node.compIndex);
+            componentIndex.RemoveEntityFromIndex(entity.Id, node.archetype, node.compIndex);
         }
         // --- remove entity relations from entity
         var relationsMap = extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
-            relations.RemoveEntityRelations(id);
+            relations.RemoveEntityRelations(entity.Id);
         }
     }
     
-    private void RemoveLinksToEntity(int id, in EntityNode node)
+    private void RemoveLinksToEntity(Entity target)
     {
-        var indexTypes          = new ComponentTypes();
-        var relationTypes       = new ComponentTypes();
-        var schema              = Static.EntitySchema;
-        var isLinked            = node.isLinked;
-        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & isLinked; // intersect
-        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & isLinked; // intersect
+        EntityExtensions.GetIncomingLinkTypes(target, out var indexTypes, out var relationTypes);
         
         // --- remove link components from entities having the passed entity id as target
         var indexMap = extension.indexMap;
         foreach (var componentType in indexTypes) {
             var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
-            entityIndex.RemoveLinksWithTarget(id);
+            entityIndex.RemoveLinksWithTarget(target.Id);
         }
         // --- remove link relations from entities having the passed entity id as target
         var relationsMap = extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
-            relations.RemoveLinksWithTarget(id);
+            relations.RemoveLinksWithTarget(target.Id);
         }
     }
     
