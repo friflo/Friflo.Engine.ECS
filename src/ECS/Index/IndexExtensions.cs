@@ -20,10 +20,10 @@ public static class IndexExtensions
     /// Executes in O(1). 
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static EntityReferences<TComponent> GetEntityReferences<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
+    public static IncomingLinks<TComponent> GetIncomingLinks<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
-        return new EntityReferences<TComponent>(entity, index.GetHasValueEntities(entity), null);
+        return new IncomingLinks<TComponent>(entity, index.GetHasValueEntities(entity), null);
     }
     #endregion
     
@@ -70,7 +70,7 @@ public static class IndexExtensions
     ///     The returned collection changes when component link values are updated, removed or added.
     ///   </item>
     ///   <item>
-    ///     To get the entities linking a specific entity use <see cref="GetEntityReferences{TComponent}"/>.<br/>
+    ///     To get the entities linking a specific entity use <see cref="GetIncomingLinks{TComponent}"/>.<br/>
     ///   </item>
     ///   <item>
     ///     The method is a specialized version of <see cref="GetAllIndexedComponentValues{TComponent,TValue}"/><br/>

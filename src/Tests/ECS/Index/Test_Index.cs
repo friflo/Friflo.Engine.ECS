@@ -132,21 +132,21 @@ public static class Test_Index
         AreEqual("{ 1 }",       query1.Entities.Debug());
         AreEqual("{ 1, 2, 3 }", query2.Entities.Debug());
         
-        AreEqual("{ 1 }",       target4.GetEntityReferences<LinkComponent>().Debug());
-        AreEqual("{ 2, 3 }",    target5.GetEntityReferences<LinkComponent>().Debug());
+        AreEqual("{ 1 }",       target4.GetIncomingLinks<LinkComponent>().Debug());
+        AreEqual("{ 2, 3 }",    target5.GetIncomingLinks<LinkComponent>().Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        AreEqual("{ 3 }",       target5.GetEntityReferences<LinkComponent>().Debug());
+        AreEqual("{ 3 }",       target5.GetIncomingLinks<LinkComponent>().Debug());
         
         entity2.AddComponent(new LinkComponent { entity = target6 });   AreEqual(3, values.Count);
-        AreEqual("{ 3 }",       target5.GetEntityReferences<LinkComponent>().Debug());
+        AreEqual("{ 3 }",       target5.GetIncomingLinks<LinkComponent>().Debug());
         
         entity3.RemoveComponent<LinkComponent>();                       AreEqual(2, values.Count);
-        AreEqual("{ }",         target5.GetEntityReferences<LinkComponent>().Debug());
+        AreEqual("{ }",         target5.GetIncomingLinks<LinkComponent>().Debug());
     }
     
     [Test]
-    public static void Test_Index_EntityReferences()
+    public static void Test_Index_IncomingLinks()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -160,26 +160,25 @@ public static class Test_Index
         entity2.AddComponent(new LinkComponent { entity = target5, data = 101  });
         entity3.AddComponent(new LinkComponent { entity = target5, data = 102  });
 
-        var refs4    = target4.GetEntityReferences<LinkComponent>();
+        var refs4    = target4.GetIncomingLinks<LinkComponent>();
+        AreEqual("IncomingLinks<LinkComponent>[1]  Target: 4", refs4.ToString());
         AreEqual("{ 1 }",       refs4.Debug());
         AreSame (store,         refs4.Store);
         AreEqual(4,             refs4.Target.Id);
         AreEqual(1,             refs4.Count);
         AreEqual(1,             refs4.Entities.Count);
-        AreEqual("entity: 1",   refs4[0].ToString());
+        AreEqual("Entity: 1",   refs4[0].ToString());
         AreEqual(1,             refs4[0].Entity.Id);
-        AreEqual(4,             refs4[0].Target.Id);
         AreEqual(100,           refs4[0].Component.data);
         
-        var refs5    = target5.GetEntityReferences<LinkComponent>();
+        var refs5    = target5.GetIncomingLinks<LinkComponent>();
         AreEqual("{ 2, 3 }",    refs5.Debug());
         AreEqual(5,             refs5.Target.Id);
-        AreEqual("entity: 2",   refs5[0].ToString());
+        AreEqual("Entity: 2",   refs5[0].ToString());
         AreEqual(2,             refs5[0].Entity.Id);
         AreEqual(101,           refs5[0].Component.data);
-        AreEqual("entity: 3",   refs5[1].ToString());
+        AreEqual("Entity: 3",   refs5[1].ToString());
         AreEqual(3,             refs5[1].Entity.Id);
-        AreEqual(5,             refs5[1].Target.Id);
         AreEqual(102,           refs5[1].Component.data);
 
         int count = 0;
@@ -240,7 +239,7 @@ public static class Test_Index
         var expect = "entity is null. id: 1";
         
         var nre = Throws<NullReferenceException>(() => {
-            entity.GetEntityReferences<AttackComponent>();
+            entity.GetIncomingLinks<AttackComponent>();
         });
         AreEqual(expect, nre!.Message);
     }

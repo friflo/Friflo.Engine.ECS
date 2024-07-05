@@ -72,25 +72,25 @@ public static class Test_Index_Delete
         var values  = store.GetAllIndexedComponentValues<AttackComponent, Entity>();
         
         entity1.AddComponent(new AttackComponent { target = entity10 });                    //  1  🡒  10     2
-        AreEqual("{ 1 }",       entity10.GetEntityReferences<AttackComponent>().Debug());   //  3      11
+        AreEqual("{ 1 }",       entity10.GetIncomingLinks<AttackComponent>().Debug());      //  3      11
                                                                                     
         entity2.AddComponent(new AttackComponent { target = entity10 });                    //  1  🡒  10  🡐  2
-        AreEqual("{ 1, 2 }",    entity10.GetEntityReferences<AttackComponent>().Debug());   //  3      11
+        AreEqual("{ 1, 2 }",    entity10.GetIncomingLinks<AttackComponent>().Debug());      //  3      11
                                                                                     
         entity3.AddComponent(new AttackComponent { target = entity11 });                    //  1  🡒  10  🡐  2
-        AreEqual("{ 3 }",       entity11.GetEntityReferences<AttackComponent>().Debug());   //  3  🡒  11
+        AreEqual("{ 3 }",       entity11.GetIncomingLinks<AttackComponent>().Debug());      //  3  🡒  11
         AreEqual("{ 10, 11 }",  values.Debug());
         
         entity1.DeleteEntity();                                                             //  -     10  🡐  2
-        AreEqual("{ 2 }",       entity10.GetEntityReferences<AttackComponent>().Debug());   //  3  🡒  11
+        AreEqual("{ 2 }",       entity10.GetIncomingLinks<AttackComponent>().Debug());      //  3  🡒  11
         AreEqual("{ 10, 11 }",  values.Debug());                                    
         
         entity2.DeleteEntity();                                                             //  -     10     -
-        AreEqual("{ }",         entity10.GetEntityReferences<AttackComponent>().Debug());   //  3  🡒  11
+        AreEqual("{ }",         entity10.GetIncomingLinks<AttackComponent>().Debug());      //  3  🡒  11
         AreEqual("{ 11 }",      values.Debug());                                    
         
         entity3.DeleteEntity();                                                             //  -     10     -
-        AreEqual("{ }",         entity11.GetEntityReferences<AttackComponent>().Debug());   //  -     11
+        AreEqual("{ }",         entity11.GetIncomingLinks<AttackComponent>().Debug());      //  -     11
         AreEqual("{ }",         values.Debug());                                    
     }
     
@@ -112,8 +112,8 @@ public static class Test_Index_Delete
         entity2.AddComponent(new AttackComponent { target = target10 });
         entity3.AddComponent(new AttackComponent { target = target11 });                    //  1  🡒  10  🡐  2
         // --- initial targets state                                                        //  3  🡒  11
-        AreEqual("{ 1, 2 }",    target10.GetEntityReferences<AttackComponent>().Debug());
-        AreEqual("{ 3 }",       target11.GetEntityReferences<AttackComponent>().Debug());
+        AreEqual("{ 1, 2 }",    target10.GetIncomingLinks<AttackComponent>().Debug());
+        AreEqual("{ 3 }",       target11.GetIncomingLinks<AttackComponent>().Debug());
         AreEqual("{ 10, 11 }",  targets.Debug());
 
         target10.DeleteEntity();                                                            //  1      -      2
@@ -142,7 +142,7 @@ public static class Test_Index_Delete
         entity3.AddComponent(new AttackComponent { target = entity1 });                 //  2  🡒  1  🡐  3
                                                                                         //        ⮍
         // --- initial targets state
-        AreEqual("{ 1, 2, 3 }", entity1.GetEntityReferences<AttackComponent>().Debug());
+        AreEqual("{ 1, 2, 3 }", entity1.GetIncomingLinks<AttackComponent>().Debug());
         AreEqual("{ 1 }",       targets.Debug());
         
         entity1.DeleteEntity();                                                         //  2     -      3

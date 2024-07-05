@@ -111,7 +111,7 @@ public static class Test_Relations
     }
     
     [Test]
-    public static void Test_Relation_EntityReferences()
+    public static void Test_Relation_IncomingLinks()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -127,7 +127,7 @@ public static class Test_Relations
         entity3.AddRelation(new AttackRelation { target = target10, speed = 102  });
         entity3.AddRelation(new AttackRelation { target = target11, speed = 103  });
 
-        var refs10   = target10.GetEntityReferences<AttackRelation>();
+        var refs10   = target10.GetIncomingLinks<AttackRelation>();
         AreEqual("{ 1, 2, 3 }",     refs10.Debug());
         AreEqual(3,                 refs10.Count);
         AreEqual(10,                refs10.Target.Id);
@@ -138,7 +138,7 @@ public static class Test_Relations
         AreEqual(3,                 refs10[2].Entity.Id);
         AreEqual(102,               refs10[2].Component.speed);
             
-        var refs11 = target11.GetEntityReferences<AttackRelation>();
+        var refs11 = target11.GetIncomingLinks<AttackRelation>();
         AreEqual("{ 3 }",       refs11.Debug());
         AreEqual(1,             refs11.Count);
         AreEqual(11,            refs11.Target.Id);
@@ -421,7 +421,7 @@ public static class Test_Relations
         AreEqual(expect, nre!.Message);
         
         nre = Throws<NullReferenceException>(() => {
-            entity.GetEntityReferences<AttackRelation>();
+            entity.GetIncomingLinks<AttackRelation>();
         });
         AreEqual(expect, nre!.Message);
     }
