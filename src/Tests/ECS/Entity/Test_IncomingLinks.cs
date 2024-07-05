@@ -50,6 +50,10 @@ public static class Test_IncomingLinks
             
         AreEqual(3,                             links[5].Entity.Id);
         AreEqual(6,         ((AttackRelation)   links[5].Component).speed);
+        
+        entity1.DeleteEntity();
+        AreEqual(0, entity2.Components.Count);
+        AreEqual(0, entity3.Components.Count);
     }
     
     [Test]
