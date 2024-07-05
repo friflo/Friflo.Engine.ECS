@@ -14,7 +14,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     where TRelationComponent : struct, IRelationComponent<TKey>
 {
     /// Single <see cref="StructHeap"/> stored in the <see cref="EntityRelations.archetype"/>.
-    private  readonly   StructHeap<TRelationComponent>  heapGeneric;
+    internal  readonly   StructHeap<TRelationComponent>  heapGeneric;
     
     /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
     public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)

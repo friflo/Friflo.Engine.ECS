@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Friflo.Engine.ECS.Collections;
 
+// ReSharper disable UnusedVariable
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
@@ -29,6 +30,19 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
             return ref ((StructHeap<TComponent>)heap).components[position];
         }
         throw KeyNotFoundException(id, target);
+    }
+    
+    internal override void AddLinkRelations(int target, List<IncomingLink> result)
+    {
+        linkEntityMap.TryGetValue(target, out var sourceIds);
+        var sourceIdSpan    = sourceIds.GetIdSpan(linkIdsHeap);
+        var components      = heapGeneric.components;
+        var targetEntity    = new Entity(store, target);    
+        foreach (var sourceId in sourceIdSpan) {
+            var position = FindRelationPosition(sourceId, targetEntity, out var positions, out _);
+            var link     = new IncomingLink (new Entity(store, sourceId), components[position]);
+            result.Add(link);
+        }
     }
     
 #region mutation

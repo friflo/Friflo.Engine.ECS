@@ -27,7 +27,7 @@ public static partial class EntityExtensions
         
         LinkBuffer.Clear();
         
-        // --- remove link components from entities having the passed entity id as target
+        // --- add all link components
         var indexMap = store.extension.indexMap;
         foreach (var componentType in indexTypes)
         {
@@ -40,11 +40,11 @@ public static partial class EntityExtensions
                 LinkBuffer.Add(new IncomingLink(linkEntity, component));
             }
         }
-        // --- remove link relations from entities having the passed entity id as target
+        // --- add all link relations
         var relationsMap = store.extension.relationsMap;
         foreach (var componentType in relationTypes) {
-            // var relations = relationsMap[componentType.StructIndex];
-            // relations.RemoveLinksWithTarget(id);
+            var relations = relationsMap[componentType.StructIndex];
+            relations.AddLinkRelations(entity.Id, LinkBuffer);
         }
         var links = LinkBuffer.ToArray();
         return new IncomingLinks(entity, links);
