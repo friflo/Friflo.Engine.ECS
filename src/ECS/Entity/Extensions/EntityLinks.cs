@@ -85,17 +85,16 @@ public static partial class EntityExtensions
 #region outgoing links
     public static int CountAllOutgoingLinks(this Entity entity)
     {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        var linkComponents = new ComponentTypes();
-        linkComponents.bitSet = BitSet.Intersect(entity.archetype.componentTypes.bitSet, schema.linkComponentTypes.bitSet);
-        int count = linkComponents.Count;
-        
-        var store = entity.store;
-        var relationComponents = new ComponentTypes();
-        relationComponents.bitSet.l0 = store.nodes[entity.Id].isOwner & schema.linkRelationTypes.bitSet.l0;
-        foreach (var componentType in relationComponents) {
-            var relations = store.extension.relationsMap[componentType.StructIndex];
-            count += relations.GetRelationCount(entity);
+        var schema  = EntityStoreBase.Static.EntitySchema;
+        var types   = new ComponentTypes {
+            bitSet      = BitSet.Intersect(entity.archetype.componentTypes.bitSet, schema.linkComponentTypes.bitSet)
+        };
+        int count       = types.Count;
+        var store       = entity.store;
+        types.bitSet.l0 = store.nodes[entity.Id].isOwner & schema.linkRelationTypes.bitSet.l0;
+        foreach (var componentType in types) {
+            var relations   = store.extension.relationsMap[componentType.StructIndex];
+            count          += relations.GetRelationCount(entity);
         }
         return count;
     }
