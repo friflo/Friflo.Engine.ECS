@@ -23,7 +23,7 @@ public static class IndexExtensions
     public static EntityReferences<TComponent> GetEntityReferences<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
-        return new EntityReferences<TComponent>(index.GetHasValueEntities(entity));
+        return new EntityReferences<TComponent>(index.GetHasValueEntities(entity), null);
     }
     #endregion
     

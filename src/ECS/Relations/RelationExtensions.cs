@@ -92,8 +92,8 @@ public static class RelationExtensions
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     public static EntityReferences<TComponent> GetEntityReferences<TComponent>(this Entity entity) where TComponent: struct, IRelationComponent {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
-        var entities = EntityRelations.GetLinkRelationReferences(entity.store, entity.Id, StructInfo<TComponent>.Index);
-        return new EntityReferences<TComponent>(entities);
+        var entities = EntityRelations.GetLinkRelationReferences(entity.store, entity.Id, StructInfo<TComponent>.Index, out var relations);
+        return new EntityReferences<TComponent>(entities, relations);
     }
     #endregion
     

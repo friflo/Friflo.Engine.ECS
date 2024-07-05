@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -14,20 +15,21 @@ namespace Friflo.Engine.ECS;
 public readonly struct EntityReference<TComponent>
     where TComponent : struct, IComponent
 {
-                    public  readonly    Entity  Entity;
-    [Browse(Never)] private readonly    int     index;
+                    public  readonly    Entity          Entity;     // 16
+    [Browse(Never)] private readonly    int             index;      //  4
+    [Browse(Never)] private readonly    EntityRelations relations;  //  8
 
                     public  override    string  ToString() => $"Source: {Entity.Id}";
 
-    internal EntityReference(Entity entity, int index) {
-        Entity      = entity;
-        this.index  = index;
+    internal EntityReference(Entity entity, EntityRelations relations, int index) {
+        Entity          = entity;
+        this.relations  = relations;
+        this.index      = index;
     }
     
     public TComponent Component {
         get {
-            if (StructInfo<TComponent>.IsRelation) {
-                var relations = Entity.store.extension.relationsMap[StructInfo<TComponent>.Index];
+            if (relations != null) {
                 return relations.GetRelationAt<TComponent>(Entity.Id, index);
             }
             return Entity.GetComponent<TComponent>();
@@ -45,15 +47,17 @@ public readonly struct EntityReferences<T> : IReadOnlyList<EntityReference<T>>
     #endregion
     
 #region fields
-    public   readonly   Entities    Entities;   //  8
+                    public   readonly   Entities            Entities;   // 16
+    [Browse(Never)] internal readonly   EntityRelations     relations;  //  8
     #endregion
     
 #region general
-    internal EntityReferences(in Entities entities) {
-        Entities   = entities;
+    internal EntityReferences(in Entities entities, EntityRelations relations) {
+        Entities        = entities;
+        this.relations  = relations;
     }
     
-    public EntityReference<T> this[int index] => new (Entities[index], index);
+    public EntityReference<T> this[int index] => new (Entities[index], relations, index);
     
     public string Debug()
     {
@@ -71,13 +75,13 @@ public readonly struct EntityReferences<T> : IReadOnlyList<EntityReference<T>>
 
     
 #region IEnumerator
-    public EntityReferenceEnumerator<T>                             GetEnumerator() => new EntityReferenceEnumerator<T> (Entities);
+    public EntityReferenceEnumerator<T>                             GetEnumerator() => new EntityReferenceEnumerator<T> (this);
     
     // --- IEnumerable
-    IEnumerator                                         IEnumerable.GetEnumerator() => new EntityReferenceEnumerator<T> (Entities);
+    IEnumerator                                         IEnumerable.GetEnumerator() => new EntityReferenceEnumerator<T> (this);
 
     // --- IEnumerable<>
-    IEnumerator<EntityReference<T>> IEnumerable<EntityReference<T>>.GetEnumerator() => new EntityReferenceEnumerator<T> (Entities);
+    IEnumerator<EntityReference<T>> IEnumerable<EntityReference<T>>.GetEnumerator() => new EntityReferenceEnumerator<T> (this);
     #endregion
 }
 
@@ -85,20 +89,22 @@ public readonly struct EntityReferences<T> : IReadOnlyList<EntityReference<T>>
 public struct EntityReferenceEnumerator<T> : IEnumerator<EntityReference<T>>
     where T : struct, IComponent
 {
-    private readonly    Entities    entities;   // 16
-    private             int         index;      //  4
+    private readonly    Entities        entities;   // 16
+    private readonly    EntityRelations relations;  // 16
+    private             int             index;      //  4
     
-    internal EntityReferenceEnumerator(in Entities entities) {
-        this.entities    = entities;
-        index           = -1;
+    internal EntityReferenceEnumerator(in EntityReferences<T> references) {
+        entities    = references.Entities;
+        relations   = references.relations;
+        index       = -1;
     }
     
     // --- IEnumerator
     public          void         Reset()    => index = 0;
 
-    readonly object IEnumerator.Current    => new EntityReference<T>(entities[index], index);
+    readonly object IEnumerator.Current    => new EntityReference<T>(entities[index], relations, index);
 
-    public   EntityReference<T> Current    => new EntityReference<T>(entities[index], index);
+    public   EntityReference<T> Current    => new EntityReference<T>(entities[index], relations, index);
     
     // --- IEnumerator
     public bool MoveNext()
