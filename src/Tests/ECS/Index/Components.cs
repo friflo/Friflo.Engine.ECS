@@ -8,6 +8,7 @@ namespace Tests.ECS.Index {
     
 public struct AttackComponent : ILinkComponent {
     public          Entity      target;
+    public          int         data;
     public          Entity      GetIndexedValue()   => target;
     
     public override string      ToString()          => target.ToString();
