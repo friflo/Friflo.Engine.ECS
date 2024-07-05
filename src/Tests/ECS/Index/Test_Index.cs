@@ -168,6 +168,7 @@ public static class Test_Index
         AreEqual(1,             refs4.Entities.Count);
         AreEqual("Source: 1",   refs4[0].ToString());
         AreEqual(1,             refs4[0].Entity.Id);
+        AreEqual(4,             refs4[0].Target.Id);
         AreEqual(100,           refs4[0].Component.data);
         
         var refs5    = target5.GetEntityReferences<LinkComponent>();
@@ -178,6 +179,7 @@ public static class Test_Index
         AreEqual(101,           refs5[0].Component.data);
         AreEqual("Source: 3",   refs5[1].ToString());
         AreEqual(3,             refs5[1].Entity.Id);
+        AreEqual(5,             refs5[1].Target.Id);
         AreEqual(102,           refs5[1].Component.data);
 
         int count = 0;

@@ -14,7 +14,9 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct EntityReference<TComponent>
     where TComponent : struct, IComponent
-{ 
+{
+                    public              Entity          Target      => new Entity(Entity.store, target);
+    
                     public  readonly    Entity          Entity;     // 16
     [Browse(Never)] private readonly    EntityRelations relations;  //  8
     [Browse(Never)] private readonly    int             target;     //  4
