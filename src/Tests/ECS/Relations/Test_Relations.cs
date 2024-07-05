@@ -387,6 +387,11 @@ public static class Test_Relations
             entity.GetIncomingLinks<AttackRelation>();
         });
         AreEqual(expect, nre!.Message);
+        
+        nre = Throws<NullReferenceException>(() => {
+            entity.AddRelation(new AttackRelation());
+        });
+        AreEqual(expect, nre!.Message);
     }
 }
 
