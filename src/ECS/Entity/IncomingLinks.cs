@@ -30,9 +30,9 @@ public readonly struct IncomingLinks : IReadOnlyList<IncomingLink>
 
 {
 #region properties
-    public              int         Count       => incomingLinks.Length;
-    public              EntityStore Store       => Target.store;
-    public   override   string      ToString()  => $"IncomingLinks[{Count}]  Target entity: {Target.Id}";
+    public                  int         Count       => incomingLinks.Length;
+    public                  EntityStore Store       => Target.store;
+    public   override       string      ToString()  => $"IncomingLinks[{Count}]  Target entity: {Target.Id}";
     #endregion
     
 #region fields

@@ -26,8 +26,12 @@ public static class Test_IncomingLinks
         entity3.AddRelation (new AttackRelation  { target = entity1, speed = 6 });
         
         var links = entity1.GetAllIncomingLinks();
+        AreEqual("{ 2, 3, 2, 3, 2, 3 }",                links.Debug());
         AreEqual("IncomingLinks[6]  Target entity: 1",  links.ToString());
         AreEqual(6,                                     links.Count);
+        AreEqual(1,                                     links.Target.Id);
+        AreSame (store,                                 links.Store);
+        
         AreEqual("Entity: 2  [AttackComponent]",links[0].ToString());
         AreEqual(2,                             links[0].Entity.Id);
         AreEqual(2,         ((AttackComponent)  links[0].Component).data);
