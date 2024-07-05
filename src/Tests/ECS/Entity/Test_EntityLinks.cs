@@ -1,4 +1,6 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using System.Collections;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS.Index;
 using Tests.ECS.Relations;
@@ -27,6 +29,8 @@ public static class Test_EntityLinks
         
         var links = entity1.GetAllIncomingLinks();
         AreEqual("{ 2, 3, 2, 3, 2, 3 }",        links.Debug());
+        AreEqual(6,                             links.Count);
+        AreEqual(6, entity1.CountAllIncomingLinks());
         AreEqual("EntityLinks[6]",              links.ToString());
         AreEqual(6,                             links.Count);
         AreSame (store,                         links.Store);
@@ -105,6 +109,14 @@ public static class Test_EntityLinks
             }
         }
         AreEqual(2, count);
+        
+        IEnumerable enumerable = refs5;
+        var enumerator = enumerable.GetEnumerator();
+        using var enumerator1 = enumerator as IDisposable;
+        enumerator.Reset();
+        while (enumerator.MoveNext()) {
+            _ = enumerator.Current;
+        }
     }
     
     [Test]

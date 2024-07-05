@@ -22,14 +22,12 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         linkIdsHeap     = new IdArrayHeap();
     }
     
-    internal override ref TComponent GetEntityRelation<TComponent>(int id, int targetId)
+    /// Expect: component is present
+    internal override TComponent GetEntityRelation<TComponent>(int id, int targetId)
     {
         var target      = new Entity(store, targetId);
         var position    = FindRelationPosition(id, target, out _, out _);
-        if (position >= 0) {
-            return ref ((StructHeap<TComponent>)heap).components[position];
-        }
-        throw KeyNotFoundException(id, target);
+        return ((StructHeap<TComponent>)heap).components[position];
     }
     
     internal override void AddIncomingRelations(int target, List<EntityLink> result)
