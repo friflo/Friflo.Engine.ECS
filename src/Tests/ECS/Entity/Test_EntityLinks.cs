@@ -55,6 +55,12 @@ public static class Test_EntityLinks
         entity1.DeleteEntity();
         AreEqual(0, entity2.Components.Count);
         AreEqual(0, entity3.Components.Count);
+
+        int count = 0;
+        foreach (var _ in links) {
+            count++;
+        }
+        AreEqual(6, count);
     }
     
     [Test]

@@ -30,7 +30,6 @@ public readonly struct EntityLink
 
 [DebuggerTypeProxy(typeof(EntityLinksDebugView))]
 public readonly struct EntityLinks : IReadOnlyList<EntityLink>
-
 {
 #region properties
     public                  int         Count       => links.Length;
@@ -111,7 +110,7 @@ public struct EntityLinkEnumerator : IEnumerator<EntityLink>
 internal sealed class EntityLinksDebugView
 {
     [Browse(RootHidden)]
-    private readonly    EntityLink[]    links;
+    internal readonly    EntityLink[]    links;
     
     internal EntityLinksDebugView(EntityLinks entityLinks) {
         links = entityLinks.links;
