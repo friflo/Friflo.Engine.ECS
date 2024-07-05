@@ -127,14 +127,14 @@ public static class Test_Relations
 
         var refs4   = target4.GetEntityReferences<AttackRelation>();
         AreEqual(2,     refs4.Count);
-        AreEqual(1,     refs4[0].Source.Id);
+        AreEqual(1,     refs4[0].Entity.Id);
         AreEqual(100,   refs4[0].Component.speed);
-        AreEqual(2,     refs4[1].Source.Id);
+        AreEqual(2,     refs4[1].Entity.Id);
         AreEqual(101,   refs4[1].Component.speed);
         
         var refs5 = target5.GetEntityReferences<AttackRelation>();
         AreEqual(1,     refs5.Count);
-        AreEqual(3,     refs5[0].Source.Id);
+        AreEqual(3,     refs5[0].Entity.Id);
         AreEqual(102,   refs5[0].Component.speed);
     }
 

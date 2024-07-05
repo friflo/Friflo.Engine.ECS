@@ -163,17 +163,17 @@ public static class Test_Index
         var refs4    = target4.GetEntityReferences<LinkComponent>();
         AreSame (store,         refs4.Store);
         AreEqual(1,             refs4.Count);
-        AreEqual(1,             refs4.Sources.Count);
+        AreEqual(1,             refs4.Entities.Count);
         AreEqual("Source: 1",   refs4[0].ToString());
-        AreEqual(1,             refs4[0].Source.Id);
+        AreEqual(1,             refs4[0].Entity.Id);
         AreEqual(100,           refs4[0].Component.data);
         
         var refs5    = target5.GetEntityReferences<LinkComponent>();
         AreEqual("Source: 2",   refs5[0].ToString());
-        AreEqual(2,             refs5[0].Source.Id);
+        AreEqual(2,             refs5[0].Entity.Id);
         AreEqual(101,           refs5[0].Component.data);
         AreEqual("Source: 3",   refs5[1].ToString());
-        AreEqual(3,             refs5[1].Source.Id);
+        AreEqual(3,             refs5[1].Entity.Id);
         AreEqual(102,           refs5[1].Component.data);
 
         int count = 0;
