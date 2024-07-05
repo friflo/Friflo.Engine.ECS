@@ -141,7 +141,7 @@ internal abstract class EntityRelations
         return (entities, chunk);
     }
     
-    internal static Entities GetLinkRelationReferences(EntityStore store, int id, int structIndex, out EntityRelations relations)
+    internal static Entities GetIncomingLinkRelations(EntityStore store, int id, int structIndex, out EntityRelations relations)
     {
         relations = store.extension.relationsMap[structIndex];
         if (relations == null) {
@@ -151,7 +151,7 @@ internal abstract class EntityRelations
         return relations.linkIdsHeap.GetEntities(store, ids);
     }
     
-    internal int CountIncomingLinks(int target)
+    internal int CountIncomingLinkRelations(int target)
     {
         linkEntityMap.TryGetValue(target, out var sourceIds);
         return sourceIds.Count;

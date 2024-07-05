@@ -73,7 +73,7 @@ public static partial class EntityExtensions
         var relationsMap = store.extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations   = relationsMap[componentType.StructIndex];
-            count          += relations.CountIncomingLinks(entity.Id);
+            count          += relations.CountIncomingLinkRelations(entity.Id);
         }
         return count;
     }
