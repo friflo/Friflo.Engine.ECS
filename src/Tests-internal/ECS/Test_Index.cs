@@ -75,6 +75,20 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_cover_AddComponentValue()
+    {
+        var store = new EntityStore();
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        entity1.AddComponent(new AttackComponent { target = entity2 });
+        
+        var index = (EntityIndex)store.extension.indexMap[StructInfo<AttackComponent>.Index];
+        AreEqual(1, index.Count);
+        EntityIndexUtils.AddComponentValue(1, 2, index);
+        AreEqual(1, index.Count);
+    }
+    
+    [Test]
     public static void Test_Index_EntityIndexValue()
     {
         var index       = new EntityIndex<AttackComponent>();
