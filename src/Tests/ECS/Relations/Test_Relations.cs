@@ -109,6 +109,34 @@ public static class Test_Relations
         entity3.RemoveRelation<AttackRelation>(target10);
         Mem.AssertNoAlloc(start);
     }
+    
+    [Test]
+    public static void Test_Relation_EntityReferences()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        
+        var target4 = store.CreateEntity(4);
+        var target5 = store.CreateEntity(5);
+       
+        entity1.AddRelation(new AttackRelation { target = target4, speed = 100 });
+        entity2.AddRelation(new AttackRelation { target = target4, speed = 101  });
+        entity3.AddRelation(new AttackRelation { target = target5, speed = 102  });
+
+        var refs4   = target4.GetEntityReferences<AttackRelation>();
+        AreEqual(2,     refs4.Count);
+        AreEqual(1,     refs4[0].Source.Id);
+        AreEqual(100,   refs4[0].Component.speed);
+        AreEqual(2,     refs4[1].Source.Id);
+        AreEqual(101,   refs4[1].Component.speed);
+        
+        var refs5 = target5.GetEntityReferences<AttackRelation>();
+        AreEqual(1,     refs5.Count);
+        AreEqual(3,     refs5[0].Source.Id);
+        AreEqual(102,   refs5[0].Component.speed);
+    }
 
     
 #pragma warning disable CS0618 // Type or member is obsolete

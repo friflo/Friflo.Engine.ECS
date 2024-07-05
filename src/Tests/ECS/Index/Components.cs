@@ -29,9 +29,10 @@ public struct IndexedInt : IIndexedComponent<int> {
 
 public struct LinkComponent : ILinkComponent {
     public          Entity      entity;
+    public          int         data;
     public          Entity      GetIndexedValue()   => entity;
 
-    public override string      ToString()          => entity.ToString();
+    public override string      ToString()          => entity.Id.ToString();
 }
 
 public struct GuidComponent : IIndexedComponent<Guid> {

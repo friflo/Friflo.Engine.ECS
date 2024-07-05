@@ -52,7 +52,20 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
         }
         var poolIndex       = IdArrayHeap.PoolIndex(count);
         var poolPositions   = idHeap.GetPool(poolIndex).Ids;
-        return components[poolPositions[index]];
+        return components[poolPositions[positions.start + index]];
+    }
+    
+    internal override TComponent GetRelationAt<TComponent>(int id, int index)
+    {
+        positionMap.TryGetValue(id, out var positions);
+        var count       = positions.count;
+        var components  = ((StructHeap<TComponent>)heap).components;
+        if (count == 1) {
+            return components[positions.start];
+        }
+        var poolIndex       = IdArrayHeap.PoolIndex(count);
+        var poolPositions   = idHeap.GetPool(poolIndex).Ids;
+        return components[poolPositions[positions.start + index]];
     }
     
     internal ref TComponent GetRelation<TComponent>(int id, TKey key)

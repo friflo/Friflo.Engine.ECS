@@ -46,9 +46,10 @@ internal abstract class EntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    internal  abstract bool         AddComponent<TComponent>(int id, TComponent component) where TComponent : struct, IComponent;
-    internal  abstract IComponent   GetRelationAt           (int id, int index);
-    internal  virtual  void         RemoveLinksWithTarget   (int targetId) => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  abstract bool         AddComponent<TComponent> (int id, TComponent component) where TComponent : struct, IComponent;
+    internal  abstract IComponent   GetRelationAt            (int id, int index);
+    internal  abstract TComponent   GetRelationAt<TComponent>(int id, int index) where TComponent : struct, IComponent;
+    internal  virtual  void         RemoveLinksWithTarget    (int targetId) => throw new InvalidOperationException($"type: {GetType().Name}");
     
     internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {

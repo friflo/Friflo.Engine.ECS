@@ -146,6 +146,47 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_EntityReferences()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        
+        var target4 = store.CreateEntity(4);
+        var target5 = store.CreateEntity(5);
+       
+        entity1.AddComponent(new LinkComponent { entity = target4, data = 100 });
+        entity2.AddComponent(new LinkComponent { entity = target5, data = 101  });
+        entity3.AddComponent(new LinkComponent { entity = target5, data = 102  });
+
+        var refs4    = target4.GetEntityReferences<LinkComponent>();
+        AreSame (store,         refs4.Store);
+        AreEqual(1,             refs4.Count);
+        AreEqual(1,             refs4.Sources.Count);
+        AreEqual("Source: 1",   refs4[0].ToString());
+        AreEqual(1,             refs4[0].Source.Id);
+        AreEqual(100,           refs4[0].Component.data);
+        
+        var refs5    = target5.GetEntityReferences<LinkComponent>();
+        AreEqual("Source: 2",   refs5[0].ToString());
+        AreEqual(2,             refs5[0].Source.Id);
+        AreEqual(101,           refs5[0].Component.data);
+        AreEqual("Source: 3",   refs5[1].ToString());
+        AreEqual(3,             refs5[1].Source.Id);
+        AreEqual(102,           refs5[1].Component.data);
+
+        int count = 0;
+        foreach (var reference in refs5) {
+            switch (count++) {
+                case 0: AreEqual(101, reference.Component.data);    break;
+                case 1: AreEqual(102, reference.Component.data);    break;
+            }
+        }
+        AreEqual(2, count);
+    }
+    
+    [Test]
     public static void Test_Index_support_null()
     {
         var store   = new EntityStore();
