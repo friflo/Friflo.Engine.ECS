@@ -40,7 +40,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         var targetEntity    = new Entity(store, target);    
         foreach (var sourceId in sourceIdSpan) {
             var position = FindRelationPosition(sourceId, targetEntity, out var positions, out _);
-            var link     = new IncomingLink (new Entity(store, sourceId), components[position]);
+            var link     = new IncomingLink (new Entity(store, sourceId), target, components[position]);
             result.Add(link);
         }
     }

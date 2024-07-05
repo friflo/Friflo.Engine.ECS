@@ -14,13 +14,16 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct IncomingLink
 {
-    public  override    string          ToString()  => $"Entity: {Entity.Id}  [{Component.GetType().Name}]";
+    public              Entity          Target      => new Entity(Entity.store, target);
+    public  override    string          ToString()  => $"Entity: {Entity.Id} -> Target: {target}  [{Component.GetType().Name}]";
     
     public  readonly    Entity          Entity;     // 16
     public  readonly    IComponent      Component;  //  8
+    private readonly    int             target;     //  4
 
-    internal IncomingLink(in Entity entity, IComponent component) {
+    internal IncomingLink(in Entity entity, int target, IComponent component) {
         Entity      = entity;
+        this.target = target;
         Component   = component;
     }
 }
@@ -31,18 +34,18 @@ public readonly struct IncomingLinks : IReadOnlyList<IncomingLink>
 {
 #region properties
     public                  int         Count       => incomingLinks.Length;
-    public                  EntityStore Store       => Target.store;
-    public   override       string      ToString()  => $"IncomingLinks[{Count}]  Target entity: {Target.Id}";
+    public                  EntityStore Store       => target.store;
+    public   override       string      ToString()  => $"EntityLinks[{Count}]";
     #endregion
     
 #region fields
-                    public   readonly   Entity          Target;         // 16
+    [Browse(Never)] private  readonly   Entity          target;         // 16
     [Browse(Never)] internal readonly   IncomingLink[]  incomingLinks;  //  8
     #endregion
     
 #region general
     internal IncomingLinks(in Entity target, IncomingLink[]  links) {
-        Target          = target;
+        this.target          = target;
         incomingLinks   = links;
     }
     

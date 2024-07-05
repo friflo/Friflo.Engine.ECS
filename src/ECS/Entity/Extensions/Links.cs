@@ -16,8 +16,8 @@ public static partial class EntityExtensions
     public static IncomingLinks GetAllIncomingLinks(this Entity entity)
     {
         var store               = entity.store;
-        var id                  = entity.Id;
-        var isLinked            = store.nodes[id].isLinked;
+        var target              = entity.Id;
+        var isLinked            = store.nodes[target].isLinked;
         var indexTypes          = new ComponentTypes();
         var relationTypes       = new ComponentTypes();
         var schema              = EntityStoreBase.Static.EntitySchema;
@@ -32,12 +32,12 @@ public static partial class EntityExtensions
         foreach (var componentType in indexTypes)
         {
             var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
-            entityIndex.entityMap.TryGetValue(id, out var idArray);
+            entityIndex.entityMap.TryGetValue(target, out var idArray);
             var idSpan = idArray.GetIdSpan(entityIndex.idHeap);
             foreach (var linkId in idSpan) {
                 var linkEntity  = new Entity(store, linkId);
                 var component   = EntityUtils.GetEntityComponent(linkEntity, componentType);
-                LinkBuffer.Add(new IncomingLink(linkEntity, component));
+                LinkBuffer.Add(new IncomingLink(linkEntity, target, component));
             }
         }
         // --- add all link relations

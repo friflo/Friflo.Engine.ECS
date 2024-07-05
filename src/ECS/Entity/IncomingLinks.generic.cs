@@ -17,11 +17,12 @@ namespace Friflo.Engine.ECS;
 public readonly struct IncomingLink<TComponent>
     where TComponent : struct, IComponent
 {
+                    public              Entity          Target      => new Entity(Entity.store, target);
                     public  readonly    Entity          Entity;     // 16
     [Browse(Never)] private readonly    EntityRelations relations;  //  8
     [Browse(Never)] private readonly    int             target;     //  4
 
-                    public  override    string          ToString()  => $"Entity: {Entity.Id}";
+                    public  override    string          ToString()  => $"Entity: {Entity.Id} -> Target: {target}";
 
     internal IncomingLink(int target, in Entity entity, EntityRelations relations) {
         this.target     = target;
@@ -45,9 +46,8 @@ public readonly struct IncomingLinks<T> : IReadOnlyList<IncomingLink<T>>
 {
 #region properties
     public              int         Count       => Entities.Count;
-    public              Entity      Target      => new Entity(Entities.store, target);
     public              EntityStore Store       => Entities.store;
-    public   override   string      ToString()  => $"IncomingLinks<{typeof(T).Name}>[{Entities.Count}]  Target entity: {target}";
+    public   override   string      ToString()  => $"EntityLinks<{typeof(T).Name}>[{Entities.Count}]";
     #endregion
     
 #region fields
