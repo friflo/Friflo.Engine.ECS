@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS.Index;
@@ -65,6 +66,25 @@ public static class Test_EntityLinks
             count++;
         }
         AreEqual(6, count);
+        {
+            IEnumerable enumerable = links;
+            var enumerator = enumerable.GetEnumerator();
+            using var enumerator1 = enumerator as IDisposable;
+            enumerator.Reset();
+            count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+                _ = enumerator.Current;
+            }
+            AreEqual(6, count);
+        } {
+            count = 0;
+            IEnumerable<EntityLink> enumerable = links;
+            foreach (var VARIABLE in enumerable) {
+                count++;
+            }
+            AreEqual(6, count);
+        }
     }
     
     [Test]
