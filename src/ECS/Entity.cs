@@ -185,8 +185,6 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
     public              EntityComponents        Components      => new EntityComponents(this);
     
-    public              IncomingLinks           IncomingLinks   => EntityUtils.GetIncomingLinks(this);
-    
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
     public              Scripts                 Scripts         => new Scripts(EntityUtils.GetScripts(this));
 

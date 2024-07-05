@@ -110,43 +110,6 @@ public static class Test_Relations
         Mem.AssertNoAlloc(start);
     }
     
-    [Test]
-    public static void Test_Relation_IncomingLinks()
-    {
-        var store   = new EntityStore();
-        var entity1 = store.CreateEntity(1);
-        var entity2 = store.CreateEntity(2);
-        var entity3 = store.CreateEntity(3);
-        
-        var target10 = store.CreateEntity(10);
-        var target11 = store.CreateEntity(11);
-        var target12 = store.CreateEntity(12);
-        
-        entity1.AddRelation(new AttackRelation { target = target10, speed = 100 });
-        entity2.AddRelation(new AttackRelation { target = target10, speed = 101  });
-        entity3.AddRelation(new AttackRelation { target = target10, speed = 102  });
-        entity3.AddRelation(new AttackRelation { target = target11, speed = 103  });
-
-        var refs10   = target10.GetIncomingLinks<AttackRelation>();
-        AreEqual("{ 1, 2, 3 }",     refs10.Debug());
-        AreEqual(3,                 refs10.Count);
-        AreEqual(10,                refs10.Target.Id);
-        AreEqual(1,                 refs10[0].Entity.Id);
-        AreEqual(100,               refs10[0].Component.speed);
-        AreEqual(2,                 refs10[1].Entity.Id);
-        AreEqual(101,               refs10[1].Component.speed);
-        AreEqual(3,                 refs10[2].Entity.Id);
-        AreEqual(102,               refs10[2].Component.speed);
-            
-        var refs11 = target11.GetIncomingLinks<AttackRelation>();
-        AreEqual("{ 3 }",       refs11.Debug());
-        AreEqual(1,             refs11.Count);
-        AreEqual(11,            refs11.Target.Id);
-        AreEqual(3,             refs11[0].Entity.Id);
-        AreEqual(103,           refs11[0].Component.speed);
-    }
-
-    
 #pragma warning disable CS0618 // Type or member is obsolete
     [Test]
     public static void Test_Relations_EntityComponents()

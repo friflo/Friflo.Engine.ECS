@@ -47,7 +47,7 @@ public readonly struct IncomingLinks<T> : IReadOnlyList<IncomingLink<T>>
     public              int         Count       => Entities.Count;
     public              Entity      Target      => new Entity(Entities.store, target);
     public              EntityStore Store       => Entities.store;
-    public   override   string      ToString()  => $"IncomingLinks<{typeof(T).Name}>[{Entities.Count}]  Target: {target}";
+    public   override   string      ToString()  => $"IncomingLinks<{typeof(T).Name}>[{Entities.Count}]  Target entity: {target}";
     #endregion
     
 #region fields
