@@ -22,16 +22,13 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
 {
     // --- internal fields
     [Browse(Never)]
-    private  readonly   Entity  entity;     // 16
-    
-    [Browse(Never)]
-    internal readonly   bool    onlyReferences;
+    internal readonly   Entity  entity;     // 16
 
     /// <summary>Return the number of <see cref="IComponent"/>'s of an entity.</summary>
-    public              int     Count       => onlyReferences ? GetReferences(null) : GetCountAll();
+    public              int     Count       => GetCount();
     public   override   string  ToString()  => GetString();
     
-    private int GetCountAll()
+    private int GetCount()
     {
         var type        = entity.archetype;
         var count       = type.componentCount; 
@@ -47,67 +44,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         return count;
     }
     
-    internal EntityComponent[] GetAllComponents()
-    {
-        var components  = new EntityComponent[GetCountAll()];
-        int compIndex = 0;
-        foreach (var componentType in entity.archetype.componentTypes) {
-            components[compIndex++] = new EntityComponent(entity, componentType);
-        }
-        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
-            return components;
-        }
-        var relationsMap = entity.store.extension.relationsMap;
-        foreach (var componentType in relationTypes)
-        {
-            var relations       = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
-            int relationCount   = relations.GetRelationCount(entity);
-            for (int n = 0; n < relationCount; n++) {
-                components[compIndex++] = new EntityComponent(entity, componentType, relations, n);
-            }
-        }
-        return components;
-    }
-    
-    internal int GetReferences(EntityComponent[] components)
-    {
-        var id          = entity.Id;
-        var store       = entity.store;
-        var isLinked    = store.nodes[id].isLinked;
-        if (isLinked == 0) {
-            return 0;
-        }
-        var indexTypes          = new ComponentTypes();
-        var relationTypes       = new ComponentTypes();
-        var schema              = EntityStoreBase.Static.EntitySchema;
-        indexTypes.bitSet.l0    = schema.indexTypes.   bitSet.l0 & isLinked; // intersect
-        relationTypes.bitSet.l0 = schema.relationTypes.bitSet.l0 & isLinked; // intersect
-
-        var relationsMap = store.extension.relationsMap;
-        if (components == null) {
-            int count = indexTypes.Count;
-            foreach (var componentType in relationTypes) {
-                var references  = EntityRelations.GetRelationReferences(store, id, componentType.StructIndex);
-                count          += references.Count;
-            }
-            return count;
-        }
-        var index   = 0;
-        foreach (var componentType in indexTypes) {
-            components[index++] = new EntityComponent(entity, componentType);
-        }
-        foreach (var componentType in relationTypes) {
-            var references      = EntityRelations.GetRelationReferences(store, id, componentType.StructIndex);
-            var relations       = relationsMap[componentType.StructIndex];
-            int relationIndex   = 0;
-            foreach (var reference in references) {
-                components[index++] = new EntityComponent(new Entity(store, reference.Id), componentType, relations, relationIndex++);
-            }
-        }
-        return index;
-    }
-    
-    private static bool GetRelationTypes(Entity entity, out ComponentTypes relationTypes)
+    internal static bool GetRelationTypes(Entity entity, out ComponentTypes relationTypes)
     {
         relationTypes  = default;
         var isOwner = entity.store.nodes[entity.Id].isOwner; 
@@ -156,9 +93,8 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     // --- new
     public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(this);
 
-    internal EntityComponents(Entity entity, bool onlyReferences) {
-        this.entity         = entity;
-        this.onlyReferences = onlyReferences;
+    internal EntityComponents(Entity entity) {
+        this.entity          = entity;
     }
 }
 
@@ -173,17 +109,25 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     
     internal ComponentEnumerator(in EntityComponents entityComponents)
     {
-        if (!entityComponents.onlyReferences) {
-            components = entityComponents.GetAllComponents();
+        var entity  = entityComponents.entity;
+        var array   = new EntityComponent[entityComponents.Count];
+        components  = array;
+        int compIndex = 0;
+        foreach (var componentType in entity.archetype.componentTypes) {
+            array[compIndex++] = new EntityComponent(entity, componentType);
+        }
+        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
             return;
         }
-        var count   = entityComponents.GetReferences(null);
-        if (count == 0) {
-            components = Array.Empty<EntityComponent>();
-            return;
+        var relationsMap = entity.store.extension.relationsMap;
+        foreach (var componentType in relationTypes)
+        {
+            var relations       = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
+            int relationCount   = relations.GetRelationCount(entity);
+            for (int n = 0; n < relationCount; n++) {
+                array[compIndex++] = new EntityComponent(entity, componentType, relations, n);
+            }
         }
-        components  = new EntityComponent[count];
-        entityComponents.GetReferences(components);
     }
     
     // --- IEnumerator<>
