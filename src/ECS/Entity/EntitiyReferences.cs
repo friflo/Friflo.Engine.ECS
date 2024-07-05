@@ -3,6 +3,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -21,7 +23,7 @@ public readonly struct EntityReference<TComponent>
     [Browse(Never)] private readonly    EntityRelations relations;  //  8
     [Browse(Never)] private readonly    int             target;     //  4
 
-                    public  override    string  ToString() => $"Source: {Entity.Id}";
+                    public  override    string          ToString()  => $"entity: {Entity.Id}";
 
     internal EntityReference(int target, in Entity entity, EntityRelations relations) {
         this.target     = target;
@@ -39,6 +41,7 @@ public readonly struct EntityReference<TComponent>
     }
 }
 
+[DebuggerTypeProxy(typeof(EntityReferencesDebugView<>))]
 public readonly struct EntityReferences<T> : IReadOnlyList<EntityReference<T>>
     where T : struct, IComponent
 {
@@ -124,5 +127,17 @@ public struct EntityReferenceEnumerator<T> : IEnumerator<EntityReference<T>>
     }
     
     public readonly void Dispose() { }
+}
+
+internal sealed class EntityReferencesDebugView<T> where T : struct, IComponent
+{
+    [Browse(RootHidden)]
+    internal            EntityReference<T>[]    Entities => references.ToArray();
+    
+    private readonly    EntityReferences<T>     references;
+    
+    internal EntityReferencesDebugView(EntityReferences<T> references) {
+        this.references = references;
+    }
 }
 
