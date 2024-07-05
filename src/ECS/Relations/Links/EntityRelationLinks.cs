@@ -32,7 +32,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         throw KeyNotFoundException(id, target);
     }
     
-    internal override void AddLinkRelations(int target, List<IncomingLink> result)
+    internal override void AddLinkRelations(int target, List<EntityLink> result)
     {
         linkEntityMap.TryGetValue(target, out var sourceIds);
         var sourceIdSpan    = sourceIds.GetIdSpan(linkIdsHeap);
@@ -40,7 +40,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         var targetEntity    = new Entity(store, target);    
         foreach (var sourceId in sourceIdSpan) {
             var position = FindRelationPosition(sourceId, targetEntity, out var positions, out _);
-            var link     = new IncomingLink (new Entity(store, sourceId), target, components[position]);
+            var link     = new EntityLink (new Entity(store, sourceId), target, components[position]);
             result.Add(link);
         }
     }

@@ -29,7 +29,7 @@ internal readonly struct EntityInfo
     internal            bool                Enabled         => entity.Enabled;
     internal            string              JSON            => EntityUtils.EntityToJSON(entity);
     internal            DebugEventHandlers  EventHandlers   => EntityStore.GetEventHandlers(entity.store, entity.Id);
-    internal            IncomingLinks       IncomingLinks   => entity.GetAllIncomingLinks();   
+    internal            EntityLinks         EntityLinks     => entity.GetAllIncomingLinks();   
     public   override   string              ToString()      => "";
     #endregion
 

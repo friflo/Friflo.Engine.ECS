@@ -14,7 +14,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct IncomingLink<TComponent>
+public readonly struct EntityLink<TComponent>
     where TComponent : struct, IComponent
 {
                     public              Entity          Target      => new Entity(Entity.store, target);
@@ -24,7 +24,7 @@ public readonly struct IncomingLink<TComponent>
 
                     public  override    string          ToString()  => $"Entity: {Entity.Id} -> Target: {target}";
 
-    internal IncomingLink(int target, in Entity entity, EntityRelations relations) {
+    internal EntityLink(int target, in Entity entity, EntityRelations relations) {
         this.target     = target;
         Entity          = entity;
         this.relations  = relations;
@@ -40,8 +40,8 @@ public readonly struct IncomingLink<TComponent>
     }
 }
 
-[DebuggerTypeProxy(typeof(IncomingLinksDebugView<>))]
-public readonly struct IncomingLinks<T> : IReadOnlyList<IncomingLink<T>>
+[DebuggerTypeProxy(typeof(EntityLinksDebugView<>))]
+public readonly struct EntityLinks<T> : IReadOnlyList<EntityLink<T>>
     where T : struct, IComponent
 {
 #region properties
@@ -57,13 +57,13 @@ public readonly struct IncomingLinks<T> : IReadOnlyList<IncomingLink<T>>
     #endregion
     
 #region general
-    internal IncomingLinks(in Entity target, in Entities entities, EntityRelations relations) {
+    internal EntityLinks(in Entity target, in Entities entities, EntityRelations relations) {
         this.target     = target.Id;
         Entities        = entities;
         this.relations  = relations;
     }
     
-    public IncomingLink<T> this[int index] => new (target, Entities[index], relations);
+    public EntityLink<T> this[int index] => new (target, Entities[index], relations);
     
     public string Debug()
     {
@@ -81,18 +81,18 @@ public readonly struct IncomingLinks<T> : IReadOnlyList<IncomingLink<T>>
 
     
 #region IEnumerator
-    public IncomingLinkEnumerator<T>                          GetEnumerator() => new IncomingLinkEnumerator<T> (this);
+    public EntityLinkEnumerator<T>                         GetEnumerator() => new EntityLinkEnumerator<T> (this);
     
     // --- IEnumerable
-    IEnumerator                                   IEnumerable.GetEnumerator() => new IncomingLinkEnumerator<T> (this);
+    IEnumerator                                IEnumerable.GetEnumerator() => new EntityLinkEnumerator<T> (this);
 
     // --- IEnumerable<>
-    IEnumerator<IncomingLink<T>> IEnumerable<IncomingLink<T>>.GetEnumerator() => new IncomingLinkEnumerator<T> (this);
+    IEnumerator<EntityLink<T>>  IEnumerable<EntityLink<T>>.GetEnumerator() => new EntityLinkEnumerator<T> (this);
     #endregion
 }
 
 
-public struct IncomingLinkEnumerator<T> : IEnumerator<IncomingLink<T>>
+public struct EntityLinkEnumerator<T> : IEnumerator<EntityLink<T>>
     where T : struct, IComponent
 {
     private readonly    int             target;     //  4
@@ -100,19 +100,19 @@ public struct IncomingLinkEnumerator<T> : IEnumerator<IncomingLink<T>>
     private readonly    EntityRelations relations;  //  8
     private             int             index;      //  4
     
-    internal IncomingLinkEnumerator(in IncomingLinks<T> incomingLinks) {
-        target      = incomingLinks.target;
-        entities    = incomingLinks.Entities;
-        relations   = incomingLinks.relations;
+    internal EntityLinkEnumerator(in EntityLinks<T> entityLinks) {
+        target      = entityLinks.target;
+        entities    = entityLinks.Entities;
+        relations   = entityLinks.relations;
         index       = -1;
     }
     
     // --- IEnumerator
     public          void         Reset()    => index = -1;
 
-    readonly object IEnumerator.Current    => new IncomingLink<T>(target, entities[index], relations);
+    readonly object IEnumerator.Current    => new EntityLink<T>(target, entities[index], relations);
 
-    public   IncomingLink<T>    Current    => new IncomingLink<T>(target, entities[index], relations);
+    public   EntityLink<T>    Current    => new EntityLink<T>(target, entities[index], relations);
     
     // --- IEnumerator
     public bool MoveNext()
@@ -127,15 +127,15 @@ public struct IncomingLinkEnumerator<T> : IEnumerator<IncomingLink<T>>
     public readonly void Dispose() { }
 }
 
-internal sealed class IncomingLinksDebugView<T> where T : struct, IComponent
+internal sealed class EntityLinksDebugView<T> where T : struct, IComponent
 {
     [Browse(RootHidden)]
-    internal            IncomingLink<T>[]    Entities => incomingLinks.ToArray();
+    internal            EntityLink<T>[]    Entities => entityLinks.ToArray();
     
-    private readonly    IncomingLinks<T>     incomingLinks;
+    private readonly    EntityLinks<T>     entityLinks;
     
-    internal IncomingLinksDebugView(IncomingLinks<T> incomingLinks) {
-        this.incomingLinks = incomingLinks;
+    internal EntityLinksDebugView(EntityLinks<T> entityLinks) {
+        this.entityLinks = entityLinks;
     }
 }
 

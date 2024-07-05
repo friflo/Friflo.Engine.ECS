@@ -8,10 +8,10 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS {
     
-public static class Test_IncomingLinks
+public static class Test_EntityLinks
 {
     [Test]
-    public static void Test_IncomingLinks_All()
+    public static void Test_EntityLinks_All()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -58,7 +58,7 @@ public static class Test_IncomingLinks
     }
     
     [Test]
-    public static void Test_IncomingLinks_LinkComponent()
+    public static void Test_EntityLinks_LinkComponent()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
@@ -102,7 +102,7 @@ public static class Test_IncomingLinks
     }
     
     [Test]
-    public static void Test_IncomingLinks_LinkRelation()
+    public static void Test_EntityLinks_LinkRelation()
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);

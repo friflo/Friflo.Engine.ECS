@@ -11,9 +11,9 @@ namespace Friflo.Engine.ECS;
 
 public static partial class EntityExtensions
 {
-    private static readonly List<IncomingLink> LinkBuffer = new ();
+    private static readonly List<EntityLink> LinkBuffer = new ();
     
-    public static IncomingLinks GetAllIncomingLinks(this Entity entity)
+    public static EntityLinks GetAllIncomingLinks(this Entity entity)
     {
         var store               = entity.store;
         var target              = entity.Id;
@@ -37,7 +37,7 @@ public static partial class EntityExtensions
             foreach (var linkId in idSpan) {
                 var linkEntity  = new Entity(store, linkId);
                 var component   = EntityUtils.GetEntityComponent(linkEntity, componentType);
-                LinkBuffer.Add(new IncomingLink(linkEntity, target, component));
+                LinkBuffer.Add(new EntityLink(linkEntity, target, component));
             }
         }
         // --- add all link relations
@@ -47,7 +47,7 @@ public static partial class EntityExtensions
             relations.AddLinkRelations(entity.Id, LinkBuffer);
         }
         var links = LinkBuffer.ToArray();
-        return new IncomingLinks(entity, links);
+        return new EntityLinks(entity, links);
     }
 
     

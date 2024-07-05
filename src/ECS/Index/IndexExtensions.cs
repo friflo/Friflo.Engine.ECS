@@ -20,10 +20,10 @@ public static class IndexExtensions
     /// Executes in O(1). 
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static IncomingLinks<TComponent> GetIncomingLinks<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
+    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
-        return new IncomingLinks<TComponent>(entity, index.GetHasValueEntities(entity), null);
+        return new EntityLinks<TComponent>(entity, index.GetHasValueEntities(entity), null);
     }
     #endregion
     
