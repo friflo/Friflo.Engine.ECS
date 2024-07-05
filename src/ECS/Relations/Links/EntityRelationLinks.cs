@@ -21,6 +21,16 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         linkIdsHeap     = new IdArrayHeap();
     }
     
+    internal override ref TComponent GetEntityRelation<TComponent>(int id, int targetId)
+    {
+        var target      = new Entity(store, targetId);
+        var position    = FindRelationPosition(id, target, out _, out _);
+        if (position >= 0) {
+            return ref ((StructHeap<TComponent>)heap).components[position];
+        }
+        throw KeyNotFoundException(id, target);
+    }
+    
 #region mutation
 
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>

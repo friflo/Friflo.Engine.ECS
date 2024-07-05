@@ -14,23 +14,23 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct EntityReference<TComponent>
     where TComponent : struct, IComponent
-{
+{ 
                     public  readonly    Entity          Entity;     // 16
-    [Browse(Never)] private readonly    int             index;      //  4
     [Browse(Never)] private readonly    EntityRelations relations;  //  8
+    [Browse(Never)] private readonly    int             target;     //  4
 
                     public  override    string  ToString() => $"Source: {Entity.Id}";
 
-    internal EntityReference(Entity entity, EntityRelations relations, int index) {
+    internal EntityReference(int target, in Entity entity, EntityRelations relations) {
+        this.target     = target;
         Entity          = entity;
         this.relations  = relations;
-        this.index      = index;
     }
     
     public TComponent Component {
         get {
             if (relations != null) {
-                return relations.GetRelationAt<TComponent>(Entity.Id, index);
+                return relations.GetEntityRelation<TComponent>(Entity.Id, target);
             }
             return Entity.GetComponent<TComponent>();
         }
@@ -42,22 +42,25 @@ public readonly struct EntityReferences<T> : IReadOnlyList<EntityReference<T>>
 {
 #region properties
     public              int         Count       => Entities.Count;
+    public              Entity      Target      => new Entity(Entities.store, target);
     public              EntityStore Store       => Entities.store;
     public   override   string      ToString()  => $"EntityReference<{typeof(T).Name}>[{Entities.Count}]";
     #endregion
     
 #region fields
                     public   readonly   Entities            Entities;   // 16
+    [Browse(Never)] internal readonly   int                 target;     //  4
     [Browse(Never)] internal readonly   EntityRelations     relations;  //  8
     #endregion
     
 #region general
-    internal EntityReferences(in Entities entities, EntityRelations relations) {
+    internal EntityReferences(in Entity target, in Entities entities, EntityRelations relations) {
+        this.target     = target.Id;
         Entities        = entities;
         this.relations  = relations;
     }
     
-    public EntityReference<T> this[int index] => new (Entities[index], relations, index);
+    public EntityReference<T> this[int index] => new (target, Entities[index], relations);
     
     public string Debug()
     {
@@ -89,22 +92,24 @@ public readonly struct EntityReferences<T> : IReadOnlyList<EntityReference<T>>
 public struct EntityReferenceEnumerator<T> : IEnumerator<EntityReference<T>>
     where T : struct, IComponent
 {
+    private readonly    int             target;     //  4
     private readonly    Entities        entities;   // 16
-    private readonly    EntityRelations relations;  // 16
+    private readonly    EntityRelations relations;  //  8
     private             int             index;      //  4
     
     internal EntityReferenceEnumerator(in EntityReferences<T> references) {
+        target      = references.target;
         entities    = references.Entities;
         relations   = references.relations;
         index       = -1;
     }
     
     // --- IEnumerator
-    public          void         Reset()    => index = 0;
+    public          void         Reset()    => index = -1;
 
-    readonly object IEnumerator.Current    => new EntityReference<T>(entities[index], relations, index);
+    readonly object IEnumerator.Current    => new EntityReference<T>(target, entities[index], relations);
 
-    public   EntityReference<T> Current    => new EntityReference<T>(entities[index], relations, index);
+    public   EntityReference<T> Current    => new EntityReference<T>(target, entities[index], relations);
     
     // --- IEnumerator
     public bool MoveNext()
