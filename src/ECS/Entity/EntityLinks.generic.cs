@@ -17,13 +17,18 @@ namespace Friflo.Engine.ECS;
 public readonly struct EntityLink<TComponent>
     where TComponent : struct, IComponent
 {
-                    public              Entity          Target      => new Entity(Entity.store, target);
+#region properties
+    public              Entity          Target      => new Entity(Entity.store, target);
+    public  override    string          ToString()  => $"Entity: {Entity.Id} -> Target: {target}";
+    #endregion
+
+#region fields
                     public  readonly    Entity          Entity;     // 16
     [Browse(Never)] private readonly    EntityRelations relations;  //  8
     [Browse(Never)] private readonly    int             target;     //  4
+    #endregion
 
-                    public  override    string          ToString()  => $"Entity: {Entity.Id} -> Target: {target}";
-
+ 
     internal EntityLink(int target, in Entity entity, EntityRelations relations) {
         this.target     = target;
         Entity          = entity;
