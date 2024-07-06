@@ -476,7 +476,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
 /// </summary>
 public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
 {
-    private                BitSetEnumerator    bitSetEnumerator;   // 48
+    internal                BitSetEnumerator    bitSetEnumerator;   // 48
     
     private static readonly ComponentType[]     Components = EntityStoreBase.Static.EntitySchema.components;
 

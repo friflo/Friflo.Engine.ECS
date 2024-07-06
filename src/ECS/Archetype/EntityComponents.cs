@@ -46,13 +46,13 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     
     private EntityComponent[] CreateComponents()
     {
+        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
+            return null;
+        }
         var components  = new EntityComponent[GetCount()];
         int compIndex   = 0;
         foreach (var componentType in entity.archetype.componentTypes) {
             components[compIndex++] = new EntityComponent(entity, componentType);
-        }
-        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
-            return components;
         }
         var relationsMap = entity.store.extension.relationsMap;
         foreach (var componentType in relationTypes)
@@ -80,7 +80,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     
     internal IComponent[] GetComponentArray()
     {
-        int count = Count;
+        int count = GetCount();
         if (count == 0) {
             return Array.Empty<IComponent>();
         }
@@ -97,7 +97,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         var sb          = new StringBuilder();
         var archetype   = entity.archetype;
         archetype.componentTypes.AppendTo(sb);
-        var relationCount = Count - archetype.componentTypes.Count;
+        var relationCount = GetCount() - archetype.componentTypes.Count;
         if (relationCount > 0) {
             sb.Append(" +");
             sb.Append(relationCount);
@@ -107,13 +107,13 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     }
 
     // --- IEnumerable<>
-    IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(CreateComponents());
+    IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(entity, CreateComponents());
     
     // --- IEnumerable
-    IEnumerator                                     IEnumerable.GetEnumerator() => new ComponentEnumerator(CreateComponents());
+    IEnumerator                                     IEnumerable.GetEnumerator() => new ComponentEnumerator(entity, CreateComponents());
     
     // --- new
-    public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(CreateComponents());
+    public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(entity, CreateComponents());
 
     internal EntityComponents(Entity entity) {
         this.entity          = entity;
@@ -125,19 +125,34 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
 /// </summary>
 public struct ComponentEnumerator : IEnumerator<EntityComponent>
 {
-    // --- internal fields
-    private  readonly   EntityComponent[]   components;
-    private             int                 index;
+#region fields
+    // --- used when entity does not contain relations
+    private  readonly   Entity                      entity;             // 16
+    private             ComponentTypesEnumerator    typesEnumerator;    // 48
+    // --- used when entity contains relations
+    private  readonly   EntityComponent[]           components;         //  8
+    private             int                         index;              //  4
+    #endregion
     
-    internal ComponentEnumerator(EntityComponent[] components) {
+    internal ComponentEnumerator(Entity entity, EntityComponent[] components) {
+        this.entity     = entity;
+        typesEnumerator = new ComponentTypesEnumerator (entity.archetype.componentTypes);
         this.components = components;
     }
     
     // --- IEnumerator<>
-    public readonly EntityComponent Current   => components[index - 1];
+    public readonly EntityComponent Current   => components == null
+        ? new EntityComponent(entity, typesEnumerator.Current)
+        : components[index - 1];
     
     // --- IEnumerator
-    public bool MoveNext() {
+    object IEnumerator.Current => Current;
+    
+    public bool MoveNext()
+    {
+        if (components == null) {
+            return typesEnumerator.bitSetEnumerator.MoveNext();
+        }
         if (index < components.Length) {
             index++;
             return true;
@@ -146,10 +161,9 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     }
 
     public void Reset() {
+        typesEnumerator.bitSetEnumerator.Reset();
         index = 0;
     }
-    
-    object IEnumerator.Current => components[index - 1];
 
     // --- IDisposable
     public void Dispose() { }
