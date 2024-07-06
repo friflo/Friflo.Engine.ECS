@@ -54,6 +54,7 @@ public static partial class EntityExtensions
             relations.AddIncomingRelations(entity.Id, linkBuffer);
         }
         var links = linkBuffer.ToArray();
+        linkBuffer.Clear(); // clear to avoid tracing references by GC
         return new EntityLinks(links);
     }
     
