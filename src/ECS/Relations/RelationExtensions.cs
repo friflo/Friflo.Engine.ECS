@@ -86,14 +86,14 @@ public static class RelationExtensions
     }
     
     /// <summary>
-    /// Return the entities with a link relation link referencing this entity of the passed <see cref="IRelationComponent"/> type.<br/>
+    /// Return the entities with a link relation referencing the <paramref name="target"/> entity of the passed <see cref="IRelationComponent"/> type.<br/>
     /// Executes in O(1).
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity entity) where TComponent: struct, IRelationComponent {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
-        var entities = EntityRelations.GetIncomingLinkRelations(entity.store, entity.Id, StructInfo<TComponent>.Index, out var relations);
-        return new EntityLinks<TComponent>(entity, entities, relations);
+    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity target) where TComponent: struct, IRelationComponent {
+        if (target.archetype == null) throw EntityStoreBase.EntityNullException(target);
+        var entities = EntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TComponent>.Index, out var relations);
+        return new EntityLinks<TComponent>(target, entities, relations);
     }
     #endregion
     

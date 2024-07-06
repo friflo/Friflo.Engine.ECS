@@ -16,14 +16,14 @@ public static class IndexExtensions
 {
 #region Entity
     /// <summary>
-    /// Return the entities with a link component referencing this entity of the passed <see cref="ILinkComponent"/> type.<br/>
+    /// Return the entities with a link component referencing the <paramref name="target"/> entity of the passed <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). 
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity entity) where TComponent: struct, ILinkComponent {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
-        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(entity.store, StructInfo<TComponent>.Index);
-        return new EntityLinks<TComponent>(entity, index.GetHasValueEntities(entity), null);
+    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity target) where TComponent: struct, ILinkComponent {
+        if (target.archetype == null) throw EntityStoreBase.EntityNullException(target);
+        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(target.store, StructInfo<TComponent>.Index);
+        return new EntityLinks<TComponent>(target, index.GetHasValueEntities(target), null);
     }
     #endregion
     

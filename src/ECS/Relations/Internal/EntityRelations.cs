@@ -142,13 +142,13 @@ internal abstract class EntityRelations
         return (entities, chunk);
     }
     
-    internal static Entities GetIncomingLinkRelations(EntityStore store, int id, int structIndex, out EntityRelations relations)
+    internal static Entities GetIncomingLinkRelations(EntityStore store, int target, int structIndex, out EntityRelations relations)
     {
         relations = store.extension.relationsMap[structIndex];
         if (relations == null) {
             return default;
         }
-        relations.linkEntityMap.TryGetValue(id, out var ids);
+        relations.linkEntityMap.TryGetValue(target, out var ids);
         return relations.linkIdsHeap.GetEntities(store, ids);
     }
     
