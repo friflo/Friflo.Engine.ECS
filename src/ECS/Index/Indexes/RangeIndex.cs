@@ -31,15 +31,15 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(component);
+        TValue value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
         SortedListUtils.AddComponentValue    (id, value, entityMap, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldValue = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
-        var value    = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(component);
+        TValue oldValue = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
+        TValue value    = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(component);
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
@@ -50,7 +50,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
 
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
+        TValue value = IndexedValueUtils<TComponent,TValue>.GetIndexedValue(heap.componentStash);
         SortedListUtils.RemoveComponentValue (id, value, entityMap, this);
     }
     
@@ -59,7 +59,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
         var map         = entityMap;
         var heap        = idHeap;
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
-        var value       = components[compIndex].GetIndexedValue();
+        TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetIdSpan(heap);
         var index   = idSpan.IndexOf(id);

@@ -23,15 +23,15 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var target = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+        int target = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
     //  var target = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
         EntityIndexUtils.AddComponentValue    (id, target, this);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap<TComponent> heap)
     {
-        var oldTarget = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
-        var target    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
+        int oldTarget = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        int target    = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(component).Id;
         if (oldTarget == target) {
             return;
         }
@@ -41,7 +41,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     
     internal override void Remove<TComponent>(int id, StructHeap<TComponent> heap)
     {
-        var target = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
+        int target = IndexedValueUtils<TComponent,Entity>.GetIndexedValue(heap.componentStash).Id;
         EntityIndexUtils.RemoveComponentValue (id, target, this);
     }
     
@@ -50,7 +50,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
         entityMap.TryGetValue(targetId, out var idArray);
         // TODO check if it necessary to make a copy of linkingEntityIds - e.g. by stackalloc 
         var linkingEntityIds  = idArray.GetIdSpan(idHeap);
-        foreach (var linkingEntityId in linkingEntityIds)
+        foreach (int linkingEntityId in linkingEntityIds)
         {
             var entity = new Entity(store, linkingEntityId);
             EntityUtils.RemoveEntityComponent(entity, componentType);
@@ -77,10 +77,10 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
         var map             = entityMap;
         var heap            = idHeap;
         var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
-        var linkedEntity    = components[compIndex].GetIndexedValue().Id;
+        int linkedEntity    = components[compIndex].GetIndexedValue().Id;
         map.TryGetValue(linkedEntity, out var idArray);
         var idSpan  = idArray.GetIdSpan(heap);
-        var index   = idSpan.IndexOf(id);
+        int index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             map.Remove(linkedEntity);

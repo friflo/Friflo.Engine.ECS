@@ -90,13 +90,13 @@ internal abstract class EntityRelations
             return default;
         }
         relations.positionMap.TryGetValue(id, out var positions);
-        var count       = positions.count;
+        int count       = positions.count;
         var components  = ((StructHeap<TComponent>)relations.heap).components;
         switch (count) {
             case 0: return  new RelationComponents<TComponent>();
             case 1: return  new RelationComponents<TComponent>(components, positions.start);
         }
-        var poolIndex       = IdArrayHeap.PoolIndex(count);
+        int poolIndex       = IdArrayHeap.PoolIndex(count);
         var poolPositions   = relations.idHeap.GetPool(poolIndex).Ids;
         return new RelationComponents<TComponent>(components, poolPositions, positions.start, positions.count);
     }
@@ -125,7 +125,7 @@ internal abstract class EntityRelations
     internal void ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda)  where TComponent : struct, IRelationComponent
     {
         var components  = ((StructHeap<TComponent>)heap).components;
-        var count       = archetype.Count;
+        int count       = archetype.Count;
         var ids         = archetype.entityIds;
         var entityStore = store;
         for (int n = 0; n < count; n++) {
@@ -193,11 +193,11 @@ internal abstract class EntityRelations
         var localIdHeap = idHeap;
         
         // --- adjust position in entityMap of last component
-        var lastPosition        = type.entityCount - 1;
-        var lastId              = type.entityIds[lastPosition];
+        int lastPosition        = type.entityCount - 1;
+        int lastId              = type.entityIds[lastPosition];
         map.TryGetValue(lastId, out var curPositions);
         var positionSpan        = curPositions.GetIdSpan(localIdHeap);
-        var curPositionIndex    = positionSpan.IndexOf(lastPosition);
+        int curPositionIndex    = positionSpan.IndexOf(lastPosition);
         curPositions.Set(curPositionIndex, position, localIdHeap);
         // array with length == 1 is stored in-place
         if (curPositions.count == 1) {

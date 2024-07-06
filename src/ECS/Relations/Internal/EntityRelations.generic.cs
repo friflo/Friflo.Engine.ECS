@@ -29,11 +29,11 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     {
         positionMap.TryGetValue(id, out positions);
         var positionSpan    = positions.GetIdSpan(idHeap);
-        var positionCount   = positions.count;
+        int positionCount   = positions.count;
         var components      = heapGeneric.components;
         for (index = 0; index < positionCount; index++) {
-            var position    = positionSpan[index];
-            var relation    = components[position].GetRelationKey(); // no boxing
+            int position    = positionSpan[index];
+            TKey relation   = components[position].GetRelationKey(); // no boxing
             //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
             if (EqualityComparer<TKey>.Default.Equals(relation, key)) {
                 return position;

@@ -16,7 +16,7 @@ internal static class LinkRelationUtils
         var linkHeap    = componentIndex.linkIdsHeap;
         map.TryGetValue(target, out var ids);
         var idSpan  = ids.GetIdSpan(linkHeap);
-        var index   = idSpan.IndexOf(id);
+        int index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }

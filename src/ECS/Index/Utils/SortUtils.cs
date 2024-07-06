@@ -12,7 +12,7 @@ internal static class SortUtils<TValue>
 {
     internal static void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet, Dictionary<TValue, IdArray> map, ComponentIndex<TValue> componentIndex)
     {
-        var count   = map.Count;
+        int count   = map.Count;
         var buffer  = componentIndex.sortBuffer;
         if (componentIndex.modified) {
             componentIndex.modified = false;

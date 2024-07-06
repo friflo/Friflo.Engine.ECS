@@ -18,12 +18,12 @@ internal static class EntityIndexUtils
         var idHeap  = componentIndex.idHeap;
         map.TryGetValue(target, out var ids);
         var idSpan  = ids.GetIdSpan(idHeap);
-        var index   = idSpan.IndexOf(id);
+        int index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
         var nodes           =  componentIndex.store.nodes;
-        var complement      = ~componentIndex.indexBit;
+        int complement      = ~componentIndex.indexBit;
         nodes[id].isOwner  &=  complement;
         if (ids.Count == 1) {
             nodes[target].isLinked   &= complement;
@@ -45,7 +45,7 @@ internal static class EntityIndexUtils
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }
         var nodes           = componentIndex.store.nodes;
-        var indexBit        = componentIndex.indexBit;
+        int indexBit        = componentIndex.indexBit;
         nodes[id].isOwner  |= indexBit;
         if (ids.Count == 0) {
             nodes[target].isLinked   |= indexBit;

@@ -25,8 +25,8 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     /// Expect: component is present
     internal override ref TComponent GetEntityRelation<TComponent>(int id, int targetId)
     {
-        var target      = new Entity(store, targetId);
-        var position    = FindRelationPosition(id, target, out _, out _);
+        Entity target   = new Entity(store, targetId);
+        int position    = FindRelationPosition(id, target, out _, out _);
         return ref ((StructHeap<TComponent>)heap).components[position];
     }
     
@@ -35,7 +35,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         linkEntityMap.TryGetValue(target, out var sourceIds);
         var sourceIdSpan    = sourceIds.GetIdSpan(linkIdsHeap);
         var components      = heapGeneric.components;
-        var targetEntity    = new Entity(store, target);    
+        Entity targetEntity = new Entity(store, target);    
         foreach (var sourceId in sourceIdSpan) {
             var position = FindRelationPosition(sourceId, targetEntity, out var positions, out _);
             var link     = new EntityLink (new Entity(store, sourceId), target, components[position]);
@@ -49,8 +49,8 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     internal override bool AddComponent<TComponent>(int id, in TComponent component)
     {
         Entity target   = RelationUtils<TComponent, Entity>.GetRelationKey(component);
-        var added       = true;
-        var position    = FindRelationPosition(id, target, out var positions, out _);
+        bool added      = true;
+        int position    = FindRelationPosition(id, target, out var positions, out _);
         if (position >= 0) {
             added = false;
             goto AssignComponent;
@@ -66,7 +66,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     /// <returns>true if entity contained a relation of the given type before</returns>
     internal override bool RemoveRelation(int id, Entity target)
     {
-        var position = FindRelationPosition(id, target, out var positions, out int index);
+        int position = FindRelationPosition(id, target, out var positions, out int index);
         if (position >= 0) {
             RemoveEntityRelation(id, position, positions, index);
             LinkRelationUtils.RemoveComponentValue(id, target.Id, this);
