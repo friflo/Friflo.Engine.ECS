@@ -49,8 +49,12 @@ public sealed class Archetype
     /// <summary>The current capacity reserved to store entity components.</summary>
                     public              int                 Capacity        => memory.capacity;
 
-    /// <summary>The list of entity ids stored in the archetype.</summary>
+    /// <summary>Return the entity ids stored in the archetype.</summary>
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
+    
+    /// <summary>Return the components of the specified <typeparamref name="TComponent"/> type stored in the archetype.</summary>
+                    public              Span<TComponent>    Components<TComponent>() where TComponent : struct, IComponent
+                        => new (((StructHeap<TComponent>)heapMap[StructInfo<TComponent>.Index]).components, 0, entityCount);
     
     /// <summary>The <see cref="EntityStore"/> owning the archetype.</summary>
                     public              EntityStoreBase     Store           => store;
@@ -363,7 +367,7 @@ public sealed class Archetype
         value++;
         return value;
     }
-
+    
     internal static int GetEntityCount(ReadOnlySpan<Archetype> archetypes)
     {
         int count = 0;
