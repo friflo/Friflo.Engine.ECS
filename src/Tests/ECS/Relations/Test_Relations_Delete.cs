@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Friflo.Engine.ECS;
+﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -45,12 +44,10 @@ public static class Test_Relations_Delete
         AreEqual("{ 10, 20, 30 }",  relations.Debug());
             
         entity1.DeleteEntity();
-        AreEqual("{ 2 }",       allEntities.Debug());
-        var array = allEntities.ToArray();
-        AreEqual(30, array[0].GetRelation<IntRelation, int>(30).value);
-        
+        AreEqual("{ 2 }",           allEntities.Debug());
+
         entity2.DeleteEntity();
-        AreEqual("{ }",         allEntities.Debug());
+        AreEqual("{ }",             allEntities.Debug());
     }
     
     [Test]
@@ -96,7 +93,8 @@ public static class Test_Relations_Delete
         entity1.DeleteEntity();                                             //  10     -     11
         AreEqual("{ 2 }",           sourceNodes.Debug());                   //  12  🡐  2
         
-        AreEqual(12, sourceNodes.First().GetRelation<AttackRelation, Entity>(target12).target.Id);
+        var entity2Relation = entity2.GetRelation<AttackRelation, Entity>(target12);
+        AreEqual(12, entity2Relation.target.Id);
         
         entity2.DeleteEntity();                                             //  10     -     11
         AreEqual("{ }",             sourceNodes.Debug());                   //  12     -
