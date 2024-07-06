@@ -22,7 +22,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
 {
     // --- internal fields
     [Browse(Never)]
-    internal readonly   Entity  entity;     // 16
+    private  readonly   Entity  entity;     // 16
 
     /// <summary>Return the number of <see cref="IComponent"/>'s of an entity.</summary>
     public              int     Count       => GetCount();
@@ -44,7 +44,29 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         return count;
     }
     
-    internal static bool GetRelationTypes(Entity entity, out ComponentTypes relationTypes)
+    private EntityComponent[] CreateComponents()
+    {
+        var components  = new EntityComponent[GetCount()];
+        int compIndex   = 0;
+        foreach (var componentType in entity.archetype.componentTypes) {
+            components[compIndex++] = new EntityComponent(entity, componentType);
+        }
+        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
+            return components;
+        }
+        var relationsMap = entity.store.extension.relationsMap;
+        foreach (var componentType in relationTypes)
+        {
+            var relations       = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
+            int relationCount   = relations.GetRelationCount(entity);
+            for (int n = 0; n < relationCount; n++) {
+                components[compIndex++] = new EntityComponent(entity, componentType, relations, n);
+            }
+        }
+        return components;
+    }
+    
+    private static bool GetRelationTypes(Entity entity, out ComponentTypes relationTypes)
     {
         relationTypes  = default;
         var isOwner = entity.store.nodes[entity.Id].isOwner; 
@@ -85,13 +107,13 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     }
 
     // --- IEnumerable<>
-    IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(this);
+    IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(CreateComponents());
     
     // --- IEnumerable
-    IEnumerator                                     IEnumerable.GetEnumerator() => new ComponentEnumerator(this);
+    IEnumerator                                     IEnumerable.GetEnumerator() => new ComponentEnumerator(CreateComponents());
     
     // --- new
-    public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(this);
+    public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(CreateComponents());
 
     internal EntityComponents(Entity entity) {
         this.entity          = entity;
@@ -107,27 +129,8 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     private  readonly   EntityComponent[]   components;
     private             int                 index;
     
-    internal ComponentEnumerator(in EntityComponents entityComponents)
-    {
-        var entity  = entityComponents.entity;
-        var array   = new EntityComponent[entityComponents.Count];
-        components  = array;
-        int compIndex = 0;
-        foreach (var componentType in entity.archetype.componentTypes) {
-            array[compIndex++] = new EntityComponent(entity, componentType);
-        }
-        if (!EntityComponents.GetRelationTypes(entity, out var relationTypes)) {
-            return;
-        }
-        var relationsMap = entity.store.extension.relationsMap;
-        foreach (var componentType in relationTypes)
-        {
-            var relations       = relationsMap[componentType.StructIndex]; // not null - ensured by GetRelationTypes()
-            int relationCount   = relations.GetRelationCount(entity);
-            for (int n = 0; n < relationCount; n++) {
-                array[compIndex++] = new EntityComponent(entity, componentType, relations, n);
-            }
-        }
+    internal ComponentEnumerator(EntityComponent[] components) {
+        this.components = components;
     }
     
     // --- IEnumerator<>
