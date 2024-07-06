@@ -6,7 +6,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS {
+namespace Internal.ECS {
     
 public static class Test_EntityLinks
 {

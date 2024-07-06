@@ -10,8 +10,8 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable once CheckNamespace
-namespace Tests.Systems
-{
+namespace Internal.ECS {
+
     // ReSharper disable once InconsistentNaming
     public static class Test_Array
     {
