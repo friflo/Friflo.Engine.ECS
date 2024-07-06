@@ -29,11 +29,12 @@ public static partial class EntityExtensions
     public static EntityLinks GetAllIncomingLinks(this Entity entity)
     {
         GetIncomingLinkTypes(entity, out var indexTypes, out var relationTypes);
-        var store   = entity.store;
-        var target  = entity.Id;
-        LinkBuffer.Clear();
+        var store       = entity.store;
+        var target      = entity.Id;
+        var linkBuffer  = LinkBuffer;
+        linkBuffer.Clear();
         
-        // --- add all link components
+        // --- add all incoming link components
         var indexMap = store.extension.indexMap;
         foreach (var componentType in indexTypes)
         {
@@ -43,16 +44,16 @@ public static partial class EntityExtensions
             foreach (var linkId in idSpan) {
                 var linkEntity  = new Entity(store, linkId);
                 var component   = EntityUtils.GetEntityComponent(linkEntity, componentType);
-                LinkBuffer.Add(new EntityLink(linkEntity, target, component));
+                linkBuffer.Add(new EntityLink(linkEntity, target, component));
             }
         }
-        // --- add all link relations
+        // --- add all incoming link relations
         var relationsMap = store.extension.relationsMap;
         foreach (var componentType in relationTypes) {
             var relations = relationsMap[componentType.StructIndex];
-            relations.AddIncomingRelations(entity.Id, LinkBuffer);
+            relations.AddIncomingRelations(entity.Id, linkBuffer);
         }
-        var links = LinkBuffer.ToArray();
+        var links = linkBuffer.ToArray();
         return new EntityLinks(entity, links);
     }
     
@@ -60,9 +61,7 @@ public static partial class EntityExtensions
     {
         GetIncomingLinkTypes(entity, out var indexTypes, out var relationTypes);
         var store   = entity.store;
-        LinkBuffer.Clear();
-        
-        int count = 0;
+        int count   = 0;
         // --- count all incoming link components
         var indexMap = store.extension.indexMap;
         foreach (var componentType in indexTypes)
