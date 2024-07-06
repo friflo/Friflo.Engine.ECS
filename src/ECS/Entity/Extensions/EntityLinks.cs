@@ -54,7 +54,7 @@ public static partial class EntityExtensions
             relations.AddIncomingRelations(entity.Id, linkBuffer);
         }
         var links = linkBuffer.ToArray();
-        return new EntityLinks(entity, links);
+        return new EntityLinks(links);
     }
     
     public static int CountAllIncomingLinks(this Entity entity)

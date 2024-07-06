@@ -36,18 +36,15 @@ public readonly struct EntityLinks : IReadOnlyList<EntityLink>
 {
 #region properties
     public                  int         Count       => links.Length;
-    public                  EntityStore Store       => target.store;
     public   override       string      ToString()  => $"EntityLinks[{Count}]";
     #endregion
     
 #region fields
-    [Browse(Never)] private  readonly   Entity          target;         // 16
     [Browse(Never)] internal readonly   EntityLink[]    links;  //  8
     #endregion
     
 #region general
-    internal EntityLinks(in Entity target, EntityLink[]  links) {
-        this.target = target;
+    internal EntityLinks(EntityLink[] links) {
         this.links  = links;
     }
     

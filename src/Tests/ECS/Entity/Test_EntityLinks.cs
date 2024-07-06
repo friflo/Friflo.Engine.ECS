@@ -34,7 +34,6 @@ public static class Test_EntityLinks
         AreEqual(6, entity1.CountAllIncomingLinks());
         AreEqual("EntityLinks[6]",              links.ToString());
         AreEqual(6,                             links.Count);
-        AreSame (store,                         links.Store);
         
         AreEqual("Entity: 2 -> Target: 1  [AttackComponent]",links[0].ToString());
         AreEqual(2,                             links[0].Entity.Id);

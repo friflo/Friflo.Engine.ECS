@@ -117,7 +117,7 @@ public struct EntityLinkEnumerator<T> : IEnumerator<EntityLink<T>>
 
     readonly object IEnumerator.Current    => new EntityLink<T>(target, entities[index], relations);
 
-    public   EntityLink<T>    Current    => new EntityLink<T>(target, entities[index], relations);
+    public   EntityLink<T>      Current    => new EntityLink<T>(target, entities[index], relations);
     
     // --- IEnumerator
     public bool MoveNext()
