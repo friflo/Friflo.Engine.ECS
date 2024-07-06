@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Collections;
 
+// ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
@@ -46,11 +47,11 @@ internal abstract class EntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    internal  abstract bool             AddComponent<TComponent>     (int id, TComponent component) where TComponent : struct, IComponent;
+    internal  abstract bool             AddComponent<TComponent>     (int id, in TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent       GetRelationAt                (int id, int index);
-    internal  virtual  ref TComponent   GetEntityRelation<TComponent>(int id, int target)           where TComponent : struct, IComponent   => throw new InvalidOperationException($"type: {GetType().Name}");
-    internal  virtual  void             AddIncomingRelations         (int target, List<EntityLink> result)                                  => throw new InvalidOperationException($"type: {GetType().Name}");
-    internal  virtual  void             RemoveLinksWithTarget        (int targetId)                                                         => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  virtual  ref TComponent   GetEntityRelation<TComponent>(int id, int target)              where TComponent : struct, IComponent   => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  virtual  void             AddIncomingRelations         (int target, List<EntityLink> result)                                     => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  virtual  void             RemoveLinksWithTarget        (int targetId)                                                            => throw new InvalidOperationException($"type: {GetType().Name}");
     
     internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {
@@ -159,7 +160,7 @@ internal abstract class EntityRelations
     #endregion
     
 #region mutation
-    internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, TComponent component)
+    internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, in TComponent component)
         where TComponent : struct, IComponent
     {
         var relations = GetEntityRelations(store, StructInfo<TComponent>.Index);

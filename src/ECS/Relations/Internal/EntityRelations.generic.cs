@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Friflo.Engine.ECS.Collections;
 
+// ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
@@ -81,7 +82,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
 #region mutation
 
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    internal override bool AddComponent<TComponent>(int id, TComponent component)
+    internal override bool AddComponent<TComponent>(int id, in TComponent component)
     {
         var relationKey = RelationUtils<TComponent, TKey>.GetRelationKey(component);
     //  var relationKey = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
