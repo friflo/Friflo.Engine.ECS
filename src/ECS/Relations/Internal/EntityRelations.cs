@@ -48,7 +48,7 @@ internal abstract class EntityRelations
     
     internal  abstract bool             AddComponent<TComponent>     (int id, TComponent component) where TComponent : struct, IComponent;
     internal  abstract IComponent       GetRelationAt                (int id, int index);
-    internal  virtual  TComponent       GetEntityRelation<TComponent>(int id, int target)           where TComponent : struct, IComponent   => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  virtual  ref TComponent   GetEntityRelation<TComponent>(int id, int target)           where TComponent : struct, IComponent   => throw new InvalidOperationException($"type: {GetType().Name}");
     internal  virtual  void             AddIncomingRelations         (int target, List<EntityLink> result)                                  => throw new InvalidOperationException($"type: {GetType().Name}");
     internal  virtual  void             RemoveLinksWithTarget        (int targetId)                                                         => throw new InvalidOperationException($"type: {GetType().Name}");
     

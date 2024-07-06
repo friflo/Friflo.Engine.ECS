@@ -23,11 +23,11 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     }
     
     /// Expect: component is present
-    internal override TComponent GetEntityRelation<TComponent>(int id, int targetId)
+    internal override ref TComponent GetEntityRelation<TComponent>(int id, int targetId)
     {
         var target      = new Entity(store, targetId);
         var position    = FindRelationPosition(id, target, out _, out _);
-        return ((StructHeap<TComponent>)heap).components[position];
+        return ref ((StructHeap<TComponent>)heap).components[position];
     }
     
     internal override void AddIncomingRelations(int target, List<EntityLink> result)

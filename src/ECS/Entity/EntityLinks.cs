@@ -15,17 +15,18 @@ namespace Friflo.Engine.ECS;
 public readonly struct EntityLink
 {
 #region properties
-                    public              Entity          Target      => new Entity(Entity.store, target);
-                    public  override    string          ToString()  => $"Entity: {Entity.Id} -> Target: {target}  [{Component.GetType().Name}]";
+                    public              Entity          Entity      => entity;
+                    public              Entity          Target      => new Entity(entity.store, target);
+                    public   override   string          ToString()  => $"Entity: {entity.Id} -> Target: {target}  [{Component.GetType().Name}]";
     #endregion
 #region fields    
-                    public  readonly    Entity          Entity;     // 16
-                    public  readonly    IComponent      Component;  //  8
-    [Browse(Never)] private readonly    int             target;     //  4
+    [Browse(Never)] internal readonly   Entity          entity;     // 16
+                    public   readonly   IComponent      Component;  //  8
+    [Browse(Never)] private  readonly   int             target;     //  4
     #endregion
 
     internal EntityLink(in Entity entity, int target, IComponent component) {
-        Entity      = entity;
+        this.entity = entity;
         this.target = target;
         Component   = component;
     }
@@ -57,7 +58,7 @@ public readonly struct EntityLinks : IReadOnlyList<EntityLink>
         sb.Append("{ ");
         foreach (var link in links) {
             if (sb.Length > 2) sb.Append(", ");
-            sb.Append(link.Entity.Id);
+            sb.Append(link.entity.Id);
         }
         sb.Append(" }");
         return sb.ToString();

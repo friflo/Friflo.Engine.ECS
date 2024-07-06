@@ -35,12 +35,12 @@ public readonly struct EntityLink<TComponent>
         this.relations  = relations;
     }
     
-    public TComponent Component {
+    public ref TComponent Component {
         get {
             if (relations != null) {
-                return relations.GetEntityRelation<TComponent>(Entity.Id, target);
+                return ref relations.GetEntityRelation<TComponent>(Entity.Id, target);
             }
-            return Entity.GetComponent<TComponent>();
+            return ref Entity.GetComponent<TComponent>();
         }
     }
 }

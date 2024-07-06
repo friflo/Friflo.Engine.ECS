@@ -79,7 +79,7 @@ public static class Test_EntityLinks
         } {
             count = 0;
             IEnumerable<EntityLink> enumerable = links;
-            foreach (var VARIABLE in enumerable) {
+            foreach (var _ in enumerable) {
                 count++;
             }
             AreEqual(6, count);
@@ -110,6 +110,7 @@ public static class Test_EntityLinks
         AreEqual("Entity: 1 -> Target: 4",   refs4[0].ToString());
         AreEqual(1,             refs4[0].Entity.Id);
         AreEqual(100,           refs4[0].Component.data);
+        _ =                     ref refs4[0].Component; // ensure component can be accessed by ref
         
         var refs5    = target5.GetIncomingLinks<LinkComponent>();
         AreEqual("{ 2, 3 }",    refs5.Debug());
