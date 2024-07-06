@@ -80,11 +80,11 @@ public static class RelationExtensions
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true if the entity contained a link relation of the given type before. </returns>
-    public static bool RemoveRelation<T>(this Entity entity, Entity target)
-        where T : struct, ILinkRelation
+    public static bool RemoveRelation<TComponent>(this Entity entity, Entity target)
+        where TComponent : struct, ILinkRelation
     {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.RemoveRelation<T, Entity>(entity.store, entity.Id, target);
+        return EntityRelations.RemoveRelation<TComponent, Entity>(entity.store, entity.Id, target);
     }
     
     /// <summary>
