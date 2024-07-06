@@ -54,7 +54,9 @@ public static class RelationExtensions
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true - relation is newly added to the entity.<br/> false - relation is updated.</returns>
-    public static bool AddRelation<TComponent>(this Entity entity, in TComponent component) where TComponent : struct, IRelationComponent {
+    public static bool AddRelation<TComponent>(this Entity entity, in TComponent component)
+        where TComponent : struct, IRelationComponent
+    {
         if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.AddRelation(entity.store, entity.Id, component);
     }
@@ -90,7 +92,9 @@ public static class RelationExtensions
     /// Executes in O(1).
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity target) where TComponent: struct, IRelationComponent {
+    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity target)
+        where TComponent: struct, IRelationComponent
+    {
         if (target.archetype == null) throw EntityStoreBase.EntityNullException(target);
         var entities = EntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TComponent>.Index, out var relations);
         return new EntityLinks<TComponent>(target, entities, relations);

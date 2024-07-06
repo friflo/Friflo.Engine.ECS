@@ -11,7 +11,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
-    where TValue : struct
+    where TValue            : struct
 {
     internal override   int                         Count       => entityMap.Count;
 #region fields

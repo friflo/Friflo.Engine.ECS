@@ -40,4 +40,5 @@ internal static class RelationUtils<TComponent, TKey>
     }
 }
     
-internal delegate TKey GetRelationKey<TComponent, out TKey>(in TComponent component) where TComponent : struct, IComponent;
+internal delegate TKey GetRelationKey<TComponent, out TKey>(in TComponent component)
+    where TComponent : struct, IComponent;

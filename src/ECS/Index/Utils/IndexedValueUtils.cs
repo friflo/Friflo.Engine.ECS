@@ -11,7 +11,8 @@ namespace Friflo.Engine.ECS.Index;
 internal static class IndexedValueUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
-    internal static GetIndexedValue<TComponent,TValue> CreateGetValue<TComponent,TValue>() where TComponent : struct, IComponent
+    internal static GetIndexedValue<TComponent,TValue> CreateGetValue<TComponent,TValue>()
+        where TComponent : struct, IComponent
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         var method          = typeof(IndexedValueUtils).GetMethod(nameof(GetIndexedComponentValue), flags);
@@ -21,12 +22,15 @@ internal static class IndexedValueUtils
         return (GetIndexedValue<TComponent,TValue>)genericDelegate;
     }
     
-    private static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component) where TComponent : struct, IIndexedComponent<TValue> {
+    private static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component)
+        where TComponent : struct, IIndexedComponent<TValue>
+    {
         return component.GetIndexedValue();
     }
 }
 
-internal static class IndexedValueUtils<TComponent, TValue>  where TComponent : struct, IComponent
+internal static class IndexedValueUtils<TComponent, TValue>
+    where TComponent : struct, IComponent
 {
     /// <summary> Returns the indexed component value without boxing. </summary>
     internal static readonly GetIndexedValue<TComponent,TValue> GetIndexedValue;
@@ -36,4 +40,5 @@ internal static class IndexedValueUtils<TComponent, TValue>  where TComponent : 
     }
 }
     
-internal delegate TValue GetIndexedValue<TComponent, out TValue>(in TComponent component) where TComponent : struct, IComponent;
+internal delegate TValue GetIndexedValue<TComponent, out TValue>(in TComponent component)
+    where TComponent : struct, IComponent;

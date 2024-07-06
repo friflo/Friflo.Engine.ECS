@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
-    where TValue : class
+    where TValue            : class
 {
     internal override   int                         Count       => entityMap.Count + (nullValue.count > 0 ? 1 : 0);
     

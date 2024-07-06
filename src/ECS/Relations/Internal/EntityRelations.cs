@@ -122,7 +122,8 @@ internal abstract class EntityRelations
         return relations.TryGetRelation(id, key, out value);
     }
     
-    internal void ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda)  where TComponent : struct, IRelationComponent
+    internal void ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda)
+        where TComponent : struct, IRelationComponent
     {
         var components  = ((StructHeap<TComponent>)heap).components;
         int count       = archetype.Count;
@@ -133,7 +134,8 @@ internal abstract class EntityRelations
         }
     }
     
-    internal (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>() where TComponent : struct, IRelationComponent
+    internal (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>()
+        where TComponent : struct, IRelationComponent
     {
         int count       = archetype.Count;
         var entities    = new Entities(store, archetype.entityIds, 0, count);
