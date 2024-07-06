@@ -51,6 +51,9 @@ public readonly struct EntityLinks : IReadOnlyList<EntityLink>
     
     public EntityLink this[int index] => links[index];
     
+    /// <summary>
+    /// Return the entity ids as a string.<br/>E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public string Debug()
     {
         if (Count == 0) return "{ }";

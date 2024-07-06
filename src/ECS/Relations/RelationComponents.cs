@@ -55,6 +55,9 @@ public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
         return methodInfo;
     }
     
+    /// <summary>
+    /// Returns a string containing the relation keys.<br/>E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public string Debug()
     {
         if (Length == 0) return "{ }";

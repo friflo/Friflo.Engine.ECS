@@ -62,6 +62,9 @@ public struct Entities : IReadOnlyList<Entity>
         }
     }
     
+    /// <summary>
+    /// Return the entity ids as a string.<br/>E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public string Debug()
     {
         if (count == 0) return "{ }";

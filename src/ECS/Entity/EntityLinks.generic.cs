@@ -70,6 +70,9 @@ public readonly struct EntityLinks<T> : IReadOnlyList<EntityLink<T>>
     
     public EntityLink<T> this[int index] => new (target, Entities[index], relations);
     
+    /// <summary>
+    /// Return the entity ids as a string.<br/>E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public string Debug()
     {
         if (Count == 0) return "{ }";

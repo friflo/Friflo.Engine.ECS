@@ -11,6 +11,11 @@ namespace Friflo.Engine.ECS;
 
 public static class CollectionExtensions
 {
+    
+    /// <summary>
+    /// Returns a string containing the <see cref="object.ToString"/> for each component.<br/>
+    /// E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public static string Debug<T>(this IEnumerable<T> enumerable)
     {
         var array = enumerable.ToArray();
@@ -25,6 +30,10 @@ public static class CollectionExtensions
         return sb.ToString();
     }
     
+    /// <summary>
+    /// Returns a string containing the entity ids.<br/>
+    /// E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public static string Debug(this IEnumerable<Entity> entities)
     {
         var array = entities.ToArray();
@@ -39,6 +48,10 @@ public static class CollectionExtensions
         return sb.ToString();
     }
     
+    /// <summary>
+    /// Returns a string containing the <see cref="object.ToString"/> for each component.<br/>
+    /// E.g <c>"{ 1, 3, 7 }"</c>
+    /// </summary>
     public static string Debug<T>(this Chunk<T> chunk)
         where T : struct, IComponent
     {
