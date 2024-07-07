@@ -62,17 +62,17 @@ public static class Test_Relations_Delete
         var target12    = store.CreateEntity(12);
 
         var entity1     = store.CreateEntity(1);
-        var entity2     = store.CreateEntity(2);                            //  10      1      11
-        AreEqual("{ }",         sourceNodes.Debug());                       //  12      2 
+        var entity2     = store.CreateEntity(2);                            //  10     1     11
+        AreEqual("{ }",         sourceNodes.Debug());                       //  12     2 
         
-        entity1.AddRelation(new AttackRelation { target = target10 });      //  10  🡐  1      11
-        AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12      2 
+        entity1.AddRelation(new AttackRelation { target = target10 });      //  10  ←  1     11
+        AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12     2 
         
-        entity1.AddRelation(new AttackRelation { target = target11 });      //  10  🡐  1  🡒  11
+        entity1.AddRelation(new AttackRelation { target = target11 });      //  10  ←  1  →  11
         AreEqual("{ 1 }",       sourceNodes.Debug());                       //  12
         
-        entity2.AddRelation(new AttackRelation { target = target12 });      //  10  🡐  1  🡒  11
-        AreEqual("{ 1, 2 }",    sourceNodes.Debug());                       //  12  🡐  2
+        entity2.AddRelation(new AttackRelation { target = target12 });      //  10  ←  1  →  11
+        AreEqual("{ 1, 2 }",    sourceNodes.Debug());                       //  12  ←  2
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
@@ -91,7 +91,7 @@ public static class Test_Relations_Delete
         AreEqual("{ 10, 11, 12 }",  relations.Debug());
         
         entity1.DeleteEntity();                                             //  10     -     11
-        AreEqual("{ 2 }",           sourceNodes.Debug());                   //  12  🡐  2
+        AreEqual("{ 2 }",           sourceNodes.Debug());                   //  12  ←  2
         
         var entity2Relation = entity2.GetRelation<AttackRelation, Entity>(target12);
         AreEqual(12, entity2Relation.target.Id);
@@ -111,19 +111,19 @@ public static class Test_Relations_Delete
                                                                                         //  1     2     3
         AreEqual("{ }",         entity2.GetIncomingLinks<AttackRelation>().Debug());    //
         
-        entity1.AddRelation(new AttackRelation { target = entity2 });                   //  1  🡒  2     3
+        entity1.AddRelation(new AttackRelation { target = entity2 });                   //  1  →  2     3
         AreEqual("{ 1 }",       entity2.GetIncomingLinks<AttackRelation>().Debug());    //
         AreEqual("{ 2 }",       entity1.GetRelations<AttackRelation>().Debug());
         
-        entity2.AddRelation(new AttackRelation { target = entity2 });                   //  1  🡒  2     3
+        entity2.AddRelation(new AttackRelation { target = entity2 });                   //  1  →  2     3
         AreEqual("{ 1, 2 }",    entity2.GetIncomingLinks<AttackRelation>().Debug());    //        ⮍
         AreEqual("{ 2 }",       entity2.GetRelations<AttackRelation>().Debug());
         
-        entity3.AddRelation(new AttackRelation { target = entity2 });                   //  1  🡒  2  🡐  3
+        entity3.AddRelation(new AttackRelation { target = entity2 });                   //  1  →  2  ←  3
         AreEqual("{ 1, 2, 3 }", entity2.GetIncomingLinks<AttackRelation>().Debug());    //        ⮍
         AreEqual("{ 2 }",       entity3.GetRelations<AttackRelation>().Debug());
         
-        entity2.DeleteEntity();                                                         //  1     -      3
+        entity2.DeleteEntity();                                                         //  1     -     3
         AreEqual("{ }",         entity1.GetRelations<AttackRelation>().Debug());        //
         AreEqual("{ }",         entity3.GetRelations<AttackRelation>().Debug());
     }
