@@ -16,8 +16,10 @@ See benchmark results - Mac Mini M2 - at the bottom of this page.
 Added [Systems](#systems), [Native AOT](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#native-aot) support,
 performance improvements and bug fixes. See [Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
 
-![new](docs/images/new.svg) released **v3.0.0-preview.1**  
-Add support for [Relationships](#relationships) and full-text [Search](#search).
+![new](docs/images/new.svg) released **v3.0.0-preview.2**  
+Added new features supported by a set of specific [Component Types](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types).  
+**Entity Relationships** 1:1 and 1:N, **Relations** and full-text **Search** executing in O(1).
+
 
 *Feature highlights*
 - Simple API - no boilerplate.
@@ -133,135 +135,22 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **Relationships**
+## **Specific Component Types**
 
-![new](docs/images/new.svg) in **v3.0.0-preview.1**
+![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
 
-Link relationships enable creating a *reference* from one entity to another.  
-This is accomplished by adding a link component to an entity referencing another entity as shown below.  
-In SQL terms: A link component contains a *secondary key* field referencing an entity by id - the *primary key*.
+For special use cases, there are now a number of new component types that allow implementation in a game.  
+The new features do not affect the behavior or performance of existing features.
 
-This implementation uses a different approach than **flecs** or other ECS implementations similar to **flecs**.  
-It uses the same indexing mechanism as for indexed components. See [Search](#search).  
-*Performance:* Indexing 1000 different link components ~60 μs.
-
-The main differences compared to **flecs** are:
-
-- The API to create and query relations in **flecs** is very compact but not intuitive - imho.  
-  It is completely different from common component handling.
-  See [flecs ⋅ Relationships](https://github.com/SanderMertens/flecs/blob/master/docs/Relationships.md)
-
-- Adding, removing or updating a link does not cause [archetype fragmentation](https://www.flecs.dev/flecs/md_docs_2Relationships.html#fragmentation).  
-  In **flecs** every relationship between two entities creates an individual archetype only containing a single entity / component.  
-  So each relationship allocates ~ 1000 bytes required by the archetype stored in the heap. Only for a simple link.  
-  The more significant performance penalty is the side effect in queries. Many archetypes need to be iterated if they are query matches.
-
-- Changing an entity link does not cause a structural change. In **flecs** an new archetype needs to be created.  
-  
-
-The example shows how to create a follow component using another entity as target.
-
-```cs
-public struct FollowComponent : ILinkComponent
-{
-    public  Entity  target;
-    public  Entity  GetIndexedValue() => target;
-}
-
-public static void Relationships()
-{
-    var store     = new EntityStore();
-    var targets   = new List<Entity>();
-    for (int n = 0; n < 1000; n++) {
-        var target   = store.CreateEntity();
-        targets.Add(target);
-        var follower = store.CreateEntity();
-        follower.AddComponent(new FollowComponent { target = target });
-    }
-    // get all entities where FollowComponent.target == targets[0]. O(1)
-    var followers = targets[0].GetEntityReferences<FollowComponent>();
-    Console.WriteLine($"followers: {followers.Count}");                     // > followers: 1
-    
-    // return same result as followers using a Query(). O(1)
-    var query = store.Query().HasValue<FollowComponent, Entity>(targets[0]);
-    Console.WriteLine($"query: {query.Count}");                             // > query: 1
-    
-    // get all entities linked by a FollowComponent. O(1)
-    var allTargets = store.GetAllLinkedEntities<FollowComponent>();
-    Console.WriteLine($"all targets: {allTargets.Count}");                  // > all targets: 1000
-}
-```
-The API related to link components is in namespace [Friflo.Engine.ECS.Index](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Friflo.Engine.ECS.Index.md).
-
-This feature is work in progress but ready to use.  
-The following operations will be executed by the ECS automatically. For now the application must execute them itself.
-
-- [ ] Update index by all methods adding, removing or updating a link component
-- [ ] Remove link component from index if entity is deleted
-- [ ] Remove link component from entity if linked entity is deleted
+| Use case                                                                                                                  | Component type            | Description
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
+| [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | Entity links - 1 : 1
+|                                                                                                                           | **Link Relation**         | Entity links - 1 : many 
+| [Relations](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
+| [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields in O(1)
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
-
-<br/>
-
-
-## **Search**
-
-![new](docs/images/new.svg) in **v3.0.0-preview.1**
-
-**Friflo.Engine.ECS** enables efficient search of indexed component values.  
-This enables **full-text search** by using `string` as the indexed component type like in the example below.  
-Any type can be used as indexed component type. E.g. int, long, float, Guid, DateTime, enum, ... .  
-A search / query for a specific value executes in O(1).
-
-Indexed components provide the same functionality and behavior as normal components implementing `IComponent`.  
-Indexing is implement using an [inverted index ⋅ Wikipedia](https://en.wikipedia.org/wiki/Inverted_index).  
-Adding, removing or updating an indexed component updates the index.  
-These operations are executed in O(1) but significant slower than the non indexed counterparts ~10x.  
-*Performance:* Indexing 1000 different component values ~60 μs.
-
-In case the indexed component type implements `IComparable<>` like int, string, DateTime, ... range queries can be executed.  
-A range query returns all entities with a component value in the specified range. See example code.
-
-```cs
-public struct Player : IIndexedComponent<string>
-{
-    public  string  name;
-    public  string  GetIndexedValue() => name;
-}
-
-public static void IndexedComponents()
-{
-    var store   = new EntityStore();
-    for (int n = 0; n < 1000; n++) {
-        var entity = store.CreateEntity();
-        entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
-    }
-    // get all entities where Player.name == "Player-001". O(1)
-    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");
-    Console.WriteLine($"lookup: {lookup.Count}");                           // > lookup: 1
-    
-    // return same result as lookup using a Query(). O(1)
-    var query      = store.Query().HasValue    <Player,string>("Player-001");
-    Console.WriteLine($"query: {query.Count}");                             // > query: 1
-    
-    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
-    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
-    Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
-    
-    // get all unique Player.name's. O(1)
-    var allNames = store.GetAllIndexedComponentValues<Player,string>();
-    Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
-}
-```
-The API related to indexed components is in namespace [Friflo.Engine.ECS.Index](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Friflo.Engine.ECS.Index.md).
-
-This feature is work in progress but ready to use.  
-The following operations will be executed by the ECS automatically. For now the application must execute them itself.
-
-- [ ] Update index by all methods adding, removing or updating an indexed component
-- [ ] Remove indexed component from index if entity is deleted
 
 <br/>
 
