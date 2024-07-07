@@ -110,6 +110,22 @@ public static class Test_Relations
         Mem.AssertNoAlloc(start);
     }
     
+    [Test]
+    public static void Test_Relations_add_remove_default()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        IsTrue  (entity.AddRelation<AttackRelation>(default));
+        IsFalse (entity.AddRelation<AttackRelation>(default));
+        var relations = entity.GetRelations<AttackRelation>();
+        AreEqual("{ 0 }", relations.Debug());
+        IsTrue  (relations[0].target == default);
+        IsTrue  (entity.RemoveRelation<AttackRelation>(default));
+        IsFalse (entity.RemoveRelation<AttackRelation>(default));
+        relations = entity.GetRelations<AttackRelation>();
+        AreEqual("{ }", relations.Debug());
+    }    
+    
 #pragma warning disable CS0618 // Type or member is obsolete
     [Test]
     public static void Test_Relations_EntityComponents()
