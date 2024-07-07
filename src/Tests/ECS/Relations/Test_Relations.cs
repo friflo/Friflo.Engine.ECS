@@ -54,7 +54,7 @@ public static class Test_Relations
         AreEqual(new InventoryItem(), value);
         
         entity.AddRelation(new InventoryItem { type = InventoryItemType.Axe,       amount = 1 });
-        entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe); // force one tim allocation
+        entity.GetRelation<InventoryItem, InventoryItemType>(InventoryItemType.Axe); // force one time allocation
         
         var start = Mem.GetAllocatedBytes();
         

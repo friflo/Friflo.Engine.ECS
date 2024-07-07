@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 
+// ReSharper disable NotAccessedField.Local
 // ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -119,10 +119,32 @@ public static void IndexedComponents()
 
 #region relation component
 
+struct InventoryItem : IRelationComponent<string>
+{
+    public  string  name;
+    public  int     count;
+    public  string  GetRelationKey() => name;
+}
+
 [Test]
 public static void RelationComponents()
 {
-    // todo
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    
+    // add multiple relations of the same component type
+    entity.AddRelation(new InventoryItem { name = "Coin",   count = 42 });
+    entity.AddRelation(new InventoryItem { name = "Axe",    count =  3 });
+    
+    // Get all relations added to an entity
+    entity.GetRelations  <InventoryItem>();                 // { Coin, Axe }
+    
+    // Get a specific relation from an entity
+    entity.GetRelation   <InventoryItem,string>("Coin");    // 42
+    
+    // Remove a specific relation from an entity
+    entity.RemoveRelation<InventoryItem,string>("Axe");
+    entity.GetRelations  <InventoryItem>();                 // { Coin }
 }
 #endregion
 
