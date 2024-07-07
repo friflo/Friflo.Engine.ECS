@@ -48,7 +48,7 @@ public static void LinkRelations()
     entity2.GetRelations    <AttackRelation>();                     // { 1 }
     entity1.GetIncomingLinks<AttackRelation>();                     // { 2 }
     
-    // an entity can have multiple one relation components
+    // add another one. An entity can have multiple relation components
     entity2.AddRelation(new AttackRelation { target = entity3 });   //                  1  ←  2  →  3
     entity2.GetRelations    <AttackRelation>();                     // { 1, 3 }
     entity3.GetIncomingLinks<AttackRelation>();                     // { 2 }
