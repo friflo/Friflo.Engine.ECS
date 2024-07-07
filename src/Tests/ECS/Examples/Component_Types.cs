@@ -10,7 +10,13 @@ namespace Tests.Examples {
 // See: https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types
 public static class Component_Types
 {
+
     
+struct AttackComponent : ILinkComponent {
+    public  Entity  target;
+    public  Entity  GetIndexedValue() => target;
+}
+
 [Test]
 public static void LinkComponents()
 {
@@ -32,6 +38,12 @@ public static void LinkComponents()
     // delete entity (3) is reflected by incoming links query
     entity3.DeleteEntity();                                         //                  1     2
     entity2.GetIncomingLinks<AttackComponent>();                    // { }
+}
+
+
+struct AttackRelation : ILinkRelation {
+    public  Entity  target;
+    public  Entity  GetRelationKey() => target;
 }
 
 [Test]
