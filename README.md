@@ -17,8 +17,8 @@ Added [Systems](#systems), [Native AOT](https://github.com/friflo/Friflo.Json.Fl
 performance improvements and bug fixes. See [Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
 
 ![new](docs/images/new.svg) released **v3.0.0-preview.2**  
-Added new features supported by a set of specific [Component Types](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types).  
-**Entity Relationships** 1:1 and 1:N, **Relations** and full-text **Search** executing in O(1).
+Added new features supported by a set of specialized [Component Types](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types) for  
+**Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1).
 
 
 *Feature highlights*
@@ -135,19 +135,26 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **Specific Component Types**
+## **Specialized Component Types**
 
 ![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
 
-For special use cases, there are now a number of new component types that allow implementation in a game.  
-The new features do not affect the behavior or performance of existing features.
+For specific use cases there is now a set of specialized component interfaces providing additional features.    
+*Note:* Newly added features do not affect the behavior or performance of existing features.
 
-| Use case                                                                                                                  | Component type            | Description
+Typical use case for entity relationships and relations in a game are:
+- Attack systems
+- Path finding / Route tracing
+- Model social networks. E.g friendship, alliances or rivalries
+- Inventory systems
+- Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph).
+
+| Use case                                                                                                                  | Component interface type  | Description
 | ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
 | [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | Entity links - 1 : 1
 |                                                                                                                           | **Link Relation**         | Entity links - 1 : many 
 | [Relations](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
-| [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields in O(1)
+| [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields executed in O(1)
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
