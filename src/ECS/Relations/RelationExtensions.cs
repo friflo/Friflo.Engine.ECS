@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Relations;
 
 // ReSharper disable once CheckNamespace
@@ -146,6 +147,7 @@ public static class RelationExtensions
         return entityRelations.GetAllEntityRelations<TComponent>();
     }
     
+    [ExcludeFromCodeCoverage]
     public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
         where TComponent: struct, IRelationComponent
     {
