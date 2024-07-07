@@ -119,11 +119,11 @@ public static void IndexedComponents()
 
 #region relation component
 
-struct InventoryItem : IRelationComponent<string>
+struct InventoryItem : IRelationComponent<string>   // relation TKey type: string
 {
     public  string  name;
     public  int     count;
-    public  string  GetRelationKey() => name;
+    public  string  GetRelationKey() => name;       // unique relation key
 }
 
 [Test]
@@ -140,7 +140,7 @@ public static void RelationComponents()
     entity.GetRelations  <InventoryItem>();                 // { Coin, Axe }
     
     // Get a specific relation from an entity
-    entity.GetRelation   <InventoryItem,string>("Coin");    // 42
+    entity.GetRelation   <InventoryItem,string>("Coin");    // { name = "Coin", count = 42 }
     
     // Remove a specific relation from an entity
     entity.RemoveRelation<InventoryItem,string>("Axe");
