@@ -46,7 +46,7 @@ dotnet add package Friflo.Engine.ECS
 * [Demos](#demos)
 * [Examples](#examples)
   - [Hello World](#hello-world)
-  - [Relationships](#relationships)
+  - [Component Types](#component-types)
   - [Search](#search)
   - [Systems](#systems)
 * [Wiki](#wiki)
@@ -135,7 +135,7 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **Specialized Component Types**
+## **Component Types**
 
 ![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
 
