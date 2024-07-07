@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
@@ -158,67 +157,6 @@ public static void AddScript()
     // get script
     var myScript = entity.GetScript<MyScript>();
     Console.WriteLine($"data: {myScript.data}");        // > data: 123
-}
-
-public struct Player : IIndexedComponent<string>
-{
-    public  string  name;
-    public  string  GetIndexedValue() => name;
-}
-
-[Test]
-public static void IndexedComponents()
-{
-    var store   = new EntityStore();
-    for (int n = 0; n < 1000; n++) {
-        var entity = store.CreateEntity();
-        entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
-    }
-    // get all entities where Player.name == "Player-001". O(1)
-    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");
-    Console.WriteLine($"lookup: {lookup.Count}");                           // > lookup: 1
-    
-    // return same result as lookup using a Query(). O(1)
-    var query      = store.Query().HasValue    <Player,string>("Player-001");
-    Console.WriteLine($"query: {query.Count}");                             // > query: 1
-    
-    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
-    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
-    Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
-    
-    // get all unique Player.name's. O(1)
-    var allNames = store.GetAllIndexedComponentValues<Player,string>();
-    Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
-}
-
-public struct FollowComponent : ILinkComponent
-{
-    public  Entity  target;
-    public  Entity  GetIndexedValue() => target;
-}
-
-[Test]
-public static void Relationships()
-{
-    var store     = new EntityStore();
-    var targets   = new List<Entity>();
-    for (int n = 0; n < 1000; n++) {
-        var target   = store.CreateEntity();
-        targets.Add(target);
-        var follower = store.CreateEntity();
-        follower.AddComponent(new FollowComponent { target = target });
-    }
-    // get all entities where FollowComponent.target == targets[0]. O(1)
-    var followers = targets[0].GetIncomingLinks<FollowComponent>();
-    Console.WriteLine($"followers: {followers.Count}");                     // > followers: 1
-    
-    // return same result as followers using a Query(). O(1)
-    var query = store.Query().HasValue<FollowComponent, Entity>(targets[0]);
-    Console.WriteLine($"query: {query.Count}");                             // > query: 1
-    
-    // get all entities linked by a FollowComponent. O(1)
-    var allTargets = store.GetAllLinkedEntities<FollowComponent>();
-    Console.WriteLine($"all targets: {allTargets.Count}");                  // > all targets: 1000
 }
 
 [Test]

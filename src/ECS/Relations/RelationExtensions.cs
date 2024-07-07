@@ -145,5 +145,11 @@ public static class RelationExtensions
         var entityRelations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
         return entityRelations.GetAllEntityRelations<TComponent>();
     }
+    
+    public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
+        where TComponent: struct, IRelationComponent
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 }
