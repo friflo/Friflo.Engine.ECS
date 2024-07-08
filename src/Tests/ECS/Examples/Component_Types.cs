@@ -81,12 +81,48 @@ public static void LinkRelations()
 #endregion
 
 
+#region relation component
+
+enum ItemType {
+    Coin    = 1,
+    Axe     = 2,
+}
+
+struct InventoryItem : IRelationComponent<ItemType> {   // relation key type: ItemType
+    public  ItemType    type;
+    public  int         count;
+    public  ItemType    GetRelationKey() => type;       // unique relation key
+}
+
+[Test]
+public static void RelationComponents()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    
+    // add multiple relations of the same component type
+    entity.AddRelation(new InventoryItem { type = ItemType.Coin, count = 42 });
+    entity.AddRelation(new InventoryItem { type = ItemType.Axe,  count =  3 });
+    
+    // Get all relations added to an entity
+    entity.GetRelations  <InventoryItem>();                         // { Coin, Axe }
+    
+    // Get a specific relation from an entity
+    entity.GetRelation   <InventoryItem,ItemType>(ItemType.Coin);   // { name = Coin, count = 42 }
+    
+    // Remove a specific relation from an entity
+    entity.RemoveRelation<InventoryItem,ItemType>(ItemType.Axe);
+    entity.GetRelations  <InventoryItem>();                         // { Coin }
+}
+#endregion
+
+
 #region indexed component
 
-struct Player : IIndexedComponent<string>
+struct Player : IIndexedComponent<string>       // indexed field type: string
 {
     public  string  name;
-    public  string  GetIndexedValue() => name;
+    public  string  GetIndexedValue() => name;  // indexed field
 }
 
 [Test]
@@ -115,39 +151,6 @@ public static void IndexedComponents()
 }
 
 #endregion
-
-
-#region relation component
-
-struct InventoryItem : IRelationComponent<string>   // relation TKey type: string
-{
-    public  string  name;
-    public  int     count;
-    public  string  GetRelationKey() => name;       // unique relation key
-}
-
-[Test]
-public static void RelationComponents()
-{
-    var store   = new EntityStore();
-    var entity  = store.CreateEntity();
-    
-    // add multiple relations of the same component type
-    entity.AddRelation(new InventoryItem { name = "Coin",   count = 42 });
-    entity.AddRelation(new InventoryItem { name = "Axe",    count =  3 });
-    
-    // Get all relations added to an entity
-    entity.GetRelations  <InventoryItem>();                 // { Coin, Axe }
-    
-    // Get a specific relation from an entity
-    entity.GetRelation   <InventoryItem,string>("Coin");    // { name = "Coin", count = 42 }
-    
-    // Remove a specific relation from an entity
-    entity.RemoveRelation<InventoryItem,string>("Axe");
-    entity.GetRelations  <InventoryItem>();                 // { Coin }
-}
-#endregion
-
 }
 
 }
