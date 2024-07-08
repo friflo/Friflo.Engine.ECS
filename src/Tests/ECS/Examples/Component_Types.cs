@@ -134,20 +134,17 @@ public static void IndexedComponents()
         entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
     }
     // get all entities where Player.name == "Player-001". O(1)
-    var lookup = store.GetEntitiesWithComponentValue<Player,string>("Player-001");
-    Console.WriteLine($"lookup: {lookup.Count}");                           // > lookup: 1
+    store.GetEntitiesWithComponentValue<Player,string>("Player-001");       // Count: 1
     
     // return same result as lookup using a Query(). O(1)
-    var query      = store.Query().HasValue    <Player,string>("Player-001");
-    Console.WriteLine($"query: {query.Count}");                             // > query: 1
+    store.Query().HasValue    <Player,string>("Player-001");                // Count: 1
     
-    // return all entities with a Player.name in the given range. O(N ⋅ log N) - N: all unique player names
-    var rangeQuery = store.Query().ValueInRange<Player,string>("Player-000", "Player-099");
-    Console.WriteLine($"range query: {rangeQuery.Count}");                  // > range query: 100
+    // return all entities with a Player.name in the given range.
+    // O(N ⋅ log N) - N: all unique player names
+    store.Query().ValueInRange<Player,string>("Player-000", "Player-099");  // Count: 100
     
     // get all unique Player.name's. O(1)
-    var allNames = store.GetAllIndexedComponentValues<Player,string>();
-    Console.WriteLine($"all names: {allNames.Count}");                      // > all names: 1000
+    store.GetAllIndexedComponentValues<Player,string>();                    // Count: 1000
 }
 
 #endregion
