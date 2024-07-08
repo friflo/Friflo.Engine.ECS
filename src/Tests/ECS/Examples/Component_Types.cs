@@ -1,5 +1,4 @@
-﻿using System;
-using Friflo.Engine.ECS;
+﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
 
 // ReSharper disable NotAccessedField.Local
