@@ -30,7 +30,7 @@ public static class Test_EntityLinks
         AreEqual("links incoming: 6 outgoing: 0", entity1.Info.ToString());
         AreEqual("links incoming: 0 outgoing: 3", entity2.Info.ToString());
         AreEqual("links incoming: 0 outgoing: 3", entity3.Info.ToString());
-        links = entity1.Info.AllIncomingLinks;
+        links = entity1.Info.IncomingLinks;
 
         var debugView = new EntityLinksDebugView(links);
         AreEqual(6, debugView.links.Length);

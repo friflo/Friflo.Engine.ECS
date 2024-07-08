@@ -199,6 +199,24 @@ public static class Test_EntityLinks
         AreEqual(3, entity1.CountAllOutgoingLinks());
     }
     
+    [Test]
+    public static void Test_EntityLinks_screenshot()
+    {
+        var store   = new EntityStore(PidType.RandomPids);
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        entity2.AddComponent(new AttackComponent { target = entity1 });
+        entity3.AddRelation (new AttackRelation  { target = entity1 });
+        
+        EntityLinks_screenshot(entity1);
+    }
+    
+    // make screenshot with scale 350% - on 4K monitor. Size[px]: ~ 1890 x 1110
+    private static void EntityLinks_screenshot(Entity entity) {
+        _ = entity;
+    }
+    
 }
 
 }
