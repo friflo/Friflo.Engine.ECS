@@ -83,10 +83,11 @@ public static partial class EntityExtensions
         // --- count relations components
         int count           = linkTypes.Count;
         var store           = entity.store;
+        var relationsMap    = store.extension.relationsMap;
         var relationsTypes  = new ComponentTypes();
         relationsTypes.bitSet.l0 = store.nodes[entity.Id].isOwner & schema.linkRelationTypes.bitSet.l0;
         foreach (var componentType in relationsTypes) {
-            var relations   = store.extension.relationsMap[componentType.StructIndex];
+            var relations   = relationsMap[componentType.StructIndex];
             count          += relations.GetRelationCount(entity);
         }
         return count;

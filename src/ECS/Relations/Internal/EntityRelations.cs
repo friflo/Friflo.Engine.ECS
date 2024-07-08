@@ -61,7 +61,7 @@ internal abstract class EntityRelations
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     internal static EntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
     {
-        var relationsMap    = ((EntityStore)store).extension.relationsMap;
+        var relationsMap    = ((EntityStore)store).extension.relationsMap ??= CreateRelationsMap();
         var relations       = relationsMap[structIndex];
         if (relations != null) {
             return relations;
@@ -74,6 +74,11 @@ internal abstract class EntityRelations
         return relationsMap[structIndex] = (EntityRelations)obj;
         //  return store.relationsMap[structIndex] = new RelationArchetype<TComponent, TKey>(archetype, heap);
     }
+    
+    private static EntityRelations[] CreateRelationsMap() {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        return new EntityRelations[schema.maxIndexedStructIndex];
+    }
     #endregion
     
 #region query
@@ -85,7 +90,7 @@ internal abstract class EntityRelations
     internal static RelationComponents<TComponent> GetRelations<TComponent>(EntityStore store, int id)
         where TComponent : struct, IRelationComponent
     {
-        var relations = store.extension.relationsMap[StructInfo<TComponent>.Index];
+        var relations = store.extension.relationsMap?[StructInfo<TComponent>.Index];
         if (relations == null) {
             return default;
         }
@@ -104,7 +109,7 @@ internal abstract class EntityRelations
     internal static ref TComponent GetRelation<TComponent, TKey>(EntityStore store, int id, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap[StructInfo<TComponent>.Index];
+        var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap?[StructInfo<TComponent>.Index];
         if (relations == null) {
             throw KeyNotFoundException(id, key);
         }
@@ -114,7 +119,7 @@ internal abstract class EntityRelations
     internal static bool TryGetRelation<TComponent, TKey>(EntityStore store, int id, TKey key, out TComponent value)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap[StructInfo<TComponent>.Index];
+        var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap?[StructInfo<TComponent>.Index];
         if (relations == null) {
             value = default;    
             return false;
@@ -146,7 +151,7 @@ internal abstract class EntityRelations
     
     internal static Entities GetIncomingLinkRelations(EntityStore store, int target, int structIndex, out EntityRelations relations)
     {
-        relations = store.extension.relationsMap[structIndex];
+        relations = store.extension.relationsMap?[structIndex];
         if (relations == null) {
             return default;
         }

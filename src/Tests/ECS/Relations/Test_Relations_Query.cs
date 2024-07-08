@@ -15,7 +15,14 @@ public static class Test_Relations_Query
     [Test]
     public static void Test_Relations_query()
     {
-        var store    = new EntityStore();
+        var store   = new EntityStore();
+        var query   = store.Query<AttackRelation>();
+        // --- test query without adding relations before
+        AreEqual(0, query.Count);
+        int count = 0;
+        query.ForEachEntity((ref AttackRelation component1, Entity entity) => { count++; });
+        AreEqual(0, count);
+        
         var entity0  = store.CreateEntity(100);
         var emptyRelations = entity0.GetRelations<AttackRelation>();
         AreEqual(0, emptyRelations.Length);
@@ -42,8 +49,7 @@ public static class Test_Relations_Query
         AreEqual(0, emptyRelations.Length);
         
         // --- query
-        var query = store.Query<AttackRelation>();
-        int count = 0;
+        count = 0;
         query.ForEachEntity((ref AttackRelation relation, Entity entity) => {
             switch (count++) {
                 case 0: Mem.AreEqual(42, relation.speed); break;

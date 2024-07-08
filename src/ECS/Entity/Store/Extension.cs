@@ -51,11 +51,11 @@ internal partial struct StoreExtension
     #endregion
     
 #region component indices
-    internal                            ComponentIndex[]        indexMap;                   //  8   - map and its component indexes created on demand
+    internal                            ComponentIndex[]        indexMap;                   //  8   - map & its component indexes created on demand
     #endregion
     
 #region entity relations
-    internal readonly                   EntityRelations[]       relationsMap;               //  8
+    internal                            EntityRelations[]       relationsMap;               //  8   - map & its EntityRelations created on demand
     #endregion
     
     internal StoreExtension(PidType pidType)
@@ -69,8 +69,6 @@ internal partial struct StoreExtension
         scriptMap           = new Dictionary<int, int>();
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
         entityScriptCount   = 1;
-        var schema          = EntityStoreBase.Static.EntitySchema;
-        relationsMap        = new EntityRelations[schema.maxIndexedStructIndex];
     }
     
     internal void RemoveEntity(int id) {

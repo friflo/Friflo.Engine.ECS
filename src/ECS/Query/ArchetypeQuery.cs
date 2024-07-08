@@ -470,7 +470,10 @@ public class ArchetypeQuery
     
     private void AddRelationEntities(EntityStore entityStore, ref int count, ref int[] chunkPositions, ref Archetype[] archetypes)
     {
-        var relations   = entityStore.extension.relationsMap[relationQuery.StructIndex];
+        var relations = entityStore.extension.relationsMap?[relationQuery.StructIndex];
+        if (relations == null) {
+            return;
+        }
         var archetype   = relations.archetype;
         var entityIds   = archetype.entityIds;
         var nodes       = entityStore.nodes;
@@ -495,8 +498,11 @@ public class ArchetypeQuery
     
     private int CountRelationEntities(EntityStore entityStore)
     {
+        var relations   = entityStore.extension.relationsMap?[relationQuery.StructIndex];
+        if (relations == null) {
+            return 0;
+        }
         int count = 0;
-        var relations   = entityStore.extension.relationsMap[relationQuery.StructIndex];
         var archetype   = relations.archetype;
         var entityIds   = archetype.entityIds;
         var nodes       = entityStore.nodes;
