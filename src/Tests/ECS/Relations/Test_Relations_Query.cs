@@ -130,36 +130,44 @@ public static class Test_Relations_Query
     [Test]
     public static void Test_Relations_add_int_relations_Perf()
     {
-        int entityCount = 10; // 1_000_000
+        int componentCount = 100; // 1_000_000
     /*
-    #PC:    Test_Relations_add_int_relations_Perf - entities: 1000000
+    #PC:    Test_Relations_add_int_relations_Perf - componentCount: 1000000
             | relationsPerEntity |        duration ms |
-            | ------------------ | ------------------ |
-            |                  1 |                129 |
-            |                  2 |                221 |
-            |                  4 |                243 |
-            |                  8 |                536 |
-            |                 16 |               1057 |
-            |                 32 |               2509 |
-            |                 64 |               6700 |
-            |                128 |              20319 |
+            | ------------------:| ------------------:|
+            |                  1 |                182 |
+            |                  2 |                187 |
+            |                  4 |                174 |
+            |                  8 |                202 |
+            |                 16 |                262 |
+            |                 32 |                320 |
+            |                 64 |                442 |
+            |                128 |                759 |
+            |                256 |               1299 |
+            |                512 |               2403 |
+            |               1024 |               4433 |
          */
         var sb = new StringBuilder();
-        sb.AppendLine($"Test_Relations_add_int_relations_Perf - entities: {entityCount}");
+        sb.AppendLine($"Test_Relations_add_int_relations_Perf - componentCount: {componentCount}");
         sb.AppendLine("| relationsPerEntity |        duration ms |");
-        sb.AppendLine("| ------------------ | ------------------ |");
-        for (int relationsPerEntity = 1; relationsPerEntity <= 128; relationsPerEntity *= 2)
+        sb.AppendLine("| ------------------:| ------------------:|");
+        for (int relationsPerEntity = 1; relationsPerEntity <= 1024; relationsPerEntity *= 2)
         {
             var store           = new EntityStore();
             var type            = store.GetArchetype(default);
-            var createdEntities = type.CreateEntities(entityCount);
+            var createdEntities = type.CreateEntities(componentCount);
             var sw = new Stopwatch();
             sw.Start();
-            foreach (var entity in createdEntities) {
+            int entityIndex = 0;
+            int count = 0;
+            while (true) {
                 for (int n = 0; n < relationsPerEntity; n++) {
-                    entity.AddRelation(new IntRelation { value = n });
+                    createdEntities[entityIndex].AddRelation(new IntRelation { value = n });
+                    if (++count == componentCount) goto Finished;
                 }
+                entityIndex++;
             }
+        Finished:
             sb.AppendLine($"|{relationsPerEntity,19} |{sw.ElapsedMilliseconds,19} |");
         }
         Console.WriteLine(sb);
