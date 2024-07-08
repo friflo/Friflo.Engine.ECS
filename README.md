@@ -147,7 +147,8 @@ Typical use case for entity relationships in a game are:
 - Attack systems
 - Path finding / Route tracing
 - Model social networks. E.g friendship, alliances or rivalries
-- Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph).
+- Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
+  using entities as *nodes* and links or relations as *edges*.
 
 Use cases for relations:
 - Inventory systems
