@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS.Relations;
 using Tests.Examples;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
@@ -199,10 +201,61 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_add_indexed_int_component_Perf()
+    {
+        int componentCount = 100; // 1_000_000
+        /*
+        #PC:    Test_Index_add_indexed_int_component_Perf - componentCount: 1000000
+                |   uniqueValueCount |        duration ms |
+                | ------------------ | ------------------ |
+                |                  1 |                359 |
+                |                  2 |                221 |
+                |                  4 |                107 |
+                |                  8 |                149 |
+                |                 16 |                108 |
+                |                 32 |                121 |
+                |                 64 |                191 |
+                |                128 |                110 |
+                |                256 |                132 |
+                |                512 |                141 |
+                |               1024 |                142 |
+                |               2048 |                205 |
+                |               4096 |                271 |
+                |               8192 |                430 |
+                |              16384 |                908 |
+                |              32768 |               1614 |
+             */
+        var sb = new StringBuilder();
+        sb.AppendLine($"Test_Index_add_indexed_int_component_Perf - componentCount: {componentCount}");
+        sb.AppendLine("|   uniqueValueCount |        duration ms |");
+        sb.AppendLine("| ------------------ | ------------------ |");
+        for (int uniqueValueCount = 1; uniqueValueCount <= 32 * 1024; uniqueValueCount *= 2)
+        {
+            var store           = new EntityStore();
+            var type            = store.GetArchetype(default);
+            var createdEntities = type.CreateEntities(componentCount);
+            var sw = new Stopwatch();
+            sw.Start();
+            var value = 0;
+            var count = 0;
+            foreach (var entity in createdEntities) {
+                entity.AddComponent(new IndexedInt { value = value });
+                if (++count < uniqueValueCount) {
+                    continue;
+                }
+                value++;
+                count = 0;
+            }
+            sb.AppendLine($"|{uniqueValueCount,19} |{sw.ElapsedMilliseconds,19} |");
+        }
+        Console.WriteLine(sb);
+    }
+    
+    [Test]
     public static void Test_Index_Perf()
     {
         int count       = 100;
-        // 1_000_000  #PC    Test_Index_Allocation - count: 1000000 duration: 176 ms
+        // 1_000_000  #PC    Test_Index_Perf - count: 1000000 duration: 176 ms
         var store       = new EntityStore();
         var entities    = new List<Entity>();
         var values      = store.GetAllIndexedComponentValues<IndexedInt, int>();
