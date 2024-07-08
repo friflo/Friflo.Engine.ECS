@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -124,6 +125,44 @@ public static class Test_Relations_Query
             }
         }
         Mem.AreEqual(3, count);
+    }
+    
+    [Test]
+    public static void Test_Relations_add_int_relations_Perf()
+    {
+        int entityCount = 10; // 1_000_000
+    /*
+    #PC:    Test_Relations_add_int_relations_Perf - entities: 1000000
+            | relationsPerEntity |        duration ms |
+            | ------------------ | ------------------ |
+            |                  1 |                129 |
+            |                  2 |                221 |
+            |                  4 |                243 |
+            |                  8 |                536 |
+            |                 16 |               1057 |
+            |                 32 |               2509 |
+            |                 64 |               6700 |
+            |                128 |              20319 |
+         */
+        var sb = new StringBuilder();
+        sb.AppendLine($"Test_Relations_add_int_relations_Perf - entities: {entityCount}");
+        sb.AppendLine("| relationsPerEntity |        duration ms |");
+        sb.AppendLine("| ------------------ | ------------------ |");
+        for (int relationsPerEntity = 1; relationsPerEntity <= 128; relationsPerEntity *= 2)
+        {
+            var store           = new EntityStore();
+            var type            = store.GetArchetype(default);
+            var createdEntities = type.CreateEntities(entityCount);
+            var sw = new Stopwatch();
+            sw.Start();
+            foreach (var entity in createdEntities) {
+                for (int n = 0; n < relationsPerEntity; n++) {
+                    entity.AddRelation(new IntRelation { value = n });
+                }
+            }
+            sb.AppendLine($"|{relationsPerEntity,19} |{sw.ElapsedMilliseconds,19} |");
+        }
+        Console.WriteLine(sb);
     }
     
     [Test]
