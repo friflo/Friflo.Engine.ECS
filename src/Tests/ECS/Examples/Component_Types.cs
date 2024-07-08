@@ -23,8 +23,8 @@ public static void LinkComponents()
 {
     var store   = new EntityStore();
 
-    var entity1 = store.CreateEntity(1);
-    var entity2 = store.CreateEntity(2);                            //              link components (drawn as →)
+    var entity1 = store.CreateEntity(1);                            //              link components
+    var entity2 = store.CreateEntity(2);                            //              symbolized as →
     var entity3 = store.CreateEntity(3);                            //              1     2     3
     
     // add a link component to entity (2) referencing entity (1)
@@ -55,8 +55,8 @@ public static void LinkRelations()
 {
     var store   = new EntityStore();
     
-    var entity1 = store.CreateEntity(1);
-    var entity2 = store.CreateEntity(2);                            //              link relations (drawn as →)
+    var entity1 = store.CreateEntity(1);                            //              link relations
+    var entity2 = store.CreateEntity(2);                            //              symbolized as →
     var entity3 = store.CreateEntity(3);                            //              1     2     3
     
     // add a link relation to entity (2) referencing entity (1)
