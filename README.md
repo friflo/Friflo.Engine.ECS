@@ -142,19 +142,23 @@ All query optimizations are using the same `query` but with different enumeratio
 For specific use cases there is now a set of specialized component interfaces providing additional features.    
 *Note:* Newly added features do not affect the behavior or performance of existing features.
 
-Typical use case for entity relationships and relations in a game are:
+The specialized component types enable entity relationships, relations and full-text search.  
+Typical use case for entity relationships in a game are:
 - Attack systems
 - Path finding / Route tracing
 - Model social networks. E.g friendship, alliances or rivalries
-- Inventory systems
 - Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph).
+
+Use cases for relations:
+- Inventory systems
+- Add multiple components of the same type to an entity
 
 | Use case                                                                                                                  | Component interface type  | Description
 | ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | Entity links - 1 : 1
-|                                                                                                                           | **Link Relation**         | Entity links - 1 : many 
+| [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | Links between entities - 1 : 1
+|                                                                                                                           | **Link Relation**         | Links between entities - 1 : many 
 | [Relations](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
-| [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields executed in O(1)
+| [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields executing in O(1)
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
