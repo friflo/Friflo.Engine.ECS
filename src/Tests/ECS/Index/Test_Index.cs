@@ -206,7 +206,7 @@ public static class Test_Index
         int componentCount = 100; // 1_000_000
         /*
         #PC:    Test_Index_add_indexed_int_component_Perf - componentCount: 1000000
-                |   uniqueValueCount |        duration ms |
+                |     duplicateCount |        duration ms |
                 | ------------------ | ------------------ |
                 |                  1 |                359 |
                 |                  2 |                221 |
@@ -227,9 +227,9 @@ public static class Test_Index
              */
         var sb = new StringBuilder();
         sb.AppendLine($"Test_Index_add_indexed_int_component_Perf - componentCount: {componentCount}");
-        sb.AppendLine("|   uniqueValueCount |        duration ms |");
+        sb.AppendLine("|     duplicateCount |        duration ms |");
         sb.AppendLine("| ------------------ | ------------------ |");
-        for (int uniqueValueCount = 1; uniqueValueCount <= 32 * 1024; uniqueValueCount *= 2)
+        for (int duplicateCount = 1; duplicateCount <= 32 * 1024; duplicateCount *= 2)
         {
             var store           = new EntityStore();
             var type            = store.GetArchetype(default);
@@ -240,13 +240,13 @@ public static class Test_Index
             var count = 0;
             foreach (var entity in createdEntities) {
                 entity.AddComponent(new IndexedInt { value = value });
-                if (++count < uniqueValueCount) {
+                if (++count < duplicateCount) {
                     continue;
                 }
                 value++;
                 count = 0;
             }
-            sb.AppendLine($"|{uniqueValueCount,19} |{sw.ElapsedMilliseconds,19} |");
+            sb.AppendLine($"|{duplicateCount,19} |{sw.ElapsedMilliseconds,19} |");
         }
         Console.WriteLine(sb);
     }
