@@ -2,6 +2,7 @@
 
 namespace Tests.ECS.Relations {
 
+[ComponentKey("multi-attack")]
 public struct AttackRelation : ILinkRelation
 {
     public          int     speed;
@@ -35,6 +36,7 @@ internal enum InventoryItemType {
 }
 
 /// <summary> <see cref="IRelationComponent{TKey}"/> using an enum as relation key. </summary>
+[ComponentKey("item")]
 internal struct InventoryItem : IRelationComponent<InventoryItemType>
 {
     public          InventoryItemType   type;

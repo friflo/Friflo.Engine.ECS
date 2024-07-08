@@ -6,6 +6,7 @@ using Friflo.Engine.ECS.Index;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Index {
     
+[ComponentKey("single-attack")]
 public struct AttackComponent : ILinkComponent {
     public          Entity      target;
     public          int         data;

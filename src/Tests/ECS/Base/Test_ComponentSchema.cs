@@ -52,7 +52,7 @@ public static class Test_ComponentSchema
         AreEqual(66,    components.Length);
         AreEqual(11,    scripts.Length);
         
-        AreEqual(68,    schema.SchemaTypeByKey.Count);
+        AreEqual(71,    schema.SchemaTypeByKey.Count);
         AreEqual(65,    schema.ComponentTypeByType.Count);
         AreEqual(10,    schema.ScriptTypeByType.Count);
         
