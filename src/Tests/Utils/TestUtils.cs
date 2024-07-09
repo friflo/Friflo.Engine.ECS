@@ -61,6 +61,19 @@ public static class TestUtils
         sb.Append(" }");
         return sb.ToString();
     }
+    
+    private static readonly double StopwatchPeriodMs = 1 / (Stopwatch.Frequency / 1000d);
+
+    public static long GetTimestamp() {
+        return Stopwatch.GetTimestamp();
+    }
+    
+    public static string DurationMs(long start) {
+        var duration = (float)((Stopwatch.GetTimestamp() - start) * StopwatchPeriodMs);
+        var result = $"{duration,9:0.00}";
+        return result.Replace(',', '.');
+    }
+    
 }
 
 }
