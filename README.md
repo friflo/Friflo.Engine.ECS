@@ -24,7 +24,7 @@ Added new features supported by a set of specialized [Component Types](https://g
 *Feature highlights*
 - Simple API - no boilerplate.
 - High-performance 🔥 and compact ECS with low memory footprint.
-- Zero allocations for entire API after buffers grown large enough.
+- Zero allocations for entire API after buffers grown large enough. No struct boxing.
 - Fully reactive - *optional*. Subscribe change events of all or specific entities.
 - JSON Serialization - *optional*.
 - SIMD Support - *optional*. Multi thread capable and remainder loop free.
