@@ -205,29 +205,29 @@ public static class Test_Index
         int componentCount = 100; // 1_000_000
         /*
         #PC:    Test_Index_add_indexed_int_component_Perf - componentCount: 1000000
-                |     duplicateCount |        duration ms |
-                | ------------------:| ------------------:|
-                |                  1 |                344 |
-                |                  2 |                243 |
-                |                  4 |                296 |
-                |                  8 |                290 |
-                |                 16 |                277 |
-                |                 32 |                267 |
-                |                 64 |                366 |
-                |                128 |                295 |
-                |                256 |                288 |
-                |                512 |                298 |
-                |               1024 |                334 |
-                |               2048 |                376 |
-                |               4096 |                423 |
-                |               8192 |                643 |
-                |              16384 |               1086 |
-                |              32768 |               1883 |
+                |     duplicateCount |        duration ms |           entities |
+                | ------------------:| ------------------:| ------------------:|
+                |                  1 |                279 |            1000000 |
+                |                  2 |                116 |            1000000 |
+                |                  4 |                106 |            1000000 |
+                |                  8 |                124 |            1000000 |
+                |                 16 |                101 |            1000000 |
+                |                 32 |                 96 |            1000000 |
+                |                 64 |                143 |            1000000 |
+                |                128 |                 99 |            1000000 |
+                |                256 |                115 |            1000000 |
+                |                512 |                129 |            1000000 |
+                |               1024 |                139 |            1000000 |
+                |               2048 |                176 |            1000000 |
+                |               4096 |                271 |            1000000 |
+                |               8192 |                441 |            1000000 |
+                |              16384 |                900 |            1000000 |
+                |              32768 |               1722 |            1000000 |
              */
         var sb = new StringBuilder();
         sb.AppendLine($"Test_Index_add_indexed_int_component_Perf - componentCount: {componentCount}");
-        sb.AppendLine("|     duplicateCount |        duration ms |");
-        sb.AppendLine("| ------------------:| ------------------:|");
+        sb.AppendLine("|     duplicateCount |        duration ms |           entities |");
+        sb.AppendLine("| ------------------:| ------------------:| ------------------:|");
         for (int duplicateCount = 1; duplicateCount <= 32 * 1024; duplicateCount *= 2)
         {
             var store           = new EntityStore();
@@ -246,7 +246,7 @@ public static class Test_Index
                 value++;
                 count = 0;
             }
-            sb.AppendLine($"|{duplicateCount,19} |{sw.ElapsedMilliseconds,19} |");
+            sb.AppendLine($"|{duplicateCount,19} |{sw.ElapsedMilliseconds,19} |{store.Count,19} |");
             AreEqual(componentCount, store.GetArchetype(ComponentTypes.Get<IndexedInt>()).Count);
         }
         Console.WriteLine(sb);
