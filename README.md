@@ -159,7 +159,7 @@ Use cases for relations:
 | [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | A single link on an entity referencing another entity
 |                                                                                                                           | **Link Relation**         | Multiple links on an entity referencing other entities
 | [Relations](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
-| [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields executing in O(1)
+| [Search & Range queries](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)              | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
