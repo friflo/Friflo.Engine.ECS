@@ -41,6 +41,7 @@ public static void LinkComponents()
     
     // add a link component to entity (2) referencing entity (1)
     entity2.AddComponent(new AttackComponent { target = entity1 }); //              1  ←  2     3
+    // get all incoming links of given type.    O(1)                //
     entity1.GetIncomingLinks<AttackComponent>();                    // { 2 }
 
     // update link component of entity (2). It links now entity (3)
@@ -88,7 +89,9 @@ public static void LinkRelations()
     
     // add a link relation to entity (2) referencing entity (1)
     entity2.AddRelation(new AttackRelation { target = entity1 });   //              1  ←  2     3
+    // get all links added to the entity.       O(1)                //
     entity2.GetRelations    <AttackRelation>();                     // { 1 }
+    // get all incoming links.                  O(1)                //
     entity1.GetIncomingLinks<AttackRelation>();                     // { 2 }
     
     // add another one. An entity can have multiple link relations
@@ -143,10 +146,10 @@ public static void RelationComponents()
     entity.AddRelation(new InventoryItem { type = ItemType.Coin, count = 42 });
     entity.AddRelation(new InventoryItem { type = ItemType.Axe,  count =  3 });
     
-    // Get all relations added to an entity
+    // Get all relations added to an entity.   O(1)
     entity.GetRelations  <InventoryItem>();                         // { Coin, Axe }
     
-    // Get a specific relation from an entity
+    // Get a specific relation from an entity. O(1)
     entity.GetRelation   <InventoryItem,ItemType>(ItemType.Coin);   // { name = Coin, count = 42 }
     
     // Remove a specific relation from an entity
