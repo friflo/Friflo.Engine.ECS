@@ -69,8 +69,8 @@ public static void LinkRelation_Snippets()
     entity.AddRelation(new AttackRelation { target = entity1 });
     entity.AddRelation(new AttackRelation { target = entity2 });
     entity.RemoveRelation <AttackRelation>(entity1);
-    entity.GetRelations   <AttackRelation>();
-    entity.GetRelation    <AttackRelation,Entity>(entity2);
+    entity.GetRelations   <AttackRelation>();               // O(1)
+    entity.GetRelation    <AttackRelation,Entity>(entity2); // O(1)
 }
 
 struct AttackRelation : ILinkRelation {
@@ -121,8 +121,8 @@ public static void RelationComponent_Snippets()
     entity.AddRelation(new InventoryItem { type = ItemType.Coin });
     entity.AddRelation(new InventoryItem { type = ItemType.Axe  });
     entity.RemoveRelation <InventoryItem,ItemType>(ItemType.Coin);
-    entity.GetRelations   <InventoryItem>();
-    entity.GetRelation    <InventoryItem,ItemType>(ItemType.Axe);
+    entity.GetRelations   <InventoryItem>();                        // O(1)
+    entity.GetRelation    <InventoryItem,ItemType>(ItemType.Axe);   // O(1)
 }
 
 enum ItemType {
@@ -150,7 +150,7 @@ public static void RelationComponents()
     entity.GetRelations  <InventoryItem>();                         // { Coin, Axe }
     
     // Get a specific relation from an entity. O(1)
-    entity.GetRelation   <InventoryItem,ItemType>(ItemType.Coin);   // { name = Coin, count = 42 }
+    entity.GetRelation   <InventoryItem,ItemType>(ItemType.Coin);   // { type = Coin, count = 42 }
     
     // Remove a specific relation from an entity
     entity.RemoveRelation<InventoryItem,ItemType>(ItemType.Axe);
