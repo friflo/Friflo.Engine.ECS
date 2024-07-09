@@ -154,10 +154,10 @@ Use cases for relations:
 - Inventory systems
 - Add multiple components of the same type to an entity
 
-| Use case                                                                                                                  | Component interface type  | Description
+| Use case / example                                                                                                        | Component interface type  | Description
 | ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | Links between entities - 1 : 1
-|                                                                                                                           | **Link Relation**         | Links between entities - 1 : many 
+| [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | A single link on an entity referencing another entity
+|                                                                                                                           | **Link Relation**         | Multiple links on an entity referencing other entities
 | [Relations](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
 | [Full-Text Search](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)                    | **Indexed Component**     | Full text search of component fields executing in O(1)
 
