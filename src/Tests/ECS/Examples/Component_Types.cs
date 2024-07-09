@@ -12,6 +12,18 @@ public static class Component_Types
 {
 
 #region link component
+[Test]
+public static void LinkComponent_Snippets()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    var entity2 = store.CreateEntity();
+    // --- snippets
+    entity.AddComponent(new AttackComponent { target = entity2 });
+    entity.GetComponent    <AttackComponent>();
+    entity.RemoveComponent <AttackComponent>();
+    entity.HasComponent    <AttackComponent>();
+}
 
 struct AttackComponent : ILinkComponent {
     public  Entity  target;
@@ -44,6 +56,21 @@ public static void LinkComponents()
 
 
 #region link relation
+
+[Test]
+public static void LinkRelation_Snippets()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    var entity1 = store.CreateEntity();
+    var entity2 = store.CreateEntity();
+    // --- snippets
+    entity.AddRelation(new AttackRelation { target = entity1 });
+    entity.AddRelation(new AttackRelation { target = entity2 });
+    entity.RemoveRelation <AttackRelation>(entity1);
+    entity.GetRelations   <AttackRelation>();
+    entity.GetRelation    <AttackRelation,Entity>(entity2);
+}
 
 struct AttackRelation : ILinkRelation {
     public  Entity  target;
@@ -81,6 +108,19 @@ public static void LinkRelations()
 
 
 #region relation component
+
+[Test]
+public static void RelationComponent_Snippets()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    // --- snippets
+    entity.AddRelation(new InventoryItem { type = ItemType.Coin });
+    entity.AddRelation(new InventoryItem { type = ItemType.Axe  });
+    entity.RemoveRelation <InventoryItem,ItemType>(ItemType.Coin);
+    entity.GetRelations   <InventoryItem>();
+    entity.GetRelation    <InventoryItem,ItemType>(ItemType.Axe);
+}
 
 enum ItemType {
     Coin    = 1,
