@@ -174,15 +174,16 @@ Systems are new in **Friflo.Engine.ECS v2.0.0**
 Systems in ECS are typically queries.  
 So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello World" example.  
 
-Using Systems is optional but they have some significant advantages:
+Using Systems is optional but they have some significant advantages.
 
-- It enables chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes.
+**System features**
+
+- Enable chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes in a
+  [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
+  Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
 
 - A system can have state - fields or properties - which can be used as parameters in `OnUpdate()`.  
   The system state can be serialized to JSON.
-
-- Systems are added to a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
-  Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
 
 - Systems can be enabled/disabled or removed.  
   The order of systems in a group can be changed.
