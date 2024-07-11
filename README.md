@@ -20,6 +20,8 @@ performance improvements and bug fixes. See [Release ⋅ engine-v2.0.0](https://
 Added new features supported by a set of specialized [Component Types](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types) for  
 **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1).
 
+![new](docs/images/new.svg) Created a new GitHub repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
+comparing the performance of multiple ECS projects with **simple** benchmarks.
 
 *Feature highlights*
 - Simple API - no boilerplate.
