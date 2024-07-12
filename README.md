@@ -307,6 +307,17 @@ The **GitHub Wiki** provide you detailed information about the ECS and illustrat
 
 # ECS Benchmarks
 
+## ECS.CSharp.Benchmark - Common use-cases
+
+Created a new GitHub repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases).  
+It compares the performance of multiple ECS projects with **simple** benchmarks.  
+So they can be used as a **guide to migrate** form one ECS to another.  
+See discussion of [reddit announcement Post](https://www.reddit.com/r/EntityComponentSystem/comments/1e0qo62/just_published_new_github_repo_ecs_c_benchmark/).
+
+
+## ECS.CSharp.Benchmark
+
+Performance comparison in popular **ECS C# benchmark** on GitHub.  
 Two benchmarks - subset of [GitHub ⋅ Ecs.CSharp.Benchmark + PR #38](https://github.com/Doraku/Ecs.CSharp.Benchmark/pull/38)
 running on a Mac Mini M2.
 
