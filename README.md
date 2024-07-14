@@ -34,7 +34,7 @@ comparing the performance of multiple ECS projects with **simple** benchmarks.
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and ![new](docs/images/new.svg) Native AOT
 - **100% secure C#**. No use of *unsafe code*. No bindings to native dll's.
   See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
-  *Access violation* bugs caused by *unsafe code* on customer installs provide often no stacktrace.
+  *Access violation* bugs caused by *unsafe code* on customer installs provide often no stacktrace when crashing.
 
 Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
 
