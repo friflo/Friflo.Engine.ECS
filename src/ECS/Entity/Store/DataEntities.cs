@@ -67,9 +67,9 @@ public partial class EntityStore
     {
         var children = dataEntity.children;
         var childEntities = entity.ChildEntities;
-        if (childEntities.childCount > 0) {
+        if (childEntities.Count > 0) {
             if (children == null) {
-                children = dataEntity.children = new List<long>(childEntities.childCount);
+                children = dataEntity.children = new List<long>(childEntities.Count);
             } else {
                 children.Clear();
             }

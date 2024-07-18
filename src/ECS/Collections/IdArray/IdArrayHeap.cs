@@ -13,7 +13,7 @@ internal readonly struct IdArrayHeap
 {
 #region properties
     public              int             Count               => GetCount();
-    public   override   string          ToString()          => $"count: {Count}";
+    public   override   string          ToString()          => pools == null ? "null" : $"count: {Count}";
     #endregion
     
 #region fields

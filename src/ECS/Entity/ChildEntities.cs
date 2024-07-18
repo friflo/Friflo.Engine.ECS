@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Friflo.Engine.ECS.Collections;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -17,20 +19,20 @@ namespace Friflo.Engine.ECS;
 /// Return the child entities of an <see cref="Entity"/>.
 /// </summary>
 [DebuggerTypeProxy(typeof(ChildEntitiesDebugView))]
-public readonly struct ChildEntities : IEnumerable<Entity>
+public struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties
-                        public              int                 Count           => childCount;
-                        public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
+                        public              int                 Count           => node.childIds.count;
+                        public              ReadOnlySpan<int>   Ids             => node.ChildIds;
     
                         public              Entity              this[int index] => new Entity(store, Ids[index]);
-                        public override     string              ToString()      => $"Entity[{childCount}]";
+                        public override     string              ToString()      => $"Entity[{Count}]";
     
     // --- internal fields
-    [Browse(Never)]     internal readonly   int                 childCount;     //  4
-    [Browse(Never)]     internal readonly   int[]               childIds;       //  8
-    [Browse(Never)]     internal readonly   EntityStore         store;          //  8
-
+    /// must not be readonly. Because of <see cref="TreeNode.GetChildIds"/> using <see cref="MemoryMarshal.CreateReadOnlySpan{T}"/>
+    [Browse(Never)]     internal            TreeNode            node;   // 16
+    [Browse(Never)]     internal readonly   EntityStore         store;  //  8
+    
     // --- IEnumerable<>
     IEnumerator<Entity> IEnumerable<Entity>.GetEnumerator() => new ChildEnumerator(this);
     
@@ -42,22 +44,20 @@ public readonly struct ChildEntities : IEnumerable<Entity>
 
     internal ChildEntities(Entity entity) {
         store = entity.store;
-        entity.TryGetTreeNode(out var node);
-        childIds    = node.childIds;
-        childCount  = node.childCount;
+        entity.TryGetTreeNode(out node);
     }
     
     public void ToArray(Entity[] array) {
         var ids = Ids;
-        for (int n = 0; n < childCount; n++) {
+        for (int n = 0; n < ids.Length; n++) {
             array[n] = new Entity(store, ids[n]);
         }
     }
     
     internal Entity[] ToArray() {
         var ids = Ids;
-        var array = new Entity[childCount];
-        for (int n = 0; n < childCount; n++) {
+        var array = new Entity[Ids.Length];
+        for (int n = 0; n < Ids.Length; n++) {
             array[n] = new Entity(store, ids[n]);
         }
         return array;
@@ -69,19 +69,21 @@ public readonly struct ChildEntities : IEnumerable<Entity>
 /// </summary>
 public struct ChildEnumerator : IEnumerator<Entity>
 {
-    private             int             index;          //  4
-    private readonly    ChildEntities   childEntities;  // 20
+    private             int         index;      //  4
+    private readonly    TreeNode    node;       //  16
+    private readonly    EntityStore store;      //  8
     
     internal ChildEnumerator(in ChildEntities childEntities) {
-        this.childEntities = childEntities;
+        node    = childEntities.node;
+        store   = childEntities.store;
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(childEntities.store, childEntities.childIds[index - 1]);
+    public readonly Entity Current   => new Entity(store, node.childIds.Get(index - 1, node.arrayHeap));
     
     // --- IEnumerator
     public bool MoveNext() {
-        if (index < childEntities.childCount) {
+        if (index < node.childIds.count) {
             index++;
             return true;
         }

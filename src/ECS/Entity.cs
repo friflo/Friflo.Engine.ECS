@@ -268,7 +268,7 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ child / tree properties -------------------------------
 #region child / tree - properties
     /// <summary>Return the number of child entities.</summary>
-    [Browse(Never)] public  int                 ChildCount { get { TryGetTreeNode(out var node); return node.childCount; } }
+    [Browse(Never)] public  int                 ChildCount { get { TryGetTreeNode(out var node); return node.childIds.count; } }
 
     /// <summary>Returns the parent entity that contains the entity.</summary>
     /// <returns>
@@ -551,8 +551,6 @@ public readonly struct Entity : IEquatable<Entity>
     
     internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNode>.Index] != null;
     
-    internal  ref TreeNode   GetTreeNode()
-        => ref ((StructHeap<TreeNode>)archetype.heapMap[StructInfo<TreeNode>.Index]).components[compIndex];
     #endregion
 
 

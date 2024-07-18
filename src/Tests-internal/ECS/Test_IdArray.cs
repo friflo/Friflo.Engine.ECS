@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using Tests.Utils;
@@ -14,6 +15,13 @@ namespace Internal.ECS
 
     public class Test_IdArray
     {
+        [Test]
+        public unsafe void Test_IdArray_sizeof()
+        {
+            AreEqual(8, Marshal.SizeOf(typeof(IdArrayHeap))); // Important -> to use IdArrayHeap as a TreeNode field
+            AreEqual(8, sizeof(IdArray));
+        }
+    
         [Test]
         public void Test_IdArray_Add()
         {

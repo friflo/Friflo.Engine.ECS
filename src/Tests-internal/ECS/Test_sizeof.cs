@@ -23,7 +23,7 @@ public static class Test_sizeof
     [Test]
     public static unsafe void Test_sizeof_StoreExtension() {
         var size = sizeof(StoreExtension);
-        AreEqual(112, size);
+        AreEqual(120, size);
     }
     
     [Test]

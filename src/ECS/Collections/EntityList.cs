@@ -144,10 +144,8 @@ public sealed class EntityList : IList<Entity>
     {
         AddInternal(entity.Id);
         entity.TryGetTreeNode(out var node);
-        var childCount  = node.childCount;
-        var childIds    = node.childIds;
-        for (int index = 0; index < childCount; index++) {
-            var child = new Entity(entityStore, childIds[index]);
+        foreach (var id in node.ChildIds) {
+            var child = new Entity(entityStore, id);
             AddEntityTree(child);
         }
     }
