@@ -144,7 +144,7 @@ public sealed class EntityList : IList<Entity>
     {
         AddInternal(entity.Id);
         entity.TryGetTreeNode(out var node);
-        foreach (var id in node.ChildIds) {
+        foreach (var id in node.GetChildIds(entityStore)) {
             var child = new Entity(entityStore, id);
             AddEntityTree(child);
         }

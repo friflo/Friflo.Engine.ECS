@@ -457,7 +457,7 @@ public static class Test_ComponentReader
         var entity20    = store.GetEntityById(20);
         AreEqual(10,    store.GetInternalParentId(entity20.Id));
         AreEqual(20,    entity20.Pid);
-        var childIds = treeNode.ChildIds;
+        var childIds = treeNode.GetChildIds(store);
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 20, childIds[n]);
         }
@@ -487,7 +487,7 @@ public static class Test_ComponentReader
         var entity2     = store.GetEntityById(2);
         AreEqual(1,     store.GetInternalParentId(entity2.Id));
         AreEqual(20,    entity2.Pid);
-        var childIds = treeNode1.ChildIds;
+        var childIds = treeNode1.GetChildIds(store);
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 2, childIds[n]);
         }

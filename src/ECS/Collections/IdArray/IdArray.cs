@@ -42,7 +42,7 @@ internal struct IdArray
 
 internal static class IdArrayExtensions {
 
-    public static ReadOnlySpan<int> GetIdSpan(this ref IdArray array, IdArrayHeap heap)
+    internal static ReadOnlySpan<int> GetIdSpan(this ref IdArray array, IdArrayHeap heap)
     {
         var count = array.count;
         switch (count) {

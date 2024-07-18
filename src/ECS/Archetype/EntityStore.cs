@@ -77,7 +77,9 @@ public abstract partial class EntityStoreBase
     // --- nodes
     [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
-    [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
+    [Browse(Never)] private  readonly   ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
+    [Browse(Never)] private  readonly   int[]                   singleIds;      //   8
+    [Browse(Never)] private             int                     singleIndex;    //   4
     
                     private             InternBase              internBase;         // 40
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
@@ -135,13 +137,22 @@ public abstract partial class EntityStoreBase
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
         internBase.entityLists          = new StackArray<EntityList>        (Array.Empty<EntityList>());
+        singleIds                       = new int[SingleMax];
+    }
+    #endregion
+    
+    private const int SingleMax = 32;
+    
+    /// safe alternative for unsafe variant using <see cref="System.Runtime.InteropServices.MemoryMarshal.CreateReadOnlySpan{T}"/>.
+    internal ReadOnlySpan<int> GetSpanId(int id) {
+        var ids     = singleIds;
+        var index   = singleIndex;
+        singleIndex = (index + 1) % SingleMax;
+        ids[index]  = id;
+        return new ReadOnlySpan<int>(ids, index, 1);
     }
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);
-    
-    #endregion
-    
-    
     
 #region exceptions
     /// <summary>

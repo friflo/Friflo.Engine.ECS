@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -15,21 +14,21 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 [DebuggerTypeProxy(typeof(EntitiesDebugView))]
-public struct Entities : IReadOnlyList<Entity>
+public readonly struct Entities : IReadOnlyList<Entity>
 {
 #region properties
     public              int                 Count       => count;
     public              EntityStore         EntityStore => store;
-    public              ReadOnlySpan<int>   Ids         => ids != null ? new ReadOnlySpan<int>(ids, start, count) : MemoryMarshal.CreateReadOnlySpan(ref id, 1);
+    public              ReadOnlySpan<int>   Ids         => ids != null ? new ReadOnlySpan<int>(ids, start, count) : store.GetSpanId(start);
     public   override   string              ToString()  => $"Entity[{count}]";
     #endregion
 
 #region interal fields
     internal readonly   int[]           ids;    //  8
     internal readonly   EntityStore     store;  //  8
+    /// id - if <see cref="ids"/> == null.
     internal readonly   int             start;  //  4
     internal readonly   int             count;  //  4
-    internal            int             id;     //  4
     #endregion
     
 #region general
@@ -47,7 +46,7 @@ public struct Entities : IReadOnlyList<Entity>
     
     internal Entities(EntityStore store, int id) {
         this.store  = store;
-        this.id     = id;
+        start       = id;
         count       = 1;
     }
     
@@ -58,7 +57,7 @@ public struct Entities : IReadOnlyList<Entity>
             }
             // case: count == 1
             if (index != 0) throw new IndexOutOfRangeException();
-            return new Entity(store, id);
+            return new Entity(store, start);
         }
     }
     
@@ -106,7 +105,7 @@ public struct EntityEnumerator : IEnumerator<Entity>
         store   = entities.store;
         start   = entities.start - 1;
         last    = start + entities.count;
-        id      = entities.id;
+        id      = entities.start;
         index   = start;
     }
     

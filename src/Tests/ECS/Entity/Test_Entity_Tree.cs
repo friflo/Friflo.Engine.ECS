@@ -86,7 +86,7 @@ public static class Test_Entity_Tree
         AreEqual(1,         childEntities.Ids.Length);
         var rootNode = root.GetComponent<TreeNode>();
         AreEqual(1,         rootNode.ChildCount);
-        AreEqual(1,         rootNode.ChildIds.Length);
+        AreEqual(1,         rootNode.GetChildIds(store).Length);
         AreEqual("ChildCount: 1", rootNode.ToString());
     //  AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  root.ToString()); TREE_NODE
         AreEqual("id: 1  \"root\"  [EntityName, TreeNode]",  root.ToString());
@@ -140,7 +140,7 @@ public static class Test_Entity_Tree
             AreEqual(1,                                 childNodes.Ids.Length);
             var rootNode = root.GetComponent<TreeNode>();
             AreEqual(1,                                 rootNode.ChildCount);
-            AreEqual(1,                                 rootNode.ChildIds.Length);
+            AreEqual(1,                                 rootNode.GetChildIds(store).Length);
             AreEqual("id: 1  \"root\"  [EntityName, TreeNode]",  root.ToString());
             IsTrue(child4 ==                            childNodes[0]);
             events.RemoveHandler();

@@ -23,7 +23,7 @@ public struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties
                         public              int                 Count           => node.childIds.count;
-                        public              ReadOnlySpan<int>   Ids             => node.ChildIds;
+                        public              ReadOnlySpan<int>   Ids             => node.GetChildIds(store);
     
                         public              Entity              this[int index] => new Entity(store, Ids[index]);
                         public override     string              ToString()      => $"Entity[{Count}]";
@@ -79,7 +79,7 @@ public struct ChildEnumerator : IEnumerator<Entity>
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(store, node.childIds.Get(index - 1, node.arrayHeap));
+    public readonly Entity Current   => new Entity(store, node.childIds.Get(index - 1, store.extension.hierarchyHeap));
     
     // --- IEnumerator
     public bool MoveNext() {
