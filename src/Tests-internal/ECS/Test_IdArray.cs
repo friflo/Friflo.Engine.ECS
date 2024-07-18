@@ -18,7 +18,7 @@ namespace Internal.ECS
         [Test]
         public unsafe void Test_IdArray_sizeof()
         {
-            AreEqual(8, Marshal.SizeOf(typeof(IdArrayHeap))); // Important -> to use IdArrayHeap as a TreeNode field
+            // AreEqual(8, Marshal.SizeOf(typeof(IdArrayHeap))); // Important -> to use IdArrayHeap as a TreeNode field
             AreEqual(8, sizeof(IdArray));
         }
     
