@@ -15,7 +15,7 @@ internal static class LinkRelationUtils
         var map         = componentIndex.linkEntityMap;
         var linkHeap    = componentIndex.linkIdsHeap;
         map.TryGetValue(target, out var ids);
-        var idSpan  = ids.GetIdSpan(linkHeap);
+        var idSpan  = ids.GetIdSpan(linkHeap, componentIndex.store);
         int index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
@@ -35,7 +35,7 @@ internal static class LinkRelationUtils
         var map         = componentIndex.linkEntityMap;
         var linkHeap    = componentIndex.linkIdsHeap;
         map.TryGetValue(target, out var ids);
-        var idSpan = ids.GetIdSpan(linkHeap);
+        var idSpan = ids.GetIdSpan(linkHeap, componentIndex.store);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }

@@ -16,7 +16,7 @@ internal static class SortedListUtils
     {
         var idHeap  = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);
-        var idSpan  = ids.GetIdSpan(idHeap);
+        var idSpan  = ids.GetIdSpan(idHeap, componentIndex.store);
         int index   = idSpan.IndexOf(id);
         if (index == -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
@@ -34,7 +34,7 @@ internal static class SortedListUtils
     {
         var idHeap = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);
-        var idSpan = ids.GetIdSpan(idHeap);
+        var idSpan = ids.GetIdSpan(idHeap, componentIndex.store);
         if (idSpan.IndexOf(id) != -1) {
             return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         }

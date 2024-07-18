@@ -42,12 +42,12 @@ internal struct IdArray
 
 internal static class IdArrayExtensions {
 
-    internal static ReadOnlySpan<int> GetIdSpan(this ref IdArray array, IdArrayHeap heap)
+    internal static ReadOnlySpan<int> GetIdSpan(this ref IdArray array, IdArrayHeap heap, EntityStoreBase store)
     {
         var count = array.count;
         switch (count) {
             case 0:     return default;
-            case 1:     return MemoryMarshal.CreateReadOnlySpan(ref array.start, 1);
+            case 1:     return store.GetSpanId(array.start);
         }
         var curPoolIndex = IdArrayHeap.PoolIndex(count);
         return new ReadOnlySpan<int>(heap.GetPool(curPoolIndex).Ids, array.start, count);

@@ -29,7 +29,7 @@ public static partial class EntityExtensions
         {
             var entityIndex = (EntityIndex)indexMap[componentType.StructIndex];
             entityIndex.entityMap.TryGetValue(targetId, out var idArray);
-            var idSpan = idArray.GetIdSpan(entityIndex.idHeap);
+            var idSpan = idArray.GetIdSpan(entityIndex.idHeap, target.store);
             foreach (var linkId in idSpan) {
                 var linkEntity  = new Entity(store, linkId);
                 var component   = EntityUtils.GetEntityComponent(linkEntity, componentType);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using Tests.Utils;
@@ -24,39 +25,40 @@ namespace Internal.ECS
         [Test]
         public void Test_IdArray_Add()
         {
+            var store   = new EntityStore();
             var heap    = new IdArrayHeap();
             
             var array   = new IdArray();
             AreEqual("count: 0", array.ToString());
             AreEqual(0, array.Count);
-            AreEqual("{ }", array.GetIdSpan(heap).Debug());
+            AreEqual("{ }", array.GetIdSpan(heap, store).Debug());
 
             array.AddId(100, heap);
             AreEqual(1, array.Count);
             AreEqual("count: 1  id: 100", array.ToString());
-            var span = array.GetIdSpan(heap);
+            var span = array.GetIdSpan(heap, store);
             AreEqual("{ 100 }", span.Debug());
             AreEqual(0, heap.Count);
             
             array.AddId(101, heap);
             AreEqual(2, array.Count);
             AreEqual("count: 2  index: 1  start: 0", array.ToString());
-            AreEqual("{ 100, 101 }", array.GetIdSpan(heap).Debug());
+            AreEqual("{ 100, 101 }", array.GetIdSpan(heap, store).Debug());
             AreEqual(1, heap.Count);
 
             array.AddId(102, heap);
             AreEqual(3, array.Count);
-            AreEqual("{ 100, 101, 102 }", array.GetIdSpan(heap).Debug());
+            AreEqual("{ 100, 101, 102 }", array.GetIdSpan(heap, store).Debug());
             AreEqual(1, heap.Count);
             
             array.AddId(103, heap);
             AreEqual(4, array.Count);
-            AreEqual("{ 100, 101, 102, 103 }", array.GetIdSpan(heap).Debug());
+            AreEqual("{ 100, 101, 102, 103 }", array.GetIdSpan(heap, store).Debug());
             AreEqual(1, heap.Count);
             
             array.AddId(104, heap);
             AreEqual(5, array.Count);
-            AreEqual("{ 100, 101, 102, 103, 104 }", array.GetIdSpan(heap).Debug());
+            AreEqual("{ 100, 101, 102, 103, 104 }", array.GetIdSpan(heap, store).Debug());
             AreEqual(1, heap.Count);
             AreEqual("count: 1", heap.ToString());
             
@@ -68,6 +70,7 @@ namespace Internal.ECS
         [Test]
         public void Test_IdArray_Remove()
         {
+            var store   = new EntityStore();
             var heap    = new IdArrayHeap();
             {
                 var array   = new IdArray();
@@ -80,7 +83,7 @@ namespace Internal.ECS
                 array.AddId(201, heap);
                 array.RemoveAt(0, heap);
                 AreEqual(1, array.Count);
-                var ids     = array.GetIdSpan(heap);
+                var ids     = array.GetIdSpan(heap, store);
                 AreEqual("{ 201 }", ids.Debug());
                 AreEqual(0, heap.Count);
             } {
@@ -89,7 +92,7 @@ namespace Internal.ECS
                 array.AddId(301, heap);
                 array.RemoveAt(1, heap);
                 AreEqual(1, array.Count);
-                var ids     = array.GetIdSpan(heap);
+                var ids     = array.GetIdSpan(heap, store);
                 AreEqual("{ 300 }", ids.Debug());
                 AreEqual(0, heap.Count);
             } {
@@ -99,7 +102,7 @@ namespace Internal.ECS
                 array.AddId(402, heap);
                 array.RemoveAt(0, heap);
                 AreEqual(2, array.Count);
-                var ids     = array.GetIdSpan(heap);
+                var ids     = array.GetIdSpan(heap, store);
                 AreEqual("{ 401, 402 }", ids.Debug());
                 AreEqual(1, heap.Count);
             } {
@@ -109,7 +112,7 @@ namespace Internal.ECS
                 array.AddId(502, heap);
                 array.RemoveAt(2, heap);
                 AreEqual(2, array.Count);
-                var ids     = array.GetIdSpan(heap);
+                var ids     = array.GetIdSpan(heap, store);
                 AreEqual("{ 500, 501 }", ids.Debug());
                 AreEqual(2, heap.Count);
             } {
@@ -120,7 +123,7 @@ namespace Internal.ECS
                 array.AddId(603, heap);
                 array.RemoveAt(0, heap);
                 AreEqual(3, array.Count);
-                var ids     = array.GetIdSpan(heap);
+                var ids     = array.GetIdSpan(heap, store);
                 AreEqual("{ 603, 601, 602 }", ids.Debug());
                 AreEqual(3, heap.Count);
             } {
@@ -131,7 +134,7 @@ namespace Internal.ECS
                 array.AddId(703, heap);
                 array.RemoveAt(3, heap);
                 AreEqual(3, array.Count);
-                var ids     = array.GetIdSpan(heap);
+                var ids     = array.GetIdSpan(heap, store);
                 AreEqual("{ 700, 701, 702 }", ids.Debug());
                 AreEqual(4, heap.Count);
             }
@@ -140,6 +143,7 @@ namespace Internal.ECS
         [Test]
         public void Test_IdArray_clear_freeList()
         {
+            var store   = new EntityStore();
             var heap    = new IdArrayHeap();
             var arrays  = new IdArray[100];
             int id      = 0;
@@ -151,7 +155,7 @@ namespace Internal.ECS
             }
             id = 0;
             for (int n = 0; n < 100; n++) {
-                var span = arrays[n].GetIdSpan(heap);
+                var span = arrays[n].GetIdSpan(heap, store);
                 for (int i = 0; i < 10; i++) {
                     Mem.AreEqual(id++, span[i]);
                 }

@@ -49,7 +49,7 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     {
         entityMap.TryGetValue(targetId, out var idArray);
         // TODO check if it necessary to make a copy of linkingEntityIds - e.g. by stackalloc 
-        var linkingEntityIds  = idArray.GetIdSpan(idHeap);
+        var linkingEntityIds  = idArray.GetIdSpan(idHeap, store);
         foreach (int linkingEntityId in linkingEntityIds)
         {
             var entity = new Entity(store, linkingEntityId);
@@ -79,7 +79,7 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
         var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         int linkedEntity    = components[compIndex].GetIndexedValue().Id;
         map.TryGetValue(linkedEntity, out var idArray);
-        var idSpan  = idArray.GetIdSpan(heap);
+        var idSpan  = idArray.GetIdSpan(heap, store);
         int index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {

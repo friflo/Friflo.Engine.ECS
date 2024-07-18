@@ -203,7 +203,7 @@ internal abstract class EntityRelations
         int lastPosition        = type.entityCount - 1;
         int lastId              = type.entityIds[lastPosition];
         map.TryGetValue(lastId, out var curPositions);
-        var positionSpan        = curPositions.GetIdSpan(localIdHeap);
+        var positionSpan        = curPositions.GetIdSpan(localIdHeap, store);
         int curPositionIndex    = positionSpan.IndexOf(lastPosition);
         curPositions.Set(curPositionIndex, position, localIdHeap);
         // array with length == 1 is stored in-place

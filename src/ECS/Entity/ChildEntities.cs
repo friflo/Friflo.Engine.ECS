@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 /// Return the child entities of an <see cref="Entity"/>.
 /// </summary>
 [DebuggerTypeProxy(typeof(ChildEntitiesDebugView))]
-public struct ChildEntities : IEnumerable<Entity>
+public readonly struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties
                         public              int                 Count           => node.childIds.count;
@@ -29,8 +29,8 @@ public struct ChildEntities : IEnumerable<Entity>
                         public override     string              ToString()      => $"Entity[{Count}]";
     
     // --- internal fields
-    /// must not be readonly. Because of <see cref="TreeNode.GetChildIds"/> using <see cref="MemoryMarshal.CreateReadOnlySpan{T}"/>
-    [Browse(Never)]     internal            TreeNode            node;   // 16
+
+    [Browse(Never)]     internal readonly   TreeNode            node;   // 16
     [Browse(Never)]     internal readonly   EntityStore         store;  //  8
     
     // --- IEnumerable<>
