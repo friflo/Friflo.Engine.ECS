@@ -68,6 +68,81 @@ namespace Internal.ECS
         }
         
         [Test]
+        public void Test_IdArray_InsertAt()
+        {
+            var store   = new EntityStore();
+            var heap    = new IdArrayHeap();
+            
+            var array   = new IdArray();
+            AreEqual(0, array.Count);
+            AreEqual("{ }", array.GetIdSpan(heap, store).Debug());
+
+            array.InsertAt(0, 100, heap);
+            AreEqual("{ 100 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(0, heap.Count);
+            
+            array.InsertAt(0, 99, heap);
+            AreEqual("{ 99, 100 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.RemoveAt(0, heap);
+            AreEqual("{ 100 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(0, heap.Count);
+            
+            array.InsertAt(1, 101, heap);
+            AreEqual("{ 100, 101 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+
+            array.InsertAt(0, 99, heap);
+            AreEqual("{ 99, 100, 101 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.InsertAt(3, 102, heap);
+            AreEqual("{ 99, 100, 101, 102 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.InsertAt(0, 98, heap);
+            AreEqual("{ 98, 99, 100, 101, 102 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.RemoveAt(0, heap);
+            AreEqual("{ 99, 100, 101, 102 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.InsertAt(4, 103, heap);
+            AreEqual("{ 99, 100, 101, 102, 103 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            AreEqual("arraySize: 2 count: 0", heap.GetPool(1).ToString());
+            AreEqual("arraySize: 4 count: 0", heap.GetPool(2).ToString());
+            AreEqual("arraySize: 8 count: 1", heap.GetPool(3).ToString());
+        }
+        
+        [Test]
+        public void Test_IdArray_SetArray()
+        {
+            var store   = new EntityStore();
+            var heap    = new IdArrayHeap();
+            var array   = new IdArray();
+
+            array.SetArray(new int[] { 100 }, heap);
+            AreEqual("{ 100 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(0, heap.Count);
+            
+            array.SetArray(new int[] { 101, 102 }, heap);
+            AreEqual("{ 101, 102 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.SetArray(new int[] { 103, 104, 105 }, heap);
+            AreEqual("{ 103, 104, 105 }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(1, heap.Count);
+            
+            array.SetArray(new int[] { }, heap);
+            AreEqual("{ }", array.GetIdSpan(heap, store).Debug());
+            AreEqual(0, heap.Count);
+        }
+        
+        [Test]
         public void Test_IdArray_Remove()
         {
             var store   = new EntityStore();
@@ -181,6 +256,12 @@ namespace Internal.ECS
             });
             Throws<IndexOutOfRangeException>(() => {
                 array.RemoveAt(-1, heap);    
+            });
+            Throws<IndexOutOfRangeException>(() => {
+                array.InsertAt(-1, 42, heap);    
+            });
+            Throws<IndexOutOfRangeException>(() => {
+                array.InsertAt(1, 42, heap);    
             });
         }
         
