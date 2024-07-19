@@ -47,6 +47,11 @@ public readonly struct ChildEntities : IEnumerable<Entity>
         entity.TryGetTreeNode(out node);
     }
     
+    internal ChildEntities(EntityStore store, TreeNode node) {
+        this.store  = store;
+        this.node   = node;
+    }
+    
     public void ToArray(Entity[] array) {
         var ids = Ids;
         for (int n = 0; n < ids.Length; n++) {

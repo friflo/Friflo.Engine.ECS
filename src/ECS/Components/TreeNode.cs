@@ -10,11 +10,17 @@ namespace Friflo.Engine.ECS;
 [ComponentKey(null)]
 public struct TreeNode : IComponent
 {
+#region properties 
     public                      int     ChildCount  => childIds.count;
     public          override    string  ToString()  => $"ChildCount: {childIds.count}";
+    #endregion
     
-//  [Browse(Never)] internal    int     parentId;   //  4   0 if entity has no parent
+#region fields
                     internal    IdArray childIds;   //  8
+//  [Browse(Never)] internal    int     parentId;   //  4   0 if entity has no parent
+    #endregion
+    
+    public ChildEntities  GetChildEntities(EntityStore store) => new ChildEntities(store, this);
     
     /// same as <see cref="IdArrayExtensions.GetSpan"/>
     public ReadOnlySpan<int>  GetChildIds(EntityStore store)

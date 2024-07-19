@@ -426,6 +426,24 @@ public static class Test_Entity_Tree
     }
     
     [Test]
+    public static void Test_Entity_Tree_TreeNode()
+    {
+        var store       = new EntityStore();
+        var root        = store.CreateEntity(1);
+        var child2      = store.CreateEntity(2);
+        var child3      = store.CreateEntity(3);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        var node        = root.GetComponent<TreeNode>();
+        var ids         = node.GetChildIds(store).Debug();
+        var children    = node.GetChildEntities(store);
+        AreEqual("{ 2, 3 }", ids);
+        AreEqual(2, children.Count);
+        IsTrue(child2 == children[0]);
+        IsTrue(child3 == children[1]);
+    }
+    
+    [Test]
     public static void Test_Entity_Tree_Allocation()
     {
         int count       = 10;   // 2000
