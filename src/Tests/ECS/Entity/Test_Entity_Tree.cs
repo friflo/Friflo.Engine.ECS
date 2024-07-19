@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -425,8 +426,48 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Entity_Tree_Allocation() {
+    public static void Test_Entity_Tree_Allocation()
+    {
+        int count       = 10;   // 1000
+        // Test_Entity_Tree_Allocation - count: 1000  entities: 1001001  duration: 360 ms
+        var store       = new EntityStore();
+        var root        = store.CreateEntity(1);
+        var type        = store.GetArchetype(default);
+        var children    = type.CreateEntities(count).ToArray();
+        var subChildren = type.CreateEntities(count * count).ToArray();
+        store.SetStoreRoot(root);
         
+        for (int repeat = 0; repeat < 2; repeat++)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var start = Mem.GetAllocatedBytes();
+            int subIndex = 0;
+            foreach (var child in children)
+            {
+                root.AddChild(child);
+                for (int i = 0; i < count; i++) {
+                    var subChild = subChildren[subIndex++];
+                    child.AddChild(subChild);
+                }
+                Mem.AreEqual(count, child.ChildCount);
+            }
+            Mem.AreEqual(count, root.ChildCount);
+            
+            for (int n = count - 1; n >= 0; n--)
+            {
+                var child           = children[n];
+                var childEntities   = child.ChildEntities;
+                for (int i = count - 1; i >= 0; i--) {
+                    Mem.IsTrue(child.RemoveChild(childEntities[i]));
+                }
+                Mem.IsTrue(root.RemoveChild(child));
+            }
+            if (repeat > 0) {
+                Mem.AssertNoAlloc(start);
+                Console.WriteLine($"Test_Entity_Tree_Allocation - count: {count}  entities: {store.Count}  duration: {sw.ElapsedMilliseconds} ms");
+            }
+        }
     }
     
     [Test]
