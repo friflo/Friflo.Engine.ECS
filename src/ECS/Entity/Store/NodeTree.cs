@@ -55,7 +55,7 @@ public partial class EntityStore
     private static bool HasParent(int id)  =>   id >= Static.MinNodeId;
     
     /// This message must be used if adding or removing ids from an entity <see cref="TreeNode"/>.
-    private ref TreeNode GetTreeNodeRef(Entity entity)
+    private static ref TreeNode GetTreeNodeRef(Entity entity)
     {
         var heap = entity.archetype.heapMap[StructInfo<TreeNode>.Index];
         if (heap == null) {
