@@ -20,7 +20,7 @@ namespace Tests.ECS {
 public static class Test_Entity_Tree
 {
     [Test]
-    public static void Test_CreateEntity_UseRandomPids()
+    public static void Test_Entity_Tree_CreateEntity_UseRandomPids()
     {
         var store   = new EntityStore(PidType.RandomPids);
         store.SetRandomSeed(0);
@@ -32,7 +32,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_CreateEntity_UsePidAsId()
+    public static void Test_Entity_Tree_CreateEntity_UsePidAsId()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
@@ -43,7 +43,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_AddChild()
+    public static void Test_Entity_Tree_AddChild()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -100,7 +100,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_InsertChild()
+    public static void Test_Entity_Tree_InsertChild()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -184,7 +184,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Cover <see cref="EntityStore.EnsureChildIdsCapacity"/></summary>
     [Test]
-    public static void Test_InsertChild_EnsureChildIdsCapacity()
+    public static void Test_Entity_Tree_InsertChild_EnsureChildIdsCapacity()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -207,7 +207,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Cover <see cref="EntityStore.InsertChild"/></summary>
     [Test]
-    public static void Test_InsertChild_cover()
+    public static void Test_Entity_Tree_InsertChild_cover()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -253,7 +253,7 @@ public static class Test_Entity_Tree
     
     /// <summary>code coverage for <see cref="EntityStore.SetTreeFlags"/></summary>
     [Test]
-    public static void Test_AddChild_move_root_tree_entity()
+    public static void Test_Entity_Tree_AddChild_move_root_tree_entity()
     {
         var store       = new EntityStore(PidType.RandomPids);
         var root        = store.CreateEntity(1);
@@ -292,7 +292,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_RemoveChild()
+    public static void Test_Entity_Tree_RemoveChild()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -329,7 +329,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_RemoveChild_from_multiple_children()
+    public static void Test_Entity_Tree_RemoveChild_from_multiple_children()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -361,7 +361,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_SetRoot()
+    public static void Test_Entity_Tree_SetRoot()
     {
         var store   = new EntityStore(PidType.RandomPids);
         
@@ -389,7 +389,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_move_with_AddChild()
+    public static void Test_Entity_Tree_move_with_AddChild()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity(1);
@@ -425,7 +425,12 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Entity_ToString()
+    public static void Test_Entity_Tree_Allocation() {
+        
+    }
+    
+    [Test]
+    public static void Test_Entity_Tree_Entity_ToString()
     {
         var nullEntity = new Entity();
         AreEqual("null",                nullEntity.ToString());
@@ -443,7 +448,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_DeleteEntity()
+    public static void Test_Entity_Tree_DeleteEntity()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -563,7 +568,7 @@ public static class Test_Entity_Tree
     
     /// <summary>cover <see cref="EntityStore.DeleteNode"/></summary>
     [Test]
-    public static void Test_Test_Entity_Tree_cover_DeleteNode()
+    public static void Test_Entity_Tree_cover_DeleteNode()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -604,7 +609,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>
     [Test]
-    public static void Test_Entity_GetChildIndex()
+    public static void Test_Entity_Tree_GetChildIndex()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -614,7 +619,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Cover <see cref="EntityStore.OnChildEntitiesChanged"/></summary>
     [Test]
-    public static void Test_EntityStore_ChildEntitiesChanged()
+    public static void Test_Entity_Tree_ChildEntitiesChanged()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -672,7 +677,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Entity_id_argument_exceptions()
+    public static void Test_Entity_Tree_id_argument_exceptions()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var e = Throws<ArgumentException>(() => {
@@ -688,7 +693,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Entity_SetRoot_assertions()
+    public static void Test_Entity_Tree_SetRoot_assertions()
     {
         {
             var store   = new EntityStore(PidType.RandomPids);
@@ -762,7 +767,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Add_Child_Entities_UseRandomPids_Perf()
+    public static void Test_Entity_Tree_AddChild_Entities_UseRandomPids_Perf()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity();
@@ -780,7 +785,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Add_Child_Entities_UsePidAsId_Perf()
+    public static void Test_Entity_Tree_AddChild_Entities_UsePidAsId_Perf()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
@@ -799,7 +804,7 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Math_Perf()
+    public static void Test_Entity_Tree_Math_Perf()
     {
         var rand = new Random();
         var count = 10; // 10_000_000 ~ #PC: 39 ms
