@@ -41,7 +41,7 @@ internal struct IdArray
 
 internal static class IdArrayExtensions {
 
-    internal static ReadOnlySpan<int> GetIdSpan(this ref IdArray array, IdArrayHeap heap, EntityStoreBase store)
+    internal static ReadOnlySpan<int> GetSpan(this ref IdArray array, IdArrayHeap heap, EntityStoreBase store)
     {
         var count = array.count;
         switch (count) {
@@ -52,7 +52,7 @@ internal static class IdArrayExtensions {
         return new ReadOnlySpan<int>(heap.GetPool(curPoolIndex).Ids, array.start, count);
     }
     
-    public static void AddId(this ref IdArray array, int id, IdArrayHeap heap)
+    public static void Add(this ref IdArray array, int id, IdArrayHeap heap)
     {
         var count = array.count; 
         if (count == 0) {

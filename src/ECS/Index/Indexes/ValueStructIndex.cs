@@ -52,7 +52,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
-        var idSpan  = idArray.GetIdSpan(heap, store);
+        var idSpan  = idArray.GetSpan(heap, store);
         var index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {

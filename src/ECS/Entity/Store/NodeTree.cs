@@ -96,7 +96,7 @@ public partial class EntityStore
         int index           = parent.childIds.count;
     //  childNode.parentId  = parentId;
         extension.parentMap[childId]  = parentId;
-        parent.childIds.AddId(childId, extension.hierarchyHeap);
+        parent.childIds.Add(childId, extension.hierarchyHeap);
         SetTreeFlags(localNodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId, childId, index);

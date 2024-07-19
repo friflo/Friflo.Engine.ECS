@@ -18,7 +18,7 @@ public struct TreeNode : IComponent    // todo should be internal
                     internal    IdArray     childIds;   //  8
                     internal    int[]       dummy;      //  8  todo remove
     
-    /// same as <see cref="IdArrayExtensions.GetIdSpan"/>
+    /// same as <see cref="IdArrayExtensions.GetSpan"/>
     public ReadOnlySpan<int>  GetChildIds(EntityStore store)
     {
         var count = childIds.count;

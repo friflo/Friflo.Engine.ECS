@@ -34,7 +34,7 @@ internal static class SortUtils<TValue>
         for (int index = minIndex; index < maxIndex; index++)
         {
             var ids     = map[buffer[index]];
-            var idSpan  = ids.GetIdSpan(idHeap, componentIndex.store);
+            var idSpan  = ids.GetSpan(idHeap, componentIndex.store);
             foreach (var id in idSpan) {
                 idSet.Add(id);
             }

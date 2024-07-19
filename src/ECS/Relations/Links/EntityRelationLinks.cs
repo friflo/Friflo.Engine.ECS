@@ -33,7 +33,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     internal override void AddIncomingRelations(int target, List<EntityLink> result)
     {
         linkEntityMap.TryGetValue(target, out var sourceIds);
-        var sourceIdSpan    = sourceIds.GetIdSpan(linkIdsHeap, store);
+        var sourceIdSpan    = sourceIds.GetSpan(linkIdsHeap, store);
         var components      = heapGeneric.components;
         Entity targetEntity = new Entity(store, target);    
         foreach (var sourceId in sourceIdSpan) {
@@ -79,7 +79,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     internal override void RemoveLinksWithTarget(int targetId)
     {
         linkEntityMap.TryGetValue(targetId, out var sourceIds);
-        var sourceIdSpan = sourceIds.GetIdSpan(linkIdsHeap, store);
+        var sourceIdSpan = sourceIds.GetSpan(linkIdsHeap, store);
         // TODO check if it necessary to make a copy of idSpan - e.g. by stackalloc
         foreach (var sourceId in sourceIdSpan) {
             var target = new Entity(store, targetId);

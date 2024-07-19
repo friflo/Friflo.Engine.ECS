@@ -28,7 +28,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     protected int FindRelationPosition(int id, TKey key, out IdArray positions, out int index)
     {
         positionMap.TryGetValue(id, out positions);
-        var positionSpan    = positions.GetIdSpan(idHeap, store);
+        var positionSpan    = positions.GetSpan(idHeap, store);
         int positionCount   = positions.count;
         var components      = heapGeneric.components;
         for (index = 0; index < positionCount; index++) {

@@ -187,7 +187,7 @@ internal abstract class EntityRelations
             store.nodes[id].isOwner |= relationBit;
         }
         int position = Archetype.AddEntity(archetype, id);
-        positions.AddId(position, idHeap);
+        positions.Add(position, idHeap);
         positionMap[id] = positions;
         return position;
     }
@@ -203,7 +203,7 @@ internal abstract class EntityRelations
         int lastPosition        = type.entityCount - 1;
         int lastId              = type.entityIds[lastPosition];
         map.TryGetValue(lastId, out var curPositions);
-        var positionSpan        = curPositions.GetIdSpan(localIdHeap, store);
+        var positionSpan        = curPositions.GetSpan(localIdHeap, store);
         int curPositionIndex    = positionSpan.IndexOf(lastPosition);
         curPositions.SetAt(curPositionIndex, position, localIdHeap);
         // array with length == 1 is stored in-place

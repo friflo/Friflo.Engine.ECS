@@ -55,7 +55,7 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
         var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
         TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
-        var idSpan  = idArray.GetIdSpan(heap, store);
+        var idSpan  = idArray.GetSpan(heap, store);
         var index   = idSpan.IndexOf(id);
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
@@ -75,9 +75,9 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
             return;
         }
         var heap    = idHeap;
-        var idSpan  = nullValue.GetIdSpan(heap, store);
+        var idSpan  = nullValue.GetSpan(heap, store);
         if (idSpan.IndexOf(id) != -1) return; // unexpected. Better safe than sorry. Used belts with suspenders :)
-        nullValue.AddId(id, heap);
+        nullValue.Add(id, heap);
     }
     
     internal void RemoveComponentValue(int id, in TValue value)
@@ -87,7 +87,7 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : ComponentIndex
             return;
         }
         var heap    = idHeap;
-        var idSpan  = nullValue.GetIdSpan(heap, store);
+        var idSpan  = nullValue.GetSpan(heap, store);
         var index   = idSpan.IndexOf(id);
         if (index == -1) return; // unexpected. Better safe than sorry. Used belts with suspenders :)
         nullValue.RemoveAt(index, heap);
