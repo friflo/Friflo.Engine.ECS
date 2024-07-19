@@ -22,11 +22,12 @@ public struct TreeNode : IComponent    // todo should be internal
     public ReadOnlySpan<int>  GetChildIds(EntityStore store)
     {
         var count = childIds.count;
+        var start = childIds.start;
         switch (count) {
             case 0: return default;
-            case 1: return store.GetSpanId(childIds.start);
+            case 1: return store.GetSpanId(start);
         }
         var curPoolIndex = IdArrayHeap.PoolIndex(count);
-        return new ReadOnlySpan<int>(store.extension.hierarchyHeap.GetPool(curPoolIndex).Ids, childIds.start, count);
+        return new ReadOnlySpan<int>(store.extension.hierarchyHeap.GetPool(curPoolIndex).Ids, start, count);
     }
 }
