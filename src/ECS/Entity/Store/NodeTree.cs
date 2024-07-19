@@ -23,24 +23,24 @@ public partial class EntityStore
     /// <returns>The number of entities that can be added without reallocation. </returns>
     public int EnsureCapacity(int capacity)
     {
-        var curLength   = nodes.Length;
-        var last        = intern.sequenceId + 1;
-        var curCapacity = curLength - last;
+        int curLength   = nodes.Length;
+        int last        = intern.sequenceId + 1;
+        int curCapacity = curLength - last;
         if (curCapacity >= capacity) {
             return curCapacity;
         }
-        var newLength   = last + capacity;
+        int newLength   = last + capacity;
         ArrayUtils.Resize(ref nodes, newLength);
         return newLength - last;
     }
     
     private void EnsureNodesLength(int length)
     {
-        var curLength = nodes.Length;
+        int curLength = nodes.Length;
         if (length <= curLength) {
             return;
         }
-        var newLength = Math.Max(length, 2 * curLength); // could grow slower to minimize heap pressure
+        int newLength = Math.Max(length, 2 * curLength); // could grow slower to minimize heap pressure
         ArrayUtils.Resize(ref nodes, newLength);
     }
     
@@ -163,7 +163,7 @@ public partial class EntityStore
         }
     //  childNode.parentId  = Static.NoParentId;
         extension.parentMap.Remove(childId);
-        var curIndex        = RemoveChildNode(parentId, childId);
+        int curIndex        = RemoveChildNode(parentId, childId);
         ClearTreeFlags(localNodes, childId, NodeFlags.TreeNode);
         
         OnChildNodeRemove(parentId, childId, curIndex);
@@ -194,7 +194,7 @@ public partial class EntityStore
         var parent          = new Entity(this, parentId);
         ref var treeNode    = ref GetTreeNodeRef(parent);
         var childIds        = treeNode.GetChildIds(this);
-        var index           = childIds.IndexOf(childId);
+        int index           = childIds.IndexOf(childId);
         if (index != -1) {
             treeNode.childIds.RemoveAt(index, extension.childHeap, keepOrder: true);
             return index;
@@ -273,12 +273,12 @@ public partial class EntityStore
     {
         var newIdSet = idBufferSet;
         newIdSet.Clear();
-        foreach (var id in newIds) {
+        foreach (int id in newIds) {
             newIdSet.Add(id);
         }
         var childIds = node.GetChildIds(this);
         for (int index = node.childIds.count - 1; index >= 0; index--) {
-            var id = childIds[index];
+            int id = childIds[index];
             if (newIdSet.Contains(id)) {
                 continue;
             }
@@ -295,13 +295,13 @@ public partial class EntityStore
     {
         var curIdSet = idBufferSet;
         curIdSet.Clear();
-        foreach (var id in node.GetChildIds(this)) {
+        foreach (int id in node.GetChildIds(this)) {
             curIdSet.Add(id);
         }
-        var newCount = newIds.Length;
+        int newCount = newIds.Length;
         for (int index = 0; index < newCount; index++)
         {
-            var id = newIds[index];
+            int id = newIds[index];
             if (curIdSet.Contains(id)) {
                 // case: child ids contains id already
                 continue;
@@ -316,7 +316,7 @@ public partial class EntityStore
     private void ChildIds_GetRange(in TreeNode node, ReadOnlySpan<int> newIds, out int first, out int last)
     {
         var childIds    = node.GetChildIds(this);
-        var count       = newIds.Length;
+        int count       = newIds.Length;
         first           = 0;
         for (; first < count; first++)
         {
@@ -357,7 +357,7 @@ public partial class EntityStore
         var heap = extension.childHeap;
         for (int index = first; index <= last; index++)
         {
-            var addedId = newIds[index];
+            int addedId = newIds[index];
             node.childIds.InsertAt(index, addedId, heap);
             OnChildNodeAdd(parentId, addedId, index);
         }
@@ -408,7 +408,7 @@ public partial class EntityStore
             return true;
         }
         // --- iterate all parents of id and fail if id in these parents 
-        var cur         = id;
+        int cur         = id;
     //  var localNodes  = nodes;
         while (true) {
         //  cur = localNodes[cur].parentId;
@@ -425,7 +425,7 @@ public partial class EntityStore
     }
     
     private InvalidOperationException EntityDependencyCycleException(int id) {
-        var cur = id;
+        int cur = id;
         var sb = new StringBuilder();
         sb.Append("dependency cycle in entity children: ");
         sb.Append(id);
@@ -452,8 +452,8 @@ public partial class EntityStore
     private void NewIds(int[] ids, int start, int count)
     {
         var localNodes  = nodes;
-        var max         = localNodes.Length;
-        var sequenceId  = intern.sequenceId;
+        int max         = localNodes.Length;
+        int sequenceId  = intern.sequenceId;
         for (int n = 0; n < count; n++)
         {
             for (; ++sequenceId < max;)
@@ -472,8 +472,8 @@ public partial class EntityStore
     internal int NewId()
     {
         var localNodes  = nodes;
-        var max         = localNodes.Length;
-        var id          = ++intern.sequenceId;
+        int max         = localNodes.Length;
+        int id          = ++intern.sequenceId;
         for (; id < max;)
         {
             if ((localNodes[id].flags & Created) != 0) {
@@ -489,8 +489,8 @@ public partial class EntityStore
     internal int NewIdInterlocked()
     {
         var localNodes  = nodes;
-        var max         = localNodes.Length;
-        var id          = Interlocked.Increment(ref intern.sequenceId);
+        int max         = localNodes.Length;
+        int id          = Interlocked.Increment(ref intern.sequenceId);
         for (; id < max;)
         {
             if ((localNodes[id].flags & Created) != 0) {
@@ -517,7 +517,7 @@ public partial class EntityStore
         }
         // --- mark its child nodes as floating
         ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
-        foreach (var childId in entity.ChildIds) {
+        foreach (int childId in entity.ChildIds) {
         //  localNodes[childId].parentId = Static.NoParentId;
             extension.parentMap.Remove(childId);
         }
@@ -597,7 +597,7 @@ public partial class EntityStore
         }
         node.flags &= ~flag;
         var entity = new Entity(this, id);
-        foreach (var childId in entity.ChildIds) {
+        foreach (int childId in entity.ChildIds) {
             ClearTreeFlags(nodes, childId, flag);
         }
     }
@@ -606,9 +606,9 @@ public partial class EntityStore
         if (!storeRoot.IsNull) {
             throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.Id}");
         }
-        var id = entity.Id;
+        int id = entity.Id;
     //  ref var parentId = ref nodes[id].parentId;
-        extension.parentMap.TryGetValue(id, out var parentId);
+        extension.parentMap.TryGetValue(id, out int parentId);
         if (HasParent(parentId)) {
             throw new InvalidOperationException($"entity must not have a parent to be {nameof(StoreRoot)}. current parent id: {parentId}");
         }

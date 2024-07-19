@@ -43,8 +43,8 @@ internal static class IdArrayExtensions {
 
     internal static ReadOnlySpan<int> GetSpan(this ref IdArray array, IdArrayHeap heap, EntityStoreBase store)
     {
-        var count = array.count;
-        var start = array.start;
+        int count = array.count;
+        int start = array.start;
         switch (count) {
             case 0:     return default;
             case 1:     return store.GetSpanId(start);
@@ -54,23 +54,23 @@ internal static class IdArrayExtensions {
     
     public static void Add(this ref IdArray array, int id, IdArrayHeap heap)
     {
-        var count = array.count; 
+        int count = array.count; 
         if (count == 0) {
             array = new IdArray(id, 1);
             return;
         }
-        var curStart = array.start;
+        int curStart = array.start;
         if (count == 1) {
             var pool        = heap.GetOrCreatePool(1);
-            var start       = pool.CreateArray(out var ids);
+            int start       = pool.CreateArray(out var ids);
             ids[start]      = curStart;
             ids[start + 1]  = id;
             array = new IdArray(start, 2);
             return;
         }
-        var newCount        = count + 1;
-        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
-        var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
+        int newCount        = count + 1;
+        int curPoolIndex    = IdArrayHeap.PoolIndex(count);
+        int newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
         var curPool         = IdArrayPool.GetPool(heap, curPoolIndex, out var curIds);
         if (newPoolIndex == curPoolIndex) {
             curIds[curStart + count] = id;
@@ -79,7 +79,7 @@ internal static class IdArrayExtensions {
         }
         curPool.DeleteArray(curStart, out curIds);
         var newPool     = heap.GetOrCreatePool(newPoolIndex);
-        var newStart    = newPool.CreateArray(out var newIds);
+        int newStart    = newPool.CreateArray(out var newIds);
         
         new ReadOnlySpan<int> (curIds, curStart, count).CopyTo(
         new Span<int>         (newIds, newStart, count));
@@ -90,24 +90,24 @@ internal static class IdArrayExtensions {
     
     public static void RemoveAt(this ref IdArray array, int index, IdArrayHeap heap, bool keepOrder = false)
     {
-        var count = array.count;
+        int count = array.count;
         if (index < 0 || index >= count) throw new IndexOutOfRangeException();
         if (count == 1) {   // index is 0
             array = default;
             return;
         }
-        var curStart = array.start;
+        int curStart = array.start;
         if (count == 2) {   // index is 0 or 1
             var pool = heap.GetPool(1);
             pool.DeleteArray(curStart, out var ids);
             array = new IdArray(ids[curStart + 1 - index], 1);
             return;
         }
-        var newCount        = count - 1;
-        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
-        var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
+        int newCount        = count - 1;
+        int curPoolIndex    = IdArrayHeap.PoolIndex(count);
+        int newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
         var curPool         = IdArrayPool.GetPool(heap, curPoolIndex, out var curIds);
-        var tail            = newCount - index;
+        int tail            = newCount - index;
         if (newPoolIndex == curPoolIndex) {
             if (keepOrder) {
                 // remove id at index
@@ -122,7 +122,7 @@ internal static class IdArrayExtensions {
         }
         curPool.DeleteArray(curStart, out curIds);
         var newPool     = heap.GetOrCreatePool(newPoolIndex);
-        var newStart    = newPool.CreateArray(out var newIds);
+        int newStart    = newPool.CreateArray(out var newIds);
         
         new ReadOnlySpan<int> (curIds, curStart,             index).CopyTo(
         new Span<int>         (newIds, newStart,             index));
@@ -135,14 +135,14 @@ internal static class IdArrayExtensions {
     
     public static void SetArray(this ref IdArray array, ReadOnlySpan<int> idSpan, IdArrayHeap heap)
     {
-        var count       = array.count;
-        var curStart    = array.start;
+        int count       = array.count;
+        int curStart    = array.start;
         if (count > 1 ) {
-            var curPoolIndex    = IdArrayHeap.PoolIndex(count);
+            int curPoolIndex    = IdArrayHeap.PoolIndex(count);
             var curPool         = heap.GetPool(curPoolIndex);
             curPool.DeleteArray(curStart, out _);
         }
-        var newCount = idSpan.Length;
+        int newCount = idSpan.Length;
         switch (newCount) {
             case 0:
                 array = default;
@@ -151,25 +151,25 @@ internal static class IdArrayExtensions {
                 array = new IdArray(idSpan[0], 1);
                 return;
         }
-        var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
+        int newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
         var newPool         = heap.GetOrCreatePool(newPoolIndex);
-        var newStart        = newPool.CreateArray(out var newIds);
+        int newStart        = newPool.CreateArray(out var newIds);
         idSpan.CopyTo(new Span<int>(newIds, newStart, newCount));
         array = new IdArray(newStart, newCount);
     }
     
     public static void InsertAt(this ref IdArray array, int index, int id, IdArrayHeap heap)
     {
-        var count = array.count; 
+        int count = array.count; 
         if (index < 0 || index > count) throw new IndexOutOfRangeException();
         if (count == 0) {
             array = new IdArray(id, 1);
             return;
         }
-        var curStart = array.start;
+        int curStart = array.start;
         if (count == 1) {
             var pool        = heap.GetOrCreatePool(1);
-            var start       = pool.CreateArray(out var ids);
+            int start       = pool.CreateArray(out var ids);
             if (index == 0) {
                 ids[start]      = id;
                 ids[start + 1]  = curStart;
@@ -180,12 +180,12 @@ internal static class IdArrayExtensions {
             array = new IdArray(start, 2);
             return;
         }
-        var newCount        = count + 1;
-        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
-        var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
+        int newCount        = count + 1;
+        int curPoolIndex    = IdArrayHeap.PoolIndex(count);
+        int newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
         var curPool         = IdArrayPool.GetPool(heap, curPoolIndex, out var curIds);
-        var tail            = count - index;
-        var curIndex        = curStart + index;
+        int tail            = count - index;
+        int curIndex        = curStart + index;
         if (newPoolIndex == curPoolIndex) {
             new ReadOnlySpan<int> (curIds, curIndex,     tail).CopyTo(
             new Span<int>         (curIds, curIndex + 1, tail));
@@ -195,7 +195,7 @@ internal static class IdArrayExtensions {
         }
         curPool.DeleteArray(curStart, out curIds);
         var newPool     = heap.GetOrCreatePool(newPoolIndex);
-        var newStart    = newPool.CreateArray(out var newIds);
+        int newStart    = newPool.CreateArray(out var newIds);
   
         new ReadOnlySpan<int> (curIds, curStart, index).CopyTo(
         new Span<int>         (newIds, newStart, index));
