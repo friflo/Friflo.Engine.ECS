@@ -25,6 +25,6 @@ public struct TreeNode : IComponent
             case 0: return default;
             case 1: return store.GetSpanId(start);
         }
-        return new ReadOnlySpan<int>(IdArrayPool.GetIds(count, store.extension.hierarchyHeap), start, count);
+        return new ReadOnlySpan<int>(IdArrayPool.GetIds(count, store.extension.childHeap), start, count);
     }
 }

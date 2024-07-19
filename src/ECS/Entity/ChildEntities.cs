@@ -78,7 +78,7 @@ public struct ChildEnumerator : IEnumerator<Entity>
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(store, node.childIds.GetAt(index - 1, store.extension.hierarchyHeap));
+    public readonly Entity Current   => new Entity(store, node.childIds.GetAt(index - 1, store.extension.childHeap));
     
     // --- IEnumerator
     public bool MoveNext() {

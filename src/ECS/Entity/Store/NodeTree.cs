@@ -96,7 +96,7 @@ public partial class EntityStore
         int index           = parent.childIds.count;
     //  childNode.parentId  = parentId;
         extension.parentMap[childId]  = parentId;
-        parent.childIds.Add(childId, extension.hierarchyHeap);
+        parent.childIds.Add(childId, extension.childHeap);
         SetTreeFlags(localNodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId, childId, index);
@@ -139,15 +139,15 @@ public partial class EntityStore
             curIndex = RemoveChildNode(curParentId, childId);
             OnChildNodeRemove(curParentId, childId, curIndex);
             
-            parent.childIds.InsertAt(childIndex, childId, extension.hierarchyHeap);
-            OnChildNodeAdd (parentId,                 childId, childIndex);
+            parent.childIds.InsertAt(childIndex, childId, extension.childHeap);
+            OnChildNodeAdd (parentId,            childId, childIndex);
             return;
         }
     InsertNode:
         // --- insert entity with given id as child to its parent
     //  childNode.parentId  = parentId;
         extension.parentMap[childId] = parentId;
-        parent.childIds.InsertAt(childIndex, childId, extension.hierarchyHeap);
+        parent.childIds.InsertAt(childIndex, childId, extension.childHeap);
         SetTreeFlags(localNodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId,    childId, childIndex);
@@ -196,7 +196,7 @@ public partial class EntityStore
         var childIds        = treeNode.GetChildIds(this);
         var index           = childIds.IndexOf(childId);
         if (index != -1) {
-            treeNode.childIds.RemoveAt(index, extension.hierarchyHeap, keepOrder: true);
+            treeNode.childIds.RemoveAt(index, extension.childHeap, keepOrder: true);
             return index;
         }
         throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {childId}");
@@ -232,7 +232,7 @@ public partial class EntityStore
             parent.AddComponent(new TreeNode(extension.hierarchyHeap));
         } */
         ref var node = ref GetTreeNodeRef(parent);
-        node.childIds.SetArray(newChildIds, extension.hierarchyHeap);
+        node.childIds.SetArray(newChildIds, extension.childHeap);
         SetChildParents(node, parent.Id);
     }
     
@@ -282,7 +282,7 @@ public partial class EntityStore
             if (newIdSet.Contains(id)) {
                 continue;
             }
-            node.childIds.RemoveAt(index, extension.hierarchyHeap, keepOrder: true);
+            node.childIds.RemoveAt(index, extension.childHeap, keepOrder: true);
         //  nodes[id].parentId          = Static.NoParentId;
             extension.parentMap.Remove(id);
         //  OnChildNodeRemove(node.id, id, index);
@@ -307,7 +307,7 @@ public partial class EntityStore
                 continue;
             }
             // case: child ids does not contain id      => insert at specified position
-            node.childIds.InsertAt(index, id, extension.hierarchyHeap);
+            node.childIds.InsertAt(index, id, extension.childHeap);
             OnChildNodeAdd(parentId, id, index);
         }
     }
@@ -340,7 +340,7 @@ public partial class EntityStore
     // --- 3.2
     private void ChildIds_RemoveRange(ref TreeNode node, int first, int last, int parentId)
     {
-        var heap = extension.hierarchyHeap;
+        var heap = extension.childHeap;
         for (int index = last; index >= first; index--)
         {
             int removedId = node.childIds.GetAt(index, heap);
@@ -354,7 +354,7 @@ public partial class EntityStore
     // --- 3.3
     private void ChildIds_InsertRange(ref TreeNode node, int first, int last, ReadOnlySpan<int> newIds, int parentId)
     {
-        var heap = extension.hierarchyHeap;
+        var heap = extension.childHeap;
         for (int index = first; index <= last; index++)
         {
             var addedId = newIds[index];
