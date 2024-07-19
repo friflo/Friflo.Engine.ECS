@@ -84,8 +84,9 @@ public static class Test_Entity
         AreSame (entity.Archetype,              entity.Info.Archetype);
         IsTrue  (entity.Parent ==               entity.Info.Parent);
         AreEqual(entity.Scripts,                entity.Info.Scripts);
-        AreEqual(json,                          entity.Info.JSON);
+        AreEqual(json,                          entity.Info.JSON.Value);
         AreEqual("event types: 0, handlers: 0", entity.Info.EventHandlers.ToString());
+        AreEqual("",                            entity.Info.JSON.ToString());
     }
     
     [Test]
