@@ -428,8 +428,8 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_Tree_Allocation()
     {
-        int count       = 10;   // 1000
-        // Test_Entity_Tree_Allocation - count: 1000  entities: 1001001  duration: 360 ms
+        int count       = 10;   // 2000
+        // Test_Entity_Tree_Allocation - count: 2000  entities: 4002001  duration: 674 ms
         var store       = new EntityStore();
         var root        = store.CreateEntity(1);
         var type        = store.GetArchetype(default);
