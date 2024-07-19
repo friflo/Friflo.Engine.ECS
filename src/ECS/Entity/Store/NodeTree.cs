@@ -185,15 +185,8 @@ public partial class EntityStore
     internal static int GetChildIndex(Entity parent, int childId)
     {
         parent.TryGetTreeNode(out var node);
-        var childIds    = node.GetChildIds(parent.store);
-        int count       = node.childIds.count;
-        for (int n = 0; n < count; n++) {
-            if (childId != childIds[n]) {
-                continue;
-            }
-            return n;
-        }
-        return -1;
+        var childIds = node.GetChildIds(parent.store);
+        return childIds.IndexOf(childId);
     }
     
     private int RemoveChildNode (int parentId, int childId)
@@ -201,13 +194,10 @@ public partial class EntityStore
         var parent          = new Entity(this, parentId);
         ref var treeNode    = ref GetTreeNodeRef(parent);
         var childIds        = treeNode.GetChildIds(this);
-        int count           = treeNode.childIds.count;
-        for (int n = 0; n < count; n++) {
-            if (childId != childIds[n]) {
-                continue;
-            }
-            treeNode.childIds.RemoveAt(n, extension.hierarchyHeap, keepOrder: true);
-            return n;
+        var index           = childIds.IndexOf(childId);
+        if (index != -1) {
+            treeNode.childIds.RemoveAt(index, extension.hierarchyHeap, keepOrder: true);
+            return index;
         }
         throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {childId}");
     }
@@ -325,9 +315,9 @@ public partial class EntityStore
     // --- 3.1
     private void ChildIds_GetRange(in TreeNode node, ReadOnlySpan<int> newIds, out int first, out int last)
     {
-        var childIds = node.GetChildIds(this);
-        var count = newIds.Length;
-        first = 0;
+        var childIds    = node.GetChildIds(this);
+        var count       = newIds.Length;
+        first           = 0;
         for (; first < count; first++) {
             var id = newIds[first];
             if (childIds[first] == id) {
@@ -376,7 +366,7 @@ public partial class EntityStore
     private void SetChildParents(in TreeNode node, int parentId)
     {
     //  var localNodes = nodes;
-        foreach (int childId in  node.GetChildIds(this))
+        foreach (int childId in node.GetChildIds(this))
         {
         //  ref var child   = ref localNodes[childId];
             extension.parentMap.TryGetValue(childId, out int curParentId);
