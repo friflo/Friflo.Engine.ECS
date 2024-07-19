@@ -33,6 +33,12 @@ public static class Test_sizeof
     }
     
     [Test]
+    public static unsafe void Test_sizeof_TreeNode() {
+        var size = sizeof(TreeNode);
+        AreEqual(8, size);
+    }
+    
+    [Test]
     public static unsafe void Test_sizeof_RawEntity() {
         var size = sizeof(RawEntity);
         AreEqual(8, size);
