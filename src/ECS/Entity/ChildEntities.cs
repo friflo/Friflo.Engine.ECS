@@ -20,17 +20,18 @@ namespace Friflo.Engine.ECS;
 [DebuggerTypeProxy(typeof(ChildEntitiesDebugView))]
 public readonly struct ChildEntities : IEnumerable<Entity>
 {
-    // --- public properties
+#region properties
                         public              int                 Count           => node.childIds.count;
                         public              ReadOnlySpan<int>   Ids             => node.GetChildIds(store);
     
                         public              Entity              this[int index] => new Entity(store, Ids[index]);
                         public override     string              ToString()      => $"Entity[{Count}]";
+    #endregion
     
-    // --- internal fields
-
-    [Browse(Never)]     internal readonly   TreeNode            node;   // 16
+#region fields
+    [Browse(Never)]     internal readonly   TreeNode            node;   //  8
     [Browse(Never)]     internal readonly   EntityStore         store;  //  8
+    #endregion
     
     // --- IEnumerable<>
     IEnumerator<Entity> IEnumerable<Entity>.GetEnumerator() => new ChildEnumerator(this);
@@ -90,7 +91,7 @@ public struct ChildEnumerator : IEnumerator<Entity>
             index++;
             return true;
         }
-        return false;  
+        return false;
     }
 
     public void Reset() {
