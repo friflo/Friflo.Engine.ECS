@@ -11,7 +11,7 @@ using static EntityExtensions;
 /// <summary>
 /// Provide generic <c>CreateEntity()</c> overloads to create entities with passed components without any structural change.
 /// </summary>
-public static class EntityStoreExtensions {
+public static partial class EntityStoreExtensions {
 
 #region generic create overloads
     /// <summary>

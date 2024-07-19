@@ -78,8 +78,8 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private  readonly   ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
-    [Browse(Never)] private  readonly   int[]                   singleIds;      //   8
-    [Browse(Never)] private             int                     singleIndex;    //   4
+    [Browse(Never)] internal readonly   int[]                   singleIds;      //   8
+    [Browse(Never)] internal            int                     singleIndex;    //   4
     
                     private             InternBase              internBase;         // 40
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
@@ -141,16 +141,7 @@ public abstract partial class EntityStoreBase
     }
     #endregion
     
-    private const int SingleMax = 32;
-    
-    /// safe alternative for unsafe variant using <see cref="System.Runtime.InteropServices.MemoryMarshal.CreateReadOnlySpan{T}"/>.
-    internal ReadOnlySpan<int> GetSpanId(int id) {
-        var ids     = singleIds;
-        var index   = singleIndex;
-        singleIndex = (index + 1) % SingleMax;
-        ids[index]  = id;
-        return new ReadOnlySpan<int>(ids, index, 1);
-    }
+    internal const int SingleMax = 32;
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);
     
@@ -204,4 +195,22 @@ public abstract partial class EntityStoreBase
         return new ArgumentException($"relation component must be removed with:  entity.{nameof(RelationExtensions.RemoveRelation)}<{type},{keyType}>(key);  id: {id}");
     }
     #endregion
+}
+
+public static partial class EntityStoreExtensions
+{
+    /// <summary>
+    /// Safe alternative for unsafe variant using <see cref="System.Runtime.InteropServices.MemoryMarshal.CreateReadOnlySpan{T}"/>
+    /// to create a span of a single item. <br/>
+    /// The general problem of this approach, the item is typically on the stack. <br/>
+    /// So it's easy to create code with access violation that reference the span item that is not on the stack anymore.  
+    /// </summary>
+    internal static ReadOnlySpan<int> GetSpanId(this EntityStoreBase store, int id)
+    {
+        var ids             = store.singleIds;
+        var index           = store.singleIndex;
+        store.singleIndex   = (index + 1) % EntityStoreBase.SingleMax;
+        ids[index]  = id;
+        return new ReadOnlySpan<int>(ids, index, 1);
+    }
 }
