@@ -81,7 +81,10 @@ public partial class EntityStore
     /// <summary>
     /// Create and return a clone of the passed <paramref name="entity"/> in the store.
     /// </summary>
-    /// <returns></returns>
+    /// <remarks>
+    /// Child entities of the passed <paramref name="entity"/> are not copied to the cloned entity.<br/>
+    /// If doing this these child entities would be children of the passed entity <b>and</b> the clone.
+    /// </remarks>
     public Entity CloneEntity(Entity entity)
     {
         var archetype   = entity.archetype ?? throw EntityNullException(entity);
@@ -96,6 +99,9 @@ public partial class EntityStore
             var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
             // CopyComponents() must be used only in case all component types are blittable
             Archetype.CopyComponents(archetype, entity.compIndex, clone.compIndex);
+            if (clone.HasComponent<TreeNode>()) {
+                clone.GetComponent<TreeNode>() = default;   // clear child ids. See child entities note in remarks.
+            }
             // --- clone scripts
             foreach (var script in entity.Scripts) {
                 var scriptType      = scriptTypeByType[script.GetType()];
@@ -110,7 +116,7 @@ public partial class EntityStore
             
             // --- deserialize DataEntity
             dataBuffer.pid      = IdToPid(clone.Id);
-            dataBuffer.children = null; // child ids are not copied. If doing this these children would have two parents.
+            dataBuffer.children = null;                     // clear children. See child entities note in remarks.
             // convert will use entity created above
             converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
             AssertNoError(error);

@@ -16,7 +16,6 @@ public struct TreeNode : IComponent    // todo should be internal
     
 //  [Browse(Never)] internal    int         parentId;   //  4   0 if entity has no parent
                     internal    IdArray     childIds;   //  8
-                    internal    int[]       dummy;      //  8  todo remove
     
     /// same as <see cref="IdArrayExtensions.GetSpan"/>
     public ReadOnlySpan<int>  GetChildIds(EntityStore store)
