@@ -101,8 +101,7 @@ internal abstract class EntityRelations
             case 0: return  new RelationComponents<TComponent>();
             case 1: return  new RelationComponents<TComponent>(components, positions.start);
         }
-        int poolIndex       = IdArrayHeap.PoolIndex(count);
-        var poolPositions   = relations.idHeap.GetPool(poolIndex).Ids;
+        var poolPositions = IdArrayPool.GetIds(count, relations.idHeap);
         return new RelationComponents<TComponent>(components, poolPositions, positions.start, positions.count);
     }
     

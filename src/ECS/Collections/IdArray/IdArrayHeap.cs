@@ -17,14 +17,15 @@ internal readonly struct IdArrayHeap
     #endregion
     
 #region fields
-    private  readonly   IdArrayPool[]   pools;
+    internal readonly   IdArrayPool[]   pools;
     #endregion
     
     public IdArrayHeap() {
         pools = new IdArrayPool[32];
     }
 
-    internal IdArrayPool GetPool(int index) => pools[index] ??= new IdArrayPool(index);
+    internal IdArrayPool GetPool        (int index) => pools[index];
+    internal IdArrayPool GetOrCreatePool(int index) => pools[index] ??= new IdArrayPool(index);
     
     private int GetCount()
     {
@@ -40,13 +41,13 @@ internal readonly struct IdArrayHeap
     public Entities GetEntities(EntityStore store, IdArray array)
     {
         var count = array.count;
+        var start = array.start;
         switch (count) {
             case 0: return  new Entities(store);
-            case 1: return  new Entities(store, array.start);
+            case 1: return  new Entities(store, start);
         }
-        var curPoolIndex  = PoolIndex(count);
-        var ids           = GetPool(curPoolIndex).Ids;
-        return new Entities(store, ids, array.start, count);
+        var ids = IdArrayPool.GetIds(count, this);
+        return new Entities(store, ids, start, count);
     }
 
     internal static int PoolIndex(int count)

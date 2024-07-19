@@ -27,7 +27,6 @@ public struct TreeNode : IComponent    // todo should be internal
             case 0: return default;
             case 1: return store.GetSpanId(start);
         }
-        var curPoolIndex = IdArrayHeap.PoolIndex(count);
-        return new ReadOnlySpan<int>(store.extension.hierarchyHeap.GetPool(curPoolIndex).Ids, start, count);
+        return new ReadOnlySpan<int>(IdArrayPool.GetIds(count, store.extension.hierarchyHeap), start, count);
     }
 }

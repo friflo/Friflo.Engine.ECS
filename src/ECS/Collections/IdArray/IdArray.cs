@@ -44,12 +44,12 @@ internal static class IdArrayExtensions {
     internal static ReadOnlySpan<int> GetSpan(this ref IdArray array, IdArrayHeap heap, EntityStoreBase store)
     {
         var count = array.count;
+        var start = array.start;
         switch (count) {
             case 0:     return default;
-            case 1:     return store.GetSpanId(array.start);
+            case 1:     return store.GetSpanId(start);
         }
-        var curPoolIndex = IdArrayHeap.PoolIndex(count);
-        return new ReadOnlySpan<int>(heap.GetPool(curPoolIndex).Ids, array.start, count);
+        return new ReadOnlySpan<int>(IdArrayPool.GetIds(count, heap), start, count);
     }
     
     public static void Add(this ref IdArray array, int id, IdArrayHeap heap)
@@ -61,7 +61,7 @@ internal static class IdArrayExtensions {
         }
         var curStart = array.start;
         if (count == 1) {
-            var pool        = heap.GetPool(1);
+            var pool        = heap.GetOrCreatePool(1);
             var start       = pool.CreateArray(out var ids);
             ids[start]      = curStart;
             ids[start + 1]  = id;
@@ -78,7 +78,7 @@ internal static class IdArrayExtensions {
             return;
         }
         curPool.DeleteArray(curStart, out var curIds);
-        var newPool     = heap.GetPool(newPoolIndex);
+        var newPool     = heap.GetOrCreatePool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
         
         new ReadOnlySpan<int> (curIds, curStart, count).CopyTo(
@@ -122,7 +122,7 @@ internal static class IdArrayExtensions {
             return;
         }
         curPool.DeleteArray(curStart, out var curIds);
-        var newPool     = heap.GetPool(newPoolIndex);
+        var newPool     = heap.GetOrCreatePool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
         
         new ReadOnlySpan<int> (curIds, curStart,             index).CopyTo(
@@ -153,7 +153,7 @@ internal static class IdArrayExtensions {
                 return;
         }
         var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
-        var newPool         = heap.GetPool(newPoolIndex);
+        var newPool         = heap.GetOrCreatePool(newPoolIndex);
         var newStart        = newPool.CreateArray(out var newIds);
         idSpan.CopyTo(new Span<int>(newIds, newStart, newCount));
         array = new IdArray(newStart, newCount);
@@ -169,7 +169,7 @@ internal static class IdArrayExtensions {
         }
         var curStart = array.start;
         if (count == 1) {
-            var pool        = heap.GetPool(1);
+            var pool        = heap.GetOrCreatePool(1);
             var start       = pool.CreateArray(out var ids);
             if (index == 0) {
                 ids[start]      = id;
@@ -196,7 +196,7 @@ internal static class IdArrayExtensions {
             return;
         }
         curPool.DeleteArray(curStart, out var curIds);
-        var newPool     = heap.GetPool(newPoolIndex);
+        var newPool     = heap.GetOrCreatePool(newPoolIndex);
         var newStart    = newPool.CreateArray(out var newIds);
   
         new ReadOnlySpan<int> (curIds, curStart, index).CopyTo(
@@ -230,19 +230,18 @@ internal static class IdArrayExtensions {
             array.start = value;
             return;
         }
-        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
-        var curPool         = heap.GetPool(curPoolIndex);
-        curPool.Ids[array.start + positionIndex] = value;
+        var ids = IdArrayPool.GetIds(count, heap);
+        ids[array.start + positionIndex] = value;
     }
     
     internal static int GetAt(this IdArray array, int positionIndex, IdArrayHeap heap)
     {
         int count = array.count;
+        int start = array.start;
         if (count == 1) {   // index is 0
-            return array.start;
+            return start;
         }
-        var curPoolIndex    = IdArrayHeap.PoolIndex(count);
-        var curPool         = heap.GetPool(curPoolIndex);
-        return curPool.Ids[array.start + positionIndex];
+        var ids = IdArrayPool.GetIds(count, heap);
+        return ids[start + positionIndex];
     }
 } 

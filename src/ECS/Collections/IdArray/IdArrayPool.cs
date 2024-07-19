@@ -29,6 +29,11 @@ internal sealed class IdArrayPool
         freeStarts  = new StackArray<int>(Array.Empty<int>());
     }
     
+    internal static int[] GetIds(int count, IdArrayHeap heap)
+    {
+        return heap.pools[IdArrayHeap.PoolIndex(count)].ids;
+    }
+    
     /// <summary>
     /// Return the start index within the returned newIds.
     /// </summary>
