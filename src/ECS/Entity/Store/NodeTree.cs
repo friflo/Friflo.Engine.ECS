@@ -353,7 +353,7 @@ public partial class EntityStore
         var heap = extension.hierarchyHeap;
         for (int index = last; index >= first; index--)
         {
-            int removedId = node.childIds.Get(index, heap);
+            int removedId = node.childIds.GetAt(index, heap);
             node.childIds.RemoveAt(index, heap, keepOrder: true);
         //  nodes[removedId].parentId   = Static.NoParentId;
             extension.parentMap.Remove(removedId);

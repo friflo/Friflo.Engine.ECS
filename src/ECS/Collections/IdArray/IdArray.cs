@@ -224,8 +224,7 @@ internal static class IdArrayExtensions {
         array = default;
     } */
 
-    // todo - rename -> SetAt()
-    internal static void Set(this ref IdArray array, int positionIndex, int value, IdArrayHeap heap)
+    internal static void SetAt(this ref IdArray array, int positionIndex, int value, IdArrayHeap heap)
     {
         int count = array.count;
         if (count == 1) {   // index is 0
@@ -237,8 +236,7 @@ internal static class IdArrayExtensions {
         curPool.Ids[array.start + positionIndex] = value;
     }
     
-    // todo - rename -> GetAt()
-    internal static int Get(this IdArray array, int positionIndex, IdArrayHeap heap)
+    internal static int GetAt(this IdArray array, int positionIndex, IdArrayHeap heap)
     {
         int count = array.count;
         if (count == 1) {   // index is 0

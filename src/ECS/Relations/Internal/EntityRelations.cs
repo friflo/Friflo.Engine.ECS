@@ -205,7 +205,7 @@ internal abstract class EntityRelations
         map.TryGetValue(lastId, out var curPositions);
         var positionSpan        = curPositions.GetIdSpan(localIdHeap, store);
         int curPositionIndex    = positionSpan.IndexOf(lastPosition);
-        curPositions.Set(curPositionIndex, position, localIdHeap);
+        curPositions.SetAt(curPositionIndex, position, localIdHeap);
         // array with length == 1 is stored in-place
         if (curPositions.count == 1) {
             map[lastId] = curPositions;
@@ -229,7 +229,7 @@ internal abstract class EntityRelations
         positionMap.TryGetValue(id, out var positions);
         while (positions.count > 0) {
             var lastIndex   = positions.count - 1;
-            int position    = positions.Get(lastIndex, idHeap);
+            int position    = positions.GetAt(lastIndex, idHeap);
             positions       = RemoveEntityRelation(id, position, positions, lastIndex);
         }
     }
