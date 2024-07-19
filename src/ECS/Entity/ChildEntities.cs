@@ -68,21 +68,25 @@ public readonly struct ChildEntities : IEnumerable<Entity>
 /// </summary>
 public struct ChildEnumerator : IEnumerator<Entity>
 {
+#region fields
     private             int         index;      //  4
-    private readonly    TreeNode    node;       //  16
+    private readonly    IdArray     childIds;   //  8
     private readonly    EntityStore store;      //  8
+    private readonly    IdArrayHeap heap;       //  8
+    #endregion
     
     internal ChildEnumerator(in ChildEntities childEntities) {
-        node    = childEntities.node;
-        store   = childEntities.store;
+        childIds    = childEntities.node.childIds;
+        store       = childEntities.store;
+        heap        = store.extension.childHeap;
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(store, node.childIds.GetAt(index - 1, store.extension.childHeap));
+    public readonly Entity Current   => new Entity(store, childIds.GetAt(index - 1, heap));
     
     // --- IEnumerator
     public bool MoveNext() {
-        if (index < node.childIds.count) {
+        if (index < childIds.count) {
             index++;
             return true;
         }
