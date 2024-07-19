@@ -34,6 +34,13 @@ internal sealed class IdArrayPool
         return heap.pools[IdArrayHeap.PoolIndex(count)].ids;
     }
     
+    internal static IdArrayPool GetPool(IdArrayHeap heap, int index, out int[] ids)
+    {
+        var pool = heap.pools[index];
+        ids = pool.ids;
+        return pool;
+    }
+
     /// <summary>
     /// Return the start index within the returned newIds.
     /// </summary>
