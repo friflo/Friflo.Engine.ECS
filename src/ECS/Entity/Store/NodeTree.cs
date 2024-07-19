@@ -318,18 +318,18 @@ public partial class EntityStore
         var childIds    = node.GetChildIds(this);
         var count       = newIds.Length;
         first           = 0;
-        for (; first < count; first++) {
-            var id = newIds[first];
-            if (childIds[first] == id) {
+        for (; first < count; first++)
+        {
+            if (childIds[first] == newIds[first]) {
                 // case: id is already at specified position
                 continue;
             }
             break;
         }
         last = count - 1;
-        for (; last > first; last--) {
-            var id = newIds[last];
-            if (childIds[last] == id) {
+        for (; last > first; last--)
+        {
+            if (childIds[last] == newIds[last]) {
                 // case: id is already at specified position
                 continue;
             }
