@@ -7,15 +7,14 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-// TODO make internal, rename: TreeNodeComponent -> TreeNode
 [ComponentKey(null)]
-public struct TreeNode : IComponent    // todo should be internal
+public struct TreeNode : IComponent
 {
-    public                      int                 ChildCount  => childIds.count;
-    public          override    string              ToString()  => $"ChildCount: {childIds.count}";
+    public                      int     ChildCount  => childIds.count;
+    public          override    string  ToString()  => $"ChildCount: {childIds.count}";
     
-//  [Browse(Never)] internal    int         parentId;   //  4   0 if entity has no parent
-                    internal    IdArray     childIds;   //  8
+//  [Browse(Never)] internal    int     parentId;   //  4   0 if entity has no parent
+                    internal    IdArray childIds;   //  8
     
     /// same as <see cref="IdArrayExtensions.GetSpan"/>
     public ReadOnlySpan<int>  GetChildIds(EntityStore store)
