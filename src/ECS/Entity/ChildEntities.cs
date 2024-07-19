@@ -21,11 +21,11 @@ namespace Friflo.Engine.ECS;
 public readonly struct ChildEntities : IEnumerable<Entity>
 {
 #region properties
-                        public              int                 Count           => node.childIds.count;
-                        public              ReadOnlySpan<int>   Ids             => node.GetChildIds(store);
+    public          int                 Count           => node.childIds.count;
+    public          ReadOnlySpan<int>   Ids             => node.GetChildIds(store);
     
-                        public              Entity              this[int index] => new Entity(store, Ids[index]);
-                        public override     string              ToString()      => $"Entity[{Count}]";
+    public          Entity              this[int index] => new Entity(store, node.childIds.GetAt(index, store.extension.childHeap));
+    public override string              ToString()      => $"Entity[{Count}]";
     #endregion
     
 #region fields
