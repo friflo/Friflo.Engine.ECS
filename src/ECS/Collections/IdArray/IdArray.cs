@@ -189,7 +189,7 @@ internal static class IdArrayExtensions {
         if (newPoolIndex == curPoolIndex) {
             new ReadOnlySpan<int> (curIds, curIndex,     tail).CopyTo(
             new Span<int>         (curIds, curIndex + 1, tail));
-            curPool.Ids[curIndex] = id;
+            curIds[curIndex] = id;
             array = new IdArray(curStart, newCount);
             return;
         }

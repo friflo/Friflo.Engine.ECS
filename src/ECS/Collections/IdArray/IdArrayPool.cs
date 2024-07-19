@@ -10,7 +10,6 @@ namespace Friflo.Engine.ECS.Collections;
 internal sealed class IdArrayPool
 {
     public              int             Count       => count;
-    internal            int[]           Ids         => ids;
     internal            int             FreeCount   => freeStarts.Count;
     
     private             int[]           ids;
