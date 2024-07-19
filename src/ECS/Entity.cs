@@ -186,7 +186,7 @@ public readonly struct Entity : IEquatable<Entity>
     public              EntityComponents        Components      => new EntityComponents(this);
     
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
-    public              Scripts                 Scripts         => new Scripts(EntityUtils.GetScripts(this));
+    [Browse(Never)] public  Scripts             Scripts         => new Scripts(EntityUtils.GetScripts(this));
 
     /// <summary>Return the <see cref="ECS.Tags"/> added to the entity.</summary>
     /// <returns>
@@ -199,7 +199,7 @@ public readonly struct Entity : IEquatable<Entity>
 
     /// <summary>Returns the <see cref="Archetype"/> that contains the entity.</summary>
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
-    public                  Archetype           Archetype       => archetype;
+    [Browse(Never)] public  Archetype           Archetype       => archetype;
     
     /// <summary>Returns the <see cref="EntityStore"/> that contains the entity.</summary>
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
@@ -276,7 +276,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
-                    public  Entity              Parent { get {
+    [Browse(Never)] public  Entity              Parent { get {
                         if (archetype == null) throw EntityStoreBase.EntityNullException(this);
                         return new Entity(store, store.GetInternalParentId(Id));
                     }}

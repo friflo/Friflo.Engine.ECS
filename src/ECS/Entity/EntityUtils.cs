@@ -19,6 +19,9 @@ namespace Friflo.Engine.ECS;
 /// Used to provide additional debug information for an <see cref="Entity"/>:<br/>
 /// <see cref="Entity.Pid"/>                <br/>
 /// <see cref="Entity.Enabled"/>            <br/>
+/// <see cref="Entity.Archetype"/>          <br/>
+/// <see cref="Entity.Scripts"/>            <br/>
+/// <see cref="Entity.Parent"/>            <br/>
 /// <see cref="Entity.DebugJSON"/>          <br/>
 /// <see cref="Entity.DebugEventHandlers"/> <br/>
 /// </summary>
@@ -27,6 +30,9 @@ internal readonly struct EntityInfo
 #region properties
     internal            long                Pid             => entity.Pid;
     internal            bool                Enabled         => entity.Enabled;
+    internal            Archetype           Archetype       => entity.archetype;
+    internal            Scripts             Scripts         => entity.Scripts;
+    internal            Entity              Parent          => entity.Parent;
     internal            string              JSON            => EntityUtils.EntityToJSON(entity);
     internal            DebugEventHandlers  EventHandlers   => EntityStore.GetEventHandlers(entity.store, entity.Id);
     internal            EntityLinks         IncomingLinks   => entity.GetAllIncomingLinks();   
