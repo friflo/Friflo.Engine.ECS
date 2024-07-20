@@ -21,6 +21,15 @@ namespace Internal.ECS
             // AreEqual(8, Marshal.SizeOf(typeof(IdArrayHeap))); // Important -> to use IdArrayHeap as a TreeNode field
             AreEqual(8, sizeof(IdArray));
         }
+        
+        [Test]
+        public void Test_IdArray_IdArrayHeap() {
+            IdArrayHeap heap = default;
+            AreEqual("null", heap.ToString());
+            
+            heap    = new IdArrayHeap();
+            AreEqual("count: 0", heap.ToString());
+        }
     
         [Test]
         public void Test_IdArray_Add()
