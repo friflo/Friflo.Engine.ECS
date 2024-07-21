@@ -183,9 +183,8 @@ public static class Test_Entity_Tree
         }
     }
     
-    /// <summary>Cover <see cref="EntityStore.EnsureChildIdsCapacity"/></summary>
     [Test]
-    public static void Test_Entity_Tree_InsertChild_EnsureChildIdsCapacity()
+    public static void Test_Entity_Tree_InsertChild_events()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
@@ -650,21 +649,6 @@ public static class Test_Entity_Tree
         AreEqual(2, childIds[0]);
         AreEqual(4, childIds[1]);
     }
-    
-    /*
-    /// <summary>Cover <see cref="Entity.GetChildNodeByIndex"/></summary>
-    [Test]
-    public static void Test_Entity_GetChildNodeByIndex()
-    {
-        var store   = new EntityStore();
-        var root    = store.CreateEntity(1);
-        root.AddComponent(new EntityName("root"));
-       
-        var child2      = store.CreateEntity(2);
-        AreEqual(0,         root.AddChild(child2));
-        
-        IsTrue(child2 ==    root.ChildEntities[0]);
-    } */
     
     /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>
     [Test]

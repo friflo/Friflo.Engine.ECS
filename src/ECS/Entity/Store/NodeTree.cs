@@ -170,18 +170,6 @@ public partial class EntityStore
         return true;
     }
     
-    /* redundant: Entity.GetChildIndex() provide same feature but cleaner
-    internal ref readonly EntityNode GetChildNodeByIndex(int parentId, int childIndex) {
-        var childIds = nodes[parentId].childIds;
-        return ref nodes[childIds[childIndex]];
-    } */
-    
-    /* redundant: Entity.ChildEntities[] provide same feature but cleaner
-    internal Entity GetChildEntityByIndex(int parentId, int childIndex) {
-        var childIds = nodes[parentId].childIds;
-        return new Entity(childIds[childIndex], this);
-    } */
-    
     internal static int GetChildIndex(Entity parent, int childId)
     {
         parent.TryGetTreeNode(out var node);
@@ -201,19 +189,6 @@ public partial class EntityStore
         }
         throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {childId}");
     }
-    
-    /*
-    private static void EnsureChildIdsCapacity(ref TreeNode parent, int length)
-    {
-        if (parent.childIds == null) {
-            parent.childIds = new int[Math.Max(4, length)];
-            return;
-        }
-        if (length > parent.childIds.Length) { 
-            var newLen = Math.Max(2 * parent.childIds.Length, length);
-            ArrayUtils.Resize(ref parent.childIds, newLen);
-        }
-    } */
     
     private void SetChildNodes(Entity parent, ReadOnlySpan<int> newChildIds)
     {
