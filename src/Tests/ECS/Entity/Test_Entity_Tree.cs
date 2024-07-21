@@ -446,7 +446,7 @@ public static class Test_Entity_Tree
     public static void Test_Entity_Tree_Allocation()
     {
         int count       = 10;   // 2000
-        // Test_Entity_Tree_Allocation - count: 2000  entities: 4002001  duration: 674 ms
+        // Test_Entity_Tree_Allocation - count: 2000  entities: 4002001  duration: 486 ms
         var store       = new EntityStore();
         var root        = store.CreateEntity(1);
         var type        = store.GetArchetype(default);
@@ -815,7 +815,7 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        int count       = 10; // 10_000_000 ~ #PC: 2824 ms
+        int count       = 10; // 10_000_000 ~ #PC: 2631 ms
         var type        = store.GetArchetype(default);
         var sw = new Stopwatch();
         sw.Start();
@@ -834,7 +834,7 @@ public static class Test_Entity_Tree
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
 
-        int count       = 10; // 10_000_000 ~ #PC: 776 ms
+        int count       = 10; // 10_000_000 ~ #PC: 512 ms
         var type        = store.GetArchetype(default);
         var sw          = new Stopwatch();
         sw.Start();
