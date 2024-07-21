@@ -88,10 +88,7 @@ public partial class EntityStore
         }
         // --- add entity with given id as child to this entity
     //  ref var parent      = ref localNodes[parentId];
-        var parentEntity = new Entity(this, parentId);
-        /* if (!parentEntity.HasTreeNode()) { // todo could optimize
-            parentEntity.AddComponent(new TreeNode(extension.hierarchyHeap));
-        }*/
+        var parentEntity    = new Entity(this, parentId);
         ref var parent      = ref GetTreeNodeRef(parentEntity);
         int index           = parent.childIds.count;
     //  childNode.parentId  = parentId;
@@ -105,13 +102,10 @@ public partial class EntityStore
     
     internal void InsertChild (int parentId, int childId, int childIndex)
     {
-        var localNodes  = nodes;
+        var localNodes      = nodes;
     //  ref var parent  = ref localNodes[parentId];
-        var parentEntity = new Entity(this, parentId);
-        /* if (!parentEntity.HasTreeNode()) {  // todo could optimize
-            parentEntity.AddComponent(new TreeNode(extension.hierarchyHeap));
-        } */
-        ref var parent = ref GetTreeNodeRef(parentEntity);
+        var parentEntity    = new Entity(this, parentId);
+        ref var parent      = ref GetTreeNodeRef(parentEntity);
         
         if (childIndex > parent.childIds.count) {
             throw new IndexOutOfRangeException();
@@ -201,11 +195,6 @@ public partial class EntityStore
         if (newChildIds.Length == 0) { // todo fix
             return;
         }
-    //  ref var node        = ref nodes[parent.Id];
-
-        /* if (!parent.HasTreeNode()) {    // todo could optimize
-            parent.AddComponent(new TreeNode(extension.hierarchyHeap));
-        } */
         ref var node = ref GetTreeNodeRef(parent);
         node.childIds.SetArray(newChildIds, extension.childHeap);
         SetChildParents(node, parent.Id);
@@ -213,9 +202,6 @@ public partial class EntityStore
     
     private void SetChildNodesWithEvents(Entity parent, ReadOnlySpan<int> newIds)
     {
-        /* if (!parent.HasTreeNode()) {    // todo could optimize
-            parent.AddComponent(new TreeNode(extension.hierarchyHeap));
-        } */
         ref var node    = ref GetTreeNodeRef(parent);
         // --- 1. Remove missing ids in new child ids.          E.g.    cur ids [2, 3, 4, 5]
         //                                                             *newIds  [6, 4, 2, 5]    => remove: 3
