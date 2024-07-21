@@ -580,17 +580,28 @@ public static class Test_Entity_Tree
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
         
         // set 1 -> 2   OK
         entity1.AddChild(entity2); 
         AreEqual(1, entity2.Parent.Id);
+        
+        entity2.AddChild(entity3); 
+        AreEqual(2, entity3.Parent.Id);
         
         var e = Throws<InvalidOperationException>(() => {
             // set 2 -> 1  result: cycle!
             entity2.AddChild(entity1);
         });
         AreEqual("operation would cause a cycle: 2 -> 1 -> 2", e!.Message);
-        AreEqual(0,     entity2.ChildCount); // count stays unchanged
+        AreEqual(1,     entity2.ChildCount); // count stays unchanged
+        
+        e = Throws<InvalidOperationException>(() => {
+            // set 3 -> 1  result: cycle!
+            entity3.AddChild(entity1);
+        });
+        AreEqual("operation would cause a cycle: 3 -> 2 -> 1 -> 3", e!.Message);
+        AreEqual(0,     entity3.ChildCount); // count stays unchanged
         
         e = Throws<InvalidOperationException>(() => {
             entity1.AddChild(entity1);
@@ -603,13 +614,13 @@ public static class Test_Entity_Tree
             entity2.InsertChild(0, entity1);
         });
         AreEqual("operation would cause a cycle: 2 -> 1 -> 2", e!.Message);
-        AreEqual(0,     entity2.ChildCount); // count stays unchanged
+        AreEqual(1,     entity2.ChildCount); // count stays unchanged
         
         e = Throws<InvalidOperationException>(() => {
             entity2.InsertChild(0, entity2);
         });
         AreEqual("operation would cause a cycle: 2 -> 2", e!.Message);
-        AreEqual(0,     entity2.ChildCount); // count stays unchanged
+        AreEqual(1,     entity2.ChildCount); // count stays unchanged
     }
     
     [Test]
