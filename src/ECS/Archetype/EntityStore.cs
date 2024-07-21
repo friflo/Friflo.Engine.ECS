@@ -120,7 +120,7 @@ public abstract partial class EntityStoreBase
     //  /// A <see cref="EntityNode"/> with <see cref="Entity.Parent"/> == null
     //  /// is declared as <see cref="TreeMembership.floating"/>.
     //  /// </summary>
-    //  internal const              int             NoParentId              =  0;
+        internal const              int             NoParentId              =  0;
     //  internal const              int             StoreRootParentId       = -1;
     }
     #endregion

@@ -30,7 +30,7 @@ internal partial struct StoreExtension
     #endregion
     
 #region entity hierarchy
-    internal readonly                   Dictionary<int, int>    parentMap;                  //  8   - store the parent (value) of an entity (key)
+    internal                            int[]                   parentMap;                  //  8
     internal readonly                   IdArrayHeap             childHeap;                  //  8
     // --- events
     internal    Action                <ChildEntitiesChanged>    childEntitiesChanged;       //  8   - fires event on add, insert, remove or delete an Entity
@@ -62,7 +62,7 @@ internal partial struct StoreExtension
     
     internal StoreExtension(PidType pidType)
     {
-        parentMap   = new Dictionary<int, int>();
+        parentMap   = Array.Empty<int>();
         childHeap   = new IdArrayHeap();
         if (pidType == PidType.RandomPids) {
             randPid  = new Random();

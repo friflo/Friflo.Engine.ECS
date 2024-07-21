@@ -16,8 +16,8 @@ public static class Test_EntityStore
     {
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity(10);
-    //  store.nodes[10].parentId = 5;        
-        store.extension.parentMap[10] = 5;
+    //  store.extension.parentMap[10] = 5;
+        store.SetTreeParent(10, 5);
         
         var e = Throws<InvalidOperationException>(() => {
             entity.DeleteEntity();

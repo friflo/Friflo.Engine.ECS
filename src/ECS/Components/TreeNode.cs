@@ -36,7 +36,6 @@ public struct TreeNode : IComponent
     
 #region fields
                     internal    IdArray childIds;   //  8
-//  [Browse(Never)] internal    int     parentId;   //  4   0 if entity has no parent
     #endregion
     
     public ChildEntities  GetChildEntities(EntityStore store) => new ChildEntities(store, this);
