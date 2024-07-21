@@ -432,7 +432,7 @@ public partial class EntityStore
         sb.Append(id);
         while (true)
         {
-        cur = GetTreeParentId(cur);
+            cur = GetTreeParentId(cur);
             sb.Append(" -> ");
             sb.Append(cur);
             if (cur != other) {
