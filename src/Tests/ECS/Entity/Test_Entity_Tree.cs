@@ -589,26 +589,26 @@ public static class Test_Entity_Tree
             // set 2 -> 1  result: cycle!
             entity2.AddChild(entity1);
         });
-        AreEqual("operation creates cycle: 2 -> 1 -> 2", e!.Message);
+        AreEqual("operation would cause a cycle: 2 -> 1 -> 2", e!.Message);
         AreEqual(0,     entity2.ChildCount); // count stays unchanged
         
         e = Throws<InvalidOperationException>(() => {
             entity1.AddChild(entity1);
         });
-        AreEqual("operation creates cycle: 1 -> 1", e!.Message);
+        AreEqual("operation would cause a cycle: 1 -> 1", e!.Message);
         AreEqual(1,     entity1.ChildCount); // count stays unchanged
         
         e = Throws<InvalidOperationException>(() => {
             // set 2 -> 1  result: cycle!
             entity2.InsertChild(0, entity1);
         });
-        AreEqual("operation creates cycle: 2 -> 1 -> 2", e!.Message);
+        AreEqual("operation would cause a cycle: 2 -> 1 -> 2", e!.Message);
         AreEqual(0,     entity2.ChildCount); // count stays unchanged
         
         e = Throws<InvalidOperationException>(() => {
             entity2.InsertChild(0, entity2);
         });
-        AreEqual("operation creates cycle: 2 -> 2", e!.Message);
+        AreEqual("operation would cause a cycle: 2 -> 2", e!.Message);
         AreEqual(0,     entity2.ChildCount); // count stays unchanged
     }
     

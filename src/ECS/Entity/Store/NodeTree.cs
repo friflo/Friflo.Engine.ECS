@@ -424,11 +424,11 @@ public partial class EntityStore
     }
     
     private static InvalidOperationException AddEntityAsChildToItselfException(int id) {
-        return new InvalidOperationException($"operation creates cycle: {id} -> {id}");
+        return new InvalidOperationException($"operation would cause a cycle: {id} -> {id}");
     }
     
     private InvalidOperationException OperationCycleException(int id, int other) {
-        return CycleException("operation creates cycle: ", id, other);
+        return CycleException("operation would cause a cycle: ", id, other);
     }
     
     private InvalidOperationException CycleException(string message, int id, int other)
