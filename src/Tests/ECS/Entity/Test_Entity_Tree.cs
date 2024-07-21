@@ -251,7 +251,7 @@ public static class Test_Entity_Tree
         });
     }
     
-    /// <summary>code coverage for <see cref="EntityStore.SetTreeFlags"/></summary>
+    // deprecated comment: <summary>code coverage for <see cref="EntityStore.SetTreeFlags"/></summary>
     [Test]
     public static void Test_Entity_Tree_AddChild_move_root_tree_entity()
     {
@@ -381,11 +381,11 @@ public static class Test_Entity_Tree
         AreEqual(2,             store.Count);
         var node0 = store.GetEntityNode(0);
         var node2 = store.GetEntityNode(2);
-        AreEqual("",                            node0.ToString());
-        AreEqual("flags: TreeNode | Created",   node2.ToString());
+        AreEqual("",                node0.ToString());
+        AreEqual("flags: Created",  node2.ToString());
         
-        AreEqual(NullNode,                      node0.Flags);
-        AreEqual(NodeFlags.TreeNode | Created,  node2.Flags);
+        AreEqual(NullNode,          node0.Flags);
+        AreEqual(Created,           node2.Flags);
     }
     
     [Test]

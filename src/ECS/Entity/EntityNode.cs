@@ -104,9 +104,6 @@ public struct EntityNode
         if (flags != 0) {
             sb.Append("flags: ");
             var startPos = sb.Length;
-            if (Is(NodeFlags.TreeNode)) {
-                sb.Append("TreeNode");
-            }
             if (Is(Created)) {
                 if (startPos < sb.Length) {
                     sb.Append(" | ");

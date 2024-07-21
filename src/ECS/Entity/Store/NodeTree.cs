@@ -69,7 +69,7 @@ public partial class EntityStore
     {
         var parentMap = extension.parentMap;
         if (entityId >= parentMap.Length) {
-            return 0;
+            return Static.NoParentId;
         }
         return parentMap[entityId];
     }
@@ -112,7 +112,7 @@ public partial class EntityStore
         SetTreeParent(childId, parentId);
         
         parent.childIds.Add(childId, extension.childHeap);
-        SetTreeFlags(nodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
+        // SetTreeFlags(nodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId, childId, index);
         return index;
@@ -120,7 +120,6 @@ public partial class EntityStore
     
     internal void InsertChild (int parentId, int childId, int childIndex)
     {
-        var localNodes      = nodes;
         var parentEntity    = new Entity(this, parentId);
         ref var parent      = ref GetTreeNodeRef(parentEntity);
         
@@ -155,21 +154,20 @@ public partial class EntityStore
         // --- insert entity with given id as child to its parent
         SetTreeParent(childId, parentId);
         parent.childIds.InsertAt(childIndex, childId, extension.childHeap);
-        SetTreeFlags(localNodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
+        // SetTreeFlags(nodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId,    childId, childIndex);
     }
     
     internal bool RemoveChild (int parentId, int childId)
     {
-        var localNodes      = nodes;
         int curParentId = GetTreeParentId(childId);
         if (parentId != curParentId) {
             return false;
         }
         RemoveTreeParent(childId);
         int curIndex        = RemoveChildNode(parentId, childId);
-        ClearTreeFlags(localNodes, childId, NodeFlags.TreeNode);
+        // ClearTreeFlags(nodes, childId, NodeFlags.TreeNode);
         
         OnChildNodeRemove(parentId, childId, curIndex);
         return true;
@@ -177,8 +175,7 @@ public partial class EntityStore
     
     internal static int GetChildIndex(Entity parent, int childId)
     {
-        parent.TryGetTreeNode(out var node);
-        var childIds = node.GetChildIds(parent.store);
+        var childIds = GetChildIds(parent);
         return childIds.IndexOf(childId);
     }
     
@@ -479,7 +476,7 @@ public partial class EntityStore
             RemoveLinksToEntity(entity);
         }
         // --- mark its child nodes as floating
-        ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
+        // ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
         foreach (int childId in entity.ChildIds) {
             RemoveTreeParent(childId);
         }
@@ -538,7 +535,7 @@ public partial class EntityStore
         }
     }
     
-    private void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {
+    /* private void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {
         ref var node    = ref nodes[id];
         if (node.IsNot(Created) || node.Is(flag)) {
             return;
@@ -560,7 +557,7 @@ public partial class EntityStore
         foreach (int childId in entity.ChildIds) {
             ClearTreeFlags(nodes, childId, flag);
         }
-    }
+    } */
     
     private void SetStoreRootEntity(Entity entity) {
         if (!storeRoot.IsNull) {
@@ -572,7 +569,7 @@ public partial class EntityStore
             throw new InvalidOperationException($"entity must not have a parent to be {nameof(StoreRoot)}. current parent id: {parentId}");
         }
         storeRoot   = entity;
-        SetTreeFlags(nodes, id, NodeFlags.TreeNode);
+        // SetTreeFlags(nodes, id, NodeFlags.TreeNode);
     }
     
     // ---------------------------------- child nodes change notification ----------------------------------
@@ -598,19 +595,19 @@ public partial class EntityStore
     
     
     // ------------------------------------- Entity access -------------------------------------
-    internal TreeMembership  GetTreeMembership(int id) {
-        return nodes[id].Is(NodeFlags.TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
+    internal TreeMembership  GetTreeMembership(int id)
+    {
+        while (true)
+        {
+            var parentId = GetTreeParentId(id);
+            if (parentId == Static.NoParentId) {
+                return storeRoot.Id == id ? TreeMembership.treeNode : TreeMembership.floating;
+            }
+            id = parentId;
+        }
     }
 
-    public int GetInternalParentId(int id)
-    {
-        return GetTreeParentId(id);
-    }
-    
-    internal static ChildEntities GetChildEntities(Entity entity)
-    {
-        return new ChildEntities(entity);
-    }
+    public int GetInternalParentId(int id) => GetTreeParentId(id);
     
     internal static ReadOnlySpan<int> GetChildIds(Entity entity)
     {

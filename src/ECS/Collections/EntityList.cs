@@ -143,8 +143,7 @@ public sealed class EntityList : IList<Entity>
     private void AddEntityTree(Entity entity)
     {
         AddInternal(entity.Id);
-        entity.TryGetTreeNode(out var node);
-        foreach (var id in node.GetChildIds(entityStore)) {
+        foreach (var id in EntityStore.GetChildIds(entity)) {
             var child = new Entity(entityStore, id);
             AddEntityTree(child);
         }

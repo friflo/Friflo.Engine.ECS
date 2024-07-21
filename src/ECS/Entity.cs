@@ -288,7 +288,7 @@ public readonly struct Entity : IEquatable<Entity>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
     /// </remarks>
-     public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(this);
+                    public  ChildEntities       ChildEntities   => new ChildEntities(this);
     
     /// <summary>Return the ids of the child entities.</summary>
     [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(this);

@@ -64,7 +64,7 @@ public static class Test_EntityConverter
         //
         IsTrue  (                       store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
-        AreEqual(Created | NodeFlags.TreeNode,    node8.Flags);
+        AreEqual(Created,               node8.Flags);
     }
     
     [Test]
@@ -96,7 +96,7 @@ public static class Test_EntityConverter
         //
         IsTrue(                         store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
-        AreEqual(Created | NodeFlags.TreeNode,    node8.Flags);
+        AreEqual(Created,               node8.Flags);
     }
     
     [Test]
