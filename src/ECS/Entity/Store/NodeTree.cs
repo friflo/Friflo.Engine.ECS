@@ -100,8 +100,11 @@ public partial class EntityStore
         }
     }
     
-    private bool IsChildOf(int id, int parentId)
+    private bool WouldCreateCycle(int id, int parentId)
     {
+        if (id == parentId) {
+            return true;
+        }
         while (true) {
             var parent = GetTreeParentId(id);
             if (parent == Static.NoParentId) {
@@ -117,6 +120,9 @@ public partial class EntityStore
     
     internal int AddChild (int parentId, int childId)
     {
+        if (WouldCreateCycle(parentId, childId)) {
+            throw OperationCycleException(parentId, childId);
+        }
         var curParentId = GetTreeParentId(childId);
         if (HasParent(curParentId)) {
             if (curParentId == parentId) {
@@ -127,14 +133,6 @@ public partial class EntityStore
         //  int curIndex = RemoveChildNode(ref localNodes[curParentId], curParentId, childId)
             int curIndex = RemoveChildNode(curParentId, childId);
             OnChildNodeRemove(curParentId, childId, curIndex);
-        } else {
-            if (parentId == childId) {
-                // case: tried to add entity to itself as a child
-                throw AddEntityAsChildToItselfException(parentId);
-            }
-        }
-        if (IsChildOf(parentId, childId)) {
-            throw OperationCycleException(parentId, childId);
         }
         // --- add entity with given id as child to this entity
         var parentEntity    = new Entity(this, parentId);
@@ -151,17 +149,13 @@ public partial class EntityStore
     
     internal void InsertChild (int parentId, int childId, int childIndex)
     {
+        if (WouldCreateCycle(parentId, childId)) {
+            throw OperationCycleException(parentId, childId);
+        }
         var parentEntity    = new Entity(this, parentId);
         ref var parent      = ref GetTreeNodeRef(parentEntity);
-        
         if (childIndex > parent.childIds.count) {
             throw new IndexOutOfRangeException();
-        }
-        if (parentId == childId) {
-            throw AddEntityAsChildToItselfException(parentId);
-        }
-        if (IsChildOf(parentId, childId)) {
-            throw OperationCycleException(parentId, childId);
         }
         var curParentId = GetTreeParentId(childId);
         if (HasParent(curParentId))
@@ -423,11 +417,10 @@ public partial class EntityStore
         }
     }
     
-    private static InvalidOperationException AddEntityAsChildToItselfException(int id) {
-        return new InvalidOperationException($"operation would cause a cycle: {id} -> {id}");
-    }
-    
     private InvalidOperationException OperationCycleException(int id, int other) {
+        if (id == other) {
+            return new InvalidOperationException($"operation would cause a cycle: {id} -> {id}");
+        }
         return CycleException("operation would cause a cycle: ", id, other);
     }
     
@@ -439,7 +432,7 @@ public partial class EntityStore
         sb.Append(id);
         while (true)
         {
-            cur = GetTreeParentId(cur);
+        cur = GetTreeParentId(cur);
             sb.Append(" -> ");
             sb.Append(cur);
             if (cur != other) {
