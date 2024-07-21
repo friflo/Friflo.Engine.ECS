@@ -466,7 +466,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#child-entities">Example.</a>
     /// </summary>
     /// <remarks>
-    /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
+    /// Executes in O(1).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     /// <returns>
@@ -485,7 +485,6 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks>
     /// Executes in O(1) in case <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
     /// Otherwise, O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
-    /// If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public void InsertChild(int index, Entity child) {
@@ -499,7 +498,6 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Remove the given child <paramref name="child"/> from the entity.</summary>
     /// <remarks>
     /// Executes in O(N) to search the entity. N = <see cref="ChildCount"/><br/>
-    /// If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public bool RemoveChild(Entity child) {
