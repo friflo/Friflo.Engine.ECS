@@ -122,6 +122,8 @@ public abstract partial class EntityStoreBase
     //  /// </summary>
         internal const              int             NoParentId              =  0;
     //  internal const              int             StoreRootParentId       = -1;
+    
+        internal const              int             SingleMax               = 32;
     }
     #endregion
     
@@ -137,11 +139,9 @@ public abstract partial class EntityStoreBase
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
         internBase.entityLists          = new StackArray<EntityList>        (Array.Empty<EntityList>());
-        singleIds                       = new int[SingleMax];
+        singleIds                       = new int[Static.SingleMax];
     }
     #endregion
-    
-    internal const int SingleMax = 32;
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);
     
@@ -205,7 +205,7 @@ public static partial class EntityStoreExtensions
     {
         var ids             = store.singleIds;
         var index           = store.singleIndex;
-        store.singleIndex   = (index + 1) % EntityStoreBase.SingleMax;
+        store.singleIndex   = (index + 1) % EntityStoreBase.Static.SingleMax;
         ids[index]  = id;
         return new ReadOnlySpan<int>(ids, index, 1);
     }
