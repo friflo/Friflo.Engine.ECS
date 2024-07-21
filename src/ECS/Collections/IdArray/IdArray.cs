@@ -41,7 +41,7 @@ internal struct IdArray
 
 internal static class IdArrayExtensions {
 
-    internal static ReadOnlySpan<int> GetSpan(this ref IdArray array, IdArrayHeap heap, EntityStoreBase store)
+    internal static ReadOnlySpan<int> GetSpan(this IdArray array, IdArrayHeap heap, EntityStoreBase store)
     {
         int count = array.count;
         int start = array.start;

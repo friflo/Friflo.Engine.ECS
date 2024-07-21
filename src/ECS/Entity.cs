@@ -466,7 +466,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#child-entities">Example.</a>
     /// </summary>
     /// <remarks>
-    /// Executes in O(1).<br/>
+    /// Executes in O(1) in case the child has no parent.<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     /// <returns>
@@ -483,7 +483,7 @@ public readonly struct Entity : IEquatable<Entity>
     }
     /// <summary>Insert the given <paramref name="child"/> as a child to the entity at the passed <paramref name="index"/>.</summary>
     /// <remarks>
-    /// Executes in O(1) in case <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
+    /// Executes in O(1) in case the child has no paren and <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
     /// Otherwise, O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>

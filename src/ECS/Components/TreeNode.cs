@@ -27,7 +27,7 @@ public struct TreeNode : IComponent
     /// <summary> returns the number of <see cref="Entity.ChildEntities"/>.</summary>
     public          int                 ChildCount  => childIds.count;
     
-    /// <summary> Property is obsolete. Use <see cref="GetChildIds"/> instead. </summary>
+    /// <summary>Property is obsolete. Use <see cref="GetChildIds"/> instead. </summary>
     [Obsolete($"Use {nameof(GetChildIds)}()")]
     public          ReadOnlySpan<int>   ChildIds    => throw new InvalidOperationException($"ChildIds is obsolete. Use {nameof(GetChildIds)}()");
     
@@ -38,9 +38,17 @@ public struct TreeNode : IComponent
                     internal    IdArray childIds;   //  8
     #endregion
     
+    /// <summary>
+    /// Returns the child entities.<br/>
+    /// Executes in O(1).
+    /// </summary>
     public ChildEntities  GetChildEntities(EntityStore store) => new ChildEntities(store, this);
     
-    /// same as <see cref="IdArrayExtensions.GetSpan"/>
+    // same as <see cref="IdArrayExtensions.GetSpan"/>
+    /// <summary>
+    /// Returns the child entity ids.<br/>
+    /// Executes in O(1).
+    /// </summary>
     public ReadOnlySpan<int>  GetChildIds(EntityStore store)
     {
         var count = childIds.count;
