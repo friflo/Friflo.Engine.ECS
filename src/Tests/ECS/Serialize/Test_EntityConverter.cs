@@ -171,7 +171,7 @@ public static class Test_EntityConverter
         var e = Throws<InvalidOperationException> (() => {
             converter.DataEntityToEntity(CreateDataEntity(2, new [] { 1 }), store, out _);
         });
-        AreEqual("dependency cycle in entity children: 2 -> 1 -> 2", e!.Message);
+        AreEqual("cycle in entity children: 2 -> 1 -> 2", e!.Message);
     }
     
     [Test]
@@ -185,7 +185,7 @@ public static class Test_EntityConverter
         var e = Throws<InvalidOperationException> (() => {
             converter.DataEntityToEntity(CreateDataEntity(3, new [] { 1 }), store, out _);
         });
-        AreEqual("dependency cycle in entity children: 3 -> 2 -> 1 -> 3", e!.Message);
+        AreEqual("cycle in entity children: 3 -> 2 -> 1 -> 3", e!.Message);
     }
     
     [Test]

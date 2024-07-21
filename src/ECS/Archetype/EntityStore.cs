@@ -178,10 +178,6 @@ public abstract partial class EntityStoreBase
         return new ArgumentException($"id: {id}. expect in [0, current max id: {store.nodes.Length - 1}]");
     }
     
-    internal static Exception   AddEntityAsChildToItselfException(int id) {
-        return new InvalidOperationException($"Cannot add entity to itself as a child. id: {id}");
-    }
-    
     private static ArgumentException AddRelationException(int id, int structIndex) {
         var componentType   = Static.EntitySchema.components[structIndex];
         var type            = componentType.Name;

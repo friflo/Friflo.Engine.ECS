@@ -403,11 +403,6 @@ public static class Test_Entity_Tree
         AreEqual(0,     entity1.AddChild(child));
         AreEqual(1,     entity1.ChildCount);
         
-        var e = Throws<InvalidOperationException>(() => {
-            entity1.AddChild(entity1);
-        });
-        AreEqual("Cannot add entity to itself as a child. id: 1", e!.Message);
-        AreEqual(1,     entity1.ChildCount); // count stays unchanged
         events.RemoveHandler();
         
         // --- move child from entity1 -> entity2
@@ -577,6 +572,44 @@ public static class Test_Entity_Tree
         Throws<NullReferenceException> (() => {
             _ = child.Parent; // access tree node
         });
+    }
+    
+    [Test]
+    public static void Test_Entity_Tree_cycle_exceptions()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        
+        // set 1 -> 2   OK
+        entity1.AddChild(entity2); 
+        AreEqual(1, entity2.Parent.Id);
+        
+        var e = Throws<InvalidOperationException>(() => {
+            // set 2 -> 1  result: cycle!
+            entity2.AddChild(entity1);
+        });
+        AreEqual("operation creates cycle: 2 -> 1 -> 2", e!.Message);
+        AreEqual(0,     entity2.ChildCount); // count stays unchanged
+        
+        e = Throws<InvalidOperationException>(() => {
+            entity1.AddChild(entity1);
+        });
+        AreEqual("operation creates cycle: 1 -> 1", e!.Message);
+        AreEqual(1,     entity1.ChildCount); // count stays unchanged
+        
+        e = Throws<InvalidOperationException>(() => {
+            // set 2 -> 1  result: cycle!
+            entity2.InsertChild(0, entity1);
+        });
+        AreEqual("operation creates cycle: 2 -> 1 -> 2", e!.Message);
+        AreEqual(0,     entity2.ChildCount); // count stays unchanged
+        
+        e = Throws<InvalidOperationException>(() => {
+            entity2.InsertChild(0, entity2);
+        });
+        AreEqual("operation creates cycle: 2 -> 2", e!.Message);
+        AreEqual(0,     entity2.ChildCount); // count stays unchanged
     }
     
     [Test]

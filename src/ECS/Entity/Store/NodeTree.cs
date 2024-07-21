@@ -52,8 +52,6 @@ public partial class EntityStore
         extension.randPid = new Random(seed);
     }
     
-    private static bool HasParent(int id)  =>   id >= Static.MinNodeId;
-    
     /// This message must be used if adding or removing ids from an entity <see cref="TreeNode"/>.
     private static ref TreeNode GetTreeNodeRef(Entity entity)
     {
@@ -65,6 +63,9 @@ public partial class EntityStore
         return ref ((StructHeap<TreeNode>)heap).components[entity.compIndex];
     }
     
+#region get / set parent
+    private static bool HasParent(int id)  =>   id >= Static.MinNodeId;
+
     private int GetTreeParentId(int entityId)
     {
         var parentMap = extension.parentMap;
@@ -87,6 +88,33 @@ public partial class EntityStore
         parentMap[entityId] = parentId;
     }
     
+    internal TreeMembership  GetTreeMembership(int id)
+    {
+        while (true)
+        {
+            var parentId = GetTreeParentId(id);
+            if (parentId == Static.NoParentId) {
+                return storeRoot.Id == id ? TreeMembership.treeNode : TreeMembership.floating;
+            }
+            id = parentId;
+        }
+    }
+    
+    private bool IsChildOf(int id, int parentId)
+    {
+        while (true) {
+            var parent = GetTreeParentId(id);
+            if (parent == Static.NoParentId) {
+                return false;
+            }
+            if (parent == parentId) {
+                return true;
+            }
+            id = parent;
+        }
+    }
+    #endregion
+    
     internal int AddChild (int parentId, int childId)
     {
         var curParentId = GetTreeParentId(childId);
@@ -104,6 +132,9 @@ public partial class EntityStore
                 // case: tried to add entity to itself as a child
                 throw AddEntityAsChildToItselfException(parentId);
             }
+        }
+        if (IsChildOf(parentId, childId)) {
+            throw OperationCycleException(parentId, childId);
         }
         // --- add entity with given id as child to this entity
         var parentEntity    = new Entity(this, parentId);
@@ -125,6 +156,12 @@ public partial class EntityStore
         
         if (childIndex > parent.childIds.count) {
             throw new IndexOutOfRangeException();
+        }
+        if (parentId == childId) {
+            throw AddEntityAsChildToItselfException(parentId);
+        }
+        if (IsChildOf(parentId, childId)) {
+            throw OperationCycleException(parentId, childId);
         }
         var curParentId = GetTreeParentId(childId);
         if (HasParent(curParentId))
@@ -380,28 +417,40 @@ public partial class EntityStore
                 return false;
             }
             if (cur == id) {
-                exception = EntityDependencyCycleException(id);
+                exception = CycleException("cycle in entity children: ", id, id);
                 return true;
             }
         }
     }
     
-    private InvalidOperationException EntityDependencyCycleException(int id) {
+    private static InvalidOperationException AddEntityAsChildToItselfException(int id) {
+        return new InvalidOperationException($"operation creates cycle: {id} -> {id}");
+    }
+    
+    private InvalidOperationException OperationCycleException(int id, int other) {
+        return CycleException("operation creates cycle: ", id, other);
+    }
+    
+    private InvalidOperationException CycleException(string message, int id, int other)
+    {
         int cur = id;
         var sb = new StringBuilder();
-        sb.Append("dependency cycle in entity children: ");
+        sb.Append(message);
         sb.Append(id);
-        while (true) {
+        while (true)
+        {
             cur = GetTreeParentId(cur);
-            if (cur != id) {
-                sb.Append(" -> ");
-                sb.Append(cur);
+            sb.Append(" -> ");
+            sb.Append(cur);
+            if (cur != other) {
                 continue;
             }
             break;
         }
-        sb.Append(" -> ");
-        sb.Append(id);
+        if (other != id) {
+            sb.Append(" -> ");
+            sb.Append(id);
+        }
         return new InvalidOperationException(sb.ToString());
     }
     
@@ -595,17 +644,7 @@ public partial class EntityStore
     
     
     // ------------------------------------- Entity access -------------------------------------
-    internal TreeMembership  GetTreeMembership(int id)
-    {
-        while (true)
-        {
-            var parentId = GetTreeParentId(id);
-            if (parentId == Static.NoParentId) {
-                return storeRoot.Id == id ? TreeMembership.treeNode : TreeMembership.floating;
-            }
-            id = parentId;
-        }
-    }
+
 
     public int GetInternalParentId(int id) => GetTreeParentId(id);
     
