@@ -15,7 +15,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Return the child entities of an <see cref="Entity"/>.
+/// Return the child entities of an <see cref="Entity"/>.<br/>
+/// To iterate all entities with child entities use <see cref="TreeNode"/> in a <c>Query()</c>.
 /// </summary>
 [DebuggerTypeProxy(typeof(ChildEntitiesDebugView))]
 public readonly struct ChildEntities : IEnumerable<Entity>

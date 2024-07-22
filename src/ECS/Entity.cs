@@ -287,6 +287,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <code>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
+    /// To iterate all entities with child entities use <see cref="TreeNode"/> in a <c>Query()</c>.
     /// </remarks>
                     public  ChildEntities       ChildEntities   => new ChildEntities(this);
     
