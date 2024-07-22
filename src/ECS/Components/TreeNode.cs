@@ -24,7 +24,7 @@ namespace Friflo.Engine.ECS;
 public struct TreeNode : IComponent
 {
 #region properties
-    /// <summary> returns the number of <see cref="Entity.ChildEntities"/>.</summary>
+    /// <summary> Returns the number of <see cref="Entity.ChildEntities"/>.</summary>
     public          int                 ChildCount  => childIds.count;
     
     /// <summary>Property is obsolete. Use <see cref="GetChildIds"/> instead. </summary>

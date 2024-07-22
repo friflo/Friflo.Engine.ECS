@@ -462,51 +462,53 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ child / tree methods ----------------------------------
 #region child / tree - methods
     /// <summary>
-    /// Add the given <paramref name="child"/> as a child to the entity.<br/>
+    /// Add the given <paramref name="entity"/> as a child to this entity.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#child-entities">Example.</a>
     /// </summary>
     /// <remarks>
     /// Executes in O(1) in case the child has no parent.<br/>
-    /// The subtree structure of the added entity remains unchanged<br/>
+    /// The subtree structure of the added entity remains unchanged.<br/>
+    /// To iterate all entities with child entities use <see cref="TreeNode"/> in a <c>Query()</c>.
     /// </remarks>
     /// <returns>
-    /// The index within <see cref="ChildIds"/> the <paramref name="child"/> is added.<br/>
-    /// -1 if the <paramref name="child"/> is already a child entity.
+    /// The index within <see cref="ChildIds"/> the <paramref name="entity"/> is added.<br/>
+    /// -1 if the <paramref name="entity"/> is already a child entity.
     /// </returns>
-    public int AddChild(Entity child) {
-        if (child.store == null)                throw new ArgumentNullException              (nameof(child));
-        var childType = child.archetype;
-        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(child));
+    public int AddChild(Entity entity) {
+        if (entity.store == null)                throw new ArgumentNullException              (nameof(entity));
+        var childType = entity.archetype;
+        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(entity));
         var entityStore = archetype.entityStore;
-        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(child));
-        return entityStore.AddChild(Id, child.Id);
+        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(entity));
+        return entityStore.AddChild(Id, entity.Id);
     }
-    /// <summary>Insert the given <paramref name="child"/> as a child to the entity at the passed <paramref name="index"/>.</summary>
+    /// <summary>Insert the given <paramref name="entity"/> as a child to this entity at the passed <paramref name="index"/>.</summary>
     /// <remarks>
     /// Executes in O(1) in case the child has no paren and <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
     /// Otherwise, O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
-    /// The subtree structure of the added entity remains unchanged<br/>
+    /// The subtree structure of the added entity remains unchanged.<br/>
+    /// To iterate all entities with child entities use <see cref="TreeNode"/> in a <c>Query()</c>.
     /// </remarks>
-    public void InsertChild(int index, Entity child) {
-        if (child.store == null)                throw new ArgumentNullException              (nameof(child));
-        var childType = child.archetype;
-        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(child));
+    public void InsertChild(int index, Entity entity) {
+        if (entity.store == null)                throw new ArgumentNullException              (nameof(entity));
+        var childType = entity.archetype;
+        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(entity));
         var entityStore = archetype.entityStore;
-        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(child));
-        entityStore.InsertChild(Id, child.Id, index);
+        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(entity));
+        entityStore.InsertChild(Id, entity.Id, index);
     }
-    /// <summary>Remove the given child <paramref name="child"/> from the entity.</summary>
+    /// <summary>Remove the given child <paramref name="entity"/> from this entity.</summary>
     /// <remarks>
     /// Executes in O(N) to search the entity. N = <see cref="ChildCount"/><br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
-    public bool RemoveChild(Entity child) {
-        if (child.store == null)                throw new ArgumentNullException              (nameof(child));
-        var childType = child.archetype;
-        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(child));
+    public bool RemoveChild(Entity entity) {
+        if (entity.store == null)                throw new ArgumentNullException              (nameof(entity));
+        var childType = entity.archetype;
+        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(entity));
         var entityStore = archetype.entityStore;
-        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(child));
-        return entityStore.RemoveChild(Id, child.Id);
+        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(entity));
+        return entityStore.RemoveChild(Id, entity.Id);
     }
     
     /// <summary>

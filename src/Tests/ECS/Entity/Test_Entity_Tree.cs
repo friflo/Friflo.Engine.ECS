@@ -636,17 +636,17 @@ public static class Test_Entity_Tree
             var e = Throws<ArgumentException> (() => {
                 root.AddChild(child);
             });
-            AreEqual("entity is detached (Parameter 'child')", e!.Message);
+            AreEqual("entity is detached (Parameter 'entity')", e!.Message);
             
             e = Throws<ArgumentException> (() => {
                 root.RemoveChild(child);
             });
-            AreEqual("entity is detached (Parameter 'child')", e!.Message);
+            AreEqual("entity is detached (Parameter 'entity')", e!.Message);
             
             e = Throws<ArgumentException> (() => {
                 root.InsertChild(0, child);
             });
-            AreEqual("entity is detached (Parameter 'child')", e!.Message);
+            AreEqual("entity is detached (Parameter 'entity')", e!.Message);
         } {
             var entity = new Entity();
             
@@ -654,17 +654,17 @@ public static class Test_Entity_Tree
             var e = Throws<ArgumentNullException> (() => {
                 root.AddChild(entity);
             });
-            AreEqual("child", e!.ParamName);
+            AreEqual("entity", e!.ParamName);
             
             e = Throws<ArgumentNullException> (() => {
                 root.RemoveChild(entity);
             });
-            AreEqual("child", e!.ParamName);
+            AreEqual("entity", e!.ParamName);
             
             e = Throws<ArgumentNullException> (() => {
                 root.InsertChild(0, entity);
             });
-            AreEqual("child", e!.ParamName);
+            AreEqual("entity", e!.ParamName);
         }
     }
     
@@ -829,17 +829,17 @@ public static class Test_Entity_Tree
         var e = Throws<ArgumentException>(() => {
             entity1.AddChild(entity2);
         });
-        AreEqual("entity is owned by a different store (Parameter 'child')", e!.Message);
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         
         e = Throws<ArgumentException>(() => {
             entity1.RemoveChild(entity2);
         });
-        AreEqual("entity is owned by a different store (Parameter 'child')", e!.Message);
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         
         e = Throws<ArgumentException>(() => {
             entity1.InsertChild(0, entity2);
         });
-        AreEqual("entity is owned by a different store (Parameter 'child')", e!.Message);
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
     }
 
     /// <summary><see cref="StoreExtension.GenerateRandomPidForId"/></summary>
