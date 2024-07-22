@@ -169,7 +169,8 @@ public partial class EntityStore
                 goto InsertNode;
             }
             // case: entity with given id is already a child of this entity => move child
-            curIndex = GetChildIndex(curParentEntity, childId);
+            var childIds    = GetChildIds(curParentEntity);
+            curIndex        = childIds.LastIndexOf(childId); // enable O(1) if childIndex == last child
             if (curIndex == childIndex) {
                 // case: child entity is already at the requested childIndex
                 return;
@@ -215,7 +216,7 @@ public partial class EntityStore
         var parent          = new Entity(this, parentId);
         ref var treeNode    = ref GetTreeNodeRef(parent);
         var childIds        = treeNode.GetChildIds(this);
-        int index           = childIds.IndexOf(childId);
+        int index           = childIds.LastIndexOf(childId); // enable O(1) if childId == last child
         if (index != -1) {
             treeNode.childIds.RemoveAt(index, extension.childHeap, keepOrder: true);
             return index;
