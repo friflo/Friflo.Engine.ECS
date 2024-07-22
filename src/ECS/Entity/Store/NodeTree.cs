@@ -517,8 +517,7 @@ public partial class EntityStore
         if (node.isLinked != 0) {
             RemoveLinksToEntity(entity);
         }
-        // --- mark its child nodes as floating
-        // ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
+        // ClearTreeFlags(nodes, id, NodeFlags.TreeNode); // --- mark its child nodes as floating
         foreach (int childId in entity.ChildIds) {
             RemoveTreeParent(childId);
         }
