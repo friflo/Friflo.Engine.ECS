@@ -44,10 +44,11 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 dotnet add package Friflo.Engine.ECS
 ```
 
-# Contents
+## Contents
 
-* [Demos](#demos)
-* [ECS definition](#ecs-definition)
+* [Friflo.Engine.ECS](#c-ecs---frifloengineecs)
+  - [Demos](#demos)
+  - [ECS definition](#ecs-definition)
 * [Examples](#examples)
   - [Hello World](#hello-world)
   - [Component Types](#component-types)
@@ -57,12 +58,7 @@ dotnet add package Friflo.Engine.ECS
 * [Benchmarks](#ecs-benchmarks)
 
 
-
-
-
-
-
-# Demos
+## Demos
 
 MonoGame Demo is available as WASM / WebAssembly app. [**Try Demo in your browser**](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
 
@@ -85,7 +81,7 @@ MonoGame Demo is available as WASM / WebAssembly app. [**Try Demo in your browse
 All example Demos - **Windows**, **macOS** & **Linux** - available as projects for **MonoGame**, **Unity** and **Godot**.  
 See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
-<br/>
+
 
 ## ECS definition
 
