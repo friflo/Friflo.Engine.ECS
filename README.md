@@ -61,36 +61,38 @@ dotnet add package Friflo.Engine.ECS
 
 ## Projects using friflo ECS
 
-| [Horse Runner DX](https://store.steampowered.com/app/2955320/Horse_Runner_DX) | quote from developer |
-| ----------------------------------------------------------------------------- |:-------------------- |
-| <a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img style="float: left;" src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/horse-runner-dx.png" width="246" height="124"/></a> |  *"Just wanted to let you know that Friflo ECS 2.0.0 works like a charm in my little game. <br/> I use it for basically everything (landscape segments, vegetation, players, animations, <br/> collisions and even the floating dust particles are entities). <br/> After some optimization there is no object allocation during gameplay - <br/> the allocation graph just stays flat - no garbage collection"* |
+### [Horse Runner DX](https://store.steampowered.com/app/2955320/Horse_Runner_DX)
+
+<a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/horse-runner-dx.png" width="246" height="124"/></a>  
+Quote from developer: *"Just wanted to let you know that Friflo ECS 2.0.0 works like a charm in my little game.  
+I use it for basically everything (landscape segments, vegetation, players, animations,  collisions and even the floating dust particles are entities).  
+After some optimization there is no object allocation during gameplay - the allocation graph just stays flat - no garbage collection."*
 
 <br/>
 
 ## Demos
 
 MonoGame Demo is available as WASM / WebAssembly app. [**Try Demo in your browser**](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
+Demo projects on GitHub below.
 
 <table>
  <thead>
   <tr>
-    <td><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/MonoGame-wasm.png" width="320" height="197"/></a></td>
-    <td><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity"   ><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Unity.png"         width="320" height="197"/></a></td>
-    <td><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot"   ><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Godot.png"         width="320" height="197"/></a></td>
+    <td><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/MonoGame-wasm.png" width="256px" height="159px"/></a></td>
+    <td><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity"   ><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Unity.png"         width="256px" height="159px"/></a></td>
+    <td><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot"   ><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Godot.png"         width="256px" height="159px"/></a></td>
   </tr>
  </thead>
  <tbody>
   <tr>
-    <td align="center"><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame" >MonoGame Project</a></td>
-    <td align="center"><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity"    >Unity Project</a></td>
-    <td align="center"><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot"    >Godot Project</a></td>
+    <td align="center"><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame" >MonoGame</a></td>
+    <td align="center"><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity"    >Unity</a></td>
+    <td align="center"><a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot"    >Godot</a></td>
   </tr>
  </tbody>
 <table>
 
-
-*Desktop Demo performance:* Godot 202 FPS, Unity 100 FPS at 65536 entities.
-
+*Desktop Demo performance:* Godot 202 FPS, Unity 100 FPS at 65536 entities.  
 All example Demos - **Windows**, **macOS** & **Linux** - available as projects for **MonoGame**, **Unity** and **Godot**.  
 See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
