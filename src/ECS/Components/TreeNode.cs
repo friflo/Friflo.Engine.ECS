@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable once CheckNamespace
@@ -29,6 +30,7 @@ public struct TreeNode : IComponent
     
     /// <summary>Property is obsolete. Use <see cref="GetChildIds"/> instead. </summary>
     [Obsolete($"Use {nameof(GetChildIds)}()")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public          ReadOnlySpan<int>   ChildIds    => throw new InvalidOperationException($"ChildIds is obsolete. Use {nameof(GetChildIds)}()");
     
     public override string              ToString()  => $"ChildCount: {childIds.count}";
