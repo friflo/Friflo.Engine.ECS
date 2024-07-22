@@ -25,7 +25,7 @@ comparing the performance of multiple ECS projects with **simple** benchmarks.
 
 *Feature highlights*
 - Simple API - no boilerplate.
-- High-performance 🔥 and compact ECS with low memory footprint.
+- High-performance 🔥 and compact ECS with low memory footprint. 100.000.000 entities with 16 GB RAM.
 - Zero allocations for entire API after buffers grown large enough. No struct boxing.
 - Fully reactive - *optional*. Subscribe change events of all or specific entities.
 - JSON Serialization - *optional*.
