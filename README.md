@@ -68,8 +68,6 @@ Quote from developer: *"Just wanted to let you know that Friflo ECS 2.0.0 works 
 I use it for basically everything (landscape segments, vegetation, players, animations,  collisions and even the floating dust particles are entities).  
 After some optimization there is no object allocation during gameplay - the allocation graph just stays flat - no garbage collection."*
 
-<br/>
-
 ## Demos
 
 MonoGame Demo is available as WASM / WebAssembly app. [**Try Demo in your browser**](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
@@ -95,7 +93,6 @@ Demo projects on GitHub below.
 All example Demos - **Windows**, **macOS** & **Linux** - available as projects for **MonoGame**, **Unity** and **Godot**.  
 See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
-<br/>
 
 ## ECS definition
 
