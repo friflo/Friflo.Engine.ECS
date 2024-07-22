@@ -548,9 +548,6 @@ public readonly struct Entity : IEquatable<Entity>
         node = ((StructHeap<TreeNode>)heap).components[compIndex];
         return true;
     }
-    
-    internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNode>.Index] != null;
-    
     #endregion
 
 
