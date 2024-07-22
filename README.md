@@ -25,10 +25,10 @@ comparing the performance of multiple ECS projects with **simple** benchmarks.
 
 *Feature highlights*
 - Simple API - no boilerplate, rock-solid 🗿 & bulletproof 🔫.
-- High-performance 🔥 and compact ECS with low memory footprint. 100.000.000 entities with 16 GB RAM.
+- High-performance 🔥 compact ECS with low memory footprint. Create 100.000.000 entities in 1.5 sec (16 GB RAM).
 - Zero ⭕ allocations for entire API after buffers grown large enough. No struct boxing.
 - Fully reactive ⚡ *optional*. Subscribe change events of all or specific entities.
-- JSON Serialization 📀 *optional*.
+- JSON Serialization 💿 *optional*.
 - SIMD Support 🧮 *optional*. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
