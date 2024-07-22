@@ -32,11 +32,12 @@ comparing the performance of multiple ECS projects with **simple** benchmarks.
 - SIMD Support - *optional*. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and ![new](docs/images/new.svg) Native AOT
-- **100% secure C#**. No use of *unsafe code*. No bindings to native dll's.
+- **100% secure C#**. No *unsafe code*. No *native dll bindings*. No *access violation* bugs. 
   See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
   *Access violation* bugs caused by *unsafe code* on customer installs provide often no stacktrace when crashing.
 
 Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
+
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
 ```
