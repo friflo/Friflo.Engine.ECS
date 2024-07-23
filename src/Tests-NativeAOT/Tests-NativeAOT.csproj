@@ -31,13 +31,13 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeCoverage.MSBuild" Version="17.11.3" />
         <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.11.3" />
-        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.2.1" />
-        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.2.1" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.3.1" />
+        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.3.1" />
 
         <PackageReference Include="MSTest.Engine" Version="1.0.0-alpha.24163.4" />
         <PackageReference Include="MSTest.SourceGeneration" Version="1.0.0-alpha.24163.4" />
-        <PackageReference Include="MSTest.TestFramework" Version="3.4.3" />
-        <PackageReference Include="MSTest.Analyzers" Version="3.4.3"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.5.0" />
+        <PackageReference Include="MSTest.Analyzers" Version="3.5.0"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
