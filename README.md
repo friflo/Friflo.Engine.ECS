@@ -9,44 +9,20 @@
 
 # C# ECS - Friflo.Engine.ECS
 
-Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benchmark** as reference.  
-See benchmark results - Mac Mini M2 - at the bottom of this page.  
+The C# ECS for finishers 🏁  
+Fastest 🔥 C# ECS proven by several benchmarks.
 
-Released **v2.0.0**  
-Added [Systems](#systems), [Native AOT](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#native-aot) support,
-performance improvements and bug fixes. See [Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
+## News
 
-![new](docs/images/new.svg) released **v3.0.0-preview.5**  
-Added new features supported by a set of specialized [Component Types](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types) for  
-**Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1).
+- Released v3.0.0-preview.5  
+  New: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1). See [Component Types](#component-types)
 
-![new](docs/images/new.svg) Created a new GitHub repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
-comparing the performance of multiple ECS projects with **simple** benchmarks.
-
-*Feature highlights*
-- Simple API - no boilerplate, rock-solid 🗿 & bulletproof 🔫.
-- High-performance 🔥 compact ECS with low memory footprint. Create 100.000.000 entities in 1.5 sec (16 GB RAM).
-- Zero ⭕ allocations for entire API after buffers grown large enough. No struct boxing.
-- Fully reactive ⚡ *optional*. Subscribe change events of all or specific entities.
-- JSON Serialization 💿 *optional*.
-- SIMD Support 🧮 *optional*. Multi thread capable and remainder loop free.
-- Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
-  WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
-- **100% secure C#** 🔒. No *unsafe code*. No *native dll bindings*. No *access violation* bugs. 
-  See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
-  *Access violation* bugs caused by *unsafe code* on customer installs provide often no stacktrace when crashing.
-
-Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
-
-
-Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
-```
-dotnet add package Friflo.Engine.ECS
-```
+- New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
 ## Contents
 
 * [Friflo.Engine.ECS](#c-ecs---frifloengineecs)
+  - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
   - [ECS definition](#ecs-definition)
@@ -57,6 +33,34 @@ dotnet add package Friflo.Engine.ECS
   - [Systems](#systems)
 * [Wiki](#wiki)
 * [Benchmarks](#ecs-benchmarks)
+
+## Feature highlights
+
+- [x] Simple API - no boilerplate, rock-solid 🗿 and bulletproof 🔫
+- [x] High-performance 🔥 compact ECS
+- [x] Low memory footprint 👣 create 100.000.000 entities in 1.5 sec
+- [x] Zero ⭕ allocations after buffers grown large enough. No struct boxing
+- [x] Fully reactive ⚡
+- [x] Entity relationships and relations ⌘
+- [x] Entity hierarchy / tree 🞱
+- [x] Search 🔎
+- [x] JSON Serialization 💿
+- [x] SIMD Support 🧮
+- [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
+  WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
+- [x] **100% secure C#** 🔒. No *unsafe code*. No *native dll bindings*. No *access violation* bugs. 
+  See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
+
+
+Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
+
+
+Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
+```
+dotnet add package Friflo.Engine.ECS
+```
+
+
 
 
 ## Projects using friflo ECS
