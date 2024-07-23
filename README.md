@@ -52,7 +52,7 @@ See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXh
 - [x] Fully reactive / entity events ⚡
 - [x] Entity component Search in O(1) 🔎 
 - [x] Fast batch / bulk operations ⫴
-- [x] Command buffers ⋙
+- [x] Command buffers / deferred operations ⋙
 - [x] Entity relationships and relations ⌘
 - [x] Entity hierarchy / tree 🞱
 - [x] Systems / System groups ⚙️
