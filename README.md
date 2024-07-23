@@ -11,12 +11,12 @@
 
 ***The ECS for finishers 🏁***  
 Leading performance in most ECS aspects.  
-See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXhiQJpY-VuNxocxaxPKGTJYQL72Zcbrvq0CcY).
+*Ratio*: Average Performance Ratio. See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXhiQJpY-VuNxocxaxPKGTJYQL72Zcbrvq0CcY)
 
-|                           | friflo ECS | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
-| ------------------------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
-| Average Performance Ratio |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |       2.57 |       3.81 |      21.09 |
-| Notes                     |            |            |            |            |            | [^sparse]  | [^sparse]  | [^sparse]  |
+|         |     friflo | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
+| ------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
+| *Ratio* |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |       2.57 |       3.81 |      21.09 |
+| *Notes* |            |            |            |            |            | [^sparse]  | [^sparse]  | [^sparse]  |
 
 [^sparse]: Sparse Set based ECS projects.
 
