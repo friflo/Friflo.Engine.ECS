@@ -9,30 +9,29 @@
 
 # C# ECS - Friflo.Engine.ECS
 
-The C# ECS for finishers 🏁  
+*The C# ECS for finishers 🏁*  
 Fastest 🔥 C# ECS proven by several benchmarks.
 
 ## News
 
-- Released v3.0.0-preview.5  
+- [x] Released v3.0.0-preview.5  
   New: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1). See [Component Types](#component-types)
 
-- New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
+- [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
 ## Contents
 
-* [Friflo.Engine.ECS](#c-ecs---frifloengineecs)
+* [📦 Friflo.Engine.ECS](#c-ecs---frifloengineecs)
   - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
   - [ECS definition](#ecs-definition)
-* [Examples](#examples)
-  - [Hello World](#hello-world)
-  - [Component Types](#component-types)
-  - [Search](#search)
-  - [Systems](#systems)
-* [Wiki](#wiki)
-* [Benchmarks](#ecs-benchmarks)
+* [🚀 Examples](#-examples)
+  - [⏩ Hello World](#-hello-world)
+  - [⌘ Component Types](#-component-types)
+  - [⚙️ Systems](#-systems)
+* [📖 Wiki](#-wiki)
+* [🏁 Benchmarks](#-ecs-benchmarks)
 
 ## Feature highlights
 
@@ -45,6 +44,7 @@ Fastest 🔥 C# ECS proven by several benchmarks.
 - [x] Entity relationships and relations ⌘
 - [x] Entity hierarchy / tree 🞱
 - [x] Search 🔎
+- [x] Watch entities, components, tags, query results, archetypes & world in debugger 🐞
 - [x] JSON Serialization 💿
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
@@ -113,7 +113,7 @@ An ECS provide two strengths:
 
 <br/>
 
-# Examples
+# 🚀 Examples
 
 This section contains two typical use cases when using an ECS.  
 More examples are in the GitHub Wiki.
@@ -125,7 +125,7 @@ Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer
 Provide techniques how to improve ECS performance.
 
 
-## **Hello World**
+## **⏩ Hello World**
 
 The hello world examples demonstrates the creation of a world, some entities with components  
 and their movement using a simple `ForEachEntity()` call.  
@@ -155,7 +155,7 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **Component Types**
+## **⌘ Component Types**
 
 ![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
 
@@ -187,7 +187,7 @@ for the challenge to improve the feature set and performance of this project!
 <br/>
 
 
-## **Systems**
+## ⚙️ **Systems**
 
 Systems are new in **Friflo.Engine.ECS v2.0.0**
 
@@ -296,7 +296,7 @@ entities            number of entities matching a QuerySystem
 <br/>
 
 
-# Wiki
+# 📖 Wiki
 
 The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
 
@@ -323,7 +323,7 @@ The **GitHub Wiki** provide you detailed information about the ECS and illustrat
 
 
 
-# ECS Benchmarks
+# 🏁 ECS Benchmarks
 
 ## ECS.CSharp.Benchmark - Common use-cases
 
