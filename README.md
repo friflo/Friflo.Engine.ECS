@@ -7,7 +7,7 @@
 [![stars](https://img.shields.io/github/stars/friflo/Friflo.Json.Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox)
 
 
-# 📦 Friflo.Engine.ECS
+# 🔥 Friflo.Engine.ECS
 
 *The C# ECS for finishers 🏁*  
 Fastest 🔥 C# ECS proven by several benchmarks.
@@ -21,7 +21,7 @@ Fastest 🔥 C# ECS proven by several benchmarks.
 
 ## Contents
 
-* [📦 Friflo.Engine.ECS](#c-ecs---frifloengineecs)
+* [🔥 Friflo.Engine.ECS](#c-ecs---frifloengineecs)
   - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
