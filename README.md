@@ -12,6 +12,10 @@
 ***The ECS for finishers 🏁***  
 Fastest C# ECS proven by several benchmarks.
 
+|                           | friflo ECS | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
+| ------------------------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
+| Average Performance Ratio |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |       2.57 |       3.81 |      21.09 |
+
 ## News
 
 - [x] Released v3.0.0-preview.5  
@@ -40,10 +44,14 @@ Fastest C# ECS proven by several benchmarks.
 - [x] High-performance 🔥 compact ECS
 - [x] Low memory footprint 👣 create 100.000.000 entities in 1.5 sec
 - [x] Zero ⦰ allocations after buffers are large enough. No struct boxing
+- [x] High performant / type-safe queries ∈
+- [x] Efficient multithreaded queries ⇶
 - [x] Fully reactive ⚡
+- [x] Search O(1) 🔎
+- [x] Fast batch / bulk operations ⫴
+- [x] Command buffers ⋙
 - [x] Entity relationships and relations ⌘
 - [x] Entity hierarchy / tree 🞱
-- [x] Search 🔎
 - [x] Systems / System groups ⚙️
 - [x] Watch entities, components, tags, query results and systems in debugger 🐞
 - [x] JSON Serialization 💿
