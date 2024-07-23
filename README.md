@@ -10,7 +10,8 @@
 # 🔥 Friflo.Engine.ECS
 
 ***The ECS for finishers 🏁***  
-Fastest C# ECS. See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXhiQJpY-VuNxocxaxPKGTJYQL72Zcbrvq0CcY)
+Leading performance in most ECS aspects.  
+See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXhiQJpY-VuNxocxaxPKGTJYQL72Zcbrvq0CcY).
 
 |                           | friflo ECS | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
 | ------------------------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
