@@ -9,19 +9,19 @@
 
 # 🔥 Friflo.Engine.ECS
 
-*The C# ECS for finishers 🏁*  
+***The ECS for finishers 🏁***  
 Fastest C# ECS proven by several benchmarks.
 
 ## News
 
 - [x] Released v3.0.0-preview.5  
-  New: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1). See [Component Types](#component-types)
+  New: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1). See [Component Types](#-component-types)
 
 - [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
 ## Contents
 
-* [🔥 Friflo.Engine.ECS](#c-ecs---frifloengineecs)
+* [🔥 Friflo.Engine.ECS](#-frifloengineecs)
   - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
@@ -44,7 +44,8 @@ Fastest C# ECS proven by several benchmarks.
 - [x] Entity relationships and relations ⌘
 - [x] Entity hierarchy / tree 🞱
 - [x] Search 🔎
-- [x] Watch entities, components, tags, query results, archetypes & world in debugger 🐞
+- [x] Systems / System groups ⚙️
+- [x] Watch entities, components, tags, query results and systems in debugger 🐞
 - [x] JSON Serialization 💿
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
