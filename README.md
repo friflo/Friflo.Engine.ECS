@@ -10,7 +10,7 @@
 # 🔥 Friflo.Engine.ECS
 
 *The C# ECS for finishers 🏁*  
-Fastest 🔥 C# ECS proven by several benchmarks.
+Fastest C# ECS proven by several benchmarks.
 
 ## News
 
