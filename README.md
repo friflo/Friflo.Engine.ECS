@@ -47,16 +47,16 @@ Leading performance in most ECS aspects.
 - [x] High-performance 🔥 compact ECS
 - [x] Low memory footprint 👣. Create 100.000.000 entities in 1.5 sec
 - [x] Zero ⦰ allocations after buffers are large enough. No struct boxing
-- [x] High performant / type-safe queries ∈
+- [x] High performant / type-safe queries ⊆
 - [x] Efficient multithreaded queries ⇶
-- [x] Fully reactive / entity events ⚡
-- [x] Entity component Search in O(1) 🔎 
-- [x] Fast batch / bulk operations ⫴
-- [x] Command buffers / deferred operations ⋙
+- [x] Entity component Search in O(1) ∈ 
+- [x] Fast batch / bulk operations ⏩
+- [x] Command buffers / deferred operations ⏭️
 - [x] Entity relationships and relations ⌘
 - [x] Entity hierarchy / tree ⪪
+- [x] Fully reactive / entity events ⚡
 - [x] Systems / System groups ⚙️
-- [x] Watch entities, components, tags, query results and systems in debugger 🐞
+- [x] Watch entities, components, relations, tags, query results, systems, ... in debugger 🐞
 - [x] JSON Serialization 💿
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
