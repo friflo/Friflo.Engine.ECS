@@ -39,15 +39,14 @@ Fastest C# ECS proven by several benchmarks.
 
 ## Feature highlights
 
-
 - [x] Simple API - no boilerplate, rock-solid 🗿 and bulletproof 🛡️
 - [x] High-performance 🔥 compact ECS
-- [x] Low memory footprint 👣 create 100.000.000 entities in 1.5 sec
+- [x] Low memory footprint 👣. Create 100.000.000 entities in 1.5 sec
 - [x] Zero ⦰ allocations after buffers are large enough. No struct boxing
 - [x] High performant / type-safe queries ∈
 - [x] Efficient multithreaded queries ⇶
-- [x] Fully reactive ⚡
-- [x] Search O(1) 🔎
+- [x] Fully reactive / entity events ⚡
+- [x] Entity component Search in O(1) 🔎 
 - [x] Fast batch / bulk operations ⫴
 - [x] Command buffers ⋙
 - [x] Entity relationships and relations ⌘
