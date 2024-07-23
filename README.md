@@ -36,10 +36,11 @@ Fastest 🔥 C# ECS proven by several benchmarks.
 
 ## Feature highlights
 
-- [x] Simple API - no boilerplate, rock-solid 🗿 and bulletproof 🔫
+
+- [x] Simple API - no boilerplate, rock-solid 🗿 and bulletproof 🛡️
 - [x] High-performance 🔥 compact ECS
 - [x] Low memory footprint 👣 create 100.000.000 entities in 1.5 sec
-- [x] Zero ⭕ allocations after buffers grown large enough. No struct boxing
+- [x] Zero ⦰ allocations after buffers are large enough. No struct boxing
 - [x] Fully reactive ⚡
 - [x] Entity relationships and relations ⌘
 - [x] Entity hierarchy / tree 🞱
@@ -48,7 +49,7 @@ Fastest 🔥 C# ECS proven by several benchmarks.
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
-- [x] **100% secure C#** 🔒. No *unsafe code*. No *native dll bindings*. No *access violation* bugs. 
+- [x] **100% secure C#** 🔒. No *unsafe code*, *native dll bindings* and *access violations*. 
   See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
 
 
