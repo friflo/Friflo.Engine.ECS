@@ -13,9 +13,10 @@
 Leading performance in most ECS aspects.  
 See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXhiQJpY-VuNxocxaxPKGTJYQL72Zcbrvq0CcY).
 
-|                           | friflo ECS | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam [^*]| DefaultEcs[^*]| Morpeh[^*]|
-| ------------------------- | ----------:| ----------:| ----------:| ----------:| ----------:| ------------:| -------------:| ---------:|
-| Average Performance Ratio |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |         2.57 |          3.81 |     21.09 |
+|                           | friflo ECS | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
+| ------------------------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
+| Average Performance Ratio |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |       2.57 |       3.81 |      21.09 |
+|                           |            |            |            |            |            | [^*]       | [^*]       | [^*]       |
 
 [^*]:  Sparse Set based ECS projects.
 
