@@ -54,7 +54,7 @@ See [C# ECS Benchmark Overview](https://docs.google.com/spreadsheets/d/1170ZjOXh
 - [x] Fast batch / bulk operations ⫴
 - [x] Command buffers / deferred operations ⋙
 - [x] Entity relationships and relations ⌘
-- [x] Entity hierarchy / tree 🞯
+- [x] Entity hierarchy / tree ⪪
 - [x] Systems / System groups ⚙️
 - [x] Watch entities, components, tags, query results and systems in debugger 🐞
 - [x] JSON Serialization 💿
