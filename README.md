@@ -7,7 +7,7 @@
 [![stars](https://img.shields.io/github/stars/friflo/Friflo.Json.Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox)
 
 
-# C# ECS - Friflo.Engine.ECS
+# 📦 Friflo.Engine.ECS
 
 *The C# ECS for finishers 🏁*  
 Fastest 🔥 C# ECS proven by several benchmarks.
@@ -26,10 +26,10 @@ Fastest 🔥 C# ECS proven by several benchmarks.
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
   - [ECS definition](#ecs-definition)
-* [🚀 Examples](#-examples)
-  - [⏩ Hello World](#-hello-world)
+* [⏩ Examples](#-examples)
+  - [🚀 Hello World](#-hello-world)
   - [⌘ Component Types](#-component-types)
-  - [⚙️ Systems](#-systems)
+  - [⚙️ Systems](#️-systems)
 * [📖 Wiki](#-wiki)
 * [🏁 Benchmarks](#-ecs-benchmarks)
 
@@ -113,7 +113,7 @@ An ECS provide two strengths:
 
 <br/>
 
-# 🚀 Examples
+# ⏩ Examples
 
 This section contains two typical use cases when using an ECS.  
 More examples are in the GitHub Wiki.
@@ -125,7 +125,7 @@ Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer
 Provide techniques how to improve ECS performance.
 
 
-## **⏩ Hello World**
+## **🚀 Hello World**
 
 The hello world examples demonstrates the creation of a world, some entities with components  
 and their movement using a simple `ForEachEntity()` call.  
@@ -187,7 +187,7 @@ for the challenge to improve the feature set and performance of this project!
 <br/>
 
 
-## ⚙️ **Systems**
+## **⚙️ Systems**
 
 Systems are new in **Friflo.Engine.ECS v2.0.0**
 
@@ -260,7 +260,7 @@ class PulseSystem : QuerySystem<Scale3>
 }
 ```
 
-### System monitoring
+### ⏱ System monitoring
 
 System performance monitoring is disabled by default.  
 To enable monitoring call:
