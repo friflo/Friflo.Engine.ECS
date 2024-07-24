@@ -1,0 +1,42 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Classes="ComponentField"
+             x:Class="Friflo.Editor.UI.Inspector.Vector3Field"
+             xmlns:local="clr-namespace:Friflo.Editor.UI.Inspector"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="30">
+
+    <Grid HorizontalAlignment="Stretch" Height="22"
+          ColumnDefinitions="15, *, 15, *, 15, *" RowDefinitions="*">
+        
+        <TextBlock  Grid.Row="0" Grid.Column="0" 
+                    VerticalAlignment="Center" Margin="2 1 0 0"
+                    Text="x"/>
+        <DockPanel Grid.Row="0" Grid.Column="1">
+            <Border     Background="Red" Classes="PositionBorder"/>
+            <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
+                        Text="{Binding $parent[local:Vector3Field].X}"/>
+        </DockPanel>
+        
+        <TextBlock  Grid.Row="0" Grid.Column="2" 
+                    VerticalAlignment="Center" Margin="2 1 0 0"
+                    Text="y"/>
+        <DockPanel Grid.Row="0" Grid.Column="3">
+            <Border     Background="Green" Classes="PositionBorder"/>
+            <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
+                        Text="{Binding $parent[local:Vector3Field].Y}"/>
+        </DockPanel>
+
+        <TextBlock  Grid.Row="0" Grid.Column="4" 
+                    VerticalAlignment="Center" Margin="2 1 0 0"
+                    Text="z"/>
+        <DockPanel Grid.Row="0" Grid.Column="5">
+            <Border     Background="Blue" Classes="PositionBorder"/>
+            <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
+                        Text="{Binding $parent[local:Vector3Field].Z}"/>
+        </DockPanel>
+       
+    </Grid>
+
+</UserControl>

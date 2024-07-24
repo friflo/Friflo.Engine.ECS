@@ -1,0 +1,17 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
+
+             x:Class="Friflo.Editor.UI.Panels.InspectorPanel"
+             xmlns:inspector ="using:Friflo.Editor.UI.Inspector"
+             xmlns:panels="clr-namespace:Friflo.Editor.UI.Panels"
+             >
+    <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground}">
+    <DockPanel >
+        <panels:PanelHeader PanelTitle="Inspector" DockPanel.Dock="Top"/>
+        <inspector:InspectorControl/>
+    </DockPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,104 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:inspector="clr-namespace:Friflo.Editor.UI.Inspector"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
+             x:Class="Friflo.Editor.UI.Inspector.InspectorControl"
+             x:DataType     ="inspector:InspectorControlModel">
+
+    <DockPanel>
+        
+    <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+        <TextBlock Text="id" Margin="10 0"
+                   Foreground="{DynamicResource GroupColor}"/>
+        <TextBox Text="{Binding EntityId}" IsReadOnly="True" Width="80"
+                 Margin="0" Padding="3 0" MinHeight="1" MaxHeight="22" BorderThickness="0"
+                 Foreground="{DynamicResource GroupColor}"/>
+    </StackPanel>
+    <Border DockPanel.Dock="Top" Height="1"  Background="{DynamicResource FromBackground}"/>
+        
+    <ScrollViewer>
+    <StackPanel>
+        
+        <inspector:InspectorGroup Name="TagGroup" GroupName="tags" Expand="{Binding #TagSet}"
+                                  Count="{Binding TagCount}"/>
+        <inspector:InspectorTagSet Name="TagSet"
+                                   IsVisible="{Binding TagCount}">
+        <StackPanel IsVisible="{Binding #TagGroup.Expanded}" HorizontalAlignment="Stretch">
+            <WrapPanel Name="Tags" Orientation="Horizontal" ItemWidth="98" HorizontalAlignment="Center">
+                <inspector:InspectorTag TagName="Player"/>
+                <inspector:InspectorTag TagName="Moveable"/>
+                <inspector:InspectorTag TagName="Destroyable"/>
+                <inspector:InspectorTag TagName="Tag 4"/>
+            </WrapPanel>
+            <inspector:Separator/>
+        </StackPanel>
+        </inspector:InspectorTagSet>
+
+        <inspector:InspectorGroup Name="ComponentGroup" GroupName="components" Expand="{Binding #Components}"
+                                  Count="{Binding ComponentCount}"/>
+        <StackPanel Name="Components" Background="{DynamicResource FromBackground}"
+                    IsVisible="{Binding #ComponentGroup.Expanded}">
+            <inspector:InspectorComponent Name="Comp1" ComponentTitle="EntityName"/>
+            <StackPanel IsVisible="{Binding #Comp1.Expanded}">
+                <DockPanel >
+                    <inspector:FieldLabel Text="field 1"/>
+                    <inspector:StringField Value="value 1"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
+            
+            <inspector:InspectorComponent Name="Comp2" ComponentTitle="Transform"/>
+            <StackPanel IsVisible="{Binding #Comp2.Expanded}">
+                <DockPanel>
+                    <inspector:FieldLabel Text="position"/>
+                    <inspector:Vector3Field X="1" Y="2" Z="3"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldLabel Text="field 2"/>
+                    <inspector:StringField Value="value 2"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
+            
+            <inspector:InspectorComponent Name="Comp3" ComponentTitle="Material"/>
+            <StackPanel IsVisible="{Binding #Comp3.Expanded}">
+                <DockPanel>
+                    <inspector:FieldLabel Text="field 1"/>
+                    <inspector:StringField Value="value 1"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldLabel Text="field 2"/>
+                    <inspector:StringField Value="value 2"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldLabel Text="field 3"/>
+                    <inspector:StringField Value="value 3"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
+        </StackPanel>
+        
+        <inspector:InspectorGroup Name="ScriptGroup" GroupName="scripts" Expand="{Binding #Scripts}"
+                                  Count="{Binding ScriptCount}"/>
+        <StackPanel Name="Scripts" Background="{DynamicResource FromBackground}"
+                    IsVisible="{Binding #ScriptGroup.Expanded}">
+            <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
+            <StackPanel IsVisible="{Binding #Script1.Expanded}">
+                <DockPanel>
+                    <inspector:FieldLabel Text="field 1"/>
+                    <inspector:StringField Value="value 1"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldLabel Text="field 2"/>
+                    <inspector:StringField Value="value 2"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
+        </StackPanel>
+
+    </StackPanel>
+    </ScrollViewer>
+    </DockPanel>
+</UserControl>

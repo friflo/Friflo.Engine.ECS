@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <CodeCoverage>
+        <!-- Match assembly file paths: -->
+        <ModulePaths>
+            <Include>
+                <ModulePath>Friflo.Engine.ECS.dll</ModulePath>
+                <!-- Add more ModulePath nodes here. -->
+            </Include>
+        </ModulePaths>
+    </CodeCoverage>
+</Configuration>

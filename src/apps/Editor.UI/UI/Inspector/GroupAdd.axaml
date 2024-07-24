@@ -1,0 +1,22 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Editor.UI.Inspector.GroupAdd"
+             Width="200" Height="300"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
+    <StackPanel>
+        <TextBox Margin="3" Padding="5 2" Height="22" MinHeight="1"/>
+        <ListBox Name="List">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="5 1" />
+                    <Setter Property="Height" Value="22" />
+                </Style>
+            </ListBox.Styles>
+            <ListBoxItem Content="111"/>
+            <ListBoxItem Content="222"/>
+            <ListBoxItem Content="333"/>
+        </ListBox>
+    </StackPanel>
+</UserControl>

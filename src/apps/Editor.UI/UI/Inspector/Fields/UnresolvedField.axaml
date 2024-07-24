@@ -1,0 +1,47 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Editor.UI.Inspector.UnresolvedField"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
+
+    <StackPanel>
+        <StackPanel IsVisible="{Binding #Tags.ItemCount}">
+            <TextBlock Text="tags" Margin="10 0 0 0"/>
+            <ListBox Name="Tags" Margin="20 0 0 0" Background="Transparent">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding"              Value="5 0"/>
+                        <Setter Property="Margin"               Value="2 1 0 0"/>
+                        <Setter Property="Height"               Value="17" />
+                        <Setter Property="Width"                Value="94" />
+                        <Setter Property="HorizontalAlignment"  Value="Left" />
+                        <Setter Property="CornerRadius"         Value="6" />
+                        <Setter Property="Background"           Value="{DynamicResource ComponentBackground}" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBoxItem Content="FooTag"></ListBoxItem>
+                <ListBoxItem Content="BarTag"></ListBoxItem>
+            </ListBox>
+        </StackPanel>
+        
+        <StackPanel IsVisible="{Binding #Components.ItemCount}">
+            <TextBlock Text="components" Margin="10 0 0 0"/>
+            <ListBox Name="Components" Margin="20 0 0 0" Background="Transparent">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding"              Value="5 0" />
+                        <Setter Property="Margin"               Value="2 1 0 0"/>
+                        <Setter Property="Height"               Value="20" />
+                        <Setter Property="Width"                Value="94" />
+                        <Setter Property="HorizontalAlignment"  Value="Left" />
+                        <Setter Property="Background"           Value="{DynamicResource ComponentBackground}" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBoxItem Content="foo"></ListBoxItem>
+                <ListBoxItem Content="bar"></ListBoxItem>
+            </ListBox>
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

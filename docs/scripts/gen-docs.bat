@@ -1,0 +1,3 @@
+defaultdocumentation -j ./docs-config.json
+
+rem set /p DUMMY=Hit ENTER to continue...

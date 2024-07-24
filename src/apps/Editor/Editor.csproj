@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <GenerateProgramFile>true</GenerateProgramFile>
+        <RootNamespace>Friflo.Editor</RootNamespace>
+        
+        <!-- Avalionia specific -->
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <AssemblyName>Friflo.Editor</AssemblyName>
+
+        <!-- packaging -->
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <!-- packaging: end -->
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Editor.UI\Editor.UI.csproj" />
+      <ProjectReference Include="..\OpenGL\Engine.OpenGL.csproj" />
+      <ProjectReference Include="..\..\Hub\Engine.Hub.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="1.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Include="Assets\Avalonia\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Assets\Shader\**\*.*">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+
+        <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
+        <!--<PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />-->
+
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
+    </ItemGroup>
+
+    <!-- Copy XML files from all PackageReferences to output dir -->
+    <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
+        <ItemGroup>
+        <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+        </ItemGroup>
+    </Target>
+
+    <ItemGroup>
+      <None Remove="**/*.csproj.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+    
+      <Compile Update="UI\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+
+    </ItemGroup>
+
+
+</Project>

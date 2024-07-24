@@ -1,0 +1,44 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Editor.UI.Inspector.InspectorComponent"
+             xmlns:local="clr-namespace:Friflo.Editor.UI.Inspector"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100">
+
+    <StackPanel Background="{DynamicResource FromBackground}">
+        <Border Margin="0 0 0 0" Height="20" Background="{DynamicResource ComponentBackground}">
+            <DockPanel>
+                <Border Width="20" DockPanel.Dock="Left">
+                    <ToggleButton Margin="4 0 0 0" Height="14" Width="14" FontSize="4"
+                                  IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
+                    </ToggleButton>
+                </Border>
+                <Border Margin="0 0 18 0"
+                        DockPanel.Dock="Right">
+                    <Button Background="{DynamicResource ComponentBackground}"
+                            Content="..." 
+                            BorderThickness="0" CornerRadius="2"
+                            Margin="0 1" Padding="3 1">
+                        <Button.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedRight">
+                                <MenuItem Header="Remove" Click="MenuItem_RemoveComponent"/>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </Border>
+                <Border>
+                    <Button Background="{DynamicResource ComponentBackground}"
+                            Content="{Binding $parent[local:InspectorComponent].ComponentTitle}"
+                            BorderThickness="0" CornerRadius="2"
+                            Margin="6 1 0 1" Padding="1"
+                            Click="Button_OnClick"
+                            Classes="ComponentTitle">
+                    </Button>
+                </Border>
+            </DockPanel>
+        </Border>
+        <local:Separator    IsVisible="{Binding !$parent[local:InspectorComponent].Expanded}"
+                            Height="1"  Background="{DynamicResource FromBackground}"/>
+    </StackPanel>
+</UserControl>

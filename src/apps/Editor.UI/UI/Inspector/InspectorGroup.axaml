@@ -1,0 +1,49 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Editor.UI.Inspector.InspectorGroup"
+             xmlns:local="clr-namespace:Friflo.Editor.UI.Inspector"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100">
+
+    
+    <StackPanel>
+        <Border Margin="0" Height="20" Background="{DynamicResource PanelBackground}">
+            <DockPanel>
+                <Border Margin="0 0 18 0" BorderThickness="0" 
+                        DockPanel.Dock="Right">
+                    <Button Name="Add"
+                            Classes="GreenButton"
+                            Content="add"
+                            HorizontalAlignment="Stretch"
+                            BorderThickness="0" CornerRadius="2"
+                            Margin="0" Padding="3 -1">
+                        <Button.Flyout>
+                            <Flyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="InspectorFlyout">
+                                <local:GroupAdd Name="GroupAdd" />
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </Border>
+                <Border>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  VerticalAlignment="Center"
+                                    TextAlignment="Right"
+                                    Width="15"  Margin="0 1 0 0 "
+                                    Foreground="{DynamicResource GroupColor}"
+                                    Text="{Binding $parent[local:InspectorGroup].Count}"/>
+                        <Button Background="{DynamicResource PanelBackground}"
+                                Foreground="{DynamicResource GroupColor}"
+                                Content="{Binding $parent[local:InspectorGroup].GroupName}"
+                                BorderThickness="0" CornerRadius="2"
+                                Margin="4 1 0 1" Padding="1"
+                                Click="Button_OnClick"
+                                Classes="ComponentTitle">
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <local:Separator    Height="1"  Background="{DynamicResource FromBackground}"/>
+    </StackPanel>
+</UserControl>

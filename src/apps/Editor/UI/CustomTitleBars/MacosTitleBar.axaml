@@ -1,0 +1,136 @@
+﻿<!-- template project: https://github.com/FrankenApps/Avalonia-CustomTitleBarTemplate -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CustomTitleBarTemplate.Views.CustomTitleBars.MacosTitleBar"
+             DockPanel.Dock="Top"
+             Height="30">
+  <Grid>
+    <DockPanel Background="{DynamicResource MacOsTitleBarBackground}"
+               IsHitTestVisible="False"
+               Name="TitleBarBackground">
+      <!--#3E3E40-->
+      <!--#DEE1E6-->
+    </DockPanel>
+    <DockPanel>
+      <!--
+      <StackPanel Orientation="Horizontal"
+                  DockPanel.Dock="Left"
+                  Spacing="6"
+                  Margin="6,0,0,0"
+                  Background="Transparent">
+        <StackPanel.Styles>
+          <Style Selector="StackPanel:pointerover Path">
+            <Setter Property="IsVisible" Value="true"></Setter>
+          </Style>
+          <Style Selector="StackPanel:not(:pointerover) Path">
+            <Setter Property="IsVisible" Value="false"></Setter>
+          </Style>
+        </StackPanel.Styles>
+        <Button Name="CloseButton"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                VerticalAlignment="Center"
+                Width="24"
+                Height="24">
+          <Button.Resources>
+            <CornerRadius x:Key="ControlCornerRadius">12</CornerRadius>
+          </Button.Resources>
+          <Button.Styles>
+            <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="#99FF5D55"/>
+            </Style>
+            <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="#FF5D55"/>
+            </Style>
+          </Button.Styles>
+
+          <Path Data="M 0,0 l 12,12 M 0,12 l 12,-12"
+                Stroke="#4C0102"
+                StrokeThickness="1"
+                Width="12"
+                Height="12"></Path>
+        </Button>
+
+        <Button Name="MinimizeButton"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                VerticalAlignment="Center"
+                Width="24"
+                Height="24">
+          <Button.Resources>
+            <CornerRadius x:Key="ControlCornerRadius">12</CornerRadius>
+          </Button.Resources>
+          <Button.Styles>
+            <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="#99FFBC2E"/>
+            </Style>
+            <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="#FFBC2E"/>
+            </Style>
+          </Button.Styles>
+
+          <Path Data="M 0,0 l 16,0"
+                Stroke="#985712"
+                StrokeThickness="1"
+                Width="16"
+                Height="1"></Path>
+        </Button>
+
+        <Button Name="ZoomButton"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                VerticalAlignment="Center"
+                Width="24"
+                Height="24">
+          <Button.Resources>
+            <CornerRadius x:Key="ControlCornerRadius">12</CornerRadius>
+          </Button.Resources>
+          <Button.Styles>
+            <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="#9928C83E"/>
+            </Style>
+            <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Background" Value="#28C83E"/>
+            </Style>
+          </Button.Styles>
+
+          <Path Data="M 0,12 l 9,0 l -9,-9 l 0,9 M 12,0 l 0,9 l -9,-9 l 9,0"
+                Fill="#0A630C"
+                StrokeThickness="0"
+                Width="12"
+                Height="12"></Path>
+        </Button>
+
+      </StackPanel>
+      -->
+
+      <StackPanel Orientation="Horizontal"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Spacing="6"
+                  IsHitTestVisible="False"
+                  IsVisible="True"
+                  Name="TitleAndWindowIconWrapper">
+        <StackPanel.RenderTransform>
+          <TranslateTransform X="-33"
+                              Y="0"></TranslateTransform>
+        </StackPanel.RenderTransform>
+        <Image Source="/Assets/Avalonia/Images/Icon.ico"
+               Height="25"
+               Width="25"></Image>
+        <TextBlock Text="Fliox Editor"
+
+                   VerticalAlignment="Center"
+                   Foreground="{DynamicResource MacOsWindowTitleColor}">
+          <!--#999EA1-->
+          <!--#4D4D4D-->
+        </TextBlock>
+      </StackPanel>
+    </DockPanel>
+  </Grid>
+  
+  
+</UserControl>

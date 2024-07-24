@@ -1,0 +1,160 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:Friflo.Editor.UI"
+             x:Class="Friflo.Editor.UI.App"
+             RequestedThemeVariant="Default">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+        <!-- Set global styles https://docs.avaloniaui.net/docs/styling/styles -->
+        <Style Selector="MenuFlyoutPresenter.editorMenuFlyout">
+            <!-- <Setter Property="Background" Value="Red" /> -->
+            <!-- Workaround for non transparent rounded corners. Required if OverlayPopups = false -->
+            <!-- <Setter Property="CornerRadius" Value="0" /> -->
+        </Style>
+        <Style Selector="Button.ComponentTitle">
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="TextBox.EditField">
+            <Setter Property="MinHeight"        Value="1" />
+            <Setter Property="Height"           Value="22" />
+            <Setter Property="MaxHeight"        Value="22" />
+            <Setter Property="Margin"           Value="2 1 6 0" />
+            <Setter Property="Padding"          Value="3 3 3 0" />
+            <Setter Property="BorderThickness"  Value="0" />
+            <Setter Property="BorderBrush"      Value="{DynamicResource ComponentBackground}" />
+            <Setter Property="Background"       Value="{DynamicResource EditBackground}" />
+        </Style>
+        <Style Selector=":is(Layoutable).ComponentField">
+            <Setter Property="HorizontalAlignment"  Value="Right" />
+            <Setter Property="Width"                Value="200" />
+        </Style>
+        <Style Selector="Border.PositionBorder">
+            <Setter Property="Width"        Value="2" />
+            <Setter Property="Height"       Value="20" />
+            <Setter Property="MaxHeight"    Value="20" />
+            <Setter Property="Margin"       Value="0 1 0 0" />
+            <Setter Property="CornerRadius" Value="2 0 0 2" />
+        </Style>
+        <Style Selector="TextBox.PositionEdit">
+            <Setter Property="Height"       Value="20" />
+            <Setter Property="MaxHeight"    Value="20" />
+            <Setter Property="Margin"       Value="0 1 6 0" />
+            <Setter Property="Padding"      Value="4 2 2 0" />
+            <Setter Property="CornerRadius" Value="0 2 2 0" />
+        </Style>
+        
+
+        <Style Selector="Button.Transparent">
+            <Setter Property="Background"   Value="Transparent" />
+            <Setter Property="Opacity"      Value="0.5" />
+        </Style>
+        <Style Selector="Button.GreenButton">
+            <Setter Property="Background"   Value="#00a000" />
+            <Setter Property="Foreground"   Value="#ffffff" />
+            <Setter Property="Opacity"      Value="1" />
+        </Style>
+        <Style Selector="Button.GreenButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"   Value="#00d000"/>
+            <Setter Property="Foreground"   Value="#ffffff" />
+        </Style>
+        <Style Selector="Button.GreenButton:pressed /template/ ContentPresenter">
+            <Setter Property="Background"   Value="#007000"/>
+        </Style>
+        
+        <Style Selector="TextBlock.Hyperlink:pointerover">
+            <Setter Property="TextDecorations"   Value="Underline"/>
+        </Style>
+        
+        <Style Selector="FlyoutPresenter.InspectorFlyout">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+        
+        <!--
+        Notes to:  <Style Selector="DataValidationErrors">
+        [Data Validation | Avalonia UI > Customize the appearance of the validation message]
+        https://docs.avaloniaui.net/docs/data-binding/data-validation#customize-the-appearance-of-the-validation-message
+        
+        Modified access to "{Binding}" within <Setter Property="ErrorTemplate">
+        https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/DataValidationErrors.xaml#L52-L54
+        -->
+        <Style Selector="DataValidationErrors">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True">
+                        <ContentControl     DockPanel.Dock="Right"
+                                            ContentTemplate="{TemplateBinding ErrorTemplate}"
+                                            DataContext="{TemplateBinding Owner}"
+                                            Content="{Binding (DataValidationErrors.Errors)}"
+                                            IsVisible="{Binding (DataValidationErrors.HasErrors)}"/>
+                        <ContentPresenter   Name="PART_ContentPresenter"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="{TemplateBinding CornerRadius}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"/>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter>
+            <Setter Property="ErrorTemplate">
+                <DataTemplate>
+                    <Canvas Width="15" Height="14" Margin="2 0 0 0" Background="Transparent">
+                        <Canvas.Styles>
+                            <Style Selector="ToolTip">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderBrush" Value="Red"/>
+                            </Style>
+                        </Canvas.Styles>
+                       
+                        <ToolTip.Tip >
+                            <DockPanel>
+                                <ui:ValidationError x:DataType="DataValidationErrors" ItemsSource="{Binding}"/>
+                            </DockPanel>
+                        </ToolTip.Tip>
+
+                        <Path Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2" 
+                              Stroke="Red" Fill="White" StrokeThickness="2"/>
+                    </Canvas>
+                </DataTemplate>
+            </Setter>
+        </Style>
+
+
+
+        
+    </Application.Styles>
+    <Application.Resources>
+        <ResourceDictionary>
+            <CornerRadius x:Key='Radius'>4</CornerRadius>
+            <CornerRadius x:Key='RadiusTop'>4 0</CornerRadius>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key='Light'>
+                    <SolidColorBrush x:Key='AppBackground'>#F1E8FF</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBackground'>#ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key='FromBackground'>#ececec</SolidColorBrush>
+                    <SolidColorBrush x:Key='EditBackground'>#fcfcfc</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelTitleBackground'>#f4f4f4</SolidColorBrush>
+                    <SolidColorBrush x:Key='ComponentBackground'>#d8d8d8</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBorder'>#dddddd</SolidColorBrush>
+                    <SolidColorBrush x:Key='GroupColor'>#606060</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key='Dark'>
+                    <SolidColorBrush x:Key='AppBackground'>#422A6D</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBackground'>#2c2c2c</SolidColorBrush>
+                    <SolidColorBrush x:Key='FromBackground'>#383838</SolidColorBrush>
+                    <SolidColorBrush x:Key='EditBackground'>#242424</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelTitleBackground'>#242424</SolidColorBrush>
+                    <SolidColorBrush x:Key='ComponentBackground'>#484848</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBorder'>#000000</SolidColorBrush>
+                    <SolidColorBrush x:Key='GroupColor'>#a0a0a0</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

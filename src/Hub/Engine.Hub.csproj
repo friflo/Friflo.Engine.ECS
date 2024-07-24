@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>library</OutputType>
+    <TargetFrameworks>net8.0;netstandard2.1</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>Friflo.Engine.Hub</RootNamespace>
+    <AssemblyName>Friflo.Engine.Hub</AssemblyName>
+    <LangVersion>12.0</LangVersion>
+
+    <!-- packaging -->
+    <PublishRepositoryUrl>false</PublishRepositoryUrl>
+    <!-- packaging: end -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Create XML documentation file. This file is used by the server to show command documentation -->
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ECS\Engine.ECS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Friflo.Json.Fliox.Hub" Version="1.0.2" />
+  </ItemGroup>
+
+</Project>

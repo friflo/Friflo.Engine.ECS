@@ -1,0 +1,127 @@
+﻿<!-- template project: https://github.com/FrankenApps/Avalonia-CustomTitleBarTemplate -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CustomTitleBarTemplate.Views.CustomTitleBars.WindowsTitleBar"
+             DockPanel.Dock="Top">
+  <StackPanel>
+    <Grid>
+    <!--The proper way would be not to use white as default, but somehow retrieve the users' window chrome color.-->
+      <DockPanel Background="White"
+                 IsHitTestVisible="False"
+                 Name="TitleBarBackground"></DockPanel>
+      <DockPanel Name="TitleBar">
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Left"
+                    Spacing="0">
+          <Image Source="/Assets/Avalonia/Images/Icon.ico"
+                 Height="20"
+                 Width="20"
+                 VerticalAlignment="Center"
+                 Margin="5,0,3,0"
+                 Name="WindowIcon"></Image>
+          <NativeMenuBar DockPanel.Dock="Top"
+                         Width="100"
+                         HorizontalAlignment="Left"
+                         Name="SeamlessMenuBar"></NativeMenuBar>
+          <TextBlock Text="Custom TitleBar Demo"
+                     FontSize="12"
+                     Foreground="Black"
+                     VerticalAlignment="Center"
+                     IsHitTestVisible="False"
+                     Name="SystemChromeTitle"></TextBlock>
+        </StackPanel>
+        <!--
+        <StackPanel Height="22" 
+					HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Spacing="0"
+					VerticalAlignment="Top">
+          <Button Width="46"
+				  VerticalAlignment="Stretch"
+                  HorizontalContentAlignment="Center"
+                  BorderThickness="0"
+                  Name="MinimizeButton"
+                  ToolTip.Tip="Minimize">
+            <Button.Resources>
+              <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+            </Button.Resources>
+            <Button.Styles>
+              <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#44AAAAAA"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent"/>
+              </Style>
+            </Button.Styles>
+            <Path Margin="10,0,10,0"
+                  Stretch="Uniform"
+				  VerticalAlignment="Center"
+                  Fill="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                  Data="M2048 1229v-205h-2048v205h2048z"></Path>
+          </Button>
+
+          <Button Width="46"
+                  VerticalAlignment="Stretch"
+                  BorderThickness="0"
+                  Name="MaximizeButton">
+            <ToolTip.Tip>
+              <ToolTip Content="Maximize"
+                       Name="MaximizeToolTip"></ToolTip>
+            </ToolTip.Tip>
+
+            <Button.Resources>
+              <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+            </Button.Resources>
+            <Button.Styles>
+              <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#44AAAAAA"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent"/>
+              </Style>
+            </Button.Styles>
+            <Path Margin="10,0,10,0"
+                  Stretch="Uniform"
+                  Fill="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                  Name="MaximizeIcon"
+                  Data="M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z"></Path>
+          </Button>
+
+          <Button Width="46"
+                  VerticalAlignment="Stretch"
+                  BorderThickness="0"
+                  Name="CloseButton"
+                  ToolTip.Tip="Close">
+            <Button.Resources>
+              <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+            </Button.Resources>
+            <Button.Styles>
+              <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Red"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent"/>
+              </Style>
+              <Style Selector="Button:pointerover > Path">
+                <Setter Property="Fill" Value="White"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) > Path">
+                <Setter Property="Fill" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+              </Style>
+            </Button.Styles>
+            <Path Margin="10,0,10,0"
+                  Stretch="Uniform"
+                  Data="M1169 1024l879 -879l-145 -145l-879 879l-879 -879l-145 145l879 879l-879 879l145 145l879 -879l879 879l145 -145z"></Path>
+          </Button>
+
+        </StackPanel>
+        -->
+      </DockPanel>
+    </Grid>
+    <NativeMenuBar HorizontalAlignment="Left"
+                   Name="DefaultMenuBar"></NativeMenuBar>
+  </StackPanel>
+</UserControl>
