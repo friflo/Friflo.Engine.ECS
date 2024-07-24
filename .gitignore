@@ -2,6 +2,7 @@
 
 bin/
 obj/
+.bin/
 
 .idea/
 .vs/
