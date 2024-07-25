@@ -7,7 +7,7 @@ using NUnit.Framework;
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
-// See: https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types
+// See: https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types
 public static class Component_Types
 {
 

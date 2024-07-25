@@ -26,7 +26,7 @@ public sealed class CommandBufferSynced : ICommandBuffer
 
     /// <summary>
     /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer">Example.</a>
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// When recording commands after calling <see cref="Playback"/>.<br/>

@@ -66,10 +66,10 @@ Average Performance Ratio - see [C# ECS Benchmark Overview](https://github.com/f
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
 - [x] **100% secure C#** 🔒. No *unsafe code*, *native dll bindings* and *access violations*. 
-  See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
+  See [Wiki ⋅ Library](https://friflo.gitbook.io/friflo.engine.ecs/package/library#assembly-dll).  
 
 
-Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
+Complete feature list at [Wiki ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
 
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
@@ -134,10 +134,10 @@ An ECS provide two strengths:
 This section contains two typical use cases when using an ECS.  
 More examples are in the GitHub Wiki.
 
-[**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General)  
+[**Examples - General**](https://friflo.gitbook.io/friflo.engine.ecs/examples/general)  
 Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and how to use them.
 
-[**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
+[**Examples - Optimization**](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization)  
 Provide techniques how to improve ECS performance.
 
 
@@ -163,9 +163,9 @@ public static void HelloWorld()
 ```
 In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
 See:
-[Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks),
-[Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job) and
-[Query Vectorization - SIMD](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd).  
+[Enumerate Query Chunks](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks),
+[Parallel Query Job](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job) and
+[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd).  
 All query optimizations are using the same `query` but with different enumeration techniques.
 
 <br/>
@@ -192,10 +192,10 @@ Use cases for relations:
 
 | Use case / Example                                                                                                        | Component interface type  | Description
 | ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Entity Relationships](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#entity-relationships)  | **Link Component**        | A single link on an entity referencing another entity
+| [Entity Relationships](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#entity-relationships)  | **Link Component**        | A single link on an entity referencing another entity
 |                                                                                                                           | **Link Relation**         | Multiple links on an entity referencing other entities
-| [Relations](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
-| [Search & Range queries](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Component-Types#search)              | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
+| [Relations](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
+| [Search & Range queries](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#search)              | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
@@ -216,7 +216,7 @@ Using Systems is optional but they have some significant advantages.
 
 - Enable chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes in a
   [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
-  Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
+  Each group provide a [CommandBuffer](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer).
 
 - A system can have state - fields or properties - which can be used as parameters in `OnUpdate()`.  
   The system state can be serialized to JSON.
@@ -316,23 +316,23 @@ entities            number of entities matching a QuerySystem
 
 The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
 
-- [**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General)  
+- [**Examples - General**](https://friflo.gitbook.io/friflo.engine.ecs/examples/general)  
   Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.  
   Contains an example for [Native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot) integration.
 
-- [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
+- [**Examples - Optimization**](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization)  
   Provide you techniques how to improve ECS performance.
 
-- [**Extensions**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Extensions)  
+- [**Extensions**](https://friflo.gitbook.io/friflo.engine.ecs/extensions/unity-extension)  
   Projects extending Friflo.Engine.ECS with additional features.
   
-- [**Features**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features)  
+- [**Features**](https://friflo.gitbook.io/friflo.engine.ecs/package/features)  
   Integration possibilities, a complete feature list and performance characteristics 🔥.
 
-- [**Library**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library)  
+- [**Library**](https://friflo.gitbook.io/friflo.engine.ecs/package/library)  
   List supported platforms, properties of the assembly dll and build statistics.
 
-- [**Release Notes**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Release-Notes)  
+- [**Release Notes**](https://friflo.gitbook.io/friflo.engine.ecs/package/release-notes)  
   List of changes of every release available on nuget.
 
 <br/>

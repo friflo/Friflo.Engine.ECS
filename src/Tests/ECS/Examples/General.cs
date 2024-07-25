@@ -11,7 +11,7 @@ using NUnit.Framework;
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
-// See: https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General
+// See: https://friflo.gitbook.io/friflo.engine.ecs/examples/general
 public static class General
 {
 
