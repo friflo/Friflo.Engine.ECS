@@ -28,4 +28,4 @@ More at GitHub [README.md](https://github.com/friflo/Friflo.Engine.ECS)
 
 - [Homepage](https://github.com/friflo/Friflo.Engine.ECS)
 - [NuGet Package](https://www.nuget.org/packages/Friflo.Engine.ECS/)
-- [License](https://github.com/friflo/Friflo.Json.Fliox/blob/main/LICENSE)
+- [License](https://github.com/friflo/Friflo.Engine.ECS/blob/main/LICENSE)
