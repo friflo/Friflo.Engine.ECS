@@ -25,6 +25,8 @@
         "Unity/UserSettings": true,
         
         // root files / folders
+        ".github": true,
+        ".gitattributes": true,
         "package-lock.json": true,
         "node_modules": true,
         "Directory.Build.props": false,
