@@ -1,0 +1,60 @@
+name: CD-Engine
+
+on:
+  push:
+    tags:
+    - 'engine-v*'
+  
+env:
+  PACKAGE_DIRECTORY: ${{ github.workspace }}/output
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.101
+    - name: Restore dependencies
+      working-directory: ./
+      run: dotnet restore
+
+    - name: Set VERSION from git tag 
+      run: |
+        TAG=${{ github.ref_name }}
+        echo TAG: ${TAG}
+        echo "VERSION=${TAG#engine-v}" >> $GITHUB_ENV     # remove prefix 'engine-v'
+
+    - name: Set FILE_VER from VERSION
+      run: |
+        echo VERSION: ${VERSION}
+        echo "FILE_VER=${VERSION%\-*}" >> $GITHUB_ENV     # remove suffix e.g. '-preview.1'
+
+    - name: Echo versions
+      run: |
+        echo package version: ${VERSION} FILE_VER: ${FILE_VER}
+
+    - name: Build
+      working-directory: ./
+      run: |
+        echo "GITHUB_ACTIONS=true" >> $GITHUB_ENV
+        dotnet build --no-restore /p:Version=${FILE_VER} /p:FileVersion=${FILE_VER} /p:AssemblyVersion=${FILE_VER} -c Release
+
+    - name: Test
+      working-directory: ./
+      run: dotnet test --no-build --verbosity normal -c Release
+
+    - name: Pack
+      working-directory: ./
+      run: dotnet pack --no-restore --no-build -p:PackageVersion=${VERSION} -p:SymbolPackageFormat=snupkg -p:PackageOutputPath=${{ env.PACKAGE_DIRECTORY }} -c Release
+
+    - name: Push
+      working-directory: ./
+      run: |
+        dotnet nuget push ${{ env.PACKAGE_DIRECTORY }}/Friflo.Engine.ECS.${VERSION}.nupkg                --source https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_AUTH_TOKEN }}
+
+    

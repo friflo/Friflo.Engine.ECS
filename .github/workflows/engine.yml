@@ -1,0 +1,37 @@
+name: CI-Engine
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.101
+
+    - name: Restore dependencies
+      working-directory: ./
+      run: dotnet restore
+
+    - name: Build
+      working-directory: ./
+      run: dotnet build --no-restore
+
+    - name: Test
+      working-directory: ./
+      run: dotnet test --no-build --verbosity normal
+
+
+
+
+    

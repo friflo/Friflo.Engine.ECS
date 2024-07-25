@@ -1,0 +1,42 @@
+name: Engine coverage
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.101
+
+    - name: Restore dependencies
+      working-directory: ./
+      run: dotnet restore
+
+    - name: Build
+      working-directory: ./
+      run: dotnet build --no-restore
+
+    - name: Install dotnet-coverage
+      run: dotnet tool install --global dotnet-coverage
+
+    - name: Test with coverage
+      working-directory: ./
+      run: dotnet-coverage collect -f cobertura -s docs/scripts/coverage.settings.xml -o "coverage.cobertura.xml" "dotnet test"
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.cobertura.xml
+        name: Friflo.Engine.ECS
+
+    
