@@ -4,7 +4,7 @@
 [![codecov](https://img.shields.io/codecov/c/gh/friflo/Friflo.Engine.ECS?logo=codecov&logoColor=white&label=codecov)](https://app.codecov.io/gh/friflo/Friflo.Engine.ECS/tree/main/src/ECS)
 [![CI-Engine](https://img.shields.io/github/actions/workflow/status/friflo/Friflo.Engine.ECS/.github%2Fworkflows%2Fengine.yml?logo=github&logoColor=white&label=CI)](https://github.com/friflo/Friflo.Engine.ECS/actions/workflows/engine.yml)
 [![C# API](https://img.shields.io/badge/C%23%20API-22aaaa)](https://github.com/friflo/Friflo.Engine-docs)
-[![Github Repo](https://img.shields.io/badge/Wiki-C200FF)](https://friflo.gitbook.io/friflo.engine.ecs)
+[![Wiki](https://img.shields.io/badge/Wiki-A200FF)](https://friflo.gitbook.io/friflo.engine.ecs)
 
 # 🔥 Friflo.Engine.ECS
 
