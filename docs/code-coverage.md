@@ -25,9 +25,6 @@ dotnet tool install -g dotnet-reportgenerator-globaltool
 
 ## Usage
 
-```
-cd ./Engine
-```
 
 Create single `coverage.cobertura.xml` file by running unit tests.  
 *Executes in ~ 7 second.*
