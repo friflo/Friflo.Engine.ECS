@@ -72,12 +72,12 @@ public static void QueryVectorization()
     foreach (var (component, entities) in query.Chunks)
     {
         // increment all MyComponent.value's. add = <1, 1, 1, 1, 1, 1, 1, 1>
-        var add     = Vector256.Create<int>(1);         // create int[8] vector - all values = 1
-        var values  = component.AsSpan256<int>();       // values.Length - multiple of 8
-        var step    = component.StepSpan256;            // step = 8
+        var add     = Vector256.Create<int>(1);     // create int[8] vector - all values = 1
+        var values  = component.AsSpan256<int>();   // values.Length - multiple of 8
+        var step    = component.StepSpan256;        // step = 8
         for (int n = 0; n < values.Length; n += step) {
             var slice   = values.Slice(n, step);
-            var result  = Vector256.Create<int>(slice) + add; // execute 8 add instructions in one CPU cycle
+            var result  = Vector256.Create<int>(slice) + add; // 8 add ops in one CPU cycle
             result.CopyTo(slice);
         }
     }
@@ -114,7 +114,7 @@ public static void CreateEntityBatch()
         .Add(new EntityName("test"))
         .Add(new Position(1,1,1))
         .CreateEntity();
-    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  "test"  [EntityName, Position]
+    Console.WriteLine($"{entity}");         // > id: 1  "test"  [EntityName, Position]
 
     // Create a batch - can be cached if needed.
     var batch = new CreateEntityBatch(store).AddTag<MyTag1>();
@@ -122,7 +122,7 @@ public static void CreateEntityBatch()
         batch.CreateEntity();
     }
     var taggedEntities = store.Query().AllTags(Tags.Get<MyTag1>());
-    Console.WriteLine(taggedEntities);                  // > Query: [#MyTag1]  Count: 10
+    Console.WriteLine(taggedEntities);      // > Query: [#MyTag1]  Count: 10
 }
 
 [Test]
@@ -136,7 +136,7 @@ public static void EntityBatch()
         .AddTag<MyTag1>()
         .Apply();
     
-    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [Position, #MyTag1]
+    Console.WriteLine($"entity: {entity}"); // > entity: id: 1  [Position, #MyTag1]
 }
 
 [Test]
@@ -151,7 +151,7 @@ public static void BulkBatch()
     store.Entities.ApplyBatch(batch);
     
     var query = store.Query<Position>().AllTags(Tags.Get<MyTag1>());
-    Console.WriteLine(query);                           // > Query: [Position, #MyTag1]  Count: 1000
+    Console.WriteLine(query);               // > Query: [Position, #MyTag1]  Count: 1000
     
     // Same as: store.Entities.ApplyBatch(batch) above
     foreach (var entity in store.Entities) {
@@ -174,14 +174,14 @@ public static void EntityList()
     var list = new EntityList(store);
     // Add root and all its children to the list
     list.AddTree(root);
-    Console.WriteLine($"list - {list}");                // > list - Count: 31
+    Console.WriteLine($"list - {list}");        // > list - Count: 31
     
     var batch = new EntityBatch();
     batch.Add(new Position());
     list.ApplyBatch(batch);
     
     var query = store.Query<Position>();
-    Console.WriteLine(query);                           // > Query: [Position]  Count: 31
+    Console.WriteLine(query);                   // > Query: [Position]  Count: 31
 }
 
 [Test]
@@ -202,9 +202,9 @@ public static void CommandBuffer()
     cb.Playback();
     
     var entity3 = store.GetEntityById(newEntity);
-    Console.WriteLine(entity1);                         // > id: 1  "changed entity"  [EntityName, #MyTag1]
-    Console.WriteLine(entity2);                         // > id: 2  (detached)
-    Console.WriteLine(entity3);                         // > id: 3  "new entity"  [EntityName]
+    Console.WriteLine(entity1);     // > id: 1  "changed entity"  [EntityName, #MyTag1]
+    Console.WriteLine(entity2);     // > id: 2  (detached)
+    Console.WriteLine(entity3);     // > id: 3  "new entity"  [EntityName]
 }
 
 }
