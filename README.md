@@ -23,7 +23,7 @@ Average Performance Ratio - see [C# ECS Benchmark Overview](https://github.com/f
 
 ## News
 
-- [x] ![new](docs/images/new.svg) **Friflo.Engine.ECS** is now developed in this new repository.  
+- [x] ![new](docs/images/new.svg) Finally **Friflo.Engine.ECS** is now in its own new repository!  
   The ECS is moved including its git history. Everything not related to the ECS is omitted.
 
 - [x] Released v3.0.0-preview.5  
