@@ -47,12 +47,12 @@ The Editor can be build and launched on Windows, macOS (both tested) and Linux (
 dotnet --version
 ```
 
-3. Clone git repository: https://github.com/friflo/Friflo.Json.Fliox
+3. Clone git repository: https://github.com/friflo/Friflo.Engine.ECS
 
-4. Navigate to folder: `./Engine/Editor`  
+4. Navigate to folder: `./src/apps/Editor`  
    Assuming you are in the root folder of the git repository.
 ```cmd
-cd ./Engine/Editor
+cd ./src/apps/Editor
 ```
 
 5. Build & Launch with
