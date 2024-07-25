@@ -35,23 +35,23 @@ public static void LinkComponents()
 {
     var store   = new EntityStore();
 
-    var entity1 = store.CreateEntity(1);                            //    link components
-    var entity2 = store.CreateEntity(2);                            //    symbolized as →
-    var entity3 = store.CreateEntity(3);                            //      1     2     3
+    var entity1 = store.CreateEntity(1);                            // link components
+    var entity2 = store.CreateEntity(2);                            // symbolized as →
+    var entity3 = store.CreateEntity(3);                            //   1     2     3
     
     // add a link component to entity (2) referencing entity (1)
-    entity2.AddComponent(new AttackComponent { target = entity1 }); //      1  ←  2     3
-    // get all incoming links of given type.    O(1)                //
-    entity1.GetIncomingLinks<AttackComponent>();                    // { 2 }
+    entity2.AddComponent(new AttackComponent { target = entity1 }); //   1  ←  2     3
+    // get all incoming links of given type.    O(1)
+    entity1.GetIncomingLinks<AttackComponent>();        // { 2 }
 
     // update link component of entity (2). It links now entity (3)
-    entity2.AddComponent(new AttackComponent { target = entity3 }); //      1     2  →  3
-    entity1.GetIncomingLinks<AttackComponent>();                    // { }
-    entity3.GetIncomingLinks<AttackComponent>();                    // { 2 }
+    entity2.AddComponent(new AttackComponent { target = entity3 }); //   1     2  →  3
+    entity1.GetIncomingLinks<AttackComponent>();        // { }
+    entity3.GetIncomingLinks<AttackComponent>();        // { 2 }
 
     // deleting a linked entity (3) removes all link components referencing it
-    entity3.DeleteEntity();                                         //            1     2
-    entity2.HasComponent    <AttackComponent>();                    // false
+    entity3.DeleteEntity();                                         //         1     2
+    entity2.HasComponent    <AttackComponent>();        // false
 }
 #endregion
 
@@ -83,29 +83,29 @@ public static void LinkRelations()
 {
     var store   = new EntityStore();
     
-    var entity1 = store.CreateEntity(1);                            //    link relations
-    var entity2 = store.CreateEntity(2);                            //    symbolized as →
-    var entity3 = store.CreateEntity(3);                            //      1     2     3
+    var entity1 = store.CreateEntity(1);                          // link relations
+    var entity2 = store.CreateEntity(2);                          // symbolized as →
+    var entity3 = store.CreateEntity(3);                          //   1     2     3
     
     // add a link relation to entity (2) referencing entity (1)
-    entity2.AddRelation(new AttackRelation { target = entity1 });   //      1  ←  2     3
-    // get all links added to the entity.       O(1)                //
-    entity2.GetRelations    <AttackRelation>();                     // { 1 }
-    // get all incoming links.                  O(1)                //
-    entity1.GetIncomingLinks<AttackRelation>();                     // { 2 }
+    entity2.AddRelation(new AttackRelation { target = entity1 }); //   1  ←  2     3
+    // get all links added to the entity. O(1)
+    entity2.GetRelations    <AttackRelation>();     // { 1 }
+    // get all incoming links. O(1)
+    entity1.GetIncomingLinks<AttackRelation>();     // { 2 }
     
     // add another one. An entity can have multiple link relations
-    entity2.AddRelation(new AttackRelation { target = entity3 });   //      1  ←  2  →  3
-    entity2.GetRelations    <AttackRelation>();                     // { 1, 3 }
-    entity3.GetIncomingLinks<AttackRelation>();                     // { 2 }
+    entity2.AddRelation(new AttackRelation { target = entity3 }); //   1  ←  2  →  3
+    entity2.GetRelations    <AttackRelation>();     // { 1, 3 }
+    entity3.GetIncomingLinks<AttackRelation>();     // { 2 }
     
     // deleting a linked entity (1) removes all link relations referencing it
-    entity1.DeleteEntity();                                         //            2  →  3
-    entity2.GetRelations    <AttackRelation>();                     // { 3 }
+    entity1.DeleteEntity();                                       //         2  →  3
+    entity2.GetRelations    <AttackRelation>();     // { 3 }
     
     // deleting entity (2) is reflected by incoming links query
-    entity2.DeleteEntity();                                         //                  3
-    entity3.GetIncomingLinks<AttackRelation>();                     // { }
+    entity2.DeleteEntity();                                       //               3
+    entity3.GetIncomingLinks<AttackRelation>();     // { }
 }
 #endregion
 
@@ -130,10 +130,10 @@ enum ItemType {
     Axe     = 2,
 }
 
-struct InventoryItem : IRelationComponent<ItemType> {   // relation key type: ItemType
+struct InventoryItem : IRelationComponent<ItemType> { // relation key type: ItemType
     public  ItemType    type;
     public  int         count;
-    public  ItemType    GetRelationKey() => type;       // unique relation key
+    public  ItemType    GetRelationKey() => type;     // unique relation key
 }
 
 [Test]
