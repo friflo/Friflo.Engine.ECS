@@ -12,7 +12,7 @@ using static Tests.Examples.HelloWorldExample;
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
-// See: https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
+// See: https://github.com/friflo/Friflo.Engine.ECS#-examples
 public static class HelloSystemExample
 {
 

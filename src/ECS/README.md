@@ -1,4 +1,4 @@
-# [![JSON Fliox](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/Json-Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md)    **Friflo.Engine.ECS** ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
+# [![JSON Fliox](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/Json-Fliox.svg)](https://github.com/friflo/Friflo.Engine.ECS)    **Friflo.Engine.ECS** ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
 
 
 ## Project
@@ -21,11 +21,11 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wiki
 - Library uses only secure and managed code. No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).  
   App / Game can access component chunks with native or unsafe code using `Span<>`s.
 
-More at GitHub [README.md](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md)
+More at GitHub [README.md](https://github.com/friflo/Friflo.Engine.ECS)
 
 
 ## Links
 
-- [Homepage](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md)
+- [Homepage](https://github.com/friflo/Friflo.Engine.ECS)
 - [NuGet Package](https://www.nuget.org/packages/Friflo.Engine.ECS/)
 - [License](https://github.com/friflo/Friflo.Json.Fliox/blob/main/LICENSE)
