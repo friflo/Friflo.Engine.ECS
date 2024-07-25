@@ -50,7 +50,7 @@ public static void LinkComponents()
     entity3.GetIncomingLinks<AttackComponent>();        // { 2 }
 
     // deleting a linked entity (3) removes all link components referencing it
-    entity3.DeleteEntity();                                         //         1     2
+    entity3.DeleteEntity();                                         //   1     2
     entity2.HasComponent    <AttackComponent>();        // false
 }
 #endregion
