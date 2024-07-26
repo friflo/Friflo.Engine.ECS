@@ -3,10 +3,11 @@
 [![nuget](https://img.shields.io/nuget/v/Friflo.Engine.ECS?logo=nuget&logoColor=white)](https://www.nuget.org/packages/Friflo.Engine.ECS)
 [![codecov](https://img.shields.io/codecov/c/gh/friflo/Friflo.Engine.ECS?logo=codecov&logoColor=white&label=codecov)](https://app.codecov.io/gh/friflo/Friflo.Engine.ECS/tree/main/src/ECS)
 [![CI-Engine](https://img.shields.io/github/actions/workflow/status/friflo/Friflo.Engine.ECS/.github%2Fworkflows%2Fengine.yml?logo=github&logoColor=white&label=CI)](https://github.com/friflo/Friflo.Engine.ECS/actions/workflows/engine.yml)
-[![C# API](https://img.shields.io/badge/C%23%20API-22aaaa)](https://github.com/friflo/Friflo.Engine-docs)
-[![Wiki](https://img.shields.io/badge/Wiki-A200FF)](https://friflo.gitbook.io/friflo.engine.ecs)
+[![C# API](https://img.shields.io/badge/C%23%20API-22aaaa?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine-docs)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/nFfrhgQkb8)
+[![Wiki](https://img.shields.io/badge/Wiki-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
 
-# 🔥 Friflo.Engine.ECS
+# Friflo.Engine.ECS
 
 ***The ECS for finishers 🏁***  
 Leading performance in most ECS aspects.  
@@ -31,7 +32,7 @@ Average Performance Ratio - see [C# ECS Benchmark Overview](https://github.com/f
 
 ## Contents
 
-* [🔥 Friflo.Engine.ECS](#-frifloengineecs)
+* [🔥 Friflo.Engine.ECS](#frifloengineecs)
   - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
