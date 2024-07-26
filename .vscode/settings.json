@@ -17,6 +17,15 @@
 		"**/*.meta": true,
         "**/*.csproj.xml": true,
 
+        // Tests-Unity files / folders
+        "src/Tests-Unity/*.csproj": true,
+        "src/Tests-Unity/Tests-Unity.sln": true,
+
+        "src/Tests-Unity/Library": true,
+        "src/Tests-Unity/Logs": true,
+        "src/Tests-Unity/Temp": true,
+        "src/Tests-Unity/UserSettings": true,
+
         // root files / folders
         ".github": true,
 
