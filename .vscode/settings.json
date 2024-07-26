@@ -17,19 +17,13 @@
 		"**/*.meta": true,
         "**/*.csproj.xml": true,
 
-        // Unity files / folders
-        "Unity/Unity.sln": true,
-        "Unity/*.csproj": true,
-        "Unity/Library": true,
-        "Unity/Logs": true,
-        "Unity/UserSettings": true,
-        
         // root files / folders
         ".github": true,
-        ".gitattributes": true,
-        "package-lock.json": true,
-        "node_modules": true,
-        "Directory.Build.props": false,
-        "yarn.lock": true
+
+        // src folder
+        "src/.cspell.json": true,
+        "src/.editorconfig": true,
+        "src/.gitattributes": true,
+        "src/package-icon.png": true,
     }
 }
