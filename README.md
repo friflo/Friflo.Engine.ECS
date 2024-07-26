@@ -26,7 +26,7 @@ Average Performance Ratio - see [C# ECS Benchmark Overview](https://github.com/f
   The ECS is moved including its git history. Everything not related to the ECS is omitted.
 
 - [x] Released v3.0.0-preview.5  
-  New: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** executing in O(1). See [Component Types](#-component-types)
+  New: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** in O(1). See [Component Types](#-component-types)
 
 - [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
