@@ -25,7 +25,7 @@ internal static class OpenGLTest
     private static readonly string VertexShaderSource = @"
         #version 330 core //Using version GLSL version 3.3
         layout (location = 0) in vec4 vPos;
-        
+
         void main()
         {
             gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
@@ -74,10 +74,10 @@ internal static class OpenGLTest
         window.Closing += OnClose;
 
         window.Run();
-            
+
         window.Dispose();
     }
-        
+
     internal static IWindow Init(string[] args)
     {
         var options = WindowOptions.Default;
@@ -92,15 +92,15 @@ internal static class OpenGLTest
         window.Closing += OnClose;
         return window;
     }
-        
+
     public class EventLoop
     {
         private bool stop;
-            
+
         public void Stop() {
             stop = true;
         }
-            
+
         /// <summary>Copy of <see cref="Silk.NET.Windowing.WindowExtensions.Run"/> </summary>
         public void RunEventLoop(IView view)
         {
@@ -134,7 +134,7 @@ internal static class OpenGLTest
         //     input.Keyboards[i].KeyDown += KeyDown;
         // }
 
-        //Getting the opengl api for drawing to the screen.
+        //Getting the OpenGL api for drawing to the screen.
         Gl = GL.GetApi(window);
 
         //Creating a vertex array.
@@ -200,7 +200,7 @@ internal static class OpenGLTest
         Gl.DeleteShader(vertexShader);
         Gl.DeleteShader(fragmentShader);
 
-        //Tell opengl how to give the data to the shaders.
+        //Tell OpenGL how to give the data to the shaders.
         Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
         Gl.EnableVertexAttribArray(0);
     }
@@ -232,7 +232,7 @@ internal static class OpenGLTest
         Gl.DeleteProgram(Shader);
     }
 
-    
+
     // private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
     // {
     //     if (arg2 == Key.Escape)

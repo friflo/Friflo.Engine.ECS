@@ -12,7 +12,7 @@ namespace Friflo.Editor.OpenGL
     {
         internal            Action      OpenGlReady;
         private             DrawTest    test;
-        
+
         protected override void OnOpenGlInit(GlInterface gl)
         {
             base.OnOpenGlInit(gl);
@@ -35,7 +35,7 @@ namespace Friflo.Editor.OpenGL
             var width   = Bounds.Width;
             var height  = Bounds.Height;
             test.OpenGlRender(width, height);
-            
+
             Dispatcher.UIThread.Post(RequestNextFrameRendering, DispatcherPriority.Background);
         }
     }

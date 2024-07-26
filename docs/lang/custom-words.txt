@@ -1,3 +1,4 @@
+apireference
 archs
 Avalonia
 bepu
@@ -6,12 +7,17 @@ blittable
 Browsable
 cobertura
 codecov
+defaultdocumentation
 Dependants
+Doraku
 Entitas
 fenn
 Flecs
 globaltool
+GLSL
+Grynwald
 Leopotam
+mddocs
 MemberwiseClone
 mklink
 Morpeh
