@@ -27,7 +27,7 @@ public static void CreateEntity()
     var store = new EntityStore();
     store.CreateEntity();
     store.CreateEntity();
-    
+
     foreach (var entity in store.Entities) {
         Console.WriteLine($"entity {entity}");
     }
@@ -52,10 +52,10 @@ public static void DisableEntity()
     var entity  = store.CreateEntity();
     entity.Enabled = false;
     Console.WriteLine(entity);                      // > id: 1  [#Disabled]
-    
+
     var query    = store.Query();
     Console.WriteLine($"default - {query}");        // > default - Query: []  Count: 0
-    
+
     var disabled = store.Query().WithDisabled();
     Console.WriteLine($"disabled - {disabled}");    // > disabled - Query: []  Count: 1
 }
@@ -70,17 +70,17 @@ public static void AddComponents()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
-    
+
     // add components
     entity.AddComponent(new EntityName("Hello World!"));// EntityName is build-in
     entity.AddComponent(new MyComponent { value = 42 });
     Console.WriteLine($"entity: {entity}");             // > entity: id: 1  "Hello World!"  [EntityName, Position]
-    
+
     // get component
     Console.WriteLine($"name: {entity.Name.value}");    // > name: Hello World!
     var value = entity.GetComponent<MyComponent>().value;
     Console.WriteLine($"MyComponent: {value}");         // > MyComponent: 42
-    
+
     // Serialize entity to JSON
     Console.WriteLine(entity.DebugJSON);
 }
@@ -94,7 +94,7 @@ public static void GetUniqueEntity()
 {
     var store   = new EntityStore();
     store.CreateEntity(new UniqueEntity("Player"));     // UniqueEntity is build-in
-    
+
     var player  = store.GetUniqueEntity("Player");
     Console.WriteLine($"entity: {player}");             // > entity: id: 1  [UniqueEntity]
 }
@@ -108,12 +108,12 @@ public static void AddTags()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
-    
+
     // add tags
     entity.AddTag<MyTag1>();
     entity.AddTag<MyTag2>();
     Console.WriteLine($"entity: {entity}");     // > entity: id: 1  [#MyTag1, #MyTag2]
-    
+
     // get tag
     var tag1 = entity.Tags.Has<MyTag1>();
     Console.WriteLine($"tag1: {tag1}");         // > tag1: True
@@ -127,20 +127,22 @@ public static void EntityQueries()
     store.CreateEntity(new EntityName("entity-1"));
     store.CreateEntity(new EntityName("entity-2"), Tags.Get<MyTag1>());
     store.CreateEntity(new EntityName("entity-3"), Tags.Get<MyTag1, MyTag2>());
-    
+
     // --- query components
     var queryNames = store.Query<EntityName>();
     queryNames.ForEachEntity((ref EntityName name, Entity entity) => {
         // ... 3 matches
     });
-    
     // --- query components with tags
     var namesWithTags  = store.Query<EntityName>().AllTags(Tags.Get<MyTag1, MyTag2>());
     namesWithTags.ForEachEntity((ref EntityName name, Entity entity) => {
         // ... 1 match
     });
+    // --- use query.Entities in case an iteration requires no component access
+    foreach (var entity in queryNames.Entities) {
+        // ... 3 matches
+    }
 }
-
 
 public class MyScript : Script { public int data; }
 
@@ -149,11 +151,11 @@ public static void AddScript()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
-    
+
     // add script
     entity.AddScript(new MyScript{ data = 123 });
     Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [*MyScript]
-    
+
     // get script
     var myScript = entity.GetScript<MyScript>();
     Console.WriteLine($"data: {myScript.data}");        // > data: 123
@@ -166,11 +168,11 @@ public static void AddChildEntities()
     var root    = store.CreateEntity();
     var child1  = store.CreateEntity();
     var child2  = store.CreateEntity();
-    
+
     // add child entities
     root.AddChild(child1);
     root.AddChild(child2);
-    
+
     Console.WriteLine($"entities: {root.ChildEntities}"); // > entities: Count: 2
 }
 
@@ -197,7 +199,7 @@ public static void AddSignalHandler()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
-    entity.AddSignalHandler<MySignal>(signal => { Console.WriteLine(signal); }); // > entity: 1 - signal > MySignal    
+    entity.AddSignalHandler<MySignal>(signal => { Console.WriteLine(signal); }); // > entity: 1 - signal > MySignal
     entity.EmitSignal(new MySignal());
 }
 
@@ -213,11 +215,11 @@ public static void JsonSerialization()
     var writeStream = new FileStream("entity-store.json", FileMode.Create);
     serializer.WriteStore(store, writeStream);
     writeStream.Close();
-    
+
     // --- Read JSON array into new store
     var targetStore = new EntityStore();
     serializer.ReadIntoStore(targetStore, new FileStream("entity-store.json", FileMode.Open));
-    
+
     Console.WriteLine($"entities: {targetStore.Count}"); // > entities: 2
 }
 
