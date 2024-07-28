@@ -14,6 +14,7 @@
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -32,6 +33,18 @@
   </metadata>
   <defs
      id="defs8427">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1012">
+      <stop
+         style="stop-color:#ff2a2a;stop-opacity:1;"
+         offset="0"
+         id="stop1008" />
+      <stop
+         style="stop-color:#ffcc00;stop-opacity:1;"
+         offset="1"
+         id="stop1010" />
+    </linearGradient>
     <defs
        id="defs8399">
       <filter
@@ -141,6 +154,16 @@
          result="composite2"
          id="feComposite12954-1" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1012"
+       id="linearGradient1014"
+       x1="41.174892"
+       y1="15.66222"
+       x2="81.494819"
+       y2="15.66222"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.4064704,0,0,1.4064704,-39.268785,23.132928)" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -156,8 +179,8 @@
      id="namedview8425"
      showgrid="false"
      inkscape:zoom="7.9903066"
-     inkscape:cx="25.280632"
-     inkscape:cy="37.858372"
+     inkscape:cx="48.433686"
+     inkscape:cy="41.738073"
      inkscape:window-x="-7"
      inkscape:window-y="-7"
      inkscape:window-maximized="1"
@@ -192,39 +215,6 @@
      y="31.737539"
      rx="2.3847828"
      ry="2.6249368" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:29.9928px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;fill:#ff2a2a;fill-opacity:1;stroke:none;stroke-width:0.156212px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="18.967857"
-     y="56.162552"
-     id="text2439"><tspan
-       sodipodi:role="line"
-       id="tspan2437"
-       x="18.967857"
-       y="56.162552"
-       style="stroke-width:0.156212px">E</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:29.9928px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:0.156212px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1"
-     x="37.209476"
-     y="55.83799"
-     id="text2439-6"><tspan
-       sodipodi:role="line"
-       id="tspan2437-8"
-       x="37.209476"
-       y="55.83799"
-       style="stroke-width:0.156212px">C</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:29.9928px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;fill:#ffcc00;fill-opacity:1;stroke:none;stroke-width:0.156212px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1"
-     x="57.631531"
-     y="55.782696"
-     id="text2439-6-4"><tspan
-       sodipodi:role="line"
-       id="tspan2437-8-2"
-       x="57.631531"
-       y="55.782696"
-       style="stroke-width:0.156212px;fill:#ffcc00">S</tspan></text>
   <path
      style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke-width:0.997554"
      inkscape:connector-curvature="0"
@@ -235,6 +225,17 @@
      inkscape:connector-curvature="0"
      id="path8421"
      d="m 5.6127202,11.932055 h 49.1129708 v 20.213934 h -49.1129708 z" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:30.0046px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:-1.40647px;word-spacing:0px;fill:url(#linearGradient1014);fill-opacity:1;stroke:none;stroke-width:1.40647px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="18.642481"
+     y="55.873039"
+     id="text933"><tspan
+       sodipodi:role="line"
+       id="tspan931"
+       x="18.642481"
+       y="55.873039"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:url(#linearGradient1014);fill-opacity:1;stroke-width:1.40647px">ECS</tspan></text>
   <g
      id="g2782"
      transform="matrix(0.15621239,0,0,0.15621239,0.05648307,-4.6288167)">
