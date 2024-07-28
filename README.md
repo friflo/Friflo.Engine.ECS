@@ -1,4 +1,4 @@
-[![friflo ECS](https://raw.githubusercontent.com/friflo/Friflo.Engine.ECS/main/docs/images/friflo-ECS.svg)](https://github.com/friflo/Friflo.Engine.ECS)   ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
+[![friflo ECS](docs/images/friflo-ECS.svg)](https://github.com/friflo/Friflo.Engine.ECS)   ![splash](docs/images/paint-splatter.svg)
 
 [![nuget](https://img.shields.io/nuget/v/Friflo.Engine.ECS?logo=nuget&logoColor=white)](https://www.nuget.org/packages/Friflo.Engine.ECS)
 [![codecov](https://img.shields.io/codecov/c/gh/friflo/Friflo.Engine.ECS?logo=codecov&logoColor=white&label=codecov)](https://app.codecov.io/gh/friflo/Friflo.Engine.ECS/tree/main/src/ECS)
