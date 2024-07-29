@@ -1,6 +1,6 @@
 <div align="center">
 
-  [![friflo ECS](docs/images/friflo-ECS.svg)](https://github.com/friflo/Friflo.Engine.ECS)        ![splash](docs/images/paint-splatter.svg)
+  [![friflo ECS](docs/images/friflo-ECS.svg)](https://github.com/friflo/Friflo.Engine.ECS)   ![splash](docs/images/paint-splatter.svg)
 
 </div>
 
