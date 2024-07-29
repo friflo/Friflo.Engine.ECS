@@ -141,6 +141,72 @@ public static class Test_StructHeap
     }
     
     [Test]
+    public static void Test_StructHeap_CreateEntity_RecycleIds()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        entity1.DeleteEntity();
+        entity2.DeleteEntity();
+        
+        entity2 = store.CreateEntity();
+        entity1 = store.CreateEntity();
+        
+        Assert.AreEqual(2, entity2.Id);
+        Assert.AreEqual(1, entity1.Id);
+        
+        entity1.DeleteEntity();
+        entity2.DeleteEntity();
+        
+        var type = store.GetArchetype(default);
+        var entities = type.CreateEntities(3);
+        
+        Assert.AreEqual(3, entities.Count);
+        Assert.AreEqual("{ 2, 1, 3 }", entities.Debug()); // recycle: 2, 1   new id: 3
+        
+        // --- cover case: recycled id is created manually
+        entities[0].DeleteEntity(); // id: 2
+        entity2 = store.CreateEntity(2);
+        Assert.AreEqual(2, entity2.Id);
+        
+        var entity4 = store.CreateEntity();
+        Assert.AreEqual(4, entity4.Id);
+    }
+    
+    [Test]
+    public static void Test_StructHeap_CreateEntity_RecycleIds_Perf()
+    {
+        int repeat      = 10; // 1_000_000;
+        int count       = 100;
+        // Entity count: 100, repeat: 1000000, duration: 4279 ms
+        var store       = new EntityStore();
+        var entities    = new Entity[count];
+        var sw          = new Stopwatch();
+        sw.Start();
+        var start = 0L;
+        for (int i = 0; i < repeat; i++)
+        {
+            for (int n = 0; n < count; n++) {
+                entities[n] = store.CreateEntity();
+            }
+            for (int n = 0; n < count; n++) {
+                entities[n].DeleteEntity();
+            }
+            if (i == 0) {
+                start = Mem.GetAllocatedBytes();
+            } else {
+                Mem.AssertNoAlloc(start);
+            }
+        }
+        for (int n = 0; n < count; n++) {
+            Mem.AreEqual(count - n, entities[n].Id);
+        }
+        Console.WriteLine($"Entity count: {count}, repeat: {repeat}, duration: {sw.ElapsedMilliseconds} ms");
+        Mem.AreEqual(0,     store.Count);
+        Mem.AreEqual(128,   store.Capacity);
+    }
+    
+    [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
         int repeat  = 10;     // 1000

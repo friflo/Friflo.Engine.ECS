@@ -118,6 +118,7 @@ public sealed partial class EntityStore : EntityStoreBase
     private struct Intern {
         internal readonly   PidType                 pidType;            //   4  - pid != id  /  pid == id
         internal            int                     sequenceId;         //   4  - incrementing id used for next new entity
+        internal            StackArray<int>         recycleIds;         //  16  - contains id of deleted entities
         //
         internal    SignalHandler[]                 signalHandlerMap;   //   8
         internal    List<SignalHandler>             signalHandlers;     //   8 
@@ -138,6 +139,7 @@ public sealed partial class EntityStore : EntityStoreBase
         {
             this.pidType        = pidType;
             sequenceId          = Static.MinNodeId - 1;
+            recycleIds          = new StackArray<int>(Array.Empty<int>());
             signalHandlerMap    = Array.Empty<SignalHandler>();
         }
     }

@@ -506,9 +506,13 @@ public static class Test_Entity_Tree
     {
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
+        // create / delete to resize recycleIds buffer. Enable AssertNoAlloc() below
+        var child   = store.CreateEntity(2);
+        child.DeleteEntity();
+        
         root.AddComponent(new EntityName("root"));
         store.SetStoreRoot(root);
-        var child       = store.CreateEntity(2);
+        child           = store.CreateEntity(2);
         var childPid    = child.Pid;
         AreEqual(2,         store.PidToId(childPid));
         AreEqual(childPid,  store.IdToPid(2));

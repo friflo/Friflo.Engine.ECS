@@ -9,12 +9,16 @@ namespace Friflo.Engine.ECS;
 
 internal struct StackArray<T>
 {
+#region properties
     internal        int     Count       => count;
     public override string  ToString()  => $"Count: {count}";
+    #endregion
 
-    private     T[]     items;
-    private     int     count;
-    
+#region fields
+    private         T[]     items;  //  8
+    private         int     count;  //  4
+    #endregion
+
     internal StackArray(T[] items) {
         this.items = items;
     }

@@ -3,7 +3,6 @@
 
 using System;
 using System.Text;
-using System.Threading;
 using Friflo.Engine.ECS.Collections;
 using Friflo.Engine.ECS.Index;
 using static Friflo.Engine.ECS.NodeFlags;
@@ -456,9 +455,18 @@ public partial class EntityStore
     private void NewIds(int[] ids, int start, int count)
     {
         var localNodes  = nodes;
+        int n = 0;
+        for (; n < count; n++)
+        {
+            if (!intern.recycleIds.TryPop(out int id)) {
+                break;
+            }
+            localNodes[id].flags    = Created; // mark created. So id is not used twice by loop below
+            ids[n + start]          = id;
+        }
         int max         = localNodes.Length;
         int sequenceId  = intern.sequenceId;
-        for (int n = 0; n < count; n++)
+        for (; n < count; n++)
         {
             for (; ++sequenceId < max;)
             {
@@ -471,13 +479,21 @@ public partial class EntityStore
         }
         intern.sequenceId = sequenceId;
     }
-    
-    /// <summary> Note!  Sync implementation with <see cref="NewIdInterlocked"/>  and <see cref="NewIds"/>. </summary>
+
+    /// <summary> Note!  Sync implementation with <see cref="NewIds"/>. </summary>
     internal int NewId()
     {
-        var localNodes  = nodes;
-        int max         = localNodes.Length;
-        int id          = ++intern.sequenceId;
+        var localNodes = nodes;
+        int id;
+        while (intern.recycleIds.TryPop(out id))
+        {
+            if ((localNodes[id].flags & Created) != 0) {
+                continue;
+            }
+            return id;
+        }
+        int max = localNodes.Length;
+        id      = ++intern.sequenceId;
         for (; id < max;)
         {
             if ((localNodes[id].flags & Created) != 0) {
@@ -489,27 +505,11 @@ public partial class EntityStore
         return id;
     }
     
-    /// <summary> Same as <see cref="NewId"/> but thread safe for <see cref="CommandBuffer"/>. </summary>
-    internal int NewIdInterlocked()
-    {
-        var localNodes  = nodes;
-        int max         = localNodes.Length;
-        int id          = Interlocked.Increment(ref intern.sequenceId);
-        for (; id < max;)
-        {
-            if ((localNodes[id].flags & Created) != 0) {
-                id = Interlocked.Increment(ref intern.sequenceId);
-                continue;
-            }
-            break;
-        }
-        return id;
-    }
-    
     /// <remarks> Set <see cref="EntityNode.archetype"/> = null. </remarks>
     internal void DeleteNode(Entity entity)
     {
         int id = entity.Id;
+        intern.recycleIds.Push(id);
         entityCount--;
         ref var node = ref nodes[id];
         if (node.isOwner != 0) {

@@ -582,7 +582,10 @@ public sealed class CommandBuffer : ICommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
-        var id      = intern.store.NewIdInterlocked();
+        int id;
+        lock (intern.componentCommandTypes) {
+            id = intern.store.NewId();
+        }
         var count   = intern.entityCommandCount; 
 
         if (count == intern.entityCommands.Length) {
