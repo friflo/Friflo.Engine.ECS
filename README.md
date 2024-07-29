@@ -1,7 +1,7 @@
 <div align="center">
 
   [![friflo ECS](docs/images/friflo-ECS.svg)](https://github.com/friflo/Friflo.Engine.ECS)        ![splash](docs/images/paint-splatter.svg)
-  
+
 </div>
 
 <div align="center">
@@ -15,8 +15,6 @@
 [![Wiki](https://img.shields.io/badge/Wiki-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
 
 </div>
-
-<br/>
 
 # Friflo.Engine.ECS
 
