@@ -452,7 +452,7 @@ public partial class EntityStore
     }
     
     /// <summary> Note!  Sync implementation with <see cref="NewId"/>. </summary>
-    private void NewIds(int[] ids, int start, int count)
+    private void NewIds(int[] ids, int start, int count, Archetype archetype)
     {
         var localNodes  = nodes;
         int n = 0;
@@ -461,8 +461,8 @@ public partial class EntityStore
             if (!intern.recycleIds.TryPop(out int id)) {
                 break;
             }
-            localNodes[id].flags    = Created; // mark created. So id is not used twice by loop below
-            ids[n + start]          = id;
+            localNodes[id].archetype    = archetype; // mark created. So id is not used twice by loop below
+            ids[n + start]              = id;
         }
         int max         = localNodes.Length;
         int sequenceId  = intern.sequenceId;
@@ -470,7 +470,7 @@ public partial class EntityStore
         {
             for (; ++sequenceId < max;)
             {
-                if ((localNodes[sequenceId].flags & Created) != 0) {
+                if (localNodes[sequenceId].archetype != null) {
                     continue;
                 }
                 break;
@@ -487,7 +487,7 @@ public partial class EntityStore
         int id;
         while (intern.recycleIds.TryPop(out id))
         {
-            if ((localNodes[id].flags & Created) != 0) {
+            if (localNodes[id].archetype != null) {
                 continue;
             }
             return id;
@@ -496,7 +496,7 @@ public partial class EntityStore
         id      = ++intern.sequenceId;
         for (; id < max;)
         {
-            if ((localNodes[id].flags & Created) != 0) {
+            if (localNodes[id].archetype != null) {
                 id = ++intern.sequenceId;
                 continue;
             }

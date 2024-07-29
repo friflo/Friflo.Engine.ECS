@@ -246,7 +246,7 @@ public sealed partial class EntityStore : EntityStoreBase
         }
         if (0 < pid && pid < nodes.Length) {
             var id = (int)pid;
-            if (nodes[id].Is(NodeFlags.Created)) {
+            if (nodes[id].archetype != null) {
                 value = new Entity(this, id);
                 return true;
             }

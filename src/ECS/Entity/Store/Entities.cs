@@ -62,7 +62,7 @@ public partial class EntityStore
         if (id < Static.MinNodeId) {
             throw InvalidEntityIdException(id, nameof(id));
         }
-        if (id < nodes.Length && nodes[id].Is(Created)) {
+        if (id < nodes.Length && nodes[id].archetype != null) {
             throw IdAlreadyInUseException(id, nameof(id));
         }
     }
@@ -168,13 +168,13 @@ public partial class EntityStore
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
-        if ((node.flags & Created) != 0) {
+        if (node.archetype != null) {
             return node.compIndex;
         }
         entityCount++;
         node.compIndex  = Archetype.AddEntity(archetype, id);
         node.archetype  = archetype;
-        node.flags      = Created;
+        // node.flags      = Created;
         return node.compIndex;
     }
     
@@ -183,7 +183,7 @@ public partial class EntityStore
         archetype.EnsureCapacity(count);
         int compIndexStart  = archetype.entityCount;
         var entityIds       = archetype.entityIds;
-        NewIds(entityIds, compIndexStart, count);
+        NewIds(entityIds, compIndexStart, count, archetype);
         EnsureNodesLength(intern.sequenceId + 1); // may resize nodes
         var localNodes      = nodes;
         var maxIndex        = compIndexStart + count;
@@ -193,7 +193,7 @@ public partial class EntityStore
             ref var node    = ref localNodes[id];
             node.compIndex  = index;
             node.archetype  = archetype;
-            node.flags      = Created;
+            // node.flags      = Created;
         }
         if (intern.pidType == PidType.RandomPids) {
             for (int index = compIndexStart; index < maxIndex; index++) {

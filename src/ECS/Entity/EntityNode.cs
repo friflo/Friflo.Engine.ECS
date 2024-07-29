@@ -42,7 +42,7 @@ public struct EntityNode
     public              Archetype       Archetype   =>  archetype;
     
     /// <summary>Internally used flags assigned to the entity.</summary>
-    public              NodeFlags       Flags       =>  flags;
+    public              NodeFlags       Flags       =>  archetype != null ? Created : default;
     
     /// <summary>Property only used to see component names encoded by <see cref="isOwner"/>. </summary>
     internal            ComponentTypes  IsOwner     =>  new ComponentTypes{ bitSet = new BitSet { l0 = isOwner } };
@@ -59,8 +59,8 @@ public struct EntityNode
     
     [Browse(Never)] internal    int             compIndex;          //  4   index within Archetype.entityIds & StructHeap<>.components
     
-    /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
-    [Browse(Never)] internal    NodeFlags       flags;              //  1
+    // /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
+    // [Browse(Never)] internal    NodeFlags       flags;              //  1
     
     /// <summary>
     /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="ComponentIndex"/> instances.<br/> 
@@ -93,23 +93,21 @@ public struct EntityNode
     #endregion
     
 #region internal getter
-                    internal readonly   bool        Is      (NodeFlags flag) => (flags & flag) != 0;
-                    internal readonly   bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
+                    // internal readonly   bool        Is      (NodeFlags flag) => (flags & flag) != 0;
+                    // internal readonly   bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
     #endregion
     
 #region internal methods
     private readonly string GetString()
     {
         var sb = new StringBuilder();
-        if (flags != 0) {
+        if (archetype != null) {
             sb.Append("flags: ");
             var startPos = sb.Length;
-            if (Is(Created)) {
-                if (startPos < sb.Length) {
-                    sb.Append(" | ");
-                }
-                sb.Append("Created");
+            if (startPos < sb.Length) {
+                sb.Append(" | ");
             }
+            sb.Append("Created");
         }
         return sb.ToString();
     }
