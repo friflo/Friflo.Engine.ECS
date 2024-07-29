@@ -1,16 +1,19 @@
-<div style="text-align:center">
-  <a href="https://github.com/friflo/Friflo.Engine.ECS"> <img alt="friflo ECS" src="docs/images/friflo-ECS.svg" /> </a>
-  <img  alt="splash" src="docs/images/paint-splatter.svg" />
+<div align="center">
+
+  [![friflo ECS](docs/images/friflo-ECS.svg)](https://github.com/friflo/Friflo.Engine.ECS)        ![splash](docs/images/paint-splatter.svg)
+  
 </div>
 
-<div style="text-align:center">
-  <a href="https://www.nuget.org/packages/Friflo.Engine.ECS">                       <img alt="nuget"    src="https://img.shields.io/nuget/v/Friflo.Engine.ECS?logo=nuget&logoColor=white"   /> </a>
-  <a href="https://app.codecov.io/gh/friflo/Friflo.Engine.ECS/tree/main/src/ECS">   <img alt="codecov"  src="https://img.shields.io/codecov/c/gh/friflo/Friflo.Engine.ECS?logo=codecov&logoColor=white&label=codecov" /> </a>
-  <a href="https://github.com/friflo/Friflo.Engine.ECS/actions/workflows/engine.yml"><img alt="CI"      src="https://img.shields.io/github/actions/workflow/status/friflo/Friflo.Engine.ECS/.github%2Fworkflows%2Fengine.yml?logo=github-actions&logoColor=white&label=CI" /> </a>
-  <a href="https://github.com/friflo/Friflo.Engine.ECS-Demos">                      <img alt="Demos"    src="https://img.shields.io/badge/Demos-22aa22?logo=github&logoColor=white"         /> </a>
-  <a href="https://github.com/friflo/Friflo.Engine-docs">                           <img alt="C# API"   src="https://img.shields.io/badge/C%23%20API-22aaaa?logo=github&logoColor=white"    /> </a>
-  <a href="https://discord.gg/nFfrhgQkb8">                                          <img alt="Discord"  src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white"      /> </a>
-  <a href="https://friflo.gitbook.io/friflo.engine.ecs">                            <img alt="Wiki"     src="https://img.shields.io/badge/Wiki-A200FF?logo=gitbook&logoColor=white"         /> </a>
+<div align="center">
+
+[![nuget](https://img.shields.io/nuget/v/Friflo.Engine.ECS?logo=nuget&logoColor=white)](https://www.nuget.org/packages/Friflo.Engine.ECS)
+[![codecov](https://img.shields.io/codecov/c/gh/friflo/Friflo.Engine.ECS?logo=codecov&logoColor=white&label=codecov)](https://app.codecov.io/gh/friflo/Friflo.Engine.ECS/tree/main/src/ECS)
+[![CI-Engine](https://img.shields.io/github/actions/workflow/status/friflo/Friflo.Engine.ECS/.github%2Fworkflows%2Fengine.yml?logo=github-actions&logoColor=white&label=CI)](https://github.com/friflo/Friflo.Engine.ECS/actions/workflows/engine.yml)
+[![Demos](https://img.shields.io/badge/Demos-22aa22?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine.ECS-Demos)
+[![C# API](https://img.shields.io/badge/C%23%20API-22aaaa?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine-docs)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/nFfrhgQkb8)
+[![Wiki](https://img.shields.io/badge/Wiki-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
+
 </div>
 
 <br/>
