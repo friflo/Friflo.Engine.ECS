@@ -8,7 +8,7 @@ Example unit test for NativeAOT:
 **Note** NativeAOT test run currently only from command line
 
 ```
-cd Engine/src/Tests-NativeAOT
+cd src/Tests-NativeAOT
 ```
 
 Debug

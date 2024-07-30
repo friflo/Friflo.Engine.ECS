@@ -3,7 +3,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
@@ -32,20 +31,12 @@ public abstract class ScriptType : SchemaType
     internal abstract   void            ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "MemberwiseClone is part of BCL")]
-    protected ScriptType(string scriptKey, int scriptIndex, Type type)
+    internal ScriptType(string scriptKey, int scriptIndex, Type type, bool isBlittable, CloneScript cloneScript)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
-        ScriptIndex = scriptIndex;
-        IsBlittable   = GetBlittableType(type) == BlittableType.Blittable;
-        if (IsBlittable) {
-            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod;
-            var methodInfo      = type.GetMethod("MemberwiseClone", flags);
-            // Create a delegate representing an 'open instance method'.
-            // An instance must be passed when the delegate is invoked.
-            // See: https://learn.microsoft.com/en-us/dotnet/api/system.delegate.createdelegate
-            var cloneDelegate   = Delegate.CreateDelegate(typeof(CloneScript), null, methodInfo!);
-            cloneScript         = (CloneScript)cloneDelegate;
-        }
+        ScriptIndex         = scriptIndex;
+        IsBlittable         = isBlittable;
+        this.cloneScript    = cloneScript;
     }
     
     internal Script CloneScript(Script original)
@@ -87,8 +78,8 @@ internal sealed class ScriptType<T> : ScriptType
     #endregion
     
 #region methods
-    internal ScriptType(string scriptComponentKey, int scriptIndex, TypeStore typeStore)
-        : base(scriptComponentKey, scriptIndex, typeof(T))
+    internal ScriptType(string scriptComponentKey, int scriptIndex, TypeStore typeStore, bool isBlittable, CloneScript cloneScript)
+        : base(scriptComponentKey, scriptIndex, typeof(T), isBlittable, cloneScript)
     {
         this.typeStore = typeStore;
     }

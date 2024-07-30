@@ -69,8 +69,25 @@ internal static class SchemaUtils
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore, int scriptIndex)
         where T : Script, new()
     {
-        var scriptKey = GetComponentKey(typeof(T));
-        return new ScriptType<T>(scriptKey, scriptIndex, typeStore);
+        var scriptKey   = GetComponentKey(typeof(T));
+        var isBlittable = SchemaType.GetBlittableType(typeof(T)) == BlittableType.Blittable;
+        CloneScript cloneScript = null;
+        if (isBlittable) {
+            cloneScript = CreateCloneScriptDelegate();
+        }
+        return new ScriptType<T>(scriptKey, scriptIndex, typeStore, isBlittable, cloneScript);
+    }
+    
+    private static CloneScript CreateCloneScriptDelegate()
+    {
+        var flags           = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        var methodInfo      = typeof(object).GetMethod("MemberwiseClone", flags);
+        // Console.WriteLine($"ScriptType - methodInfo  {methodInfo}");
+        // Create a delegate representing an 'open instance method'.
+        // An instance must be passed when the delegate is invoked.
+        // See: https://learn.microsoft.com/en-us/dotnet/api/system.delegate.createdelegate
+        var cloneDelegate   = Delegate.CreateDelegate(typeof(CloneScript), null, methodInfo!);
+        return (CloneScript)cloneDelegate;
     }
     
     private static string GetComponentKey(Type type)
