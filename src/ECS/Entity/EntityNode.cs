@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Friflo.Engine.ECS.Index;
 using Friflo.Engine.ECS.Relations;
@@ -100,6 +101,9 @@ public struct EntityNode
     #endregion
     
 #region internal methods
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal bool IsAlive(int revision) => archetype != null && this.revision == revision;
+
     private readonly string GetString()
     {
         var sb = new StringBuilder();

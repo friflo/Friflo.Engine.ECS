@@ -257,7 +257,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName      Name { get {
         var node = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return ref node.archetype.std.name.components[node.compIndex];
         }
         throw EntityNullException();
@@ -267,7 +267,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
     [Browse(Never)] public  ref Position        Position { get {
         var node = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return ref node.archetype.std.position.components[node.compIndex];
         }
         throw EntityNullException();
@@ -277,7 +277,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
     [Browse(Never)] public  ref Rotation        Rotation { get {
         var node = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return ref node.archetype.std.rotation.components[node.compIndex];
         }
         throw EntityNullException();
@@ -287,7 +287,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
     [Browse(Never)] public  ref Scale3          Scale3 { get {
         var node = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return ref node.archetype.std.scale3.components[node.compIndex];
         }
         throw EntityNullException();
@@ -386,7 +386,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T   GetComponent<T>()   where T : struct, IComponent {
         ref var node = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return ref ((StructHeap<T>)node.archetype.heapMap[StructInfo<T>.Index]).components[node.compIndex];
         }
         throw EntityNullException();
@@ -396,7 +396,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool     TryGetComponent<T>(out T result) where T : struct, IComponent
     {
         var node    = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             var heap = node.archetype.heapMap[StructInfo<T>.Index];
             if (heap == null) {
                 result = default;
@@ -417,7 +417,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex   = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.AddComponent<T>(Id, StructInfo<T>.Index, ref node.archetype, ref node.compIndex, ref archIndex, default);
         }
         throw EntityNullException();
@@ -431,7 +431,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.AddComponent   (Id, StructInfo<T>.Index, ref node.archetype, ref node.compIndex, ref archIndex, in component);
         }
         throw EntityNullException();
@@ -445,7 +445,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.RemoveComponent<T>(Id, ref node.archetype, ref node.compIndex, ref archIndex, StructInfo<T>.Index);
         }
         throw EntityNullException();
@@ -510,7 +510,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool AddTag<TTag>()    where TTag : struct, ITag {
         int index       = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.AddTags   (store, Tags.Get<TTag>(), Id, ref node.archetype, ref node.compIndex, ref index);
         }
         throw EntityNullException();
@@ -519,7 +519,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool AddTags(in Tags tags) {
         int index       = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.AddTags   (store, tags,          Id, ref node.archetype, ref node.compIndex, ref index);
         }
         throw EntityNullException();
@@ -528,7 +528,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool RemoveTag<TTag>() where TTag : struct, ITag {
         int index = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.RemoveTags(store, Tags.Get<TTag>(), Id, ref node.archetype, ref node.compIndex, ref index);
         }
         throw EntityNullException();
@@ -537,7 +537,7 @@ public readonly struct Entity : IEquatable<Entity>
     public bool RemoveTags(in Tags tags) {
         int index       = 0;
         ref var node    = ref store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             return EntityStoreBase.RemoveTags(store, tags,          Id,  ref node.archetype, ref node.compIndex, ref index);
         }
         throw EntityNullException();
@@ -610,8 +610,7 @@ public readonly struct Entity : IEquatable<Entity>
     public void DeleteEntity()
     {
         var node = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision)
-        {
+        if (node.IsAlive(Revision)) {
             try {
                 // Send event. See: SEND_EVENT notes. Note - Specific characteristic: event is send before deleting the entity.
                 store.DeleteEntityEvent(this);
@@ -632,7 +631,7 @@ public readonly struct Entity : IEquatable<Entity>
     internal bool TryGetTreeNode(out TreeNode treeNode)
     {
         var node = store.nodes[Id];
-        if (node.archetype != null && node.revision == Revision) {
+        if (node.IsAlive(Revision)) {
             var heap = node.archetype.heapMap[StructInfo<TreeNode>.Index];
             if (heap == null) {
                 treeNode = default;
