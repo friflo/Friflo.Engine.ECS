@@ -59,8 +59,10 @@ public struct EntityNode
     
     [Browse(Never)] internal    int             compIndex;          //  4   index within Archetype.entityIds & StructHeap<>.components
     
+    [Browse(Never)] internal    short           revision;           //  2
+    
     // /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
-    // [Browse(Never)] internal    NodeFlags       flags;              //  1
+    // [Browse(Never)] internal NodeFlags       flags;              //  1
     
     /// <summary>
     /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="ComponentIndex"/> instances.<br/> 

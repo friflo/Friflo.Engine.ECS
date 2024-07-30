@@ -34,7 +34,8 @@ public static class EntityUtils
     /// So avoid using this method whenever possible. Use <see cref="Entity.GetComponent{T}"/> instead.
     /// </summary>
     public static  IComponent   GetEntityComponent    (Entity entity, ComponentType componentType) {
-        return entity.archetype.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
+        var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return type.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)
@@ -65,7 +66,8 @@ public static class EntityUtils
     // ------------------------------------------- internal methods -------------------------------------------
 #region internal - methods
     internal static int ComponentCount (this Entity entity) {
-        return entity.archetype.componentCount + entity.Scripts.Length;
+        var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return type.componentCount + entity.Scripts.Length;
     }
     
     internal static Exception NotImplemented(int id, string use) {
@@ -77,7 +79,7 @@ public static class EntityUtils
         if (entity.store == null) {
             return "null";
         }
-        return EntityToString(entity.Id, entity.archetype, new StringBuilder());
+        return EntityToString(entity.Id, entity.GetArchetype(), new StringBuilder());
     }
     
     internal static string EntityToString(int id, Archetype archetype, StringBuilder sb)
@@ -196,8 +198,9 @@ public static class EntityUtils
     }
     
     internal static Script AddScript (Entity entity, Script script) {
-        var scriptType = ScriptTypeByType[script.GetType()];
-        return entity.archetype.entityStore.extension.AddScript(entity, script, scriptType);
+        var store       = entity.GetStore() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        var scriptType  = ScriptTypeByType[script.GetType()];
+        return store.extension.AddScript(entity, script, scriptType);
     }
     
     private static  Script AddScriptInternal(Entity entity, Script script, ScriptType scriptType)
@@ -205,22 +208,25 @@ public static class EntityUtils
         if (!script.entity.IsNull) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.Id}");
         }
-        return entity.archetype.entityStore.extension.AddScript(entity, script, scriptType);
+        var store = entity.GetStore() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return store.extension.AddScript(entity, script, scriptType);
     }
     
     internal static Script RemoveScript(Entity entity, int scriptTypeIndex) {
+        var store = entity.GetStore() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
         if (!entity.store.extension.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
         var scriptType  = ScriptTypes[scriptTypeIndex];
-        return entity.archetype.entityStore.extension.RemoveScript(entity, scriptType, scriptIndex);
+        return store.extension.RemoveScript(entity, scriptType, scriptIndex);
     }
     
     private static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
+        var store = entity.GetStore() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
         if (!entity.store.extension.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
-        return entity.archetype.entityStore.extension.RemoveScript(entity, scriptType, scriptIndex);
+        return store.extension.RemoveScript(entity, scriptType, scriptIndex);
     }
     
     internal static void AddTreeTags(Entity entity, in Tags tags)

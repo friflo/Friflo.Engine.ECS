@@ -23,7 +23,7 @@ internal readonly struct EntityInfo
     #region properties
     internal            long                Pid             => entity.Pid;
     internal            bool                Enabled         => entity.Enabled;
-    internal            Archetype           Archetype       => entity.archetype;
+    internal            Archetype           Archetype       => entity.GetArchetype();
     internal            Scripts             Scripts         => entity.Scripts;
     internal            Entity              Parent          => entity.Parent;
     internal            JSON                JSON            => new JSON(EntityUtils.EntityToJSON(entity));

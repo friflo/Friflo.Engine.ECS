@@ -638,20 +638,20 @@ public static class Test_Entity_Tree
             child.DeleteEntity();
             
             IsTrue(child.IsNull);
-            var e = Throws<ArgumentException> (() => {
+            var e = Throws<ArgumentNullException> (() => {
                 root.AddChild(child);
             });
-            AreEqual("entity is detached (Parameter 'entity')", e!.Message);
+            AreEqual("entity is null. id: 2 (Parameter 'entity')", e!.Message);
             
-            e = Throws<ArgumentException> (() => {
+            e = Throws<ArgumentNullException> (() => {
                 root.RemoveChild(child);
             });
-            AreEqual("entity is detached (Parameter 'entity')", e!.Message);
+            AreEqual("entity is null. id: 2 (Parameter 'entity')", e!.Message);
             
-            e = Throws<ArgumentException> (() => {
+            e = Throws<ArgumentNullException> (() => {
                 root.InsertChild(0, child);
             });
-            AreEqual("entity is detached (Parameter 'entity')", e!.Message);
+            AreEqual("entity is null. id: 2 (Parameter 'entity')", e!.Message);
         } {
             var entity = new Entity();
             
@@ -792,7 +792,7 @@ public static class Test_Entity_Tree
             var e       = Throws<ArgumentNullException>(() => {
                 store.SetStoreRoot(default);
             });
-            AreEqual("entity", e!.ParamName);
+            AreEqual("entity is null. id: 0 (Parameter 'entity')", e!.Message);
         } {
             var store1  = new EntityStore(PidType.RandomPids);
             var store2  = new EntityStore(PidType.RandomPids);

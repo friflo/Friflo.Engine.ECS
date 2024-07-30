@@ -95,18 +95,30 @@ internal sealed class ComponentType<T> : ComponentType
     
     internal override bool RemoveEntityComponent(Entity entity) {
         int archIndex = 0;
-        return EntityStoreBase.RemoveComponent<T>(entity.Id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, StructIndex);
+        ref var node    = ref entity.store.nodes[entity.Id];
+        if (node.archetype != null && node.revision == entity.Revision) {
+            return EntityStoreBase.RemoveComponent<T>(entity.Id, ref node.archetype, ref node.compIndex, ref archIndex, StructIndex);
+        }
+        throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
     }
     
     internal override bool AddEntityComponent(Entity entity) {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent<T>(entity.Id, StructIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, default);
+        ref var node    = ref entity.store.nodes[entity.Id];
+        if (node.archetype != null && node.revision == entity.Revision) {
+            return EntityStoreBase.AddComponent<T>(entity.Id, StructIndex, ref node.archetype, ref node.compIndex, ref archIndex, default);
+        }
+        throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
     }
     
     internal override bool AddEntityComponentValue(Entity entity, object value) {
         int archIndex = 0;
         var componentValue = (T)value;
-        return EntityStoreBase.AddComponent(entity.Id, StructIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentValue);
+        ref var node    = ref entity.store.nodes[entity.Id];
+        if (node.archetype != null && node.revision == entity.Revision) {
+            return EntityStoreBase.AddComponent(entity.Id, StructIndex, ref node.archetype, ref node.compIndex, ref archIndex, componentValue);
+        }
+        throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
     }
     
     internal override StructHeap CreateHeap() {

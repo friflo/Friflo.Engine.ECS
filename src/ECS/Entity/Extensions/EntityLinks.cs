@@ -74,11 +74,11 @@ public static partial class EntityExtensions
 #region outgoing links
     public static int CountAllOutgoingLinks(this Entity entity)
     {
-        var schema      = EntityStoreBase.Static.EntitySchema;
-        
+        var schema  = EntityStoreBase.Static.EntitySchema;
+        var type    = entity.GetArchetype() ?? throw EntityStoreBase.EntityNullException(entity);
         // --- count link components
         var linkTypes   = new ComponentTypes {
-            bitSet = BitSet.Intersect(entity.archetype.componentTypes.bitSet, schema.linkComponentTypes.bitSet)
+            bitSet = BitSet.Intersect(type.componentTypes.bitSet, schema.linkComponentTypes.bitSet)
         };
         // --- count relations components
         int count           = linkTypes.Count;

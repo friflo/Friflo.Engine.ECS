@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -148,29 +149,44 @@ public static class Test_StructHeap
         var entity2 = store.CreateEntity(2);
         entity1.DeleteEntity();
         entity2.DeleteEntity();
+        Assert.AreEqual(1, entity1.Revision);
+        Assert.AreEqual(1, entity2.Revision);
         
-        entity2 = store.CreateEntity();
-        entity1 = store.CreateEntity();
+        var entity2b = store.CreateEntity();
+        var entity1b = store.CreateEntity();
         
-        Assert.AreEqual(2, entity2.Id);
-        Assert.AreEqual(1, entity1.Id);
+        Assert.AreEqual(2, entity2b.Id);    Assert.AreEqual(2, entity2b.Revision);
+        Assert.AreEqual(1, entity1b.Id);    Assert.AreEqual(2, entity1b.Revision);
         
-        entity1.DeleteEntity();
-        entity2.DeleteEntity();
+        entity1b.DeleteEntity();
+        entity2b.DeleteEntity();
+        
+        Assert.IsFalse(entity1 == entity1b);
+        Assert.IsFalse(entity2 == entity2b);
         
         var type = store.GetArchetype(default);
-        var entities = type.CreateEntities(3);
+        var entities = type.CreateEntities(3).ToArray();
         
-        Assert.AreEqual(3, entities.Count);
+        Assert.AreEqual(3, entities.Length);
         Assert.AreEqual("{ 2, 1, 3 }", entities.Debug()); // recycle: 2, 1   new id: 3
+        Assert.AreEqual(3, entities[0].Revision);
+        Assert.AreEqual(3, entities[1].Revision);
+        Assert.AreEqual(1, entities[2].Revision);
         
         // --- cover case: recycled id is created manually
         entities[0].DeleteEntity(); // id: 2
-        entity2 = store.CreateEntity(2);
-        Assert.AreEqual(2, entity2.Id);
+        var entity2d = store.CreateEntity(2);
+        Assert.AreEqual(2, entity2d.Id);    Assert.AreEqual(4, entity2d.Revision);
+        Assert.IsFalse(entities[0] == entity2d);
         
         var entity4 = store.CreateEntity();
         Assert.AreEqual(4, entity4.Id);
+        
+        Assert.IsTrue(entities[0].IsNull);
+        Assert.IsTrue(entity1.IsNull);
+        Assert.IsTrue(entity2.IsNull);
+        Assert.IsTrue(entity1b.IsNull);
+        Assert.IsTrue(entity2b.IsNull);
     }
     
     [Test]

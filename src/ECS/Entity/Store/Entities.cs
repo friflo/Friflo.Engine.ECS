@@ -87,7 +87,7 @@ public partial class EntityStore
     /// </remarks>
     public Entity CloneEntity(Entity entity)
     {
-        var archetype   = entity.archetype ?? throw EntityNullException(entity);
+        var archetype   = entity.GetArchetype() ?? throw EntityArgumentNullException(entity, nameof(entity));
         var id          = NewId();
         CreateEntityInternal(archetype, id);
         var clone       = new Entity(this, id);
@@ -174,6 +174,7 @@ public partial class EntityStore
         entityCount++;
         node.compIndex  = Archetype.AddEntity(archetype, id);
         node.archetype  = archetype;
+        node.revision++;
         // node.flags      = Created;
         return node.compIndex;
     }
@@ -193,6 +194,7 @@ public partial class EntityStore
             ref var node    = ref localNodes[id];
             node.compIndex  = index;
             node.archetype  = archetype;
+            node.revision++;
             // node.flags      = Created;
         }
         if (intern.pidType == PidType.RandomPids) {
@@ -208,10 +210,8 @@ public partial class EntityStore
     /// Set the passed <paramref name="entity"/> as the <see cref="StoreRoot"/> entity.
     /// </summary>
     public void SetStoreRoot(Entity entity) {
-        if (entity.IsNull) {
-            throw new ArgumentNullException(nameof(entity));
-        }
-        if (this != entity.archetype.store) {
+        var store = entity.GetStore() ?? throw EntityArgumentNullException(entity, nameof(entity));
+        if (this != store) {
             throw InvalidStoreException(nameof(entity));
         }
         SetStoreRootEntity(entity);

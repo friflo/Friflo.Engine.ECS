@@ -525,7 +525,9 @@ public partial class EntityStore
         RemoveAllEntityEventHandlers(this, node, id);
         int parentId = GetTreeParentId(id);
         // --- clear node entry.
+        var revision    = node.revision;
         node = default;
+        node.revision   = revision;        
         extension.RemoveEntity(id);
 
         // --- remove child from parent 

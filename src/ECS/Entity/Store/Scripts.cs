@@ -58,8 +58,8 @@ internal partial struct StoreExtension
     /// <br/> 
     /// The entity state refers to:
     /// <list type="bullet">
-    ///   <item><see cref="Entity.refArchetype"/></item>
-    ///   <item><see cref="Entity.refCompIndex"/></item>
+    ///   <item><see cref="EntityNode.archetype"/></item>
+    ///   <item><see cref="EntityNode.compIndex"/></item>
     ///   <item><see cref="RawEntity.archIndex"/></item>
     /// </list>
     /// </remarks>

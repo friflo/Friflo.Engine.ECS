@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
@@ -174,6 +175,7 @@ namespace Friflo.Engine.ECS;
 /// </para>
 /// </remarks>
 [CLSCompliant(true)]
+[StructLayout(LayoutKind.Explicit)]
 public readonly struct Entity : IEquatable<Entity>
 {
     // ------------------------------------ general properties ------------------------------------
@@ -195,30 +197,45 @@ public readonly struct Entity : IEquatable<Entity>
     /// Modifying the returned <see cref="ECS.Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
-    public     ref readonly Tags                Tags            => ref archetype.tags;
-
+    public     ref readonly Tags                Tags { get {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return ref type.tags;
+    } }
+    
     /// <summary>Returns the <see cref="Archetype"/> that contains the entity.</summary>
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
-    [Browse(Never)] public  Archetype           Archetype       => archetype;
+    [Browse(Never)] public  Archetype           Archetype       => GetArchetype();
     
     /// <summary>Returns the <see cref="EntityStore"/> that contains the entity.</summary>
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
-    [Browse(Never)] public  EntityStore         Store           => archetype?.entityStore;
+    [Browse(Never)] public  EntityStore         Store           => GetStore();
                     
     /// <remarks>If <see cref="attached"/> its <see cref="Store"/> and <see cref="Archetype"/> are not null. Otherwise null.</remarks>
-    [Browse(Never)] public  StoreOwnership      StoreOwnership  => archetype != null ? attached : detached;
+    [Browse(Never)] public  StoreOwnership      StoreOwnership  => IsNull ? detached : attached;
     
     /// <returns>
     /// <see cref="treeNode"/> if the entity is member of the <see cref="EntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
-    [Browse(Never)] public  TreeMembership      TreeMembership  => archetype.entityStore.GetTreeMembership(Id);
+    [Browse(Never)] public  TreeMembership      TreeMembership { get {
+        var entityStore = GetStore() ?? throw EntityNullException();
+        return entityStore.GetTreeMembership(Id);
+    } }
     
     /// <summary> Returns true if the entity was deleted. </summary>
-    [Browse(Never)] public  bool                IsNull          => store?.nodes[Id].archetype == null;
+//  [Browse(Never)] public  bool IsNull          => store?.nodes[Id].archetype == null;
+    [Browse(Never)] public  bool IsNull {
+        get {
+            var entityStore = store;
+            if (entityStore == null) return true;
+            var node = entityStore.nodes[Id];
+            return node.archetype == null || node.revision != Revision;
+        }
+    }
     
     /// <summary> Return the <b>JSON</b> representation of an entity. </summary>
     /// <remarks> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </remarks>
     // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
+    // ReSharper disable once InconsistentNaming
     [Browse(Never)] public  string              DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
     
     /// <summary> Display additional entity information like Pid, Enabled, JSON and attached event handlers.</summary>
@@ -238,28 +255,67 @@ public readonly struct Entity : IEquatable<Entity>
 #region component - properties
     /// <summary>Returns the <see cref="ECS.EntityName"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
-    [Browse(Never)] public  ref EntityName      Name        => ref archetype.std.name.    components[compIndex];
-
+    [Browse(Never)] public  ref EntityName      Name { get {
+        var node = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return ref node.archetype.std.name.components[node.compIndex];
+        }
+        throw EntityNullException();
+    } }
+    
     /// <summary>Returns the <see cref="ECS.Position"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
-    [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.components[compIndex];
+    [Browse(Never)] public  ref Position        Position { get {
+        var node = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return ref node.archetype.std.position.components[node.compIndex];
+        }
+        throw EntityNullException();
+    } }
     
     /// <summary>Returns the <see cref="ECS.Rotation"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
-    [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.components[compIndex];
+    [Browse(Never)] public  ref Rotation        Rotation { get {
+        var node = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return ref node.archetype.std.rotation.components[node.compIndex];
+        }
+        throw EntityNullException();
+    } }
     
     /// <summary>Returns the <see cref="ECS.Scale3"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
-    [Browse(Never)] public  ref Scale3          Scale3      => ref archetype.std.scale3.  components[compIndex];
+    [Browse(Never)] public  ref Scale3          Scale3 { get {
+        var node = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return ref node.archetype.std.scale3.components[node.compIndex];
+        }
+        throw EntityNullException();
+    } }
     
     /// <summary>Returns true if the entity has an <see cref="ECS.EntityName"/>.</summary>
-    [Browse(Never)] public  bool                HasName     =>     archetype.std.name              != null;
+    [Browse(Never)] public  bool                HasName { get {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return type.std.name != null;
+    } }
+    
     /// <summary>Returns true if the entity has a <see cref="ECS.Position"/>.</summary>
-    [Browse(Never)] public  bool                HasPosition =>     archetype.std.position          != null;
+    [Browse(Never)] public  bool                HasPosition { get {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return type.std.position != null;
+    } }
+    
     /// <summary>Returns true if the entity has a <see cref="ECS.Rotation"/>.</summary>
-    [Browse(Never)] public  bool                HasRotation =>     archetype.std.rotation          != null;
+    [Browse(Never)] public  bool                HasRotation { get {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return type.std.rotation != null;
+    } }
+    
     /// <summary>Returns true if the entity has a <see cref="ECS.Scale3"/>.</summary>
-    [Browse(Never)] public  bool                HasScale3   =>     archetype.std.scale3            != null;
+    [Browse(Never)] public  bool                HasScale3 { get {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return type.std.scale3 != null;
+    } }
     #endregion
 
 
@@ -277,7 +333,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
     [Browse(Never)] public  Entity              Parent { get {
-                        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
+                        if (IsNull) throw EntityNullException();
                         return new Entity(store, store.GetInternalParentId(Id));
                     }}
 
@@ -301,11 +357,15 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ fields ------------------------------------------------
 #region fields
     // Note! Must not have any other fields to keep its size at 16 bytes
-    [Browse(Never)] internal    readonly    EntityStore store;  //  8
+    [Browse(Never)]
+    [FieldOffset(0)]    internal    readonly    EntityStore store;      //  8
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
+    [Browse(Never)]
+    [FieldOffset(8)]    internal    readonly    long        idRevision; //  8
     // ReSharper disable once InconsistentNaming
-                    public      readonly    int         Id;     //  4
+    [FieldOffset(8)]    public      readonly    int         Id;         //  4
+    [FieldOffset(12)]   public      readonly    short       Revision;   //  2
     #endregion
 
 
@@ -316,24 +376,36 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Return true if the entity contains a component of the given type.</summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructInfo<T>.Index] != null;
-
+    public  bool    HasComponent<T> ()  where T : struct, IComponent {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return type.heapMap[StructInfo<T>.Index] != null;
+    }
+    
     /// <summary>Return the component of the given type as a reference.</summary>
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
-    public  ref T   GetComponent<T>()   where T : struct, IComponent
-    => ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
+    public  ref T   GetComponent<T>()   where T : struct, IComponent {
+        ref var node = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return ref ((StructHeap<T>)node.archetype.heapMap[StructInfo<T>.Index]).components[node.compIndex];
+        }
+        throw EntityNullException();
+    }
     
     /// <remarks>Executes in O(1)</remarks>
     public bool     TryGetComponent<T>(out T result) where T : struct, IComponent
     {
-        var heap = archetype.heapMap[StructInfo<T>.Index];
-        if (heap == null) {
-            result = default;
-            return false;
+        var node    = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            var heap = node.archetype.heapMap[StructInfo<T>.Index];
+            if (heap == null) {
+                result = default;
+                return false;
+            }
+            result = ((StructHeap<T>)heap).components[node.compIndex];
+            return true;
         }
-        result = ((StructHeap<T>)heap).components[compIndex];
-        return true;
+        throw EntityNullException();
     }
     /// <summary>
     /// Add a component of the given type <typeparamref name="T"/> to the entity.<br/>
@@ -343,9 +415,12 @@ public readonly struct Entity : IEquatable<Entity>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
-        int archIndex = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.AddComponent<T>(Id, StructInfo<T>.Index, ref refArchetype, ref refCompIndex, ref archIndex, default);
+        int archIndex   = 0;
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.AddComponent<T>(Id, StructInfo<T>.Index, ref node.archetype, ref node.compIndex, ref archIndex, default);
+        }
+        throw EntityNullException();
     }
     /// <summary>
     /// Add the given <paramref name="component"/> to the entity.<br/>
@@ -355,8 +430,11 @@ public readonly struct Entity : IEquatable<Entity>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.AddComponent   (Id, StructInfo<T>.Index, ref refArchetype, ref refCompIndex, ref archIndex, in component);
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.AddComponent   (Id, StructInfo<T>.Index, ref node.archetype, ref node.compIndex, ref archIndex, in component);
+        }
+        throw EntityNullException();
     }
     /// <summary>Remove the component of the given type from the entity.</summary>
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -366,8 +444,11 @@ public readonly struct Entity : IEquatable<Entity>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructInfo<T>.Index);
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.RemoveComponent<T>(Id, ref node.archetype, ref node.compIndex, ref archIndex, StructInfo<T>.Index);
+        }
+        throw EntityNullException();
     }
     #endregion
 
@@ -427,27 +508,39 @@ public readonly struct Entity : IEquatable<Entity>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#tag">Example.</a>
     /// </summary>
     public bool AddTag<TTag>()    where TTag : struct, ITag {
-        int index = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.AddTags   (store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
+        int index       = 0;
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.AddTags   (store, Tags.Get<TTag>(), Id, ref node.archetype, ref node.compIndex, ref index);
+        }
+        throw EntityNullException();
     }
     /// <summary>Add the given <paramref name="tags"/> to the entity.</summary>
     public bool AddTags(in Tags tags) {
-        int index = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.AddTags   (store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
+        int index       = 0;
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.AddTags   (store, tags,          Id, ref node.archetype, ref node.compIndex, ref index);
+        }
+        throw EntityNullException();
     }
     /// <summary>Add the given <typeparamref name="TTag"/> from the entity.</summary>
     public bool RemoveTag<TTag>() where TTag : struct, ITag {
         int index = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.RemoveTags(store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.RemoveTags(store, Tags.Get<TTag>(), Id, ref node.archetype, ref node.compIndex, ref index);
+        }
+        throw EntityNullException();
     }
     /// <summary>Remove the given <paramref name="tags"/> from the entity.</summary>
     public bool RemoveTags(in Tags tags) {
-        int index = 0;
-        if (archetype == null) throw EntityStoreBase.EntityNullException(this);
-        return EntityStoreBase.RemoveTags(store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
+        int index       = 0;
+        ref var node    = ref store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            return EntityStoreBase.RemoveTags(store, tags,          Id,  ref node.archetype, ref node.compIndex, ref index);
+        }
+        throw EntityNullException();
     }
     
     /// <summary> Enable recursively all child entities of the <see cref="Entity"/>. </summary>
@@ -476,11 +569,9 @@ public readonly struct Entity : IEquatable<Entity>
     /// -1 if the <paramref name="entity"/> is already a child entity.
     /// </returns>
     public int AddChild(Entity entity) {
-        if (entity.store == null)                throw new ArgumentNullException              (nameof(entity));
-        var childType = entity.archetype;
-        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(entity));
-        var entityStore = archetype.entityStore;
-        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(entity));
+        var childStore  = entity.GetStore() ??  throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        var entityStore = GetStore()        ??  throw EntityNullException();
+        if (entityStore != childStore)          throw EntityStoreBase.InvalidStoreException  (nameof(entity));
         return entityStore.AddChild(Id, entity.Id);
     }
     /// <summary>Insert the given <paramref name="entity"/> as a child to this entity at the passed <paramref name="index"/>.</summary>
@@ -491,11 +582,9 @@ public readonly struct Entity : IEquatable<Entity>
     /// To iterate all entities with child entities use <see cref="TreeNode"/> in a <c>Query()</c>.
     /// </remarks>
     public void InsertChild(int index, Entity entity) {
-        if (entity.store == null)                throw new ArgumentNullException              (nameof(entity));
-        var childType = entity.archetype;
-        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(entity));
-        var entityStore = archetype.entityStore;
-        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(entity));
+        var childStore  = entity.GetStore() ??  throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        var entityStore = GetStore()        ??  throw EntityNullException();
+        if (entityStore != childStore)          throw EntityStoreBase.InvalidStoreException  (nameof(entity));
         entityStore.InsertChild(Id, entity.Id, index);
     }
     /// <summary>Remove the given child <paramref name="entity"/> from this entity.</summary>
@@ -504,11 +593,9 @@ public readonly struct Entity : IEquatable<Entity>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public bool RemoveChild(Entity entity) {
-        if (entity.store == null)                throw new ArgumentNullException              (nameof(entity));
-        var childType = entity.archetype;
-        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(entity));
-        var entityStore = archetype.entityStore;
-        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(entity));
+        var childStore  = entity.GetStore() ??  throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        var entityStore = GetStore()        ??  throw EntityNullException();
+        if (entityStore != childStore)          throw EntityStoreBase.InvalidStoreException  (nameof(entity));
         return entityStore.RemoveChild(Id, entity.Id);
     }
     
@@ -522,32 +609,39 @@ public readonly struct Entity : IEquatable<Entity>
     /// </remarks>
     public void DeleteEntity()
     {
-        try {
-            // Send event. See: SEND_EVENT notes. Note - Specific characteristic: event is send before deleting the entity.
-            store.DeleteEntityEvent(this);
+        var node = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision)
+        {
+            try {
+                // Send event. See: SEND_EVENT notes. Note - Specific characteristic: event is send before deleting the entity.
+                store.DeleteEntityEvent(this);
+            }
+            finally {
+                store.DeleteNode(this); 
+                Archetype.MoveLastComponentsTo(node.archetype, node.compIndex);
+            }
+            return;
         }
-        finally {
-            var arch            = archetype;
-            var componentIndex  = compIndex;
-            var entityStore     = arch.entityStore;
-            entityStore.DeleteNode(this); 
-            Archetype.MoveLastComponentsTo(arch, componentIndex);
-        }
+        throw EntityNullException();
     }
     /// <summary>Return the position of the given <paramref name="child"/> in the entity.</summary>
     /// <param name="child"></param>
     /// <returns></returns>
     public int  GetChildIndex(Entity child)     => EntityStore.GetChildIndex(this, child.Id);
     
-    internal bool TryGetTreeNode(out TreeNode node)
+    internal bool TryGetTreeNode(out TreeNode treeNode)
     {
-        var heap = archetype.heapMap[StructInfo<TreeNode>.Index];
-        if (heap == null) {
-            node = default;
-            return false;
+        var node = store.nodes[Id];
+        if (node.archetype != null && node.revision == Revision) {
+            var heap = node.archetype.heapMap[StructInfo<TreeNode>.Index];
+            if (heap == null) {
+                treeNode = default;
+                return false;
+            }
+            treeNode = ((StructHeap<TreeNode>)heap).components[node.compIndex];
+            return true;
         }
-        node = ((StructHeap<TreeNode>)heap).components[compIndex];
-        return true;
+        throw EntityNullException();
     }
     #endregion
 
@@ -555,13 +649,13 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ general methods ---------------------------------------
 #region general - methods
     /// <summary> Return true if the passed entities have the same <see cref="Entity.Id"/>'s. </summary>
-    public static   bool    operator == (Entity a, Entity b)    => a.Id == b.Id && a.store == b.store;
+    public static   bool    operator == (Entity a, Entity b)    => a.idRevision == b.idRevision && a.store == b.store;
     
     /// <summary> Return true if the passed entities have the different <see cref="Entity.Id"/>'s. </summary>
-    public static   bool    operator != (Entity a, Entity b)    => a.Id != b.Id || a.store != b.store;
+    public static   bool    operator != (Entity a, Entity b)    => a.idRevision != b.idRevision || a.store != b.store;
 
     // --- IEquatable<T>
-    public          bool    Equals(Entity other)                => Id == other.Id && store == other.store;
+    public          bool    Equals(Entity other)                => idRevision == other.idRevision && store == other.store;
 
     // --- object
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
@@ -575,8 +669,9 @@ public readonly struct Entity : IEquatable<Entity>
     public override string  ToString()          => EntityUtils.EntityToString(this);
     
     internal Entity(EntityStore entityStore, int id) {
-        store   = entityStore;
-        Id      = id;
+        store       = entityStore;
+        Id          = id;
+        Revision    = store.nodes[id].revision;
     }
 
     /// <summary>
@@ -669,14 +764,28 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ internal properties -----------------------------------
 #region internal properties
     // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
-    /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal    ref Archetype   refArchetype        => ref store. nodes[Id].archetype;
-    [Browse(Never)] internal        Archetype      archetype        =>     store. nodes[Id].archetype;
-
-    /// <summary>The index within the <see cref="refArchetype"/> the entity is stored</summary>
-    /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[Id].compIndex;
+    [Browse(Never)] internal        Archetype      archetype    =>     store. nodes[Id].archetype;
     [Browse(Never)] internal        int            compIndex    =>     store.nodes[Id].compIndex;
+    
+    internal Archetype GetArchetype() {
+        var entityStore = store;
+        if (entityStore == null) return null;
+        var node        = entityStore.nodes[Id];
+        var archetype   = node.archetype;
+        return (archetype != null && node.revision == Revision) ? archetype : null;
+    }
+    
+    internal EntityStore GetStore() {
+        var entityStore = store;
+        if (entityStore == null) return null;
+        var node        = entityStore.nodes[Id];
+        var archetype   = node.archetype;
+        return (archetype != null && node.revision == Revision) ? entityStore : null;
+    }
+    
+    private NullReferenceException EntityNullException() {
+        return new NullReferenceException($"entity is null. id: {Id}");
+    }
     
     // [Browse(Never)] internal ref int         refScriptIndex  => ref store.nodes[Id].scriptIndex;
     // [Browse(Never)] internal     int            scriptIndex  =>     store.scriptMap[Id];

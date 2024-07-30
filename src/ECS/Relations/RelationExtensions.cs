@@ -21,7 +21,7 @@ public static class RelationExtensions
     public static ref TComponent GetRelation<TComponent, TKey>(this Entity entity, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return ref EntityRelations.GetRelation<TComponent, TKey>(entity.store, entity.Id, key);
     }
     
@@ -33,7 +33,7 @@ public static class RelationExtensions
     public static bool TryGetRelation<TComponent, TKey>(this Entity entity, TKey key, out TComponent value)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.TryGetRelation(entity.store, entity.Id, key, out value);
     }
     
@@ -45,7 +45,7 @@ public static class RelationExtensions
     public static RelationComponents<TComponent> GetRelations<TComponent>(this Entity entity)
         where TComponent : struct, IRelationComponent
     {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.GetRelations<TComponent>(entity.store, entity.Id);
     }
     
@@ -58,7 +58,7 @@ public static class RelationExtensions
     public static bool AddRelation<TComponent>(this Entity entity, in TComponent component)
         where TComponent : struct, IRelationComponent
     {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.AddRelation(entity.store, entity.Id, component);
     }
     
@@ -71,7 +71,7 @@ public static class RelationExtensions
     public static bool RemoveRelation<TComponent, TKey>(this Entity entity, TKey key)
         where TComponent : struct, IRelationComponent<TKey>
     {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity); 
+        if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity); 
         return EntityRelations.RemoveRelation<TComponent, TKey>(entity.store, entity.Id, key);
     }
     
@@ -84,7 +84,7 @@ public static class RelationExtensions
     public static bool RemoveRelation<TComponent>(this Entity entity, Entity target)
         where TComponent : struct, ILinkRelation
     {
-        if (entity.archetype == null) throw EntityStoreBase.EntityNullException(entity);
+        if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.RemoveRelation<TComponent, Entity>(entity.store, entity.Id, target);
     }
     
@@ -96,7 +96,7 @@ public static class RelationExtensions
     public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity target)
         where TComponent: struct, IRelationComponent
     {
-        if (target.archetype == null) throw EntityStoreBase.EntityNullException(target);
+        if (target.IsNull) throw EntityStoreBase.EntityNullException(target);
         var entities = EntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TComponent>.Index, out var relations);
         return new EntityLinks<TComponent>(target, entities, relations);
     }

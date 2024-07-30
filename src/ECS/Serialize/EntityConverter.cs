@@ -31,10 +31,7 @@ public sealed class EntityConverter
     /// </summary>
     public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity, bool pretty)
     {
-        if (entity.IsNull) {
-            throw new ArgumentNullException(nameof(entity));
-        }
-        var store       = entity.archetype.entityStore;
+        var store       = entity.GetStore() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
         var pid         = store.IdToPid(entity.Id);
         dataEntity    ??= new DataEntity();
         dataEntity.pid  = pid;
