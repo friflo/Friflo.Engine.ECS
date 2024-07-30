@@ -5,7 +5,6 @@ using System;
 using System.Text;
 using Friflo.Engine.ECS.Collections;
 using Friflo.Engine.ECS.Index;
-using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToAutoPropertyWhenPossible

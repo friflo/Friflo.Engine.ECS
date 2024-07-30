@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Engine.ECS.TreeMembership;
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable once CheckNamespace
