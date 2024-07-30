@@ -190,6 +190,38 @@ public static class Test_StructHeap
     }
     
     [Test]
+    public static void Test_StructHeap_RecycleIds_CommandBuffer()
+    {
+        var store = new EntityStore();
+        var cb = store.GetCommandBuffer();
+        cb.ReuseBuffer = true;
+        long startMem = 0;
+        for (int n = 0; n < 100; n++)
+        {
+            var entity1 = store.CreateEntity(); // id: 1
+            var entity2 = store.CreateEntity(); // id: 2
+            entity1.DeleteEntity();
+            
+            cb.DeleteEntity(entity2.Id);
+            var id1 = cb.CreateEntity();     // recycle id: 1
+            Mem.AreEqual(1, id1);
+            cb.Playback();
+            
+            var entity1b = store.GetEntityById(1);
+            Mem.IsFalse (entity1b.IsNull);
+            Mem.IsTrue  (entity1.IsNull);
+            Mem.IsTrue  (entity2.IsNull);
+            Mem.AreEqual(1, store.Count);
+            Mem.AreEqual(4, store.Capacity);
+            entity1b.DeleteEntity();
+            if (n == 0) {
+                startMem = Mem.GetAllocatedBytes();
+            }
+        }
+        Mem.AssertNoAlloc(startMem);
+    }
+    
+    [Test]
     public static void Test_StructHeap_CreateEntity_RecycleIds_Perf()
     {
         int repeat      = 10; // 1_000_000;

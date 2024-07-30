@@ -221,7 +221,7 @@ public sealed class CommandBuffer : ICommandBuffer
                 continue;
             }
             var nodes = store.nodes;
-            if (entityId < nodes.Length && nodes[entityId].Flags.HasFlag(NodeFlags.Created)) {
+            if (entityId < nodes.Length && nodes[entityId].archetype != null) {
                 var entity = store.GetEntityById(command.entityId);
                 entity.DeleteEntity();
                 continue;
