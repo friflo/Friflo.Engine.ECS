@@ -38,6 +38,8 @@ public static class Test_StructHeap
     public static void Test_StructHeap_shrink_entity_capacity() // ENTITY_STRUCT
     {
         var store       = new EntityStore(PidType.UsePidAsId);
+        Assert.AreEqual(10, store.ShrinkRatioThreshold);
+        store.ShrinkRatioThreshold = 0 ;
         var arch1       = store.GetArchetype(ComponentTypes.Get<Position>());
         int count       = 2000;
         var entities    = new Entity[count];

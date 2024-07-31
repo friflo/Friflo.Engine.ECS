@@ -298,7 +298,7 @@ public sealed class Archetype
             // --- case: newIndex is already the last entity => only decrement entityCount
         }
         arch.entityCount = lastIndex;  // remove last entity id
-        if (lastIndex > arch.memory.shrinkThreshold) {
+        if (!store.shrinkArchetypes || lastIndex > arch.memory.shrinkThreshold) {
             return;
         }
         ResizeShrink(arch);

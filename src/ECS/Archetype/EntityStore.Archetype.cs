@@ -15,6 +15,7 @@ public partial class EntityStoreBase
 {
     internal void AddArchetypeCapacity(int capacity) {
         internBase.archetypeCapacity += capacity;
+        shrinkArchetypes = internBase.archetypeCapacity > internBase.shrinkRatio * entityCount;
     }
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype

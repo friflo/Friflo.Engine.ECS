@@ -42,6 +42,12 @@ public abstract partial class EntityStoreBase
     /// <summary> Returns the current number of <see cref="Archetypes"/> managed by the entity store. </summary>
     [Browse(Never)] public              int                     ArchetypeCount  => archsCount;
     
+    /// <summary>
+    /// Shrink ratio threshold: <c> Sum of all Archetype entity capacities / EntityStore entity count</c>. Default: 10<br/>   
+    /// If the current ratio is > <see cref="ShrinkRatioThreshold"/> archetype capacities are shrinked. 
+    /// </summary>
+    [Browse(Never)] public              double                  ShrinkRatioThreshold { get => internBase.shrinkRatio; set => internBase.shrinkRatio = value; }
+    
     /// <summary>Return all <see cref="UniqueEntity"/>'s in the entity store </summary>
                     public              QueryEntities           UniqueEntities  => GetUniqueEntities();
     
@@ -80,6 +86,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] private  readonly   ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
     [Browse(Never)] internal readonly   int[]                   singleIds;          //  8
     [Browse(Never)] internal            int                     singleIndex;        //  4
+    [Browse(Never)] internal            bool                    shrinkArchetypes;   //  1
     
                     private             InternBase              internBase;         // 88
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
@@ -87,6 +94,7 @@ public abstract partial class EntityStoreBase
     // MUST be private by all means 
     private struct InternBase {
         internal        long                                        archetypeCapacity;      // 16   - sum of all Archetype capacities
+        internal        double                                      shrinkRatio;            //  8
         // --- delegates
         internal        Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed
         internal        Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8   - entity event handlers for add/remove Tags
@@ -137,6 +145,7 @@ public abstract partial class EntityStoreBase
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
         AddArchetype(this, defaultArchetype);
+        internBase.shrinkRatio          = 10;
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
         internBase.entityLists          = new StackArray<EntityList>        (Array.Empty<EntityList>());

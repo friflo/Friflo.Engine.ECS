@@ -45,7 +45,7 @@ public static class Test_StructHeapRaw
     [Test]
     public static void Test_StructHeapRaw_shrink_entity_capacity()
     {
-        var store       = new RawEntityStore();
+        var store       = new RawEntityStore { ShrinkRatioThreshold = 0 };
         var arch        = store.GetArchetype(ComponentTypes.Get<Position>());
         int count       = 16384; // 16384 ~ #PC: 0-1 ms     8388608 ~ 190 ms
         var ids         = new int[count];
