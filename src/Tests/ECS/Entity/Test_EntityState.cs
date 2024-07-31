@@ -31,11 +31,21 @@ public static class Test_EntityState
         state = entity.State;
         IsTrue(state.IsNull);
         Throws<NullReferenceException>(() => {
-            _ = state.Tags;
+            GetTags(entity);
         });
         Throws<NullReferenceException>(() => {
-            _ = state.Get<Position>();
+            GetComponent(entity);
         });
+    }
+    
+    private static void GetTags(Entity entity) {
+        var state = entity.State;
+        _ = state.Tags;
+    }
+    
+    private static void GetComponent(Entity entity) {
+        var state = entity.State;
+        _ = state.Get<Position>();
     }
 }
 

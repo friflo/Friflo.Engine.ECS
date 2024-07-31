@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct EntityState
+public readonly ref struct EntityState
 {
 #region entity getter
     public  bool        IsNull          => archetype == null;
