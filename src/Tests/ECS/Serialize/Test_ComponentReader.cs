@@ -504,7 +504,7 @@ public static class Test_ComponentReader
             });
             AreEqual("dataEntity", e!.ParamName);
         } {
-            var e = Throws<ArgumentNullException>(() => {
+            var e = Throws<ArgumentException>(() => {
                 converter.EntityToDataEntity(default, null, false);    
             });
             AreEqual("entity is null. id: 0 (Parameter 'entity')", e!.Message);

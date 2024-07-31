@@ -638,17 +638,17 @@ public static class Test_Entity_Tree
             child.DeleteEntity();
             
             IsTrue(child.IsNull);
-            var e = Throws<ArgumentNullException> (() => {
+            var e = Throws<ArgumentException> (() => {
                 root.AddChild(child);
             });
             AreEqual("entity is null. id: 2 (Parameter 'entity')", e!.Message);
             
-            e = Throws<ArgumentNullException> (() => {
+            e = Throws<ArgumentException> (() => {
                 root.RemoveChild(child);
             });
             AreEqual("entity is null. id: 2 (Parameter 'entity')", e!.Message);
             
-            e = Throws<ArgumentNullException> (() => {
+            e = Throws<ArgumentException> (() => {
                 root.InsertChild(0, child);
             });
             AreEqual("entity is null. id: 2 (Parameter 'entity')", e!.Message);
@@ -656,20 +656,20 @@ public static class Test_Entity_Tree
             var entity = new Entity();
             
             IsTrue(entity.IsNull);
-            var e = Throws<ArgumentNullException> (() => {
+            var e = Throws<ArgumentException> (() => {
                 root.AddChild(entity);
             });
-            AreEqual("entity", e!.ParamName);
+            AreEqual("entity is null. id: 0 (Parameter 'entity')", e!.Message);
             
-            e = Throws<ArgumentNullException> (() => {
+            e = Throws<ArgumentException> (() => {
                 root.RemoveChild(entity);
             });
-            AreEqual("entity", e!.ParamName);
+            AreEqual("entity is null. id: 0 (Parameter 'entity')", e!.Message);
             
-            e = Throws<ArgumentNullException> (() => {
+            e = Throws<ArgumentException> (() => {
                 root.InsertChild(0, entity);
             });
-            AreEqual("entity", e!.ParamName);
+            AreEqual("entity is null. id: 0 (Parameter 'entity')", e!.Message);
         }
     }
     
@@ -789,7 +789,7 @@ public static class Test_Entity_Tree
     {
         {
             var store   = new EntityStore(PidType.RandomPids);
-            var e       = Throws<ArgumentNullException>(() => {
+            var e       = Throws<ArgumentException>(() => {
                 store.SetStoreRoot(default);
             });
             AreEqual("entity is null. id: 0 (Parameter 'entity')", e!.Message);

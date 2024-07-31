@@ -14,4 +14,12 @@ internal static class ExceptionUtils
         // required as Unity format exception message is different from CLR
         return new ArgumentException($"{message} (Parameter '{parameterName}')");
     }
+    
+    /// <summary>
+    /// Replace calls of <see cref="System.ArgumentNullException(string, string)"/> by this method.
+    /// </summary>
+    internal static ArgumentException ArgumentNullException(string message, string parameterName) {
+        // required as Unity format exception message is different from CLR
+        return new ArgumentException($"{message} (Parameter '{parameterName}')");
+    }
 }

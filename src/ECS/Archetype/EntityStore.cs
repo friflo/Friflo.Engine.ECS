@@ -166,8 +166,8 @@ public abstract partial class EntityStoreBase
         return new NullReferenceException($"entity is null. id: {entity.Id}");
     }
     
-    internal static ArgumentNullException EntityArgumentNullException(Entity entity, string param) {
-        return new ArgumentNullException(param, $"entity is null. id: {entity.Id}");
+    internal static ArgumentException EntityArgumentNullException(Entity entity, string param) {
+        return ExceptionUtils.ArgumentNullException($"entity is null. id: {entity.Id}", param);
     }
     
     internal static Exception   InvalidStoreException(string parameterName) {
