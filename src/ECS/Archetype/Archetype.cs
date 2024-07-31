@@ -161,6 +161,7 @@ public sealed class Archetype
     /// <summary>Create an instance of an <see cref="EntityStoreBase.defaultArchetype"/></summary>
     internal Archetype(in ArchetypeConfig config)
     {
+        config.store.AddArchetypeCapacity(ArchetypeUtils.MinCapacity);
         memory.capacity         = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
         store           = config.store;
@@ -178,6 +179,7 @@ public sealed class Archetype
     /// <summary> used by <see cref="EntityRelations"/> </summary>
     internal Archetype(in ArchetypeConfig config, StructHeap heap)
     {
+        config.store.AddArchetypeCapacity(ArchetypeUtils.MinCapacity);
         memory.capacity = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
         store           = config.store;
@@ -198,6 +200,7 @@ public sealed class Archetype
     /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
+        config.store.AddArchetypeCapacity(ArchetypeUtils.MinCapacity);
         memory.capacity = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
         store           = config.store;
@@ -336,6 +339,7 @@ public sealed class Archetype
         arch.memory.capacity        = capacity;
         
         var count = arch.entityCount;
+        arch.store.AddArchetypeCapacity(capacity - count);
         ArrayUtils.Resize(ref arch.entityIds, capacity, count);
         foreach (var heap in arch.structHeaps) {
             heap.ResizeComponents(capacity, count);

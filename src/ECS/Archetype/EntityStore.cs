@@ -78,14 +78,15 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private  readonly   ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
-    [Browse(Never)] internal readonly   int[]                   singleIds;      //   8
-    [Browse(Never)] internal            int                     singleIndex;    //   4
+    [Browse(Never)] internal readonly   int[]                   singleIds;          //  8
+    [Browse(Never)] internal            int                     singleIndex;        //  4
     
-                    private             InternBase              internBase;         // 40
+                    private             InternBase              internBase;         // 88
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     // MUST be private by all means 
     private struct InternBase {
+        internal        long                                        archetypeCapacity;      // 16   - sum of all Archetype capacities
         // --- delegates
         internal        Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed
         internal        Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8   - entity event handlers for add/remove Tags
