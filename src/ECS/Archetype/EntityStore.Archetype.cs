@@ -17,6 +17,12 @@ public partial class EntityStoreBase
         internBase.archetypesCapacity += capacity;
         shrinkArchetypes = internBase.archetypesCapacity > internBase.shrinkRatio * entityCount;
     }
+    
+    private void SetShrinkRatio(double value) {
+        internBase.shrinkRatio = value;
+        AddArchetypeCapacity(0);
+    }
+    
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
     internal static ArchetypeConfig GetArchetypeConfig(EntityStoreBase store) {

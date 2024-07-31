@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -34,6 +35,13 @@ public static class Test_Entity
             entity.AddComponent<Position>();
         }
         AreEqual(16896, store.CapacitySumArchetypes);
+        
+        store.ShrinkRatioThreshold = 0;
+        var entities = store.Entities.ToArray();
+        foreach (var entity in entities) {
+            entity.DeleteEntity();
+        }
+        AreEqual(1536, store.CapacitySumArchetypes);
     }
     
     [Test]

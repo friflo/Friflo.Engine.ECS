@@ -46,7 +46,7 @@ public abstract partial class EntityStoreBase
     /// Shrink ratio threshold: <c> Sum of all Archetype capacities / EntityStore entity count</c>. Default: 10<br/>   
     /// If the current ratio is > <see cref="ShrinkRatioThreshold"/> archetype capacities are shrinked. 
     /// </summary>
-    [Browse(Never)] public              double                  ShrinkRatioThreshold { get => internBase.shrinkRatio; set => internBase.shrinkRatio = value; }
+    [Browse(Never)] public              double                  ShrinkRatioThreshold { get => internBase.shrinkRatio; set => SetShrinkRatio(value); }
     
     /// <summary> Return the sum of all Archetype capacities. </summary>
     [Browse(Never)] public              long                    CapacitySumArchetypes => internBase.archetypesCapacity;
