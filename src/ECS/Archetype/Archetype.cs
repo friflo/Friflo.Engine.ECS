@@ -338,8 +338,9 @@ public sealed class Archetype
         arch.memory.shrinkThreshold = shrinkThreshold;
         arch.memory.capacity        = capacity;
         
+        arch.store.AddArchetypeCapacity(capacity - arch.entityIds.Length);
+        
         var count = arch.entityCount;
-        arch.store.AddArchetypeCapacity(capacity - count);
         ArrayUtils.Resize(ref arch.entityIds, capacity, count);
         foreach (var heap in arch.structHeaps) {
             heap.ResizeComponents(capacity, count);

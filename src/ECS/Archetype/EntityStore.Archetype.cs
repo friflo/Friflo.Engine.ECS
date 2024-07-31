@@ -14,8 +14,8 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStoreBase
 {
     internal void AddArchetypeCapacity(int capacity) {
-        internBase.archetypeCapacity += capacity;
-        shrinkArchetypes = internBase.archetypeCapacity > internBase.shrinkRatio * entityCount;
+        internBase.archetypesCapacity += capacity;
+        shrinkArchetypes = internBase.archetypesCapacity > internBase.shrinkRatio * entityCount;
     }
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype

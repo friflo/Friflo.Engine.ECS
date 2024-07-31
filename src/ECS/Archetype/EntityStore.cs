@@ -43,10 +43,13 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] public              int                     ArchetypeCount  => archsCount;
     
     /// <summary>
-    /// Shrink ratio threshold: <c> Sum of all Archetype entity capacities / EntityStore entity count</c>. Default: 10<br/>   
+    /// Shrink ratio threshold: <c> Sum of all Archetype capacities / EntityStore entity count</c>. Default: 10<br/>   
     /// If the current ratio is > <see cref="ShrinkRatioThreshold"/> archetype capacities are shrinked. 
     /// </summary>
     [Browse(Never)] public              double                  ShrinkRatioThreshold { get => internBase.shrinkRatio; set => internBase.shrinkRatio = value; }
+    
+    /// <summary> Return the sum of all Archetype capacities. </summary>
+    [Browse(Never)] public              long                    CapacitySumArchetypes => internBase.archetypesCapacity;
     
     /// <summary>Return all <see cref="UniqueEntity"/>'s in the entity store </summary>
                     public              QueryEntities           UniqueEntities  => GetUniqueEntities();
@@ -93,7 +96,7 @@ public abstract partial class EntityStoreBase
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     // MUST be private by all means 
     private struct InternBase {
-        internal        long                                        archetypeCapacity;      // 16   - sum of all Archetype capacities
+        internal        long                                        archetypesCapacity;     // 16   - sum of all Archetype capacities
         internal        double                                      shrinkRatio;            //  8
         // --- delegates
         internal        Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed

@@ -26,6 +26,17 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Test_Entity_CapacitySumArchetypes()
+    {
+        var store = new EntityStore();
+        for (int n = 0; n < 10000; n++) {
+            var entity = store.CreateEntity();
+            entity.AddComponent<Position>();
+        }
+        AreEqual(16896, store.CapacitySumArchetypes);
+    }
+    
+    [Test]
     public static void Test_Entity_non_generic_Script_methods()
     {
         var store       = new EntityStore(PidType.RandomPids);
