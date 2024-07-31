@@ -257,7 +257,7 @@ public readonly struct Entity : IEquatable<Entity>
     [Browse(Never)] public EntityData Data { get {
         ref var node = ref store.nodes[Id];
         if (node.archetype != null && Revision == node.revision) {
-            return new EntityData(node);
+            return new EntityData(node, Id);
         }
         return default;
     } }  

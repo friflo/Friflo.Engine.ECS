@@ -11,6 +11,7 @@ namespace Tests.ECS {
 
 public static class Test_EntityState
 {
+#pragma warning disable CS0618 // Type or member is obsolete
     [Test]
     public static void Test_EntityData_access()
     {
@@ -24,6 +25,8 @@ public static class Test_EntityState
         IsTrue(tags.Has<TestTag>());
         IsTrue(tags.Has<TestTag2>());
         
+        AreEqual(1,                     data.Id);
+        AreEqual("Id: 1",               data.ToString());
         AreSame (entity.Archetype,      data.Archetype);
         AreEqual(new Position(1,2,3),   data.Get<Position>());
         IsTrue  (                       data.Has<Position>());
@@ -34,6 +37,19 @@ public static class Test_EntityState
         
         IsFalse(                        data.Has<Scale3>());
         IsFalse(                        data.TryGet<Scale3>(out _));
+        
+        var components = data.Components;
+        AreEqual(2, components.Count);
+        int count = 0;
+        foreach (var component in components)
+        {
+            var value = component.Value;
+            switch (count++) {
+                case 0: AreEqual("test",                ((EntityName)value).value); break;
+                case 1: AreEqual(new Position(1,2,3),   (Position)value);           break;
+            }
+        }
+        AreEqual(2, count);
         
         entity.DeleteEntity();
         
@@ -46,7 +62,7 @@ public static class Test_EntityState
             GetComponent(entity);
         });
     }
-
+#pragma warning restore CS0618 // Type or member is obsolete
     
     private static void GetTags(Entity entity) {
         var state = entity.Data;
