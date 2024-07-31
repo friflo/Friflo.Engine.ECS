@@ -10,7 +10,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// An <see cref="EntityData"/> is used to optimize read / write access of entity components.br/>
+/// An <see cref="EntityData"/> is used to optimize access of entity components and tags.<br/>
 /// An instance can be returned by <see cref="Entity.Data"/>. 
 /// </summary>
 /// <remarks>
@@ -40,6 +40,8 @@ public readonly ref struct EntityData
 #region fields
     [Browse(Never)] private readonly    StructHeap[]    heapMap;
     [Browse(Never)] private readonly    Archetype       archetype;
+    
+    /// <summary> <see cref="Entity"/> id </summary>
                     public  readonly    int             Id;
     [Browse(Never)] private readonly    int             compIndex;
     #endregion
