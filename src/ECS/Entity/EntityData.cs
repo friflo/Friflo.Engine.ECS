@@ -1,20 +1,19 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-// ReSharper disable once CheckNamespace
-
 using System;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// An <see cref="EntityState"/> is used to optimize read / write access of entity components.br/>
-/// An instance can be returned by <see cref="Entity.State"/>. 
+/// An <see cref="EntityData"/> is used to optimize read / write access of entity components.br/>
+/// An instance can be returned by <see cref="Entity.Data"/>. 
 /// </summary>
 /// <remarks>
 /// It should be used if reading or updating multiple components of the same entity to optimize component access.
 /// </remarks>
-public readonly ref struct EntityState
+public readonly ref struct EntityData
 {
 #region entity getter
     /// <summary> Returns true is the entity is deleted. </summary>
@@ -39,7 +38,7 @@ public readonly ref struct EntityState
     private readonly    int         compIndex;
 #endregion
 
-    internal EntityState(Archetype archetype, int compIndex) {
+    internal EntityData(Archetype archetype, int compIndex) {
         this.archetype  = archetype;
         this.compIndex  = compIndex;
     }

@@ -11,25 +11,25 @@ namespace Tests.ECS {
 public static class Test_EntityState
 {
     [Test]
-    public static void Test_EntityState_getter()
+    public static void Test_EntityData_access()
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity(new Position(1,2,3), new EntityName("test"), Tags.Get<TestTag, TestTag2>());
         
-        var state = entity.State;
-        IsFalse(state.IsNull);
+        var data = entity.Data;
+        IsFalse(data.IsNull);
         
-        var tags = state.Tags;
+        var tags = data.Tags;
         IsTrue(tags.Has<TestTag>());
         IsTrue(tags.Has<TestTag2>());
         
-        AreEqual(new Position(1,2,3),   state.Get<Position>());
-        AreEqual("test",                state.Get<EntityName>().value);
+        AreEqual(new Position(1,2,3),   data.Get<Position>());
+        AreEqual("test",                data.Get<EntityName>().value);
         
         entity.DeleteEntity();
         
-        state = entity.State;
-        IsTrue(state.IsNull);
+        data = entity.Data;
+        IsTrue(data.IsNull);
         Throws<NullReferenceException>(() => {
             GetTags(entity);
         });
@@ -39,13 +39,13 @@ public static class Test_EntityState
     }
     
     private static void GetTags(Entity entity) {
-        var state = entity.State;
+        var state = entity.Data;
         _ = state.Tags;
     }
     
     private static void GetComponent(Entity entity) {
-        var state = entity.State;
-        _ = state.Get<Position>();
+        var data = entity.Data;
+        _ = data.Get<Position>();
     }
 }
 
