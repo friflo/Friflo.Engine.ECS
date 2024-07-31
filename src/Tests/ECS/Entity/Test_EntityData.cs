@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -45,6 +46,7 @@ public static class Test_EntityState
             GetComponent(entity);
         });
     }
+
     
     private static void GetTags(Entity entity) {
         var state = entity.Data;
@@ -54,6 +56,27 @@ public static class Test_EntityState
     private static void GetComponent(Entity entity) {
         var data = entity.Data;
         _ = data.Get<Position>();
+    }
+    
+    [Test]
+    public static void Test_EntityData_access_Perf()
+    {
+        int count   = 100; // 1_000_000_000
+        // Test_EntityData_access_Perf count: 1000000000, duration: 3286 ms
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(new Position(1,2,3), new EntityName("test"), new Scale3(), new MyComponent1());
+        
+        var data = entity.Data;
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int n = 0; n < count; n++) {
+            data.Get<Position>();
+            data.Get<EntityName>();
+            data.Get<Scale3>();
+            data.Get<MyComponent1>();
+        }
+        Console.WriteLine($"Test_EntityData_access_Perf count: {count}, duration: {sw.ElapsedMilliseconds} ms");
     }
 }
 

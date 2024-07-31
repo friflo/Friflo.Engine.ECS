@@ -255,10 +255,9 @@ public readonly struct Entity : IEquatable<Entity>
 #region component - properties
     /// <summary> Returns the entity data used to optimize read / write access of entity components. </summary>
     [Browse(Never)] public EntityData Data { get {
-        ref var node    = ref store.nodes[Id];
-        var type        = archetype;
-        if (type != null && Revision == node.revision) {
-            return new EntityData(type, node.compIndex);
+        ref var node = ref store.nodes[Id];
+        if (node.archetype != null && Revision == node.revision) {
+            return new EntityData(node);
         }
         return default;
     } }  

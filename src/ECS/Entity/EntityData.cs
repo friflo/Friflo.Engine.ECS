@@ -31,14 +31,14 @@ public readonly ref struct EntityData
     
     /// <summary> Returns true if the entity contains a component of the specified type. </summary>
     public  bool        Has<T> ()  where T : struct, IComponent {
-        return archetype.heapMap[StructInfo<T>.Index] != null;
+        return heapMap[StructInfo<T>.Index] != null;
     }
     
     /// <summary>Return the component of the given type as a reference.</summary>
     /// <exception cref="NullReferenceException"> if the entity is deleted or has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T       Get<T>() where T : struct, IComponent {
-        return ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
+        return ref ((StructHeap<T>)heapMap[StructInfo<T>.Index]).components[compIndex];
     }
     
     /// <summary>
@@ -48,7 +48,7 @@ public readonly ref struct EntityData
     /// <exception cref="NullReferenceException"> if the entity is deleted.</exception>
     /// <remarks>Executes in O(1)</remarks>
     public  bool        TryGet<T>(out T value) where T : struct, IComponent {
-        var type = archetype.heapMap[StructInfo<T>.Index];
+        var type = heapMap[StructInfo<T>.Index];
         if (type != null) {
             value =  ((StructHeap<T>)type).components[compIndex];
             return true;
@@ -59,12 +59,15 @@ public readonly ref struct EntityData
     #endregion
     
 #region fields
-    private readonly    Archetype   archetype;
-    private readonly    int         compIndex;
+    private readonly    StructHeap[]    heapMap;
+    private readonly    Archetype       archetype;
+    private readonly    int             compIndex;
 #endregion
 
-    internal EntityData(Archetype archetype, int compIndex) {
-        this.archetype  = archetype;
-        this.compIndex  = compIndex;
+    internal EntityData(in EntityNode node) {
+        var type    = node.archetype;
+        heapMap     = type.heapMap;
+        archetype   = type;
+        compIndex   = node.compIndex;
     }
 }
