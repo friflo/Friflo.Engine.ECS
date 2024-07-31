@@ -278,7 +278,8 @@ public sealed class Archetype
     
     internal static void MoveLastComponentsTo(Archetype arch, int newIndex)
     {
-        var lastIndex = arch.entityCount - 1;
+        var lastIndex   = arch.entityCount - 1;
+        var store       = arch.store;
         if (lastIndex != newIndex) {
             // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
             foreach (var heap in arch.structHeaps) {
@@ -286,7 +287,7 @@ public sealed class Archetype
             }
             var entityIds       = arch.entityIds;
             var lastEntityId    = entityIds[lastIndex];
-            arch.store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
+            store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
         
             entityIds[newIndex] = lastEntityId;
         }   // ReSharper disable once RedundantIfElseBlock
