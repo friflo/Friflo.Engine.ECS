@@ -24,7 +24,14 @@ public static class Test_EntityState
         IsTrue(tags.Has<TestTag2>());
         
         AreEqual(new Position(1,2,3),   data.Get<Position>());
+        IsTrue  (                       data.Has<Position>());
+        IsTrue  (                       data.TryGet<Position>(out var pos));
+        AreEqual(new Position(1,2,3),   pos);
+        
         AreEqual("test",                data.Get<EntityName>().value);
+        
+        IsFalse(                        data.Has<Scale3>());
+        IsFalse(                        data.TryGet<Scale3>(out _));
         
         entity.DeleteEntity();
         

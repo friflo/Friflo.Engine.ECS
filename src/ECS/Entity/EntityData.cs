@@ -25,11 +25,25 @@ public readonly ref struct EntityData
     /// <remarks>Executes in O(1)</remarks>
     public  Tags        Tags            => archetype.tags;
     
+    public  bool        Has<T> ()  where T : struct, IComponent {
+        return archetype.heapMap[StructInfo<T>.Index] != null;
+    }
+    
     /// <summary>Return the component of the given type as a reference.</summary>
     /// <exception cref="NullReferenceException"> if the entity is deleted or has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T       Get<T>() where T : struct, IComponent {
         return ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
+    }
+    
+    public  bool        TryGet<T>(out T value) where T : struct, IComponent {
+        var type = archetype.heapMap[StructInfo<T>.Index];
+        if (type != null) {
+            value =  ((StructHeap<T>)type).components[compIndex];
+            return true;
+        }
+        value = default;
+        return false;
     }
     #endregion
     
