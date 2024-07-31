@@ -253,6 +253,15 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ component properties ----------------------------------
 #region component - properties
+    [Browse(Never)] public EntityState State { get {
+        ref var node    = ref store.nodes[Id];
+        var type        = archetype;
+        if (type != null && Revision == node.revision) {
+            return new EntityState(type, node.compIndex);
+        }
+        return default;
+    } }  
+
     /// <summary>Returns the <see cref="ECS.EntityName"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName      Name { get {
