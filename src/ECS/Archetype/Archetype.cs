@@ -321,9 +321,8 @@ public sealed class Archetype
     }
     
     private static void ResizeGrow  (Archetype arch) => Resize(arch, 2 * arch.memory.capacity);
-    private static void ResizeShrink(Archetype arch) {
-        // Resize(arch, 2 * arch.memory.shrinkThreshold);
-    }
+    private static void ResizeShrink(Archetype arch) => Resize(arch, 2 * arch.memory.shrinkThreshold);
+    
     
     private static void Resize(Archetype arch, int capacity)
     {
