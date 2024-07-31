@@ -66,6 +66,8 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Get the number of internally reserved entities. </summary>
     [Browse(Never)] public              int                 Capacity        => nodes.Length;
     
+    [Browse(Never)] public              bool                RecycleIds      { get => recycleIds; set => SetRecycleIds(value); }
+    
     /// <summary> Return store information used for debugging and optimization. </summary>
     // ReSharper disable once InconsistentNaming
     [Browse(Never)] public readonly     EntityStoreInfo     Info;
@@ -104,6 +106,7 @@ public sealed partial class EntityStore : EntityStoreBase
     // --- Note: all fields must stay private to limit the scope of mutations
     [Browse(Never)] internal            EntityNode[]    nodes;          //   8  - acts also id2pid
     [Browse(Never)] private             Entity          storeRoot;      //  16  - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] private             bool            recycleIds;     //   1
 
     // --- buffers
     [Browse(Never)] private             int[]           idBuffer;       //   8
@@ -156,6 +159,7 @@ public sealed partial class EntityStore : EntityStoreBase
         EnsureNodesLength(2);
         idBuffer            = new int[1];
         idBufferSet         = new HashSet<int>();
+        recycleIds          = true;
         dataBuffer          = new DataEntity();
         Info                = new EntityStoreInfo(this);
     }

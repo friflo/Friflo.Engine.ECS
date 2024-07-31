@@ -455,13 +455,15 @@ public partial class EntityStore
     {
         var localNodes  = nodes;
         int n = 0;
-        for (; n < count; n++)
-        {
-            if (!intern.recycleIds.TryPop(out int id)) {
-                break;
+        if (recycleIds) {
+            for (; n < count; n++)
+            {
+                if (!intern.recycleIds.TryPop(out int id)) {
+                    break;
+                }
+                localNodes[id].archetype    = archetype; // mark created. So id is not used twice by loop below
+                ids[n + start]              = id;
             }
-            localNodes[id].archetype    = archetype; // mark created. So id is not used twice by loop below
-            ids[n + start]              = id;
         }
         int max         = localNodes.Length;
         int sequenceId  = intern.sequenceId;
@@ -484,12 +486,14 @@ public partial class EntityStore
     {
         var localNodes = nodes;
         int id;
-        while (intern.recycleIds.TryPop(out id))
-        {
-            if (localNodes[id].archetype != null) {
-                continue;
+        if (recycleIds) {
+            while (intern.recycleIds.TryPop(out id))
+            {
+                if (localNodes[id].archetype != null) {
+                    continue;
+                }
+                return id;
             }
-            return id;
         }
         int max = localNodes.Length;
         id      = ++intern.sequenceId;
@@ -508,7 +512,9 @@ public partial class EntityStore
     internal void DeleteNode(Entity entity)
     {
         int id = entity.Id;
-        intern.recycleIds.Push(id);
+        if (recycleIds) {
+            intern.recycleIds.Push(id);
+        }
         entityCount--;
         ref var node = ref nodes[id];
         if (node.isOwner != 0) {

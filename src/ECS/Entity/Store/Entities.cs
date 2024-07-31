@@ -205,6 +205,16 @@ public partial class EntityStore
         archetype.entityCount   += count;
     }
     
+    private void SetRecycleIds (bool enable) {
+        if (enable == recycleIds) {
+            return;
+        }
+        recycleIds = enable;
+        if (!enable) {
+            intern.recycleIds.Clear();
+        }
+    }
+    
     /// <summary>
     /// Set the passed <paramref name="entity"/> as the <see cref="StoreRoot"/> entity.
     /// </summary>

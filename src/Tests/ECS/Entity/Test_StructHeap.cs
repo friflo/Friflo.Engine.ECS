@@ -142,6 +142,34 @@ public static class Test_StructHeap
     }
     
     [Test]
+    public static void Test_StructHeap_RecycleIds_Disabled()
+    {
+        var store = new EntityStore { RecycleIds = false };
+        store.RecycleIds = false;
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        entity1.DeleteEntity();
+        entity2.DeleteEntity();
+        
+        var entity3 = store.CreateEntity();
+        var entity4 = store.CreateEntity();
+        Assert.AreEqual(3, entity3.Id);
+        Assert.AreEqual(4, entity4.Id);
+        
+        // --- can change RecycleIds state on store
+        store.RecycleIds = true;
+        entity4.DeleteEntity();
+        entity3.DeleteEntity();
+        
+        var entity3b = store.CreateEntity();
+        Assert.AreEqual(3, entity3b.Id);
+        
+        store.RecycleIds = false;
+        var entity5 = store.CreateEntity();
+        Assert.AreEqual(5, entity5.Id);
+    }
+    
+    [Test]
     public static void Test_StructHeap_CreateEntity_RecycleIds()
     {
         var store   = new EntityStore();
