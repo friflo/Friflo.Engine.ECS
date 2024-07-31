@@ -335,10 +335,10 @@ public sealed class Archetype
         if (shrinkThreshold < ArchetypeUtils.MinCapacity) {
             shrinkThreshold = -1;
         }
+        arch.store.AddArchetypeCapacity(capacity - arch.memory.capacity);
+        
         arch.memory.shrinkThreshold = shrinkThreshold;
         arch.memory.capacity        = capacity;
-        
-        arch.store.AddArchetypeCapacity(capacity - arch.entityIds.Length);
         
         var count = arch.entityCount;
         ArrayUtils.Resize(ref arch.entityIds, capacity, count);
