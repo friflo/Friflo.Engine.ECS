@@ -25,8 +25,11 @@ public readonly ref struct EntityData
     /// <remarks>Executes in O(1)</remarks>
     public  Tags        Tags            => archetype.tags;
 
+    /// <summary> Returns the archetype the entity belongs to. </summary>
     public  Archetype   Archetype       => archetype;
     
+    
+    /// <summary> Returns true if the entity contains a component of the specified type. </summary>
     public  bool        Has<T> ()  where T : struct, IComponent {
         return archetype.heapMap[StructInfo<T>.Index] != null;
     }
@@ -38,6 +41,12 @@ public readonly ref struct EntityData
         return ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
     }
     
+    /// <summary>
+    /// Gets the component of the specififed type.<br/>
+    /// Returns true if the entity contains a component of specified type. Otherwise false.
+    /// </summary>
+    /// <exception cref="NullReferenceException"> if the entity is deleted.</exception>
+    /// <remarks>Executes in O(1)</remarks>
     public  bool        TryGet<T>(out T value) where T : struct, IComponent {
         var type = archetype.heapMap[StructInfo<T>.Index];
         if (type != null) {
