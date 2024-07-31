@@ -253,6 +253,7 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ component properties ----------------------------------
 #region component - properties
+    /// <summary> Returns the entity state used to optimize read / write access to entity components. </summary>
     [Browse(Never)] public EntityState State { get {
         ref var node    = ref store.nodes[Id];
         var type        = archetype;

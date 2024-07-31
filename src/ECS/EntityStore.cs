@@ -66,6 +66,10 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Get the number of internally reserved entities. </summary>
     [Browse(Never)] public              int                 Capacity        => nodes.Length;
     
+    /// <summary>
+    /// If true ids of deleted entities are recycled when creating new entities.<br/>
+    /// If false every new entity gets its own unique id. As a result the store capacity will always grow over time.   
+    /// </summary>
     [Browse(Never)] public              bool                RecycleIds      { get => recycleIds; set => SetRecycleIds(value); }
     
     /// <summary> Return store information used for debugging and optimization. </summary>
