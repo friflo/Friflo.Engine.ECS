@@ -11,6 +11,9 @@ namespace Friflo.Engine.ECS;
 /// An <see cref="EntityState"/> is used to optimize read / write access of entity components.br/>
 /// An instance can be returned by <see cref="Entity.State"/>. 
 /// </summary>
+/// <remarks>
+/// It should be used if reading or updating multiple components of the same entity to optimize component access.
+/// </remarks>
 public readonly ref struct EntityState
 {
 #region entity getter
@@ -19,11 +22,12 @@ public readonly ref struct EntityState
     public  bool        IsNull          => archetype == null;
     
     /// <summary> Return the <see cref="ECS.Tags"/> added to an entity. </summary>
+    /// <exception cref="NullReferenceException"> if the entity is deleted.</exception>
     /// <remarks>Executes in O(1)</remarks>
     public  Tags        Tags            => archetype.tags;
     
     /// <summary>Return the component of the given type as a reference.</summary>
-    /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
+    /// <exception cref="NullReferenceException"> if the entity is deleted or has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T       Get<T>() where T : struct, IComponent {
         return ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
