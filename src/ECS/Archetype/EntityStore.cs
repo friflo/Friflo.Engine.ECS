@@ -77,7 +77,7 @@ public abstract partial class EntityStoreBase
     
 #region private / internal fields
     // --- archetypes
-    [Browse(Never)] protected           Archetype[]             archs;              //  8   - array of all archetypes. never null
+    [Browse(Never)] internal            Archetype[]             archs;              //  8   - array of all archetypes. never null
     [Browse(Never)] private             int                     archsCount;         //  4   - number of archetypes
     [Browse(Never)] private  readonly   HashSet<ArchetypeKey>   archSet;            //  8   - Set<> to get archetypes by key
     /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.ComponentTypes"/> and <see cref="Archetype.Tags"/>.<br/>
