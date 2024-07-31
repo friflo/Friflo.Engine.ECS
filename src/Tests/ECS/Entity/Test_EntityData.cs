@@ -23,6 +23,7 @@ public static class Test_EntityState
         IsTrue(tags.Has<TestTag>());
         IsTrue(tags.Has<TestTag2>());
         
+        AreSame (entity.Archetype,      data.Archetype);
         AreEqual(new Position(1,2,3),   data.Get<Position>());
         IsTrue  (                       data.Has<Position>());
         IsTrue  (                       data.TryGet<Position>(out var pos));

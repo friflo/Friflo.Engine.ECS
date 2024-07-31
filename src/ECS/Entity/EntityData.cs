@@ -24,6 +24,8 @@ public readonly ref struct EntityData
     /// <exception cref="NullReferenceException"> if the entity is deleted.</exception>
     /// <remarks>Executes in O(1)</remarks>
     public  Tags        Tags            => archetype.tags;
+
+    public  Archetype   Archetype       => archetype;
     
     public  bool        Has<T> ()  where T : struct, IComponent {
         return archetype.heapMap[StructInfo<T>.Index] != null;
