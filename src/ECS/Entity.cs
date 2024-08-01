@@ -682,6 +682,12 @@ public readonly struct Entity : IEquatable<Entity>
         Id          = id;
         Revision    = store.nodes[id].revision;
     }
+    
+    internal Entity(EntityStore entityStore, int id, short revision) {
+        store       = entityStore;
+        Id          = id;
+        Revision    = revision;
+    }
 
     /// <summary>
     /// Returns an <see cref="EntityBatch"/> to add/remove components or tags to/from this entity using the batch.<br/>

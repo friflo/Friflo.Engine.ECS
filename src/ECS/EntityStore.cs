@@ -204,8 +204,9 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     /// <exception cref="IndexOutOfRangeException"> In case passed <paramref name="id"/> invalid (id >= <see cref="Capacity"/>). </exception>
     public  Entity  GetEntityById(int id) {
-        if (0 <= id && id < nodes.Length) {
-            return new Entity(this, id);
+        var localNodes = nodes;
+        if (0 <= id && id < localNodes.Length) {
+            return new Entity(this, id, localNodes[id].revision);
         }
         throw IdOutOfRangeException(this, id);
     }

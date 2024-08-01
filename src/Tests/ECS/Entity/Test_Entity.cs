@@ -162,6 +162,20 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Assert_GetEntityById_Perf() {
+        var count = 10; // 10_000_000_000L;
+        // Assert_GetEntityById_Perf() - count: 10000000000, duration: 3238
+        var store   = new EntityStore();
+        store.CreateEntity(2);
+        var sw = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            store.GetEntityById(2);
+        }
+        Console.WriteLine($"Assert_GetEntityById_Perf() - count: {count}, duration: {sw.ElapsedMilliseconds}");
+    }
+    
+    [Test]
     public static void Assert_TryGetEntityById()
     {
         var store   = new EntityStore(PidType.RandomPids);
@@ -187,7 +201,7 @@ public static class Test_Entity
         IsFalse(store.TryGetEntityById(4, out entity));
         IsTrue (entity.IsNull);
     }
-        
+     
     [Test]
     public static void Test_EntityStore_CloneEntity()
     {
