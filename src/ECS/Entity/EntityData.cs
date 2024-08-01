@@ -85,5 +85,9 @@ public readonly ref struct EntityData
         Id          = id;
         compIndex   = node.compIndex;
     }
+    
+    internal EntityData(int id) {
+        Id = id;
+    }
     #endregion
 }

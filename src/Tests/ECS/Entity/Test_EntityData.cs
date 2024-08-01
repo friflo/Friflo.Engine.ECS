@@ -54,7 +54,10 @@ public static class Test_EntityState
         entity.DeleteEntity();
         
         data = entity.Data;
-        IsTrue(data.IsNull);
+        IsTrue  (           data.IsNull);
+        AreEqual(1,         data.Id);
+        AreEqual("Id: 1",   data.ToString());
+        
         Throws<NullReferenceException>(() => {
             GetTags(entity);
         });

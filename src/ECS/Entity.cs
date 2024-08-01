@@ -259,7 +259,7 @@ public readonly struct Entity : IEquatable<Entity>
         if (node.archetype != null && Revision == node.revision) {
             return new EntityData(node, Id);
         }
-        return default;
+        return new EntityData(Id);
     } }  
 
     /// <summary>Returns the <see cref="ECS.EntityName"/> reference of an entity.</summary>
