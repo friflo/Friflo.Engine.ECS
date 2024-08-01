@@ -32,6 +32,7 @@ public readonly ref struct EntityData
     [Browse(Never)] public  Archetype           Archetype       => archetype;
     
     /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
+    /// <exception cref="NullReferenceException"> if the entity is deleted.</exception>
                     public  EntityComponents    Components      => new EntityComponents(new Entity(archetype.entityStore, Id));
     
      public override        string              ToString()      => $"Id: {Id}";
@@ -48,6 +49,7 @@ public readonly ref struct EntityData
     
 #region entity getter
     /// <summary> Returns true if the entity contains a component of the specified type. </summary>
+    /// <exception cref="NullReferenceException"> if the entity is deleted.</exception>
     public  bool        Has<T> ()  where T : struct, IComponent {
         return heapMap[StructInfo<T>.Index] != null;
     }
