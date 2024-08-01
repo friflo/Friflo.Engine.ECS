@@ -17,6 +17,7 @@ namespace Friflo.Engine.ECS;
 /// <see cref="Entity.Parent"/>            <br/>
 /// <see cref="Entity.DebugJSON"/>          <br/>
 /// <see cref="Entity.DebugEventHandlers"/> <br/>
+/// <see cref="Entity.Revision"/>           <br/>
 /// </summary>
 internal readonly struct EntityInfo
 {
@@ -28,7 +29,8 @@ internal readonly struct EntityInfo
     internal            Entity              Parent          => entity.Parent;
     internal            JSON                JSON            => new JSON(EntityUtils.EntityToJSON(entity));
     internal            DebugEventHandlers  EventHandlers   => EntityStore.GetEventHandlers(entity.store, entity.Id);
-    internal            EntityLinks         IncomingLinks   => entity.GetAllIncomingLinks();   
+    internal            EntityLinks         IncomingLinks   => entity.GetAllIncomingLinks();
+    internal            short               Revision        => entity.Revision;
     public   override   string              ToString()      => GetString();
     #endregion
 

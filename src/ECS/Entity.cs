@@ -374,6 +374,7 @@ public readonly struct Entity : IEquatable<Entity>
     [FieldOffset(8)]    internal    readonly    long        idRevision; //  8
     // ReSharper disable once InconsistentNaming
     [FieldOffset(8)]    public      readonly    int         Id;         //  4
+    [Browse(Never)]
     [FieldOffset(12)]   public      readonly    short       Revision;   //  2
     #endregion
 
