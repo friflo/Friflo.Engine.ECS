@@ -371,7 +371,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
     [Browse(Never)]
-    [FieldOffset(8)]    internal    readonly    long        idRevision; //  8
+    [FieldOffset(8)]    internal    readonly    long        idRevision; // (8) - 4 (Id) + 2 (Revision) + 2 (padding)
     // ReSharper disable once InconsistentNaming
     [FieldOffset(8)]    public      readonly    int         Id;         //  4
     [Browse(Never)]
