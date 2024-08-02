@@ -146,20 +146,20 @@ public static void EntityBatchOperations()
         new Scale3(4, 5, 6),
         new EntityName("test"),
         Tags.Get<MyTag1>());
-    Console.WriteLine(entity);  // id: 1  "test"  [EntityName, Position, Scale3, #MyTag1]
+    Console.WriteLine(entity); // id: 1  "test"  [EntityName, Position, Scale3, #MyTag1]
     
     // batch: get operations
-    var data    = entity.Data;  // introduced in 3.0.0-preview.7
+    var data    = entity.Data; // introduced in 3.0.0-preview.7
     var pos     = data.Get<Position>();
     var scale   = data.Get<Scale3>();
     var name    = data.Get<EntityName>();
     var tags    = data.Tags;
-    Console.WriteLine($"({pos}), ({scale}), ({name})"); // (1, 2, 3), (4, 5, 6), ('test')
-    Console.WriteLine(tags);                            // Tags: [#MyTag1]
+    Console.WriteLine($"({pos}),({scale}),({name})"); // (1, 2, 3), (4, 5, 6), ('test')
+    Console.WriteLine(tags);                          // Tags: [#MyTag1]
     
     // batch: remove operations
-    entity.Remove<Position, EntityName>(Tags.Get<MyTag1>());
-    Console.WriteLine(entity);  // id: 1  []
+    entity.Remove<Position, Scale3, EntityName>(Tags.Get<MyTag1>());
+    Console.WriteLine(entity); // id: 1  []
 }
 
 /// An EntityBatch should only be used when adding <b>AND</b> removing components / tags to the same entity.<br/>
