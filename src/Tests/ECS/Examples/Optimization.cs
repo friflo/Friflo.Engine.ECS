@@ -27,8 +27,8 @@ public static void EnumerateQueryChunks()
     var query = store.Query<MyComponent>();
     foreach (var (components, entities) in query.Chunks)
     {
-        foreach (var component in components.Span) {
-            Console.WriteLine($"MyComponent.value: {component.value}");
+        for (int n = 0; n < entities.Length; n++) {
+            Console.WriteLine($"MyComponent.value: {components[n].value}");
             // > MyComponent.value: 42
             // > MyComponent.value: 43
             // > MyComponent.value: 44
@@ -47,15 +47,11 @@ public static void ParallelQueryJob()
     var query = store.Query<MyComponent>();
     var queryJob = query.ForEach((myComponents, entities) =>
     {
-        // multi threaded query execution running on all available cores 
-        foreach (ref var myComponent in myComponents.Span) {
-            myComponent.value += 10;                
+        // multi threaded query execution running on all available cores
+        for (int n = 0; n < entities.Length; n++) {
+            myComponents[n].value += 10;
         }
     });
-    Console.WriteLine($"JobRunner - thread count:              {runner.ThreadCount}");
-    Console.WriteLine($"Query     - entity count:              {query.Count}");
-    Console.WriteLine($"QueryJob  - MinParallelChunkLength:    {queryJob.MinParallelChunkLength}");
-    Console.WriteLine($"QueryJob  - ParallelComponentMultiple: {queryJob.ParallelComponentMultiple}");
     queryJob.RunParallel();
     runner.Dispose();
 }
