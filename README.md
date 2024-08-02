@@ -297,7 +297,7 @@ root.SetMonitorPerf(true);
 
 When enabled system monitoring captures
 - System execution duration in ms.
-- Memory heap allocations per system.
+- Memory heap allocations per system in bytes.
 - The number of entities matching a query system.
 
 The performance statistics available at [SystemPerf](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemPerf.md).  
