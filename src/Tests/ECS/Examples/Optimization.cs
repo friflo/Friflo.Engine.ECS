@@ -113,6 +113,15 @@ public static void CreateEntityOperation()
     Console.WriteLine(taggedEntities);      // > Query: [#MyTag1]  Count: 10
 }
 
+[Test]
+public static void CreateEntities()
+{
+    var store     = new EntityStore();
+    var archetype = store.GetArchetype(ComponentTypes.Get<Position, Scale3>(), Tags.Get<MyTag1>());
+    archetype.CreateEntities(100_000);  // ~ 0.5 ms
+    Console.WriteLine(store.Count);     // 100000
+}
+
 /// Obsolete! Prefer using significant more performant <c>CreateEntity()</c> overloads used
 /// in <see cref="CreateEntityOperation"/> above.
 [Test]
