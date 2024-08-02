@@ -296,6 +296,7 @@ root.SetMonitorPerf(true);
 ```
 
 When enabled system monitoring captures
+- Number of system executions.
 - System execution duration in ms.
 - Memory heap allocations per system in bytes.
 - The number of entities matching a query system.
