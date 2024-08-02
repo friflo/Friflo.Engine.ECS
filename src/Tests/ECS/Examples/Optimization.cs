@@ -28,11 +28,12 @@ public static void EnumerateQueryChunks()
     foreach (var (components, entities) in query.Chunks)
     {
         for (int n = 0; n < entities.Length; n++) {
-            Console.WriteLine($"MyComponent.value: {components[n].value}");
-            // > MyComponent.value: 42
-            // > MyComponent.value: 43
-            // > MyComponent.value: 44
+            Console.WriteLine(components[n].value); // > 42  44  44
         }
+    }
+    // Caution! This alternative to iterate components is much slower
+    foreach (var entity in query.Entities) {
+        Console.WriteLine(entity.GetComponent<MyComponent>().value); // > 42  44  44
     }
 }
 
