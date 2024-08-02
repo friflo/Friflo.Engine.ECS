@@ -220,8 +220,9 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         var localNodes = nodes;
         if (0 <= id && id < localNodes.Length) {
-            entity = new Entity(this, id);
-            return localNodes[id].archetype != null;
+            ref var node = ref localNodes[id];
+            entity = new Entity(this, id, node.revision);
+            return node.archetype != null;
         }
         entity = default;
         return false;
@@ -246,7 +247,7 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         var pid2Id = extension.pid2Id;
         if (pid2Id != null) {
-            if (pid2Id.TryGetValue(pid,out int id)) {
+            if (pid2Id.TryGetValue(pid, out int id)) {
                 value = new Entity(this, id);
                 return true;
             }
