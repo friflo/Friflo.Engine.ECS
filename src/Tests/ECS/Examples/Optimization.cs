@@ -107,7 +107,20 @@ public static void FilterEntityEvents()
 }
 
 [Test]
-public static void CreateEntityBatch()
+public static void CreateEntityOperation()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 10; n++) {
+        store.CreateEntity(new EntityName("test"), new Position(), Tags.Get<MyTag1>());
+    }
+    var taggedEntities = store.Query().AllTags(Tags.Get<MyTag1>());
+    Console.WriteLine(taggedEntities);      // > Query: [#MyTag1]  Count: 10
+}
+
+/// Obsolete! Prefer using significant more performant <c>CreateEntity()</c> overloads used
+/// in <see cref="CreateEntityOperation"/> above.
+[Test]
+public static void CreateEntityBatch_Obsolete()
 {
     var store   = new EntityStore();
     var entity  = store.Batch()
@@ -126,6 +139,36 @@ public static void CreateEntityBatch()
 }
 
 [Test]
+public static void EntityBatchOperations()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    
+    // batch: add operations
+    entity.Add(
+        new Position(1, 2, 3),
+        new Scale3(4, 5, 6),
+        new EntityName("test"),
+        Tags.Get<MyTag1>());
+    Console.WriteLine(entity);  // id: 1  "test"  [EntityName, Position, Scale3, #MyTag1]
+    
+    // batch: get operations
+    var data    = entity.Data;  // introduced in 3.0.0-preview.7
+    var pos     = data.Get<Position>();
+    var scale   = data.Get<Scale3>();
+    var name    = data.Get<EntityName>();
+    var tags    = data.Tags;
+    Console.WriteLine($"({pos}), ({scale}), ({name})"); // (1, 2, 3), (4, 5, 6), ('test')
+    Console.WriteLine(tags);                            // Tags: [#MyTag1]
+    
+    // batch: remove operations
+    entity.Remove<Position, EntityName>(Tags.Get<MyTag1>());
+    Console.WriteLine(entity);  // id: 1  []
+}
+
+/// An EntityBatch should only be used when adding <b>AND</b> removing components / tags to the same entity.<br/>
+/// If only adding <b>OR</b> removing components / tags use the <c>Add() / Remove()</c> overloads shown above.
+[Test]
 public static void EntityBatch()
 {
     var store   = new EntityStore();
@@ -133,10 +176,12 @@ public static void EntityBatch()
     
     entity.Batch()
         .Add(new Position(1, 2, 3))
+        .Add(new EntityName("test"))
+        .Remove<Scale3>()   // <- now batch is a combination of add & remove
         .AddTag<MyTag1>()
         .Apply();
     
-    Console.WriteLine($"entity: {entity}"); // > entity: id: 1  [Position, #MyTag1]
+    Console.WriteLine(entity); // id: 1  "test"  [EntityName, Position, #MyTag1]
 }
 
 [Test]
