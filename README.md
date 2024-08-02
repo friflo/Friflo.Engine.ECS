@@ -70,14 +70,17 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 - [x] Entity hierarchy / tree ⪪
 - [x] Fully reactive / entity events ⚡
 - [x] Systems / System groups ⚙️
-- [x] Watch entities, components, relations, tags, query results, systems, ... in debugger 🐞
 - [x] JSON Serialization 💿
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
 - [x] **100% secure C#** 🔒. No *unsafe code*, *native dll bindings* and *access violations*. 
-  See [Wiki ⋅ Library](https://friflo.gitbook.io/friflo.engine.ecs/package/library#assembly-dll).  
-
+  See [Wiki ⋅ Library](https://friflo.gitbook.io/friflo.engine.ecs/package/library#assembly-dll).
+- [x] Watch entities, components, relations, tags, query results, systems, ... in debugger 🐞
+      <details>
+        <summary>Screenshot - Watch ad-hoc query result in debugger</summary>
+        <img src="docs/images/watch-query-result-set.png" width="656" height="202"/>
+      </details>
 
 Complete feature list at [Wiki ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
 
