@@ -118,8 +118,8 @@ public static void CreateEntities()
 {
     var store     = new EntityStore();
     var archetype = store.GetArchetype(ComponentTypes.Get<Position, Scale3>(), Tags.Get<MyTag1>());
-    archetype.CreateEntities(100_000);  // ~ 0.5 ms
-    Console.WriteLine(store.Count);     // 100000
+    var entities  = archetype.CreateEntities(100_000);  // ~ 0.5 ms
+    Console.WriteLine(entities.Count);                  // 100000
 }
 
 /// Obsolete! Prefer using significant more performant <c>CreateEntity()</c> overloads used
