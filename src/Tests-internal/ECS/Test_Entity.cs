@@ -15,21 +15,21 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_IdRevision()
     {
-        var dict = new Dictionary<IdRevision, int>();
-        var idRef11 = new IdRevision(1,1);
-        var idRef21 = new IdRevision(2,1);
+        var dict = new Dictionary<Ident, int>();
+        var idRef11 = new Ident(1,1);
+        var idRef21 = new Ident(2,1);
         
-        IsTrue(idRef11 == idRef11);
+        IsTrue(idRef11 == new Ident(1,1));
         IsTrue(idRef11 != idRef21);
         
         dict.Add(idRef11, 11);
         dict.Add(idRef21, 21);
         
         AreEqual(2,     dict.Count);
-        AreEqual(11,    dict[new IdRevision(1,1)]);
+        AreEqual(11,    dict[new Ident(1,1)]);
         
         var start = Mem.GetAllocatedBytes();
-        _ = dict[new IdRevision(1,1)];
+        _ = dict[new Ident(1,1)];
         Mem.AssertNoAlloc(start);
         
         Throws<NotImplementedException>(() => {
