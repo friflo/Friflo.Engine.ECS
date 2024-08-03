@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
@@ -9,6 +12,32 @@ namespace Internal.ECS {
 
 public static class Test_Entity
 {
+    [Test]
+    public static void Test_Entity_IdRevision()
+    {
+        var dict = new Dictionary<IdRevision, int>();
+        var idRef11 = new IdRevision(1,1);
+        var idRef21 = new IdRevision(2,1);
+        
+        IsTrue(idRef11 == idRef11);
+        IsTrue(idRef11 != idRef21);
+        
+        dict.Add(idRef11, 11);
+        dict.Add(idRef21, 21);
+        
+        AreEqual(2,     dict.Count);
+        AreEqual(11,    dict[new IdRevision(1,1)]);
+        
+        var start = Mem.GetAllocatedBytes();
+        _ = dict[new IdRevision(1,1)];
+        Mem.AssertNoAlloc(start);
+        
+        Throws<NotImplementedException>(() => {
+            object obj = idRef11;
+            _ = obj.Equals(idRef11);
+        });
+    }
+    
     [Test]
     public static void Test_Entity_Components()
     {
