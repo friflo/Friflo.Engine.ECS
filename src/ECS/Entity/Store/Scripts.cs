@@ -60,7 +60,7 @@ internal partial struct StoreExtension
     /// <list type="bullet">
     ///   <item><see cref="EntityNode.archetype"/></item>
     ///   <item><see cref="EntityNode.compIndex"/></item>
-    ///   <item><see cref="RawEntity.archIndex"/></item>
+    ///   <item><see cref="RawEntityNode.archIndex"/></item>
     /// </list>
     /// </remarks>
     internal Script AddScript(Entity entity, Script script, ScriptType scriptType)

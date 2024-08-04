@@ -15,25 +15,25 @@ namespace Friflo.Engine.ECS;
 /// <remarks>
 /// The focus of the this entity store implementation is performance.<br/>
 /// The key is to minimize heap consumption required by <see cref="EntityNode"/>'s - 48 bytes<br/>
-/// A <see cref="RawEntityStore"/> stores only an array of blittable <see cref="RawEntity"/>'s -
+/// A <see cref="RawEntityStore"/> stores only an array of blittable <see cref="RawEntityNode"/>'s -
 /// structs having no reference type fields.<br/>
 /// <br/>
 /// The downside of this approach are:<br/>
 /// <list type="bullet">
 ///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="Entity"/>'s.</item>
-///   <item>The API to access / query / mutate <see cref="RawEntity"/>'s is less convenient.<br/>
+///   <item>The API to access / query / mutate <see cref="RawEntityNode"/>'s is less convenient.<br/>
 ///     It requires always two parameters - a <see cref="RawEntityStore"/> + entity <c>id</c> - instead of a single <see cref="Entity"/> reference.
 ///   </item>
 /// </list>
 /// </remarks>
 public sealed class RawEntityStore : EntityStoreBase
 {
-    private         RawEntity[] entities;       //  8 + all raw entities
-    private         int         sequenceId;     //  4               - incrementing id used for next new entity
+    private         RawEntityNode[] entities;       //  8 + all raw entities
+    private         int             sequenceId;     //  4               - incrementing id used for next new entity
 
     public RawEntityStore()
     {
-        entities    = Array.Empty<RawEntity>();
+        entities    = Array.Empty<RawEntityNode>();
         sequenceId  = Static.MinNodeId;
     }
 

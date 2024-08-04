@@ -40,10 +40,10 @@ public static class Test_sizeof
     
     [Test]
     public static unsafe void Test_sizeof_RawEntity() {
-        var size = sizeof(RawEntity);
+        var size = sizeof(RawEntityNode);
         AreEqual(8, size);
         
-        var rawEntity = new RawEntity { archIndex = 1, compIndex = 2 };
+        var rawEntity = new RawEntityNode { archIndex = 1, compIndex = 2 };
         AreEqual("archIndex: 1  compIndex: 2", rawEntity.ToString());
     }
     

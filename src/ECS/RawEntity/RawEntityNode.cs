@@ -9,11 +9,11 @@ namespace Friflo.Engine.ECS;
 
 /// <remarks>
 /// <b>Hard rule</b><br/>
-/// All fields must be blittable types. As the intention is to store millions (or billions) of <see cref="RawEntity"/>'s
+/// All fields must be blittable types. As the intention is to store millions (or billions) of <see cref="RawEntityNode"/>'s
 /// in <see cref="RawEntityStore"/>.<see cref="RawEntityStore.entities"/>.<br/>
 /// This enables that the GC will not iterate <see cref="RawEntityStore.entities"/> when performing a GC.Collect().
 /// </remarks>
-internal struct RawEntity
+internal struct RawEntityNode
 {
     internal        int     archIndex;  // 4    could be short. if changing check perf
     internal        int     compIndex;  // 4
