@@ -371,10 +371,10 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
     [Browse(Never)]
-    [FieldOffset(8)]    internal    readonly    Ident   ident;   // (8)
-    [FieldOffset(8)]    public      readonly    int     Id;         //  4
+    [FieldOffset(8)]    internal    readonly    RawEntity   rawEntity;  // (8)
+    [FieldOffset(8)]    public      readonly    int         Id;         //  4
     [Browse(Never)]
-    [FieldOffset(12)]   public      readonly    short   Revision;   //  2
+    [FieldOffset(12)]   public      readonly    short       Revision;   //  2
     #endregion
 
 
@@ -657,13 +657,13 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ general methods ---------------------------------------
 #region general - methods
     /// <summary> Return true if the passed entities have the same <see cref="Entity.Id"/>'s. </summary>
-    public static   bool    operator == (Entity a, Entity b)    => a.ident == b.ident && a.store == b.store;
+    public static   bool    operator == (Entity a, Entity b)    => a.rawEntity == b.rawEntity && a.store == b.store;
     
     /// <summary> Return true if the passed entities have the different <see cref="Entity.Id"/>'s. </summary>
-    public static   bool    operator != (Entity a, Entity b)    => a.ident != b.ident || a.store != b.store;
+    public static   bool    operator != (Entity a, Entity b)    => a.rawEntity != b.rawEntity || a.store != b.store;
 
     // --- IEquatable<T>
-    public          bool    Equals(Entity other)                => ident == other.ident && store == other.store;
+    public          bool    Equals(Entity other)                => rawEntity == other.rawEntity && store == other.store;
 
     // --- object
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>

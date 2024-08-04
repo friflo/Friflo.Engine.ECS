@@ -100,7 +100,7 @@ public static class Test_RawEntities
         for (int n = 0; n < count; n++) {
             store.CreateEntity();
         }
-        Console.WriteLine($"create RawEntity's. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"create RawEntityNode's. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     [Test]
