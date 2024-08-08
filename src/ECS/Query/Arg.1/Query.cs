@@ -2,9 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static System.Diagnostics.DebuggerBrowsableState;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
