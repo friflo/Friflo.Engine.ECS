@@ -27,7 +27,7 @@
         "src/Tests-Unity/UserSettings": true,
 
         // root files / folders
-        ".github": true,
+        ".github": false,
 
         // src folder
         "src/.cspell.json": true,
