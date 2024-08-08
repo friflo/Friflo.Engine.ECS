@@ -11,8 +11,20 @@
 
 # Friflo.Engine.ECS.Boost
 
-High Performance C# ECS - Entity Component System.  
-***The ECS for finishers 🏁***  
+Extension for [Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/) to boost performance of query execution.
+
+**Friflo.Engine.ECS** is using only **verifiably safe code**.  
+Using [unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code)
+may lead to access violations errors in case of bugs caused by *unsafe code*.  
+
+To improve performance of query execution this library is allowed to use unsafe code.  
+For large query result sets the bounds check for array access using safe code is significant.
+
+With unsafe code these bounds check can be elided resulting in a performance boost of ~30%.
+
+
+
+
 
 
 
