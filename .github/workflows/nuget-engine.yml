@@ -55,7 +55,7 @@ jobs:
     - name: Push
       working-directory: ./
       run: |
-        dotnet nuget push ${{ env.PACKAGE_DIRECTORY }}/Friflo.Engine.ECS.${VERSION}.nupkg             --source https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_AUTH_TOKEN }}
         dotnet nuget push ${{ env.PACKAGE_DIRECTORY }}/Friflo.Engine.ECS.Boost.${VERSION}.nupkg       --source https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_AUTH_TOKEN }}
+        dotnet nuget push ${{ env.PACKAGE_DIRECTORY }}/Friflo.Engine.ECS.${VERSION}.nupkg             --source https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_AUTH_TOKEN }}
 
     

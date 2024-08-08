@@ -16,6 +16,7 @@
 
         <!-- packaging -->
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <IsPackable>false</IsPackable>
         <!-- packaging: end -->
     </PropertyGroup>
 
