@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\ECS\Engine.ECS.csproj" />
+      <ProjectReference Include="..\..\ECS\Friflo.Engine.ECS.csproj" />
     </ItemGroup>
 
     <ItemGroup>
