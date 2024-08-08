@@ -292,59 +292,6 @@ public static class Test_Query
     }
     
     [Test]
-    public static void Test_Signature_Query_ReadOnly()
-    {
-        var store   = new EntityStore(PidType.RandomPids);
-        
-        var sig1 = Signature.Get<Position>();
-        var sig2 = Signature.Get<Position, Rotation>();
-        var sig3 = Signature.Get<Position, Rotation, Scale3>();
-        var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
-        var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
-        //
-        var query1 =    store.Query(sig1);
-        var query2 =    store.Query(sig2);
-        var query3 =    store.Query(sig3);
-        var query4 =    store.Query(sig4);
-        var query5 =    store.Query(sig5);
-        
-        query1.ReadOnly<Position>();
-        //
-        query2.ReadOnly<Position>();
-        query2.ReadOnly<Rotation>();
-        //
-        query3.ReadOnly<Position>();
-        query3.ReadOnly<Rotation>();
-        query3.ReadOnly<Scale3>();
-        //
-        query4.ReadOnly<Position>();
-        query4.ReadOnly<Rotation>();
-        query4.ReadOnly<Scale3>();
-        query4.ReadOnly<MyComponent1>();
-        //
-        query5.ReadOnly<Position>();
-        query5.ReadOnly<Rotation>();
-        query5.ReadOnly<Scale3>();
-        query5.ReadOnly<MyComponent1>();
-        query5.ReadOnly<MyComponent2>();
-        //
-        var e = Assert.Throws<ArgumentException>(() => { query1.ReadOnly<Transform>(); });
-        AreEqual("Query does not contain Component type: Transform", e!.Message);
-        
-        e = Assert.Throws<ArgumentException>(() => { query2.ReadOnly<Transform>(); });
-        AreEqual("Query does not contain Component type: Transform", e!.Message);
-
-        e = Assert.Throws<ArgumentException>(() => { query3.ReadOnly<Transform>(); });
-        AreEqual("Query does not contain Component type: Transform", e!.Message);
-        
-        e = Assert.Throws<ArgumentException>(() => { query4.ReadOnly<Transform>(); });
-        AreEqual("Query does not contain Component type: Transform", e!.Message);
-
-        e = Assert.Throws<ArgumentException>(() => { query5.ReadOnly<Transform>(); });
-        AreEqual("Query does not contain Component type: Transform", e!.Message);
-    }
-    
-    [Test]
     public static void Test_Query_creation_Perf()
     {
         var store   = new EntityStore(PidType.RandomPids);
@@ -433,42 +380,6 @@ public static class Test_Query
         }
         AreEqual(2,  chunkCount);
         AreEqual(99, entity2.Rotation.x);
-    }
-    
-    [Test]
-    public static void Test_Query_Chunks_RO()
-    {
-        var store   = new EntityStore(PidType.RandomPids);
-        var entity2 = store.CreateEntity();
-        entity2.AddComponent(new Position(1, 1, 1));
-        entity2.AddComponent(new Rotation(4, 2, 2, 2));
-        
-        var entity3  = store.CreateEntity();
-        entity3.AddComponent(new Position(1, 3, 3));
-        entity3.AddComponent(new Rotation(4, 4, 4, 4));
-        entity3.AddComponent(new Scale3  (7, 7, 7));
-        
-        var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig).ReadOnly<Position>().ReadOnly<Rotation>();
-        _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
-
-        var chunkCount   = 0;
-        AreEqual("QueryChunks[2]  Components: [Position, Rotation]", query.Chunks.ToString());
-        foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
-        var start = GetAllocatedBytes();
-        foreach (var (position, rotation, _) in query.Chunks) {
-            AreEqual(1, position[0].x);
-            AreEqual(4, rotation[0].x);
-            position[0].x = 42;
-            rotation[0].x = 43;
-            chunkCount++;
-        }
-        AssertNoAlloc(start);
-        AreEqual(2,  chunkCount);
-        AreEqual(1, entity2.Position.x);
-        AreEqual(4, entity2.Rotation.x);
-        AreEqual(1, entity3.Position.x);
-        AreEqual(4, entity3.Rotation.x);
     }
     
     [Test]

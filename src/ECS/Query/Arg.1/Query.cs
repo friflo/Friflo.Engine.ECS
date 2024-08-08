@@ -23,8 +23,6 @@ public delegate void ForEachEntity<T1>(ref T1 component1, Entity entity)
 public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     where T1 : struct, IComponent
 {
-    [Browse(Never)] internal    T1[]                copyT1;
-    
     /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
     /// <inheritdoc cref="ArchetypeQuery.AnyTags"/>
@@ -58,13 +56,6 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter)
         : base(store, signature.signatureIndexes, filter) {
-    }
-    
-    public ArchetypeQuery<T1> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
     }
     
     /// <summary>

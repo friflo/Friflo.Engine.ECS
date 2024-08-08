@@ -103,10 +103,6 @@ public struct ChunkEnumerator<T1, T2, T3, T4> : IEnumerator<Chunks<T1, T2, T3, T
     where T3 : struct, IComponent
     where T4 : struct, IComponent
 {
-    private readonly    T1[]                    copyT1;         //  8
-    private readonly    T2[]                    copyT2;         //  8
-    private readonly    T3[]                    copyT3;         //  8
-    private readonly    T4[]                    copyT4;         //  8
     private readonly    int                     structIndex1;   //  4
     private readonly    int                     structIndex2;   //  4
     private readonly    int                     structIndex3;   //  4
@@ -120,10 +116,6 @@ public struct ChunkEnumerator<T1, T2, T3, T4> : IEnumerator<Chunks<T1, T2, T3, T
     
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2, T3, T4> query)
     {
-        copyT1          = query.copyT1;
-        copyT2          = query.copyT2;
-        copyT3          = query.copyT3;
-        copyT4          = query.copyT4;
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
         structIndex3    = query.signatureIndexes.T3;
@@ -173,11 +165,11 @@ public struct ChunkEnumerator<T1, T2, T3, T4> : IEnumerator<Chunks<T1, T2, T3, T
         var chunks3     = (StructHeap<T3>)heapMap[structIndex3];
         var chunks4     = (StructHeap<T4>)heapMap[structIndex4];
 
-        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, start);
-        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count, start);
-        var chunk3      = new Chunk<T3>(chunks3.components, copyT3, count, start);
-        var chunk4      = new Chunk<T4>(chunks4.components, copyT4, count, start);
-        var entities    = new ChunkEntities(archetype,              count, start);
+        var chunk1      = new Chunk<T1>(chunks1.components, count, start);
+        var chunk2      = new Chunk<T2>(chunks2.components, count, start);
+        var chunk3      = new Chunk<T3>(chunks3.components, count, start);
+        var chunk4      = new Chunk<T4>(chunks4.components, count, start);
+        var entities    = new ChunkEntities(archetype,      count, start);
         chunks          = new Chunks<T1, T2, T3, T4>(chunk1, chunk2, chunk3, chunk4, entities);
         return true;
     SingleEntity:

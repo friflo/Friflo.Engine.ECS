@@ -82,7 +82,6 @@ public readonly struct QueryChunks<T1>  : IEnumerable <Chunks<T1>>
 public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
     where T1 : struct, IComponent
 {
-    private readonly    T1[]                    copyT1;         //  8
     private readonly    int                     structIndex1;   //  4
     //
     private readonly    Archetypes              archetypes;     // 16
@@ -93,7 +92,6 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
     
     internal  ChunkEnumerator(ArchetypeQuery<T1> query)
     {
-        copyT1          = query.copyT1;
         structIndex1    = query.signatureIndexes.T1;
         archetypes      = query.GetArchetypes();
         archetypePos    = -1;
@@ -137,8 +135,8 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
         var heapMap     = archetype.heapMap;
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
             
-        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, start);
-        var entities    = new ChunkEntities(archetype,              count, start);
+        var chunk1      = new Chunk<T1>(chunks1.components, count, start);
+        var entities    = new ChunkEntities(archetype,      count, start);
         chunks          = new Chunks<T1>(chunk1, entities);
         return true;
     SingleEntity:

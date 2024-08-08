@@ -25,9 +25,6 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     where T1 : struct, IComponent
     where T2 : struct, IComponent
 {
-    [Browse(Never)] internal    T1[]    copyT1;
-    [Browse(Never)] internal    T2[]    copyT2;
-    
     /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1, T2> AllTags       (in Tags tags) { SetHasAllTags(tags);      return this; }
     /// <inheritdoc cref="ArchetypeQuery.AnyTags"/>
@@ -62,14 +59,6 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature, QueryFilter filter)
         : base(store, signature.signatureIndexes, filter) {
-    }
-    
-    public ArchetypeQuery<T1, T2> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
     }
     
     /// <summary>

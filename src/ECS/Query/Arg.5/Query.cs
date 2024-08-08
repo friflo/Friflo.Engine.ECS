@@ -31,12 +31,6 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IComponent
     where T5 : struct, IComponent
 {
-    [Browse(Never)] internal    T1[]    copyT1;
-    [Browse(Never)] internal    T2[]    copyT2;
-    [Browse(Never)] internal    T3[]    copyT3;
-    [Browse(Never)] internal    T4[]    copyT4;
-    [Browse(Never)] internal    T5[]    copyT5;
-    
     /// <inheritdoc          cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
     /// <inheritdoc          cref="ArchetypeQuery.AnyTags"/>
@@ -70,17 +64,6 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature, QueryFilter filter)
         : base(store, signature.signatureIndexes, filter) {
-    }
-    
-    public ArchetypeQuery<T1, T2, T3, T4, T5> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
-        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
-        if (typeof(T4) == typeof(T)) { copyT4 = new T4[ChunkSize]; return this; }
-        if (typeof(T5) == typeof(T)) { copyT5 = new T5[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
     }
     
     /// <summary>

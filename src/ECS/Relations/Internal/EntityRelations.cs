@@ -144,7 +144,7 @@ internal abstract class EntityRelations
         int count       = archetype.Count;
         var entities    = new Entities(store, archetype.entityIds, 0, count);
         var components  = ((StructHeap<TComponent>)heap).components;
-        var chunk       = new Chunk<TComponent>(components, null, count, 0);
+        var chunk       = new Chunk<TComponent>(components, count, 0);
         return (entities, chunk);
     }
     
