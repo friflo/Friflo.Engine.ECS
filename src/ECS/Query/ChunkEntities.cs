@@ -28,7 +28,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
     /// <summary> Return the entity <see cref="Entity.Id"/>'s for the components in a <see cref="Chunk{T}"/>. </summary>
-    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, start, Length);
+    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, Start, Length);
     public   override   string              ToString()  => GetString();
     #endregion
 
@@ -37,7 +37,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   Archetype           Archetype;  //  8
     
     // ReSharper disable once NotAccessedField.Local
-    internal readonly   int                 start;      //  4
+    public   readonly   int                 Start;      //  4
     
     /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
@@ -59,7 +59,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         Archetype   = archetype;
         entityIds   = archetype.entityIds;
         Length      = componentLen;
-        this.start  = start;
+        Start       = start;
     }
     
     internal ChunkEntities(in ChunkEntities entities, int start, int componentLen, int taskIndex) {
@@ -67,7 +67,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         Execution   = JobExecution.Parallel;
         TaskIndex   = (byte)taskIndex;
         entityIds   = entities.entityIds;
-        this.start  = start;
+        Start       = start;
         Length      = componentLen;
     }
     
@@ -84,7 +84,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public int this[int index] {
         get {
             if (index < Length) {
-                return entityIds[start + index];
+                return entityIds[Start + index];
             }
             throw new IndexOutOfRangeException();
         }
@@ -95,7 +95,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     /// </summary>
     public Entity EntityAt(int index) {
         if (index < Length) {
-            return new Entity(Archetype.entityStore, entityIds[start + index]);
+            return new Entity(Archetype.entityStore, entityIds[Start + index]);
         }
         throw new IndexOutOfRangeException();
     }
@@ -147,7 +147,7 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.entityIds;
         store       = chunkEntities.Archetype.entityStore;
-        index       = chunkEntities.start - 1;
+        index       = chunkEntities.Start - 1;
         last        = chunkEntities.Length + index;
     }
     
