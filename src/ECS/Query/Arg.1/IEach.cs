@@ -10,3 +10,9 @@ public interface IEach<T1>
 {
     void Execute(ref T1 c1);
 }
+
+public interface IEachEntity<T1>
+    where T1 : IComponent
+{
+    void Execute(ref T1 c1, int id);
+}

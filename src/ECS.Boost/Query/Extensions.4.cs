@@ -39,4 +39,40 @@ public static partial class QueryExtensions
             }
         }
     }
+    
+    public static void ForEntity<TEachEntity, T1,T2,T3,T4>(this ArchetypeQuery<T1,T2,T3,T4> query, TEachEntity each)
+        where TEachEntity : IEachEntity<T1, T2, T3, T4>
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+    {
+        using var e = query.Chunks.GetEnumerator();
+        while (e.MoveNext())
+        {
+            var cur         = e.Current;
+            var entities    = cur.Entities;
+            var length      = entities.Length;
+            var spanIds     = entities.Ids;
+            var span1       = cur.Chunk1.Span;
+            var span2       = cur.Chunk2.Span;
+            var span3       = cur.Chunk3.Span;
+            var span4       = cur.Chunk4.Span;
+            
+            unsafe {
+#pragma warning disable CS8500
+                fixed (T1*  c1  = span1)
+                fixed (T2*  c2  = span2)
+                fixed (T3*  c3  = span3)
+                fixed (T4*  c4  = span4)
+#pragma warning restore CS8500
+                fixed (int* ids = spanIds)
+                {
+                    for (int i = 0; i < length; i++) {
+                        each.Execute(ref c1[i], ref c2[i], ref c3[i], ref c4[i], ids[i]);
+                    }
+                }
+            }
+        }
+    }
 }
