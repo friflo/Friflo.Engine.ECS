@@ -6,7 +6,7 @@ namespace Friflo.Engine.ECS;
 
 public static partial class QueryExtensions
 {
-    public static void For<TEach, T1,T2,T3,T4>(this ArchetypeQuery<T1,T2,T3,T4> query, TEach each)
+    public static void Each<TEach, T1,T2,T3,T4>(this ArchetypeQuery<T1,T2,T3,T4> query, TEach each)
         where TEach : IEach<T1, T2, T3, T4>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -40,7 +40,7 @@ public static partial class QueryExtensions
         }
     }
     
-    public static void ForEntity<TEachEntity, T1,T2,T3,T4>(this ArchetypeQuery<T1,T2,T3,T4> query, TEachEntity each)
+    public static void EachEntity<TEachEntity, T1,T2,T3,T4>(this ArchetypeQuery<T1,T2,T3,T4> query, TEachEntity each)
         where TEachEntity : IEachEntity<T1, T2, T3, T4>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
