@@ -36,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ECS.Boost\Friflo.Engine.ECS.Boost.csproj" />
       <ProjectReference Include="..\Hub\Engine.Hub.csproj" />
     </ItemGroup>
 

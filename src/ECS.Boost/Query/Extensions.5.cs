@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public static partial class QueryExtension
+public static partial class QueryExtensions
 {
     public static void For<TEach, T1,T2,T3,T4,T5>(this ArchetypeQuery<T1,T2,T3,T4,T5> query, TEach each)
         where TEach : IEach<T1, T2, T3, T4, T5>
