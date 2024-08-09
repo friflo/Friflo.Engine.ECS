@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -15,8 +17,9 @@ public static partial class QueryExtensions
         {
             var cur         = e.Current;
             var entities    = cur.Entities;
+            var start       = entities.Start;
             var length      = entities.Length;
-            var span1       = cur.Chunk1.Span;
+            var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
             
             unsafe {
 #pragma warning disable CS8500
@@ -40,9 +43,10 @@ public static partial class QueryExtensions
         {
             var cur         = e.Current;
             var entities    = cur.Entities;
+            var start       = entities.Start;
             var length      = entities.Length;
-            var spanIds     = entities.Ids;
-            var span1       = cur.Chunk1.Span;
+            var spanIds     = new ReadOnlySpan<int>(entities.ArchetypeIds, start, length);
+            var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
             
             unsafe {
 #pragma warning disable CS8500

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -18,11 +20,12 @@ public static partial class QueryExtensions
         {
             var cur         = e.Current;
             var entities    = cur.Entities;
+            var start       = entities.Start;
             var length      = entities.Length;
-            var span1       = cur.Chunk1.Span;
-            var span2       = cur.Chunk2.Span;
-            var span3       = cur.Chunk3.Span;
-            var span4       = cur.Chunk4.Span;
+            var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
+            var span2       = new Span<T2>(cur.Chunk2.ArchetypeComponents, start, length);
+            var span3       = new Span<T3>(cur.Chunk3.ArchetypeComponents, start, length);
+            var span4       = new Span<T4>(cur.Chunk4.ArchetypeComponents, start, length);
             
             unsafe {
 #pragma warning disable CS8500
@@ -52,12 +55,13 @@ public static partial class QueryExtensions
         {
             var cur         = e.Current;
             var entities    = cur.Entities;
+            var start       = entities.Start;
             var length      = entities.Length;
-            var spanIds     = entities.Ids;
-            var span1       = cur.Chunk1.Span;
-            var span2       = cur.Chunk2.Span;
-            var span3       = cur.Chunk3.Span;
-            var span4       = cur.Chunk4.Span;
+            var spanIds     = new ReadOnlySpan<int>(entities.ArchetypeIds, start, length);
+            var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
+            var span2       = new Span<T2>(cur.Chunk2.ArchetypeComponents, start, length);
+            var span3       = new Span<T3>(cur.Chunk3.ArchetypeComponents, start, length);
+            var span4       = new Span<T4>(cur.Chunk4.ArchetypeComponents, start, length);
             
             unsafe {
 #pragma warning disable CS8500

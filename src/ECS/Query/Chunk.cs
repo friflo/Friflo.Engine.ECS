@@ -31,15 +31,15 @@ public readonly struct Chunk<T>
     where T : struct, IComponent
 {
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
-    public              Span<T>     Span        => new(values, start, Length);
+    public              Span<T>     Span                    => new(ArchetypeComponents, start, Length);
     
-    private  readonly   T[]         values;     //  8
+    public   readonly   T[]         ArchetypeComponents;    //  8
     
     /// <summary> Return the number of components in a <see cref="Chunk{T}"/>. </summary>
-    public   readonly   int         Length;     //  4
+    public   readonly   int         Length;                 //  4
     
     // ReSharper disable once NotAccessedField.Local
-    private  readonly   int         start;      //  4
+    private  readonly   int         start;                  //  4
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
@@ -68,7 +68,7 @@ public readonly struct Chunk<T>
     /// </code>
     /// </remarks>
     public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount256) & 0x7fff_ffe0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + ComponentType<T>.PadCount256) & 0x7fff_ffe0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -76,7 +76,7 @@ public readonly struct Chunk<T>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount128) & 0x7fff_fff0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + ComponentType<T>.PadCount128) & 0x7fff_fff0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -84,7 +84,7 @@ public readonly struct Chunk<T>
     ///  See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount512) & 0x7fff_ffc0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + ComponentType<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a Vector128{T}.
@@ -111,23 +111,23 @@ public readonly struct Chunk<T>
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
 
-    internal Chunk(T[] values, int length, int start) {
-        Length      = length;
-        this.start  = start;
-        this.values = values;
+    internal Chunk(T[] components, int length, int start) {
+        Length              = length;
+        this.start          = start;
+        ArchetypeComponents = components;
     }
     
     internal Chunk(Chunk<T> chunk, int start, int length) {
-        Length      = length;
-        this.start  = start;
-        values      = chunk.values;
+        Length              = length;
+        this.start          = start;
+        ArchetypeComponents = chunk.ArchetypeComponents;
     }
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>
     public ref T this[int index] {
         get {
             if (index < Length) {
-                return ref values[start + index];
+                return ref ArchetypeComponents[start + index];
             }
             throw new IndexOutOfRangeException();
         }
