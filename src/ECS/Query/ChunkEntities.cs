@@ -30,8 +30,6 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     /// <summary> Return the entity <see cref="Entity.Id"/>'s for the components in a <see cref="Chunk{T}"/>. </summary>
     public              ReadOnlySpan<int>   Ids             => new(Archetype.entityIds, Start, Length);
     
-    public              int[]               ArchetypeIds    => Archetype.entityIds;
-    
     public   override   string              ToString()      => GetString();
     #endregion
 

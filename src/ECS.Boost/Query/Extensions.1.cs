@@ -45,7 +45,7 @@ public static partial class QueryExtensions
             var entities    = cur.Entities;
             var start       = entities.Start;
             var length      = entities.Length;
-            var spanIds     = new ReadOnlySpan<int>(entities.ArchetypeIds, start, length);
+            var spanIds     = entities.Archetype.EntityIds.Slice          (start, length);
             var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
             
             unsafe {
