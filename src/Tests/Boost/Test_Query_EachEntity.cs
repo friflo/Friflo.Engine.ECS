@@ -21,11 +21,37 @@ public static class Test_Query_EachEntity
     }
     
     [Test]
+    public static void Test_Query_Chunks_EachEntity1()
+    {
+        var store       = CreateStore();
+        var query       = store.Query<MyComponent1>();
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(new Each1());
+        }
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(1, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    [Test]
     public static void Test_Query_EachEntity2()
     {
         var store       = CreateStore();
         var query       = store.Query<MyComponent1, MyComponent2>();
         query.EachEntity(new Each2());
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(1, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    [Test]
+    public static void Test_Query_Chunks_EachEntity2()
+    {
+        var store       = CreateStore();
+        var query       = store.Query<MyComponent1, MyComponent2>();
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(new Each2());
+        }
         foreach (var entity in store.Entities) {
             Mem.AreEqual(1, entity.GetComponent<MyComponent1>().a);
         }
@@ -43,6 +69,19 @@ public static class Test_Query_EachEntity
     }
     
     [Test]
+    public static void Test_Query_Chunks_EachEntity3()
+    {
+        var store       = CreateStore();
+        var query       = store.Query<MyComponent1, MyComponent2, MyComponent3>();
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(new Each3());
+        }
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(3, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    [Test]
     public static void Test_Query_EachEntity4()
     {
         var store       = CreateStore();
@@ -54,11 +93,37 @@ public static class Test_Query_EachEntity
     }
     
     [Test]
+    public static void Test_Query_Chunks_EachEntity4()
+    {
+        var store       = CreateStore();
+        var query       = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4>();
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(new Each4());
+        }
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(7, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    [Test]
     public static void Test_Query_EachEntity5()
     {
         var store       = CreateStore();
         var query       = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5>();
         query.EachEntity(new Each5());
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(15, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    [Test]
+    public static void Test_Query_Chunks_EachEntity5()
+    {
+        var store       = CreateStore();
+        var query       = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5>();
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(new Each5());
+        }
         foreach (var entity in store.Entities) {
             Mem.AreEqual(15, entity.GetComponent<MyComponent1>().a);
         }
