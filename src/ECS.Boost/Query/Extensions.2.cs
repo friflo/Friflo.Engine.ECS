@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
-
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -14,26 +12,8 @@ public static partial class QueryExtensions
         where T2 : struct, IComponent
     {
         using var e = query.Chunks.GetEnumerator();
-        while (e.MoveNext())
-        {
-            var cur         = e.Current;
-            var entities    = cur.Entities;
-            var start       = entities.Start;
-            var length      = entities.Length;
-            var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
-            var span2       = new Span<T2>(cur.Chunk2.ArchetypeComponents, start, length);
-            
-            unsafe {
-#pragma warning disable CS8500
-                fixed (T1*  c1  = span1)
-                fixed (T2*  c2  = span2)
-#pragma warning restore CS8500
-                {
-                    for (int i = 0; i < length; i++) {
-                        each.Execute(ref c1[i], ref c2[i]);
-                    }
-                }
-            }
+        while (e.MoveNext()) {
+            e.Current.Each(each);
         }
     }
     
@@ -43,28 +23,8 @@ public static partial class QueryExtensions
         where T2 : struct, IComponent
     {
         using var e = query.Chunks.GetEnumerator();
-        while (e.MoveNext())
-        {
-            var cur         = e.Current;
-            var entities    = cur.Entities;
-            var start       = entities.Start;
-            var length      = entities.Length;
-            var spanIds     = entities.Archetype.EntityIds.Slice          (start, length);
-            var span1       = new Span<T1>(cur.Chunk1.ArchetypeComponents, start, length);
-            var span2       = new Span<T2>(cur.Chunk2.ArchetypeComponents, start, length);
-            
-            unsafe {
-#pragma warning disable CS8500
-                fixed (T1*  c1  = span1)
-                fixed (T2*  c2  = span2)
-#pragma warning restore CS8500
-                fixed (int* ids = spanIds)
-                {
-                    for (int i = 0; i < length; i++) {
-                        each.Execute(ref c1[i], ref c2[i], ids[i]);
-                    }
-                }
-            }
+        while (e.MoveNext()) {
+            e.Current.EachEntity(each);
         }
     }
 }
