@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static Tests.Examples.General;
 
 #if !UNITY_5_3_OR_NEWER
 using System.Runtime.Intrinsics;
-
 #endif
 
+// ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable UnusedVariable
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable CheckNamespace
@@ -16,6 +17,24 @@ namespace Tests.Examples {
 // See: https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization
 public static class Optimization
 {
+
+[Test]
+public static void BoostedQuery()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 100; n++) {
+        store.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
+    }
+    var query = store.Query<Position, Velocity>();
+    query.Each(new MoveEach()); // requires https://www.nuget.org/packages/Friflo.Engine.ECS.Boost
+}
+
+struct MoveEach : IEach<Position, Velocity>
+{
+    public void Execute(ref Position position, ref Velocity velocity) {
+        position.value += velocity.value;
+    }
+} 
 
 [Test]
 public static void EnumerateQueryChunks()

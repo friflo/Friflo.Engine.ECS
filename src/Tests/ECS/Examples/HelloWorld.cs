@@ -5,12 +5,12 @@ using NUnit.Framework;
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
+    
+public struct Velocity : IComponent { public Vector3 value; }
 
 // See: https://github.com/friflo/Friflo.Engine.ECS#-examples
 public static class HelloWorldExample
 {
-
-public struct Velocity : IComponent { public Vector3 value; }
 
 [Test]
 public static void HelloWorld()
