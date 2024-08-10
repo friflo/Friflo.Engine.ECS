@@ -23,7 +23,7 @@ public static void BoostedQuery()
 {
     var store   = new EntityStore();
     for (int n = 0; n < 100; n++) {
-        store.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
+        store.CreateEntity(new Position(), new Velocity());
     }
     var query = store.Query<Position, Velocity>();
     query.Each(new MoveEach()); // requires https://www.nuget.org/packages/Friflo.Engine.ECS.Boost
