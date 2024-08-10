@@ -6,7 +6,7 @@ namespace Friflo.Engine.ECS;
 
 public static partial class QueryExtensions
 {
-    public static void Each<TEach, T1,T2,T3>(this ArchetypeQuery<T1,T2,T3> query, TEach each)
+    public static TEach Each<TEach, T1,T2,T3>(this ArchetypeQuery<T1,T2,T3> query, TEach each)
         where TEach : IEach<T1, T2, T3>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -14,11 +14,12 @@ public static partial class QueryExtensions
     {
         using var e = query.Chunks.GetEnumerator();
         while (e.MoveNext()) {
-            e.Current.Each(each);
+            e.Current.Each(ref each);
         }
+        return each;
     }
     
-    public static void EachEntity<TEachEntity, T1,T2,T3>(this ArchetypeQuery<T1,T2,T3> query, TEachEntity each)
+    public static TEachEntity EachEntity<TEachEntity, T1,T2,T3>(this ArchetypeQuery<T1,T2,T3> query, TEachEntity each)
         where TEachEntity : IEachEntity<T1, T2, T3>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -26,7 +27,8 @@ public static partial class QueryExtensions
     {
         using var e = query.Chunks.GetEnumerator();
         while (e.MoveNext()) {
-            e.Current.EachEntity(each);
+            e.Current.EachEntity(ref each);
         }
+        return each;
     }
 }

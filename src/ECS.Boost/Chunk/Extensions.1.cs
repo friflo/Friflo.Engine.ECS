@@ -8,7 +8,7 @@ namespace Friflo.Engine.ECS;
 
 public static partial class ChunkExtensions
 {
-    public static void Each<TEach, T1>(this Chunks<T1> chunks, TEach each)
+    public static void Each<TEach, T1>(this Chunks<T1> chunks, ref TEach each)
         where TEach : IEach<T1>
         where T1 : struct, IComponent
     {
@@ -29,7 +29,7 @@ public static partial class ChunkExtensions
         }
     }
     
-    public static void EachEntity<TEachEntity, T1>(this Chunks<T1> chunks, TEachEntity each)
+    public static void EachEntity<TEachEntity, T1>(this Chunks<T1> chunks, ref TEachEntity each)
         where TEachEntity : IEachEntity<T1>
         where T1 : struct, IComponent
     {
