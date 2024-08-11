@@ -77,18 +77,18 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
-- [x] **100% secure 🔒 C#**. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
-      *native dll bindings* and *access violations*. 
-      <details>
-        <summary>Symptoms of access violation bugs using unsafe code</summary>
-        <img src="docs/images/access_violation/VS-2022_access_violation.png" width="201" height="109"/>
-        <img src="docs/images/access_violation/Rider-access_violation.png"   width="200" height="100"/>
-        <img src="docs/images/access_violation/Unity_access_violation.png"   width="220" height="135"/>
-      </details>
 - [x] Watch entities, components, relations, tags, query results, systems, ... in debugger 🐞
       <details>
         <summary>Screenshot - Watch ad-hoc query result in debugger</summary>
         <img src="docs/images/watch-query-result-set.png" width="656" height="202"/>
+      </details>
+- [x] **100% secure 🔒 C#**. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
+      *native dll bindings* and *access violations*. 
+      <details>
+        <summary>Symptoms of access violation bugs using unsafe code</summary>
+        <img src="docs/images/access_violation/VS-2022_access_violation.png" width="249" height="135"/>
+        <img src="docs/images/access_violation/Rider-access_violation.png"   width="230" height="115"/>
+        <img src="docs/images/access_violation/Unity_access_violation.png"   width="213" height="131"/>
       </details>
 
 Complete feature list at [Wiki ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
