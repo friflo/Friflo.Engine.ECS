@@ -82,7 +82,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
         <summary>Screenshot - Watch ad-hoc query result in debugger</summary>
         <img src="docs/images/watch-query-result-set.png" width="656" height="202"/>
       </details>
-- [x] **100% secure 🔒 C#**. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
+- [x] **100%** verifiably safe 🔒 C#. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
       *native dll bindings* and *access violations*. 
       <details>
         <summary>Symptoms of access violation bugs using unsafe code</summary>
