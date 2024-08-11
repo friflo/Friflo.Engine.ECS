@@ -11,9 +11,8 @@ public static partial class QueryExtensions
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        using var e = query.Chunks.GetEnumerator();
-        while (e.MoveNext()) {
-            e.Current.Each(ref each);
+        foreach (var chunk in query.Chunks) {
+            chunk.Each(ref each);
         }
         return each;
     }
@@ -23,9 +22,8 @@ public static partial class QueryExtensions
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        using var e = query.Chunks.GetEnumerator();
-        while (e.MoveNext()) {
-            e.Current.EachEntity(ref each);
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(ref each);
         }
         return each;
     }
