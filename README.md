@@ -77,7 +77,8 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
-- [x] **100% secure 🔒 C#**. No *unsafe code*, *native dll bindings* and *access violations*. 
+- [x] **100% secure 🔒 C#**. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
+      *native dll bindings* and *access violations*. 
       <details>
         <summary>Symptoms of access violation bugs using unsafe code</summary>
         <img src="docs/images/access_violation/VS-2022_access_violation.png" width="201" height="109"/>
