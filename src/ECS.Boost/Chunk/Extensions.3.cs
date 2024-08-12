@@ -29,6 +29,7 @@ public static partial class ChunkExtensions
 #pragma warning restore CS8500
             {
                 for (int i = 0; i < length; i++) {
+                    // all spanX.Length == length. spanX[i] is always in bounds.
                     each.Execute(ref c1[i], ref c2[i], ref c3[i]);
                 }
             }
@@ -58,6 +59,7 @@ public static partial class ChunkExtensions
             fixed (int* ids = spanIds)
             {
                 for (int i = 0; i < length; i++) {
+                    // all spanX.Length == length. spanX[i] is always in bounds.
                     each.Execute(ref c1[i], ref c2[i], ref c3[i], ids[i]);
                 }
             }
