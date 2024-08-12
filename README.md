@@ -85,7 +85,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 - [x] **100%** verifiably safe 🔒 C#. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
       *native dll bindings* and *access violations*. 
       <details>
-        <summary>Symptoms of access violation bugs using unsafe code</summary>
+        <summary>Behavior of access violation bugs using unsafe code</summary>
         <img src="docs/images/access_violation/VS-2022_access_violation.png" width="249" height="135"/>
         <img src="docs/images/access_violation/Rider-access_violation.png"   width="230" height="115"/>
         <img src="docs/images/access_violation/Unity_access_violation.png"   width="213" height="131"/>
