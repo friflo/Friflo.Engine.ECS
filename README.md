@@ -20,7 +20,7 @@
 
 ***The ECS for finishers 🏁***  
 Leading performance in most ECS aspects.  
-Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases/blob/main/README.md#overview)
+Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)
 
 |         |     friflo | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
 | ------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
