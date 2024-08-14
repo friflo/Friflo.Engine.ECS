@@ -3,7 +3,6 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
-using static Tests.Examples.HelloWorldExample;
 
 // ReSharper disable UnusedType.Local
 // ReSharper disable ArrangeTypeMemberModifiers
@@ -40,9 +39,13 @@ class MoveSystem : QuerySystem<Position, Velocity>
     }
 }
 
+struct Pulsating : ITag { }
+
 class PulseSystem : QuerySystem<Scale3>
 {
     float frequency = 4f;
+    
+    PulseSystem() => Filter.AnyTags(Tags.Get<Pulsating>());
     
     protected override void OnUpdate() {
         foreach (var entity in Query.Entities) {

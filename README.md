@@ -285,9 +285,13 @@ This system uses a `foreach (var entity in Query.Entities)` as an alternative to
 to iterate the query result.
 
 ```csharp
+struct Pulsating : ITag { }
+
 class PulseSystem : QuerySystem<Scale3>
 {
     float frequency = 4f;
+    
+    PulseSystem() => Filter.AnyTags(Tags.Get<Pulsating>());
     
     protected override void OnUpdate() {
         foreach (var entity in Query.Entities) {
