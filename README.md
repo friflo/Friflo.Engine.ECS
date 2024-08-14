@@ -317,6 +317,18 @@ When enabled system monitoring captures
 - Memory heap allocations per system in bytes.
 - The number of entities matching a query system.
 
+
+#### Realtime performance monitoring
+
+In a game editor like Unity system monitoring is available in the **ECS System Set** component.
+<details>
+<summary>Screenshot: <b>ECS System Set</b> component in Play mode</summary>
+<img src="docs/images/SystemSet-Unity.png" width="324" height="ddd"/>
+</details>
+
+
+#### Log performance monitoring
+
 The performance statistics available at [SystemPerf](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemPerf.md).  
 To get performance statistics on console use:
 
