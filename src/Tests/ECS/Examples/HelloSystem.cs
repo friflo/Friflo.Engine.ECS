@@ -45,7 +45,7 @@ class PulseSystem : QuerySystem<Scale3>
 {
     float frequency = 4f;
     
-    PulseSystem() => Filter.AnyTags(Tags.Get<Pulsating>());
+    public PulseSystem() => Filter.AnyTags(Tags.Get<Pulsating>());
     
     protected override void OnUpdate() {
         foreach (var entity in Query.Entities) {
