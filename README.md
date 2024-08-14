@@ -318,7 +318,7 @@ When enabled system monitoring captures
 - The number of entities matching a query system.
 
 
-#### Realtime performance monitoring
+#### Realtime monitoring
 
 In a game editor like Unity system monitoring is available in the **ECS System Set** component.
 <details>
@@ -327,7 +327,7 @@ In a game editor like Unity system monitoring is available in the **ECS System S
 </details>
 
 
-#### Log performance monitoring
+#### Log monitoring
 
 The performance statistics available at [SystemPerf](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemPerf.md).  
 To get performance statistics on console use:
