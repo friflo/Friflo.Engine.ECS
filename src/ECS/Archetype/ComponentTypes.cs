@@ -274,8 +274,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     public static ComponentTypes Get<T1>()
         where T1 : struct, IComponent
     {
-        return new ComponentTypes(
-            StructInfo<T1>.Index);
+        return Generic<T1>.ComponentTypes;
     }
     
     /// <summary>
@@ -286,9 +285,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index);
+        return Generic<T1,T2>.ComponentTypes;
     }
     
     /// <summary>
@@ -300,10 +297,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index);
+        return Generic<T1,T2,T3>.ComponentTypes;
     }
     
     /// <summary>
@@ -316,11 +310,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index,
-            StructInfo<T4>.Index);
+        return Generic<T1,T2,T3,T4>.ComponentTypes;
     }
     
     /// <summary>
@@ -334,12 +324,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index,
-            StructInfo<T4>.Index,
-            StructInfo<T5>.Index);
+        return Generic<T1,T2,T3,T4,T5>.ComponentTypes;
     }
     /*
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6>()
