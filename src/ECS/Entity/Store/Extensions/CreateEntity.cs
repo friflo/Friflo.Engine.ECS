@@ -21,8 +21,8 @@ public static partial class EntityStoreExtensions {
     {
         var archetype   = store.GetArchetype(default, tags);
         var id          = store.NewId();
-        store.CreateEntityInternal(archetype, id);
-        var entity      = new Entity(store, id);
+        store.CreateEntityInternal(archetype, id, out var revision);
+        var entity      = new Entity(store, id, revision);
         
         // Send event. See: SEND_EVENT notes
         store.CreateEntityEvent(entity);
@@ -304,8 +304,8 @@ public static partial class EntityStoreExtensions {
     {
         archetype   = store.GetArchetype(componentTypes, tags);
         var id      = store.NewId();
-        compIndex   = store.CreateEntityInternal(archetype, id);
-        return new Entity(store, id);
+        compIndex   = store.CreateEntityInternal(archetype, id, out var revision);
+        return new Entity(store, id, revision);
     }
     
     private static void SendCreateEvents(Entity entity, Archetype archetype, in SignatureIndexes componentTypes)

@@ -101,11 +101,11 @@ public sealed class Archetype
     {
         var localStore  = entityStore;
         var id          = localStore.NewId();
-        var compIndex   = localStore.CreateEntityInternal(this, id);
+        var compIndex   = localStore.CreateEntityInternal(this, id, out var revision);
         foreach (var heap in structHeaps) {
             heap.SetComponentDefault(compIndex);
         }
-        var entity = new Entity(localStore, id);
+        var entity = new Entity(localStore, id, revision);
         
         // Send event. See: SEND_EVENT notes
         localStore.CreateEntityEvent(entity);
@@ -116,11 +116,11 @@ public sealed class Archetype
     {
         var localStore  = entityStore;
         localStore.CheckEntityId(id);
-        var compIndex   = localStore.CreateEntityInternal(this, id);
+        var compIndex   = localStore.CreateEntityInternal(this, id, out var revision);
         foreach (var heap in structHeaps) {
             heap.SetComponentDefault(compIndex);
         }
-        var entity = new Entity(localStore, id);
+        var entity = new Entity(localStore, id, revision);
         
         // Send event. See: SEND_EVENT notes
         localStore.CreateEntityEvent(entity);

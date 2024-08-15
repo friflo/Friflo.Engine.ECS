@@ -32,8 +32,8 @@ public partial class EntityStore
     public Entity CreateEntity()
     {
         var id = NewId();
-        CreateEntityInternal(defaultArchetype, id);
-        var entity = new Entity(this, id);
+        CreateEntityInternal(defaultArchetype, id, out var revision);
+        var entity = new Entity(this, id, revision);
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
@@ -47,8 +47,8 @@ public partial class EntityStore
     public Entity CreateEntity(int id)
     {
         CheckEntityId(id);
-        CreateEntityInternal(defaultArchetype, id);
-        var entity = new Entity(this, id); 
+        CreateEntityInternal(defaultArchetype, id, out var revision);
+        var entity = new Entity(this, id, revision); 
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
@@ -67,14 +67,14 @@ public partial class EntityStore
     }
     
     /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
-    internal int CreateEntityInternal(Archetype archetype, int id)
+    internal int CreateEntityInternal(Archetype archetype, int id, out short revision)
     {
         // Assign pid: assign pid if intern.pidType == PidType.RandomPids
         if (intern.pidType == PidType.RandomPids) {
             extension.GenerateRandomPidForId(id);
         }
         EnsureNodesLength(id + 1);
-        return CreateEntityNode(archetype, id);
+        return CreateEntityNode(archetype, id, out revision);
     }
     
     /// <summary>
@@ -88,8 +88,8 @@ public partial class EntityStore
     {
         var archetype   = entity.GetArchetype() ?? throw EntityArgumentNullException(entity, nameof(entity));
         var id          = NewId();
-        CreateEntityInternal(archetype, id);
-        var clone       = new Entity(this, id);
+        CreateEntityInternal(archetype, id, out var revision);
+        var clone       = new Entity(this, id, revision);
         
         var isBlittable = IsBlittable(entity);
 
@@ -163,17 +163,19 @@ public partial class EntityStore
     
     /// <summary> expect <see cref="EntityStore.nodes"/> Length > id </summary>
     /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
-    private int CreateEntityNode(Archetype archetype, int id)
+    private int CreateEntityNode(Archetype archetype, int id, out short revision)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
+        revision     = node.revision;
         if (node.archetype != null) {
             return node.compIndex;
         }
         entityCount++;
+        revision++;
         node.compIndex  = Archetype.AddEntity(archetype, id);
         node.archetype  = archetype;
-        node.revision++;
+        node.revision   = revision;   
         // node.flags      = Created;
         return node.compIndex;
     }

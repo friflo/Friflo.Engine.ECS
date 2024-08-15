@@ -129,9 +129,9 @@ public partial class EntityStore
         }
         // Assign pid: pid's for entity and its child entities are added above.
         EnsureNodesLength(intern.sequenceId + 1);
-        CreateEntityNode(defaultArchetype, id);
+        CreateEntityNode(defaultArchetype, id, out var revision);
 
-        var entity = new Entity(this, id); 
+        var entity = new Entity(this, id, revision); 
         SetChildNodes(entity, ids);
         return entity;
     }
@@ -162,9 +162,9 @@ public partial class EntityStore
         }
         // Assign pid: assign no pid. intern.pidType == PidType.UsePidAsId 
         EnsureNodesLength(maxId + 1);
-        CreateEntityNode(defaultArchetype, id);
+        CreateEntityNode(defaultArchetype, id, out var revision);
         
-        var entity = new Entity(this, id);
+        var entity = new Entity(this, id, revision);
         SetChildNodes(entity, ids);
         return entity;
     }

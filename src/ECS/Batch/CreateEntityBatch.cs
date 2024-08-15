@@ -135,7 +135,7 @@ public sealed class CreateEntityBatch
     private Entity CreateEntityInternal(EntityStore entityStore, int id)
     {
         archetype     ??= entityStore.GetArchetype(componentsCreate, tagsCreate);
-        var compIndex   = entityStore.CreateEntityInternal(archetype, id);
+        var compIndex   = entityStore.CreateEntityInternal(archetype, id, out var revision);
         var components  = batchComponents;
         
         // --- assign component values
@@ -147,7 +147,7 @@ public sealed class CreateEntityBatch
             Clear();
             entityStore.ReturnCreateBatch(this);
         }
-        var entity = new Entity(entityStore, id);
+        var entity = new Entity(entityStore, id, revision);
         
         // Send event. See: SEND_EVENT notes
         entityStore.CreateEntityEvent(entity);
