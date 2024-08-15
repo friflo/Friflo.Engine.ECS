@@ -77,26 +77,26 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         Type1:   bitSet.SetBit(indexes.T1);
     }
     
-    private ComponentTypes(int t1)
+    internal ComponentTypes(int t1)
     {
         bitSet.SetBit(t1);
     }
     
-    private ComponentTypes(int t1, int t2)
+    internal ComponentTypes(int t1, int t2)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
     }
     
     
-    private ComponentTypes(int t1, int t2, int t3)
+    internal ComponentTypes(int t1, int t2, int t3)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
         bitSet.SetBit(t3);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4)
+    internal ComponentTypes(int t1, int t2, int t3, int t4)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -104,7 +104,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(t4);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4, int t5)
+    internal ComponentTypes(int t1, int t2, int t3, int t4, int t5)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -113,7 +113,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(t5);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6)
+    internal ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -123,7 +123,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(t6);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7)
+    internal ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -134,7 +134,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(t7);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8)
+    internal ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -146,7 +146,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(t8);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9)
+    internal ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -159,7 +159,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(t9);
     }
     
-    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10)
+    internal ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10)
     {
         bitSet.SetBit(t1);
         bitSet.SetBit(t2);
@@ -341,7 +341,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             StructInfo<T4>.Index,
             StructInfo<T5>.Index);
     }
-    
+    /*
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -359,7 +359,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             StructInfo<T6>.Index);
     }
     
-    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7>()
+    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7>() ////
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
@@ -445,7 +445,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             StructInfo<T8>.Index,
             StructInfo<T9>.Index,
             StructInfo<T10>.Index);
-    }
+    }*/
     #endregion
     
 #region internal methods

@@ -34,20 +34,154 @@ internal readonly struct SignatureIndexes
     public override     string          ToString()      => GetString("SignatureIndexes: ");
     
     internal SignatureIndexes (
-        int length,
-        int T1  = 0,
-        int T2  = 0,
-        int T3  = 0,
-        int T4  = 0,
-        int T5  = 0,
-        int T6  = 0,
-        int T7  = 0,
-        int T8  = 0,
-        int T9  = 0,
-        int T10 = 0
+        int T1
     ) {
-        AssertLength(length);
-        this.length = length;
+        length = 1;
+        this.T1     = (byte)T1;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2
+
+    ) {
+        this.length = 2;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3
+    ) {
+        this.length = 3;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4
+    ) {
+        this.length = 4;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4,
+        int T5
+    ) {
+        this.length = 5;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+        this.T5     = (byte)T5;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4,
+        int T5,
+        int T6
+    ) {
+        this.length = 6;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+        this.T5     = (byte)T5;
+        this.T6     = (byte)T6;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4,
+        int T5,
+        int T6,
+        int T7
+    ) {
+        this.length = 7;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+        this.T5     = (byte)T5;
+        this.T6     = (byte)T6;
+        this.T7     = (byte)T7;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4,
+        int T5,
+        int T6,
+        int T7,
+        int T8
+    ) {
+        this.length = 8;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+        this.T5     = (byte)T5;
+        this.T6     = (byte)T6;
+        this.T7     = (byte)T7;
+        this.T8     = (byte)T8;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4,
+        int T5,
+        int T6,
+        int T7,
+        int T8,
+        int T9
+    ) {
+        this.length = 9;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+        this.T5     = (byte)T5;
+        this.T6     = (byte)T6;
+        this.T7     = (byte)T7;
+        this.T8     = (byte)T8;
+        this.T9     = (byte)T9;
+    }
+    
+    internal SignatureIndexes (
+        int T1,
+        int T2,
+        int T3,
+        int T4,
+        int T5,
+        int T6,
+        int T7,
+        int T8,
+        int T9,
+        int T10
+    ) {
+        this.length = 10;
         this.T1     = (byte)T1;
         this.T2     = (byte)T2;
         this.T3     = (byte)T3;

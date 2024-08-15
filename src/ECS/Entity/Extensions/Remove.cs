@@ -15,17 +15,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1>();
-        var removeComponents= GetIndexes<T1>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -38,17 +36,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2>();
-        var removeComponents= GetIndexes<T1,T2>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -62,17 +58,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3>();
-        var removeComponents= GetIndexes<T1,T2,T3>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -87,17 +81,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -113,17 +105,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4,T5>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4,T5>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4,T5>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4,T5>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -140,17 +130,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4,T5,T6>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4,T5,T6>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4,T5,T6>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4,T5,T6>.SignatureIndexes, newType, oldType);
     }
 
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -168,17 +156,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4,T5,T6,T7>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7>.SignatureIndexes, newType, oldType);
     }
 
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -197,17 +183,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4,T5,T6,T7,T8>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7,T8>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7,T8>.SignatureIndexes, newType, oldType);
     }
 
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -227,17 +211,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.SignatureIndexes, newType, oldType);
     }
 
     /// <summary> Remove the specified components and tags from the entity. </summary>
@@ -258,17 +240,15 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeTypes     = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
-        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
+        var newType         = store.GetArchetypeRemove(oldType, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.ComponentTypes, tags);
         
-        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.SignatureIndexes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(entity, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.SignatureIndexes, newType, oldType);
     }
 }
 

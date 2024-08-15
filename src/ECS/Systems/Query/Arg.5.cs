@@ -29,7 +29,7 @@ public abstract class QuerySystem<T1, T2, T3, T4, T5> : QuerySystem
     [Browse(Never)] private     ArchetypeQuery<T1, T2, T3, T4, T5>    query;
     #endregion
     
-    protected QuerySystem() : base (ComponentTypes.Get<T1, T2, T3, T4, T5>()) { }
+    protected QuerySystem() : base (Generic<T1, T2, T3, T4, T5>.ComponentTypes) { }
     
     internal override void SetQuery(ArchetypeQuery query) { this.query = (ArchetypeQuery<T1, T2, T3, T4, T5>)query; }
     

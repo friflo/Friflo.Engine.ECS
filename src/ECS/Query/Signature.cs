@@ -35,7 +35,7 @@ public static class Signature
         where T1 : struct, IComponent
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
-        var indexes   = new SignatureIndexes(1,
+        var indexes   = new SignatureIndexes(
             T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index)
         );
         return new Signature<T1>(indexes);
@@ -52,7 +52,7 @@ public static class Signature
         where T2 : struct, IComponent
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
-        var indexes = new SignatureIndexes(2,
+        var indexes = new SignatureIndexes(
             T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index),
             T2: schema.CheckStructIndex(typeof(T2), StructInfo<T2>.Index)
         );
@@ -71,7 +71,7 @@ public static class Signature
         where T3 : struct, IComponent
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
-        var indexes = new SignatureIndexes(3,
+        var indexes = new SignatureIndexes(
             T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index),
             T2: schema.CheckStructIndex(typeof(T2), StructInfo<T2>.Index),
             T3: schema.CheckStructIndex(typeof(T3), StructInfo<T3>.Index)
@@ -92,7 +92,7 @@ public static class Signature
         where T4 : struct, IComponent
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
-        var indexes = new SignatureIndexes(4,
+        var indexes = new SignatureIndexes(
             T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index),
             T2: schema.CheckStructIndex(typeof(T2), StructInfo<T2>.Index),
             T3: schema.CheckStructIndex(typeof(T3), StructInfo<T3>.Index),
@@ -115,7 +115,7 @@ public static class Signature
         where T5 : struct, IComponent
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
-        var indexes = new SignatureIndexes(5,
+        var indexes = new SignatureIndexes(
             T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index),
             T2: schema.CheckStructIndex(typeof(T2), StructInfo<T2>.Index),
             T3: schema.CheckStructIndex(typeof(T3), StructInfo<T3>.Index),

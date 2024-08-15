@@ -19,18 +19,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1>();
-        var addComponents   = GetIndexes<T1>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -47,18 +45,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2>();
-        var addComponents   = GetIndexes<T1,T2>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -77,18 +73,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3>();
-        var addComponents   = GetIndexes<T1,T2,T3>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -109,18 +103,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -143,18 +135,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4,T5>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4,T5>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4,T5>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4,T5>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -179,18 +169,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4,T5,T6>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4,T5,T6>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5, component6);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4,T5,T6>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -217,18 +205,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4,T5,T6,T7>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5, component6, component7);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -257,18 +243,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4,T5,T6,T7,T8>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7,T8>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5, component6, component7, component8);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7,T8>.SignatureIndexes, newType, oldType);
     }
     
     /// <summary> Add the passed components and tags to the entity. </summary>
@@ -299,18 +283,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.SignatureIndexes, newType, oldType);
     }
 
     
@@ -344,18 +326,16 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
-        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        var newType         = store.GetArchetypeAdd(oldType, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.ComponentTypes, tags);
         
-        StashAddComponents(store, addComponents, oldType, oldCompIndex);
+        StashAddComponents(store, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.SignatureIndexes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(entity, addComponents, newType, oldType);
+        SendAddEvents(entity, Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.SignatureIndexes, newType, oldType);
     }
 }
 

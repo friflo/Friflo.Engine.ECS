@@ -7,10 +7,11 @@ namespace Friflo.Engine.ECS;
 
 public static partial class EntityExtensions
 {
+    /*
     internal static SignatureIndexes GetIndexes<T1>()
         where T1 : struct, IComponent
     {
-        return new SignatureIndexes(1,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index);
     }
     
@@ -18,7 +19,7 @@ public static partial class EntityExtensions
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        return new SignatureIndexes(2,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index);
     }
@@ -28,7 +29,7 @@ public static partial class EntityExtensions
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        return new SignatureIndexes(3,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index);
@@ -40,21 +41,21 @@ public static partial class EntityExtensions
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        return new SignatureIndexes(4,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
             T4: StructInfo<T4>.Index);
     }
     
-    internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5>()
+    internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5>() ////
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        return new SignatureIndexes(5,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
@@ -70,7 +71,7 @@ public static partial class EntityExtensions
         where T5 : struct, IComponent
         where T6 : struct, IComponent
     {
-        return new SignatureIndexes(6,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
@@ -88,7 +89,7 @@ public static partial class EntityExtensions
         where T6 : struct, IComponent
         where T7 : struct, IComponent
     {
-        return new SignatureIndexes(7,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
@@ -108,7 +109,7 @@ public static partial class EntityExtensions
         where T7 : struct, IComponent
         where T8 : struct, IComponent
     {
-        return new SignatureIndexes(8,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
@@ -130,7 +131,7 @@ public static partial class EntityExtensions
         where T8 : struct, IComponent
         where T9 : struct, IComponent
     {
-        return new SignatureIndexes(9,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
@@ -154,7 +155,7 @@ public static partial class EntityExtensions
         where T9 : struct, IComponent
         where T10: struct, IComponent
     {
-        return new SignatureIndexes(10,
+        return new SignatureIndexes(
             T1: StructInfo<T1>.Index,
             T2: StructInfo<T2>.Index,
             T3: StructInfo<T3>.Index,
@@ -165,5 +166,5 @@ public static partial class EntityExtensions
             T8: StructInfo<T8>.Index,
             T9: StructInfo<T9>.Index,
             T10:StructInfo<T10>.Index);
-    }
+    }*/
 }

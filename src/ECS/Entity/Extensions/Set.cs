@@ -16,7 +16,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1>();
+        var components      = Generic<T1>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1)) {
@@ -38,7 +38,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2>();
+        var components      = Generic<T1,T2>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2)) {
@@ -62,7 +62,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3>();
+        var components      = Generic<T1,T2,T3>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3)) {
@@ -88,7 +88,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4>();
+        var components      = Generic<T1,T2,T3,T4>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4)) {
@@ -116,7 +116,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4, T5>();
+        var components      = Generic<T1,T2,T3,T4,T5>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5)) {
@@ -146,7 +146,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4, T5, T6>();
+        var components      = Generic<T1,T2,T3,T4,T5,T6>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6)) {
@@ -178,7 +178,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7>();
+        var components      = Generic<T1,T2,T3,T4,T5,T6,T7>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7)) {
@@ -212,7 +212,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8>();
+        var components      = Generic<T1,T2,T3,T4,T5,T6,T7,T8>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8)) {
@@ -248,7 +248,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
+        var components      = Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9)) {
@@ -286,7 +286,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
+        var components      = Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.SignatureIndexes;
         StashSetComponents(entity, components, type, componentIndex);
 
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10)) {
