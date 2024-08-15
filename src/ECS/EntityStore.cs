@@ -160,7 +160,8 @@ public sealed partial class EntityStore : EntityStoreBase
         intern              = new Intern(pidType);
         extension           = new StoreExtension(pidType);
         nodes               = Array.Empty<EntityNode>();
-        EnsureNodesLength(2);
+        // length should not be too small to avoid multiple resizes of nodes[] for common use cases
+        EnsureNodesLength(128);
         idBuffer            = new int[1];
         idBufferSet         = new HashSet<int>();
         recycleIds          = true;

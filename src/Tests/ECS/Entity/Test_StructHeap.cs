@@ -65,13 +65,17 @@ public static class Test_StructHeap
     public static void Test_StructHeap_EntityStore_EnsureCapacity()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        Mem.AreEqual(1, store.EnsureCapacity(0)); // 1 => default capacity
-        store.CreateEntity();
-        Mem.AreEqual(0, store.EnsureCapacity(0));
+        var maxId   = store.NodeMaxId;
+        Mem.AreEqual(maxId, store.EnsureCapacity(0)); // 1 => default capacity
+        var entity = store.CreateEntity();
+        Mem.AreEqual(1, entity.Id);
         
-        Mem.AreEqual(9, store.EnsureCapacity(9));
-        for (int n = 0; n < 9; n++) {
-            Mem.AreEqual(9 - n, store.EnsureCapacity(0));
+        var count = maxId - 1;
+        Mem.AreEqual(count, store.EnsureCapacity(0));
+        
+        Mem.AreEqual(count, store.EnsureCapacity(count));
+        for (int n = 0; n < count; n++) {
+            Mem.AreEqual(count - n, store.EnsureCapacity(0));
             store.CreateEntity();
         }
         Mem.AreEqual(0, store.EnsureCapacity(0));
@@ -242,7 +246,7 @@ public static class Test_StructHeap
             Mem.IsTrue  (entity1.IsNull);
             Mem.IsTrue  (entity2.IsNull);
             Mem.AreEqual(1, store.Count);
-            Mem.AreEqual(4, store.Capacity);
+            Mem.AreEqual(128, store.Capacity);
             entity1b.DeleteEntity();
             if (n == 0) {
                 startMem = Mem.GetAllocatedBytes();

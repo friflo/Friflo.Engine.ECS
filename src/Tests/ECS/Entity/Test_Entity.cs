@@ -144,7 +144,7 @@ public static class Test_Entity
         var store   = new EntityStore(PidType.RandomPids);
         store.CreateEntity(2);
 
-        AreEqual(4, store.Capacity);
+        AreEqual(128, store.Capacity);
         
         IsTrue (store.GetEntityById(0).IsNull);
         IsTrue (store.GetEntityById(1).IsNull);
@@ -154,11 +154,11 @@ public static class Test_Entity
         var e = Throws<ArgumentException>(() => {
             store.GetEntityById(-1);
         });
-        AreEqual("id: -1. expect in [0, current max id: 3]", e!.Message);
+        AreEqual("id: -1. expect in [0, current max id: 127]", e!.Message);
         e = Throws<ArgumentException>(() => {
-            store.GetEntityById(4);
+            store.GetEntityById(128);
         });
-        AreEqual("id: 4. expect in [0, current max id: 3]", e!.Message);
+        AreEqual("id: 128. expect in [0, current max id: 127]", e!.Message);
     }
     
     [Test]
@@ -181,7 +181,7 @@ public static class Test_Entity
         var store   = new EntityStore(PidType.RandomPids);
         store.CreateEntity(2);
 
-        AreEqual(4, store.Capacity);
+        AreEqual(128, store.Capacity);
         
         IsFalse(store.TryGetEntityById(-1, out Entity entity));
         IsTrue (entity.IsNull);

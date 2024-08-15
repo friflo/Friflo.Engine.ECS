@@ -29,19 +29,19 @@ public static class Test_EntityList
     public static void Test_EntityList_Add()
     {
         var store   = new EntityStore();
-        AreEqual(2, store.Capacity);
+        AreEqual(128, store.Capacity);
         // ReSharper disable once UseObjectOrCollectionInitializer
         var list = new EntityList(store);
         list.Add(0);
         IsTrue(list[0].IsNull);
         var e = Throws<ArgumentException>(() => {
-            list.Add(2);
+            list.Add(128);
         });
-        AreEqual("id: 2. expect in [0, current max id: 1]", e!.Message);
+        AreEqual("id: 128. expect in [0, current max id: 127]", e!.Message);
         e = Throws<ArgumentException>(() => {
             list.Add(-1);
         });
-        AreEqual("id: -1. expect in [0, current max id: 1]", e!.Message);
+        AreEqual("id: -1. expect in [0, current max id: 127]", e!.Message);
     }
     
     [Test]
