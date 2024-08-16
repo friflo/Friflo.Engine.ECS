@@ -74,7 +74,7 @@ public partial class EntityStoreBase
         return archSet.TryGetValue(searchKey, out archetypeKey);
     }
         
-    private static Archetype GetArchetypeWith(EntityStoreBase store, Archetype current, int structIndex)
+    internal static Archetype GetArchetypeWith(EntityStoreBase store, Archetype current, int structIndex)
     {
         var key = store.searchKey;
         key.SetWith(current, structIndex);
@@ -89,7 +89,7 @@ public partial class EntityStoreBase
         return archetype;
     }
     
-    private static Archetype GetArchetypeWithout(EntityStoreBase store, Archetype archetype, int structIndex)
+    internal static Archetype GetArchetypeWithout(EntityStoreBase store, Archetype archetype, int structIndex)
     {
         var key = store.searchKey;
         key.SetWithout(archetype, structIndex);

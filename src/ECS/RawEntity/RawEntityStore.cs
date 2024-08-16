@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 // Hard rule: this file MUST NOT use type: Entity
 
@@ -135,21 +136,18 @@ public sealed class RawEntityStore : EntityStoreBase
         return ref heap.components[entity.compIndex];
     }
     
+    [ExcludeFromCodeCoverage]
     public bool AddEntityComponent<T>(int id, in T component)
         where T : struct, IComponent
     {
-        ref var entity      = ref entities[id];
-        var archetype       = archs[entity.archIndex];
-        var structIndex     = StructInfo<T>.Index;
-        return AddComponent(id, structIndex, ref archetype, ref entity.compIndex, ref entity.archIndex, component);
+        throw new NotImplementedException($"{nameof(RawEntityStore)} will be removed");
     }
     
+    [ExcludeFromCodeCoverage]
     public bool RemoveEntityComponent<T>(int id)
         where T : struct, IComponent
     {
-        ref var entity      = ref entities[id];
-        var archetype       = archs[entity.archIndex];
-        return RemoveComponent<T>(id, ref archetype, ref entity.compIndex, ref entity.archIndex, StructInfo<T>.Index);
+        throw new NotImplementedException($"{nameof(RawEntityStore)} will be removed");
     }
     #endregion
     

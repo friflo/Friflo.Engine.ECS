@@ -91,11 +91,10 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal            int                     singleIndex;        //  4
     [Browse(Never)] internal            bool                    shrinkArchetypes;   //  1
     
-                    private             InternBase              internBase;         // 88
+                    internal            InternBase              internBase;         // 88
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
-    // MUST be private by all means 
-    private struct InternBase {
+    internal struct InternBase {
         internal        long                                        archetypesCapacity;     // 16   - sum of all Archetype capacities
         internal        double                                      shrinkRatio;            //  8
         // --- delegates
@@ -191,13 +190,13 @@ public abstract partial class EntityStoreBase
         return new ArgumentException($"id: {id}. expect in [0, current max id: {store.nodes.Length - 1}]");
     }
     
-    private static ArgumentException AddRelationException(int id, int structIndex) {
+    internal static ArgumentException AddRelationException(int id, int structIndex) {
         var componentType   = Static.EntitySchema.components[structIndex];
         var type            = componentType.Name;
         return new ArgumentException($"relation component must be added with:  entity.{nameof(RelationExtensions.AddRelation)}(new {type}());  id: {id}");
     }
     
-    private static ArgumentException RemoveRelationException(int id, int structIndex) {
+    internal static ArgumentException RemoveRelationException(int id, int structIndex) {
         var componentType   = Static.EntitySchema.components[structIndex];
         var type            = componentType.Name;
         var keyType         = componentType.RelationKeyType.Name;

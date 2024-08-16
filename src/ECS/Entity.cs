@@ -176,7 +176,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 [CLSCompliant(true)]
 [StructLayout(LayoutKind.Explicit)]
-public readonly struct Entity : IEquatable<Entity>
+public readonly partial struct Entity : IEquatable<Entity>
 {
     // ------------------------------------ general properties ------------------------------------
 #region general properties
@@ -424,13 +424,10 @@ public readonly struct Entity : IEquatable<Entity>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
-        int archIndex   = 0;
-        ref var node    = ref store.nodes[Id];
-        if (node.IsAlive(Revision)) {
-            return EntityStoreBase.AddComponent<T>(Id, StructInfo<T>.Index, ref node.archetype, ref node.compIndex, ref archIndex, default);
-        }
-        throw EntityNullException();
+        return AddComponent<T>(default);
     }
+    
+    /*
     /// <summary>
     /// Add the given <paramref name="component"/> to the entity.<br/>
     /// If the entity contains a component of the same type it is updated.<br/>
@@ -458,7 +455,7 @@ public readonly struct Entity : IEquatable<Entity>
             return EntityStoreBase.RemoveComponent<T>(Id, ref node.archetype, ref node.compIndex, ref archIndex, StructInfo<T>.Index);
         }
         throw EntityNullException();
-    }
+    }*/
     #endregion
 
 

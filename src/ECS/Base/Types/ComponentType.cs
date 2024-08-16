@@ -94,31 +94,16 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override bool RemoveEntityComponent(Entity entity) {
-        int archIndex = 0;
-        ref var node    = ref entity.store.nodes[entity.Id];
-        if (node.IsAlive(entity.Revision)) {
-            return EntityStoreBase.RemoveComponent<T>(entity.Id, ref node.archetype, ref node.compIndex, ref archIndex, StructIndex);
-        }
-        throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return entity.RemoveComponent<T>();
     }
     
     internal override bool AddEntityComponent(Entity entity) {
-        int archIndex = 0;
-        ref var node    = ref entity.store.nodes[entity.Id];
-        if (node.IsAlive(entity.Revision)) {
-            return EntityStoreBase.AddComponent<T>(entity.Id, StructIndex, ref node.archetype, ref node.compIndex, ref archIndex, default);
-        }
-        throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return entity.AddComponent<T>(default);
     }
     
     internal override bool AddEntityComponentValue(Entity entity, object value) {
-        int archIndex = 0;
         var componentValue = (T)value;
-        ref var node    = ref entity.store.nodes[entity.Id];
-        if (node.IsAlive(entity.Revision)) {
-            return EntityStoreBase.AddComponent(entity.Id, StructIndex, ref node.archetype, ref node.compIndex, ref archIndex, componentValue);
-        }
-        throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return entity.AddComponent(componentValue);
     }
     
     internal override StructHeap CreateHeap() {

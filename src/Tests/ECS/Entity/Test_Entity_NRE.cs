@@ -70,20 +70,20 @@ public static class Test_Entity_NRE
         var schema = EntityStore.GetEntitySchema();
         var componentType = schema.ComponentTypeByType[typeof(Position)];
         
-        var ane = Throws<ArgumentException>(() => {
+        nre = Throws<NullReferenceException>(() => {
             EntityUtils.RemoveEntityComponent(entity, componentType);
         });
-        AreEqual(expectArg, ane!.Message);
+        AreEqual(expect, nre!.Message);
         
-        ane = Throws<ArgumentException>(() => {
+        nre = Throws<NullReferenceException>(() => {
             EntityUtils.AddEntityComponent(entity, componentType);
         });
-        AreEqual(expectArg, ane!.Message);
+        AreEqual(expect, nre!.Message);
         
-        ane = Throws<ArgumentException>(() => {
+        nre = Throws<NullReferenceException>(() => {
             EntityUtils.AddEntityComponentValue(entity, componentType, new Position());
         });
-        AreEqual(expectArg, ane!.Message);
+        AreEqual(expect, nre!.Message);
         
         // --- tags
         nre = Throws<NullReferenceException>(() => {
@@ -106,7 +106,7 @@ public static class Test_Entity_NRE
         });
         AreEqual(expect, nre!.Message);
         
-        ane = Throws<ArgumentException>(() => {
+        var ane = Throws<ArgumentException>(() => {
             store.CloneEntity(entity);
         });
         AreEqual(expectArg, ane!.Message);

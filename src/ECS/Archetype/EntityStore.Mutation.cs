@@ -15,6 +15,7 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+/*
     // ------------------------------------ add / remove component ------------------------------------
 #region add / remove component
     internal static bool AddComponent<T>(
@@ -99,7 +100,8 @@ public partial class EntityStoreBase
         return true;
     }
     #endregion
-    
+*/
+
     // ------------------------------------ add / remove entity Tag ------------------------------------
 #region add / remove tags
 
