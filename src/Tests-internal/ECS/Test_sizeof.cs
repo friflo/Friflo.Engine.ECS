@@ -73,6 +73,13 @@ public static class Test_sizeof
     }
     
     [Test]
+    public static void Test_sizeof_TypeCache() {
+        var type = typeof(TypeCache);
+        var size = Marshal.SizeOf(type!);
+        AreEqual(24, size);
+    }
+    
+    [Test]
     public static unsafe void Test_Math_sizeof() {
         var size = sizeof(Position);
         AreEqual(12, size);

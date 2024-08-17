@@ -516,6 +516,43 @@ public static class Test_StructComponent
         AreEqual(0, entity.MyComponent1().a);
     }
     
+    [Test]
+    public static void Test_StructComponent_Cache()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        
+        IsTrue  (entity.AddComponent(new MyComponent1()));
+        IsTrue  (entity.RemoveComponent<MyComponent1>());
+        IsTrue  (entity.AddComponent(new MyComponent1 { a = 10 }));
+        AreEqual(10, entity.GetComponent<MyComponent1>().a);
+        IsTrue  (entity.RemoveComponent<MyComponent1>());
+        
+        IsTrue  (entity.AddComponent(new MyComponent2()));
+        IsTrue  (entity.RemoveComponent<MyComponent2>());
+        IsTrue  (entity.AddComponent(new MyComponent2 { b = 11 }));
+        AreEqual(11, entity.GetComponent<MyComponent2>().b);
+        IsTrue  (entity.RemoveComponent<MyComponent2>());
+        
+        IsTrue  (entity.AddComponent(new MyComponent3()));
+        IsTrue  (entity.RemoveComponent<MyComponent3>());
+        IsTrue  (entity.AddComponent(new MyComponent3 { b = 12 }));
+        AreEqual(12, entity.GetComponent<MyComponent3>().b);
+        IsTrue  (entity.RemoveComponent<MyComponent3>());
+        
+        IsTrue  (entity.AddComponent(new MyComponent4()));
+        IsTrue  (entity.RemoveComponent<MyComponent4>());
+        IsTrue  (entity.AddComponent(new MyComponent4 { b = 13 }));
+        AreEqual(13, entity.GetComponent<MyComponent4>().b);
+        IsTrue  (entity.RemoveComponent<MyComponent4>());
+        
+        IsTrue  (entity.AddComponent(new MyComponent5()));
+        IsTrue  (entity.RemoveComponent<MyComponent5>());
+        IsTrue  (entity.AddComponent(new MyComponent5 { b = 14 }));
+        AreEqual(14, entity.GetComponent<MyComponent5>().b);
+        IsTrue  (entity.RemoveComponent<MyComponent5>());
+    }
+    
 }
 
 }
