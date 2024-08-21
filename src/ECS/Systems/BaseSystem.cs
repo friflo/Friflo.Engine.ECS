@@ -297,7 +297,7 @@ public abstract class BaseSystem
         sb.Append($" {Perf.LastMemory,12}");
         sb.Append($" {Perf.SumMemory,12}");
         
-        if (this is QuerySystem querySystem) {
+        if (this is QuerySystemBase querySystem) {
             sb.Append($" {querySystem.EntityCount,12}");
         }
         sb.Append('\n');

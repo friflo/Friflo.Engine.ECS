@@ -15,12 +15,14 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_QuerySystem_ToString()
         {
+            var query0 = new TestQuerySystem0();
             var query1 = new TestQuerySystem1();
             var query2 = new TestQuerySystem2();
             var query3 = new TestQuerySystem3();
             var query4 = new TestQuerySystem4();
             var query5 = new TestQuerySystem5();
             
+            AreEqual("TestQuerySystem0 - []",                                                       query0.ToString());
             AreEqual("TestQuerySystem1 - [Position]",                                               query1.ToString());
             AreEqual("TestQuerySystem2 - [Position, Scale3]",                                       query2.ToString());
             AreEqual("TestQuerySystem3 - [Position, Scale3, Rotation]",                             query3.ToString());
@@ -54,6 +56,10 @@ namespace Tests.ECS.Systems
             AreEqual(1,                     group.beginCalled);
             AreEqual(1,                     group.endCalled);
         }
+    }
+    
+    internal class TestQuerySystem0 : QuerySystem {
+        protected override void OnUpdate() { }
     }
     
     internal class TestQuerySystem1 : QuerySystem<Position> {

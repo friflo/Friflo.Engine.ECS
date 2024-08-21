@@ -13,23 +13,22 @@ namespace Friflo.Engine.ECS.Systems;
 /// <summary>
 /// A query system returning entities with the specified component type via its <see cref="Query"/> property.
 /// </summary>
-public abstract class QuerySystem<T1> : QuerySystemBase
-    where T1 : struct, IComponent
+public abstract class QuerySystem : QuerySystemBase
 {
     /// <summary> Return all entities matching the <see cref="Query"/>. </summary>
-    protected       ArchetypeQuery<T1>  Query       => query;
+    protected       ArchetypeQuery      Query       => query;
     
-    public override string              ToString()  => GetString(Signature.Get<T1>().signatureIndexes);
+    public override string              ToString()  => $"{Name} - []";
 
     #region fields
-    [Browse(Never)] private     ArchetypeQuery<T1>    query;
+    [Browse(Never)] private     ArchetypeQuery    query;
     #endregion
     
-    protected QuerySystem() : base (Generic<T1>.ComponentTypes) { }
+    protected QuerySystem() : base (default) { }
     
-    internal override void SetQuery(ArchetypeQuery query) { this.query = (ArchetypeQuery<T1>)query; }
+    internal override void SetQuery(ArchetypeQuery query) { this.query = query; }
     
     internal override ArchetypeQuery  CreateQuery(EntityStore store) {
-        return store.Query<T1>(Filter);
+        return store.Query(Filter);
     }
 }

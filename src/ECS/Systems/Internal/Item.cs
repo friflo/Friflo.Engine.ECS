@@ -20,7 +20,7 @@ internal struct Item
         sb.Append(system.id);
         sb.Append(" - ");
         switch (system) {
-            case QuerySystem querySystem:
+            case QuerySystemBase querySystem:
                 sb.Append(system.Name);
                 sb.Append(" - entities: ");
                 sb.Append(querySystem.EntityCount);

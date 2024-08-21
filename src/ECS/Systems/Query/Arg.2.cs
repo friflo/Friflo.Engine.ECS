@@ -13,7 +13,7 @@ namespace Friflo.Engine.ECS.Systems;
 /// <summary>
 /// A query system returning entities with the specified component types via its <see cref="Query"/> property.
 /// </summary>
-public abstract class QuerySystem<T1, T2> : QuerySystem
+public abstract class QuerySystem<T1, T2> : QuerySystemBase
     where T1 : struct, IComponent
     where T2 : struct, IComponent
 {

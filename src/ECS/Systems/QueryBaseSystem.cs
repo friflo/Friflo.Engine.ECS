@@ -16,10 +16,23 @@ namespace Friflo.Engine.ECS.Systems;
 /// <summary>
 /// A query system returning the components specified in a subclass extending <c>QuerySystem&lt;T1, ... , Tn></c>.
 /// </summary>
-public abstract class QuerySystem : BaseSystem
+public abstract class QuerySystemBase : BaseSystem
 {
 #region properties
-    /// <summary> A query filter used to restrict the entities returned by its <c>Query</c> property. </summary>
+    /// <summary>
+    /// A query filter used to restrict the entities returned by its <c>Query</c> property.<br/>
+    /// See remarks to add a tag filter to a custom <c>QuerySystem</c>.
+    /// </summary>
+    /// <remarks>
+    /// Additional tag filters can be added in the constructor of a class extending a <c>QuerySystem</c>.
+    /// <code>
+    /// class MySystem : QuerySystem&lt;Scale3>
+    /// {
+    ///     public MySystem() => Filter.AnyTags(Tags.Get&lt;MyTag>()); 
+    ///     protected override void OnUpdate() { ... }
+    /// }
+    /// </code>
+    /// </remarks>
     [Browse(Never)] public          QueryFilter         Filter          => filter;
 
     /// <summary> The number of entities matching the <c>Query</c>. </summary>
@@ -43,7 +56,7 @@ public abstract class QuerySystem : BaseSystem
     #endregion
     
 #region constructor
-    internal QuerySystem(in ComponentTypes componentTypes) {
+    internal QuerySystemBase(in ComponentTypes componentTypes) {
         this.componentTypes = componentTypes;
         queries             = new ReadOnlyList<ArchetypeQuery>(Array.Empty<ArchetypeQuery>());
     }

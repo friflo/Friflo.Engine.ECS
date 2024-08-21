@@ -80,7 +80,7 @@ public static class SystemExtensions
                 GetGroupSystems(type, systemGroup, storeIndex, subParent, depth + 1);
                 continue;
             }
-            if (system is QuerySystem querySystem) {
+            if (system is QuerySystemBase querySystem) {
                 var query = querySystem.Queries[storeIndex];
                 if (query.IsMatch(type.ComponentTypes, type.Tags)) {
                     IncrementCount(parent);
@@ -98,7 +98,7 @@ public static class SystemExtensions
                 GetSystems(type, systemGroup, storeIndex);
                 continue;
             }
-            if (system is QuerySystem querySystem) {
+            if (system is QuerySystemBase querySystem) {
                 var query = querySystem.Queries[storeIndex];
                 if (query.IsMatch(type.ComponentTypes, type.Tags)) {
                     AddMatch(new SystemMatch { system = querySystem, count = 1 });

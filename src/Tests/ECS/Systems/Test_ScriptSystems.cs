@@ -15,7 +15,8 @@ public class SystemSet : Script
     private readonly    SystemRoot  Systems = new ("Systems");
     
     public override void Start() {
-        QuerySystem system = argCount switch {
+        QuerySystemBase system = argCount switch {
+            0 => new MySystem_Arg0(),
             1 => new MySystem_Arg1(),
             2 => new MySystem_Arg2(),
             3 => new MySystem_Arg3(),
@@ -29,6 +30,17 @@ public class SystemSet : Script
 
     public override void Update() {
         Systems.Update(default);
+    }
+}
+
+public class MySystem_Arg0 : QuerySystem
+{
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
+    protected override void OnUpdate()
+    {
+        Mem.AreEqual(1000, Query.Count);
+        Mem.AreEqual(1000, Query.Store.Count);
+        Mem.AreEqual(1000, Query.Entities.Count);
     }
 }
 
@@ -171,6 +183,24 @@ public class MySystem_Arg5 : QuerySystem<Position, Rotation, EntityName, Scale3,
 
 public static class Test_ScriptSystems
 {
+    [Test]
+    public static void Test_ScriptSystems_query_arg_count_0()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new SystemSet { argCount = 0 });
+        
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        for (int n = 3; n <= 1000; n++) {
+            child = child.Archetype.CreateEntity();
+            root.AddChild(child);
+        }
+        CreateSystems(store);
+        int count = 10; // 10_000_000 ~ #PC: 1575 ms
+        ExecuteSystems(store, count);
+    }
+    
     [Test]
     public static void Test_ScriptSystems_query_arg_count_1()
     {
