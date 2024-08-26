@@ -95,7 +95,7 @@ public static class Test_CommandBuffer_Events
     [Test]
     public static void Test_CommandBuffer_AddRemoveComponent_Perf()
     {
-        int repeat  = 1_000_000; // 1_000_000; // 500_000;
+        int repeat  = 10; // 1_000_000 - 13.394 sec
         var store   = new EntityStore();
         var entities = new Entity[100];
         for (int n = 0; n < entities.Length; n++) {
