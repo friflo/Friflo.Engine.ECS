@@ -622,8 +622,8 @@ public readonly partial struct Entity : IEquatable<Entity>
                 store.DeleteEntityEvent(this);
             }
             finally {
-                store.DeleteNode(this); 
-                Archetype.MoveLastComponentsTo(node.archetype, node.compIndex);
+                store.DeleteNode(this);
+                Archetype.MoveLastComponentsTo(node.archetype, node.compIndex, true);
             }
             return;
         }

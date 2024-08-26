@@ -277,11 +277,11 @@ public sealed class Archetype
             // This is redundant for Entity.AddComponent() but other callers may not assign a component value.
             targetHeap.SetComponentDefault(targetIndex);
         }
-        MoveLastComponentsTo(sourceArch, sourceIndex);
+        MoveLastComponentsTo(sourceArch, sourceIndex, true);
         return targetIndex;
     }
     
-    internal static void MoveLastComponentsTo(Archetype arch, int newIndex)
+    internal static void MoveLastComponentsTo(Archetype arch, int newIndex, bool updateCompIndex)
     {
         var lastIndex   = arch.entityCount - 1;
         var store       = arch.store;
@@ -292,8 +292,9 @@ public sealed class Archetype
             }
             var entityIds       = arch.entityIds;
             var lastEntityId    = entityIds[lastIndex];
-            store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
-        
+            if (updateCompIndex) {
+                store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
+            }
             entityIds[newIndex] = lastEntityId;
         }   // ReSharper disable once RedundantIfElseBlock
         else {

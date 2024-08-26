@@ -211,7 +211,7 @@ internal abstract class EntityRelations
         }
         
         // --- move last relation to position of removed relation
-        Archetype.MoveLastComponentsTo(type, position);
+        Archetype.MoveLastComponentsTo(type, position, false);
         if (positions.count == 1) {
             map.Remove(id);
             store.nodes[id].isOwner &= ~relationBit;

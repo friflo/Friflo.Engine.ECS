@@ -114,7 +114,7 @@ public sealed class RawEntityStore : EntityStoreBase
             return false;
         }
         var archetype   = archs[archIndex];
-        Archetype.MoveLastComponentsTo(archetype, entity.compIndex);
+        Archetype.MoveLastComponentsTo(archetype, entity.compIndex, true);
         entity.archIndex = 0;
         entity.compIndex = 0;
         entityCount--;
