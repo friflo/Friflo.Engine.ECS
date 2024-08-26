@@ -48,7 +48,7 @@ public static partial class EntityExtensions
             T4: StructInfo<T4>.Index);
     }
     
-    internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5>() ////
+    internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
