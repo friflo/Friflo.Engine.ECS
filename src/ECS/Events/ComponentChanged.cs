@@ -54,7 +54,7 @@ public readonly struct  ComponentChanged
     public  readonly    int                     StructIndex;    //  4
     
     [Browse(Never)]
-    private readonly    StructHeap              oldHeap;        //  8
+    private readonly    IComponentStash         stash;          //  8
 
     // use nested class to minimize noise in debugger
     private static class Static {
@@ -103,13 +103,13 @@ public readonly struct  ComponentChanged
     #endregion
 
 #region methods
-    internal ComponentChanged(EntityStoreBase store, int entityId, ComponentChangedAction action, int structIndex, StructHeap oldHeap)
+    internal ComponentChanged(EntityStoreBase store, int entityId, ComponentChangedAction action, int structIndex, IComponentStash stash)
     {
         Store           = store as EntityStore; 
         EntityId        = entityId;
         Action          = action;
         StructIndex     = structIndex;     
-        this.oldHeap    = oldHeap;
+        this.stash      = stash;
     }
     
     /// <summary>
@@ -155,7 +155,7 @@ public readonly struct  ComponentChanged
             case ComponentChangedAction.Remove: 
             case ComponentChangedAction.Update:
                 if (typeof(T) == ComponentType.Type) {
-                    return ((StructHeap<T>)oldHeap).componentStash;
+                    return ((IComponentStash<T>)stash).GetStashRef();
                 }
                 throw TypeException("OldComponent<T>() - expect component Type: ", typeof(T));
         }
@@ -179,7 +179,7 @@ public readonly struct  ComponentChanged
         {
             case ComponentChangedAction.Remove: 
             case ComponentChangedAction.Update:
-                return oldHeap.GetComponentStashDebug();
+                return stash.GetStashDebug();
         }
         return null;
     }

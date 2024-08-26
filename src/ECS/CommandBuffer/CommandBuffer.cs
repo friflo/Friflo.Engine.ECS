@@ -182,6 +182,13 @@ public sealed class CommandBuffer : ICommandBuffer
             if (intern.childCommandsCount > 0) {
                 ExecuteChildCommands();
             }
+            // Send events. See: SEND_EVENT notes
+            if (intern.tagCommandsCount > 0) {
+                SendTagEvents           (playback);
+            }
+            if (hasComponentChanges) {
+                SendCommandEvents       (playback);
+            }
         }
         finally {
             intern.Reset(hasComponentChanges);
@@ -252,6 +259,7 @@ public sealed class CommandBuffer : ICommandBuffer
                 }
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
+                change.oldArchetype     = archetype;
             }
             if (tagCommand.change == TagChange.Add) {
                 change.tags.bitSet.SetBit(tagCommand.tagIndex);
@@ -259,6 +267,23 @@ public sealed class CommandBuffer : ICommandBuffer
                 change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
             MapUtils.Set(entityChanges, entityId, change);
+        }
+    }
+    
+    private static void SendTagEvents(Playback playback)
+    {
+        var store       = playback.store;
+        var tagsChanged = store.internBase.tagsChanged;
+        if (tagsChanged == null) {
+            return;
+        }
+        foreach (var (id, change) in playback.entityChanges)
+        {
+            var oldArchetype = change.oldArchetype;
+            if (change.tags.bitSet.Equals(oldArchetype.tags.bitSet)) {
+                continue;
+            }
+            tagsChanged.Invoke(new TagsChanged(store, id, change.tags, oldArchetype.tags));
         }
     }
     
@@ -303,11 +328,14 @@ public sealed class CommandBuffer : ICommandBuffer
     
     private void PrepareComponentCommands(Playback playback)
     {
-        var componentCommands = intern.componentCommandTypes;
+        var componentCommands   = intern.componentCommandTypes;
+        var store               = playback.store;
+        var storeOldComponent   = store.internBase.componentAdded   != null ||
+                                  store.internBase.componentRemoved != null;
         foreach (var componentType in intern.changedComponentTypes)
         {
             var commands = componentCommands[componentType.StructIndex];
-            commands.UpdateComponentTypes(playback);
+            commands.UpdateComponentTypes(playback, storeOldComponent);
         }
     }
     
@@ -321,6 +349,21 @@ public sealed class CommandBuffer : ICommandBuffer
         }
     }
     
+    private void SendCommandEvents(Playback playback)
+    {
+        var store = playback.store;
+        if (store.internBase.componentAdded   == null &&
+            store.internBase.componentRemoved == null) {
+            return;
+        }
+        var componentCommands   = intern.componentCommandTypes;
+        foreach (var componentType in intern.changedComponentTypes)
+        {
+            var commands = componentCommands[componentType.StructIndex];
+            commands.SendCommandEvents(playback);
+        }
+    }
+    
     private static InvalidOperationException EntityNotFound(TagCommand command) {
         return new InvalidOperationException($"Playback - entity not found. command: {command}");
     }
@@ -329,21 +372,19 @@ public sealed class CommandBuffer : ICommandBuffer
     {
         var store               = playback.store;
         var nodes               = store.nodes.AsSpan();
-        var entityChanges       = playback.entityChanges;
         
-        foreach (var entityId in entityChanges.Keys)
+        foreach (var (entityId, change) in playback.entityChanges)
         {
-            var change          = entityChanges[entityId]; 
-            ref var node        = ref nodes[entityId];
-            var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.Equals(change.componentTypes.bitSet) &&
-                curArchetype.tags.          bitSet.Equals(change.tags.          bitSet)) {
+            var oldArchetype    = change.oldArchetype;
+            if (oldArchetype.componentTypes.bitSet.Equals(change.componentTypes.bitSet) &&
+                oldArchetype.tags.          bitSet.Equals(change.tags.          bitSet)) {
                 continue;
             }
             // case: archetype changed 
+            ref var node        = ref nodes[entityId];
             var newArchetype    = store.GetArchetype(change.componentTypes, change.tags);
             node.archetype      = newArchetype;
-            node.compIndex      = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
+            node.compIndex      = Archetype.MoveEntityTo(oldArchetype, entityId, node.compIndex, newArchetype);
         }
     }
     
@@ -420,7 +461,7 @@ public sealed class CommandBuffer : ICommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();   
         }
-        var structIndex = StructInfo<T>.Index;
+        var structIndex         = StructInfo<T>.Index;
         intern.hasCommands      = true;
         intern.changedComponentTypes.bitSet.SetBit(structIndex);
         var componentCommands   = intern.componentCommandTypes[structIndex];

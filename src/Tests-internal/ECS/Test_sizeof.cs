@@ -144,10 +144,10 @@ public static class Test_sizeof
         AreEqual(8, size);
         
         size = sizeof(ComponentCommand<LongComponent>);
-        AreEqual(16, size);
+        AreEqual(24, size);
         
         size = sizeof(EntityChange);
-        AreEqual(64, size);
+        AreEqual(96, size);
         
         size = sizeof(EntityEvent);
         AreEqual(8, size);

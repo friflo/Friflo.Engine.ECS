@@ -15,9 +15,17 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructHeap<T> : StructHeap
+internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     where T : struct, IComponent
 {
+    /// <summary>
+    /// Method only available for debugging. Reasons:<br/>
+    /// - it boxes struct values to return them as objects<br/>
+    /// - it allows only reading struct values
+    /// </summary>
+    public override IComponent  GetStashDebug() => componentStash;
+    public          ref T       GetStashRef()     => ref componentStash;
+    
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     internal            T[]                 components;     //  8
@@ -84,14 +92,7 @@ internal sealed class StructHeap<T> : StructHeap
         var componentSpan = new Span<T>(components, compIndexStart, count);
         componentSpan.Clear();
     }
-    
-    /// <summary>
-    /// Method only available for debugging. Reasons:<br/>
-    /// - it boxes struct values to return them as objects<br/>
-    /// - it allows only reading struct values
-    /// </summary>
-    internal override IComponent GetComponentStashDebug() => componentStash;
-    
+  
     /// <summary>
     /// Method only available for debugging. Reasons:<br/>
     /// - it boxes struct values to return them as objects<br/>

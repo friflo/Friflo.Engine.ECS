@@ -5,37 +5,47 @@ using System;
 using static Friflo.Engine.ECS.ComponentChangedAction;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
+// ReSharper disable InlineTemporaryVariable
 
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal abstract class ComponentCommands
+internal abstract class ComponentCommands : IComponentStash
 {
     [Browse(Never)] internal            int             commandCount;       //  4
     [Browse(Never)] internal readonly   int             structIndex;        //  4
     
-    internal abstract void UpdateComponentTypes (Playback playback);
+    
+    public   abstract IComponent   GetStashDebug();
+    
+    internal abstract void UpdateComponentTypes (Playback playback, bool storeOldComponent);
     internal abstract void ExecuteCommands      (Playback playback);
+    internal abstract void SendCommandEvents    (Playback playback);
     
     internal ComponentCommands(int structIndex) {
         this.structIndex = structIndex;
     }
 }
 
-internal sealed class ComponentCommands<T> : ComponentCommands
+internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<T>
     where T : struct, IComponent
 {
     internal       ReadOnlySpan<ComponentCommand<T>>    Commands    => new (componentCommands, 0, commandCount);
     public   override           string                  ToString()  => $"[{typeof(T).Name}] commands - Count: {commandCount}";
     
     [Browse(Never)] internal    ComponentCommand<T>[]   componentCommands;  //  8
+    [Browse(Never)] private     T                       stashValue;
 
 
     internal ComponentCommands(int structIndex) : base(structIndex) { }
     
-    internal override void UpdateComponentTypes(Playback playback)
+    public  override    IComponent  GetStashDebug() => stashValue;
+    public              ref T       GetStashRef()   => ref stashValue;
+
+    
+    internal override void UpdateComponentTypes(Playback playback, bool storeOldComponent)
     {
         var index           = structIndex;
         var commands        = componentCommands.AsSpan(0, commandCount);
@@ -55,13 +65,21 @@ internal sealed class ComponentCommands<T> : ComponentCommands
 #else
             exists = entityChanges.TryGetValue(entityId, out var change);
 #endif
-            if (!exists) {
-                var archetype           = nodes[entityId].archetype;
-                if (archetype == null) {
-                    throw EntityNotFound(command.ToString());
+            ref var node    = ref nodes[entityId];
+            var archetype   = node.archetype;
+            if (archetype == null) {
+                throw EntityNotFound(command.ToString());
+            }
+            if (storeOldComponent) {
+                var heap = archetype.heapMap[index];
+                if (heap != null) {
+                    command.oldComponent = ((StructHeap<T>)heap).components[node.compIndex];
                 }
+            }
+            if (!exists) {
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
+                change.oldArchetype     = archetype;
             }
             if (command.change == Remove) {
                 change.componentTypes.bitSet.ClearBit(index);
@@ -98,15 +116,50 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             ((StructHeap<T>)heap).components[node.compIndex] = command.component;
         }
     }
+        
+    internal override void SendCommandEvents(Playback playback)
+    {
+        var index       = structIndex;
+        var commands    = componentCommands.AsSpan(0, commandCount);
+        var store       = playback.store;
+        var added       = store.internBase.componentAdded;
+        var removed     = store.internBase.componentRemoved;
+        var entityChanges = playback.entityChanges;
+        Action<ComponentChanged> changed;
+        
+        foreach (ref var command in commands)
+        {
+            var entityId    = command.entityId;
+            var changes     = entityChanges[entityId];
+            var oldHeap     = changes.oldArchetype.heapMap[index];
+            ComponentChangedAction change; 
+            if (command.change == Remove) {
+                change = Remove;
+                if (oldHeap == null) {
+                    continue;
+                }
+                changed = removed;
+            } else {
+                change = oldHeap == null ? Add : Update;
+                changed = added;
+            }
+            if (changed == null) {
+                continue;
+            }
+            stashValue = command.oldComponent;
+            changed.Invoke(new ComponentChanged(store, entityId, change, index, this));
+        }
+    }
 }
 
 
 internal struct ComponentCommand<T>
     where T : struct, IComponent
 {
-    internal    ComponentChangedAction  change;     //  4
-    internal    int                     entityId;   //  4
-    internal    T                       component;  //  sizeof(T)
+    internal    ComponentChangedAction  change;         //  4
+    internal    int                     entityId;       //  4
+    internal    T                       component;      //  sizeof(T)
+    internal    T                       oldComponent;   //  sizeof(T)
 
     public override string ToString() => $"entity: {entityId} - {change} [{typeof(T).Name}]";
 }

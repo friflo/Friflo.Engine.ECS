@@ -11,6 +11,7 @@ internal struct EntityChange
 {
     internal            ComponentTypes                  componentTypes; // 32 
     internal            Tags                            tags;           // 32
+    internal            Archetype                       oldArchetype;   //  8
 }
 
 internal readonly struct Playback
