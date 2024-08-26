@@ -192,7 +192,8 @@ public sealed class CommandBuffer : ICommandBuffer
         }
         finally {
             intern.Reset(hasComponentChanges);
-            playback.entityChanges.Clear();
+            playback.entityChangesCount = 0;
+            playback.entityChangesIndexes.Clear();
             if (!intern.reuseBuffer) {
                 ReturnBuffer();
             }
@@ -239,34 +240,42 @@ public sealed class CommandBuffer : ICommandBuffer
     
     private void ExecuteTagCommands(Playback playback)
     {
-        var entityChanges   = playback.entityChanges;
-        var nodes           = playback.store.nodes.AsSpan(); 
-        var commands        = intern.tagCommands.AsSpan(0, intern.tagCommandsCount);
+        var indexes     = playback.entityChangesIndexes;
+        var changes     = playback.entityChanges;
+        var nodes       = playback.store.nodes.AsSpan();
+        var commands    = intern.tagCommands.AsSpan(0, intern.tagCommandsCount);
         bool exists;
         
         foreach (var tagCommand in commands)
         {
             var entityId = tagCommand.entityId;
 #if NET6_0_OR_GREATER
-            ref var change = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out exists);
+            ref var changeIndex = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(indexes, entityId, out exists);
 #else
-            exists         = entityChanges.TryGetValue(entityId, out var change);
+            exists = indexes.TryGetValue(entityId, out var changeIndex);
 #endif
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 if (archetype == null) {
                     throw EntityNotFound(tagCommand);
                 }
-                change.componentTypes   = archetype.componentTypes;
-                change.tags             = archetype.tags;
-                change.oldArchetype     = archetype;
+                changeIndex = playback.entityChangesCount++;
+                if (changes.Length == changeIndex) {
+                    changes = playback.ResizeChanges();
+                }
+                ref var newChange           = ref changes[changeIndex];
+                newChange.componentTypes    = archetype.componentTypes;
+                newChange.tags              = archetype.tags;
+                newChange.oldArchetype      = archetype;
+                newChange.entityId          = entityId;
             }
+            ref var change = ref changes[changeIndex];
             if (tagCommand.change == TagChange.Add) {
                 change.tags.bitSet.SetBit(tagCommand.tagIndex);
             } else {
                 change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
-            MapUtils.Set(entityChanges, entityId, change);
+            MapUtils.Set(indexes, entityId, changeIndex);
         }
     }
     
@@ -277,13 +286,14 @@ public sealed class CommandBuffer : ICommandBuffer
         if (tagsChanged == null) {
             return;
         }
-        foreach (var (id, change) in playback.entityChanges)
+        var changes = new Span<EntityChange>(playback.entityChanges, 0 , playback.entityChangesCount);
+        foreach (ref var change in changes)
         {
             var oldArchetype = change.oldArchetype;
             if (change.tags.bitSet.Equals(oldArchetype.tags.bitSet)) {
                 continue;
             }
-            tagsChanged.Invoke(new TagsChanged(store, id, change.tags, oldArchetype.tags));
+            tagsChanged.Invoke(new TagsChanged(store, change.entityId, change.tags, oldArchetype.tags));
         }
     }
     
@@ -370,21 +380,22 @@ public sealed class CommandBuffer : ICommandBuffer
     
     private static void UpdateEntityArchetypes(Playback playback)
     {
-        var store               = playback.store;
-        var nodes               = store.nodes.AsSpan();
+        var store   = playback.store;
+        var changes = new Span<EntityChange>(playback.entityChanges, 0 , playback.entityChangesCount);
+        var nodes   = store.nodes.AsSpan();
         
-        foreach (var (entityId, change) in playback.entityChanges)
+        foreach (ref var change in changes)
         {
-            var oldArchetype    = change.oldArchetype;
+            var oldArchetype = change.oldArchetype;
             if (oldArchetype.componentTypes.bitSet.Equals(change.componentTypes.bitSet) &&
                 oldArchetype.tags.          bitSet.Equals(change.tags.          bitSet)) {
                 continue;
             }
             // case: archetype changed 
-            ref var node        = ref nodes[entityId];
+            ref var node        = ref nodes[change.entityId];
             var newArchetype    = store.GetArchetype(change.componentTypes, change.tags);
             node.archetype      = newArchetype;
-            node.compIndex      = Archetype.MoveEntityTo(oldArchetype, entityId, node.compIndex, newArchetype);
+            node.compIndex      = Archetype.MoveEntityTo(oldArchetype, change.entityId, node.compIndex, newArchetype);
         }
     }
     

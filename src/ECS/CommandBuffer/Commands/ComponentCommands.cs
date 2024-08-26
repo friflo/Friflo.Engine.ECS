@@ -47,10 +47,12 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
     
     internal override void UpdateComponentTypes(Playback playback, bool storeOldComponent)
     {
-        var index           = structIndex;
-        var commands        = componentCommands.AsSpan(0, commandCount);
-        var entityChanges   = playback.entityChanges;
-        var nodes           = playback.store.nodes.AsSpan();
+        var index       = structIndex;
+        var commands    = componentCommands.AsSpan(0, commandCount);
+        var indexes     = playback.entityChangesIndexes;
+        var changes     = playback.entityChanges;
+        var nodes       = playback.store.nodes.AsSpan();
+        
         bool exists;
         
         // --- set new entity component types for Add/Remove commands
@@ -61,9 +63,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
             }
             var entityId = command.entityId;
 #if NET6_0_OR_GREATER
-            ref var change = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out exists);
+            ref var changeIndex = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(indexes, entityId, out exists);
 #else
-            exists = entityChanges.TryGetValue(entityId, out var change);
+            exists = indexes.TryGetValue(entityId, out var changeIndex);
 #endif
             ref var node    = ref nodes[entityId];
             var archetype   = node.archetype;
@@ -77,16 +79,23 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
                 }
             }
             if (!exists) {
-                change.componentTypes   = archetype.componentTypes;
-                change.tags             = archetype.tags;
-                change.oldArchetype     = archetype;
+                changeIndex = playback.entityChangesCount++;
+                if (changes.Length == changeIndex) {
+                    changes = playback.ResizeChanges();
+                }
+                ref var newChange           = ref changes[changeIndex];
+                newChange.componentTypes    = archetype.componentTypes;
+                newChange.tags              = archetype.tags;
+                newChange.oldArchetype      = archetype;
+                newChange.entityId          = entityId;
             }
+            ref var change = ref changes[changeIndex];
             if (command.change == Remove) {
                 change.componentTypes.bitSet.ClearBit(index);
             } else {
                 change.componentTypes.bitSet.SetBit  (index);
             }
-            MapUtils.Set(entityChanges, entityId, change);
+            MapUtils.Set(indexes, entityId, changeIndex);
         }
     }
     
@@ -124,30 +133,31 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
         var store       = playback.store;
         var added       = store.internBase.componentAdded;
         var removed     = store.internBase.componentRemoved;
-        var entityChanges = playback.entityChanges;
+        var indexes     = playback.entityChangesIndexes;
+        var changes     = playback.entityChanges;
         Action<ComponentChanged> changed;
         
         foreach (ref var command in commands)
         {
             var entityId    = command.entityId;
-            var changes     = entityChanges[entityId];
-            var oldHeap     = changes.oldArchetype.heapMap[index];
-            ComponentChangedAction change; 
+            ref var change  = ref changes[indexes[entityId]];
+            var oldHeap     = change.oldArchetype.heapMap[index];
+            ComponentChangedAction action; 
             if (command.change == Remove) {
-                change = Remove;
+                action = Remove;
                 if (oldHeap == null) {
                     continue;
                 }
                 changed = removed;
             } else {
-                change = oldHeap == null ? Add : Update;
+                action = oldHeap == null ? Add : Update;
                 changed = added;
             }
             if (changed == null) {
                 continue;
             }
             stashValue = command.oldComponent;
-            changed.Invoke(new ComponentChanged(store, entityId, change, index, this));
+            changed.Invoke(new ComponentChanged(store, entityId, action, index, this));
         }
     }
 }

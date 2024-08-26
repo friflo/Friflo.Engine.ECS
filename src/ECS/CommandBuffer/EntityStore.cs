@@ -35,7 +35,7 @@ public partial class EntityStore
     
     internal Playback GetPlayback()
     {
-        if (intern.playback.entityChanges == null) {
+        if (intern.playback == null) {
             intern.playback = new Playback(this);
         }
         return intern.playback;

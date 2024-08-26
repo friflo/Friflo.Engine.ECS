@@ -1,7 +1,5 @@
 ﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using Tests.Examples;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -95,7 +93,7 @@ public static class Test_CommandBuffer_Events
     [Test]
     public static void Test_CommandBuffer_AddRemoveComponent_Perf()
     {
-        int repeat  = 10; // 1_000_000 - 13.394 sec
+        int repeat  = 10; // 1_000_000 ~ #PC: 10.298 sec
         var store   = new EntityStore();
         var entities = new Entity[100];
         for (int n = 0; n < entities.Length; n++) {
