@@ -77,7 +77,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
-- [x] Watch entities, components, relations, tags, query results, systems, ... in debugger 🐞
+- [x] Debug Tools 🐞: Watch entities, components, tags, relations, query results, systems, ...
       <details>
         <summary>Screenshot - Watch ad-hoc query result in debugger</summary>
         <img src="docs/images/watch-query-result-set.png" width="656" height="202"/>
