@@ -73,6 +73,9 @@ public abstract partial class EntityStoreBase
     /// <summary>Add / remove an event handler for <see cref="ECS.ComponentChanged"/> events triggered by: <br/>
     /// <see cref="Entity.RemoveComponent{T}()"/>.</summary>
     public event    Action<ComponentChanged>  OnComponentRemoved { add => internBase.componentRemoved += value; remove => internBase.componentRemoved -= value; }
+    
+    /// <summary>Add / remove and event handle for <see cref="ArchetypeCreate"/> events triggered by structural changes or entity additions</summary>
+    public  event   Action<ArchetypeCreate>   OnArchetypeCreate  { add => internBase.archetypeAdded   += value; remove => internBase.archetypeAdded   -= value; }
     #endregion
     
 #region private / internal fields
@@ -104,6 +107,8 @@ public abstract partial class EntityStoreBase
         internal        Action                <ComponentChanged>    componentAdded;         //  8   - fires event on add component
         internal        Action                <ComponentChanged>    componentRemoved;       //  8   - fires event on remove component
         internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
+        //
+        internal        Action<ArchetypeCreate>                     archetypeAdded;         //   8  - fires event on new archetype
         //
         ///  reused query for <see cref="EntityStoreBase.GetUniqueEntity"/>
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8

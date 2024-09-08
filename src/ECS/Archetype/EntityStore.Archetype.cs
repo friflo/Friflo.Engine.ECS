@@ -181,6 +181,7 @@ public partial class EntityStoreBase
         store.archs[store.archsCount] = archetype;
         store.archsCount++;
         store.archSet.Add(archetype.key);
+        store.internBase.archetypeAdded?.Invoke(new ArchetypeCreate(archetype));
     }
     #endregion
 }

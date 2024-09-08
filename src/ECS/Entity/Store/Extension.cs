@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Add extended features to an <see cref="EntityStore"/> which are typically not part of an ECS. Like:<br/>
-/// - An entity hierarchy with patent / child relationship.<br/>
+/// - An entity hierarchy with parent / child relationship.<br/>
 /// - Permanent ids (pid's) of type long used as an alternative identifier for id of type int.<br/>
 /// - Entity <see cref="Script"/>'s to support entity components via OOP.<br/> 
 /// </summary>
