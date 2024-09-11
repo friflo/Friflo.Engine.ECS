@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -82,6 +82,12 @@ internal sealed class AssemblyLoader
         if (!checkedAssemblies.Add(assembly)) {
             return;
         }
+
+        if (assembly.GetCustomAttribute(typeof(ScanAssemblyComponentsAttribute)) is null)
+        {
+            return;
+        }
+
         // if (assembly.FullName.Contains("Tests,"))           { int i = 3; }
         // if (assembly.FullName.Contains("Tests-internal,"))  { int i = 3; }
         var referencedAssemblies = assembly.GetReferencedAssemblies();
