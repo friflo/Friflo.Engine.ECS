@@ -15,11 +15,16 @@ namespace Friflo.Engine.ECS;
 internal static class SchemaUtils
 {
     [ExcludeFromCodeCoverage]
-    private static bool RegisterComponentTypesByReflection() {
-        if (Platform.IsUnityRuntime) {
-            return true;
-        }
+    private static bool RegisterComponentTypesByReflectionBranchUnity() {
+        return Platform.IsUnityRuntime;
+    }
+    [ExcludeFromCodeCoverage]
+    private static bool RegisterComponentTypesByReflectionBranchDynamicCodeCompiled() {
         return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
+    }
+    [ExcludeFromCodeCoverage]
+    private static bool RegisterComponentTypesByReflection() {
+        return RegisterComponentTypesByReflectionBranchUnity() || RegisterComponentTypesByReflectionBranchDynamicCodeCompiled();
     }
     
     [ExcludeFromCodeCoverage]
