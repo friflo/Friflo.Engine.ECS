@@ -15,6 +15,15 @@ public delegate void ForEachEntity<T1, T2, T3, T4, T5>(ref T1 component1, ref T2
     where T3 : struct, IComponent
     where T4 : struct, IComponent
     where T5 : struct, IComponent;
+/// <summary>
+/// Provide the state of an entity within <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}.ForEachComponents"/>.
+/// </summary>
+public delegate void ForEachComponents<T1, T2, T3, T4, T5>(ref T1 component1, ref T2 component2, ref T3 component3, ref T4 component4, ref T5 component5)
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent
+    where T5 : struct, IComponent;
 
 
 /// <summary>
@@ -90,6 +99,23 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
                 lambda(ref span1[n], ref span2[n], ref span3[n], ref span4[n], ref span5[n], new Entity(store, ids[n]));    
+            }
+        }
+    }
+    /// <summary>
+    /// Executes the given <paramref name="lambda"/> for each entity in the query result.
+    /// </summary>
+    public void ForEachComponents(ForEachComponents<T1, T2, T3, T4, T5> lambda)
+    {
+        foreach (var (chunk1, chunk2, chunk3, chunk4, chunk5, _) in Chunks)
+        {
+            var span1   = chunk1.Span;
+            var span2   = chunk2.Span;
+            var span3   = chunk3.Span;
+            var span4   = chunk4.Span;
+            var span5   = chunk5.Span;
+            for (int n = 0; n < chunk1.Length; n++) {
+                lambda(ref span1[n], ref span2[n], ref span3[n], ref span4[n], ref span5[n]);
             }
         }
     }

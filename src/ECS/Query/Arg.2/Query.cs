@@ -13,6 +13,12 @@ public delegate void ForEachEntity<T1, T2>(ref T1 component1, ref T2 component2,
     where T1 : struct, IComponent
     where T2 : struct, IComponent;
 
+/// <summary>
+/// Provide the state of an entity within <see cref="ArchetypeQuery{T1,T2}.ForEachComponents"/>.
+/// </summary>
+public delegate void ForEachComponents<T1,T2>(ref T1 component1, ref T2 component2)
+    where T1 : struct, IComponent
+where T2 : struct, IComponent;
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
@@ -82,6 +88,20 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
                 lambda(ref span1[n], ref span2[n], new Entity(store, ids[n]));    
+            }
+        }
+    }
+    /// <summary>
+    /// Executes the given <paramref name="lambda"/> for each entity in the query result.
+    /// </summary>
+    public void ForEachComponents(ForEachComponents<T1, T2> lambda)
+    {
+        foreach (var (chunk1, chunk2, _) in Chunks)
+        {
+            var span1   = chunk1.Span;
+            var span2   = chunk2.Span;
+            for (int n = 0; n < chunk1.Length; n++) {
+                lambda(ref span1[n], ref span2[n]);
             }
         }
     }

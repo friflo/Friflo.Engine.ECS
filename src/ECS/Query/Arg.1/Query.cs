@@ -12,6 +12,11 @@ namespace Friflo.Engine.ECS;
 public delegate void ForEachEntity<T1>(ref T1 component1, Entity entity)
     where T1 : struct, IComponent;
 
+/// <summary>
+/// Provide the state of an entity within <see cref="ArchetypeQuery{T1}.ForEachEntity"/>.
+/// </summary>
+public delegate void ForEachComponents<T1>(ref T1 component1)
+    where T1 : struct, IComponent;
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
@@ -78,6 +83,19 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
                 lambda(ref span1[n], new Entity(store, ids[n]));
+            }
+        }
+    }
+    /// <summary>
+    /// Executes the given <paramref name="lambda"/> for each entity in the query result.
+    /// </summary>
+    public void ForEachComponents(ForEachComponents<T1> lambda)
+    {
+        foreach (var (chunk1, _) in Chunks)
+        {
+            var span1   = chunk1.Span;
+            for (int n = 0; n < chunk1.Length; n++) {
+                lambda(ref span1[n]);
             }
         }
     }
