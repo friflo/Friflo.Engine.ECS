@@ -76,7 +76,38 @@ public partial class EntityStore
         EnsureNodesLength(id + 1);
         return CreateEntityNode(archetype, id, out revision);
     }
-    
+    /// <summary>
+    /// Create and return a simple clone of the passed <paramref name="entity"/> in the store
+    /// </summary>
+    /// <remarks>
+    /// Clone components simply no matter whether component type is blittable or not.
+    /// </remarks>
+    public Entity CloneEntitySimply(Entity entity)
+    {
+        var archetype   = entity.GetArchetype() ?? throw EntityArgumentNullException(entity, nameof(entity));
+        var id          = NewId();
+        CreateEntityInternal(archetype, id, out var revision);
+        var clone       = new Entity(this, id, revision);
+        
+        
+        var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
+        // CopyComponents() must be used only in case all component types are blittable
+        Archetype.CopyComponents(archetype, entity.compIndex, clone.compIndex);
+        if (clone.HasComponent<TreeNode>()) {
+            clone.GetComponent<TreeNode>() = default;   // clear child ids. See child entities note in remarks.
+        }
+        // --- clone scripts
+        foreach (var script in entity.Scripts) {
+            var scriptType      = scriptTypeByType[script.GetType()];
+            var scriptClone     = scriptType.CloneScript(script);
+            scriptClone.entity  = clone;
+            extension.AddScript(clone, scriptClone, scriptType);
+        }
+        
+        // Send event. See: SEND_EVENT notes
+        CreateEntityEvent(clone);
+        return clone;
+    }
     /// <summary>
     /// Create and return a clone of the passed <paramref name="entity"/> in the store.
     /// </summary>
