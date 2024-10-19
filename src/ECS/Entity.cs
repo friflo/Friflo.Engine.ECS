@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Friflo.Engine.ECS.Predefined;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
@@ -272,7 +273,7 @@ public readonly partial struct Entity : IEquatable<Entity>
         throw EntityNullException();
     } }
     
-    /// <summary>Returns the <see cref="ECS.Position"/> reference of an entity.</summary>
+    /// <summary>Returns the <see cref="Predefined.Position"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
     [Browse(Never)] public  ref Position        Position { get {
         var node = store.nodes[Id];
@@ -282,7 +283,7 @@ public readonly partial struct Entity : IEquatable<Entity>
         throw EntityNullException();
     } }
     
-    /// <summary>Returns the <see cref="ECS.Rotation"/> reference of an entity.</summary>
+    /// <summary>Returns the <see cref="Predefined.Rotation"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
     [Browse(Never)] public  ref Rotation        Rotation { get {
         var node = store.nodes[Id];
@@ -292,7 +293,7 @@ public readonly partial struct Entity : IEquatable<Entity>
         throw EntityNullException();
     } }
     
-    /// <summary>Returns the <see cref="ECS.Scale3"/> reference of an entity.</summary>
+    /// <summary>Returns the <see cref="Predefined.Scale3"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
     [Browse(Never)] public  ref Scale3          Scale3 { get {
         var node = store.nodes[Id];
@@ -308,19 +309,19 @@ public readonly partial struct Entity : IEquatable<Entity>
         return type.std.name != null;
     } }
     
-    /// <summary>Returns true if the entity has a <see cref="ECS.Position"/>.</summary>
+    /// <summary>Returns true if the entity has a <see cref="Predefined.Position"/>.</summary>
     [Browse(Never)] public  bool                HasPosition { get {
         var type = GetArchetype() ?? throw EntityNullException();
         return type.std.position != null;
     } }
     
-    /// <summary>Returns true if the entity has a <see cref="ECS.Rotation"/>.</summary>
+    /// <summary>Returns true if the entity has a <see cref="Predefined.Rotation"/>.</summary>
     [Browse(Never)] public  bool                HasRotation { get {
         var type = GetArchetype() ?? throw EntityNullException();
         return type.std.rotation != null;
     } }
     
-    /// <summary>Returns true if the entity has a <see cref="ECS.Scale3"/>.</summary>
+    /// <summary>Returns true if the entity has a <see cref="Predefined.Scale3"/>.</summary>
     [Browse(Never)] public  bool                HasScale3 { get {
         var type = GetArchetype() ?? throw EntityNullException();
         return type.std.scale3 != null;

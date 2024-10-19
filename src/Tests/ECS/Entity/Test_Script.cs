@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable UnusedVariable
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable HeuristicUnreachableCode

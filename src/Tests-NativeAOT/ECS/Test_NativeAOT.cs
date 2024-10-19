@@ -1,5 +1,6 @@
 using System;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Predefined;
 using Tests.ECS;
 
 // [Testing Your Native AOT Applications - .NET Blog](https://devblogs.microsoft.com/dotnet/testing-your-native-aot-dotnet-apps/)

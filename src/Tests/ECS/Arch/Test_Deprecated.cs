@@ -1,6 +1,6 @@
 ﻿using System;
 using Friflo.Engine.ECS;
-using NUnit.Framework;
+using NUnit.Framework;using Friflo.Engine.ECS.Predefined;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer

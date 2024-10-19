@@ -3,7 +3,7 @@
 
 
 using System.Text;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.ECS.Systems;

@@ -11,7 +11,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 using static Tests.Utils.SingleThreadSynchronizationContext;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming

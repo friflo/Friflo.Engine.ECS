@@ -5,7 +5,7 @@ using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Serialize {
 

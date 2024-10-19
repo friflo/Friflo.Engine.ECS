@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Tests.ECS.Index;
 using Tests.ECS.Relations;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS {

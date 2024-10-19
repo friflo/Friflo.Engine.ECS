@@ -7,6 +7,15 @@ namespace Friflo.Engine.ECS;
 
 public static partial class EntityExtensions
 {
+    internal static void AssignComponents(
+        Archetype archetype,
+        int       compIndex,
+        in IComponent     component1,
+        int givenStructIndex)
+    {
+        var heapMap = archetype.heapMap;
+        heapMap[givenStructIndex].SetComponent(compIndex, component1);
+    }
     internal static void AssignComponents<T1>(
         Archetype   archetype,
         int         compIndex,

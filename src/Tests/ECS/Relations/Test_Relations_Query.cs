@@ -5,7 +5,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable AccessToModifiedClosure
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable InconsistentNaming

@@ -1,6 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Index.Query {
 

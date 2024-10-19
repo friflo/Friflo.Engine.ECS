@@ -10,7 +10,7 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Predefined;
 
 /// <summary>
 /// Rotation encoded as a <a href="https://en.wikipedia.org/wiki/Quaternion">Quaternion</a>

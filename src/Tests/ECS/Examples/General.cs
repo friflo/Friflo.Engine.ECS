@@ -3,7 +3,7 @@ using System.IO;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
-
+using Friflo.Engine.ECS.Predefined;
 
 // ReSharper disable UnusedVariable
 // ReSharper disable MemberCanBePrivate.Global

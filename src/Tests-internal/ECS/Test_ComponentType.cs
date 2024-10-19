@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-using Tests.ECS;
+using Tests.ECS;using Friflo.Engine.ECS.Predefined;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody

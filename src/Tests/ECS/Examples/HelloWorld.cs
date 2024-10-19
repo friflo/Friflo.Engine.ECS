@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {

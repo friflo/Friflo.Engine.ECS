@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using NUnit.Framework;
 using Tests.Utils;
 

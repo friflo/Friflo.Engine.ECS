@@ -7,7 +7,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable ConvertToLocalFunction
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable LoopCanBeConvertedToQuery

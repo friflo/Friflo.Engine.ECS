@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Friflo.Engine.ECS.Predefined;
 using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable UseRawString

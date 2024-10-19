@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;

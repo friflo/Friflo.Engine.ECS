@@ -3,7 +3,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.Utils;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Systems {

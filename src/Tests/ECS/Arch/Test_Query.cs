@@ -1,5 +1,5 @@
 using System;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using NUnit.Framework;
 using static Tests.Utils.Mem;
 

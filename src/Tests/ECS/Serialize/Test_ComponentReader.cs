@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Predefined;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using NUnit.Framework;

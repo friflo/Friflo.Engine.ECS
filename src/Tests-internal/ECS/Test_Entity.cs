@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.Utils;

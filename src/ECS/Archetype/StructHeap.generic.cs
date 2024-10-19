@@ -83,6 +83,11 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         components[targetPos] = components[sourcePos];
     }
     
+    internal override void SetComponent(int compIndex, in IComponent component)
+    {
+        components[compIndex] = (T)component;
+    }
+    
     internal  override  void SetComponentDefault (int compIndex) {
         components[compIndex] = default;
     }

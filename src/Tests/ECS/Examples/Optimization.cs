@@ -3,7 +3,7 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static Tests.Examples.General;
-
+using Friflo.Engine.ECS.Predefined;
 #if !UNITY_5_3_OR_NEWER
 using System.Runtime.Intrinsics;
 #endif

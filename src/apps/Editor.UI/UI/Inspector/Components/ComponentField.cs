@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Numerics;
 using Avalonia.Controls;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Predefined;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Editor.UI.Inspector.FieldDataKind;

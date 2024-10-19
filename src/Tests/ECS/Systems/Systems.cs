@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using Friflo.Engine.ECS.Systems;
 using static NUnit.Framework.Assert;
 

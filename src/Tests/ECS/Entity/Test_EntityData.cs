@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace

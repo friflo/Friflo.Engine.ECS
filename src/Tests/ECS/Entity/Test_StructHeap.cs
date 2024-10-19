@@ -4,7 +4,7 @@ using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable UselessBinaryOperation
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace

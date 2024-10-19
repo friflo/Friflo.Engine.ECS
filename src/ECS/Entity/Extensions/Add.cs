@@ -8,6 +8,33 @@ namespace Friflo.Engine.ECS;
 public static partial class EntityExtensions
 {
     /// <summary> Add the passed component and tags to the entity. </summary>
+    /// <remarks> DO NOT USE IT FREQUENTLY</remarks>
+    public static void AddNonGeneric(
+        this Entity entity,
+        in   IComponent     component1,
+        in   Tags   tags = default)
+    {
+        var store           = entity.store;
+        var id              = entity.Id;
+        ref var node        = ref store.nodes[id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
+        
+        var structIndex = SchemaTypeUtils.GetStructIndex(component1.GetType());
+        
+        var newType         = store.GetArchetypeAdd(oldType, new ComponentTypes(structIndex), tags);
+        
+        var signatureIndexes = new SignatureIndexes(structIndex);
+        StashAddComponents(store, signatureIndexes, oldType, oldCompIndex);
+        
+        var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
+        node.archetype      = newType;
+        AssignComponents(newType, newCompIndex, component1, structIndex);
+        
+        // Send event. See: SEND_EVENT notes
+        SendAddEvents(entity, signatureIndexes, newType, oldType);
+    }
+
     public static void Add<T1>(
         this Entity entity,
         in T1   component1,

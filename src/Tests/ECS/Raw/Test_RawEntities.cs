@@ -4,7 +4,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Raw {

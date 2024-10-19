@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using Friflo.Engine.ECS;
+using Friflo.Engine.ECS;using Friflo.Engine.ECS.Predefined;
 using Friflo.Engine.ECS.Systems;
 using Friflo.Engine.ECS.Utils;
 using NUnit.Framework;

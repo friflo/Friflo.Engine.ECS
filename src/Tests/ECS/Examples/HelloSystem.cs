@@ -3,7 +3,7 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable UnusedType.Local
 // ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable FieldCanBeMadeReadOnly.Local

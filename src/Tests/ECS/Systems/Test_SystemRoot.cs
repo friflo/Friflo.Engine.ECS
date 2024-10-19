@@ -9,7 +9,7 @@ using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS.Systems

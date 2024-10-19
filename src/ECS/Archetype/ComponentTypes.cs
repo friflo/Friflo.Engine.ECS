@@ -50,7 +50,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         bitSet.SetBit(type.StructIndex);
     }
     #endregion
-
+    
 
 #region internal constructors
     internal ComponentTypes(StructHeap[] heaps) {
@@ -59,6 +59,13 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         }
     }
     
+    internal ComponentTypes(int[] indexes)
+    {
+        foreach (var i in indexes)
+        {
+            bitSet.SetBit(i);
+        }
+    }
     internal ComponentTypes(in SignatureIndexes indexes)
     {
         switch (indexes.length) {

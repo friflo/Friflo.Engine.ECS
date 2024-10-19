@@ -6,7 +6,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 namespace Tests.ECS.Systems
 {
     // ReSharper disable once InconsistentNaming

@@ -20,7 +20,8 @@ internal static class SchemaUtils
     }
     [ExcludeFromCodeCoverage]
     private static bool RegisterComponentTypesByReflectionBranchDynamicCodeCompiled() {
-        return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
+        //return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
+        return false;
     }
     [ExcludeFromCodeCoverage]
     private static bool RegisterComponentTypesByReflection() {

@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Engine.ECS.Predefined;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;

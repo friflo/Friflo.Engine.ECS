@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Tests.Examples;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-
+using Friflo.Engine.ECS.Predefined;
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Index {

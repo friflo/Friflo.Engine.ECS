@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Predefined;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Engine.Hub;
 using Friflo.Json.Fliox;
