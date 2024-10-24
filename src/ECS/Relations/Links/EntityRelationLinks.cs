@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS.Collections;
 
@@ -84,6 +85,37 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
         foreach (var sourceId in sourceIdSpan) {
             var target = new Entity(store, targetId);
             RemoveRelation(sourceId, target);
+        }
+    }
+    
+    internal override void RemoveEntityRelations(int id)
+    {
+        positionMap.TryGetValue(id, out var positions);
+        RemoveIncomingLinks(positions, id);
+        while (positions.count > 0) {
+            var lastIndex   = positions.count - 1;
+            int position    = positions.GetAt(lastIndex, idHeap);
+            positions       = RemoveEntityRelation(id, position, positions, lastIndex);
+        }
+    }
+    
+    private void RemoveIncomingLinks(IdArray positions, int id)
+    {
+        var positionsSpan   = positions.GetSpan(idHeap, store);
+        var components      = ((StructHeap<TRelationComponent>)heap).components;
+        var linkMap         = linkEntityMap;
+        foreach (var position in positionsSpan)
+        {
+            var targetId        = components[position].GetRelationKey().Id;
+            var sourceIds       = linkMap[targetId];
+            var sourceIdSpan    = sourceIds.GetSpan(linkIdsHeap, store);
+            var idPosition      = sourceIdSpan.IndexOf(id);
+            sourceIds.RemoveAt(idPosition, linkIdsHeap);
+            if (sourceIds.count == 0) {
+                linkMap.Remove(targetId);
+            } else {
+                linkMap[targetId] = sourceIds;
+            }
         }
     }
     #endregion

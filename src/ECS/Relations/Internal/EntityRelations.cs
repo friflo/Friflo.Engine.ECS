@@ -197,7 +197,7 @@ internal abstract class EntityRelations
         var type        = archetype;
         var map         = positionMap;
         var localIdHeap = idHeap;
-        
+
         // --- adjust position in entityMap of last component
         int lastPosition        = type.entityCount - 1;
         int lastId              = type.entityIds[lastPosition];
@@ -223,7 +223,7 @@ internal abstract class EntityRelations
     }
     
     /// remove all entity relations
-    internal void RemoveEntityRelations (int id)
+    internal virtual void RemoveEntityRelations (int id)
     {
         positionMap.TryGetValue(id, out var positions);
         while (positions.count > 0) {
