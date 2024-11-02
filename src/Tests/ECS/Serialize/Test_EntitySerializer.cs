@@ -493,6 +493,31 @@ public static class Test_Serializer
         NotNull(inner);
         StringAssert.StartsWith("Type 'System.Uri' does not have a default constructor", inner.Message);
     }
+    
+    /// Test MemoryStream with GetBuffer() not available.  
+    [Test]
+    public static void Test_Serializer_GitHub27()
+    {
+        var store = new EntityStore();
+        Entity entity = store.CreateEntity(1);
+        entity.AddComponent(new EntityName { value = "test-name" });
+        
+        var serializer = new EntitySerializer();
+        
+        using MemoryStream writeStream = new MemoryStream();
+        var entities = new List<Entity> { entity };
+        serializer.WriteEntities(entities, writeStream);
+        
+        writeStream.Position = 0;
+        using StreamReader reader = new(writeStream);
+        string json = reader.ReadToEnd();
+        
+        var newStore = new EntityStore();
+        // MemoryStream.GetBuffer() is not available. stream data must be copied.  
+        var readStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        serializer.ReadIntoStore(newStore, readStream);
+        AreEqual("test-name", newStore.GetEntityById(1).Name.value);
+    }
 }
 
 }
