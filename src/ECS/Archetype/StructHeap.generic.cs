@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Engine.ECS.Index;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -108,5 +109,17 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
         components[compIndex] = reader.ReadMapper(componentType.TypeMapper, json);  // todo avoid boxing within typeMapper, T is struct
+    }
+    
+    internal override  void UpdateIndex (Entity entity) {
+        StoreIndex.UpdateIndex(entity.store, entity.Id, components[entity.compIndex], this);
+    }
+    
+    internal override  void AddIndex (Entity entity) {
+        StoreIndex.AddIndex(entity.store, entity.Id, components[entity.compIndex]);
+    }
+    
+    internal override  void RemoveIndex (Entity entity) {
+        StoreIndex.RemoveIndex(entity.store, entity.Id, this);
     }
 }

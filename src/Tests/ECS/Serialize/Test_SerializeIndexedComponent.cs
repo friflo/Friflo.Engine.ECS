@@ -1,0 +1,77 @@
+﻿using System.IO;
+using System.Text;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Serialize;
+using NUnit.Framework;
+using Tests.ECS.Index;
+using static NUnit.Framework.Assert;
+
+// ReSharper disable MethodHasAsyncOverload
+// ReSharper disable HeuristicUnreachableCode
+// ReSharper disable InconsistentNaming
+namespace Tests.ECS.Serialize {
+
+public static class Test_SerializeIndexedComponent
+{
+    private const string JSON_withIndexedComponent =
+@"[{
+    ""id"": 1,
+    ""components"": {
+        ""IndexedInt"": {""value"":42}
+    }
+}";
+    
+private const string JSON_withoutIndexedComponent =
+@"[{
+    ""id"": 1,
+    ""components"": {
+    }
+}";
+    
+    [Test]
+    public static void Test_SerializeIndexedComponent_add()
+    {
+        var store = new EntityStore();
+        store.CreateEntity(1);
+    
+        var serializer = new EntitySerializer();
+        var readStream = new MemoryStream(Encoding.UTF8.GetBytes(JSON_withIndexedComponent));
+        serializer.ReadIntoStore(store, readStream);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(42).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+    }
+    
+    [Test]
+    public static void Test_SerializeIndexedComponent_update()
+    {
+        var store = new EntityStore();
+        Entity entity = store.CreateEntity(1);
+        entity.AddComponent(new IndexedInt { value = 10 });
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(10).Count);
+        
+        var serializer = new EntitySerializer();
+        var readStream = new MemoryStream(Encoding.UTF8.GetBytes(JSON_withIndexedComponent));
+        serializer.ReadIntoStore(store, readStream);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(42).Count);
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(10).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+    }
+    
+    [Test]
+    public static void Test_SerializeIndexedComponent_remove()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity(1);
+        entity.AddComponent(new IndexedInt { value = 10 });
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(10).Count);
+        // entity.AddComponent(new MyComponent1 { a = 10 });
+        
+        var serializer = new EntitySerializer();
+        var readStream = new MemoryStream(Encoding.UTF8.GetBytes(JSON_withoutIndexedComponent));
+        serializer.ReadIntoStore(store, readStream);
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(10).Count);
+        AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+    }
+}
+
+}
