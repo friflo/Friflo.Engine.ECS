@@ -56,12 +56,7 @@ internal sealed class ComponentReader
     
     internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store, in ConvertOptions options)
     {
-        componentCount      = 0;
-        var hasTags         = dataEntity.tags?.Count > 0;
-        var hasComponents   = !dataEntity.components.IsNull();
-        if (!hasComponents && !hasTags) {
-            return null;
-        }
+        componentCount = 0;
         var error = ReadRaw(dataEntity, entity);
         if (error != null) {
             return error;
@@ -176,14 +171,10 @@ internal sealed class ComponentReader
     {
         var key = searchKey;
         key.Clear();
-        var hasComponentTypes   = GetComponentTypes(ref key.componentTypes);
-        var tags                = dataEntity.tags;
-        var hasTags             = tags?.Count > 0;
-        if (!hasComponentTypes && !hasTags) {
-            return; // early out in absence of components and tags
-        }
+        GetComponentTypes(ref key.componentTypes);
+        var tags = dataEntity.tags;
         unresolvedTagList.Clear();
-        if (hasTags) {
+        if (tags?.Count > 0) {
             AddTags(tags, key);
         }
         var curType = entity.archetype;
@@ -235,28 +226,24 @@ internal sealed class ComponentReader
         }
     }
     
-    private bool GetComponentTypes(ref ComponentTypes componentTypes)
+    private void GetComponentTypes(ref ComponentTypes componentTypes)
     {
-        var hasComponentTypes   = false;
-        var count               = componentCount;
+        var count = componentCount;
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
             var schemaType      = component.rawKey.schemaType;
             if (schemaType == unresolvedType) {
                 // case: unresolved component
-                hasComponentTypes = true;
                 componentTypes.bitSet.SetBit(unresolvedType.StructIndex);
                 continue;
             }
             if (schemaType.Kind == SchemaTypeKind.Component)
             {
                 var componentType = (ComponentType)schemaType;
-                hasComponentTypes = true;
                 componentTypes.bitSet.SetBit(componentType.StructIndex);
             }                
         }
-        return hasComponentTypes;
     }
     
     /// <summary> Preserve components and tags present on passed <paramref name="type"/>. </summary>

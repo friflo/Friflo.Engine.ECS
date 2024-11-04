@@ -59,7 +59,7 @@ public static class Test_ComponentReader
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
     [Test]
-    public static void Test_ComponentReader_change_archetype()
+    public static void Test_ComponentReader_change_archetype_add_components()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
@@ -74,6 +74,22 @@ public static class Test_ComponentReader
         IsTrue  (root == rootResult);
         IsTrue  (root.HasScale3);   // could change script and remove all components not present in DataEntity components
         IsTrue  (root.HasPosition);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_change_archetype_remove_component()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var root        = store.CreateEntity(10);
+        root.AddComponent(new Position());
+        IsTrue (root.HasPosition);
+        
+        var rootNode    = new DataEntity { pid = 10, components = new JsonValue() };
+        var rootResult  = converter.DataEntityToEntity(rootNode, store, out _);  // archetype changes
+        IsTrue  (root == rootResult);
+        IsFalse (root.HasPosition);
     }
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
