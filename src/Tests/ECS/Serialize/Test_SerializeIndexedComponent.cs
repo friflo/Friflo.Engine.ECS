@@ -72,6 +72,17 @@ private const string JSON_withoutIndexedComponent =
         AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(10).Count);
         AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
     }
+    
+    [Test]
+    public static void Test_IndexedComponent_CreateEntity()
+    {
+        var store = new EntityStore();
+        store.CreateEntity(new IndexedInt { value = 22 });
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(22).Count);
+        
+        store.CreateEntity(new MyComponent1(), new IndexedInt { value = 22 });
+        AreEqual(2, store.GetEntitiesWithComponentValue<IndexedInt,int>(22).Count);
+    }
 }
 
 }

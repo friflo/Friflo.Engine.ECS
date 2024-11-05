@@ -44,8 +44,7 @@ public static partial class Test_Index_Query
                 new Rotation(),
                 new MyComponent1 { a = n },
                 new MyComponent2 { b = n },
-                new MyComponent3 { b = n },
-                new AttackComponent{target = targets[n]});
+                new MyComponent3 { b = n });
             entities.Add(entity);
         }
         cx.target   = targets[0];

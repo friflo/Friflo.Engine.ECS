@@ -186,8 +186,8 @@ public partial class EntityStore
     {
         var newType         = entity.archetype;
         var indexTypesMask  = Static.EntitySchema.indexTypes.bitSet.l0;
-        var oldIndexBits    = oldType.ComponentTypes.bitSet.l0 & indexTypesMask;
-        var newIndexBits    = newType.ComponentTypes.bitSet.l0 & indexTypesMask;
+        var oldIndexBits    = oldType.componentTypes.bitSet.l0 & indexTypesMask;
+        var newIndexBits    = newType.componentTypes.bitSet.l0 & indexTypesMask;
         var indexBits       = oldIndexBits | newIndexBits;
         if (indexBits == 0) {
             return;
