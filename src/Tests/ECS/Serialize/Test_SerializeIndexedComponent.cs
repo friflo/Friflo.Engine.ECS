@@ -83,6 +83,56 @@ private const string JSON_withoutIndexedComponent =
         store.CreateEntity(new MyComponent1(), new IndexedInt { value = 22 });
         AreEqual(2, store.GetEntitiesWithComponentValue<IndexedInt,int>(22).Count);
     }
+    
+    [Test]
+    public static void Test_IndexedComponent_Add()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        
+        entity.Add(new IndexedInt { value = 30 });
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(30).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        entity.Add(new IndexedInt { value = 31 });
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(30).Count);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(31).Count);
+    }
+    
+    [Test]
+    public static void Test_IndexedComponent_Set()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity(new IndexedInt { value = 40 });
+        
+        entity.Set(new IndexedInt { value = 41 });
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(41).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        entity.Set(new IndexedInt { value = 42 });
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(41).Count);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(42).Count);
+    }
+    
+    [Test]
+    public static void Test_IndexedComponent_Remove()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        entity.AddComponent(new IndexedInt { value = 40 });
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(40).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        entity.Remove<IndexedInt>();
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(40).Count);
+        AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        entity.Remove<IndexedInt>();
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(40).Count);
+        AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+    }
 }
 
 }

@@ -17,13 +17,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -39,13 +40,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -63,13 +65,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -89,13 +92,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -117,13 +121,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4,T5>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4,T5>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -147,13 +152,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4,T5,T6>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4,T5,T6>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -179,13 +185,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4,T5,T6,T7>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4,T5,T6,T7>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -213,13 +220,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4,T5,T6,T7,T8>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4,T5,T6,T7,T8>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -249,13 +257,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
     
     /// <summary> Set the passed components on the entity. </summary>
@@ -287,13 +296,14 @@ public static partial class EntityExtensions
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.SignatureIndexes;
-        StashSetComponents(entity, components, type, componentIndex);
+        var types           = Generic<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>.ComponentTypes;
+        StashSetComponents(entity, types, components, type, componentIndex);
 
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10)) {
             throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
-        SendSetEvents(entity, components, type);
+        SendSetEvents(entity, types, components, type);
     }
 }
 
