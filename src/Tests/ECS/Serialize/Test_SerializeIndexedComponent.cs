@@ -133,6 +133,34 @@ private const string JSON_withoutIndexedComponent =
         AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(40).Count);
         AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
     }
+    
+    [Test]
+    public static void Test_IndexedComponent_ApplyTo()
+    {
+        var store   = new EntityStore(PidType.RandomPids);
+        var batch   = new EntityBatch();
+        batch.Add   (new IndexedInt { value = 50 });
+        
+        var entity1 = store.CreateEntity(1);
+        batch.ApplyTo(entity1);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(50).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        batch   = new EntityBatch();
+        batch.Add   (new IndexedInt { value = 51 });
+        batch.ApplyTo(entity1);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(51).Count);
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(50).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        batch   = new EntityBatch();
+        batch.Remove<IndexedInt>();
+        batch.ApplyTo(entity1);
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(51).Count);
+        AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        batch.ApplyTo(entity1);
+    }
 }
 
 }

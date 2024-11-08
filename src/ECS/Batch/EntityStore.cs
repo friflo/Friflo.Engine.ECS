@@ -4,6 +4,7 @@
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
@@ -19,6 +20,8 @@ public partial class EntityStoreBase
 #region EntityBatch
     [Browse(Never)]
     internal int PooledEntityBatchCount => internBase.entityBatches.Count;
+    
+    private readonly long indexTypesMak = Static.EntitySchema.indexTypes.bitSet.l0;
 
     internal EntityBatch GetBatch(int entityId)
     {
@@ -46,6 +49,15 @@ public partial class EntityStoreBase
         newComponentTypes.Add   (batch.componentsAdd);
         newComponentTypes.Remove(batch.componentsRemove);
         
+        // --- stash old component values only if an event handler is set or an indexed component changes 
+        var oldHeapMap          = archetype.heapMap;
+        var indexChanges        = ((batch.componentsAdd.bitSet.l0 | batch.componentsRemove.bitSet.l0) & indexTypesMak) != 0;
+        var sendRemoveEvents    = internBase.componentRemoved != null;
+        var sendAddEvents       = internBase.componentAdded   != null;
+        if (sendRemoveEvents || sendAddEvents || indexChanges) {
+            StashComponentValues(batch, oldHeapMap, compIndex);
+        }
+        
         // --- change archetype
         var newArchetype = GetArchetype(newComponentTypes, newTags);
         if (newArchetype != archetype) {
@@ -57,7 +69,21 @@ public partial class EntityStoreBase
         var newHeapMap  = newArchetype.heapMap;
         var components  = batch.batchComponents;
         foreach (var componentType in batch.componentsAdd) {
-            newHeapMap[componentType.StructIndex].SetBatchComponent(components, compIndex);
+            var heap = newHeapMap[componentType.StructIndex];
+            heap.SetBatchComponent(components, compIndex);
+            if (componentType.IndexType != null) {
+                var entity = new Entity((EntityStore)this, entityId, node.revision);
+                if (oldHeapMap[componentType.StructIndex] == null) {
+                    heap.AddIndex(entity);
+                } else {
+                    heap.UpdateIndex(entity);
+                }
+            }
+        }
+        // --- update indexes of removed indexed components
+        var removedIndexTypes = batch.componentsRemove.bitSet.l0 & indexTypesMak;
+        if (removedIndexTypes != 0) {
+            RemoveComponentIndexes(removedIndexTypes, new Entity((EntityStore)this, entityId, node.revision), oldHeapMap);
         }
         
         // ----------- Send events for all batch commands. See: SEND_EVENT notes
@@ -69,16 +95,35 @@ public partial class EntityStoreBase
             }
         }
         // --- send component removed event
-        if (internBase.componentRemoved != null) {
-            SendComponentRemoved(batch, entityId, archetype, compIndex);
+        if (sendRemoveEvents) {
+            SendComponentRemoved(batch, entityId, archetype);
         }
         // --- send component added event
-        if (internBase.componentAdded != null) {
-            SendComponentAdded  (batch, entityId, archetype, compIndex);
+        if (sendAddEvents) {
+            SendComponentAdded  (batch, entityId, archetype);
         }
     }
     
-    private void SendComponentAdded(EntityBatch batch, int entityId, Archetype archetype, int compIndex)
+    private static void StashComponentValues(EntityBatch batch, StructHeap[] oldHeapMap, int compIndex)
+    {
+        var componentsChanged = batch.componentsAdd;
+        componentsChanged.Add(batch.componentsRemove);
+        foreach (var componentType in componentsChanged) {
+            oldHeapMap[componentType.StructIndex]?.StashComponent(compIndex);
+        }
+    }
+    
+    private static void RemoveComponentIndexes(long indexTypes, Entity entity, StructHeap[] oldHeapMap)
+    {
+        var indexedComponentsRemove = new ComponentTypes();
+        indexedComponentsRemove.bitSet.l0 = indexTypes;
+        foreach (var componentType in indexedComponentsRemove) {
+            var heap = oldHeapMap[componentType.StructIndex];
+            heap?.RemoveIndex(entity);
+        }
+    }
+    
+    private void SendComponentAdded(EntityBatch batch, int entityId, Archetype archetype)
     {
         var oldHeapMap      = archetype.heapMap;
         var componentAdded  = internBase.componentAdded;
@@ -91,14 +136,13 @@ public partial class EntityStoreBase
                 action = ComponentChangedAction.Add;
             } else {
                 // --- case: archetype contains the component type  => archetype remains unchanged
-                structHeap.StashComponent(compIndex);
                 action = ComponentChangedAction.Update;
             }
             componentAdded.Invoke(new ComponentChanged (this, entityId, action, structIndex, structHeap));
         }
     }
     
-    private void SendComponentRemoved(EntityBatch batch, int entityId, Archetype archetype, int compIndex)
+    private void SendComponentRemoved(EntityBatch batch, int entityId, Archetype archetype)
     {
         var oldHeapMap          = archetype.heapMap;
         var componentRemoved    = internBase.componentRemoved;
@@ -109,7 +153,6 @@ public partial class EntityStoreBase
             if (oldHeap == null) {
                 continue;
             }
-            oldHeap.StashComponent(compIndex);
             componentRemoved.Invoke(new ComponentChanged (this, entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
         }
     }

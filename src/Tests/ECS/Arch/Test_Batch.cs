@@ -114,11 +114,17 @@ public static class Test_Batch
     {
         var store   = new EntityStore(PidType.RandomPids);
         var batch   = new EntityBatch();
-        batch.Add   (new Position());
+        batch.Add   (new Position(2,2,2));
         batch.AddTag<TestTag>();
         
-        var entity1 = store.CreateEntity();
-        var entity2 = store.CreateEntity();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        entity1.AddComponent(new Position(1,1,1));
+        store.OnComponentAdded += changed => {
+            if (changed.Entity.Id == 1) {
+                AreEqual(new Position(1,1,1), changed.OldComponent<Position>());
+            }
+        };
         batch.ApplyTo(entity1)
              .ApplyTo(entity2);
         AreEqual(0, store.Info.PooledEntityBatchCount);
@@ -293,6 +299,25 @@ public static class Test_Batch
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
         AreEqual(entityCount, arch.Count);
         AreEqual(0, store.Info.PooledEntityBatchCount);
+    }
+    
+    [Test]
+    public static void Test_Batch_ApplyTo_Perf()
+    {
+        var count   = 10; // 50_000_000 ~ #PC: 3278 ms
+        var store   = new EntityStore();
+        var batch   = new EntityBatch();
+        batch.Add(new Position());
+        batch.Add(new Rotation());
+        batch.Add(new Scale3());
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        var entity1 = store.CreateEntity(1);
+        for (int n = 0; n < count; n++) {
+            batch.ApplyTo(entity1);
+        }
+        Console.WriteLine($"Test_Batch_ApplyTo_Perf() - duration: {sw.ElapsedMilliseconds} ms");
     }
     
     [Test]
