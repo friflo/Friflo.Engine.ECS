@@ -11,7 +11,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Serialize {
 
-public static class Test_SerializeIndexedComponent
+public static class Test_IndexedComponent
 {
     private const string JSON_withIndexedComponent =
 @"[{
@@ -29,7 +29,7 @@ private const string JSON_withoutIndexedComponent =
 }";
     
     [Test]
-    public static void Test_SerializeIndexedComponent_add()
+    public static void Test_IndexedComponent_serialize_add()
     {
         var store = new EntityStore();
         store.CreateEntity(1);
@@ -42,7 +42,7 @@ private const string JSON_withoutIndexedComponent =
     }
     
     [Test]
-    public static void Test_SerializeIndexedComponent_update()
+    public static void Test_IndexedComponent_serialize_update()
     {
         var store = new EntityStore();
         Entity entity = store.CreateEntity(1);
@@ -58,7 +58,7 @@ private const string JSON_withoutIndexedComponent =
     }
     
     [Test]
-    public static void Test_SerializeIndexedComponent_remove()
+    public static void Test_IndexedComponent_serialize_remove()
     {
         var store = new EntityStore();
         var entity = store.CreateEntity(1);
@@ -85,7 +85,7 @@ private const string JSON_withoutIndexedComponent =
     }
     
     [Test]
-    public static void Test_IndexedComponent_Add()
+    public static void Test_IndexedComponent_EntityExtension_Add()
     {
         var store = new EntityStore();
         var entity = store.CreateEntity();
@@ -101,7 +101,7 @@ private const string JSON_withoutIndexedComponent =
     }
     
     [Test]
-    public static void Test_IndexedComponent_Set()
+    public static void Test_IndexedComponent_EntityExtension_Set()
     {
         var store = new EntityStore();
         var entity = store.CreateEntity(new IndexedInt { value = 40 });
@@ -117,7 +117,7 @@ private const string JSON_withoutIndexedComponent =
     }
     
     [Test]
-    public static void Test_IndexedComponent_Remove()
+    public static void Test_IndexedComponent_EntityExtension_Remove()
     {
         var store = new EntityStore();
         var entity = store.CreateEntity();
@@ -135,7 +135,7 @@ private const string JSON_withoutIndexedComponent =
     }
     
     [Test]
-    public static void Test_IndexedComponent_ApplyTo()
+    public static void Test_IndexedComponent_EntityBatch_ApplyTo()
     {
         var store   = new EntityStore(PidType.RandomPids);
         var batch   = new EntityBatch();
@@ -160,6 +160,19 @@ private const string JSON_withoutIndexedComponent =
         AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
         
         batch.ApplyTo(entity1);
+    }
+    
+    [Test]
+    public static void Test_IndexedComponent_CreateEntityBatch()
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+        var batch = new CreateEntityBatch(store);
+        batch.Add(new Position())
+            .Add(new IndexedInt { value = 60 });
+        
+        batch.CreateEntity();
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(60).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
     }
 }
 

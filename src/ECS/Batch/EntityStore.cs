@@ -21,7 +21,7 @@ public partial class EntityStoreBase
     [Browse(Never)]
     internal int PooledEntityBatchCount => internBase.entityBatches.Count;
     
-    private readonly long indexTypesMak = Static.EntitySchema.indexTypes.bitSet.l0;
+    private readonly long indexTypesMask = Static.EntitySchema.indexTypes.bitSet.l0;
 
     internal EntityBatch GetBatch(int entityId)
     {
@@ -51,7 +51,7 @@ public partial class EntityStoreBase
         
         // --- stash old component values only if an event handler is set or an indexed component changes 
         var oldHeapMap          = archetype.heapMap;
-        var indexChanges        = ((batch.componentsAdd.bitSet.l0 | batch.componentsRemove.bitSet.l0) & indexTypesMak) != 0;
+        var indexChanges        = ((batch.componentsAdd.bitSet.l0 | batch.componentsRemove.bitSet.l0) & indexTypesMask) != 0;
         var sendRemoveEvents    = internBase.componentRemoved != null;
         var sendAddEvents       = internBase.componentAdded   != null;
         if (sendRemoveEvents || sendAddEvents || indexChanges) {
@@ -81,7 +81,7 @@ public partial class EntityStoreBase
             }
         }
         // --- update indexes of removed indexed components
-        var removedIndexTypes = batch.componentsRemove.bitSet.l0 & indexTypesMak;
+        var removedIndexTypes = batch.componentsRemove.bitSet.l0 & indexTypesMask;
         if (removedIndexTypes != 0) {
             RemoveComponentIndexes(removedIndexTypes, new Entity((EntityStore)this, entityId, node.revision), oldHeapMap);
         }
