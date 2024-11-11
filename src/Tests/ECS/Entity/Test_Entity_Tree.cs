@@ -768,6 +768,23 @@ public static class Test_Entity_Tree
         }
     }
     
+    // https://github.com/friflo/Friflo.Engine.ECS/issues/29
+    [Test]
+    public static void Test_Entity_Tree_CreateThenDestroyEntityWithParent()
+    {
+        var store = new EntityStore();
+        var root  = store.CreateEntity();
+        var child1 = store.CreateEntity();
+        root.AddChild(child1);
+        int id = child1.Id;
+        var parent = child1.Parent;
+
+        child1.DeleteEntity();
+        var child2 = store.CreateEntity();
+        IsTrue(child2.Parent.IsNull);   // before fix this assertion failed
+        AreEqual(id, child2.Id);        // uses recycled id
+    }
+    
     [Test]
     public static void Test_Entity_Tree_id_argument_exceptions()
     {

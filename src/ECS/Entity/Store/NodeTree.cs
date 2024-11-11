@@ -539,6 +539,7 @@ public partial class EntityStore
         if (!HasParent(parentId)) {
             return;
         }
+        RemoveTreeParent(id);
         int curIndex = RemoveChildNode(parentId, id);
         OnChildNodeRemove(parentId, id, curIndex);
     }
