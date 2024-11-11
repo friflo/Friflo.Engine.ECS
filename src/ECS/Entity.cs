@@ -530,7 +530,7 @@ public readonly partial struct Entity : IEquatable<Entity>
         }
         throw EntityNullException();
     }
-    /// <summary>Add the given <typeparamref name="TTag"/> from the entity.</summary>
+    /// <summary>Remove the given <typeparamref name="TTag"/> from the entity.</summary>
     public bool RemoveTag<TTag>() where TTag : struct, ITag {
         int index = 0;
         ref var node    = ref store.nodes[Id];
