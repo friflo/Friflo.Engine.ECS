@@ -3,13 +3,12 @@ using System.Text;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
-using Tests.ECS.Index;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Serialize {
+namespace Tests.ECS.Index {
 
 public static class Test_IndexedComponent
 {
@@ -174,6 +173,50 @@ private const string JSON_withoutIndexedComponent =
         AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(60).Count);
         AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
     }
+    
+    [Test]
+    public static void Test_IndexedComponent_CommandBuffer()
+    {
+        var store   = new EntityStore();
+        store.CreateEntity(1);
+        
+
+        var ecb = store.GetCommandBuffer();
+        ecb.ReuseBuffer = true;
+        ecb.AddComponent(1, new IndexedInt { value = 70 });
+        ecb.Playback();
+        
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(70).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        ecb.AddComponent(1, new IndexedInt { value = 71 });
+        ecb.Playback();
+        
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(70).Count);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(71).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        ecb.SetComponent(1, new IndexedInt { value = 72 });
+        ecb.Playback();
+        
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(71).Count);
+        AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(72).Count);
+        AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        ecb.RemoveComponent<IndexedInt>(1);
+        ecb.RemoveComponent<IndexedInt>(1);
+        ecb.Playback();
+        
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(72).Count);
+        AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+        
+        ecb.RemoveComponent<IndexedInt>(1);
+        ecb.Playback();
+        
+        AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(72).Count);
+        AreEqual(0, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+    }
+
 }
 
 }

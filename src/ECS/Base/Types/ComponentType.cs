@@ -112,7 +112,7 @@ internal sealed class ComponentType<T> : ComponentType
     
     internal override ComponentCommands CreateComponentCommands()
     {
-        return new ComponentCommands<T>(StructIndex) {
+        return new ComponentCommands<T>(StructIndex, IndexType) {
             componentCommands = new ComponentCommand<T>[8]
         };
     }
