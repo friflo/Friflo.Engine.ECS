@@ -71,9 +71,6 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
             if ((archetype.componentTypes.bitSet.l0 & indexMask) != 0) {
                 RemoveIndexedComponent(playback, node, entityId);
             }
-            if (command.change == Update) {
-                continue;
-            }
 #if NET6_0_OR_GREATER
             ref var changeIndex = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(indexes, entityId, out exists);
 #else

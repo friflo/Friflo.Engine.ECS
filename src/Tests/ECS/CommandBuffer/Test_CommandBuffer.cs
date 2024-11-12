@@ -34,7 +34,7 @@ public static class Test_CommandBuffer
             // --- structural change: add Position
             ecb.AddComponent(1, pos1);
             AreEqual(1, ecb.ComponentCommandsCount);
-            ecb.SetComponent(1, pos2);
+            ecb.AddComponent(1, pos2);
             AreEqual(2, ecb.ComponentCommandsCount);
             AreEqual("component commands: 2  tag commands: 0", ecb.ToString());
             //
@@ -482,6 +482,25 @@ public static class Test_CommandBuffer
         AreEqual(0, ecb.ScriptCommandsCount);
         AreEqual(0, ecb.ChildCommandsCount);
         AreEqual(0, ecb.EntityCommandsCount);
+    }
+    
+    [Test]
+    [Obsolete("SetComponent() replaced by AddComponent()")]
+    // https://github.com/friflo/Friflo.Engine.ECS/issues/31
+    public static void Test_CommandBuffer_Github_31()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        entity1.AddComponent(new Position(1,1,1));
+
+        store.OnComponentAdded += changed => {
+            AreEqual(new Position(1,1,1).value, changed.OldComponent<Position>().value);
+            AreEqual(new Position(2,2,2).value, changed.Component<Position>().value);
+        };
+        var ecb     = store.GetCommandBuffer();
+        
+        ecb.SetComponent(1, new Position(2,2,2));
+        ecb.Playback();
     }
 }
 

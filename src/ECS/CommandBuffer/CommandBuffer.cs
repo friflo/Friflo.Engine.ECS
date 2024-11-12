@@ -449,12 +449,13 @@ public sealed class CommandBuffer : ICommandBuffer
     }
     
     /// <summary>
-    /// Set the given <paramref name="component"/> with type <typeparamref name="T"/> of the entity with the passed <paramref name="entityId"/>.
+    /// Obsolete. Same behavior as <c>AddComponent(int,T)</c>.
     /// </summary>
+    [Obsolete("use AddComponent() instead")]
     public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
-        ChangeComponent(component,  entityId, ComponentChangedAction.Update);
+        ChangeComponent(component,  entityId, ComponentChangedAction.Add);
     }
     
     /// <summary>

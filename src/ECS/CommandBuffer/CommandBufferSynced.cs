@@ -57,6 +57,7 @@ public sealed class CommandBufferSynced : ICommandBuffer
     /// <summary>
     /// Set the given <paramref name="component"/> with type <typeparamref name="T"/> of the entity with the passed <paramref name="entityId"/>.
     /// </summary>
+    [Obsolete("use AddComponent() instead")]
     public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {

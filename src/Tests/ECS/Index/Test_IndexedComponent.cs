@@ -196,7 +196,7 @@ private const string JSON_withoutIndexedComponent =
         AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(71).Count);
         AreEqual(1, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
         
-        ecb.SetComponent(1, new IndexedInt { value = 72 });
+        ecb.AddComponent(1, new IndexedInt { value = 72 });
         ecb.Playback();
         
         AreEqual(0, store.GetEntitiesWithComponentValue<IndexedInt,int>(71).Count);
