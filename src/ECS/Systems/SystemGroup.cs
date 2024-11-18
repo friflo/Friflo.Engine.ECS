@@ -230,14 +230,14 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region store: add / remove
-    internal override void AddStoreInternal(EntityStore entityStore)
+    protected internal override void OnAddStore(EntityStore entityStore)
     {
         var commandBuffer = entityStore.GetCommandBuffer();
         commandBuffer.ReuseBuffer = true;
         commandBuffers.Add(commandBuffer);
     }
     
-    internal override void RemoveStoreInternal(EntityStore entityStore)
+    protected internal override void OnRemoveStore(EntityStore entityStore)
     {
         foreach (var commandBuffer in commandBuffers) {
             if (commandBuffer.EntityStore != entityStore) {

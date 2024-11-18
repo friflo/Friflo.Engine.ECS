@@ -347,6 +347,21 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
+        public static void Test_SystemGroup_OnAddRemoveStore()
+        {
+            var root        = new SystemRoot("Systems");
+            var store       = new EntityStore();
+            var mySystem    = new MySystem2();
+            root.Add(mySystem);
+            
+            root.AddStore(store);
+            IsTrue(mySystem.storeAdded);
+            
+            root.RemoveStore(store);
+            IsTrue(mySystem.storeRemoved);
+        }
+        
+        [Test]
         public static void Test_SystemGroup_IsAncestorOf()
         {
             var root        = new SystemRoot("Systems");
