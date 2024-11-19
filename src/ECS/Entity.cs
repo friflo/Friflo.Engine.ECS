@@ -176,6 +176,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 [CLSCompliant(true)]
 [StructLayout(LayoutKind.Explicit)]
+[Json.Fliox.TypeMapper(typeof(Serialize.TypeMapperEntity))]
 public readonly partial struct Entity : IEquatable<Entity>
 {
     // ------------------------------------ general properties ------------------------------------

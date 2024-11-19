@@ -213,6 +213,34 @@ public sealed partial class EntityStore : EntityStoreBase
     }
     
     /// <summary>
+    /// If referenced entity is not present it will use same revision which will be set in <see cref="CreateEntityNode"/>.
+    /// </summary>
+    internal Entity CreateEntityReference(long key)
+    {
+        int id;
+        if (extension.pid2Id == null) {
+            id = (int)key;
+            EnsureNodesLength(id + 1);
+            ref var node = ref nodes[id];
+            var revision = node.revision;
+            if (node.archetype != null) {
+                return new Entity(this, id, revision);
+            }
+            return new Entity(this, id, ++revision); // assign same revision which will be assigned in CreateEntityNode()
+        }
+        throw new NotSupportedException("Entity serialization using PidType.RandomPids currently not supported");
+        /* var pid = key;
+        if (!extension.pid2Id.TryGetValue(pid, out id)) {
+            id = NewId();
+            CreateEntityNode(defaultArchetype, id, out var revision);
+            extension.pid2Id.Add(pid, id);
+            extension.id2Pid.Add(id, pid);
+            return new Entity(this, id, revision);
+        }
+        return new Entity(this, id);*/
+    }
+    
+    /// <summary>
     /// Get the <see cref="Entity"/> associated with the passed <paramref name="id"/>.<br/>
     /// Returns true if passed <paramref name="id"/> is valid (id &lt; <see cref="Capacity"/>).<br/>
     /// The returned entity can be null (<see cref="Entity.IsNull"/> == true).

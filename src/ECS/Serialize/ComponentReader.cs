@@ -19,6 +19,7 @@ namespace Friflo.Engine.ECS.Serialize;
 internal sealed class ComponentReader
 {
     private readonly    ObjectReader                            componentReader;
+    private readonly    MapperContextEntityStore                mapperContextStore;
     private readonly    Dictionary<string, SchemaType>          schemaTypeByKey;
     private readonly    Dictionary<Type,   ScriptType>          scriptTypeByType;
     private readonly    Dictionary<string, TagType>             tagTypeByName;
@@ -40,6 +41,8 @@ internal sealed class ComponentReader
         buffer                  = new Bytes(128);
         components              = new RawComponent[1];
         componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore) { ErrorHandler = ObjectReader.NoThrow };
+        mapperContextStore      = new MapperContextEntityStore();
+        componentReader.SetMapperContext(mapperContextStore);
         var schema              = EntityStoreBase.Static.EntitySchema;
         unresolvedType          = schema.unresolvedType;
         schemaTypeByKey         = schema.schemaTypeByKey;
@@ -56,6 +59,7 @@ internal sealed class ComponentReader
     
     internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store, in ConvertOptions options)
     {
+        mapperContextStore.store = (EntityStore)store;
         componentCount = 0;
         var error = ReadRaw(dataEntity, entity);
         if (error != null) {

@@ -46,6 +46,12 @@ public struct MyComponent6 : IComponent { public int b; }
 [ComponentKey("my7")]
 public struct MyComponent7 : IComponent { public int b; }
 
+public struct EntityReference : IComponent {
+    public          Entity      entity;
+    
+    public override string      ToString()          => entity.Id.ToString();
+}
+
 public struct NonBlittableArray         : IComponent { internal int[]                   array;  }
 public struct NonBlittableList          : IComponent { internal List<int>               list;   }
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }

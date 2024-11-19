@@ -265,12 +265,12 @@ public static class Test_Serializer
         stream.Close();
     }
     
-    private static string MemoryStreamAsString(MemoryStream stream) {
+    internal static string MemoryStreamAsString(MemoryStream stream) {
         stream.Flush();
         return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
     
-    private static Stream StringAsStream(string json) {
+    internal static Stream StringAsStream(string json) {
         var bytes = Encoding.UTF8.GetBytes(json);
         var stream = new MemoryStream(bytes.Length);
         stream.Write(bytes);
