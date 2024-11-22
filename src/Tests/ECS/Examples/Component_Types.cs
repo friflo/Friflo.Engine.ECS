@@ -110,7 +110,7 @@ public static void LinkRelations()
 #endregion
 
 
-#region relation component
+#region relation
 
 [Test]
 public static void Relation_Snippets()

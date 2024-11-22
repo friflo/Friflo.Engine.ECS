@@ -24,11 +24,11 @@ internal class EntityRelationLinks<TRelation> : EntityRelations<TRelation, Entit
     }
     
     /// Expect: component is present
-    internal override ref TComponent GetEntityRelation<TComponent>(int id, int targetId)
+    internal override ref T GetEntityRelation<T>(int id, int targetId)
     {
         Entity target   = new Entity(store, targetId);
         int position    = FindRelationPosition(id, target, out _, out _);
-        return ref ((StructHeap<TComponent>)heap).components[position];
+        return ref ((StructHeap<T>)heap).components[position];
     }
     
     internal override void AddIncomingRelations(int target, List<EntityLink> result)
@@ -47,9 +47,9 @@ internal class EntityRelationLinks<TRelation> : EntityRelations<TRelation, Entit
 #region mutation
 
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    internal override bool AddComponent<TComponent>(int id, in TComponent component)
+    internal override bool AddComponent<T>(int id, in T component)
     {
-        Entity target   = RelationUtils<TComponent, Entity>.GetRelationKey(component);
+        Entity target   = RelationUtils<T, Entity>.GetRelationKey(component);
         bool added      = true;
         int position    = FindRelationPosition(id, target, out var positions, out _);
         if (position >= 0) {
@@ -59,7 +59,7 @@ internal class EntityRelationLinks<TRelation> : EntityRelations<TRelation, Entit
         position = AddEntityRelation(id, positions);
         LinkRelationUtils.AddComponentValue(id, target.Id, this);
     AssignComponent:
-        ((StructHeap<TComponent>)heap).components[position] = component;
+        ((StructHeap<T>)heap).components[position] = component;
         return added;
     }
 

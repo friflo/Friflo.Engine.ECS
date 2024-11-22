@@ -56,22 +56,22 @@ internal class EntityRelations<TRelation, TKey> : EntityRelations
         return components[poolPositions[start + index]];
     }
     
-    internal ref TComponent GetRelation<TComponent>(int id, TKey key)
-        where TComponent : struct, IRelation<TKey>
+    internal ref T GetRelation<T>(int id, TKey key)
+        where T : struct, IRelation<TKey>
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
-            return ref ((StructHeap<TComponent>)heap).components[position];
+            return ref ((StructHeap<T>)heap).components[position];
         }
         throw KeyNotFoundException(id, key);
     }
     
-    internal bool TryGetRelation<TComponent>(int id, TKey key, out TComponent value)
-        where TComponent : struct, IRelation<TKey>
+    internal bool TryGetRelation<T>(int id, TKey key, out T value)
+        where T : struct, IRelation<TKey>
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
-            value = ((StructHeap<TComponent>)heap).components[position];
+            value = ((StructHeap<T>)heap).components[position];
             return true;
         }
         value = default;
@@ -82,9 +82,9 @@ internal class EntityRelations<TRelation, TKey> : EntityRelations
 #region mutation
 
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    internal override bool AddComponent<TComponent>(int id, in TComponent component)
+    internal override bool AddComponent<T>(int id, in T component)
     {
-        var relationKey = RelationUtils<TComponent, TKey>.GetRelationKey(component);
+        var relationKey = RelationUtils<T, TKey>.GetRelationKey(component);
     //  var relationKey = ((IRelation<TKey>)component).GetRelationKey(); // boxing version
         var added       = true;
         var position    = FindRelationPosition(id, relationKey, out var positions, out _);
@@ -94,7 +94,7 @@ internal class EntityRelations<TRelation, TKey> : EntityRelations
         }
         position = AddEntityRelation(id, positions);
     AssignComponent:
-        ((StructHeap<TComponent>)heap).components[position] = component;
+        ((StructHeap<T>)heap).components[position] = component;
         return added;
     }
 
