@@ -32,8 +32,6 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 ## News
 
 - [x] Breaking changes in `3.0.0-preview.16`
-  > [!IMPORTANT]
-  >   
   > renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#relations)
 
 - [x] ![new](docs/images/new.svg) Finally **Friflo.Engine.ECS** is now in its own new repository!  
