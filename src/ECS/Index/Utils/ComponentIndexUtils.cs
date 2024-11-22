@@ -40,6 +40,7 @@ internal static class ComponentIndexUtils
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "TODO")] // TODO
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2065", Justification = "TODO")] // TODO
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
     private static Type MakeIndexType(Type valueType, Type componentType)
