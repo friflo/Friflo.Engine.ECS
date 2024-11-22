@@ -13,11 +13,12 @@ namespace Tests.ECS.Relations {
 
 public static class Test_Relations_Query
 {
+    // COMP_TAG
     [Test]
     public static void Test_Relations_query()
     {
         var store   = new EntityStore();
-        var query   = store.Query<AttackRelation>();
+        var query   = store.QueryRelation<AttackRelation>();
         // --- test query without adding relations before
         AreEqual(0, query.Count);
         int count = 0;
@@ -232,6 +233,7 @@ public static class Test_Relations_Query
         Console.WriteLine($"Test_Relations_GetAllEntityRelations_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
     }
     
+    /* COMP_TAG obsolete: using relation components in a Query<>() will not compile 
     [Test]
     public static void Test_Relations_query_exception()
     {
@@ -240,7 +242,7 @@ public static class Test_Relations_Query
             store.Query<AttackRelation, Position>();
         });
         AreEqual("relation component query cannot have other query components", e!.Message);
-    }
+    } */
 }
 
 }

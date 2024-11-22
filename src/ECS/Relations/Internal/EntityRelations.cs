@@ -47,11 +47,11 @@ internal abstract class EntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    internal  abstract bool             AddComponent<TComponent>     (int id, in TComponent component) where TComponent : struct, IComponent;
-    internal  abstract IComponent       GetRelationAt                (int id, int index);
-    internal  virtual  ref TComponent   GetEntityRelation<TComponent>(int id, int target)              where TComponent : struct, IComponent   => throw new InvalidOperationException($"type: {GetType().Name}");
-    internal  virtual  void             AddIncomingRelations         (int target, List<EntityLink> result)                                     => throw new InvalidOperationException($"type: {GetType().Name}");
-    internal  virtual  void             RemoveLinksWithTarget        (int targetId)                                                            => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  abstract bool                 AddComponent<TComponent>     (int id, in TComponent component) where TComponent : struct, IRelationComponent;
+    internal  abstract IRelationComponent   GetRelationAt                (int id, int index);
+    internal  virtual  ref TComponent       GetEntityRelation<TComponent>(int id, int target)              where TComponent : struct   => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  virtual  void                 AddIncomingRelations         (int target, List<EntityLink> result)                         => throw new InvalidOperationException($"type: {GetType().Name}");
+    internal  virtual  void                 RemoveLinksWithTarget        (int targetId)                                                => throw new InvalidOperationException($"type: {GetType().Name}");
     
     internal static KeyNotFoundException KeyNotFoundException(int id, object key)
     {
@@ -167,7 +167,7 @@ internal abstract class EntityRelations
     
 #region mutation
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, in TComponent component)
-        where TComponent : struct, IComponent
+        where TComponent : struct, IRelationComponent
     {
         var relations = GetEntityRelations(store, StructInfo<TComponent>.Index);
         return relations.AddComponent(id, component);

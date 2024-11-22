@@ -20,7 +20,7 @@ public class BatchAlreadyAppliedException : InvalidOperationException
 
 internal class BatchComponent { }
 
-internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
+internal class BatchComponent<T> : BatchComponent where T : struct
 {
     internal    T   value;
 }

@@ -19,7 +19,7 @@ internal abstract class ComponentCommands : IComponentStash
     [Browse(Never)] internal readonly   long            indexMask;          //  8
     
     
-    public   abstract IComponent   GetStashDebug();
+    public   abstract object   GetStashDebug();
     
     internal abstract void UpdateComponentTypes (Playback playback, bool storeOldComponent);
     internal abstract void ExecuteCommands      (Playback playback);
@@ -45,7 +45,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
 
     internal ComponentCommands(int structIndex, Type indexType) : base(structIndex, indexType) { }
     
-    public  override    IComponent  GetStashDebug() => stashValue;
+    public  override    object      GetStashDebug() => stashValue;
     public              ref T       GetStashRef()   => ref stashValue;
 
     

@@ -10,6 +10,29 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    
+    #region relation
+    
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given relation type.<br/>
+    /// </summary>
+    public ArchetypeQuery<T1> QueryRelation<T1> ()
+        where T1 : struct, IRelationComponent
+    {
+        return new ArchetypeQuery<T1>(this, Signature.GetRelation<T1>(), null);
+    }
+    
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
+    public ArchetypeQuery<T1> QueryRelation<T1> (QueryFilter filter)
+        where T1 : struct, IRelationComponent
+    {
+        return new ArchetypeQuery<T1>(this, Signature.GetRelation<T1>(), filter);
+    }
+    #endregion
+    
 #region args - 0
     // -------------------------------------- archetype query --------------------------------------
     /// <summary>

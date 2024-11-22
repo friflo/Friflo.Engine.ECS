@@ -28,7 +28,7 @@ namespace Friflo.Engine.ECS;
 /// <typeparam name="T"><see cref="IComponent"/> type of a struct component.</typeparam>
 [DebuggerTypeProxy(typeof(ChunkDebugView<>))]
 public readonly struct Chunk<T>
-    where T : struct, IComponent
+    where T : struct
 {
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
     public              Span<T>     Span                    => new(ArchetypeComponents, start, Length);
@@ -68,7 +68,7 @@ public readonly struct Chunk<T>
     /// </code>
     /// </remarks>
     public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + ComponentType<T>.PadCount256) & 0x7fff_ffe0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -76,7 +76,7 @@ public readonly struct Chunk<T>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + ComponentType<T>.PadCount128) & 0x7fff_fff0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -84,21 +84,21 @@ public readonly struct Chunk<T>
     ///  See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + ComponentType<T>.PadCount512) & 0x7fff_ffc0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a Vector128{T}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [Browse(Never)]
-    public              int         StepSpan128 => 16 / ComponentType<T>.ByteSize;
+    public              int         StepSpan128 => 16 / StructPadding<T>.ByteSize;
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan256{TTo}"/> value to a Vector256{T}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [Browse(Never)]
-    public              int         StepSpan256 => 32 / ComponentType<T>.ByteSize;
+    public              int         StepSpan256 => 32 / StructPadding<T>.ByteSize;
     
     // ReSharper disable once InvalidXmlDocComment
     /// <summary>
@@ -106,7 +106,7 @@ public readonly struct Chunk<T>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [Browse(Never)]
-    public              int         StepSpan512 => 64 / ComponentType<T>.ByteSize;
+    public              int         StepSpan512 => 64 / StructPadding<T>.ByteSize;
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 

@@ -337,6 +337,9 @@ public static class Test_Relations
         IsNull  (entity.GetRelation<StringRelation, string>(null).value);
     }
     
+    
+    /* COMP_TAG obsolete:
+       Relations do not implement IComponent anymore. So HasComponent(), GetComponent() and AddComponent() will result in a compiler error
     [Test]
     public static void Test_Relations_Entity_Component_methods()
     {
@@ -363,8 +366,7 @@ public static class Test_Relations
         });
         AreEqual("relation component must be added with:  entity.AddRelation(new IntRelation());  id: 1", e!.Message);
         entity.AddRelation(new IntRelation()); // example
-        
-    }
+    } */
     
     [Test]
     public static void Test_Relations_NullReferenceExceptions()

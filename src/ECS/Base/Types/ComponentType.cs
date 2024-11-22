@@ -3,8 +3,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using Friflo.Json.Fliox.Mapper;
-using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable ConvertToPrimaryConstructor
@@ -58,7 +56,7 @@ public abstract class ComponentType : SchemaType
 }
 
 internal static class StructInfo<T>
-    where T : struct, IComponent
+    where T : struct
 {
     // --- static internal
     // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_StructIndex()
@@ -70,27 +68,16 @@ internal static class StructInfo<T>
     internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T));
 }
 
-internal sealed class ComponentType<T> : ComponentType 
+internal sealed class ComponentType<T> : ComponentType
     where T : struct, IComponent
 {
 #region properties
-    /// <summary>
-    /// Create <see cref="TypeMapper"/> on demand.<br/>
-    /// So possible exceptions in <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
-    /// </summary>
-    internal            TypeMapper<T>   TypeMapper  => typeMapper ??= typeStore.GetTypeMapper<T>();
     public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";
     #endregion
 
-#region fields
-    private             TypeMapper<T>   typeMapper;
-    private  readonly   TypeStore       typeStore;
-    #endregion
-
-    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType, TypeStore typeStore, Type relationType, Type keyType)
-        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, ByteSize, relationType, keyType)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType)
+        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, StructPadding<T>.ByteSize, null, null)
     {
-        this.typeStore = typeStore;
     }
     
     internal override bool RemoveEntityComponent(Entity entity) {
@@ -107,7 +94,7 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        return new StructHeap<T>(StructIndex, this);
+        return new StructHeap<T>(StructIndex);
     }
     
     internal override ComponentCommands CreateComponentCommands()
@@ -118,9 +105,42 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override BatchComponent CreateBatchComponent() => new BatchComponent<T>();
+}
+
+internal sealed class RelationType<T> : ComponentType
+    where T : struct, IRelationComponent
+{
+    #region properties
+    public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";
+    #endregion
     
+
     
-    private static int GetByteSize() {
+    internal RelationType(string componentKey, int structIndex, Type relationType, Type keyType)
+        : base(componentKey, structIndex, typeof(T), null, null, StructPadding<T>.ByteSize, relationType, keyType)
+    {
+    }
+    
+    internal override bool RemoveEntityComponent(Entity entity) => throw new InvalidOperationException();
+    
+    internal override bool AddEntityComponent(Entity entity) => throw new InvalidOperationException();
+    
+    internal override bool AddEntityComponentValue(Entity entity, object value) => throw new InvalidOperationException();
+    
+    internal override StructHeap CreateHeap() {
+        return new StructHeap<T>(StructIndex);
+    }
+    
+    internal override ComponentCommands CreateComponentCommands() => throw new InvalidOperationException();
+    
+    internal override BatchComponent CreateBatchComponent() => throw new InvalidOperationException();
+}
+
+
+internal static class StructPadding<T>
+    where T : struct
+{
+      private static int GetByteSize() {
         // Unity: when testing as dll in Assets/Plugins folder add required dll's
         //  Friflo.Json.Fliox.Hub.dll
         //  Friflo.Json.Fliox.dll

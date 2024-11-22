@@ -10,8 +10,8 @@ namespace Friflo.Engine.ECS;
 /// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{T1,T2}.ForEachEntity"/>.
 /// </summary>
 public delegate void ForEachEntity<T1, T2>(ref T1 component1, ref T2 component2, Entity entity)
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent;
+    where T1 : struct
+    where T2 : struct;
 
 
 /// <summary>
@@ -19,8 +19,8 @@ public delegate void ForEachEntity<T1, T2>(ref T1 component1, ref T2 component2,
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
 /// </summary>
 public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
 {
     /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1, T2> AllTags       (in Tags tags) { SetHasAllTags(tags);      return this; }

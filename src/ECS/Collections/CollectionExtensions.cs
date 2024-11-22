@@ -53,7 +53,7 @@ public static class CollectionExtensions
     /// E.g <c>"{ 1, 3, 7 }"</c>
     /// </summary>
     public static string Debug<T>(this Chunk<T> chunk)
-        where T : struct, IComponent
+        where T : struct
     {
         if (chunk.Length == 0) return "{ }";
         var sb = new StringBuilder();

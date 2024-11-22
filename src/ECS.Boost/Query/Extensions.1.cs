@@ -8,7 +8,7 @@ public static partial class QueryExtensions
 {
     public static TEach Each<TEach, T1>(this ArchetypeQuery<T1> query, TEach each)
         where TEach : IEach<T1>
-        where T1 : struct, IComponent
+        where T1 : struct
     {
         foreach (var chunk in query.Chunks) {
             chunk.Each(ref each);
@@ -18,7 +18,7 @@ public static partial class QueryExtensions
     
     public static TEachEntity EachEntity<TEachEntity, T1>(this ArchetypeQuery<T1> query, TEachEntity each)
         where TEachEntity : IEachEntity<T1>
-        where T1 : struct, IComponent
+        where T1 : struct
     {
         foreach (var chunk in query.Chunks) {
             chunk.EachEntity(ref each);

@@ -6,11 +6,11 @@ namespace Friflo.Engine.ECS;
 
 internal interface IComponentStash
 {
-    internal IComponent GetStashDebug();
+    internal object GetStashDebug();
 }
 
 internal interface IComponentStash<T> : IComponentStash
-    where T : struct, IComponent
+    where T : struct
 {
     internal ref T GetStashRef();
 }

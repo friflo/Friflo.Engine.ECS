@@ -21,11 +21,11 @@ public readonly struct EntityLink
     #endregion
 #region fields    
     [Browse(Never)] internal readonly   Entity          entity;     // 16
-                    public   readonly   IComponent      Component;  //  8
+                    public   readonly   object          Component;  //  8
     [Browse(Never)] private  readonly   int             target;     //  4
     #endregion
 
-    internal EntityLink(in Entity entity, int target, IComponent component) {
+    internal EntityLink(in Entity entity, int target, object component) {
         this.entity = entity;
         this.target = target;
         Component   = component;

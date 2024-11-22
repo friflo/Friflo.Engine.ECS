@@ -37,10 +37,10 @@ internal sealed class ComponentReader
     private             int                                     componentCount;
     
     
-    internal ComponentReader() {
+    internal ComponentReader(TypeStore typeStore) {
         buffer                  = new Bytes(128);
         components              = new RawComponent[1];
-        componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore) { ErrorHandler = ObjectReader.NoThrow };
+        componentReader         = new ObjectReader(typeStore) { ErrorHandler = ObjectReader.NoThrow };
         mapperContextStore      = new MapperContextEntityStore();
         componentReader.SetMapperContext(mapperContextStore);
         var schema              = EntityStoreBase.Static.EntitySchema;

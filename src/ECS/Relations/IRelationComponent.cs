@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public interface IRelationComponent : IComponent { }
+public interface IRelationComponent { }
 
 /// <summary>
 /// A relation component enables adding multiple components of the same type to an entity.<br/>

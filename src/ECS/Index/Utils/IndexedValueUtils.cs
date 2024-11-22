@@ -12,7 +12,7 @@ internal static class IndexedValueUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
     internal static GetIndexedValue<TComponent,TValue> CreateGetValue<TComponent,TValue>()
-        where TComponent : struct, IComponent
+        where TComponent : struct
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         var method          = typeof(IndexedValueUtils).GetMethod(nameof(GetIndexedComponentValue), flags);
@@ -30,7 +30,7 @@ internal static class IndexedValueUtils
 }
 
 internal static class IndexedValueUtils<TComponent, TValue>
-    where TComponent : struct, IComponent
+    where TComponent : struct
 {
     /// <summary> Returns the indexed component value without boxing. </summary>
     internal static readonly GetIndexedValue<TComponent,TValue> GetIndexedValue;
@@ -41,4 +41,4 @@ internal static class IndexedValueUtils<TComponent, TValue>
 }
     
 internal delegate TValue GetIndexedValue<TComponent, out TValue>(in TComponent component)
-    where TComponent : struct, IComponent;
+    where TComponent : struct;

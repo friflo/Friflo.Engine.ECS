@@ -15,7 +15,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 public readonly struct EntityLink<TComponent>
-    where TComponent : struct, IComponent
+    where TComponent : struct
 {
 #region properties
     public              Entity          Target      => new Entity(Entity.store, target);
@@ -40,14 +40,20 @@ public readonly struct EntityLink<TComponent>
             if (relations != null) {
                 return ref relations.GetEntityRelation<TComponent>(Entity.Id, target);
             }
-            return ref Entity.GetComponent<TComponent>();
+            // COMP_TAG
+            // return ref Entity.GetComponent<TComponent>();
+            ref var node = ref Entity.Store.nodes[Entity.Id];
+            if (node.IsAlive(Entity.Revision)) {
+                return ref ((StructHeap<TComponent>)node.archetype.heapMap[StructInfo<TComponent>.Index]).components[node.compIndex];
+            }
+            throw Entity.EntityNullException();
         }
     }
 }
 
 [DebuggerTypeProxy(typeof(EntityLinksDebugView<>))]
 public readonly struct EntityLinks<T> : IReadOnlyList<EntityLink<T>>
-    where T : struct, IComponent
+    where T : struct
 {
 #region properties
     public              int         Count       => Entities.Count;
@@ -101,7 +107,7 @@ public readonly struct EntityLinks<T> : IReadOnlyList<EntityLink<T>>
 
 
 public struct EntityLinkEnumerator<T> : IEnumerator<EntityLink<T>>
-    where T : struct, IComponent
+    where T : struct
 {
     private readonly    int             target;     //  4
     private readonly    Entities        entities;   // 16

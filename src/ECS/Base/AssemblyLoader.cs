@@ -165,7 +165,9 @@ internal sealed class AssemblyLoader
                     AddType(assemblyIndex, type, SchemaTypeKind.Tag, componentTypes);
                     continue;
                 }
-                if (typeof(IComponent).IsAssignableFrom(type)) {
+                // COMP_TAG
+                if (typeof(IRelationComponent).IsAssignableFrom(type) || 
+                    typeof(IComponent).IsAssignableFrom(type)) {
                     AddType(assemblyIndex, type, SchemaTypeKind.Component, componentTypes);
                     continue;
                 }

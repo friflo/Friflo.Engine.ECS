@@ -43,7 +43,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     }
     
 #region query
-    internal override IComponent GetRelationAt(int id, int index)
+    internal override IRelationComponent GetRelationAt(int id, int index)
     {
         positionMap.TryGetValue(id, out var positions);
         var count       = positions.count;

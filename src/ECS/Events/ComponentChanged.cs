@@ -91,13 +91,13 @@ public readonly struct  ComponentChanged
     /// <b>Note</b>: It degrades performance as it boxes the returned component. </summary>
     /// <remarks> To access the current component use <see cref="Component{T}"/> </remarks>
     [Obsolete($"use {nameof(Component)}<T>() to access the current component")]
-    public              IComponent              DebugComponent      => GetDebugComponent();
+    public              object                  DebugComponent      => GetDebugComponent();
     
     /// <summary> Return the old <see cref="IComponent"/> for debugging.<br/>
     /// <b>Note</b>: It degrades performance as it boxes the returned component. </summary>
     /// <remarks> To access the old component use <see cref="OldComponent{T}"/> </remarks>
     [Obsolete($"use {nameof(OldComponent)}<T>() to access the old component")]
-    public              IComponent              DebugOldComponent   => GetDebugOldComponent();
+    public              object                  DebugOldComponent   => GetDebugOldComponent();
     
     public override     string                  ToString()          => $"entity: {EntityId} - event > {Action} {ComponentType}";
     #endregion
@@ -163,7 +163,7 @@ public readonly struct  ComponentChanged
     }
     
     
-    private IComponent GetDebugComponent() {
+    private object GetDebugComponent() {
         switch (Action)
         {
             case ComponentChangedAction.Add: 
@@ -174,7 +174,7 @@ public readonly struct  ComponentChanged
         return null;
     }
     
-    private IComponent GetDebugOldComponent() {
+    private object GetDebugOldComponent() {
         switch (Action)
         {
             case ComponentChangedAction.Remove: 

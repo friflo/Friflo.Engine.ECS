@@ -23,9 +23,9 @@ internal sealed class ComponentWriter
     private  readonly   Dictionary<Type, ScriptType>    scriptTypeByType;
     private  readonly   int                             unresolvedIndex;
     
-    internal ComponentWriter() {
+    internal ComponentWriter(TypeStore typeStore) {
         buffer              = new Bytes(128);
-        componentWriter     = new ObjectWriter(EntityStoreBase.Static.TypeStore);
+        componentWriter     = new ObjectWriter(typeStore);
         var schema          = EntityStoreBase.Static.EntitySchema;
         structTypes         = schema.components;
         scriptTypeByType    = schema.scriptTypeByType;

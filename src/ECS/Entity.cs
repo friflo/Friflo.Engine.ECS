@@ -795,7 +795,7 @@ public readonly partial struct Entity : IEquatable<Entity>
         return (archetype != null && node.revision == Revision) ? entityStore : null;
     }
     
-    private NullReferenceException EntityNullException() {
+    internal NullReferenceException EntityNullException() {
         return new NullReferenceException($"entity is null. id: {Id}");
     }
     

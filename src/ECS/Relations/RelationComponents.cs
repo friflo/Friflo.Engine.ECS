@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS;
 /// Contains the relation components of a specific entity returned by <see cref="RelationExtensions.GetRelations{TComponent}"/>.
 /// </summary>
 public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
-    where TComponent : struct, IComponent
+    where TComponent : struct
 {
     public   override   string          ToString()  => $"Relations<{typeof(TComponent).Name}>[{Length}]";
     /// <summary>
@@ -95,7 +95,7 @@ public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
 
 
 public struct RelationsEnumerator<TComponent> : IEnumerator<TComponent>
-    where TComponent : struct, IComponent
+    where TComponent : struct
 {
     private  readonly   int[]           positions;
     private  readonly   int             position;

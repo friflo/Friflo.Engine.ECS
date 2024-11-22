@@ -27,9 +27,9 @@ public abstract class ComponentIndex
     internal            bool            modified;
     #endregion
     
-    internal abstract void Add   <TComponent>   (int id, in TComponent component)                              where TComponent : struct, IComponent;
-    internal abstract void Update<TComponent>   (int id, in TComponent component, StructHeap<TComponent> heap) where TComponent : struct, IComponent;
-    internal abstract void Remove<TComponent>   (int id,                          StructHeap<TComponent> heap) where TComponent : struct, IComponent;
+    internal abstract void Add   <TComponent>   (int id, in TComponent component)                              where TComponent : struct;
+    internal abstract void Update<TComponent>   (int id, in TComponent component, StructHeap<TComponent> heap) where TComponent : struct;
+    internal abstract void Remove<TComponent>   (int id,                          StructHeap<TComponent> heap) where TComponent : struct;
     
     /// Remove entity id from indexed component value.<br/>
     /// The component is removed by <see cref="Entity.DeleteEntity"/> shortly after.

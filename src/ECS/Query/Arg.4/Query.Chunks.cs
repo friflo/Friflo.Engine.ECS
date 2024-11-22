@@ -17,10 +17,10 @@ namespace Friflo.Engine.ECS;
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct Chunks<T1, T2, T3, T4>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
 {
     public              int             Length => Chunk1.Length;
     public readonly     Chunk<T1>       Chunk1;     //  16
@@ -65,10 +65,10 @@ public readonly struct Chunks<T1, T2, T3, T4>
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct QueryChunks<T1, T2, T3, T4>  : IEnumerable <Chunks<T1, T2, T3, T4>>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
 {
     private readonly    ArchetypeQuery<T1, T2, T3, T4>  query;
 
@@ -98,10 +98,10 @@ public readonly struct QueryChunks<T1, T2, T3, T4>  : IEnumerable <Chunks<T1, T2
 }
 
 public struct ChunkEnumerator<T1, T2, T3, T4> : IEnumerator<Chunks<T1, T2, T3, T4>>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
 {
     private readonly    int                     structIndex1;   //  4
     private readonly    int                     structIndex2;   //  4

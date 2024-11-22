@@ -26,9 +26,9 @@ public readonly partial struct  Entity
         int structIndex = StructInfo<T>.Index;
         ComponentChangedAction  action;
         bool                    added;
-        if (StructInfo<T>.IsRelation) {
-            throw EntityStoreBase.AddRelationException(id, structIndex);
-        }
+        // if (StructInfo<T>.IsRelation) { obsolete
+        //     throw EntityStoreBase.AddRelationException(id, structIndex);
+        // }
         int localCompIndex  = node.compIndex;
         var oldHeap         = (StructHeap<T>)arch.heapMap[structIndex];
         StructHeap<T> newHeap;
@@ -78,9 +78,9 @@ public readonly partial struct  Entity
         if (arch == null || Revision != node.revision) {
             throw EntityNullException();
         }
-        if (StructInfo<T>.IsRelation) {
+        /* if (StructInfo<T>.IsRelation) {
             throw EntityStoreBase.RemoveRelationException(id, structIndex);
-        }
+        } */
         int localCompIndex  = node.compIndex;
         var heap            = (StructHeap<T>)arch.heapMap[structIndex];
         if (heap == null) {

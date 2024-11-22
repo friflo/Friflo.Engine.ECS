@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Json.Fliox;
+using Friflo.Json.Fliox.Mapper;
 
 namespace Friflo.Engine.ECS.Serialize;
 
@@ -15,6 +16,7 @@ public sealed class EntityConverter
 {
     private  readonly   ComponentReader reader;
     private  readonly   ComponentWriter writer;
+    private static readonly    TypeStore       TypeStore       = new TypeStore();
     
     /// <summary>
     /// An <see cref="EntityConverter"/> singleton. Must be used only from the main thread.
@@ -22,8 +24,8 @@ public sealed class EntityConverter
     public static readonly EntityConverter Default = new EntityConverter();
     
     public EntityConverter() {
-        reader = new ComponentReader();
-        writer = new ComponentWriter();
+        reader = new ComponentReader(TypeStore);
+        writer = new ComponentWriter(TypeStore);
     }
     
     /// <summary>
