@@ -19,7 +19,7 @@ public static class RelationExtensions
     /// <exception cref="KeyNotFoundException">The relation is not found at the passed entity.</exception>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     public static ref TComponent GetRelation<TComponent, TKey>(this Entity entity, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return ref EntityRelations.GetRelation<TComponent, TKey>(entity.store, entity.Id, key);
@@ -31,7 +31,7 @@ public static class RelationExtensions
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     public static bool TryGetRelation<TComponent, TKey>(this Entity entity, TKey key, out TComponent value)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.TryGetRelation(entity.store, entity.Id, key, out value);
@@ -42,8 +42,8 @@ public static class RelationExtensions
     /// Executes in O(1). In case <typeparamref name="TComponent"/> is a <see cref="ILinkRelation"/> it returns all linked entities.
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static RelationComponents<TComponent> GetRelations<TComponent>(this Entity entity)
-        where TComponent : struct, IRelationComponent
+    public static Relations<TComponent> GetRelations<TComponent>(this Entity entity)
+        where TComponent : struct, IRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.GetRelations<TComponent>(entity.store, entity.Id);
@@ -56,7 +56,7 @@ public static class RelationExtensions
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true - relation is newly added to the entity.<br/> false - relation is updated.</returns>
     public static bool AddRelation<TComponent>(this Entity entity, in TComponent component)
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
         return EntityRelations.AddRelation(entity.store, entity.Id, component);
@@ -69,7 +69,7 @@ public static class RelationExtensions
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true if the entity contained a relation of the given type before. </returns>
     public static bool RemoveRelation<TComponent, TKey>(this Entity entity, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity); 
         return EntityRelations.RemoveRelation<TComponent, TKey>(entity.store, entity.Id, key);
@@ -89,7 +89,7 @@ public static class RelationExtensions
     }
     
     /// <summary>
-    /// Return the entities with a link relation referencing the <paramref name="target"/> entity of the passed <see cref="IRelationComponent"/> type.<br/>
+    /// Return the entities with a link relation referencing the <paramref name="target"/> entity of the passed <see cref="IRelation"/> type.<br/>
     /// Executes in O(1).
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
@@ -119,7 +119,7 @@ public static class RelationExtensions
     /// </list>
     /// </remarks>
     public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TComponent>(this EntityStore store)
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
         return new EntityReadOnlyCollection(store, relations.positionMap.Keys);
@@ -130,7 +130,7 @@ public static class RelationExtensions
     /// Executes in O(N) N: number of all entity relations.
     /// </summary>
     public static void ForAllEntityRelations<TComponent>(this EntityStore store, ForEachEntity<TComponent> lambda)
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
         relations.ForAllEntityRelations(lambda);
@@ -141,7 +141,7 @@ public static class RelationExtensions
     /// Executes in O(1).  Most efficient way to iterate all entity relations.
     /// </summary>
     public static (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>(this EntityStore store)
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         var entityRelations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
         return entityRelations.GetAllEntityRelations<TComponent>();
@@ -149,7 +149,7 @@ public static class RelationExtensions
     
     [ExcludeFromCodeCoverage]
     public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
-        where TComponent: struct, IRelationComponent
+        where TComponent: struct, IRelation
     {
         throw new NotImplementedException();
     }

@@ -18,7 +18,7 @@ internal abstract class EntityRelations
     public    override  string                      ToString()  => $"relation count: {archetype.Count}";
 
 #region fields
-    /// Single <see cref="Archetype"/> containing all relations of a specific <see cref="IRelationComponent{TKey}"/>
+    /// Single <see cref="Archetype"/> containing all relations of a specific <see cref="IRelation{TKey}"/>
     internal  readonly  Archetype                   archetype;
     
     /// Single <see cref="StructHeap"/> stored in the <see cref="archetype"/>.
@@ -47,8 +47,8 @@ internal abstract class EntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    internal  abstract bool                 AddComponent<TComponent>     (int id, in TComponent component) where TComponent : struct, IRelationComponent;
-    internal  abstract IRelationComponent   GetRelationAt                (int id, int index);
+    internal  abstract bool                 AddComponent<TComponent>     (int id, in TComponent component) where TComponent : struct, IRelation;
+    internal  abstract IRelation   GetRelationAt                (int id, int index);
     internal  virtual  ref TComponent       GetEntityRelation<TComponent>(int id, int target)              where TComponent : struct   => throw new InvalidOperationException($"type: {GetType().Name}");
     internal  virtual  void                 AddIncomingRelations         (int target, List<EntityLink> result)                         => throw new InvalidOperationException($"type: {GetType().Name}");
     internal  virtual  void                 RemoveLinksWithTarget        (int targetId)                                                => throw new InvalidOperationException($"type: {GetType().Name}");
@@ -87,8 +87,8 @@ internal abstract class EntityRelations
         return positions.count;
     }
     
-    internal static RelationComponents<TComponent> GetRelations<TComponent>(EntityStore store, int id)
-        where TComponent : struct, IRelationComponent
+    internal static Relations<TComponent> GetRelations<TComponent>(EntityStore store, int id)
+        where TComponent : struct, IRelation
     {
         var relations = store.extension.relationsMap?[StructInfo<TComponent>.Index];
         if (relations == null) {
@@ -98,15 +98,15 @@ internal abstract class EntityRelations
         int count       = positions.count;
         var components  = ((StructHeap<TComponent>)relations.heap).components;
         switch (count) {
-            case 0: return  new RelationComponents<TComponent>();
-            case 1: return  new RelationComponents<TComponent>(components, positions.start);
+            case 0: return  new Relations<TComponent>();
+            case 1: return  new Relations<TComponent>(components, positions.start);
         }
         var poolPositions = IdArrayPool.GetIds(count, relations.idHeap);
-        return new RelationComponents<TComponent>(components, poolPositions, positions.start, positions.count);
+        return new Relations<TComponent>(components, poolPositions, positions.start, positions.count);
     }
     
     internal static ref TComponent GetRelation<TComponent, TKey>(EntityStore store, int id, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap?[StructInfo<TComponent>.Index];
         if (relations == null) {
@@ -116,7 +116,7 @@ internal abstract class EntityRelations
     }
     
     internal static bool TryGetRelation<TComponent, TKey>(EntityStore store, int id, TKey key, out TComponent value)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         var relations = (EntityRelations<TComponent,TKey>)store.extension.relationsMap?[StructInfo<TComponent>.Index];
         if (relations == null) {
@@ -127,7 +127,7 @@ internal abstract class EntityRelations
     }
     
     internal void ForAllEntityRelations<TComponent>(ForEachEntity<TComponent> lambda)
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         var components  = ((StructHeap<TComponent>)heap).components;
         int count       = archetype.Count;
@@ -139,7 +139,7 @@ internal abstract class EntityRelations
     }
     
     internal (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>()
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         int count       = archetype.Count;
         var entities    = new Entities(store, archetype.entityIds, 0, count);
@@ -167,14 +167,14 @@ internal abstract class EntityRelations
     
 #region mutation
     internal static bool AddRelation<TComponent>(EntityStoreBase store, int id, in TComponent component)
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         var relations = GetEntityRelations(store, StructInfo<TComponent>.Index);
         return relations.AddComponent(id, component);
     }
         
     internal static bool RemoveRelation<TComponent, TKey>(EntityStoreBase store, int id, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         var relations = (EntityRelations<TComponent,TKey>)GetEntityRelations(store, StructInfo<TComponent>.Index);
         return relations.RemoveRelation(id, key);

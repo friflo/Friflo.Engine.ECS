@@ -59,7 +59,9 @@ public static class Test_CommandBufferSynced
         cb.AddComponent             (entity1, new EntityName("Test"));
         
         cb.RemoveComponent<EntityName>(entity1);
+#pragma warning disable CS0618 // Type or member is obsolete
         cb.SetComponent             (entity1, new Position(1,2,3));
+#pragma warning restore CS0618 // Type or member is obsolete
         
         // --- tag
         cb.AddTag<TestTag>          (entity1);

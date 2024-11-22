@@ -12,8 +12,8 @@ namespace Friflo.Engine.ECS.Relations;
 
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelationComponent, Entity>
-    where TRelationComponent : struct, ILinkRelation
+internal class EntityRelationLinks<TRelation> : EntityRelations<TRelation, Entity>
+    where TRelation : struct, ILinkRelation
 {
     /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
     public EntityRelationLinks(ComponentType componentType, Archetype archetype, StructHeap heap)
@@ -102,7 +102,7 @@ internal class EntityRelationLinks<TRelationComponent> : EntityRelations<TRelati
     private void RemoveIncomingLinks(IdArray positions, int id)
     {
         var positionsSpan   = positions.GetSpan(idHeap, store);
-        var components      = ((StructHeap<TRelationComponent>)heap).components;
+        var components      = ((StructHeap<TRelation>)heap).components;
         var linkMap         = linkEntityMap;
         foreach (var position in positionsSpan)
         {

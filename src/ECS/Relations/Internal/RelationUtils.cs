@@ -12,25 +12,25 @@ internal static class RelationUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
     internal static GetRelationKey<TComponent, TKey> CreateGetRelationKey<TComponent, TKey>()
-        where TComponent : struct, IRelationComponent
+        where TComponent : struct, IRelation
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        var method          = typeof(RelationUtils).GetMethod(nameof(GetRelationComponentKey), flags);
+        var method          = typeof(RelationUtils).GetMethod(nameof(GetRelationKey), flags);
         var genericMethod   = method!.MakeGenericMethod(typeof(TComponent), typeof(TKey));
         
         var genericDelegate = Delegate.CreateDelegate(typeof(GetRelationKey<TComponent,TKey>), genericMethod);
         return (GetRelationKey<TComponent,TKey>)genericDelegate;
     }
     
-    private static TKey GetRelationComponentKey<TComponent,TKey>(in TComponent component)
-        where TComponent : struct, IRelationComponent<TKey>
+    private static TKey GetRelationKey<TComponent,TKey>(in TComponent component)
+        where TComponent : struct, IRelation<TKey>
     {
         return component.GetRelationKey();
     }
 }
 
 internal static class RelationUtils<TComponent, TKey>
-    where TComponent : struct, IRelationComponent
+    where TComponent : struct, IRelation
 {
     /// <summary> Returns the component value without boxing. </summary>
     internal static readonly GetRelationKey<TComponent, TKey> GetRelationKey;
@@ -41,4 +41,4 @@ internal static class RelationUtils<TComponent, TKey>
 }
     
 internal delegate TKey GetRelationKey<TComponent, out TKey>(in TComponent component)
-    where TComponent : struct, IRelationComponent;
+    where TComponent : struct, IRelation;

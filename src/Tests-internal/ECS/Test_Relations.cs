@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS {
 
-internal struct StringRelation : IRelationComponent<string>
+internal struct StringRelation : IRelation<string>
 {
     public  string  value;
     public  string  GetRelationKey()    => value;

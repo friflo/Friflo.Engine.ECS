@@ -108,7 +108,7 @@ internal sealed class ComponentType<T> : ComponentType
 }
 
 internal sealed class RelationType<T> : ComponentType
-    where T : struct, IRelationComponent
+    where T : struct, IRelation
 {
     #region properties
     public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";

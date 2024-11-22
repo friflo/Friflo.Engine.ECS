@@ -113,7 +113,7 @@ public static void LinkRelations()
 #region relation component
 
 [Test]
-public static void RelationComponent_Snippets()
+public static void Relation_Snippets()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
@@ -130,14 +130,14 @@ enum ItemType {
     Axe     = 2,
 }
 
-struct InventoryItem : IRelationComponent<ItemType> { // relation key type: ItemType
+struct InventoryItem : IRelation<ItemType> { // relation key type: ItemType
     public  ItemType    type;
     public  int         count;
     public  ItemType    GetRelationKey() => type;     // unique relation key
 }
 
 [Test]
-public static void RelationComponents()
+public static void Relations()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();

@@ -26,7 +26,7 @@ namespace Friflo.Engine.ECS;
 public static class Signature
 {
     internal static Signature<T1> GetRelation<T1>()
-        where T1 : struct, IRelationComponent
+        where T1 : struct, IRelation
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes   = new SignatureIndexes(

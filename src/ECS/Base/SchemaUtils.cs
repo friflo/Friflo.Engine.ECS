@@ -66,7 +66,7 @@ internal static class SchemaUtils
     }
     
     internal static ComponentType CreateRelationType<T>(int structIndex, Type relationType, Type keyType)
-        where T : struct, IRelationComponent
+        where T : struct, IRelation
     {
         string componentKey;
         var type = typeof(T);

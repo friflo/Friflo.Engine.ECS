@@ -17,7 +17,7 @@ public partial class EntityStoreBase
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given relation type.<br/>
     /// </summary>
     public ArchetypeQuery<T1> QueryRelation<T1> ()
-        where T1 : struct, IRelationComponent
+        where T1 : struct, IRelation
     {
         return new ArchetypeQuery<T1>(this, Signature.GetRelation<T1>(), null);
     }
@@ -27,7 +27,7 @@ public partial class EntityStoreBase
     /// The filter attached to the query can be modified subsequently.
     /// </summary>
     public ArchetypeQuery<T1> QueryRelation<T1> (QueryFilter filter)
-        where T1 : struct, IRelationComponent
+        where T1 : struct, IRelation
     {
         return new ArchetypeQuery<T1>(this, Signature.GetRelation<T1>(), filter);
     }

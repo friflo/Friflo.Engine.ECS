@@ -11,17 +11,17 @@ namespace Friflo.Engine.ECS.Relations;
 
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
-    where TRelationComponent : struct, IRelationComponent<TKey>
+internal class EntityRelations<TRelation, TKey> : EntityRelations
+    where TRelation : struct, IRelation<TKey>
 {
     /// Single <see cref="StructHeap"/> stored in the <see cref="EntityRelations.archetype"/>.
-    internal  readonly   StructHeap<TRelationComponent>  heapGeneric;
+    internal  readonly   StructHeap<TRelation>  heapGeneric;
     
     /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
     public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
-        heapGeneric = (StructHeap<TRelationComponent>)heap;
+        heapGeneric = (StructHeap<TRelation>)heap;
     }
     
     /// Executes in O(M)  M: number of entity relations
@@ -34,7 +34,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
         for (index = 0; index < positionCount; index++) {
             int position    = positionSpan[index];
             TKey relation   = components[position].GetRelationKey(); // no boxing
-            //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
+            //  var relation    = RelationUtils<TRelation, TKey>.GetRelationKey(components[position]);
             if (EqualityComparer<TKey>.Default.Equals(relation, key)) {
                 return position;
             }
@@ -43,7 +43,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     }
     
 #region query
-    internal override IRelationComponent GetRelationAt(int id, int index)
+    internal override IRelation GetRelationAt(int id, int index)
     {
         positionMap.TryGetValue(id, out var positions);
         var count       = positions.count;
@@ -57,7 +57,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     }
     
     internal ref TComponent GetRelation<TComponent>(int id, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
@@ -67,7 +67,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     }
     
     internal bool TryGetRelation<TComponent>(int id, TKey key, out TComponent value)
-        where TComponent : struct, IRelationComponent<TKey>
+        where TComponent : struct, IRelation<TKey>
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
@@ -85,7 +85,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     internal override bool AddComponent<TComponent>(int id, in TComponent component)
     {
         var relationKey = RelationUtils<TComponent, TKey>.GetRelationKey(component);
-    //  var relationKey = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
+    //  var relationKey = ((IRelation<TKey>)component).GetRelationKey(); // boxing version
         var added       = true;
         var position    = FindRelationPosition(id, relationKey, out var positions, out _);
         if (position >= 0) {
