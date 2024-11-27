@@ -26,7 +26,7 @@ public readonly struct Relations<TRelation> : IEnumerable<TRelation>
     public   readonly   int             Length;     //  4
     internal readonly   int             start;      //  4
     internal readonly   int[]           positions;  //  8
-    internal readonly   TRelation[]    components; //  8
+    internal readonly   TRelation[]     components; //  8
     internal readonly   int             position;   //  4
     
     internal Relations(TRelation[] components, int[] positions, int start, int length)

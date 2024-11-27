@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using Friflo.Engine.ECS.Serialize;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable ConvertToPrimaryConstructor
@@ -37,6 +38,9 @@ public abstract class ComponentType : SchemaType
     internal abstract   bool                RemoveEntityComponent  (Entity entity);
     internal abstract   bool                AddEntityComponent     (Entity entity);
     internal abstract   bool                AddEntityComponentValue(Entity entity, object value);
+    
+    internal virtual    void                WriteRelations(ComponentWriter writer, Entity entity) => throw new InvalidOperationException();
+    
     
     internal abstract   BatchComponent      CreateBatchComponent();
     internal abstract   ComponentCommands   CreateComponentCommands();
@@ -126,6 +130,35 @@ internal sealed class RelationType<T> : ComponentType
     internal override bool AddEntityComponent(Entity entity) => throw new InvalidOperationException();
     
     internal override bool AddEntityComponentValue(Entity entity, object value) => throw new InvalidOperationException();
+    
+    internal override void WriteRelations(ComponentWriter writer, Entity entity)
+    {
+        var relations = entity.GetRelations<T>();
+        int length = relations.Length;
+        if (length == 0) {
+            return;
+        }
+        var heap = entity.store.extension.relationsMap?[StructInfo<T>.Index].heap;
+        var positions = relations.positions;
+        var isFirst = true;
+        
+        writer.writer.MemberArrayStart(componentKeyBytes.AsSpan());
+        var pretty = writer.writer.Pretty;
+        writer.writer.SetPretty(false);  // prevent line wrap when writing array end ']'
+
+        for (int n = 0; n < length; n++){
+            if (isFirst) {
+                isFirst = false;                
+            } else {
+                writer.writer.json.AppendChar(',');
+            }
+            var index = relations.start + n;
+            var bytes = heap!.Write(writer.componentWriter, positions[index]);
+            writer.writer.json.AppendBytes(bytes);
+        }
+        writer.writer.ArrayEnd();
+        writer.writer.SetPretty(pretty);
+    }
     
     internal override StructHeap CreateHeap() {
         return new StructHeap<T>(StructIndex);
