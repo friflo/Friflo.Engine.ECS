@@ -15,7 +15,12 @@ public static class Test_SerializeRelations
 @"[{
     ""id"": 1,
     ""components"": {
-        ""IntRelation"": [{""value"":101},{""value"":102}]
+        ""IntRelation"": [{""value"":101}]
+    }
+},{
+    ""id"": 2,
+    ""components"": {
+        ""IntRelation"": [{""value"":201},{""value"":202}]
     }
 }]";
     
@@ -32,8 +37,15 @@ public static class Test_SerializeRelations
         IsNull(result.error);
         
         var entity1 = store.GetEntityById(1);
-        var relations = entity1.GetRelations<IntRelation>();
-        AreEqual(2, relations.Length);
+        var relations1 = entity1.GetRelations<IntRelation>();
+        AreEqual(1,     relations1.Length);
+        AreEqual(101,   relations1[0].value);
+        
+        var entity2 = store.GetEntityById(2);
+        var relations2 = entity2.GetRelations<IntRelation>();
+        AreEqual(2,     relations2.Length);
+        AreEqual(201,   relations2[0].value);
+        AreEqual(202,   relations2[1].value);
     }
     #endregion
 
@@ -44,12 +56,15 @@ public static class Test_SerializeRelations
     {
         var store = new EntityStore();
         Entity entity1   = store.CreateEntity(1);
-        entity1.AddRelation(new IntRelation { value = 101});
-        entity1.AddRelation(new IntRelation { value = 102});
+        entity1.AddRelation(new IntRelation { value = 101 });
+        
+        Entity entity2   = store.CreateEntity(2);
+        entity2.AddRelation(new IntRelation { value = 201 });
+        entity2.AddRelation(new IntRelation { value = 202 });
         
         var serializer = new EntitySerializer();
         using MemoryStream writeStream = new MemoryStream();
-        serializer.WriteEntities(new []{entity1}, writeStream);
+        serializer.WriteEntities(new []{ entity1, entity2 }, writeStream);
         
         var str = Test_Serializer.MemoryStreamAsString(writeStream);
         AreEqual(Json, str);

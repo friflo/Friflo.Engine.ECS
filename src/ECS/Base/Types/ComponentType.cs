@@ -142,7 +142,6 @@ internal sealed class RelationType<T> : ComponentType
             return;
         }
         var heap = entity.store.extension.relationsMap?[StructInfo<T>.Index].heap;
-        var positions = relations.positions;
         var isFirst = true;
         
         writer.writer.MemberArrayStart(componentKeyBytes.AsSpan());
@@ -156,7 +155,8 @@ internal sealed class RelationType<T> : ComponentType
                 writer.writer.json.AppendChar(',');
             }
             var index = relations.start + n;
-            var bytes = heap!.Write(writer.componentWriter, positions[index]);
+            var position = relations.GetPosition(index);
+            var bytes = heap!.Write(writer.componentWriter, position);
             writer.writer.json.AppendBytes(bytes);
         }
         writer.writer.ArrayEnd();

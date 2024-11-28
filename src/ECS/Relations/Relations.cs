@@ -55,6 +55,10 @@ public readonly struct Relations<TRelation> : IEnumerable<TRelation>
         return methodInfo;
     }
     
+    internal int GetPosition(int index) {
+        return positions != null ? positions[index] : position;
+    }
+    
     /// <summary>
     /// Returns a string containing the relation keys.<br/>E.g <c>"{ 1, 3, 7 }"</c>
     /// </summary>
