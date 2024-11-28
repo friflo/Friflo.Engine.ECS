@@ -3,7 +3,9 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using Friflo.Engine.ECS.Relations;
 using Friflo.Engine.ECS.Serialize;
+using Friflo.Json.Fliox;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable ConvertToPrimaryConstructor
@@ -40,6 +42,7 @@ public abstract class ComponentType : SchemaType
     internal abstract   bool                AddEntityComponentValue(Entity entity, object value);
     
     internal virtual    void                WriteRelations(ComponentWriter writer, Entity entity) => throw new InvalidOperationException();
+    internal virtual    void                ReadRelation(ComponentReader reader, Entity entity, JsonValue json) => throw new InvalidOperationException();
     
     
     internal abstract   BatchComponent      CreateBatchComponent();
@@ -158,6 +161,12 @@ internal sealed class RelationType<T> : ComponentType
         }
         writer.writer.ArrayEnd();
         writer.writer.SetPretty(pretty);
+    }
+    
+    internal override void ReadRelation(ComponentReader reader, Entity entity, JsonValue json)
+    {
+        var relation = reader.componentReader.Read<T>(json);
+        EntityRelations.AddRelation(entity.store, entity.Id, relation);
     }
     
     internal override StructHeap CreateHeap() {

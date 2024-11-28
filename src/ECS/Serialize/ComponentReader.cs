@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS.Serialize;
 /// </summary>
 internal sealed class ComponentReader
 {
-    private readonly    ObjectReader                            componentReader;
+    internal readonly   ObjectReader                            componentReader;
     private readonly    MapperContextEntityStore                mapperContextStore;
     private readonly    Dictionary<string, SchemaType>          schemaTypeByKey;
     private readonly    Dictionary<Type,   ScriptType>          scriptTypeByType;
@@ -32,14 +32,15 @@ internal sealed class ComponentReader
     private readonly    Dictionary<string, UnresolvedComponent> unresolvedComponentMap;
     private readonly    Dictionary<BytesHash, RawKey>           rawKeyCache;
     private             Utf8JsonParser                          parser;
-    private             Bytes                                   buffer;
     private             RawComponent[]                          components;
     private             int                                     componentCount;
+    private             RawRelation[]                           relations;
+    private             int                                     relationCount;
     
     
     internal ComponentReader(TypeStore typeStore) {
-        buffer                  = new Bytes(128);
         components              = new RawComponent[1];
+        relations               = Array.Empty<RawRelation>();
         componentReader         = new ObjectReader(typeStore) { ErrorHandler = ObjectReader.NoThrow };
         mapperContextStore      = new MapperContextEntityStore();
         componentReader.SetMapperContext(mapperContextStore);
@@ -61,6 +62,7 @@ internal sealed class ComponentReader
     {
         mapperContextStore.store = (EntityStore)store;
         componentCount = 0;
+        relationCount  = 0;
         var error = ReadRaw(dataEntity, entity);
         if (error != null) {
             return error;
@@ -82,9 +84,10 @@ internal sealed class ComponentReader
                 break;
             case JsonEvent.ObjectStart:
                 ev = ReadRawComponents();
-                if (ev != JsonEvent.ObjectEnd) {
-                    // could support also scalar types in future: string, number or boolean
-                    return $"'components' element must be an object. was {ev}. id: {entity.Id}, component: '{parser.key}'";
+                if (ev != JsonEvent.ObjectEnd &&
+                    ev != JsonEvent.ArrayEnd) {
+                    // could support also scalar types in the future: string, number or boolean
+                    return $"'components' member must be object or array. was {ev}. id: {entity.Id}, component: '{parser.key}'";
                 }
                 break;
             default:
@@ -103,30 +106,18 @@ internal sealed class ComponentReader
         }
         for (int n = 0; n < componentCount; n++)
         {
-            var component = components[n];
-            buffer.Clear();
-            var json        = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
-            var schemaType  = component.rawKey.schemaType;
-            if (schemaType == unresolvedType) {
-                unresolvedComponentList.Add(new UnresolvedComponent(component.rawKey.key, json));
-                continue;
-            }
-            switch (schemaType.Kind) {
-                case SchemaTypeKind.Script:
-                    // --- read script
-                    var scriptType = (ScriptType)schemaType;
-                    scriptTypes.Remove(scriptType);
-                    scriptType.ReadScript(componentReader, json, entity);
+            ref var component = ref components[n];
+            string error = null;
+            switch (component.type) {
+                case RawComponentType.Object:
+                    error = ReadComponent(entity, component);
                     break;
-                case SchemaTypeKind.Component:
-                    var componentType   = (ComponentType)schemaType;
-                    var heap            = entity.archetype.heapMap[componentType.StructIndex]; // no range or null check required
-                    // --- read & change component
-                    heap.Read(componentReader, entity.compIndex, json);
+                case RawComponentType.Array:
+                    error = ReadRelations(entity, component);
                     break;
             }
-            if (componentReader.Error.ErrSet) {
-                return $"'components[{component.rawKey.key}]' - {componentReader.Error.GetMessage()}";
+            if (error != null) {
+                return error;
             }
         }
         // --- remove missing scripts from entity
@@ -136,6 +127,45 @@ internal sealed class ComponentReader
         // --- add unresolved components
         if (unresolvedComponentList.Count > 0 ) {
             AddUnresolvedComponents(entity);
+        }
+        return null;
+    }
+    
+    private string ReadComponent(Entity entity, in RawComponent component)
+    {
+        var json        = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
+        var schemaType  = component.rawKey.schemaType;
+        if (schemaType == unresolvedType) {
+            unresolvedComponentList.Add(new UnresolvedComponent(component.rawKey.key, json));
+            return null;
+        }
+        switch (schemaType.Kind) {
+            case SchemaTypeKind.Script:
+                // --- read script
+                var scriptType = (ScriptType)schemaType;
+                scriptTypes.Remove(scriptType);
+                scriptType.ReadScript(componentReader, json, entity);
+                break;
+            case SchemaTypeKind.Component:
+                var componentType   = (ComponentType)schemaType;
+                var heap            = entity.archetype.heapMap[componentType.StructIndex]; // no range or null check required
+                // --- read & change component
+                heap.Read(componentReader, entity.compIndex, json);
+                break;
+        }
+        if (componentReader.Error.ErrSet) {
+            return $"'components[{component.rawKey.key}]' - {componentReader.Error.GetMessage()}";
+        }
+        return null;
+    }
+    
+    private string ReadRelations(Entity entity, in RawComponent component)
+    {
+        var relationType  = (ComponentType)component.rawKey.schemaType;
+        for (int index = component.start; index < component.end; index++) {
+            var relation = relations[index];
+            var json     = new JsonValue(parser.GetInputBytes(relation.start - 1, relation.end));
+            relationType.ReadRelation(this, entity, json);
         }
         return null;
     }
@@ -280,7 +310,7 @@ internal sealed class ComponentReader
                     if (componentCount == components.Length) {
                         ArrayUtils.Resize(ref components, 2 * componentCount);
                     }
-                    components[componentCount++] = new RawComponent(rawKey, start, parser.Position);
+                    components[componentCount++] = new RawComponent(RawComponentType.Object, rawKey, start, parser.Position);
                     ev = parser.NextEvent();
                     if (ev == JsonEvent.ObjectEnd) {
                         return JsonEvent.ObjectEnd;
@@ -288,6 +318,37 @@ internal sealed class ComponentReader
                     break;
                 case JsonEvent.ObjectEnd:
                     return JsonEvent.ObjectEnd;
+                case JsonEvent.ArrayStart:
+                    return ReadRawRelations();
+                default:
+                    return ev;
+            }
+        }
+    }
+    
+    private JsonEvent ReadRawRelations()
+    {
+        var rawKey          = ToRawKey(parser.key);
+        var startRelation   = relationCount;
+        var ev = parser.NextEvent();
+        while (true) {
+            switch (ev) {
+                case JsonEvent.ObjectStart:
+                    var start   = parser.Position;
+                    parser.SkipTree();
+                    if (relationCount == relations.Length) {
+                        ArrayUtils.Resize(ref relations, Math.Max(4, 2 * relationCount));
+                    }
+                    relations[relationCount++] = new RawRelation(start, parser.Position);
+                    ev = parser.NextEvent();
+                    if (ev == JsonEvent.ArrayEnd) {
+                        if (componentCount == components.Length) {
+                            ArrayUtils.Resize(ref components, 2 * componentCount);
+                        }
+                        components[componentCount++] = new RawComponent(RawComponentType.Array, rawKey, startRelation, relationCount);
+                        return JsonEvent.ArrayEnd;
+                    }
+                    break;
                 default:
                     return ev;
             }
@@ -337,16 +398,35 @@ internal readonly struct RawKey
     }
 }
 
+internal enum RawComponentType
+{
+    Object,
+    Array
+}
+
 internal readonly struct RawComponent
 {
-    internal  readonly  RawKey      rawKey;
-    internal  readonly  int         start;
-    internal  readonly  int         end;
+    internal  readonly  RawComponentType    type;
+    internal  readonly  RawKey              rawKey;
+    internal  readonly  int                 start;
+    internal  readonly  int                 end;
 
     public    override  string      ToString() => rawKey.ToString();
     
-    internal RawComponent(in RawKey rawKey, int start, int end) {
+    internal RawComponent(RawComponentType type, in RawKey rawKey, int start, int end) {
+        this.type   = type;
         this.rawKey = rawKey;
+        this.start  = start;
+        this.end    = end;
+    }
+}
+
+internal readonly struct RawRelation
+{
+    internal  readonly  int         start;
+    internal  readonly  int         end;
+    
+    internal RawRelation(int start, int end) {
         this.start  = start;
         this.end    = end;
     }
