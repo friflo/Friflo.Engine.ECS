@@ -57,7 +57,13 @@ namespace Tests.ECS.Systems
         internal int endCalled;
         
         public TestGroup() : base("TestGroup") { }
-
+        
+        // ensure OnUpdateGroup() can be overriden 
+        // ReSharper disable once RedundantOverriddenMember
+        protected override void OnUpdateGroup() {
+            base.OnUpdateGroup();
+        }
+        
         protected override void OnUpdateGroupBegin() {
             AreEqual(1, SystemRoot.Stores.Count);
             AreEqual(42, Tick.deltaTime);
