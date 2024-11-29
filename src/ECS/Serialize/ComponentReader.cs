@@ -165,6 +165,9 @@ internal sealed class ComponentReader
             var relation = relations[index];
             var json     = new JsonValue(parser.GetInputBytes(relation.start - 1, relation.end));
             relationType.ReadRelation(this, entity, json);
+            if (componentReader.Error.ErrSet) {
+                return $"'components[{component.rawKey.key}]' - {componentReader.Error.GetMessage()}";
+            }
         }
         return null;
     }

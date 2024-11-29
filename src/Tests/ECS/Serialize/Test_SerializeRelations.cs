@@ -33,6 +33,14 @@ public static class Test_SerializeRelations
     }
 }]";
     
+    private const string JsonInvalidEntityId =
+        @"[{
+    ""id"": 1,
+    ""components"": {
+        ""IntRelation"": [{""value"":""abc""}]
+    }
+}]";
+    
     private const string JsonError =
 @"[{
     ""id"": 1,
@@ -41,7 +49,7 @@ public static class Test_SerializeRelations
     }
 }]";
     
-    private const string JsonInvalid =
+    private const string JsonInvalidRelationsArray =
         @"[{
     ""id"": 1,
     ""components"": {
@@ -89,6 +97,17 @@ public static class Test_SerializeRelations
     }
     
     [Test]
+    public static void Test_SerializeRelations_read_invalid_entity_id()
+    {
+        var store       = new EntityStore();
+        var serializer  = new EntitySerializer();
+        var stream      = Test_Serializer.StringAsStream(JsonInvalidEntityId);
+        
+        var result = serializer.ReadIntoStore(store, stream);
+        AreEqual("'components[IntRelation]' - Cannot assign string to int. got: 'abc' path: 'value' at position: 14 path: '[0]' at position: 84", result.error);
+    }
+    
+    [Test]
     public static void Test_SerializeRelations_read_error()
     {
         var store       = new EntityStore();
@@ -104,7 +123,7 @@ public static class Test_SerializeRelations
     {
         var store       = new EntityStore();
         var serializer  = new EntitySerializer();
-        var stream      = Test_Serializer.StringAsStream(JsonInvalid);
+        var stream      = Test_Serializer.StringAsStream(JsonInvalidRelationsArray);
         
         var result = serializer.ReadIntoStore(store, stream);
         AreEqual("unexpected character while reading value. Found: x path: '[0].components.IntRelation[0]' at position: 61", result.error);

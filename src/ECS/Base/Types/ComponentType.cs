@@ -166,6 +166,9 @@ internal sealed class RelationType<T> : ComponentType
     internal override void ReadRelation(ComponentReader reader, Entity entity, JsonValue json)
     {
         var relation = reader.componentReader.Read<T>(json);
+        if (reader.componentReader.Error.ErrSet) {
+            return;
+        }
         EntityRelations.AddRelation(entity.store, entity.Id, relation);
     }
     
