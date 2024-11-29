@@ -392,9 +392,9 @@ namespace Tests.ECS.Systems
             
             var emptyLog    = perfSystem1.GetPerfLog();
             AreEqual(
-@"stores: 0                     on      last ms       sum ms      updates     last mem      sum mem     entities
----------------------         --     --------     --------     --------     --------     --------     --------
-PerfSystem                     +       -1.000        0.000            0            0            0
+@"stores: 0                     E M      last ms       sum ms      updates     last mem      sum mem     entities
+---------------------         ---     --------     --------     --------     --------     --------     --------
+PerfSystem                    +         -1.000        0.000            0            0            0
 ", emptyLog);
             
             root.Add(child1);
