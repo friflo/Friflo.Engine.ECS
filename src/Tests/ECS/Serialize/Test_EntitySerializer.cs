@@ -113,6 +113,7 @@ public static class Test_Serializer
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
             var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             var result      = serializer.ReadIntoStore(store, file);
+            IsNull(result.error);
             file.Close();
             AssertReadIntoStoreResult(result, store);
         }
@@ -289,6 +290,7 @@ public static class Test_Serializer
         var fileName    = TestUtils.GetBasePath() + "assets/read_unknown_members.json";
         var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
         var result      = serializer.ReadIntoStore(store, file);
+        IsNull(result.error);
         file.Close();
         AssertReadIntoStoreResult(result, store);
     }

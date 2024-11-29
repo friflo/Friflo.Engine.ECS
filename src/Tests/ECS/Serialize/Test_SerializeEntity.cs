@@ -65,7 +65,8 @@ public static class Test_SerializeEntity
         var serializer  = new EntitySerializer();
         var stream      = Test_Serializer.StringAsStream(JsonEntityRefPresent);
         
-        serializer.ReadIntoStore(store, stream); // referenced EntityReference.entity 1002 is already deserialized
+        var result = serializer.ReadIntoStore(store, stream); // referenced EntityReference.entity 1002 is already deserialized
+        IsNull(result.error);
         
         AreEqual(2, store.Count);
         
@@ -83,7 +84,8 @@ public static class Test_SerializeEntity
         var serializer  = new EntitySerializer();
         var stream      = Test_Serializer.StringAsStream(JsonEntityRefMissing);
         
-        serializer.ReadIntoStore(store, stream);
+        var result = serializer.ReadIntoStore(store, stream);
+        IsNull(result.error);
         
         AreEqual(1, store.Count);
         
@@ -100,7 +102,8 @@ public static class Test_SerializeEntity
         var serializer  = new EntitySerializer();
         var stream      = Test_Serializer.StringAsStream(JsonEntityRefNotPresent);
         
-        serializer.ReadIntoStore(store, stream);
+        var result = serializer.ReadIntoStore(store, stream);
+        IsNull(result.error);
         
         AreEqual(2, store.Count);
         
@@ -117,7 +120,8 @@ public static class Test_SerializeEntity
         var serializer  = new EntitySerializer();
         var stream      = Test_Serializer.StringAsStream(JsonEntityRefNull);
         
-        serializer.ReadIntoStore(store, stream);
+        var result = serializer.ReadIntoStore(store, stream);
+        IsNull(result.error);
         
         AreEqual(1, store.Count);
         
