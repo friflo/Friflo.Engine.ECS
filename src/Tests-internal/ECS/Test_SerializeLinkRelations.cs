@@ -24,6 +24,14 @@ private const string JsonLinkRelation =
 },{
     ""id"": 1002
 }]";
+
+private const string JsonMissingLinkRelation =
+    @"[{
+    ""id"": 1,
+    ""components"": {
+        ""multi-attack"": [{""speed"":0,""target"":1003}]
+    }
+}]";
     
     
 #region read relations
@@ -44,10 +52,6 @@ private const string JsonLinkRelation =
         AreEqual(1,     relations1.Length);
         AreEqual(1002 , relations1[0].target.Id);
         
-        var entity1Relations = entity1.GetRelations<AttackRelation>();
-        AreEqual(1,    entity1Relations.Length);
-        AreEqual(1002, entity1Relations[0].target.Id);
-        
         var incomingLinks = entity2.GetIncomingLinks<AttackRelation>();
         var attackBit = 1 << StructInfo<AttackRelation>.Index;
         AreEqual(attackBit, store.nodes[1].isOwner);
@@ -62,6 +66,25 @@ private const string JsonLinkRelation =
          
         incomingLinks = entity2.GetIncomingLinks<AttackRelation>();
         AreEqual(0, incomingLinks.Count);
+    }
+    
+    [Test]
+    public static void Test_SerializeLinkRelations_read_MissingLinkRelation()
+    {
+        var store       = new EntityStore();
+        var serializer  = new EntitySerializer();
+        var stream      = Test_Serializer.StringAsStream(JsonMissingLinkRelation);
+        
+        var result = serializer.ReadIntoStore(store, stream);
+        IsNull(result.error);
+        
+        var entity1 = store.GetEntityById(1);
+        var relations1 = entity1.GetRelations<AttackRelation>();
+        AreEqual(1,     relations1.Length);
+        AreEqual(1003 , relations1[0].target.Id);
+        
+        var entity2 = store.GetEntityById(1003);
+        IsTrue(entity2.IsNull);
     }
     #endregion
 
