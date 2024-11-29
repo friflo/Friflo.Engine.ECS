@@ -532,7 +532,7 @@ public partial class EntityStore
         // --- clear node entry.
         var revision    = node.revision;
         node = default;
-        node.revision   = revision;        
+        node.revision   = ++revision;        
         extension.RemoveEntity(id);
 
         // --- remove child from parent 

@@ -221,12 +221,7 @@ public sealed partial class EntityStore : EntityStoreBase
         if (extension.pid2Id == null) {
             id = (int)key;
             EnsureNodesLength(id + 1);
-            ref var node = ref nodes[id];
-            var revision = node.revision;
-            if (node.archetype != null) {
-                return new Entity(this, id, revision);
-            }
-            return new Entity(this, id, ++revision); // assign same revision which will be assigned in CreateEntityNode()
+            return new Entity(this, id, nodes[id].revision);
         }
         throw new NotSupportedException("Entity serialization using PidType.RandomPids currently not supported");
         /* var pid = key;

@@ -59,7 +59,7 @@ public struct EntityNode
     [Browse(Never)] internal    Archetype       archetype;          //  8   can be null. Could use int to relieve GC tracing reference types
     
     [Browse(Never)] internal    int             compIndex;          //  4   index within Archetype.entityIds & StructHeap<>.components
-    
+    /// revision is incremented if entity id deleted
     [Browse(Never)] internal    short           revision;           //  2
     
     // /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>

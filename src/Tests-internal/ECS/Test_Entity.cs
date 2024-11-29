@@ -116,7 +116,7 @@ public static class Test_Entity
         AreEqual(json,                          entity.Info.JSON.Value);
         AreEqual("event types: 0, handlers: 0", entity.Info.EventHandlers.ToString());
         AreEqual("",                            entity.Info.JSON.ToString());
-        AreEqual(1,                             entity.Info.Revision);
+        AreEqual(0,                             entity.Info.Revision);
     }
     
     [Test]
