@@ -83,15 +83,14 @@ internal sealed class ComponentReader
             case JsonEvent.ValueNull:
                 break;
             case JsonEvent.ObjectStart:
-                ev = ReadRawComponents();
-                if (ev != JsonEvent.ObjectEnd &&
-                    ev != JsonEvent.ArrayEnd) {
+                error = ReadRawComponents(entity);
+                if (error != null) {
                     // could support also scalar types in the future: string, number or boolean
-                    return $"'components' member must be object or array. was {ev}. id: {entity.Id}, component: '{parser.key}'";
+                    return error;
                 }
                 break;
             default:
-                return $"expect 'components' == object or null. id: {entity.Id}. was: {ev}";
+                return $"expect 'components' == object, array or null. id: {entity.Id}. was: {ev}";
         }
         return null;
     }
@@ -298,7 +297,7 @@ internal sealed class ComponentReader
         return newArchetype;
     }
     
-    private JsonEvent ReadRawComponents()
+    private string ReadRawComponents(Entity entity)
     {
         var ev = parser.NextEvent();
         while (true) {
@@ -312,21 +311,18 @@ internal sealed class ComponentReader
                     }
                     components[componentCount++] = new RawComponent(RawComponentType.Object, rawKey, start, parser.Position);
                     ev = parser.NextEvent();
-                    if (ev == JsonEvent.ObjectEnd) {
-                        return JsonEvent.ObjectEnd;
-                    }
                     break;
                 case JsonEvent.ObjectEnd:
-                    return JsonEvent.ObjectEnd;
+                    return null;
                 case JsonEvent.ArrayStart:
-                    return ReadRawRelations();
+                    return ReadRawRelations(entity);
                 default:
-                    return ev;
+                    return $"'components' member must be object or array. was {ev}. id: {entity.Id}, component: '{parser.key}'";
             }
         }
     }
     
-    private JsonEvent ReadRawRelations()
+    private string ReadRawRelations(Entity entity)
     {
         var rawKey          = ToRawKey(parser.key);
         var startRelation   = relationCount;
@@ -346,11 +342,13 @@ internal sealed class ComponentReader
                             ArrayUtils.Resize(ref components, 2 * componentCount);
                         }
                         components[componentCount++] = new RawComponent(RawComponentType.Array, rawKey, startRelation, relationCount);
-                        return JsonEvent.ArrayEnd;
+                        return null;
                     }
                     break;
+                case JsonEvent.ArrayEnd:
+                    return null;
                 default:
-                    return ev;
+                    return $"'components' member expect array of objects. was {ev}. id: {entity.Id}, component: '{parser.key}'";
             }
         }
     }

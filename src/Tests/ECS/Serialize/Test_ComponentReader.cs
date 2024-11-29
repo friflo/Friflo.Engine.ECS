@@ -244,7 +244,7 @@ public static class Test_ComponentReader
         var node    = new DataEntity { pid = 10, components = new JsonValue("123") };
         var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
-        AreEqual("expect 'components' == object or null. id: 10. was: ValueNumber", error);
+        AreEqual("expect 'components' == object, array or null. id: 10. was: ValueNumber", error);
         
         node        = new DataEntity { pid = 10, components = new JsonValue("invalid") };
         entity      = converter.DataEntityToEntity(node, store, out error);
