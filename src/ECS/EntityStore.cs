@@ -213,7 +213,7 @@ public sealed partial class EntityStore : EntityStoreBase
     }
     
     /// <summary>
-    /// If referenced entity is not present it will use same revision which will be set in <see cref="CreateEntityNode"/>.
+    /// If referenced entity is not alive it will use same revision used in <see cref="CreateEntityNode"/>.
     /// </summary>
     internal Entity CreateEntityReference(long key)
     {
