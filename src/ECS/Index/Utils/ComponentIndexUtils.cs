@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
@@ -12,12 +13,10 @@ internal static class ComponentIndexUtils
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     internal static ComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
     {
-        var obj             = Activator.CreateInstance(componentType.IndexType);
-        var index           = (ComponentIndex)obj!;
-        index.store         = store;
-        index.componentType = componentType;
-        var types           = new ComponentTypes(componentType);
-        index.indexBit      = (int)types.bitSet.l0;
+        var flags   = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
+        var args    = new object[] { store, componentType };
+        var obj     = Activator.CreateInstance(componentType.IndexType, flags, null, args, null);
+        var index   = (ComponentIndex)obj!;
         return index;
     }
     

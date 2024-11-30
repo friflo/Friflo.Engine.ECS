@@ -21,9 +21,10 @@ public abstract class ComponentIndex
     
 #region fields
     internal  readonly  IdArrayHeap     idHeap   = new();
-    internal            EntityStore     store;          // could be made readonly
-    internal            ComponentType   componentType;
-    internal            int             indexBit;
+    internal  readonly  EntityStore     store;
+    internal  readonly  ComponentType   componentType;
+    internal  readonly  int             structIndex;
+    internal  readonly  int             indexBit;
     internal            bool            modified;
     #endregion
     
@@ -38,6 +39,14 @@ public abstract class ComponentIndex
     internal NotSupportedException NotSupportedException(string name) {
         return new NotSupportedException($"{name} not supported by {GetType().Name}");
     }
+    
+    internal ComponentIndex(EntityStore store, ComponentType componentType) {
+        this.store          = store;
+        this.componentType  = componentType;
+        structIndex         = componentType.StructIndex;
+        var types           = new ComponentTypes(componentType);
+        indexBit            = (int)types.bitSet.l0;
+    }
 }
 
 /// <summary>
@@ -50,4 +59,6 @@ public abstract class ComponentIndex<TValue> : ComponentIndex
     internal abstract   IReadOnlyCollection<TValue> IndexedComponentValues        { get; }
     internal abstract   Entities                    GetHasValueEntities    (TValue value);
     internal virtual    void                        AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) => throw NotSupportedException("ValueInRange()");
+    
+    internal ComponentIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
 }

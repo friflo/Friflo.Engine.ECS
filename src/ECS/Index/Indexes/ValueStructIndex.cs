@@ -19,6 +19,8 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     private  readonly   Dictionary<TValue, IdArray> entityMap   = new();
     #endregion
     
+    internal ValueStructIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
+    
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
@@ -49,7 +51,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     {
         var map         = entityMap;
         var heap        = idHeap;
-        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).components;
         TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);

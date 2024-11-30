@@ -20,7 +20,8 @@ public static class Test_Index
     public static void Test_Index_ValueInRange_EntityIndex()
     {
         var store       = new EntityStore();
-        var entityIndex = new EntityIndex<AttackComponent> { store = store };
+        var componentType = EntityStore.GetEntitySchema().ComponentTypeByType[typeof(AttackComponent)];
+        var entityIndex = new EntityIndex<AttackComponent> (store, componentType);
         var e = Throws<NotSupportedException>(() => {
             entityIndex.AddValueInRangeEntities(default, default, null);    
         });
@@ -47,7 +48,9 @@ public static class Test_Index
     [Test]
     public static void Test_Index_already_removed()
     {
-        var index = new ValueClassIndex<IndexedName,string>();
+        var store = new EntityStore();
+        var componentType = EntityStore.GetEntitySchema().ComponentTypeByType[typeof(IndexedName)];
+        var index = new ValueClassIndex<IndexedName,string>(store, componentType);
         index.RemoveComponentValue(1, "missing");   // add key with default IdArray
         AreEqual(0, index.Count);
         
@@ -91,7 +94,9 @@ public static class Test_Index
     [Test]
     public static void Test_Index_EntityIndexValue()
     {
-        var index       = new EntityIndex<AttackComponent>();
+        var store       = new EntityStore();
+        var componentType = EntityStore.GetEntitySchema().ComponentTypeByType[typeof(AttackComponent)];
+        var index       = new EntityIndex<AttackComponent>(store, componentType);
         var values      = new EntityIndexValues(index) as IEnumerable;
 
         Throws<NotImplementedException>(() => {
