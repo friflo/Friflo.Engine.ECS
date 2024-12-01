@@ -24,7 +24,7 @@ public static class IndexExtensions
         where TComponent: struct, ILinkComponent
     {
         if (target.IsNull) throw EntityStoreBase.EntityNullException(target);
-        var index = (AbstractComponentIndex<Entity>)StoreIndex.GetIndex(target.store, StructInfo<TComponent>.Index);
+        var index = (GenericComponentIndex<Entity>)StoreIndex.GetIndex(target.store, StructInfo<TComponent>.Index);
         return new EntityLinks<TComponent>(target, index.GetHasValueEntities(target), null);
     }
     #endregion
@@ -37,7 +37,7 @@ public static class IndexExtensions
     public static ComponentIndex<TIndexedComponent,TValue> ComponentIndex<TIndexedComponent, TValue>(this EntityStore store)
         where TIndexedComponent: struct, IIndexedComponent<TValue>
     {
-        var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TIndexedComponent>.Index);
+        var index = (GenericComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TIndexedComponent>.Index);
         return new ComponentIndex<TIndexedComponent, TValue>(index);
     }
     
@@ -48,7 +48,7 @@ public static class IndexExtensions
     public static LinkComponentIndex<TLinkComponent> LinkComponentIndex<TLinkComponent>(this EntityStore store)
         where TLinkComponent: struct, ILinkComponent
     {
-        var index = (AbstractComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TLinkComponent>.Index);
+        var index = (GenericComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TLinkComponent>.Index);
         return new LinkComponentIndex<TLinkComponent>(index);
     }
 
@@ -61,7 +61,7 @@ public static class IndexExtensions
     public static Entities GetEntitiesWithComponentValue<TComponent, TValue>(this EntityStore store, TValue value)
         where TComponent: struct, IIndexedComponent<TValue>
     {
-        var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
+        var index = (GenericComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(value);
     }
     
@@ -88,7 +88,7 @@ public static class IndexExtensions
     public static  IReadOnlyCollection<TValue> GetAllIndexedComponentValues<TComponent, TValue>(this EntityStore store)
         where TComponent: struct, IIndexedComponent<TValue>
     {
-        var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
+        var index = (GenericComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
     
@@ -115,7 +115,7 @@ public static class IndexExtensions
     public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
         where TComponent: struct, ILinkComponent
     {
-        var index = (AbstractComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
+        var index = (GenericComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
     #endregion

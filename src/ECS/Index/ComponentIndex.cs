@@ -10,9 +10,9 @@ namespace Friflo.Engine.ECS;
 public readonly struct ComponentIndex <TIndexedComponent,TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
 {
-    private readonly AbstractComponentIndex<TValue> index;
+    private readonly GenericComponentIndex<TValue> index;
     
-    internal ComponentIndex(AbstractComponentIndex<TValue> index) {
+    internal ComponentIndex(GenericComponentIndex<TValue> index) {
         this.index = index;
     }
     

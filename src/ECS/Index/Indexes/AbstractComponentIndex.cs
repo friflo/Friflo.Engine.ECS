@@ -52,7 +52,7 @@ public abstract class AbstractComponentIndex
 /// <summary>
 /// Generic base class required to implement a custom component index.
 /// </summary>
-public abstract class AbstractComponentIndex<TValue> : AbstractComponentIndex
+public abstract class GenericComponentIndex<TValue> : AbstractComponentIndex
 {
     internal            TValue[]                    sortBuffer  = Array.Empty<TValue>();
     
@@ -60,5 +60,5 @@ public abstract class AbstractComponentIndex<TValue> : AbstractComponentIndex
     internal abstract   Entities                    GetHasValueEntities    (TValue value);
     internal virtual    void                        AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) => throw NotSupportedException("ValueInRange()");
     
-    internal AbstractComponentIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
+    internal GenericComponentIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
 }

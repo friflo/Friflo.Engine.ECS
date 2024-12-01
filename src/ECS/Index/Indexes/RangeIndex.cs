@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS.Index;
 /// The default index executes in O(1) when adding, removing or updating indexed component values. 
 /// </summary>
 [ExcludeFromCodeCoverage] // not used - kept only for reference
-public sealed class RangeIndex<TIndexedComponent,TValue> : AbstractComponentIndex<TValue>
+public sealed class RangeIndex<TIndexedComponent,TValue> : GenericComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
 {
     internal override   int                         Count       => entityMap.Count;

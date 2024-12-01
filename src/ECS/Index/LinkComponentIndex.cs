@@ -11,9 +11,9 @@ namespace Friflo.Engine.ECS;
 public readonly struct LinkComponentIndex <TLinkComponent>
     where TLinkComponent: struct, ILinkComponent
 {
-    private readonly AbstractComponentIndex<Entity> index;
+    private readonly GenericComponentIndex<Entity> index;
     
-    internal LinkComponentIndex(AbstractComponentIndex<Entity> index) {
+    internal LinkComponentIndex(GenericComponentIndex<Entity> index) {
         this.index = index;
     }
     

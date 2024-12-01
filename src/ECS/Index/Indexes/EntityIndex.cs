@@ -9,7 +9,7 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal abstract class EntityIndex : AbstractComponentIndex<Entity>
+internal abstract class EntityIndex : GenericComponentIndex<Entity>
 {
     internal override   int                         Count       => entityMap.Count;
     
