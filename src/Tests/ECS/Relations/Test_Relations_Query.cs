@@ -222,7 +222,7 @@ public static class Test_Relations_Query
         int count = 0;
         var sw = new Stopwatch();
         sw.Start();
-        var (entities, relations) = store.GetAllEntityRelations<IntRelation>();
+        var (entities, relations) = store.EntityRelation<IntRelation>().Pairs;
         int length = entities.Count;
         for (int n = 0; n < length; n++) {
             count++;

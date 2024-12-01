@@ -121,7 +121,7 @@ public static class RelationExtensions
     ///   </item>
     ///   <item>
     ///     To get all entities including their relations (the cartesian product aka CROSS JOIN) use<br/>
-    ///     <see cref="GetAllEntityRelations{TRelation}"/>
+    ///     <see cref="EntityRelation{TRelation}.Pairs"/>
     ///   </item>
     /// </list>
     /// </remarks>
@@ -147,9 +147,11 @@ public static class RelationExtensions
     }
     
     /// <summary>
+    /// Obsolete: Use <see cref="EntityRelation{TRelation}.Pairs"/><br/> 
     /// Return all entity relations  of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(1).  Most efficient way to iterate all entity relations.
     /// </summary>
+    [Obsolete("replace with property: EntityRelation<TRelation>().Pairs")]
     public static (Entities entities, Chunk<TRelation> relations) GetAllEntityRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {

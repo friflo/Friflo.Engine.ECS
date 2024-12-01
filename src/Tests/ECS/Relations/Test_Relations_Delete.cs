@@ -39,7 +39,7 @@ public static class Test_Relations_Delete
         AreEqual(3, count);
         
         // --- version: get all entity relations in O(1)
-        var (entities, relations) = store.GetAllEntityRelations<IntRelation>();
+        var (entities, relations) = store.EntityRelation<IntRelation>().Pairs;
         AreEqual("{ 1, 1, 2 }",     entities.Debug());
         AreEqual("{ 10, 20, 30 }",  relations.Debug());
             
@@ -86,7 +86,7 @@ public static class Test_Relations_Delete
         AreEqual(3, count);
         
         // --- version: get all entity relations in O(1)
-        var (entities, relations) = store.GetAllEntityRelations<AttackRelation>();
+        var (entities, relations) = store.EntityRelation<AttackRelation>().Pairs;
         AreEqual("{ 1, 1, 2 }",     entities.Debug());
         AreEqual("{ 10, 11, 12 }",  relations.Debug());
         

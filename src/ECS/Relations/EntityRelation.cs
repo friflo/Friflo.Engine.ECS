@@ -13,7 +13,7 @@ public readonly struct EntityRelation <TRelation>
     }
     
     /// <summary>
-    /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TRelation"/> type.<br/>
+    /// Returns a collection of entities having one or more relation.<br/>
     /// Executes in O(1).
     /// </summary>
     /// <remarks>
@@ -23,15 +23,21 @@ public readonly struct EntityRelation <TRelation>
     ///   </item>
     ///   <item>
     ///     To get all entities including their relations (the cartesian product aka CROSS JOIN) use<br/>
-    ///     <see cref="RelationExtensions.GetAllEntityRelations{TRelation}"/>
+    ///     <see cref="EntityRelation{TRelation}.Pairs"/>
     ///   </item>
     /// </list>
     /// </remarks>
     public EntityReadOnlyCollection Entities => new EntityReadOnlyCollection(relations.store, relations.positionMap.Keys);
     
     /// <summary>
-    /// Iterates all entity relations of the specified <typeparamref name="TRelation"/> type.<br/>
+    /// Iterates all entity relations.<br/>
     /// Executes in O(N) N: number of all entity relations.
     /// </summary>
     public void For(ForEachEntity<TRelation> lambda) => relations.ForAllEntityRelations(lambda);
+    
+    /// <summary>
+    /// Return all entity relations as pairs. A pair is <c>(entities[i], relations[i])</c><br/>
+    /// Executes in O(1).  Most efficient way to iterate all entity relations.
+    /// </summary>
+    public (Entities entities, Chunk<TRelation> relations) Pairs => relations.GetAllEntityRelations<TRelation>();
 }
