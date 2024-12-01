@@ -178,7 +178,7 @@ public sealed class Archetype
         // tags             = default   // has no tags
     }
     
-    /// <summary> used by <see cref="EntityRelations"/> </summary>
+    /// <summary> used by <see cref="AbstractEntityRelations"/> </summary>
     internal Archetype(in ArchetypeConfig config, StructHeap heap)
     {
         config.store.AddArchetypeCapacity(ArchetypeUtils.MinCapacity);

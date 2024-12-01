@@ -41,17 +41,17 @@ public static class Test_Relations
         var e = Throws<InvalidOperationException>(() => {
             relations.RemoveLinksWithTarget(0);    
         });
-        AreEqual("type: EntityRelations`2", e!.Message);
+        AreEqual("type: GenericEntityRelations`2", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             relations.GetEntityRelation<StringRelation>(1, 2);
         });
-        AreEqual("type: EntityRelations`2", e!.Message);
+        AreEqual("type: GenericEntityRelations`2", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             relations.AddIncomingRelations(0, null);
         });
-        AreEqual("type: EntityRelations`2", e!.Message);
+        AreEqual("type: GenericEntityRelations`2", e!.Message);
     }
     
     [Test]

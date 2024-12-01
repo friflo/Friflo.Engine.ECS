@@ -22,7 +22,7 @@ public static class RelationExtensions
         where TRelation : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return ref EntityRelations.GetRelation<TRelation, TKey>(entity.store, entity.Id, key);
+        return ref AbstractEntityRelations.GetRelation<TRelation, TKey>(entity.store, entity.Id, key);
     }
     
     /// <summary>
@@ -34,7 +34,7 @@ public static class RelationExtensions
         where TRelation : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.TryGetRelation(entity.store, entity.Id, key, out value);
+        return AbstractEntityRelations.TryGetRelation(entity.store, entity.Id, key, out value);
     }
     
     /// <summary>
@@ -46,7 +46,7 @@ public static class RelationExtensions
         where TRelation : struct, IRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.GetRelations<TRelation>(entity.store, entity.Id);
+        return AbstractEntityRelations.GetRelations<TRelation>(entity.store, entity.Id);
     }
     
     /// <summary>
@@ -59,7 +59,7 @@ public static class RelationExtensions
         where TRelation : struct, IRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.AddRelation(entity.store, entity.Id, component);
+        return AbstractEntityRelations.AddRelation(entity.store, entity.Id, component);
     }
     
     /// <summary>
@@ -72,7 +72,7 @@ public static class RelationExtensions
         where TRelation : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity); 
-        return EntityRelations.RemoveRelation<TRelation, TKey>(entity.store, entity.Id, key);
+        return AbstractEntityRelations.RemoveRelation<TRelation, TKey>(entity.store, entity.Id, key);
     }
     
     /// <summary>
@@ -85,7 +85,7 @@ public static class RelationExtensions
         where TRelation : struct, ILinkRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.RemoveRelation<TRelation, Entity>(entity.store, entity.Id, target);
+        return AbstractEntityRelations.RemoveRelation<TRelation, Entity>(entity.store, entity.Id, target);
     }
     
     /// <summary>
@@ -97,7 +97,7 @@ public static class RelationExtensions
         where TRelation: struct, ILinkRelation
     {
         if (target.IsNull) throw EntityStoreBase.EntityNullException(target);
-        var entities = EntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TRelation>.Index, out var relations);
+        var entities = AbstractEntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TRelation>.Index, out var relations);
         return new EntityLinks<TRelation>(target, entities, relations);
     }
     #endregion
@@ -121,7 +121,7 @@ public static class RelationExtensions
     public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
-        var relations = EntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
+        var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
         return new EntityReadOnlyCollection(store, relations.positionMap.Keys);
     }
     
@@ -132,7 +132,7 @@ public static class RelationExtensions
     public static void ForAllEntityRelations<TRelation>(this EntityStore store, ForEachEntity<TRelation> lambda)
         where TRelation : struct, IRelation
     {
-        var relations = EntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
+        var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
         relations.ForAllEntityRelations(lambda);
     }
     
@@ -143,7 +143,7 @@ public static class RelationExtensions
     public static (Entities entities, Chunk<TRelation> relations) GetAllEntityRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
-        var entityRelations = EntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
+        var entityRelations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
         return entityRelations.GetAllEntityRelations<TRelation>();
     }
     

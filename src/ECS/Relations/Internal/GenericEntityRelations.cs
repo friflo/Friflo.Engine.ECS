@@ -11,14 +11,14 @@ namespace Friflo.Engine.ECS.Relations;
 
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal class EntityRelations<TRelation, TKey> : EntityRelations
+internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
     where TRelation : struct, IRelation<TKey>
 {
-    /// Single <see cref="StructHeap"/> stored in the <see cref="EntityRelations.archetype"/>.
+    /// Single <see cref="StructHeap"/> stored in the <see cref="AbstractEntityRelations.archetype"/>.
     internal  readonly   StructHeap<TRelation>  heapGeneric;
     
-    /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
-    public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
+    /// Instance created at <see cref="AbstractEntityRelations.GetEntityRelations"/>
+    public GenericEntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
         heapGeneric = (StructHeap<TRelation>)heap;

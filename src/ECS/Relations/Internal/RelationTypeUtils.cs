@@ -35,7 +35,7 @@ internal static class RelationTypeUtils
         if (keyType == typeof(Entity)) {
             return typeof(EntityLinkRelations<>).MakeGenericType(new [] { componentType });
         }
-        return typeof(EntityRelations<,>).MakeGenericType(new [] { componentType, keyType });
+        return typeof(GenericEntityRelations<,>).MakeGenericType(new [] { componentType, keyType });
     }
 }
 

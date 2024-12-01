@@ -173,10 +173,10 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
 public readonly struct EntityComponent
 {
     // --- public fields
-    [Browse(Never)] private readonly    Entity          entity;             // 16
-    [Browse(Never)] private readonly    ComponentType   type;               //  8
-    [Browse(Never)] private readonly    EntityRelations entityRelations;    //  8
-    [Browse(Never)] private readonly    int             relationsIndex;     //  4
+    [Browse(Never)] private readonly    Entity                  entity;             // 16
+    [Browse(Never)] private readonly    ComponentType           type;               //  8
+    [Browse(Never)] private readonly    AbstractEntityRelations entityRelations;    //  8
+    [Browse(Never)] private readonly    int                     relationsIndex;     //  4
     
     // --- public properties
     /// <summary>
@@ -199,7 +199,7 @@ public readonly struct EntityComponent
         type        = componentType;
     }
     
-    internal EntityComponent (Entity entity, ComponentType componentType, EntityRelations entityRelations, int relationsIndex) {
+    internal EntityComponent (Entity entity, ComponentType componentType, AbstractEntityRelations entityRelations, int relationsIndex) {
         this.entity             = entity;
         type                    = componentType;
         this.entityRelations    = entityRelations;

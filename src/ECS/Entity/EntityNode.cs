@@ -66,13 +66,13 @@ public struct EntityNode
     // [Browse(Never)] internal NodeFlags       flags;              //  1
     
     /// <summary>
-    /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="AbstractComponentIndex"/> instances.<br/> 
+    /// Bit mask for all <see cref="AbstractEntityRelations"/> and all <see cref="AbstractComponentIndex"/> instances.<br/> 
     /// A bit is set if the entity is an owner of either an entity relation set or an indexed component value.
     /// </summary>
     /// <remarks>
     /// Use <see cref="IsOwner"/> to see <see cref="ComponentTypes"/> by name.<br/>
     /// This masks prevents the insane cost when deleting an entity.<br/>
-    /// Otherwise, all <see cref="EntityRelations"/> and <see cref="AbstractComponentIndex"/> instances need to be iterated
+    /// Otherwise, all <see cref="AbstractEntityRelations"/> and <see cref="AbstractComponentIndex"/> instances need to be iterated
     /// to check if the entity is a key in their Dictionary's and perform required cleanup.
     /// </remarks>
     [Browse(Never)] internal    int             isOwner;            //  4

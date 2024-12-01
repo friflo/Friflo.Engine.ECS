@@ -23,13 +23,13 @@ public readonly struct EntityLink<TComponent>
     #endregion
 
 #region fields
-                    public  readonly    Entity          Entity;     // 16
-    [Browse(Never)] private readonly    EntityRelations relations;  //  8
-    [Browse(Never)] private readonly    int             target;     //  4
+                    public  readonly    Entity                  Entity;     // 16
+    [Browse(Never)] private readonly    AbstractEntityRelations relations;  //  8
+    [Browse(Never)] private readonly    int                     target;     //  4
     #endregion
 
  
-    internal EntityLink(int target, in Entity entity, EntityRelations relations) {
+    internal EntityLink(int target, in Entity entity, AbstractEntityRelations relations) {
         this.target     = target;
         Entity          = entity;
         this.relations  = relations;
@@ -62,13 +62,13 @@ public readonly struct EntityLinks<T> : IReadOnlyList<EntityLink<T>>
     #endregion
     
 #region fields
-                    public   readonly   Entities            Entities;   // 16
-    [Browse(Never)] internal readonly   int                 target;     //  4
-    [Browse(Never)] internal readonly   EntityRelations     relations;  //  8
+                    public   readonly   Entities                Entities;   // 16
+    [Browse(Never)] internal readonly   int                     target;     //  4
+    [Browse(Never)] internal readonly   AbstractEntityRelations relations;  //  8
     #endregion
     
 #region general
-    internal EntityLinks(in Entity target, in Entities entities, EntityRelations relations) {
+    internal EntityLinks(in Entity target, in Entities entities, AbstractEntityRelations relations) {
         this.target     = target.Id;
         Entities        = entities;
         this.relations  = relations;
@@ -109,10 +109,10 @@ public readonly struct EntityLinks<T> : IReadOnlyList<EntityLink<T>>
 public struct EntityLinkEnumerator<T> : IEnumerator<EntityLink<T>>
     where T : struct
 {
-    private readonly    int             target;     //  4
-    private readonly    Entities        entities;   // 16
-    private readonly    EntityRelations relations;  //  8
-    private             int             index;      //  4
+    private readonly    int                     target;     //  4
+    private readonly    Entities                entities;   // 16
+    private readonly    AbstractEntityRelations relations;  //  8
+    private             int                     index;      //  4
     
     internal EntityLinkEnumerator(in EntityLinks<T> entityLinks) {
         target      = entityLinks.target;
