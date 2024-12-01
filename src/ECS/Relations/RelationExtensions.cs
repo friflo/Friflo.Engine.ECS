@@ -102,6 +102,9 @@ public static class RelationExtensions
     #endregion
     
 #region EntityStore
+    /// <summary>
+    /// Return the storage for all entity relations of the specified <typeparamref name="TRelation"/> type.
+    /// </summary>
     public static EntityRelations<TRelation> EntityRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {

@@ -3,6 +3,10 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Storage for all entity relations of the specified <typeparamref name="TRelation"/> type.
+/// </summary>
+/// <typeparam name="TRelation"></typeparam>
 public readonly struct EntityRelations <TRelation>
     where TRelation : struct, IRelation
 {
