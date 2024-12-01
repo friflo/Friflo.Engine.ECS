@@ -12,7 +12,7 @@ public static class Test_Relations_Delete
     public static void Test_Relations_Delete_int_relations()
     {
         var store       = new EntityStore();
-        var intRelations = store.EntityRelation<IntRelation>();
+        var intRelations = store.EntityRelations<IntRelation>();
         var allEntities = intRelations.Entities;
         AreEqual("{ }",         allEntities.Debug());
 
@@ -55,7 +55,7 @@ public static class Test_Relations_Delete
     public static void Test_Relations_Delete_Entity_relations()
     {
         var store       = new EntityStore();
-        var attackRelations = store.EntityRelation<AttackRelation>();
+        var attackRelations = store.EntityRelations<AttackRelation>();
         var sourceNodes = attackRelations.Entities;
         AreEqual("{ }",         sourceNodes.Debug());
         

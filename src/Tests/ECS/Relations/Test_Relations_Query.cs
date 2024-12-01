@@ -197,7 +197,7 @@ public static class Test_Relations_Query
         int count = 0;
         var sw = new Stopwatch();
         sw.Start();
-        store.EntityRelation<IntRelation>().For((ref IntRelation relation, Entity entity) => {
+        store.EntityRelations<IntRelation>().For((ref IntRelation relation, Entity entity) => {
             count++;
         });
         AreEqual(entityCount * relationsPerEntity, count);
@@ -222,7 +222,7 @@ public static class Test_Relations_Query
         int count = 0;
         var sw = new Stopwatch();
         sw.Start();
-        var (entities, relations) = store.EntityRelation<IntRelation>().Pairs;
+        var (entities, relations) = store.EntityRelations<IntRelation>().Pairs;
         int length = entities.Count;
         for (int n = 0; n < length; n++) {
             count++;

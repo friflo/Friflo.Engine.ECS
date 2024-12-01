@@ -3,12 +3,12 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct EntityRelation <TRelation>
+public readonly struct EntityRelations <TRelation>
     where TRelation : struct, IRelation
 {
     private readonly AbstractEntityRelations relations;
     
-    internal EntityRelation(AbstractEntityRelations relations) {
+    internal EntityRelations(AbstractEntityRelations relations) {
         this.relations = relations;
     }
     
@@ -23,7 +23,7 @@ public readonly struct EntityRelation <TRelation>
     ///   </item>
     ///   <item>
     ///     To get all entities including their relations (the cartesian product aka CROSS JOIN) use<br/>
-    ///     <see cref="EntityRelation{TRelation}.Pairs"/>
+    ///     <see cref="EntityRelations{TRelation}.Pairs"/>
     ///   </item>
     /// </list>
     /// </remarks>
