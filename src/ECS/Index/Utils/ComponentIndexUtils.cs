@@ -11,12 +11,12 @@ namespace Friflo.Engine.ECS.Index;
 internal static class ComponentIndexUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
-    internal static ComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
+    internal static AbstractComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
     {
         var flags   = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
         var args    = new object[] { store, componentType };
         var obj     = Activator.CreateInstance(componentType.IndexType, flags, null, args, null);
-        var index   = (ComponentIndex)obj!;
+        var index   = (AbstractComponentIndex)obj!;
         return index;
     }
     

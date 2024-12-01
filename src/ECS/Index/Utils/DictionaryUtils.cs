@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal static class DictionaryUtils
 {
-    internal static void RemoveComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, ComponentIndex componentIndex)
+    internal static void RemoveComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, AbstractComponentIndex componentIndex)
     {
         var idHeap  = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);
@@ -29,7 +29,7 @@ internal static class DictionaryUtils
         map[value] = ids;
     }
     
-    internal static void AddComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, ComponentIndex componentIndex)
+    internal static void AddComponentValue<TValue>(int id, in TValue value, Dictionary<TValue, IdArray> map, AbstractComponentIndex componentIndex)
     {
         var idHeap = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);

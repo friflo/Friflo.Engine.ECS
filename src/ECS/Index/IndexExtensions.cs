@@ -24,7 +24,7 @@ public static class IndexExtensions
         where TComponent: struct, ILinkComponent
     {
         if (target.IsNull) throw EntityStoreBase.EntityNullException(target);
-        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(target.store, StructInfo<TComponent>.Index);
+        var index = (AbstractComponentIndex<Entity>)StoreIndex.GetIndex(target.store, StructInfo<TComponent>.Index);
         return new EntityLinks<TComponent>(target, index.GetHasValueEntities(target), null);
     }
     #endregion
@@ -37,7 +37,7 @@ public static class IndexExtensions
     public static Entities GetEntitiesWithComponentValue<TComponent, TValue>(this EntityStore store, TValue value)
         where TComponent: struct, IIndexedComponent<TValue>
     {
-        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
+        var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.GetHasValueEntities(value);
     }
     
@@ -62,7 +62,7 @@ public static class IndexExtensions
     public static  IReadOnlyCollection<TValue> GetAllIndexedComponentValues<TComponent, TValue>(this EntityStore store)
         where TComponent: struct, IIndexedComponent<TValue>
     {
-        var index = (ComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
+        var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
     
@@ -87,7 +87,7 @@ public static class IndexExtensions
     public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
         where TComponent: struct, ILinkComponent
     {
-        var index = (ComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
+        var index = (AbstractComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TComponent>.Index);
         return index.IndexedComponentValues;
     }
     #endregion

@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS.Index;
 /// Base class to enable implementing a custom component index.<br/>
 /// A custom component index can be implemented to optimize indexing or component queries for a specific component type.   
 /// </summary>
-public abstract class ComponentIndex
+public abstract class AbstractComponentIndex
 {
 #region properties    
     internal  abstract  int             Count { get; }
@@ -40,7 +40,7 @@ public abstract class ComponentIndex
         return new NotSupportedException($"{name} not supported by {GetType().Name}");
     }
     
-    internal ComponentIndex(EntityStore store, ComponentType componentType) {
+    internal AbstractComponentIndex(EntityStore store, ComponentType componentType) {
         this.store          = store;
         this.componentType  = componentType;
         structIndex         = componentType.StructIndex;
@@ -52,7 +52,7 @@ public abstract class ComponentIndex
 /// <summary>
 /// Generic base class required to implement a custom component index.
 /// </summary>
-public abstract class ComponentIndex<TValue> : ComponentIndex
+public abstract class AbstractComponentIndex<TValue> : AbstractComponentIndex
 {
     internal            TValue[]                    sortBuffer  = Array.Empty<TValue>();
     
@@ -60,5 +60,5 @@ public abstract class ComponentIndex<TValue> : ComponentIndex
     internal abstract   Entities                    GetHasValueEntities    (TValue value);
     internal virtual    void                        AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet) => throw NotSupportedException("ValueInRange()");
     
-    internal ComponentIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
+    internal AbstractComponentIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
 }

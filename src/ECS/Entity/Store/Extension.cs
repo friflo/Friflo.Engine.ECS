@@ -53,7 +53,7 @@ internal partial struct StoreExtension
     #endregion
     
 #region component indices
-    internal                            ComponentIndex[]        indexMap;                   //  8   - map & its component indexes created on demand
+    internal                            AbstractComponentIndex[] indexMap;                  //  8   - map & its component indexes created on demand
     #endregion
     
 #region entity relations

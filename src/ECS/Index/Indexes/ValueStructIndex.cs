@@ -9,7 +9,7 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentIndex<TValue>
+internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : AbstractComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
     where TValue            : struct
 {

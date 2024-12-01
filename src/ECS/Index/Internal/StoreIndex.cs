@@ -27,7 +27,7 @@ internal static class StoreIndex
         index.Remove(id, heap);
     }
     
-    internal static ComponentIndex GetIndex(EntityStore store, int structIndex)
+    internal static AbstractComponentIndex GetIndex(EntityStore store, int structIndex)
     {
         var indexMap = store.extension.indexMap; 
         if (indexMap != null) {
@@ -41,15 +41,15 @@ internal static class StoreIndex
         return indexMap[structIndex]  = CreateIndex(store, structIndex);
     }
     
-    private static ComponentIndex CreateIndex(EntityStore store, int structIndex)
+    private static AbstractComponentIndex CreateIndex(EntityStore store, int structIndex)
     {
         var componentType = EntityStoreBase.Static.EntitySchema.components[structIndex];
         return ComponentIndexUtils.CreateComponentIndex(store, componentType);
     }
     
-    private static ComponentIndex[] CreateStoreIndexMap()
+    private static AbstractComponentIndex[] CreateStoreIndexMap()
     {
         var schema = EntityStoreBase.Static.EntitySchema;
-        return new ComponentIndex[schema.maxIndexedStructIndex];
+        return new AbstractComponentIndex[schema.maxIndexedStructIndex];
     }
 }
