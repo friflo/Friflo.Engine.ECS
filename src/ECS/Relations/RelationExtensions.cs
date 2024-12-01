@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Relations;
 
 // ReSharper disable once CheckNamespace
@@ -103,7 +102,15 @@ public static class RelationExtensions
     #endregion
     
 #region EntityStore
+    public static EntityRelations<TRelation> EntityRelations<TRelation>(this EntityStore store)
+        where TRelation : struct, IRelation
+    {
+        var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
+        return new EntityRelations<TRelation>(relations);
+    }
+    
     /// <summary>
+    /// Obsolete: Use <see cref="EntityRelations{TRelation}.Entities"/><br/>
     /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(1).
     /// </summary>
@@ -118,6 +125,7 @@ public static class RelationExtensions
     ///   </item>
     /// </list>
     /// </remarks>
+    [Obsolete("replace with property: EntityRelations<TRelation>().Entities")]
     public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
@@ -126,9 +134,11 @@ public static class RelationExtensions
     }
     
     /// <summary>
+    /// Obsolete: Use <see cref="EntityRelations{TRelation}.For"/><br/>
     /// Iterates all entity relations of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(N) N: number of all entity relations.
     /// </summary>
+    [Obsolete("replace with method: EntityRelations<TRelation>().For()")]
     public static void ForAllEntityRelations<TRelation>(this EntityStore store, ForEachEntity<TRelation> lambda)
         where TRelation : struct, IRelation
     {
@@ -145,13 +155,6 @@ public static class RelationExtensions
     {
         var entityRelations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
         return entityRelations.GetAllEntityRelations<TRelation>();
-    }
-    
-    [ExcludeFromCodeCoverage]
-    public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TRelation>(this EntityStore store)
-        where TRelation: struct, IRelation
-    {
-        throw new NotImplementedException();
     }
     #endregion
 }
