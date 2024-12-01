@@ -62,7 +62,7 @@ public static class Test_Relations
         var entity2 = store.CreateEntity(2);
         entity1.AddRelation(new AttackRelation { target = entity2 });
         
-        var relations = (EntityRelationLinks<AttackRelation>)store.extension.relationsMap[StructInfo<AttackRelation>.Index];
+        var relations = (EntityLinkRelations<AttackRelation>)store.extension.relationsMap[StructInfo<AttackRelation>.Index];
         LinkRelationUtils.AddComponentValue(1, 2, relations);
         AreEqual(1, relations.Count);
         

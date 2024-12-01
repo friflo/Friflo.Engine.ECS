@@ -12,11 +12,11 @@ namespace Friflo.Engine.ECS.Relations;
 
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal class EntityRelationLinks<TRelation> : EntityRelations<TRelation, Entity>
+internal class EntityLinkRelations<TRelation> : EntityRelations<TRelation, Entity>
     where TRelation : struct, ILinkRelation
 {
     /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
-    public EntityRelationLinks(ComponentType componentType, Archetype archetype, StructHeap heap)
+    public EntityLinkRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
         linkEntityMap   = new Dictionary<int, IdArray>();

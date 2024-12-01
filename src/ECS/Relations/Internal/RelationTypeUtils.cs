@@ -33,7 +33,7 @@ internal static class RelationTypeUtils
     private static Type MakeIndexType(Type componentType, Type keyType)
     {
         if (keyType == typeof(Entity)) {
-            return typeof(EntityRelationLinks<>).MakeGenericType(new [] { componentType });
+            return typeof(EntityLinkRelations<>).MakeGenericType(new [] { componentType });
         }
         return typeof(EntityRelations<,>).MakeGenericType(new [] { componentType, keyType });
     }

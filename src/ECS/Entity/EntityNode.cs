@@ -78,13 +78,13 @@ public struct EntityNode
     [Browse(Never)] internal    int             isOwner;            //  4
     
     /// <summary>
-    /// Bit mask for all <see cref="EntityIndex"/> and all <see cref="EntityRelationLinks{TRelation}"/> instances.<br/> 
+    /// Bit mask for all <see cref="EntityIndex"/> and all <see cref="EntityLinkRelations{TRelation}"/> instances.<br/> 
     /// A bit is set if the entity is linked by either a <see cref="ILinkComponent"/> or a <see cref="ILinkRelation"/>.
     /// </summary>
     /// <remarks>
     /// Use <see cref="IsLinked"/> to see <see cref="ComponentTypes"/> by name.<br/>
     /// This masks prevents the insane cost when deleting an entity.<br/>
-    /// Otherwise, all <see cref="EntityIndex"/> and <see cref="EntityRelationLinks{TRelation}"/> instances need to be iterated
+    /// Otherwise, all <see cref="EntityIndex"/> and <see cref="EntityLinkRelations{TRelation}"/> instances need to be iterated
     /// to check if the entity is a key in their Dictionary's and perform required cleanup.
     /// </remarks>
     [Browse(Never)] internal    int             isLinked;           //  4
