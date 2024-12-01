@@ -97,6 +97,7 @@ private const string JSON_withoutIndexedComponent =
         entity.Add(new IndexedInt { value = 30 });
         AreEqual(1, index[30].Count);
         AreEqual(1, index.Values.Count);
+        AreEqual("Count: 1", index.ToString());
         
         entity.Add(new IndexedInt { value = 31 });
         AreEqual(1, index.Values.Count);

@@ -4,6 +4,9 @@ using Friflo.Engine.ECS.Index;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// The index for <see cref="IIndexedComponent{TValue}"/> struct's to search entities with a specific component value in O(1).
+/// </summary>
 public readonly struct ComponentIndex <TIndexedComponent,TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
 {

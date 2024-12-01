@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using Friflo.Engine.ECS.Index;
+// ReSharper disable UnusedTypeParameter
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// The index for <see cref="ILinkComponent"/> struct's to search entities with a specific entity in O(1).
+/// </summary>
 public readonly struct LinkComponentIndex <TLinkComponent>
     where TLinkComponent: struct, ILinkComponent
 {

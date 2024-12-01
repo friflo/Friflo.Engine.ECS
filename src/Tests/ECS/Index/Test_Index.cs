@@ -120,6 +120,7 @@ public static class Test_Index
         entity2.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
         entity3.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
         
+        AreEqual("Count: 2", index.ToString());
         AreEqual(1, index[target4].Count);
         AreEqual(2, index[target5].Count);
 
