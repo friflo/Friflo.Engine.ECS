@@ -105,6 +105,7 @@ public static class Test_Index
     public static void Test_Index_indexed_Entity()
     {
         var store   = new EntityStore();
+        var index   = store.LinkComponentIndex<LinkComponent>();
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         var entity3 = store.CreateEntity(3);
@@ -113,11 +114,14 @@ public static class Test_Index
         var target5 = store.CreateEntity(5);
         var target6 = store.CreateEntity(6);
         
-        var values = store.GetAllLinkedEntities<LinkComponent>();
+        var values = index.Values;
         
         entity1.AddComponent(new LinkComponent { entity = target4 });   AreEqual(1, values.Count);
         entity2.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
         entity3.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
+        
+        AreEqual(1, index[target4].Count);
+        AreEqual(2, index[target5].Count);
 
         int count = 0;
         foreach (var entity in values) {

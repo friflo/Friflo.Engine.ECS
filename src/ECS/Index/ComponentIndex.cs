@@ -39,25 +39,5 @@ public readonly struct ComponentIndex <TIndexedComponent,TValue>
     /// </remarks>
     public IReadOnlyCollection<TValue> Values => index.IndexedComponentValues;
     
-    /// <summary>
-    /// Returns all entities linked by the specified <see cref="ILinkComponent"/> type.<br/>
-    /// Executes in O(1). Each entity in the returned list is unique. See remarks for additional infos.
-    /// </summary>
-    /// <remarks>
-    /// <list type="bullet">
-    ///   <item>
-    ///     The returned collection changes when component link values are updated, removed or added.
-    ///   </item>
-    ///   <item>
-    ///     To get the entities linking a specific entity use <see cref="IndexExtensions.GetIncomingLinks{TComponent}"/>.<br/>
-    ///   </item>
-    ///   <item>
-    ///     The method is a specialized version of <see cref="Values"/><br/>
-    ///     using <c> TIndexedComponent = ILinkComponent</c> and <c>TValue = Entity</c>.  
-    ///   </item>
-    /// </list>
-    /// </remarks>
-    public IReadOnlyCollection<Entity> LinkedEntities => ((AbstractComponentIndex<Entity>)(object)index).IndexedComponentValues;
-    
     public override string ToString() => $"Count: {Values.Count}";
 }

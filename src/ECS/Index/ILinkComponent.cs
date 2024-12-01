@@ -20,7 +20,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 ///   <item>
 ///     Return all entities linked by a specific <see cref="ILinkComponent"/> type.<br/>
-///     See <see cref="IndexExtensions.GetAllLinkedEntities{TComponent}"/>
+///     See <see cref="LinkComponentIndex{TLinkComponent}.Values"/>
 ///   </item>
 ///   <item>
 ///     Filter entities in a query having a <see cref="ILinkComponent"/> to a specific entity.<br/>

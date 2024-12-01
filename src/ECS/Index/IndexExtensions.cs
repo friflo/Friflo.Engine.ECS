@@ -40,6 +40,17 @@ public static class IndexExtensions
         var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TIndexedComponent>.Index);
         return new ComponentIndex<TIndexedComponent, TValue>(index);
     }
+    
+    /// <summary>
+    /// Returns the index for link components to search entities with a specific entity in O(1).<br/>
+    /// Executes in O(1). 
+    /// </summary>
+    public static LinkComponentIndex<TLinkComponent> LinkComponentIndex<TLinkComponent>(this EntityStore store)
+        where TLinkComponent: struct, ILinkComponent
+    {
+        var index = (AbstractComponentIndex<Entity>)StoreIndex.GetIndex(store, StructInfo<TLinkComponent>.Index);
+        return new LinkComponentIndex<TLinkComponent>(index);
+    }
 
     /// <summary>
     /// Obsolete: Use <see cref="ComponentIndex{TIndexedComponent,TValue}.this[TValue]"/><br/>
@@ -82,7 +93,7 @@ public static class IndexExtensions
     }
     
     /// <summary>
-    /// Obsolete: Use <see cref="ComponentIndex{TIndexedComponent,TValue}.LinkedEntities"/><br/>
+    /// Obsolete: Use <see cref="LinkComponentIndex{TLinkComponent}.Values"/><br/>
     /// Returns all entities linked by the specified <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). Each entity in the returned list is unique. See remarks for additional infos.
     /// </summary>
@@ -100,6 +111,7 @@ public static class IndexExtensions
     ///   </item>
     /// </list>
     /// </remarks>
+    [Obsolete("replace with property: LinkComponentIndex<TLinkComponent>().Values")]
     public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
         where TComponent: struct, ILinkComponent
     {
