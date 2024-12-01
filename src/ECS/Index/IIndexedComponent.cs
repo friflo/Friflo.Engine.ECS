@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 ///   <item>
 ///     Return all entities with a component field of a specific value. <br/>
-///     See <see cref="IndexExtensions.GetEntitiesWithComponentValue{TIndexedComponent,TValue}"/>.
+///     See <see cref="ComponentIndex{TIndexedComponent,TValue}.this[TValue]"/>.
 ///   </item>
 ///   <item>
 ///     Return a collection of all unique component values.<br/>

@@ -23,18 +23,20 @@ namespace Tests.ECS.Github
             var entityB = store.CreateEntity(2);
             entityB.AddComponent(new IndexedInt { value = 12 });
             
-            AreEqual(1, store.GetEntitiesWithComponentValue<IndexedInt,int>(11).Count);
-            AreEqual(2, store.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+            var index = store.ComponentIndex<IndexedInt,int>();
+            AreEqual(1, index[11].Count);
+            AreEqual(2, index.Values.Count);
             
             using var stream = new MemoryStream();
             var serializer = new EntitySerializer();
             serializer.WriteStore(store, stream);
             
             var readStore = new EntityStore();
+            var readIndex = readStore.ComponentIndex<IndexedInt,int>();
             serializer.ReadIntoStore(readStore, stream);
             AreEqual(2, readStore.Count);
-            AreEqual(1, readStore.GetEntitiesWithComponentValue<IndexedInt,int>(11).Count);
-            AreEqual(2, readStore.GetAllIndexedComponentValues<IndexedInt,int>().Count);
+            AreEqual(1, readIndex[11].Count);
+            AreEqual(2, readIndex.Values.Count);
         }
     }
 }

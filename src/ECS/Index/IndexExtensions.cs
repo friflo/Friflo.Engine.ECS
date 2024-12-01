@@ -31,6 +31,18 @@ public static class IndexExtensions
     
 #region EntityStore
     /// <summary>
+    /// Returns the index for indexed components to search entities with a specific component value in O(1).<br/>
+    /// Executes in O(1). 
+    /// </summary>
+    public static ComponentIndex<TIndexedComponent,TValue> ComponentIndex<TIndexedComponent, TValue>(this EntityStore store)
+        where TIndexedComponent: struct, IIndexedComponent<TValue>
+    {
+        var index = (AbstractComponentIndex<TValue>)StoreIndex.GetIndex(store, StructInfo<TIndexedComponent>.Index);
+        return new ComponentIndex<TIndexedComponent, TValue>(index);
+    }
+
+    /// <summary>
+    /// Obsolete: Use <see cref="ComponentIndex{TIndexedComponent,TValue}.this[TValue]"/><br/>
     /// Return the entities with the passed component value.<br/>
     /// Executes in O(1) with default index. 
     /// </summary>
@@ -42,6 +54,7 @@ public static class IndexExtensions
     }
     
     /// <summary>
+    /// Obsolete: Use <see cref="ComponentIndex{TIndexedComponent,TValue}.Values"/><br/>
     /// Returns all indexed component values of the passed <typeparamref name="TComponent"/> type.<br/>
     /// Executes in O(1). Each value in the returned list is unique. See remarks for additional infos.
     /// </summary>
@@ -51,11 +64,11 @@ public static class IndexExtensions
     ///     The returned collection changes when indexed component values are updated, removed or added.
     ///   </item>
     ///   <item>
-    ///     To get the entities having a specific component value use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/>.
+    ///     To get the entities having a specific component value use <see cref="ComponentIndex{TIndexedComponent,TValue}.this[TValue]"/>.
     ///   </item>
     ///   <item>
     ///     If <typeparamref name="TValue"/> is a class all collection values are not null.<br/>
-    ///     Use <see cref="GetEntitiesWithComponentValue{TComponent,TValue}"/> to check if null is referenced.
+    ///     Use <see cref="ComponentIndex{TIndexedComponent,TValue}.this[TValue]"/> to check if null is referenced.
     ///   </item>
     /// </list>
     /// </remarks>
@@ -67,6 +80,7 @@ public static class IndexExtensions
     }
     
     /// <summary>
+    /// Obsolete: Use <see cref="ComponentIndex{TIndexedComponent,TValue}.LinkedEntities"/><br/>
     /// Returns all entities linked by the specified <see cref="ILinkComponent"/> type.<br/>
     /// Executes in O(1). Each entity in the returned list is unique. See remarks for additional infos.
     /// </summary>
@@ -79,8 +93,8 @@ public static class IndexExtensions
     ///     To get the entities linking a specific entity use <see cref="GetIncomingLinks{TComponent}"/>.<br/>
     ///   </item>
     ///   <item>
-    ///     The method is a specialized version of <see cref="GetAllIndexedComponentValues{TComponent,TValue}"/><br/>
-    ///     using <c> TComponent = ILinkComponent</c> and <c>TValue = Entity</c>.  
+    ///     The method is a specialized version of <see cref="ComponentIndex{TIndexedComponent,TValue}.Values"/><br/>
+    ///     using <c> TIndexedComponent = ILinkComponent</c> and <c>TValue = Entity</c>.  
     ///   </item>
     /// </list>
     /// </remarks>
