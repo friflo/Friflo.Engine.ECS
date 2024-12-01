@@ -46,6 +46,7 @@ public static class IndexExtensions
     /// Return the entities with the passed component value.<br/>
     /// Executes in O(1) with default index. 
     /// </summary>
+    [Obsolete("replace with indexer: ComponentIndex<TIndexedComponent,TValue>()[TValue]")]
     public static Entities GetEntitiesWithComponentValue<TComponent, TValue>(this EntityStore store, TValue value)
         where TComponent: struct, IIndexedComponent<TValue>
     {
@@ -72,6 +73,7 @@ public static class IndexExtensions
     ///   </item>
     /// </list>
     /// </remarks>
+    [Obsolete("replace with property: ComponentIndex<TIndexedComponent,TValue>().Values")]
     public static  IReadOnlyCollection<TValue> GetAllIndexedComponentValues<TComponent, TValue>(this EntityStore store)
         where TComponent: struct, IIndexedComponent<TValue>
     {

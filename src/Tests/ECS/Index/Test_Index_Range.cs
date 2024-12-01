@@ -16,6 +16,7 @@ public static class Test_Index_Range
     public static void Test_Index_Range_Query_ValueInRange()
     {
         var store = new EntityStore();
+        var index = store.ComponentIndex<IndexedIntRange, int>();
         
         var query0 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(0,    99);
         var query1 = store.Query<IndexedIntRange, Position>().ValueInRange<IndexedIntRange, int>(100, 100);
@@ -29,15 +30,15 @@ public static class Test_Index_Range
         var entity2 = store.CreateEntity(new Position());
         var entity3 = store.CreateEntity(new Position());
         
-        var values = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
+        var values = index.Values;
 
         entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual("{ 100 }",             values.Debug());
         entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.Debug());
         entity3.AddComponent(new IndexedIntRange { value  = 300 });     AreEqual("{ 100, 200, 300 }",   values.Debug());
         
-        var result = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(100);
+        var result = index[100];
         AreEqual(1, result.Count);     AreEqual("{ 1 }",    result.Ids.Debug());
-        result     = store.GetEntitiesWithComponentValue<IndexedIntRange, int>(42);
+        result     = index[42];
         AreEqual(0, result.Count);     AreEqual("{ }",      result.Ids.Debug());
         {
             int count = 0;
@@ -100,7 +101,7 @@ public static class Test_Index_Range
         var entity3 = store.CreateEntity(new Position());
         var entity4 = store.CreateEntity(new Position());
         
-        var values = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
+        var values = store.ComponentIndex<IndexedIntRange, int>().Values;
         entity1.AddComponent(new IndexedIntRange { value  = 100 });     AreEqual("{ 100 }",             values.Debug());
         entity2.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.Debug());
         entity3.AddComponent(new IndexedIntRange { value  = 200 });     AreEqual("{ 100, 200 }",        values.Debug());
@@ -139,7 +140,7 @@ public static class Test_Index_Range
         var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetAllIndexedComponentValues<IndexedStringRange, string>();
+        var values      = store.ComponentIndex<IndexedStringRange, string>().Values;
         var strings     = new string[count];
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
@@ -165,7 +166,7 @@ public static class Test_Index_Range
         var count       = 100;
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetAllIndexedComponentValues<IndexedIntRange, int>();
+        var values      = store.ComponentIndex<IndexedIntRange, int>().Values;
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }

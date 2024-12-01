@@ -20,7 +20,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 ///   <item>
 ///     Return a collection of all unique component values.<br/>
-///     See <see cref="IndexExtensions.GetAllIndexedComponentValues{TComponent,TValue}"/>.
+///     See <see cref="ComponentIndex{TIndexedComponent,TValue}.Values"/>.
 ///   </item>
 ///   <item>
 ///     Filter entities in a query having a specific component value.<br/>

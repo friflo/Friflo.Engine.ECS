@@ -53,8 +53,8 @@ public static partial class Test_Index_Query
         cx.entity2  = entities[2];
         cx.entity3  = entities[3];
         
-        cx.nameValues  = store.GetAllIndexedComponentValues<IndexedName, string>();
-        cx.intValues   = store.GetAllIndexedComponentValues<IndexedInt, int>();
+        cx.nameValues  = store.ComponentIndex<IndexedName, string>().Values;
+        cx.intValues   = store.ComponentIndex<IndexedInt, int>().Values;
         
         cx.entity0.AddComponent(new IndexedName    { name   = "find-me" });    AreEqual("{ find-me }",  cx.nameValues.Debug());
         cx.entity1.AddComponent(new IndexedInt     { value  = 123       });    AreEqual("{ 123 }",      cx.intValues.Debug());
