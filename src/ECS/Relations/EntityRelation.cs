@@ -3,12 +3,12 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct EntityRelations <TRelation>
+public readonly struct EntityRelation <TRelation>
     where TRelation : struct, IRelation
 {
     private readonly AbstractEntityRelations relations;
     
-    internal EntityRelations(AbstractEntityRelations relations) {
+    internal EntityRelation(AbstractEntityRelations relations) {
         this.relations = relations;
     }
     

@@ -102,15 +102,15 @@ public static class RelationExtensions
     #endregion
     
 #region EntityStore
-    public static EntityRelations<TRelation> EntityRelations<TRelation>(this EntityStore store)
+    public static EntityRelation<TRelation> EntityRelation<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
         var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
-        return new EntityRelations<TRelation>(relations);
+        return new EntityRelation<TRelation>(relations);
     }
     
     /// <summary>
-    /// Obsolete: Use <see cref="EntityRelations{TRelation}.Entities"/><br/>
+    /// Obsolete: Use <see cref="EntityRelation{TRelation}.Entities"/><br/>
     /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(1).
     /// </summary>
@@ -125,7 +125,7 @@ public static class RelationExtensions
     ///   </item>
     /// </list>
     /// </remarks>
-    [Obsolete("replace with property: EntityRelations<TRelation>().Entities")]
+    [Obsolete("replace with property: EntityRelation<TRelation>().Entities")]
     public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
@@ -134,11 +134,11 @@ public static class RelationExtensions
     }
     
     /// <summary>
-    /// Obsolete: Use <see cref="EntityRelations{TRelation}.For"/><br/>
+    /// Obsolete: Use <see cref="EntityRelation{TRelation}.For"/><br/>
     /// Iterates all entity relations of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(N) N: number of all entity relations.
     /// </summary>
-    [Obsolete("replace with method: EntityRelations<TRelation>().For()")]
+    [Obsolete("replace with method: EntityRelation<TRelation>().For()")]
     public static void ForAllEntityRelations<TRelation>(this EntityStore store, ForEachEntity<TRelation> lambda)
         where TRelation : struct, IRelation
     {

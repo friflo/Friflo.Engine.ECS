@@ -12,7 +12,7 @@ public static class Test_Relations_Delete
     public static void Test_Relations_Delete_int_relations()
     {
         var store       = new EntityStore();
-        var allEntities = store.EntityRelations<IntRelation>().Entities;
+        var allEntities = store.EntityRelation<IntRelation>().Entities;
         AreEqual("{ }",         allEntities.Debug());
 
         var entity1 = store.CreateEntity(1);
@@ -29,7 +29,7 @@ public static class Test_Relations_Delete
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
-        store.EntityRelations<IntRelation>().For((ref IntRelation relation, Entity entity) => {
+        store.EntityRelation<IntRelation>().For((ref IntRelation relation, Entity entity) => {
             switch (count++) {
                 case 0: AreEqual(1, entity.Id); AreEqual(10, relation.value); break;
                 case 1: AreEqual(1, entity.Id); AreEqual(20, relation.value); break;
@@ -54,7 +54,7 @@ public static class Test_Relations_Delete
     public static void Test_Relations_Delete_Entity_relations()
     {
         var store       = new EntityStore();
-        var sourceNodes = store.EntityRelations<AttackRelation>().Entities;
+        var sourceNodes = store.EntityRelation<AttackRelation>().Entities;
         AreEqual("{ }",         sourceNodes.Debug());
         
         var target10    = store.CreateEntity(10);
@@ -76,7 +76,7 @@ public static class Test_Relations_Delete
         
         int count = 0;
         // --- version: iterate all entity relations in O(N)
-        store.EntityRelations<AttackRelation>().For((ref AttackRelation relation, Entity entity) => {
+        store.EntityRelation<AttackRelation>().For((ref AttackRelation relation, Entity entity) => {
             switch (count++) {
                 case 0: AreEqual(1, entity.Id); AreEqual(10, relation.target.Id); break;
                 case 1: AreEqual(1, entity.Id); AreEqual(11, relation.target.Id); break;

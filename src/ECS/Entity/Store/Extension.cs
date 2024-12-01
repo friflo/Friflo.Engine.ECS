@@ -57,7 +57,7 @@ internal partial struct StoreExtension
     #endregion
     
 #region entity relations
-    internal                        AbstractEntityRelations[]   relationsMap;               //  8   - map & its EntityRelations created on demand
+    internal                        AbstractEntityRelations[]   relationsMap;               //  8   - map & its AbstractEntityRelations created on demand
     #endregion
     
     internal StoreExtension(PidType pidType)
