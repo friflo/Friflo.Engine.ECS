@@ -13,12 +13,26 @@ namespace Tests.ECS.Relations {
 
 public static class Test_Relations_Query
 {
-    // COMP_TAG
     [Test]
     public static void Test_Relations_query()
     {
         var store   = new EntityStore();
         var query   = store.QueryRelation<AttackRelation>();
+        QueryRelations(query);
+    }
+    
+    [Test]
+    public static void Test_Relations_query_filter()
+    {
+        var store   = new EntityStore();
+        var query   = store.QueryRelation<AttackRelation>(new QueryFilter());
+        QueryRelations(query);
+    }
+    
+    // COMP_TAG
+    private static void QueryRelations(ArchetypeQuery<AttackRelation> query)
+    {
+        var store   = query.Store;
         // --- test query without adding relations before
         AreEqual(0, query.Count);
         int count = 0;
