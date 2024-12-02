@@ -288,6 +288,16 @@ public static class Test_Relations
         AreEqual("Relations<IntRelation>[1]",   entity1.GetRelations<IntRelation>().ToString());
     }
     
+    /// Cover <see cref="Friflo.Engine.ECS.Relations.GenericEntityRelations{TRelation,TKey}.RemoveRelation"/>
+    [Test]
+    public static void Test_Relations_remove_missing_relation()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
+        IsFalse(entity1.RemoveRelation<IntRelation, int>(1));
+        AreEqual(0,   entity1.GetRelations<IntRelation>().Length);
+    }
+    
     [Test]
     public static void Test_Relations_int_relation()
     {

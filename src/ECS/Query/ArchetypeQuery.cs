@@ -407,10 +407,6 @@ public class ArchetypeQuery
         return true;
     }
     
-    internal static ArgumentException ReadOnlyException(Type type) {
-        return new ArgumentException($"Query does not contain Component type: {type.Name}");
-    }
-    
     internal string GetQueryChunksString() {
         return signatureIndexes.GetString($"QueryChunks[{ChunkCount}]  Components: ");
     }
