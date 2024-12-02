@@ -172,6 +172,13 @@ public sealed class EntitySchema
         return result;
     }
     
+    public ComponentType GetRelationType<T>()
+        where T : struct, IRelation
+    {
+        componentTypeByType.TryGetValue(typeof(T), out var result);
+        return result;
+    }
+    
     /// <summary>
     /// Return the <see cref="ScriptType"/> of a class extending <see cref="Script"/>.
     /// </summary>

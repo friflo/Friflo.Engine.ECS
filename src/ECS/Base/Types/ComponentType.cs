@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Relations;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
@@ -35,17 +36,17 @@ public abstract class ComponentType : SchemaType
     #endregion
 
 #region methods
-    internal abstract   StructHeap          CreateHeap();
-    internal abstract   bool                RemoveEntityComponent  (Entity entity);
-    internal abstract   bool                AddEntityComponent     (Entity entity);
-    internal abstract   bool                AddEntityComponentValue(Entity entity, object value);
+    internal abstract   StructHeap              CreateHeap();
+    [ExcludeFromCodeCoverage] internal virtual  bool RemoveEntityComponent  (Entity entity)                 => throw new InvalidOperationException();
+    [ExcludeFromCodeCoverage] internal virtual  bool AddEntityComponent     (Entity entity)                 => throw new InvalidOperationException();
+    [ExcludeFromCodeCoverage] internal virtual  bool AddEntityComponentValue(Entity entity, object value)   => throw new InvalidOperationException();
     
-    internal virtual    void                WriteRelations(ComponentWriter writer, Entity entity) => throw new InvalidOperationException();
-    internal virtual    void                ReadRelation(ComponentReader reader, Entity entity, JsonValue json) => throw new InvalidOperationException();
+    [ExcludeFromCodeCoverage] internal virtual  void WriteRelations(ComponentWriter writer, Entity entity)  => throw new InvalidOperationException();
+    [ExcludeFromCodeCoverage] internal virtual  void ReadRelation  (ComponentReader reader, Entity entity, JsonValue json) => throw new InvalidOperationException();
     
     
-    internal abstract   BatchComponent      CreateBatchComponent();
-    internal abstract   ComponentCommands   CreateComponentCommands();
+    [ExcludeFromCodeCoverage] internal virtual  BatchComponent      CreateBatchComponent()                  => throw new InvalidOperationException();
+    [ExcludeFromCodeCoverage] internal virtual  ComponentCommands   CreateComponentCommands()               => throw new InvalidOperationException();
     
     internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, Type indexValueType, int byteSize, Type relationType, Type keyType)
         : base (componentKey, type, Component)
@@ -117,7 +118,7 @@ internal sealed class RelationType<T> : ComponentType
     where T : struct, IRelation
 {
     #region properties
-    public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";
+    public   override   string          ToString()  => $"Relation: [{typeof(T).Name}]";
     #endregion
     
 
@@ -126,12 +127,6 @@ internal sealed class RelationType<T> : ComponentType
         : base(componentKey, structIndex, typeof(T), null, null, StructPadding<T>.ByteSize, relationType, keyType)
     {
     }
-    
-    internal override bool RemoveEntityComponent(Entity entity) => throw new InvalidOperationException();
-    
-    internal override bool AddEntityComponent(Entity entity) => throw new InvalidOperationException();
-    
-    internal override bool AddEntityComponentValue(Entity entity, object value) => throw new InvalidOperationException();
     
     internal override void WriteRelations(ComponentWriter writer, Entity entity)
     {
@@ -174,8 +169,4 @@ internal sealed class RelationType<T> : ComponentType
     internal override StructHeap CreateHeap() {
         return new StructHeap<T>(StructIndex);
     }
-    
-    internal override ComponentCommands CreateComponentCommands() => throw new InvalidOperationException();
-    
-    internal override BatchComponent CreateBatchComponent() => throw new InvalidOperationException();
 }

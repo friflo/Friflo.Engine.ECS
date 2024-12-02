@@ -1,5 +1,6 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS.Relations;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -80,6 +81,9 @@ public static class Test_ComponentSchema
             AreEqual("Component: [MyComponent1]",       componentType.ToString());
             AreEqual(4,                                 componentType.StructSize);
             IsTrue  (                                   componentType.IsBlittable);
+        } {
+            var componentType = schema.GetRelationType<IntRelation>();
+            AreEqual("Relation: [IntRelation]",        componentType.ToString());
         }
         // --- Engine.ECS types
         AssertBlittableComponent<Position>      (schema, true);
