@@ -59,8 +59,8 @@ public static class Test_Index
         var entity1 = entities[0];
         var entity2 = entities[1];
         var entity3 = entities[2];
-        var nameValues  = store.ComponentIndex<IndexedName, string>().Values;
-        var intValues   = store.ComponentIndex<IndexedInt, int>().Values;
+        var nameValues  = nameIndex.Values;
+        var intValues   = intIndex.Values;
         
         entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.Debug());
         entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.Debug());
