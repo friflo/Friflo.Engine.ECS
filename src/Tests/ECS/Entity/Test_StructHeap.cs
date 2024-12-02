@@ -79,6 +79,11 @@ public static class Test_StructHeap
             store.CreateEntity();
         }
         Mem.AreEqual(0, store.EnsureCapacity(0));
+        
+        // Coverage: no more free EntityNode's left. EnsureCapacity() will reallocate
+        var capacity = store.Capacity;
+        Mem.AreEqual(10, store.EnsureCapacity(10));
+        Mem.AreEqual(10 + capacity, store.Capacity);
     }
     
     [Test]
@@ -152,6 +157,7 @@ public static class Test_StructHeap
     {
         var store = new EntityStore { RecycleIds = false };
         store.RecycleIds = false;
+        Assert.IsFalse(store.RecycleIds);
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         entity1.DeleteEntity();
@@ -164,6 +170,7 @@ public static class Test_StructHeap
         
         // --- can change RecycleIds state on store
         store.RecycleIds = true;
+        Assert.IsTrue(store.RecycleIds);
         entity4.DeleteEntity();
         entity3.DeleteEntity();
         
