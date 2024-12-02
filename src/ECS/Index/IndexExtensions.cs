@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Index;
 
 // ReSharper disable once CheckNamespace
@@ -58,6 +59,7 @@ public static class IndexExtensions
     /// Executes in O(1) with default index. 
     /// </summary>
     [Obsolete("replace with indexer: ComponentIndex<TIndexedComponent,TValue>()[TValue]")]
+    [ExcludeFromCodeCoverage]
     public static Entities GetEntitiesWithComponentValue<TComponent, TValue>(this EntityStore store, TValue value)
         where TComponent: struct, IIndexedComponent<TValue>
     {
@@ -85,6 +87,7 @@ public static class IndexExtensions
     /// </list>
     /// </remarks>
     [Obsolete("replace with property: ComponentIndex<TIndexedComponent,TValue>().Values")]
+    [ExcludeFromCodeCoverage]
     public static  IReadOnlyCollection<TValue> GetAllIndexedComponentValues<TComponent, TValue>(this EntityStore store)
         where TComponent: struct, IIndexedComponent<TValue>
     {
@@ -112,6 +115,7 @@ public static class IndexExtensions
     /// </list>
     /// </remarks>
     [Obsolete("replace with property: LinkComponentIndex<TLinkComponent>().Values")]
+    [ExcludeFromCodeCoverage]
     public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
         where TComponent: struct, ILinkComponent
     {

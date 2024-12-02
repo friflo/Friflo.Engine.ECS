@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Relations;
 
 // ReSharper disable once CheckNamespace
@@ -129,6 +130,7 @@ public static class RelationExtensions
     /// </list>
     /// </remarks>
     [Obsolete("replace with property: EntityRelations<TRelation>().Entities")]
+    [ExcludeFromCodeCoverage]
     public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
@@ -142,6 +144,7 @@ public static class RelationExtensions
     /// Executes in O(N) N: number of all entity relations.
     /// </summary>
     [Obsolete("replace with method: EntityRelations<TRelation>().For()")]
+    [ExcludeFromCodeCoverage]
     public static void ForAllEntityRelations<TRelation>(this EntityStore store, ForEachEntity<TRelation> lambda)
         where TRelation : struct, IRelation
     {
@@ -155,6 +158,7 @@ public static class RelationExtensions
     /// Executes in O(1).  Most efficient way to iterate all entity relations.
     /// </summary>
     [Obsolete("replace with property: EntityRelations<TRelation>().Pairs")]
+    [ExcludeFromCodeCoverage]
     public static (Entities entities, Chunk<TRelation> relations) GetAllEntityRelations<TRelation>(this EntityStore store)
         where TRelation : struct, IRelation
     {
