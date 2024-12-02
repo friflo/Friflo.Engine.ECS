@@ -199,7 +199,7 @@ public class ArchetypeQuery
     /// Called by generic ArchetypeQuery constructors. <br/>
     /// <see cref="Disabled"/> entities excluded by default.
     /// </summary>
-    internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes, QueryFilter filter)
+    internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes, QueryFilter filter, ComponentType relationType)
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
@@ -207,7 +207,7 @@ public class ArchetypeQuery
         components      = new ComponentTypes(indexes);
         signatureIndexes= indexes;
         Filter          = filter ?? new QueryFilter();
-        relationQuery   = GetRelationQuery(components);
+        relationQuery   = relationType;
     }
     
     /// <summary>
@@ -453,19 +453,6 @@ public class ArchetypeQuery
     #endregion
     
 #region relations
-    private static ComponentType GetRelationQuery(in ComponentTypes componentTypes)
-    {
-        if (!componentTypes.HasAny(EntityStoreBase.Static.EntitySchema.relationTypes)) {
-            return null;
-        }
-        ComponentType result = null;
-        foreach (var componentType in componentTypes) {
-            if (componentType.RelationType == null) continue;
-            result = componentType;
-        }
-        return result;
-    }
-    
     private void AddRelationEntities(EntityStore entityStore, ref int count, ref int[] chunkPositions, ref Archetype[] archetypes)
     {
         var relations = entityStore.extension.relationsMap?[relationQuery.StructIndex];
@@ -514,15 +501,6 @@ public class ArchetypeQuery
             count++;
         }
         return count;
-    }
-    
-    // Note: Currently called only for queries with two or more components
-    internal void ValidateQuery()
-    {
-        if (relationQuery == null) {
-            return;
-        }
-        throw new InvalidOperationException("relation component query cannot have other query components");
     }
     #endregion
 }

@@ -51,8 +51,8 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     /// <inheritdoc cref="ArchetypeQuery.FreezeFilter"/>
     public new ArchetypeQuery<T1> FreezeFilter() { SetFreezeFilter();   return this; }
     
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter)
-        : base(store, signature.signatureIndexes, filter) {
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter, ComponentType relationType)
+        : base(store, signature.signatureIndexes, filter, relationType) {
     }
     
     /// <summary>

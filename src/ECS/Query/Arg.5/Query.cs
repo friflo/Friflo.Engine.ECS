@@ -60,7 +60,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     public new ArchetypeQuery<T1, T2, T3, T4, T5> FreezeFilter() { SetFreezeFilter();   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature, QueryFilter filter)
-        : base(store, signature.signatureIndexes, filter) {
+        : base(store, signature.signatureIndexes, filter, null) {
     }
     
     /// <summary>

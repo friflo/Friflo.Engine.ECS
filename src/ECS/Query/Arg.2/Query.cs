@@ -55,7 +55,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     public new ArchetypeQuery<T1, T2> FreezeFilter() { SetFreezeFilter();   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature, QueryFilter filter)
-        : base(store, signature.signatureIndexes, filter) {
+        : base(store, signature.signatureIndexes, filter, null) {
     }
     
     /// <summary>
