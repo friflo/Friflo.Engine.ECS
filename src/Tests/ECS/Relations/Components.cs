@@ -46,4 +46,15 @@ internal struct InventoryItem : IRelation<InventoryItemType>
     public override string              ToString()          => type.ToString();
 }
 
+/// Check generic relation
+[GenericInstanceType("relation-string", typeof(string))] 
+internal struct GenericRelation<T> : IRelation<int>
+{
+    public          int     key;
+    public          T       value;
+    public          int     GetRelationKey()    => key;
+    
+    public override string  ToString()          => key.ToString();
+}
+
 }

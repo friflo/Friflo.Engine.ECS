@@ -347,6 +347,17 @@ public static class Test_Relations
         IsNull  (entity.GetRelation<StringRelation, string>(null).value);
     }
     
+    /// Cover generic case at <see cref="Friflo.Engine.ECS.SchemaUtils.CreateRelationType{T}"/>
+    [Test]
+    public static void Test_Relations_generic_relation()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddRelation(new GenericRelation<string> { key = 42, value = "test" });
+        AreEqual("{ 42 }", entity.GetRelations<GenericRelation<string>>().Debug());
+        AreEqual("test",   entity.GetRelation<GenericRelation<string>, int>(42).value);
+    }
+    
     
     /* COMP_TAG obsolete:
        Relations do not implement IComponent anymore. So HasComponent(), GetComponent() and AddComponent() will result in a compiler error
