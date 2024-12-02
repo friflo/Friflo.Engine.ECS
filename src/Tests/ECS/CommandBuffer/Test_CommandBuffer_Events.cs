@@ -21,8 +21,10 @@ public static class Test_CommandBuffer_Events
                     break;
                 case 1:
                     Mem.IsTrue(ComponentChangedAction.Update == changed.Action);
-                    var old = changed.OldComponent<Position>();
-                    Mem.AreEqual(new Position(1,1,1), old);
+                    Mem.AreEqual(new Position(1,1,1), changed.OldComponent<Position>());
+#pragma warning disable CS0618 // Type or member is obsolete
+                    Mem.AreEqual(new Position(1,1,1), (Position)changed.DebugOldComponent);
+#pragma warning restore CS0618 // Type or member is obsolete
                     break;
            }
         };
@@ -54,6 +56,22 @@ public static class Test_CommandBuffer_Events
         
         AreEqual(2, addCount);
         AreEqual(1, removeCount);
+    }
+    
+    /// Cover changed Action == null at <see cref="Friflo.Engine.ECS.ComponentCommands{T}.SendCommandEvents"/>
+    [Test]
+    public static void Test_CommandBuffer_Events_cover_change_null()
+    {
+        var store   = new EntityStore();
+        store.OnComponentAdded += changed => { };
+
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new Position());
+        var ecb     = store.GetCommandBuffer();
+        ecb.ReuseBuffer = true;
+        
+        ecb.RemoveComponent<Position>(entity.Id);
+        ecb.Playback();
     }
     
     [Test]
