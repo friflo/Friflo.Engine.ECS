@@ -124,6 +124,17 @@ public static class Test_Index
         AreEqual("Components: [IndexedInt]",        node.IsOwner.ToString());
         AreEqual("Components: [AttackComponent]",   node.IsLinked.ToString());
     }
+    
+    /// Cover <see cref="EntityIndexUtils.RemoveComponentValue"/>
+    [Test]
+    public static void Test_Index_cover_removing_missing_target_entity()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        var index = StoreIndex.GetIndex(store, StructInfo<LinkComponent>.Index);
+        var entityIndex = (EntityIndex)index;
+        EntityIndexUtils.RemoveComponentValue(entity.Id, 42, entityIndex);
+    }
 }
 
 }
