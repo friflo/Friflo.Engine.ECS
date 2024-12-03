@@ -4,9 +4,9 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Storage for all entity relations of the specified <typeparamref name="TRelation"/> type.
+/// Storage for all entity relations of the specified <typeparamref name="TRelation"/> type.<br/>
+/// An instance is returned via <see cref="RelationExtensions.EntityRelations{TRelation}"/>. 
 /// </summary>
-/// <typeparam name="TRelation"></typeparam>
 public readonly struct EntityRelations <TRelation>
     where TRelation : struct, IRelation
 {

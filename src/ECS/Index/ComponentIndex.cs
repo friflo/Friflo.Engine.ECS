@@ -5,7 +5,8 @@ using Friflo.Engine.ECS.Index;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// The index for <see cref="IIndexedComponent{TValue}"/> struct's to search entities with a specific component value in O(1).
+/// The index for <see cref="IIndexedComponent{TValue}"/> struct's to search entities with a specific component value in O(1).<br/>
+/// An instance is returned via <see cref="IndexExtensions.ComponentIndex{TIndexedComponent,TValue}"/>. 
 /// </summary>
 public readonly struct ComponentIndex <TIndexedComponent,TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
