@@ -381,11 +381,11 @@ public static class Test_Entity_Tree
         AreEqual(2,             store.Count);
         var node0 = store.GetEntityNode(0);
         var node2 = store.GetEntityNode(2);
-        AreEqual("",                node0.ToString());
-        AreEqual("flags: Created",  node2.ToString());
+        AreEqual("",            node0.ToString());
+        AreEqual("Created",     node2.ToString());
         
-        AreEqual(NullNode,          node0.Flags);
-        AreEqual(Created,           node2.Flags);
+        AreEqual(NullNode,      node0.Flags);
+        AreEqual(Created,       node2.Flags);
     }
     
     [Test]

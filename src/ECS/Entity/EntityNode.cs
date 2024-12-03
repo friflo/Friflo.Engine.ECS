@@ -108,14 +108,9 @@ public struct EntityNode
     {
         var sb = new StringBuilder();
         if (archetype != null) {
-            sb.Append("flags: ");
-            var startPos = sb.Length;
-            if (startPos < sb.Length) {
-                sb.Append(" | ");
-            }
-            sb.Append("Created");
+            return "Created";
         }
-        return sb.ToString();
+        return "";
     }
     #endregion
 }
