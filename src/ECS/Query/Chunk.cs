@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -33,7 +33,7 @@ public readonly struct Chunk<T>
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
     public              Span<T>     Span                    => new(ArchetypeComponents, start, Length);
     
-    public   readonly   T[]         ArchetypeComponents;    //  8
+    private   readonly   T[]         ArchetypeComponents;    //  8
     
     /// <summary> Return the number of components in a <see cref="Chunk{T}"/>. </summary>
     public   readonly   int         Length;                 //  4
