@@ -26,3 +26,33 @@ end_of_line = crlf
 
 [*.sh]
 end_of_line = lf
+
+
+[*.{cs,vb}]
+
+# Notes
+# User Rider to modify .editorconfig
+# - Style/rule change are instantaneous shown in Rider
+# - validation errors are highlighted in .editorconfig 
+
+# --- Naming rules
+
+dotnet_naming_rule.private_fields_should_be__camelcase.severity = warning
+dotnet_naming_rule.private_fields_should_be__camelcase.symbols  = private_fields
+dotnet_naming_rule.private_fields_should_be__camelcase.style    = camelcase
+
+
+# --- Symbol specifications
+
+# EDIT: treat 'internal' also as private field
+dotnet_naming_symbols.private_fields.applicable_kinds           = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private, protected, protected_internal, private_protected, internal
+dotnet_naming_symbols.private_fields.required_modifiers         =
+
+
+# --- Naming styles
+
+dotnet_naming_style.camelcase.required_prefix = 
+dotnet_naming_style.camelcase.required_suffix =
+dotnet_naming_style.camelcase.word_separator  =
+dotnet_naming_style.camelcase.capitalization  = camel_case
