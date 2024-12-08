@@ -384,6 +384,12 @@ public readonly partial struct Entity : IEquatable<Entity>
     // ------------------------------------ component methods -------------------------------------
 #region component - methods
     /// <summary>Return true if the entity contains a component of the given type.</summary>
+    /// <returns></returns>
+    public  bool    HasComponent (Type comp_type) {
+        var type = GetArchetype() ?? throw EntityNullException();
+        return type.heapMap[SchemaTypeUtils.GetStructIndex(comp_type)] != null;
+    }
+    /// <summary>Return true if the entity contains a component of the given type.</summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public  bool    HasComponent<T> ()  where T : struct, IComponent {
