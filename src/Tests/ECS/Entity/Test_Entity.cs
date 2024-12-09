@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS.Index;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -204,7 +205,7 @@ public static class Test_Entity
     }
      
     [Test]
-    public static void Test_EntityStore_CloneEntity()
+    public static void Test_EntityStore_CloneEntity_1()
     {
         var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
@@ -237,7 +238,7 @@ public static class Test_Entity
     }
     
     [Test]
-    public static void Test_EntityStore_CopyTo()
+    public static void Test_EntityStore_CloneEntity_2()
     {
         var store       = new EntityStore();
         var entity1      = store.CreateEntity();
@@ -248,6 +249,25 @@ public static class Test_Entity
         var list2 = entity2.GetComponent<CopyComponent>().list;
         AreEqual(list1, list2);
         AreNotSame(list1, list2);
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_IndexedComponent()
+    {
+        var store   = new EntityStore();
+        var index   = store.ComponentIndex<IndexedInt,int>();
+        var entity = store.CreateEntity(1);
+        
+        entity.AddComponent(new IndexedInt { value = 42 });
+        var entities = index[42];
+        AreEqual(1,         entities.Count);
+        AreEqual("{ 1 }",   entities.Debug());
+        
+        var clone = store.CloneEntity(entity);
+        AreEqual(42, clone.GetComponent<IndexedInt>().value);
+        entities = index[42];
+        AreEqual(2,         entities.Count);
+        AreEqual("{ 1, 2 }",entities.Debug());
     }
     
     [Test]

@@ -308,12 +308,12 @@ public sealed class Archetype
     }
     
     /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.IsBlittable"/></remarks>
-    internal static void CopyComponents(Archetype arch, CopyContext context)
+    internal static void CloneComponents(Archetype arch, CopyContext context)
     {
         var sourceIndex = context.source.compIndex;
         var targetIndex = context.target.compIndex;
         foreach (var sourceHeap in arch.structHeaps) {
-            sourceHeap.CopyComponent(sourceIndex, targetIndex, context);
+            sourceHeap.CloneComponent(sourceIndex, targetIndex, context);
         }
     }
     

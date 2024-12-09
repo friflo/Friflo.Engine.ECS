@@ -92,13 +92,12 @@ public partial class EntityStore
         var clone       = new Entity(this, id, revision);
         
         // var isBlittable = IsBlittable(entity);
-
-        // todo optimize - serialize / deserialize only non blittable components and scripts
         // if (true) {
+        
         var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
         // CopyComponents() must be used only in case all component types are blittable
         var context = new CopyContext(entity, clone);
-        Archetype.CopyComponents(archetype, context);
+        Archetype.CloneComponents(archetype, context);
         if (clone.HasComponent<TreeNode>()) {
             clone.GetComponent<TreeNode>() = default;   // clear child ids. See child entities note in remarks.
         }
@@ -109,7 +108,8 @@ public partial class EntityStore
             scriptClone.entity  = clone;
             extension.AddScript(clone, scriptClone, scriptType);
         }
-        /* } else {
+        /* keep old implementation using JSON serialization for reference
+        } else {
             // --- serialize entity
             var converter       = EntityConverter.Default;
             converter.EntityToDataEntity(entity, dataBuffer, false);

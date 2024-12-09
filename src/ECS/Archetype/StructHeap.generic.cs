@@ -78,14 +78,21 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     /// <see cref="ComponentType"/>'s.<br/>
     /// If not <see cref="ComponentType.IsBlittable"/> serialization must be used.
     /// </remarks>
-    internal override void CopyComponent(int sourcePos, int targetPos, in CopyContext context)
+    internal override void CloneComponent(int sourcePos, int targetPos, in CopyContext context)
     {
         var copyValue = CopyValueUtils<T>.CopyValue;
+        ref var source = ref components[sourcePos];
+        ref var target = ref components[targetPos];
         if (copyValue == null) {
-            components[targetPos] = components[sourcePos];
+            target = source;
+        } else {
+            copyValue(source, ref target, context);
+        }
+        if (!StructInfo<T>.HasIndex) {
             return;
         }
-        copyValue(components[sourcePos], ref components[targetPos], context);
+        var targetEntity = context.target;
+        StoreIndex.AddIndex(targetEntity.store, targetEntity.Id, source);
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
