@@ -41,6 +41,10 @@ dotnet_naming_rule.private_fields_should_be__camelcase.severity = warning
 dotnet_naming_rule.private_fields_should_be__camelcase.symbols  = private_fields
 dotnet_naming_rule.private_fields_should_be__camelcase.style    = camelcase
 
+dotnet_naming_rule.static_fields_should_be__pascalcase.severity = warning
+dotnet_naming_rule.static_fields_should_be__pascalcase.symbols  = static_fields
+dotnet_naming_rule.static_fields_should_be__pascalcase.style    = pascalcase
+
 
 # --- Symbol specifications
 
@@ -49,6 +53,10 @@ dotnet_naming_symbols.private_fields.applicable_kinds           = field
 dotnet_naming_symbols.private_fields.applicable_accessibilities = private, protected, protected_internal, private_protected, internal
 dotnet_naming_symbols.private_fields.required_modifiers         =
 
+dotnet_naming_symbols.static_fields.applicable_kinds           = field
+dotnet_naming_symbols.static_fields.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.static_fields.required_modifiers         = static
+
 
 # --- Naming styles
 
@@ -56,3 +64,8 @@ dotnet_naming_style.camelcase.required_prefix =
 dotnet_naming_style.camelcase.required_suffix =
 dotnet_naming_style.camelcase.word_separator  =
 dotnet_naming_style.camelcase.capitalization  = camel_case
+
+dotnet_naming_style.pascalcase.required_prefix =
+dotnet_naming_style.pascalcase.required_suffix =
+dotnet_naming_style.pascalcase.word_separator  =
+dotnet_naming_style.pascalcase.capitalization  = pascal_case

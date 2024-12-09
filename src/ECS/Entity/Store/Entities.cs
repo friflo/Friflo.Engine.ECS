@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Friflo.Engine.ECS.Serialize;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
 
@@ -126,6 +125,7 @@ public partial class EntityStore
         return clone;
     }
     
+    // ReSharper disable once UnusedMember.Local
     [ExcludeFromCodeCoverage]
     private static void AssertNoError(string error) {
         if (error == null) {
@@ -134,6 +134,7 @@ public partial class EntityStore
         throw new InvalidOperationException($"unexpected error: {error}");
     }
     
+    // ReSharper disable once UnusedMember.Local
     [ExcludeFromCodeCoverage] // unused - method obsolete
     private static bool IsBlittable(Entity original)
     {
