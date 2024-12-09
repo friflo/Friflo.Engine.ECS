@@ -83,13 +83,14 @@ internal static class SchemaUtils
     {
         var scriptKey   = GetComponentKey(typeof(T));
         var isBlittable = SchemaType.GetBlittableType(typeof(T)) == BlittableType.Blittable;
-        CloneScript cloneScript = null;
-        if (isBlittable) {
-            cloneScript = CreateCloneScriptDelegate();
-        }
-        return new ScriptType<T>(scriptKey, scriptIndex, isBlittable, cloneScript);
+        // CloneScript cloneScript = null;
+        // if (isBlittable) {
+        //     cloneScript = CreateCloneScriptDelegate();
+        // }
+        return new ScriptType<T>(scriptKey, scriptIndex, isBlittable);
     }
     
+    [ExcludeFromCodeCoverage] // unused - kept as reference. Was used to clone scripts.
     private static CloneScript CreateCloneScriptDelegate()
     {
         var flags           = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;

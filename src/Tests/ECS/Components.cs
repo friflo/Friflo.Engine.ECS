@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Friflo.Engine.ECS;
 using static NUnit.Framework.Assert;
@@ -46,6 +47,24 @@ public struct MyComponent6 : IComponent { public int b; }
 [ComponentKey("my7")]
 public struct MyComponent7 : IComponent { public int b; }
 
+/// <summary>
+/// Component contains a non blittable field typ. This requires a <see cref="CopyValue"/> method.
+/// </summary>
+public struct CopyComponent : IComponent
+{
+    public List<int> list;
+    
+    public static void CopyValue(in CopyComponent source, ref CopyComponent target, in CopyContext context) {
+        if (source.list == null) {
+            target.list = null;
+            return;
+        }
+        target.list ??= new List<int>();
+        target.list.Clear();
+        target.list.AddRange(source.list);
+    }
+}
+
 public struct EntityReference : IComponent {
     public          Entity      entity;
     
@@ -57,11 +76,19 @@ public struct NonBlittableList          : IComponent { internal List<int>       
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }
 public struct NonBlittableCycle         : IComponent { internal CycleClass              cycle;  }
 public struct NonBlittableCycle2        : IComponent { internal CycleClass1             cycle1; }
+public struct NonBlittableComponent     : IComponent { internal int[]                   array;  }
 
-public struct BlittableDatetime         : IComponent { public DateTime      dateTime;    }
-public struct BlittableGuid             : IComponent { public Guid          guid;        }
-public struct BlittableBigInteger       : IComponent { public BigInteger    bigInteger;  }
-public struct BlittableUri              : IComponent { public Uri           uri;         } // throws exception when serialized
+public struct BlittableEnum             : IComponent { public BlittableEnumType value;       }
+public struct BlittableDatetime         : IComponent { public DateTime          dateTime;    }
+public struct BlittableGuid             : IComponent { public Guid              guid;        }
+public struct BlittableBigInteger       : IComponent { public BigInteger        bigInteger;  }
+public struct BlittableUri              : IComponent { public Uri               uri;         } // throws exception when serialized
+
+public enum BlittableEnumType
+{
+    One = 1,
+    Two = 2,
+}
 
 [ComponentKey(null)]
 public struct NonSerializedComponent    : IComponent { public int           value;  }
@@ -151,7 +178,14 @@ public struct TestTag5 : ITag { }
 // ------------------------------------------------ scripts
 [CodeCoverageTest]
 [ComponentKey("script1")]
-public class TestScript1    : Script { public   int     val1; }
+public class TestScript1    : Script
+{
+    public   int     val1;
+    
+    private static void CopyScript(TestScript1 source, TestScript1 target) {
+        target.val1 = source.val1;
+    }
+}
 
 [ComponentKey("script2")]
 public class TestScript2    : Script { public   int     val2; }
@@ -162,7 +196,14 @@ class TestScript3           : Script { public   int     val3; }
 [ComponentKey("script4")]
 class TestScript4           : Script { public   int     val4; }
 
-class NonBlittableScript    : Script { internal int[]   array; }
+class NonBlittableScript    : Script
+{
+    internal int[]   array;
+    
+    private static void CopyScript(NonBlittableScript source, NonBlittableScript target) {
+        target.array = source.array?.ToArray();
+    }
+}
 
 [ComponentKey("test")]
 class TestComponent : Script

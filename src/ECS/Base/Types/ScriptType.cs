@@ -23,7 +23,6 @@ public abstract class ScriptType : SchemaType
     public   readonly   int             ScriptIndex;    //  4
     /// <summary> Return true if <see cref="Script"/>'s of this type can be copied. </summary>
     public   readonly   bool            IsBlittable;    //  4
-    private  readonly   CloneScript     cloneScript;    //  8
     #endregion
     
 #region methods
@@ -31,19 +30,18 @@ public abstract class ScriptType : SchemaType
     internal abstract   void            ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "MemberwiseClone is part of BCL")]
-    internal ScriptType(string scriptKey, int scriptIndex, Type type, bool isBlittable, CloneScript cloneScript)
+    internal ScriptType(string scriptKey, int scriptIndex, Type type, bool isBlittable)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
-        ScriptIndex         = scriptIndex;
-        IsBlittable         = isBlittable;
-        this.cloneScript    = cloneScript;
+        ScriptIndex = scriptIndex;
+        IsBlittable = isBlittable;
     }
     
-    internal Script CloneScript(Script original)
-    {
+    internal abstract Script CloneScript(Script source);
+    /* {
         var clone = cloneScript(original);
         return (Script)clone;
-    }
+    }*/
     #endregion
 }
 
@@ -69,13 +67,25 @@ internal sealed class ScriptType<T> : ScriptType
 
    
 #region methods
-    internal ScriptType(string scriptComponentKey, int scriptIndex, bool isBlittable, CloneScript cloneScript)
-        : base(scriptComponentKey, scriptIndex, typeof(T), isBlittable, cloneScript)
+    internal ScriptType(string scriptComponentKey, int scriptIndex, bool isBlittable)
+        : base(scriptComponentKey, scriptIndex, typeof(T), isBlittable)
     {
     }
     
     internal override Script CreateScript() {
         return new T();
+    }
+    
+    internal override Script CloneScript(Script source) {
+        var clone = new T();
+        var copyScript = CopyScriptUtils<T>.CopyScript;
+        if (copyScript != null) {
+            copyScript((T)source, clone);
+            return clone;
+        }
+        var name = typeof(T).Name;
+        var msg = $"at {typeof(T).Namespace}.{name} - expect: static void CopyScript({name} source, {name} target)";
+        throw new MissingMethodException(msg);
     }
     
     internal override void ReadScript(ObjectReader reader, JsonValue json, Entity entity) {
