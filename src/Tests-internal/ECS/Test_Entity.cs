@@ -232,6 +232,17 @@ public static class Test_Entity
         AreEqual(1,         store.EntityScripts.Length);
         AreSame (script2,   store.EntityScripts[0].scripts[0]);
     }
+    
+    [Test]
+    public static void Test_Entity_CopyValue_no_alloc()
+    {
+        var copyValue = CopyValueUtils<CopyComponent>.CopyValue;
+        var source = new CopyComponent();
+        var target = new CopyComponent();
+        var start = Mem.GetAllocatedBytes();
+        copyValue(source, ref target, default);
+        Mem.AssertNoAlloc(start);
+    }
 }
 
 internal struct MyTag : ITag { }
