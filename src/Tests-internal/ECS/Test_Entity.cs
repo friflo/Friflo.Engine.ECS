@@ -243,6 +243,20 @@ public static class Test_Entity
         copyValue(source, ref target, default);
         Mem.AssertNoAlloc(start);
     }
+    
+    [Test]
+    public static void Test_Entity_CopyValue_ArgumentException()
+    {
+        var copyValue = CopyValueUtils<NonBlittableArgumentException>.CopyValue;
+        var source = new NonBlittableArgumentException();
+        var target = new NonBlittableArgumentException();
+        
+        var e = Throws<ArgumentException>(() => {
+            copyValue(source, ref target, default);
+        });
+        var expect = "Incompatible signature at Tests.ECS.NonBlittableArgumentException.CopyValue() - expect: static void CopyValue(in NonBlittableArgumentException source, ref NonBlittableArgumentException target, in CopyContext context)";
+        AreEqual(expect, e!.Message);
+    }
 }
 
 internal struct MyTag : ITag { }

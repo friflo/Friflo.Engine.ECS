@@ -65,6 +65,13 @@ public struct CopyComponent : IComponent
     }
 }
 
+public struct NonBlittableArgumentException : IComponent
+{
+    public int[] array;
+    /// Invalid signature - missing in modifier for parameter: source
+    public static void CopyValue(NonBlittableArgumentException source, ref NonBlittableArgumentException target, in CopyContext context) { }
+}
+
 public struct EntityReference : IComponent {
     public          Entity      entity;
     
