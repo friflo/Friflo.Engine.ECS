@@ -24,11 +24,12 @@ internal static class SchemaTypeUtils
         return componentType.IndexType != null;
     }
     
+    /* obsolete method
     internal static bool IsRelation(Type type)
     {
         var componentType = EntityStoreBase.Static.EntitySchema.ComponentTypeByType[type];
         return componentType.RelationType != null;
-    }
+    } */
     
     internal static int GetTagIndex(Type type)
     {

@@ -72,7 +72,7 @@ internal static class StructInfo<T>
     
     internal static readonly    bool    HasIndex    = SchemaTypeUtils.HasIndex(typeof(T));
     
-    internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T));
+    // internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T)); obsolete property
 }
 
 internal sealed class ComponentType<T> : ComponentType
