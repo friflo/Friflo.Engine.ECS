@@ -280,7 +280,7 @@ public static class Test_Entity
         var e = Throws<MissingMethodException>(() => {
             store.CloneEntity(entity1);    
         });
-        AreEqual("at Tests.ECS.NonBlittableComponent - expect: static void CopyValue(in NonBlittableComponent source, ref NonBlittableComponent target, in CopyContext context)", e!.Message);
+        AreEqual("type: Tests.ECS.NonBlittableComponent - expect: static void CopyValue(in NonBlittableComponent source, ref NonBlittableComponent target, in CopyContext context)", e!.Message);
     }
     
     [Test]
@@ -293,7 +293,7 @@ public static class Test_Entity
         var e = Throws<MissingMethodException>(() => {
             store.CloneEntity(entity1);    
         });
-        AreEqual("at Tests.ECS.TestScript2 - expect: static void CopyScript(TestScript2 source, TestScript2 target)", e!.Message);
+        AreEqual("type: Tests.ECS.TestScript2 - expect: static void CopyScript(TestScript2 source, TestScript2 target)", e!.Message);
     }
     
     [Test]

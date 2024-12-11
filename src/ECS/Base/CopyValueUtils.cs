@@ -44,13 +44,13 @@ internal static class CopyValueUtils
     
     private static void MissingCopyValue<TValue>(in TValue value, ref TValue target, in CopyContext context) {
         var name = typeof(TValue).Name;
-        var msg = $"at {typeof(TValue).Namespace}.{name} - expect: static void CopyValue(in {name} source, ref {name} target, in CopyContext context)";
+        var msg = $"type: {typeof(TValue).Namespace}.{name} - expect: static void CopyValue(in {name} source, ref {name} target, in CopyContext context)";
         throw new MissingMethodException(msg);
     }
     
     private static void IncompatibleSignature<TValue>(in TValue value, ref TValue target, in CopyContext context) {
         var name = typeof(TValue).Name;
-        var msg = $"Incompatible signature at {typeof(TValue).Namespace}.{name}.CopyValue() - expect: static void CopyValue(in {name} source, ref {name} target, in CopyContext context)";
+        var msg = $"Incompatible method signature: {typeof(TValue).Namespace}.{name}.CopyValue() - expect: static void CopyValue(in {name} source, ref {name} target, in CopyContext context)";
         throw new ArgumentException(msg);
     }
 }

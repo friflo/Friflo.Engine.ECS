@@ -84,7 +84,7 @@ internal sealed class ScriptType<T> : ScriptType
             return clone;
         }
         var name = typeof(T).Name;
-        var msg = $"at {typeof(T).Namespace}.{name} - expect: static void CopyScript({name} source, {name} target)";
+        var msg = $"type: {typeof(T).Namespace}.{name} - expect: static void CopyScript({name} source, {name} target)";
         throw new MissingMethodException(msg);
     }
     

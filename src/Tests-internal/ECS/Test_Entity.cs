@@ -254,7 +254,7 @@ public static class Test_Entity
         var e = Throws<ArgumentException>(() => {
             copyValue(source, ref target, default);
         });
-        var expect = "Incompatible signature at Tests.ECS.NonBlittableArgumentException.CopyValue() - expect: static void CopyValue(in NonBlittableArgumentException source, ref NonBlittableArgumentException target, in CopyContext context)";
+        var expect = "Incompatible method signature: Tests.ECS.NonBlittableArgumentException.CopyValue() - expect: static void CopyValue(in NonBlittableArgumentException source, ref NonBlittableArgumentException target, in CopyContext context)";
         AreEqual(expect, e!.Message);
     }
 }
