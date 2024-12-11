@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -15,7 +15,7 @@ public static partial class ChunkExtensions
         var entities    = chunks.Entities;
         var start       = entities.Start;
         var length      = entities.Length;
-        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
+        var span1       = chunks.Chunk1.Span;
         
         unsafe {
 #pragma warning disable CS8500
@@ -37,8 +37,8 @@ public static partial class ChunkExtensions
         var entities    = chunks.Entities;
         var start       = entities.Start;
         var length      = entities.Length;
-        var spanIds     = entities.Archetype.EntityIds.Slice             (start, length);
-        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
+        var spanIds     = entities.Ids;
+        var span1       = chunks.Chunk1.Span;
         
         unsafe {
 #pragma warning disable CS8500
