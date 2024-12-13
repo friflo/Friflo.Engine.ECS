@@ -12,7 +12,7 @@
 [![Demos](https://img.shields.io/badge/Demos-22aa22?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 [![C# API](https://img.shields.io/badge/C%23%20API-22aaaa?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine-docs)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/nFfrhgQkb8)
-[![Wiki](https://img.shields.io/badge/Wiki-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
+[![Docs](https://img.shields.io/badge/Docs-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
 
 </div>
 
@@ -32,7 +32,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 ## News
 
 - [x] Breaking changes in `3.0.0-preview.16`
-  > renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
+  > renamed `IRelationComponent<>` -> `IRelation<>`. See [Docs ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
 
 - [x] ![new](docs/images/new.svg) Finally **Friflo.Engine.ECS** is now in its own new repository!  
   The ECS is moved including its git history. Everything not related to the ECS is omitted.
@@ -56,7 +56,6 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
   - [🚀 Hello World](#-hello-world)
   - [⌘ Component Types](#-component-types)
   - [⚙️ Systems](#️-systems)
-* [📖 Wiki](#-wiki)
 * [🏁 Benchmarks](#-ecs-benchmarks)
 
 ## Feature highlights
@@ -92,7 +91,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
         <img src="docs/images/access_violation/Unity_access_violation.png"   width="213" height="131"/>
       </details>
 
-Complete feature list at [Wiki ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
+Complete feature list at [Docs ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
 
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
@@ -155,13 +154,7 @@ An ECS provide two strengths:
 # ⏩ Examples
 
 This section contains two typical use cases when using an ECS.  
-More examples are in the GitHub Wiki.
-
-[**Examples - General**](https://friflo.gitbook.io/friflo.engine.ecs/examples/general)  
-Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and how to use them.
-
-[**Examples - Optimization**](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization)  
-Provide techniques how to improve ECS performance.
+More examples describing use of various features are in the [friflo ECS - Documentation](https://friflo.gitbook.io/friflo.engine.ecs).
 
 
 ## **🚀 Hello World**
@@ -198,7 +191,7 @@ All query optimizations are using the same `query` but with different enumeratio
 
 > [!IMPORTANT]
 > Breaking changes in `3.0.0-preview.16`  
-> renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
+> renamed `IRelationComponent<>` -> `IRelation<>`. See [Docs ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
 
 ![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
 
@@ -359,33 +352,6 @@ entities            number of entities matching a QuerySystem
 ```
 
 <br/>
-
-
-# 📖 Wiki
-
-The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
-
-- [**Examples - General**](https://friflo.gitbook.io/friflo.engine.ecs/examples/general)  
-  Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.  
-  Contains an example for [Native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot) integration.
-
-- [**Examples - Optimization**](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization)  
-  Provide you techniques how to improve ECS performance.
-
-- [**Extensions**](https://friflo.gitbook.io/friflo.engine.ecs/extensions/unity-extension)  
-  Projects extending Friflo.Engine.ECS with additional features.
-  
-- [**Features**](https://friflo.gitbook.io/friflo.engine.ecs/package/features)  
-  Integration possibilities, a complete feature list and performance characteristics 🔥.
-
-- [**Library**](https://friflo.gitbook.io/friflo.engine.ecs/package/library)  
-  List supported platforms, properties of the assembly dll and build statistics.
-
-- [**Release Notes**](https://friflo.gitbook.io/friflo.engine.ecs/package/release-notes)  
-  List of changes of every release available on nuget.
-
-<br/>
-
 
 
 # 🏁 ECS Benchmarks
