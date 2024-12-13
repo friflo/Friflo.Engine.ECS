@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -21,7 +21,7 @@ namespace Friflo.Engine.ECS;
 /// different entity store implementations like the <see cref="RawEntityStore"/>.
 /// </remarks>
 [CLSCompliant(true)]
-public abstract partial class EntityStoreBase
+public abstract partial class EntityStoreBase : IDisposable
 {
 #region public properties
     /// <summary>Number of all entities stored in the entity store</summary>
@@ -151,8 +151,19 @@ public abstract partial class EntityStoreBase
         internBase.entityLists          = new StackArray<EntityList>        (Array.Empty<EntityList>());
         singleIds                       = new int[Static.SingleMax];
     }
+
+    public virtual void Dispose()
+    {
+        if (archs == null) return;
+        for (int i = 0; i < archsCount; i++)
+        {
+            var arch = archs[i];
+            if (arch != null)
+                arch.Dispose();
+        }
+    }
     #endregion
-    
+
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);
     
 #region exceptions

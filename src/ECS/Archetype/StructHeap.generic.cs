@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -38,7 +38,12 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     {
         components          = new T[ArchetypeUtils.MinCapacity];
     }
-    
+
+    public override void Dispose()
+    {
+        components = null;
+    }
+
     internal override void StashComponent(int compIndex) {
         componentStash = components[compIndex];
     }

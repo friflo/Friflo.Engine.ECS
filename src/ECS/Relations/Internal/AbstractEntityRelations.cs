@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 
@@ -12,7 +12,7 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
-internal abstract class AbstractEntityRelations
+internal abstract class AbstractEntityRelations : IDisposable
 {
     internal            int                         Count       => archetype.Count;
     public    override  string                      ToString()  => $"relation count: {archetype.Count}";
@@ -46,8 +46,14 @@ internal abstract class AbstractEntityRelations
         var types       = new ComponentTypes(componentType);
         relationBit     = (int)types.bitSet.l0;
     }
-    
-    internal  abstract bool                 AddComponent<TRelation>      (int id, in TRelation component) where TRelation : struct, IRelation;
+
+    public void Dispose()
+    {
+        idHeap.Dispose();
+        linkIdsHeap.Dispose();
+    }
+
+    internal abstract bool                 AddComponent<TRelation>      (int id, in TRelation component) where TRelation : struct, IRelation;
     internal  abstract IRelation            GetRelationAt                (int id, int index);
     internal  virtual  ref TRelation        GetEntityRelation<TRelation >(int id, int target)              where TRelation  : struct   => throw new InvalidOperationException($"type: {GetType().Name}");
     internal  virtual  void                 AddIncomingRelations         (int target, List<EntityLink> result)                         => throw new InvalidOperationException($"type: {GetType().Name}");

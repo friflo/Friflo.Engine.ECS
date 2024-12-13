@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS.Index;
 /// Base class to enable implementing a custom component index.<br/>
 /// A custom component index can be implemented to optimize indexing or component queries for a specific component type.   
 /// </summary>
-public abstract class AbstractComponentIndex
+public abstract class AbstractComponentIndex : IDisposable
 {
 #region properties    
     internal  abstract  int             Count { get; }
@@ -46,6 +46,11 @@ public abstract class AbstractComponentIndex
         structIndex         = componentType.StructIndex;
         var types           = new ComponentTypes(componentType);
         indexBit            = (int)types.bitSet.l0;
+    }
+
+    public void Dispose()
+    {
+        idHeap.Dispose();
     }
 }
 
