@@ -41,7 +41,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
       [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#boosted-query) with maximum performance.
 
 - [x] Released v3.0.0-preview  
-      Introduced: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** in O(1). See [Component Types](#-component-types)
+      Introduced: **Index / Search** with O(1), **Relationships** 1:1 and 1:many and **Relations**. See [New features in 3.0.0](#new-features-in-300)
 
 - [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
@@ -187,33 +187,27 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **⌘ Component Types**
+## **New features in 3.0.0**
 
-> [!IMPORTANT]
-> Breaking changes in `3.0.0-preview.16`  
-> renamed `IRelationComponent<>` -> `IRelation<>`. See [Docs ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
+- [Index / Search](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) used to search entities with specific component values in O(1). E.g
+  - To lookup entities having a *TileComponent* with a specific tile id.
+  - To lookup network entities with a *NetComponent* using a custom identifier like a `Guid`,`long` or a `string`.
 
-![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
+- [Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships) to create links / connections between entities. Used for:
+  - Attack systems
+  - Path finding / Route tracing
+  - Model social networks. E.g friendship, alliances or rivalries
+  - Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
+    using entities as *nodes* and links or relations as *edges*
 
-For specific use cases there is now a set of specialized component interfaces providing additional features.    
-*Note:* Newly added features do not affect the behavior or performance of existing features.
-
-The specialized component types enable entity relationships, relations and full-text search.  
-Typical use case for entity relationships in a game are:
-- Attack systems
-- Path finding / Route tracing
-- Model social networks. E.g friendship, alliances or rivalries
-- Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
-  using entities as *nodes* and links or relations as *edges*.
-
-Use cases for relations:
-- Inventory systems
-- Add multiple components of the same type to an entity
+- [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations) to add multiple *"components"* of the same type to a single entity. E.g.
+  - Inventory systems
+  - To model one-to-many data structures
 
 | Use case / Example                                                                                                        | Component interface type  | Description
 | ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Entity Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships)     | **Link Component**        | A single link on an entity referencing another entity
-|                                                                                                                           | **Link Relation**         | Multiple links on an entity referencing other entities
+| [Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships)            | **Link Component**        | Add a single link on an entity referencing another entity
+|                                                                                                     | **Link Relation**         | Add multiple links on an entity referencing other entities
 | [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)                    | **Relation Component**    | Add multiple components of same type to an entity
 | [Search & Range queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
 
