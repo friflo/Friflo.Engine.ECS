@@ -32,15 +32,13 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 ## News
 
 - [x] Breaking changes in `3.0.0-preview.16`
-  > renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#relations)
+  > renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
 
 - [x] ![new](docs/images/new.svg) Finally **Friflo.Engine.ECS** is now in its own new repository!  
   The ECS is moved including its git history. Everything not related to the ECS is omitted.
 
 - [x] Published [Friflo.Engine.ECS.Boost](https://www.nuget.org/packages/Friflo.Engine.ECS.Boost) to enable
       [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#boosted-query) with maximum performance.
-
-- [x] Updated [Wiki ⋅ Optimization examples](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#batching). Changes marked with 🔥 **Update**.
 
 - [x] Released v3.0.0-preview  
       Introduced: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** in O(1). See [Component Types](#-component-types)
@@ -190,7 +188,7 @@ In case of moving (updating) thousands or millions of entities an optimized appr
 See:
 [Enumerate Query Chunks](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks),
 [Parallel Query Job](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job) and
-[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simdhttps://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd).  
+[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd).  
 All query optimizations are using the same `query` but with different enumeration techniques.
 
 <br/>
@@ -200,7 +198,7 @@ All query optimizations are using the same `query` but with different enumeratio
 
 > [!IMPORTANT]
 > Breaking changes in `3.0.0-preview.16`  
-> renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#relations)
+> renamed `IRelationComponent<>` -> `IRelation<>`. See [Wiki ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
 
 ![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
 
@@ -221,10 +219,10 @@ Use cases for relations:
 
 | Use case / Example                                                                                                        | Component interface type  | Description
 | ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Entity Relationships](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#entity-relationships)  | **Link Component**        | A single link on an entity referencing another entity
+| [Entity Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships)     | **Link Component**        | A single link on an entity referencing another entity
 |                                                                                                                           | **Link Relation**         | Multiple links on an entity referencing other entities
-| [Relations](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
-| [Search & Range queries](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#search)              | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
+| [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)                    | **Relation Component**    | Add multiple components of same type to an entity
+| [Search & Range queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
 
 Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
 for the challenge to improve the feature set and performance of this project!
