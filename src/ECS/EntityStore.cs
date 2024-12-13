@@ -171,6 +171,13 @@ public sealed partial class EntityStore : EntityStoreBase
 
     public override void Dispose()
     {
+        var cmd = GetCommandBuffer();
+        foreach (var entity in Entities)
+        {
+            cmd.DeleteEntity(entity.Id);
+        }
+        cmd.Playback();
+        ReturnCommandBuffer(cmd);
         extension.Dispose();
         base.Dispose();
     }
