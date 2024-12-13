@@ -11,7 +11,7 @@ public readonly partial struct  Entity
     /// <summary>
     /// Add the given <paramref name="component"/> to the entity.<br/>
     /// If the entity contains a component of the same type it is updated.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#component">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity#component">Example.</a>
     /// </summary>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component)      where T : struct, IComponent

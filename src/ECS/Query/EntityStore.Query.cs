@@ -39,7 +39,7 @@ public partial class EntityStoreBase
     // -------------------------------------- archetype query --------------------------------------
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery Query ()
     {
@@ -68,7 +68,7 @@ public partial class EntityStoreBase
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1> Query<T1> ()
         where T1 : struct, IComponent
@@ -102,7 +102,7 @@ public partial class EntityStoreBase
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2> Query<T1, T2> ()
         where T1: struct, IComponent
@@ -141,7 +141,7 @@ public partial class EntityStoreBase
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> ()
         where T1: struct, IComponent
@@ -183,7 +183,7 @@ public partial class EntityStoreBase
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> ()
         where T1: struct, IComponent
@@ -227,7 +227,7 @@ public partial class EntityStoreBase
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> ()
         where T1: struct, IComponent

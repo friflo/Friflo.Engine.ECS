@@ -38,7 +38,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
   The ECS is moved including its git history. Everything not related to the ECS is omitted.
 
 - [x] Published [Friflo.Engine.ECS.Boost](https://www.nuget.org/packages/Friflo.Engine.ECS.Boost) to enable
-      [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#boosted-query) with maximum performance.
+      [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#boosted-query) with maximum performance.
 
 - [x] Updated [Wiki ⋅ Optimization examples](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#batching). Changes marked with 🔥 **Update**.
 
@@ -188,9 +188,9 @@ public static void HelloWorld()
 ```
 In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
 See:
-[Enumerate Query Chunks](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks),
-[Parallel Query Job](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job) and
-[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd).  
+[Enumerate Query Chunks](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks),
+[Parallel Query Job](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job) and
+[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simdhttps://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd).  
 All query optimizations are using the same `query` but with different enumeration techniques.
 
 <br/>
@@ -245,7 +245,7 @@ Using Systems is optional but they have some significant advantages.
 
 - Enable chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes in a
   [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
-  Each group provide a [CommandBuffer](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer).
+  Each group provide a [CommandBuffer](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#commandbuffer).
 
 - A system can have state - fields or properties - which can be used as parameters in `OnUpdate()`.  
   The system state can be serialized to JSON.

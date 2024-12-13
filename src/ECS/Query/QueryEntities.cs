@@ -49,7 +49,7 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
     
     /// <summary>
     /// Apply the given entity <paramref name="batch"/> to all entities in this set.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#entitybatch---query">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/batch">Example.</a>
     /// </summary>
     public void ApplyBatch(EntityBatch batch)
     {

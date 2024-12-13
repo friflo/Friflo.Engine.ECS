@@ -165,7 +165,7 @@ public partial class EntityStoreBase
     
     /// <summary>
     /// Returns a <see cref="CreateEntityBatch"/> used to create entities with components and tags added to the batch.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#batch---create-entity">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/batch">Example.</a>
     /// </summary>
     /// <remarks>
     /// The returned batch creates an entity with previously added components and tags when calling

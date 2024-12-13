@@ -25,7 +25,7 @@ public partial class EntityStore
     
     /// <summary>
     /// Create and return a new <see cref="Entity"/> in the entity store.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#entity">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity">Example.</a>
     /// </summary>
     /// <returns>An <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()

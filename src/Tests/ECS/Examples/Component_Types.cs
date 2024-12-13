@@ -8,7 +8,10 @@ using NUnit.Framework;
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
-// See: https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types
+// See: https://friflo.gitbook.io/friflo.engine.ecs
+// > Index / Search
+// > Relationships
+// > Relations
 public static class Component_Types
 {
 
