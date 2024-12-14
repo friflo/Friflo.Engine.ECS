@@ -31,17 +31,11 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 
 ## News
 
-- [x] Breaking changes in `3.0.0-preview.16`
-  > renamed `IRelationComponent<>` -> `IRelation<>`. See [Docs ⋅ Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)
-
-- [x] ![new](docs/images/new.svg) Finally **Friflo.Engine.ECS** is now in its own new repository!  
-  The ECS is moved including its git history. Everything not related to the ECS is omitted.
+- [x] ![new](docs/images/new.svg) features in v3.0.0  
+      Introduced: **Index / Search** with O(1), **Relationships** 1:1 and 1:many and **Relations**. See [New features in 3.0.0](#new-features-in-300)
 
 - [x] Published [Friflo.Engine.ECS.Boost](https://www.nuget.org/packages/Friflo.Engine.ECS.Boost) to enable
       [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#boosted-query) with maximum performance.
-
-- [x] Released v3.0.0-preview  
-      Introduced: **Index / Search** with O(1), **Relationships** 1:1 and 1:many and **Relations**. See [New features in 3.0.0](#new-features-in-300)
 
 - [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
@@ -52,9 +46,9 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
   - [ECS definition](#ecs-definition)
+  - [New features in 3.0.0](#new-features-in-300)
 * [⏩ Examples](#-examples)
   - [🚀 Hello World](#-hello-world)
-  - [⌘ Component Types](#-component-types)
   - [⚙️ Systems](#️-systems)
 * [🏁 Benchmarks](#-ecs-benchmarks)
 
@@ -91,7 +85,6 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
         <img src="docs/images/access_violation/Unity_access_violation.png"   width="213" height="131"/>
       </details>
 
-Complete feature list at [Docs ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
 
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
@@ -151,6 +144,30 @@ An ECS provide two strengths:
 
 <br/>
 
+
+## **New features in 3.0.0**
+
+- [Index / Search](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) used to search entities with specific component values in O(1). E.g
+  - To lookup entities having a *TileComponent* with a specific tile id.
+  - To lookup network entities with a *NetComponent* using a custom identifier like a `Guid`,`long` or a `string`.
+
+- [Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships) to create links / connections between entities. Used for:
+  - Attack systems
+  - Path finding / Route tracing
+  - Model social networks. E.g friendship, alliances or rivalries
+  - Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
+    using entities as *nodes* and links or relations as *edges*
+
+- [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations) to add multiple *"components"* of the same type to a single entity. E.g.
+  - Inventory systems
+  - To model one-to-many data structures
+
+
+Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
+for the challenge to improve the feature set and performance of this project!
+
+<br/>
+
 # ⏩ Examples
 
 This section contains two typical use cases when using an ECS.  
@@ -187,34 +204,7 @@ All query optimizations are using the same `query` but with different enumeratio
 <br/>
 
 
-## **New features in 3.0.0**
 
-- [Index / Search](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) used to search entities with specific component values in O(1). E.g
-  - To lookup entities having a *TileComponent* with a specific tile id.
-  - To lookup network entities with a *NetComponent* using a custom identifier like a `Guid`,`long` or a `string`.
-
-- [Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships) to create links / connections between entities. Used for:
-  - Attack systems
-  - Path finding / Route tracing
-  - Model social networks. E.g friendship, alliances or rivalries
-  - Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
-    using entities as *nodes* and links or relations as *edges*
-
-- [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations) to add multiple *"components"* of the same type to a single entity. E.g.
-  - Inventory systems
-  - To model one-to-many data structures
-
-| Use case / Example                                                                                                        | Component interface type  | Description
-| ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships)            | **Link Component**        | Add a single link on an entity referencing another entity
-|                                                                                                     | **Link Relation**         | Add multiple links on an entity referencing other entities
-| [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations)                    | **Relation Component**    | Add multiple components of same type to an entity
-| [Search & Range queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
-
-Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
-for the challenge to improve the feature set and performance of this project!
-
-<br/>
 
 
 ## **⚙️ Systems**
