@@ -51,8 +51,8 @@
 
     <ItemGroup>
 
-        <PackageReference Include="Avalonia.Desktop" Version="11.1.1" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.2" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.2" />
         <!--<PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />-->
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
