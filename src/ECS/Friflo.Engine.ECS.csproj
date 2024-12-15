@@ -72,7 +72,7 @@
     <PackageReference Include="System.Runtime" Version="4.3.1" />  -->
       
     <!-- System.Runtime.CompilerServices.Unsafe is required by Unity -->
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
   </ItemGroup>
 
 </Project>
