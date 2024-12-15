@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Linq;
 using System.Text;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
@@ -76,6 +77,12 @@ public struct Unresolved : IComponent
             sb.Length -= 2;
         }
         return sb.ToString();
+    }
+    
+        
+    private static void CopyValue(in Unresolved source, ref Unresolved target, in CopyContext context) {
+        target.components   = source.components?.ToArray();
+        target.tags         = source.tags?.ToArray();
     }
 }
 

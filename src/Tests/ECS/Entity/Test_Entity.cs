@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Friflo.Engine.ECS;
+using Friflo.Json.Fliox;
 using NUnit.Framework;
 using Tests.ECS.Index;
 using Tests.Utils;
@@ -249,6 +250,30 @@ public static class Test_Entity
         var list2 = entity2.GetComponent<CopyComponent>().list;
         AreEqual(list1, list2);
         AreNotSame(list1, list2);
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_with_Unresolved()
+    {
+        var store       = new EntityStore();
+        var entity1      = store.CreateEntity();
+        var unresolved = new Unresolved {
+            tags        = new [] { "TestTag" },
+            components  = new[] {
+                new UnresolvedComponent ("unknown", new JsonValue("{\"value\": 1}"))
+            }
+        };
+        entity1.AddComponent(unresolved);
+        var entity2 = store.CloneEntity(entity1);
+        var unresolvedClone = entity2.GetComponent<Unresolved>();
+        AreNotSame(unresolved.components,   unresolvedClone.components);
+        AreNotSame(unresolved.tags,         unresolvedClone.tags);
+        //
+        entity1.AddComponent(new Unresolved());
+        var entity3 = store.CloneEntity(entity1);
+        unresolvedClone = entity3.GetComponent<Unresolved>();
+        IsNull(unresolvedClone.components);
+        IsNull(unresolvedClone.tags);
     }
     
     [Test]
