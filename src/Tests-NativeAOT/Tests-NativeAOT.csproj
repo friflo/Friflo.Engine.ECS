@@ -29,16 +29,17 @@
     </PropertyGroup>
 
 
+    <!-- variable set in Tests-NativeAOT/Directory.Build.props -->
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeCoverage.MSBuild" Version="17.13.1" />
-        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.13.1" />
-        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.4.3" />
-        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.4.3" />
+        <PackageReference Include="Microsoft.CodeCoverage.MSBuild" Version="$(CodeCoverageVersion)" />
+        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="$(CodeCoverageVersion)" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="$(TestingPlatformVersion)" />
+        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="$(TestingPlatformVersion)" />
 
-        <PackageReference Include="MSTest.Engine" Version="1.0.0-alpha.24163.4" />
-        <PackageReference Include="MSTest.SourceGeneration" Version="1.0.0-alpha.24163.4" />
-        <PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
-        <PackageReference Include="MSTest.Analyzers" Version="3.6.4"/>
+        <PackageReference Include="MSTest.Engine" Version="$(MSTestAOTVersion)" />
+        <PackageReference Include="MSTest.SourceGeneration" Version="$(MSTestAOTVersion)" />
+        <PackageReference Include="MSTest.TestFramework" Version="$(MSTestVersion)" />
+        <PackageReference Include="MSTest.Analyzers" Version="$(MSTestVersion)"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
