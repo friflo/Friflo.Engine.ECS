@@ -42,6 +42,7 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 ## Contents
 
 * [🔥 Friflo.Engine.ECS](#frifloengineecs)
+  - [Documentation](#documentation)
   - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
@@ -51,6 +52,13 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
   - [🚀 Hello World](#-hello-world)
   - [⚙️ Systems](#️-systems)
 * [🏁 Benchmarks](#-ecs-benchmarks)
+
+
+## Documentation
+
+Get an overview of the feature set or explore various use-cases with examples at
+[**friflo ECS · Docs**](https://friflo.gitbook.io/friflo.engine.ecs).
+
 
 ## Feature highlights
 
