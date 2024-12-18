@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 #if NETCOREAPP3_0_OR_GREATER
@@ -83,7 +83,7 @@ public partial struct BitSet
         };
     }
     
-    internal static BitSet Intersect (in BitSet left, in BitSet right) {
+    public static BitSet Intersect (in BitSet left, in BitSet right) {
         return new BitSet {
             value = left.value & right.value
         };
