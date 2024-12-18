@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -31,7 +31,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     #endregion
     
 #region interal field
-    internal        BitSet  bitSet;     // 32
+    public        BitSet  bitSet;     // 32
     #endregion
 
 #region enumerator    
