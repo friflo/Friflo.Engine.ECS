@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS.Index;
 [ExcludeFromCodeCoverage] // not used - kept only for reference
 internal static class SortedListUtils
 {
-    internal static void RemoveComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, ComponentIndex componentIndex)
+    internal static void RemoveComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, AbstractComponentIndex componentIndex)
     {
         var idHeap  = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);
@@ -30,7 +30,7 @@ internal static class SortedListUtils
         map[value] = ids;
     }
     
-    internal static void AddComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, ComponentIndex componentIndex)
+    internal static void AddComponentValue<TValue>(int id, in TValue value, SortedList<TValue, IdArray> map, AbstractComponentIndex componentIndex)
     {
         var idHeap = componentIndex.idHeap;
         map.TryGetValue(value, out var ids);

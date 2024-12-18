@@ -1,5 +1,6 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS.Relations;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -48,12 +49,12 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 66  scripts: 10  entity tags: 16", schema.ToString());
-        AreEqual(67,    components.Length);
+        AreEqual("components: 73  scripts: 10  entity tags: 16", schema.ToString());
+        AreEqual(74,    components.Length);
         AreEqual(11,    scripts.Length);
         
-        AreEqual(72,    schema.SchemaTypeByKey.Count);
-        AreEqual(66,    schema.ComponentTypeByType.Count);
+        AreEqual(79,    schema.SchemaTypeByKey.Count);
+        AreEqual(73,    schema.ComponentTypeByType.Count);
         AreEqual(10,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);
@@ -80,6 +81,9 @@ public static class Test_ComponentSchema
             AreEqual("Component: [MyComponent1]",       componentType.ToString());
             AreEqual(4,                                 componentType.StructSize);
             IsTrue  (                                   componentType.IsBlittable);
+        } {
+            var componentType = schema.GetRelationType<IntRelation>();
+            AreEqual("Relation: [IntRelation]",        componentType.ToString());
         }
         // --- Engine.ECS types
         AssertBlittableComponent<Position>      (schema, true);
@@ -90,6 +94,7 @@ public static class Test_ComponentSchema
         AssertBlittableComponent<Unresolved>    (schema, false);
         
         // --- BCL types
+        AssertBlittableComponent<BlittableEnum>         (schema, true);
         AssertBlittableComponent<BlittableDatetime>     (schema, true);
         AssertBlittableComponent<BlittableGuid>         (schema, true);
         AssertBlittableComponent<BlittableBigInteger>   (schema, true);

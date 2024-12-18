@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS.Serialize;
 
 /// <summary>
 /// Enables serialization of entities to / from JSON.
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#json-serialization">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity#json-serialization">Example.</a>
 /// </summary>
 public sealed class EntitySerializer
 {
@@ -240,13 +240,26 @@ public sealed class EntitySerializer
         }
         return new MemoryStream(capacity);
     }
+    
+    private static bool GetAsMemoryStream(Stream stream, out MemoryStream memoryStream)
+    {
+        if (stream is MemoryStream memory) {
+            // check if internal buffer is available 
+            if (memory.TryGetBuffer(out _)) {
+                memoryStream = memory;
+                return true;
+            }
+        }
+        memoryStream = null;
+        return false;
+    }
 
     /// <summary>
     /// Asynchronously reads the JSON array of the given <paramref name="stream"/> into the passed <paramref name="store"/>.   
     /// </summary>
     public async Task<ReadResult> ReadIntoStoreAsync(EntityStore store, Stream stream)
     {
-        if (stream is MemoryStream memoryStream) {
+        if (GetAsMemoryStream(stream, out var memoryStream)) {
             return ReadIntoStoreSync(store, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
@@ -262,7 +275,7 @@ public sealed class EntitySerializer
     /// </summary>
     public ReadResult ReadIntoStore(EntityStore store, Stream stream)
     {
-        if (stream is MemoryStream memoryStream) {
+        if (GetAsMemoryStream(stream, out var memoryStream)) {
             return ReadIntoStoreSync(store, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
@@ -337,7 +350,7 @@ public sealed class EntitySerializer
     /// </summary>
     public ReadResult ReadEntities(List<DataEntity> entities, Stream stream)
     {
-        if (stream is MemoryStream memoryStream) {
+        if (GetAsMemoryStream(stream, out var memoryStream)) {
             return ReadEntitiesSync(entities, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);

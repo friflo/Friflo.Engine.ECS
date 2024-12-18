@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS {
 
-internal struct StringRelation : IRelationComponent<string>
+internal struct StringRelation : IRelation<string>
 {
     public  string  value;
     public  string  GetRelationKey()    => value;
@@ -41,17 +41,17 @@ public static class Test_Relations
         var e = Throws<InvalidOperationException>(() => {
             relations.RemoveLinksWithTarget(0);    
         });
-        AreEqual("type: EntityRelations`2", e!.Message);
+        AreEqual("type: GenericEntityRelations`2", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             relations.GetEntityRelation<StringRelation>(1, 2);
         });
-        AreEqual("type: EntityRelations`2", e!.Message);
+        AreEqual("type: GenericEntityRelations`2", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             relations.AddIncomingRelations(0, null);
         });
-        AreEqual("type: EntityRelations`2", e!.Message);
+        AreEqual("type: GenericEntityRelations`2", e!.Message);
     }
     
     [Test]
@@ -62,7 +62,7 @@ public static class Test_Relations
         var entity2 = store.CreateEntity(2);
         entity1.AddRelation(new AttackRelation { target = entity2 });
         
-        var relations = (EntityRelationLinks<AttackRelation>)store.extension.relationsMap[StructInfo<AttackRelation>.Index];
+        var relations = (EntityLinkRelations<AttackRelation>)store.extension.relationsMap[StructInfo<AttackRelation>.Index];
         LinkRelationUtils.AddComponentValue(1, 2, relations);
         AreEqual(1, relations.Count);
         

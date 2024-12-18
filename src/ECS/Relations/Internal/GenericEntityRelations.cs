@@ -11,17 +11,17 @@ namespace Friflo.Engine.ECS.Relations;
 
 
 /// Contains a single <see cref="Archetype"/> with a single <see cref="StructHeap{T}"/><br/>
-internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
-    where TRelationComponent : struct, IRelationComponent<TKey>
+internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
+    where TRelation : struct, IRelation<TKey>
 {
-    /// Single <see cref="StructHeap"/> stored in the <see cref="EntityRelations.archetype"/>.
-    internal  readonly   StructHeap<TRelationComponent>  heapGeneric;
+    /// Single <see cref="StructHeap"/> stored in the <see cref="AbstractEntityRelations.archetype"/>.
+    internal  readonly   StructHeap<TRelation>  heapGeneric;
     
-    /// Instance created at <see cref="EntityRelations.GetEntityRelations"/>
-    public EntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
+    /// Instance created at <see cref="AbstractEntityRelations.GetEntityRelations"/>
+    public GenericEntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap)
         : base(componentType, archetype, heap)
     {
-        heapGeneric = (StructHeap<TRelationComponent>)heap;
+        heapGeneric = (StructHeap<TRelation>)heap;
     }
     
     /// Executes in O(M)  M: number of entity relations
@@ -34,7 +34,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
         for (index = 0; index < positionCount; index++) {
             int position    = positionSpan[index];
             TKey relation   = components[position].GetRelationKey(); // no boxing
-            //  var relation    = RelationUtils<TRelationComponent, TKey>.GetRelationKey(components[position]);
+            //  var relation    = RelationUtils<TRelation, TKey>.GetRelationKey(components[position]);
             if (EqualityComparer<TKey>.Default.Equals(relation, key)) {
                 return position;
             }
@@ -43,7 +43,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
     }
     
 #region query
-    internal override IComponent GetRelationAt(int id, int index)
+    internal override IRelation GetRelationAt(int id, int index)
     {
         positionMap.TryGetValue(id, out var positions);
         var count       = positions.count;
@@ -56,22 +56,22 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
         return components[poolPositions[start + index]];
     }
     
-    internal ref TComponent GetRelation<TComponent>(int id, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+    internal ref T GetRelation<T>(int id, TKey key)
+        where T : struct, IRelation<TKey>
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
-            return ref ((StructHeap<TComponent>)heap).components[position];
+            return ref ((StructHeap<T>)heap).components[position];
         }
         throw KeyNotFoundException(id, key);
     }
     
-    internal bool TryGetRelation<TComponent>(int id, TKey key, out TComponent value)
-        where TComponent : struct, IRelationComponent<TKey>
+    internal bool TryGetRelation<T>(int id, TKey key, out T value)
+        where T : struct, IRelation<TKey>
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
-            value = ((StructHeap<TComponent>)heap).components[position];
+            value = ((StructHeap<T>)heap).components[position];
             return true;
         }
         value = default;
@@ -82,10 +82,10 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
 #region mutation
 
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    internal override bool AddComponent<TComponent>(int id, in TComponent component)
+    internal override bool AddComponent<T>(int id, in T component)
     {
-        var relationKey = RelationUtils<TComponent, TKey>.GetRelationKey(component);
-    //  var relationKey = ((IRelationComponent<TKey>)component).GetRelationKey(); // boxing version
+        var relationKey = RelationUtils<T, TKey>.GetRelationKey(component);
+    //  var relationKey = ((IRelation<TKey>)component).GetRelationKey(); // boxing version
         var added       = true;
         var position    = FindRelationPosition(id, relationKey, out var positions, out _);
         if (position >= 0) {
@@ -94,7 +94,7 @@ internal class EntityRelations<TRelationComponent, TKey> : EntityRelations
         }
         position = AddEntityRelation(id, positions);
     AssignComponent:
-        ((StructHeap<TComponent>)heap).components[position] = component;
+        ((StructHeap<T>)heap).components[position] = component;
         return added;
     }
 

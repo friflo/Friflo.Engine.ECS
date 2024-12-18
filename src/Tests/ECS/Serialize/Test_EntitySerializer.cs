@@ -113,6 +113,7 @@ public static class Test_Serializer
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
             var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             var result      = serializer.ReadIntoStore(store, file);
+            IsNull(result.error);
             file.Close();
             AssertReadIntoStoreResult(result, store);
         }
@@ -265,12 +266,12 @@ public static class Test_Serializer
         stream.Close();
     }
     
-    private static string MemoryStreamAsString(MemoryStream stream) {
+    public static string MemoryStreamAsString(MemoryStream stream) {
         stream.Flush();
         return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
     
-    private static Stream StringAsStream(string json) {
+    public static Stream StringAsStream(string json) {
         var bytes = Encoding.UTF8.GetBytes(json);
         var stream = new MemoryStream(bytes.Length);
         stream.Write(bytes);
@@ -289,6 +290,7 @@ public static class Test_Serializer
         var fileName    = TestUtils.GetBasePath() + "assets/read_unknown_members.json";
         var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
         var result      = serializer.ReadIntoStore(store, file);
+        IsNull(result.error);
         file.Close();
         AssertReadIntoStoreResult(result, store);
     }
@@ -492,6 +494,31 @@ public static class Test_Serializer
         var inner = e!.InnerException as ArgumentException;
         NotNull(inner);
         StringAssert.StartsWith("Type 'System.Uri' does not have a default constructor", inner.Message);
+    }
+    
+    /// Test MemoryStream with GetBuffer() not available.  
+    [Test]
+    public static void Test_Serializer_GitHub27()
+    {
+        var store = new EntityStore();
+        Entity entity = store.CreateEntity(1);
+        entity.AddComponent(new EntityName { value = "test-name" });
+        
+        var serializer = new EntitySerializer();
+        
+        using MemoryStream writeStream = new MemoryStream();
+        var entities = new List<Entity> { entity };
+        serializer.WriteEntities(entities, writeStream);
+        
+        writeStream.Position = 0;
+        using StreamReader reader = new(writeStream);
+        string json = reader.ReadToEnd();
+        
+        var newStore = new EntityStore();
+        // MemoryStream.GetBuffer() is not available. stream data must be copied.  
+        var readStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        serializer.ReadIntoStore(newStore, readStream);
+        AreEqual("test-name", newStore.GetEntityById(1).Name.value);
     }
 }
 

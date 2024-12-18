@@ -2,9 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Engine.ECS.Index;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
+using Friflo.Json.Fliox.Mapper.Map;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
@@ -16,26 +18,24 @@ namespace Friflo.Engine.ECS;
 ///   for collection.
 /// </remarks>
 internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
-    where T : struct, IComponent
+    where T : struct
 {
     /// <summary>
     /// Method only available for debugging. Reasons:<br/>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    public override IComponent  GetStashDebug() => componentStash;
+    public override object      GetStashDebug() => componentStash;
     public          ref T       GetStashRef()     => ref componentStash;
     
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     internal            T[]                 components;     //  8
     internal            T                   componentStash; //  sizeof(T)
-    private  readonly   ComponentType<T>    componentType;  //  8
     
-    internal StructHeap(int structIndex, ComponentType<T> componentType)
+    internal StructHeap(int structIndex)
         : base (structIndex)
     {
-        this.componentType  = componentType;
         components          = new T[ArchetypeUtils.MinCapacity];
     }
     
@@ -78,9 +78,21 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     /// <see cref="ComponentType"/>'s.<br/>
     /// If not <see cref="ComponentType.IsBlittable"/> serialization must be used.
     /// </remarks>
-    internal override void CopyComponent(int sourcePos, int targetPos)
+    internal override void CloneComponent(int sourcePos, int targetPos, in CopyContext context)
     {
-        components[targetPos] = components[sourcePos];
+        var copyValue = CopyValueUtils<T>.CopyValue;
+        ref var source = ref components[sourcePos];
+        ref var target = ref components[targetPos];
+        if (copyValue == null) {
+            target = source;
+        } else {
+            copyValue(source, ref target, context);
+        }
+        if (!StructInfo<T>.HasIndex) {
+            return;
+        }
+        var targetEntity = context.target;
+        StoreIndex.AddIndex(targetEntity.store, targetEntity.Id, source);
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
@@ -98,15 +110,29 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override IComponent GetComponentDebug(int compIndex) => components[compIndex];
+    internal override object GetComponentDebug(int compIndex) => components[compIndex];
     
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
+        var mapper = (TypeMapper<T>)writer.TypeCache.GetTypeMapper(typeof(T));
         ref var value = ref components[compIndex];
-        return writer.WriteAsBytesMapper(value, componentType.TypeMapper);
+        return writer.WriteAsBytesMapper(value, mapper);
     }
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
-        components[compIndex] = reader.ReadMapper(componentType.TypeMapper, json);  // todo avoid boxing within typeMapper, T is struct
+        var mapper = (TypeMapper<T>)reader.TypeCache.GetTypeMapper(typeof(T));
+        components[compIndex] = reader.ReadMapper(mapper, json);  // todo avoid boxing within typeMapper, T is struct
+    }
+    
+    internal override  void UpdateIndex (Entity entity) {
+        StoreIndex.UpdateIndex(entity.store, entity.Id, components[entity.compIndex], this);
+    }
+    
+    internal override  void AddIndex (Entity entity) {
+        StoreIndex.AddIndex(entity.store, entity.Id, components[entity.compIndex]);
+    }
+    
+    internal override  void RemoveIndex (Entity entity) {
+        StoreIndex.RemoveIndex(entity.store, entity.Id, this);
     }
 }

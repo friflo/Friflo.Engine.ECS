@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS.Relations;
 
 internal static class LinkRelationUtils
 {
-    internal static void RemoveComponentValue(int id, int target, EntityRelations componentIndex)
+    internal static void RemoveComponentValue(int id, int target, AbstractEntityRelations componentIndex)
     {
         var map         = componentIndex.linkEntityMap;
         var linkHeap    = componentIndex.linkIdsHeap;
@@ -30,7 +30,7 @@ internal static class LinkRelationUtils
         map[target] = ids;
     }
     
-    internal static void AddComponentValue(int id, int target, EntityRelations componentIndex)
+    internal static void AddComponentValue(int id, int target, AbstractEntityRelations componentIndex)
     {
         var map         = componentIndex.linkEntityMap;
         var linkHeap    = componentIndex.linkIdsHeap;

@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// An <see cref="EntityStore"/> is a container for <see cref="Entity"/>'s their components, scripts, tags
 /// and the tree structure.<br/>
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#entitystore">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity#entitystore">Example.</a>
 /// </summary>
 /// <remarks>
 /// The <see cref="EntityStore"/> provide the features listed below
@@ -210,6 +210,29 @@ public sealed partial class EntityStore : EntityStoreBase
             return new Entity(this, id, localNodes[id].revision);
         }
         throw IdOutOfRangeException(this, id);
+    }
+    
+    /// <summary>
+    /// If referenced entity is not alive it will use same revision used in <see cref="CreateEntityNode"/>.
+    /// </summary>
+    internal Entity CreateEntityReference(long key)
+    {
+        int id;
+        if (extension.pid2Id == null) {
+            id = (int)key;
+            EnsureNodesLength(id + 1);
+            return new Entity(this, id, nodes[id].revision);
+        }
+        throw new NotSupportedException("Entity serialization using PidType.RandomPids currently not supported");
+        /* var pid = key;
+        if (!extension.pid2Id.TryGetValue(pid, out id)) {
+            id = NewId();
+            CreateEntityNode(defaultArchetype, id, out var revision);
+            extension.pid2Id.Add(pid, id);
+            extension.id2Pid.Add(id, pid);
+            return new Entity(this, id, revision);
+        }
+        return new Entity(this, id);*/
     }
     
     /// <summary>

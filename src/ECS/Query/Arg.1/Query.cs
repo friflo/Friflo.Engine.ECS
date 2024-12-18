@@ -10,15 +10,15 @@ namespace Friflo.Engine.ECS;
 /// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{T1}.ForEachEntity"/>.
 /// </summary>
 public delegate void ForEachEntity<T1>(ref T1 component1, Entity entity)
-    where T1 : struct, IComponent;
+    where T1 : struct;
 
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
 /// </summary>
 public sealed class ArchetypeQuery<T1> : ArchetypeQuery
-    where T1 : struct, IComponent
+    where T1 : struct
 {
     /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
@@ -51,13 +51,13 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     /// <inheritdoc cref="ArchetypeQuery.FreezeFilter"/>
     public new ArchetypeQuery<T1> FreezeFilter() { SetFreezeFilter();   return this; }
     
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter)
-        : base(store, signature.signatureIndexes, filter) {
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter, ComponentType relationType)
+        : base(store, signature.signatureIndexes, filter, relationType) {
     }
     
     /// <summary>
     /// Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
     /// </summary> 
     public      QueryChunks <T1>  Chunks                                    => new (this);
     

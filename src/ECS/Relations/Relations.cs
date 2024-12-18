@@ -13,23 +13,23 @@ using System.Text;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Contains the relation components of a specific entity returned by <see cref="RelationExtensions.GetRelations{TComponent}"/>.
+/// Contains the relations of a specific entity returned by <see cref="RelationExtensions.GetRelations{TRelation}"/>.
 /// </summary>
-public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
-    where TComponent : struct, IComponent
+public readonly struct Relations<TRelation> : IEnumerable<TRelation>
+    where TRelation : struct
 {
-    public   override   string          ToString()  => $"Relations<{typeof(TComponent).Name}>[{Length}]";
+    public   override   string          ToString()  => $"Relations<{typeof(TRelation).Name}>[{Length}]";
     /// <summary>
-    /// Return the number of relation components.<br/>
+    /// Return the number of relations.<br/>
     /// Executes in O(1).
     /// </summary>
     public   readonly   int             Length;     //  4
     internal readonly   int             start;      //  4
     internal readonly   int[]           positions;  //  8
-    internal readonly   TComponent[]    components; //  8
+    internal readonly   TRelation[]     components; //  8
     internal readonly   int             position;   //  4
     
-    internal RelationComponents(TComponent[] components, int[] positions, int start, int length)
+    internal Relations(TRelation[] components, int[] positions, int start, int length)
     {
         this.components = components;
         this.positions  = positions;
@@ -37,7 +37,7 @@ public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
         Length          = length;
     }
    
-    internal RelationComponents(TComponent[] components, int position) {
+    internal Relations(TRelation[] components, int position) {
         this.components = components;
         this.position   = position;
         Length          = 1;
@@ -50,9 +50,13 @@ public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2090", Justification = "Only for debugging")]
     private static MethodInfo MakeGetRelationKey(out bool isEntity)
     {
-        var methodInfo  = typeof(TComponent).GetMethod("GetRelationKey")!;
+        var methodInfo  = typeof(TRelation).GetMethod("GetRelationKey")!;
         isEntity        = methodInfo.ReturnType == typeof(Entity);
         return methodInfo;
+    }
+    
+    internal int GetPosition(int index) {
+        return positions != null ? positions[index] : position;
     }
     
     /// <summary>
@@ -78,34 +82,34 @@ public readonly struct RelationComponents<TComponent> : IEnumerable<TComponent>
     
     
     /// <summary>
-    /// Return the relation component at the given <paramref name="index"/>.<br/>
+    /// Return the relation at the given <paramref name="index"/>.<br/>
     /// Executes in O(1).
     /// </summary>
-    public TComponent this[int index] => components[positions != null ? positions[index] : position];
+    public TRelation this[int index] => components[positions != null ? positions[index] : position];
        
     // --- IEnumerable<>
-    IEnumerator<TComponent>   IEnumerable<TComponent>.GetEnumerator() => new RelationsEnumerator<TComponent>(this);
+    IEnumerator<TRelation>   IEnumerable<TRelation>.GetEnumerator() => new RelationsEnumerator<TRelation>(this);
     
     // --- IEnumerable
-    IEnumerator                           IEnumerable.GetEnumerator() => new RelationsEnumerator<TComponent>(this);
+    IEnumerator                           IEnumerable.GetEnumerator() => new RelationsEnumerator<TRelation>(this);
     
     // --- new
-    public RelationsEnumerator<TComponent>            GetEnumerator() => new RelationsEnumerator<TComponent>(this);
+    public RelationsEnumerator<TRelation>            GetEnumerator() => new RelationsEnumerator<TRelation>(this);
 }
 
 
-public struct RelationsEnumerator<TComponent> : IEnumerator<TComponent>
-    where TComponent : struct, IComponent
+public struct RelationsEnumerator<TRelation> : IEnumerator<TRelation>
+    where TRelation : struct
 {
     private  readonly   int[]           positions;
     private  readonly   int             position;
-    private  readonly   TComponent[]    components;
+    private  readonly   TRelation[]     components;
     private  readonly   int             start;
     private  readonly   int             last;
     private             int             index;
     
     
-    internal RelationsEnumerator(in RelationComponents<TComponent> relations) {
+    internal RelationsEnumerator(in Relations<TRelation> relations) {
         positions   = relations.positions;
         position    = relations.position;
         components  = relations.components;
@@ -115,7 +119,7 @@ public struct RelationsEnumerator<TComponent> : IEnumerator<TComponent>
     }
     
     // --- IEnumerator<>
-    public readonly TComponent Current   => components[positions != null ? positions[index] : position];
+    public readonly TRelation Current   => components[positions != null ? positions[index] : position];
     
     // --- IEnumerator
     public bool MoveNext() {

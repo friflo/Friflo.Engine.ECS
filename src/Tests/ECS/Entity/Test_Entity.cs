@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Friflo.Engine.ECS;
+using Friflo.Json.Fliox;
 using NUnit.Framework;
+using Tests.ECS.Index;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -203,7 +206,7 @@ public static class Test_Entity
     }
      
     [Test]
-    public static void Test_EntityStore_CloneEntity()
+    public static void Test_EntityStore_CloneEntity_1()
     {
         var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
@@ -222,17 +225,100 @@ public static class Test_Entity
         AreNotSame(script1,                     clone.Scripts[0]);
         
         // --- clone entity with non blittable component
-        entity.AddComponent<NonBlittableArray>();
+        entity.AddComponent<CopyComponent>();
         clone = store.CloneEntity(entity);
-        AreEqual("Components: [EntityName, NonBlittableArray]",    clone.Components.ToString());
+        AreEqual("Components: [EntityName, CopyComponent]",    clone.Components.ToString());
         
         // --- clone entity with non blittable script
-        entity.RemoveComponent<NonBlittableArray>();
+        entity.RemoveComponent<CopyComponent>();
         entity.AddScript(new NonBlittableScript());
         clone = store.CloneEntity(entity);
         
         AreEqual(2,                             clone.Scripts.Length);
         NotNull(clone.GetScript<NonBlittableScript>());
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_2()
+    {
+        var store       = new EntityStore();
+        var entity1      = store.CreateEntity();
+        
+        entity1.AddComponent(new CopyComponent { list = new List<int>{ 1, 2, 3 }});
+        var entity2 = store.CloneEntity(entity1);
+        var list1 = entity1.GetComponent<CopyComponent>().list;
+        var list2 = entity2.GetComponent<CopyComponent>().list;
+        AreEqual(list1, list2);
+        AreNotSame(list1, list2);
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_with_Unresolved()
+    {
+        var store       = new EntityStore();
+        var entity1      = store.CreateEntity();
+        var unresolved = new Unresolved {
+            tags        = new [] { "TestTag" },
+            components  = new[] {
+                new UnresolvedComponent ("unknown", new JsonValue("{\"value\": 1}"))
+            }
+        };
+        entity1.AddComponent(unresolved);
+        var entity2 = store.CloneEntity(entity1);
+        var unresolvedClone = entity2.GetComponent<Unresolved>();
+        AreNotSame(unresolved.components,   unresolvedClone.components);
+        AreNotSame(unresolved.tags,         unresolvedClone.tags);
+        //
+        entity1.AddComponent(new Unresolved());
+        var entity3 = store.CloneEntity(entity1);
+        unresolvedClone = entity3.GetComponent<Unresolved>();
+        IsNull(unresolvedClone.components);
+        IsNull(unresolvedClone.tags);
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_IndexedComponent()
+    {
+        var store   = new EntityStore();
+        var index   = store.ComponentIndex<IndexedInt,int>();
+        var entity = store.CreateEntity(1);
+        
+        entity.AddComponent(new IndexedInt { value = 42 });
+        var entities = index[42];
+        AreEqual(1,         entities.Count);
+        AreEqual("{ 1 }",   entities.Debug());
+        
+        var clone = store.CloneEntity(entity);
+        AreEqual(42, clone.GetComponent<IndexedInt>().value);
+        entities = index[42];
+        AreEqual(2,         entities.Count);
+        AreEqual("{ 1, 2 }",entities.Debug());
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_component_exception()
+    {
+        var store        = new EntityStore();
+        var entity1      = store.CreateEntity();
+        
+        entity1.AddComponent(new NonBlittableComponent());
+        var e = Throws<MissingMethodException>(() => {
+            store.CloneEntity(entity1);    
+        });
+        AreEqual("type: Tests.ECS.NonBlittableComponent - expect: static void CopyValue(in NonBlittableComponent source, ref NonBlittableComponent target, in CopyContext context)", e!.Message);
+    }
+    
+    [Test]
+    public static void Test_EntityStore_CloneEntity_script_exception()
+    {
+        var store        = new EntityStore();
+        var entity1      = store.CreateEntity();
+        
+        entity1.AddScript(new TestScript2());
+        var e = Throws<MissingMethodException>(() => {
+            store.CloneEntity(entity1);    
+        });
+        AreEqual("type: Tests.ECS.TestScript2 - expect: static void CopyScript(TestScript2 source, TestScript2 target)", e!.Message);
     }
     
     [Test]

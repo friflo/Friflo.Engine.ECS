@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS.Index;
 /// The default index executes in O(1) when adding, removing or updating indexed component values. 
 /// </summary>
 [ExcludeFromCodeCoverage] // not used - kept only for reference
-public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue>
+public sealed class RangeIndex<TIndexedComponent,TValue> : GenericComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
 {
     internal override   int                         Count       => entityMap.Count;
@@ -27,6 +27,8 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
     
     private             ReadOnlyCollection<TValue>  keyCollection;
     #endregion
+    
+    internal RangeIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
@@ -58,7 +60,7 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : ComponentIndex<TValue
     {
         var map         = entityMap;
         var heap        = idHeap;
-        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).components;
         TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);

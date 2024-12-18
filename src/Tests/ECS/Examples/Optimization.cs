@@ -14,7 +14,7 @@ using System.Runtime.Intrinsics;
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
-// See: https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization
+// See: https://friflo.gitbook.io/friflo.engine.ecs
 public static class Optimization
 {
 

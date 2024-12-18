@@ -381,11 +381,11 @@ public static class Test_Entity_Tree
         AreEqual(2,             store.Count);
         var node0 = store.GetEntityNode(0);
         var node2 = store.GetEntityNode(2);
-        AreEqual("",                node0.ToString());
-        AreEqual("flags: Created",  node2.ToString());
+        AreEqual("",            node0.ToString());
+        AreEqual("Created",     node2.ToString());
         
-        AreEqual(NullNode,          node0.Flags);
-        AreEqual(Created,           node2.Flags);
+        AreEqual(NullNode,      node0.Flags);
+        AreEqual(Created,       node2.Flags);
     }
     
     [Test]
@@ -766,6 +766,23 @@ public static class Test_Entity_Tree
             enumerator.Dispose();
             AreEqual(1, count);
         }
+    }
+    
+    // https://github.com/friflo/Friflo.Engine.ECS/issues/29
+    [Test]
+    public static void Test_Entity_Tree_CreateThenDestroyEntityWithParent()
+    {
+        var store = new EntityStore();
+        var root  = store.CreateEntity();
+        var child1 = store.CreateEntity();
+        root.AddChild(child1);
+        int id = child1.Id;
+        var parent = child1.Parent;
+
+        child1.DeleteEntity();
+        var child2 = store.CreateEntity();
+        IsTrue(child2.Parent.IsNull);   // before fix this assertion failed
+        AreEqual(id, child2.Id);        // uses recycled id
     }
     
     [Test]

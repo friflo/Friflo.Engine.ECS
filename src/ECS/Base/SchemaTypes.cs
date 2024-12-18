@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Engine.ECS.Index;
 using Friflo.Engine.ECS.Relations;
-using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable RedundantJumpStatement
 // ReSharper disable once CheckNamespace
@@ -52,7 +51,7 @@ internal sealed class SchemaTypes
         }
     }
 
-    internal EngineDependant[] CreateSchemaTypes(TypeStore typeStore, IList<Assembly> assemblies)
+    internal EngineDependant[] CreateSchemaTypes(IList<Assembly> assemblies)
     {
         var assemblyCount = assemblies.Count;
         var engineTypes = new List<SchemaType>[assemblyCount];
@@ -65,11 +64,17 @@ internal sealed class SchemaTypes
             engineTypes[type.assemblyIndex].Add(schemaType);
         }
         foreach (var type in componentTypes) {
-            var schemaType = CreateComponentType(type.type, typeStore);
+            
+            SchemaType schemaType;
+            if (typeof(IComponent).IsAssignableFrom(type.type)) {
+                schemaType = CreateComponentType(type.type);
+            } else {
+                schemaType = CreateRelationType(type.type);
+            }
             engineTypes[type.assemblyIndex].Add(schemaType);
         }
         foreach (var type in scriptTypes) {
-            var schemaType = CreateScriptType(type.type, typeStore);
+            var schemaType = CreateScriptType(type.type);
             engineTypes[type.assemblyIndex].Add(schemaType);
         }
         var dependants = new EngineDependant[assemblyCount];
@@ -89,7 +94,7 @@ internal sealed class SchemaTypes
             var type        = componentTypes[n];
             buffer[n]       = type;
             var isIndex     = ComponentIndexUtils.GetIndexType(type.type, out _)              != null ||
-                              RelationComponentUtils.GetEntityRelationsType(type.type, out _) != null;
+                              RelationTypeUtils.GetEntityRelationsType(type.type, out _) != null;
             isIndexType[n]  = isIndex;
             if (isIndex) indexCount++;
         }
@@ -123,12 +128,11 @@ internal sealed class SchemaTypes
         
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
-    private SchemaType CreateComponentType(Type type, TypeStore typeStore)
+    private SchemaType CreateComponentType(Type type)
     {
         var structIndex     = components.Count + 1;
         var indexType       = ComponentIndexUtils.GetIndexType(type, out var indexValueType);
-        var relationType    = RelationComponentUtils.GetEntityRelationsType(type, out Type keyType);
-        var createParams    = new object[] { typeStore, structIndex, indexType, indexValueType, relationType, keyType };
+        var createParams    = new object[] { structIndex, indexType, indexValueType };
         var method          = typeof(SchemaUtils).GetMethod(nameof(SchemaUtils.CreateComponentType), Flags);
         var genericMethod   = method!.MakeGenericMethod(type);
         var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
@@ -138,10 +142,24 @@ internal sealed class SchemaTypes
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
-    private SchemaType CreateScriptType(Type type, TypeStore typeStore)
+    private SchemaType CreateRelationType(Type type)
+    {
+        var structIndex     = components.Count + 1;
+        var relationType    = RelationTypeUtils.GetEntityRelationsType(type, out Type keyType);
+        var createParams    = new object[] { structIndex, relationType, keyType };
+        var method          = typeof(SchemaUtils).GetMethod(nameof(SchemaUtils.CreateRelationType), Flags);
+        var genericMethod   = method!.MakeGenericMethod(type);
+        var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
+        components.Add(componentType);
+        return componentType;
+    }
+    
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Not called for NativeAOT")]
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
+    private SchemaType CreateScriptType(Type type)
     {
         var scriptIndex     = scripts.Count + 1;
-        var createParams    = new object[] { typeStore, scriptIndex };
+        var createParams    = new object[] { scriptIndex };
         var method          = typeof(SchemaUtils).GetMethod(nameof(SchemaUtils.CreateScriptType), Flags);
         var genericMethod   = method!.MakeGenericMethod(type);
         var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);

@@ -35,7 +35,7 @@ public static class EntityUtils
     /// </summary>
     public static  IComponent   GetEntityComponent    (Entity entity, ComponentType componentType) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
-        return type.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
+        return (IComponent)type.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)

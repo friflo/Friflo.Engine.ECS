@@ -10,11 +10,36 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    
+    #region relation
+    
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given relation type.<br/>
+    /// </summary>
+    public ArchetypeQuery<T1> QueryRelation<T1> ()
+        where T1 : struct, IRelation
+    {
+        var relationType = Static.EntitySchema.components[StructInfo<T1>.Index];
+        return new ArchetypeQuery<T1>(this, Signature.GetRelation<T1>(), null, relationType);
+    }
+    
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
+    public ArchetypeQuery<T1> QueryRelation<T1> (QueryFilter filter)
+        where T1 : struct, IRelation
+    {
+        var relationType = Static.EntitySchema.components[StructInfo<T1>.Index];
+        return new ArchetypeQuery<T1>(this, Signature.GetRelation<T1>(), filter, relationType);
+    }
+    #endregion
+    
 #region args - 0
     // -------------------------------------- archetype query --------------------------------------
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery Query ()
     {
@@ -38,17 +63,17 @@ public partial class EntityStoreBase
     public ArchetypeQuery<T1> Query<T1> (Signature<T1> signature)
         where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T1>(this, signature, null);
+        return new ArchetypeQuery<T1>(this, signature, null, null);
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1> Query<T1> ()
         where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), null);
+        return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), null, null);
     }
     
     /// <summary>
@@ -58,7 +83,7 @@ public partial class EntityStoreBase
     public ArchetypeQuery<T1> Query<T1> (QueryFilter filter)
         where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), filter);
+        return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), filter, null);
     }
     #endregion
     
@@ -72,20 +97,18 @@ public partial class EntityStoreBase
         where T2: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2>(this, signature, null);
-        result.ValidateQuery();
         return result;
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2> Query<T1, T2> ()
         where T1: struct, IComponent
         where T2: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>(), null);
-        result.ValidateQuery();
         return result;
     }
     
@@ -98,7 +121,6 @@ public partial class EntityStoreBase
         where T2 : struct, IComponent
     {
         var result = new ArchetypeQuery<T1,T2>(this, Signature.Get<T1,T2>(), filter);
-        result.ValidateQuery();
         return result;
     }
     #endregion
@@ -114,13 +136,12 @@ public partial class EntityStoreBase
         where T3: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2, T3>(this, signature, null);
-        result.ValidateQuery();
         return result;
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> ()
         where T1: struct, IComponent
@@ -128,7 +149,6 @@ public partial class EntityStoreBase
         where T3: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>(), null);
-        result.ValidateQuery();
         return result;
     }
     
@@ -142,7 +162,6 @@ public partial class EntityStoreBase
         where T3 : struct, IComponent
     {
         var result = new ArchetypeQuery<T1,T2,T3>(this, Signature.Get<T1,T2,T3>(), filter);
-        result.ValidateQuery();
         return result;
     }
     #endregion
@@ -159,13 +178,12 @@ public partial class EntityStoreBase
         where T4: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2, T3, T4>(this, signature, null);
-        result.ValidateQuery();
         return result;
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> ()
         where T1: struct, IComponent
@@ -174,7 +192,6 @@ public partial class EntityStoreBase
         where T4: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>(), null);
-        result.ValidateQuery();
         return result;
     }
     
@@ -189,7 +206,6 @@ public partial class EntityStoreBase
         where T4 : struct, IComponent
     {
         var result = new ArchetypeQuery<T1,T2,T3,T4>(this, Signature.Get<T1,T2,T3,T4>(), filter);
-        result.ValidateQuery();
         return result;
     }
     #endregion
@@ -206,13 +222,12 @@ public partial class EntityStoreBase
         where T5: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature, null);
-        result.ValidateQuery();
         return result;
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> ()
         where T1: struct, IComponent
@@ -222,7 +237,6 @@ public partial class EntityStoreBase
         where T5: struct, IComponent
     {
         var result = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>(), null);
-        result.ValidateQuery();
         return result;
     }
     
@@ -238,7 +252,6 @@ public partial class EntityStoreBase
         where T5 : struct, IComponent
     {
         var result = new ArchetypeQuery<T1,T2,T3,T4,T5>(this, Signature.Get<T1,T2,T3,T4,T5>(), filter);
-        result.ValidateQuery();
         return result;
     }
     #endregion

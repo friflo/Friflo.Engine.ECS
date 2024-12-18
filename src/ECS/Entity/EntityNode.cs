@@ -59,32 +59,32 @@ public struct EntityNode
     [Browse(Never)] internal    Archetype       archetype;          //  8   can be null. Could use int to relieve GC tracing reference types
     
     [Browse(Never)] internal    int             compIndex;          //  4   index within Archetype.entityIds & StructHeap<>.components
-    
+    /// revision is incremented if entity id deleted
     [Browse(Never)] internal    short           revision;           //  2
     
     // /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     // [Browse(Never)] internal NodeFlags       flags;              //  1
     
     /// <summary>
-    /// Bit mask for all <see cref="EntityRelations"/> and all <see cref="ComponentIndex"/> instances.<br/> 
+    /// Bit mask for all <see cref="AbstractEntityRelations"/> and all <see cref="AbstractComponentIndex"/> instances.<br/> 
     /// A bit is set if the entity is an owner of either an entity relation set or an indexed component value.
     /// </summary>
     /// <remarks>
     /// Use <see cref="IsOwner"/> to see <see cref="ComponentTypes"/> by name.<br/>
     /// This masks prevents the insane cost when deleting an entity.<br/>
-    /// Otherwise, all <see cref="EntityRelations"/> and <see cref="ComponentIndex"/> instances need to be iterated
+    /// Otherwise, all <see cref="AbstractEntityRelations"/> and <see cref="AbstractComponentIndex"/> instances need to be iterated
     /// to check if the entity is a key in their Dictionary's and perform required cleanup.
     /// </remarks>
     [Browse(Never)] internal    int             isOwner;            //  4
     
     /// <summary>
-    /// Bit mask for all <see cref="EntityIndex"/> and all <see cref="EntityRelationLinks{TRelationComponent}"/> instances.<br/> 
+    /// Bit mask for all <see cref="EntityIndex"/> and all <see cref="EntityLinkRelations{TRelation}"/> instances.<br/> 
     /// A bit is set if the entity is linked by either a <see cref="ILinkComponent"/> or a <see cref="ILinkRelation"/>.
     /// </summary>
     /// <remarks>
     /// Use <see cref="IsLinked"/> to see <see cref="ComponentTypes"/> by name.<br/>
     /// This masks prevents the insane cost when deleting an entity.<br/>
-    /// Otherwise, all <see cref="EntityIndex"/> and <see cref="EntityRelationLinks{TRelationComponent}"/> instances need to be iterated
+    /// Otherwise, all <see cref="EntityIndex"/> and <see cref="EntityLinkRelations{TRelation}"/> instances need to be iterated
     /// to check if the entity is a key in their Dictionary's and perform required cleanup.
     /// </remarks>
     [Browse(Never)] internal    int             isLinked;           //  4
@@ -108,14 +108,9 @@ public struct EntityNode
     {
         var sb = new StringBuilder();
         if (archetype != null) {
-            sb.Append("flags: ");
-            var startPos = sb.Length;
-            if (startPos < sb.Length) {
-                sb.Append(" | ");
-            }
-            sb.Append("Created");
+            return "Created";
         }
-        return sb.ToString();
+        return "";
     }
     #endregion
 }

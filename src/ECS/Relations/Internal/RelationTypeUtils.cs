@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
-internal static class RelationComponentUtils
+internal static class RelationTypeUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "TODO")] // TODO
     internal static Type GetEntityRelationsType(Type componentType, out Type keyType)
@@ -17,7 +17,7 @@ internal static class RelationComponentUtils
         {
             if (!i.IsGenericType) continue;
             var genericType = i.GetGenericTypeDefinition();
-            if (genericType != typeof(IRelationComponent<>)) {
+            if (genericType != typeof(IRelation<>)) {
                 continue;
             }
             keyType = i.GenericTypeArguments[0];
@@ -33,9 +33,9 @@ internal static class RelationComponentUtils
     private static Type MakeIndexType(Type componentType, Type keyType)
     {
         if (keyType == typeof(Entity)) {
-            return typeof(EntityRelationLinks<>).MakeGenericType(new [] { componentType });
+            return typeof(EntityLinkRelations<>).MakeGenericType(new [] { componentType });
         }
-        return typeof(EntityRelations<,>).MakeGenericType(new [] { componentType, keyType });
+        return typeof(GenericEntityRelations<,>).MakeGenericType(new [] { componentType, keyType });
     }
 }
 

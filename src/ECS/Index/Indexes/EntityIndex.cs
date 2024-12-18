@@ -9,7 +9,7 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal abstract class EntityIndex : ComponentIndex<Entity>
+internal abstract class EntityIndex : GenericComponentIndex<Entity>
 {
     internal override   int                         Count       => entityMap.Count;
     
@@ -19,6 +19,8 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
     
     private             EntityIndexValues           keyCollection;
     #endregion
+    
+    internal EntityIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
@@ -72,11 +74,13 @@ internal abstract class EntityIndex : ComponentIndex<Entity>
 internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
     where TIndexedComponent : struct, IIndexedComponent<Entity>
 {
+    internal EntityIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
+    
     internal override void RemoveEntityFromIndex(int id, Archetype archetype, int compIndex)
     {
         var map             = entityMap;
         var heap            = idHeap;
-        var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).components;
         int linkedEntity    = components[compIndex].GetIndexedValue().Id;
         map.TryGetValue(linkedEntity, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);

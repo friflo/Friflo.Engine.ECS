@@ -85,21 +85,21 @@ public static class Test_QueryJob
     [Test]
     public static void Test_QueryJob_ComponentMultiple()
     {
-        AreEqual( 64, ComponentType<ByteComponent>  .ComponentMultiple);
-        AreEqual( 32, ComponentType<ShortComponent> .ComponentMultiple);
-        AreEqual( 16, ComponentType<IntComponent>   .ComponentMultiple);
-        AreEqual(  8, ComponentType<LongComponent>  .ComponentMultiple);
+        AreEqual( 64, StructPadding<ByteComponent>  .ComponentMultiple);
+        AreEqual( 32, StructPadding<ShortComponent> .ComponentMultiple);
+        AreEqual( 16, StructPadding<IntComponent>   .ComponentMultiple);
+        AreEqual(  8, StructPadding<LongComponent>  .ComponentMultiple);
         //
-        AreEqual(  4, ComponentType<Component16>    .ComponentMultiple);
-        AreEqual(  2, ComponentType<Component32>    .ComponentMultiple);
-        AreEqual(  1, ComponentType<Component64>    .ComponentMultiple);
+        AreEqual(  4, StructPadding<Component16>    .ComponentMultiple);
+        AreEqual(  2, StructPadding<Component32>    .ComponentMultiple);
+        AreEqual(  1, StructPadding<Component64>    .ComponentMultiple);
         //
-        AreEqual( 16, ComponentType<Position>       .ComponentMultiple); // 12 bytes
-        AreEqual( 16, ComponentType<Scale3>         .ComponentMultiple); // 12 bytes
-        AreEqual(  4, ComponentType<Rotation>       .ComponentMultiple); // 16 bytes
-        AreEqual(  1, ComponentType<Transform>      .ComponentMultiple); // 64 bytes
+        AreEqual( 16, StructPadding<Position>       .ComponentMultiple); // 12 bytes
+        AreEqual( 16, StructPadding<Scale3>         .ComponentMultiple); // 12 bytes
+        AreEqual(  4, StructPadding<Rotation>       .ComponentMultiple); // 16 bytes
+        AreEqual(  1, StructPadding<Transform>      .ComponentMultiple); // 64 bytes
         
-        AreEqual( 16, ComponentType<Component20>    .ComponentMultiple);
+        AreEqual( 16, StructPadding<Component20>    .ComponentMultiple);
         
         AreEqual( 20, Unsafe.SizeOf<Component20>());
     }

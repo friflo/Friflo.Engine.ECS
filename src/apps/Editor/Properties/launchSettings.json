@@ -3,7 +3,7 @@
         "Editor": {
             "commandName": "Project",
             "dotnetRunMessages": true,
-            "workingDirectory": "./",
+            "workingDirectory": "$(ProjectDir)",
 
             "rem.launchBrowser": true,
             "rem.applicationUrl": "https://localhost:5000",

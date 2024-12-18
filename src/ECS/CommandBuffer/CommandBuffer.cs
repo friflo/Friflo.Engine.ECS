@@ -15,7 +15,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// A command buffer recording entity changes and execute these changes when calling <see cref="Playback"/>.<br/>
 /// <see cref="CommandBuffer"/> is not thread safe. To record changes on arbitrary threads use <see cref="Synced"/>.<br/>
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#commandbuffer">Example.</a>
 /// </summary>
 // Note: CommandBuffer is not a struct. Reasons:
 // - struct need to be passed as a ref parameter => easy to forget
@@ -145,7 +145,7 @@ public sealed class CommandBuffer : ICommandBuffer
     
     /// <summary>
     /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#commandbuffer">Example.</a>
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// When recording commands after calling <see cref="Playback"/>.<br/>
@@ -449,12 +449,13 @@ public sealed class CommandBuffer : ICommandBuffer
     }
     
     /// <summary>
-    /// Set the given <paramref name="component"/> with type <typeparamref name="T"/> of the entity with the passed <paramref name="entityId"/>.
+    /// Obsolete. Same behavior as <c>AddComponent(int,T)</c>.
     /// </summary>
+    [Obsolete("use AddComponent() instead")]
     public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
-        ChangeComponent(component,  entityId, ComponentChangedAction.Update);
+        ChangeComponent(component,  entityId, ComponentChangedAction.Add);
     }
     
     /// <summary>

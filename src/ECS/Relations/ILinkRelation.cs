@@ -14,12 +14,12 @@ namespace Friflo.Engine.ECS;
 ///     Add multiple link relations to an entity using <see cref="Entity.AddComponent{T}()"/>.
 ///   </item>
 ///   <item>
-///     Return all links of an entity to other entities using <see cref="RelationExtensions.GetRelations{TComponent}"/>.
+///     Return all links of an entity to other entities using <see cref="RelationExtensions.GetRelations{TRelation}"/>.
 ///   </item>
 ///   <item>
 ///     Remove a specific link to another entity with <see cref="RelationExtensions.RemoveRelation{T}"/>.
 ///   </item>
 /// </list>
 /// </remarks>
-public interface ILinkRelation : IRelationComponent<Entity> {
+public interface ILinkRelation : IRelation<Entity> {
 }

@@ -10,23 +10,23 @@ namespace Friflo.Engine.ECS;
 /// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}.ForEachEntity"/>.
 /// </summary>
 public delegate void ForEachEntity<T1, T2, T3, T4, T5>(ref T1 component1, ref T2 component2, ref T3 component3, ref T4 component4, ref T5 component5, Entity entity)
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
-    where T5 : struct, IComponent;
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct;
 
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#query-entities">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
 /// </summary>
 public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
-    where T5 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
 {
     /// <inheritdoc          cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
@@ -60,12 +60,12 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     public new ArchetypeQuery<T1, T2, T3, T4, T5> FreezeFilter() { SetFreezeFilter();   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature, QueryFilter filter)
-        : base(store, signature.signatureIndexes, filter) {
+        : base(store, signature.signatureIndexes, filter, null) {
     }
     
     /// <summary>
     /// Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}"/>.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
     /// </summary>
     public      QueryChunks    <T1, T2, T3, T4, T5>  Chunks         => new (this);
     

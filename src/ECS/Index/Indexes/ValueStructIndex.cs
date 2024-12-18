@@ -9,7 +9,7 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentIndex<TValue>
+internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : GenericComponentIndex<TValue>
     where TIndexedComponent : struct, IIndexedComponent<TValue>
     where TValue            : struct
 {
@@ -18,6 +18,8 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     /// map:  indexed value  ->  entities (ids) containing a <see cref="IIndexedComponent{TValue}"/> with the indexed value as key.
     private  readonly   Dictionary<TValue, IdArray> entityMap   = new();
     #endregion
+    
+    internal ValueStructIndex(EntityStore store, ComponentType componentType) : base(store, componentType) { }
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
@@ -49,7 +51,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : ComponentInd
     {
         var map         = entityMap;
         var heap        = idHeap;
-        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[componentType.StructIndex]).components;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).components;
         TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);

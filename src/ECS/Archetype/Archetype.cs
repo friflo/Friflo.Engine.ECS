@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// An <see cref="Archetype"/> store entities with a specific set of <see cref="IComponent"/> and <see cref="ITag"/> types.<br/>
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#archetype">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity#archetype">Example.</a>
 /// </summary>
 /// <remarks>
 /// E.g. all entities with a <see cref="Position"/> and <see cref="Rotation"/> component are store in the same archetype.<br/>
@@ -53,7 +53,7 @@ public sealed class Archetype
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
     /// <summary>Return the components of the specified <typeparamref name="TComponent"/> type stored in the archetype.</summary>
-                    public              Span<TComponent>    Components<TComponent>() where TComponent : struct, IComponent
+                    public              Span<TComponent>    Components<TComponent>() where TComponent : struct
                         => new (((StructHeap<TComponent>)heapMap[StructInfo<TComponent>.Index]).components, 0, entityCount);
     
     /// <summary>The <see cref="EntityStore"/> owning the archetype.</summary>
@@ -178,7 +178,7 @@ public sealed class Archetype
         // tags             = default   // has no tags
     }
     
-    /// <summary> used by <see cref="EntityRelations"/> </summary>
+    /// <summary> used by <see cref="AbstractEntityRelations"/> </summary>
     internal Archetype(in ArchetypeConfig config, StructHeap heap)
     {
         config.store.AddArchetypeCapacity(ArchetypeUtils.MinCapacity);
@@ -308,10 +308,12 @@ public sealed class Archetype
     }
     
     /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.IsBlittable"/></remarks>
-    internal static void CopyComponents(Archetype arch, int sourceIndex, int targetIndex)
+    internal static void CloneComponents(Archetype arch, CopyContext context)
     {
+        var sourceIndex = context.source.compIndex;
+        var targetIndex = context.target.compIndex;
         foreach (var sourceHeap in arch.structHeaps) {
-            sourceHeap.CopyComponent(sourceIndex, targetIndex);
+            sourceHeap.CloneComponent(sourceIndex, targetIndex, context);
         }
     }
     
@@ -438,7 +440,7 @@ public sealed class Archetype
 public static class ArchetypeUtils
 {
     /// <summary> Minimum: 64 see <see cref="MaxComponentMultiple"/> to support padding for vectorization.</summary>
-    /// <remarks> Could be less than 64 if using <see cref="ComponentType{T}.ByteSize"/> for <see cref="StructHeap{T}.components"/> </remarks>
+    /// <remarks> Could be less than 64 if using <see cref="StructPadding{T}.ByteSize"/> for <see cref="StructHeap{T}.components"/> </remarks>
     public   const  int     MinCapacity             = 512;
     
     /// <summary> Maximum number of components  </summary>

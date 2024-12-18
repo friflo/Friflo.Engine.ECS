@@ -12,7 +12,7 @@ public struct AttackRelation : ILinkRelation
     public override string  ToString()          => target.Id.ToString();
 }
 
-internal struct IntRelation : IRelationComponent<int>
+internal struct IntRelation : IRelation<int>
 {
     public          int     value;
     public          int     GetRelationKey()    => value;
@@ -20,7 +20,7 @@ internal struct IntRelation : IRelationComponent<int>
     public override string  ToString()          => value.ToString();
 }
 
-internal struct StringRelation : IRelationComponent<string>
+internal struct StringRelation : IRelation<string>
 {
     public          string  value;
     public          string  GetRelationKey()    => value;
@@ -35,15 +35,26 @@ internal enum InventoryItemType {
     Shield  = 4,
 }
 
-/// <summary> <see cref="IRelationComponent{TKey}"/> using an enum as relation key. </summary>
+/// <summary> <see cref="IRelation{TKey}"/> using an enum as relation key. </summary>
 [ComponentKey("item")]
-internal struct InventoryItem : IRelationComponent<InventoryItemType>
+internal struct InventoryItem : IRelation<InventoryItemType>
 {
     public          InventoryItemType   type;
     public          int                 amount;
     public          InventoryItemType   GetRelationKey()    => type;
 
     public override string              ToString()          => type.ToString();
+}
+
+/// Check generic relation
+[GenericInstanceType("relation-string", typeof(string))] 
+internal struct GenericRelation<T> : IRelation<int>
+{
+    public          int     key;
+    public          T       value;
+    public          int     GetRelationKey()    => key;
+    
+    public override string  ToString()          => key.ToString();
 }
 
 }

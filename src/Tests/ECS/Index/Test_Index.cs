@@ -18,7 +18,7 @@ public static class Test_Index
     public static void Test_Index_ValueInRange_ValueStructIndex()
     {
         var store = new EntityStore();
-        var values = store.GetAllIndexedComponentValues<IndexedInt, int>();
+        var values = store.ComponentIndex<IndexedInt, int>().Values;
         for (int n = 1; n <= 10; n++) {
             var entity = store.CreateEntity(n);
             entity.AddComponent(new IndexedInt { value = n });
@@ -33,7 +33,7 @@ public static class Test_Index
     public static void Test_Index_ValueInRange_ValueClassIndex()
     {
         var store = new EntityStore();
-        var values = store.GetAllIndexedComponentValues<IndexedName, string>();
+        var values = store.ComponentIndex<IndexedName, string>().Values;
         for (int n = 1; n <= 10; n++) {
             var entity = store.CreateEntity(n);
             entity.AddComponent(new IndexedName { name = n.ToString() });
@@ -48,6 +48,8 @@ public static class Test_Index
     public static void Test_Index_Component_Update()
     {
         var store = new EntityStore();
+        var nameIndex =  store.ComponentIndex<IndexedName, string>();
+        var intIndex  =  store.ComponentIndex<IndexedInt, int>();
 
         var entities = new List<Entity>();
         for (int n = 0; n < 10; n++) {
@@ -57,17 +59,17 @@ public static class Test_Index
         var entity1 = entities[0];
         var entity2 = entities[1];
         var entity3 = entities[2];
-        var nameValues  = store.GetAllIndexedComponentValues<IndexedName, string>();
-        var intValues   = store.GetAllIndexedComponentValues<IndexedInt, int>();
+        var nameValues  = nameIndex.Values;
+        var intValues   = intIndex.Values;
         
         entity1.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.Debug());
         entity2.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.Debug());
         entity3.AddComponent(new IndexedName   { name   = "find-me1" });    AreEqual("{ find-me1 }",    nameValues.Debug());
         entity3.AddComponent(new IndexedInt    { value  = 123        });    AreEqual("{ 123 }",         intValues.Debug());
 
-        AreEqual("{ 1, 3 }",store.GetEntitiesWithComponentValue<IndexedName, string>("find-me1").Debug());
-        AreEqual("{ 2, 3 }",store.GetEntitiesWithComponentValue<IndexedInt, int>(123).Debug());
-        AreEqual("{ }",     store.GetEntitiesWithComponentValue<IndexedInt, int>(42).Debug());
+        AreEqual("{ 1, 3 }",nameIndex["find-me1"].Debug());
+        AreEqual("{ 2, 3 }",intIndex[123].Debug());
+        AreEqual("{ }",     intIndex[42].Debug());
 
         var query1  = store.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me1");
         var query2  = store.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me1");
@@ -103,6 +105,7 @@ public static class Test_Index
     public static void Test_Index_indexed_Entity()
     {
         var store   = new EntityStore();
+        var index   = store.LinkComponentIndex<LinkComponent>();
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         var entity3 = store.CreateEntity(3);
@@ -111,11 +114,15 @@ public static class Test_Index
         var target5 = store.CreateEntity(5);
         var target6 = store.CreateEntity(6);
         
-        var values = store.GetAllLinkedEntities<LinkComponent>();
+        var values = index.Values;
         
         entity1.AddComponent(new LinkComponent { entity = target4 });   AreEqual(1, values.Count);
         entity2.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
         entity3.AddComponent(new LinkComponent { entity = target5 });   AreEqual(2, values.Count);
+        
+        AreEqual("Count: 2", index.ToString());
+        AreEqual(1, index[target4].Count);
+        AreEqual(2, index[target5].Count);
 
         int count = 0;
         foreach (var entity in values) {
@@ -150,13 +157,14 @@ public static class Test_Index
     public static void Test_Index_support_null()
     {
         var store   = new EntityStore();
+        var index   = store.ComponentIndex<IndexedName, string>();
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         entity1.AddComponent(new IndexedName { name = null });
         entity2.AddComponent(new IndexedName { name = null });
         
         var start = Mem.GetAllocatedBytes();
-        var result = store.GetEntitiesWithComponentValue<IndexedName, string>(null);
+        var result = index[null];
         Mem.AssertNoAlloc(start);
         
         AreEqual(2, result.Count);
@@ -164,7 +172,7 @@ public static class Test_Index
         AreEqual(2, result[1].Id);
         
         entity2.RemoveComponent<IndexedName>();
-        result = store.GetEntitiesWithComponentValue<IndexedName, string>(null);
+        result = index[null];
         AreEqual(1, result.Count);
     }
     
@@ -172,16 +180,17 @@ public static class Test_Index
     public static void Test_Index_ValueStructIndex()
     {
         var store   = new EntityStore();
+        var index   = store.ComponentIndex<IndexedInt, int>();
         var entity1 = store.CreateEntity();
         entity1.AddComponent(new IndexedInt { value = 123 });
         entity1.AddComponent(new IndexedInt { value = 123 }); // add same component value again
-        var result = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
+        var result = index[123];
         AreEqual(1, result.Count);
         
         entity1.AddComponent(new IndexedInt { value = 456 });
-        result = store.GetEntitiesWithComponentValue<IndexedInt, int>(456);
+        result = index[456];
         AreEqual(1, result.Count);
-        result = store.GetEntitiesWithComponentValue<IndexedInt, int>(123);
+        result = index[123];
         AreEqual(0, result.Count);
     }
     
@@ -263,7 +272,7 @@ public static class Test_Index
         // 1_000_000  #PC    Test_Index_Perf - count: 1000000 duration: 176 ms
         var store       = new EntityStore();
         var entities    = new List<Entity>();
-        var values      = store.GetAllIndexedComponentValues<IndexedInt, int>();
+        var values      = store.ComponentIndex<IndexedInt, int>().Values;
         for (int n = 1; n <= count; n++) {
             entities.Add(store.CreateEntity());
         }

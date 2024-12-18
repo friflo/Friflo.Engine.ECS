@@ -25,6 +25,16 @@ namespace Friflo.Engine.ECS;
 [CLSCompliant(true)]
 public static class Signature
 {
+    internal static Signature<T1> GetRelation<T1>()
+        where T1 : struct, IRelation
+    {
+        var schema  = EntityStoreBase.Static.EntitySchema;
+        var indexes   = new SignatureIndexes(
+            T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index)
+        );
+        return new Signature<T1>(indexes);
+    }
+    
     /// <summary>
     /// Returns a query <see cref="Signature{T1}"/> containing the specified component type.<br/>
     /// </summary>
@@ -138,7 +148,7 @@ public static class Signature
 /// A Signature to create a query using <see cref="EntityStoreBase.Query{T1}(Signature{T1})"/> with one component.
 /// </summary>
 public readonly struct Signature<T1>
-    where T1 : struct, IComponent
+    where T1 : struct
 {
     /// <summary> Return the component types of the query signature. </summary>
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
@@ -159,8 +169,8 @@ public readonly struct Signature<T1>
 /// A Signature to create a query using <see cref="EntityStoreBase.Query{T1,T2}(Signature{T1,T2})"/> with two components.
 /// </summary>
 public readonly struct Signature<T1, T2>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
 {
     /// <summary> Return the component types of the query signature. </summary>
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
@@ -181,9 +191,9 @@ public readonly struct Signature<T1, T2>
 /// A Signature to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3}(Signature{T1,T2,T3})"/> with three components.
 /// </summary>
 public readonly struct Signature<T1, T2, T3>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
 {
     /// <summary> Return the component types of the query signature. </summary>
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
@@ -204,10 +214,10 @@ public readonly struct Signature<T1, T2, T3>
 /// A Signature to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4}(Signature{T1,T2,T3,T4})"/> with four components.
 /// </summary>
 public readonly struct Signature<T1, T2, T3, T4>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
 {
     /// <summary> Return the component types of the query signature. </summary>
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
@@ -228,11 +238,11 @@ public readonly struct Signature<T1, T2, T3, T4>
 /// A Signature used to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5}(Signature{T1,T2,T3,T4,T5})"/> with five components.
 /// </summary>
 public readonly struct Signature<T1, T2, T3, T4, T5>
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
-    where T5 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
 {
     /// <summary> Return the component types of the query signature. </summary>
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);

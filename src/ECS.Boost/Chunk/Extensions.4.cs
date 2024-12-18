@@ -10,10 +10,10 @@ public static partial class ChunkExtensions
 {
     public static void Each<TEach, T1,T2,T3,T4>(this Chunks<T1,T2,T3,T4> chunks, ref TEach each)
         where TEach : IEach<T1, T2, T3, T4>
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
     {
         var entities    = chunks.Entities;
         var start       = entities.Start;
@@ -41,10 +41,10 @@ public static partial class ChunkExtensions
     
     public static void EachEntity<TEachEntity, T1,T2,T3,T4>(this Chunks<T1,T2,T3,T4> chunks, ref TEachEntity each)
         where TEachEntity : IEachEntity<T1, T2, T3, T4>
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
     {
         var entities    = chunks.Entities;
         var start       = entities.Start;

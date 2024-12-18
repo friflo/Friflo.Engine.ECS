@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal static class SortUtils<TValue>
 {
-    internal static void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet, Dictionary<TValue, IdArray> map, ComponentIndex<TValue> componentIndex)
+    internal static void AddValueInRangeEntities(TValue min, TValue max, HashSet<int> idSet, Dictionary<TValue, IdArray> map, GenericComponentIndex<TValue> componentIndex)
     {
         int count   = map.Count;
         var buffer  = componentIndex.sortBuffer;

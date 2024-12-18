@@ -122,8 +122,8 @@ public abstract class BaseSystem
     #endregion
 
 #region virtual - store: add / remove
-    internal           virtual  void RemoveStoreInternal(EntityStore store) { }
-    internal           virtual  void AddStoreInternal   (EntityStore store) { }
+    protected internal virtual  void OnRemoveStore(EntityStore store) { }
+    protected internal virtual  void OnAddStore   (EntityStore store) { }
     #endregion
     
 #region virtual - system: update
@@ -207,7 +207,7 @@ public abstract class BaseSystem
             system.systemRoot = newRoot;
             newRoot.AddSystemToRoot(system);
             foreach (var store in newRoot.stores) {
-                system.AddStoreInternal(store);
+                system.OnAddStore(store);
             }
         }
     }
@@ -225,7 +225,7 @@ public abstract class BaseSystem
             system.systemRoot = null;
             currentRoot.RemoveSystemFromRoot(system);
             foreach (var store in currentRoot.stores) {
-                system.RemoveStoreInternal(store);
+                system.OnRemoveStore(store);
             }
         }
     }
@@ -267,8 +267,8 @@ public abstract class BaseSystem
     /// </summary>
     public void AppendPerfLog(StringBuilder stringBuilder) {
         var stores  = SystemRoot?.stores.count ?? 0;
-        stringBuilder.Append($"stores: {stores,-3}                   on      last ms       sum ms      updates     last mem      sum mem     entities\n");
-        stringBuilder.Append("---------------------         --     --------     --------     --------     --------     --------     --------\n");
+        stringBuilder.Append($"stores: {stores,-3}                   E M      last ms       sum ms      updates     last mem      sum mem     entities\n");
+        stringBuilder.Append("---------------------         ---     --------     --------     --------     --------     --------     --------\n");
         AppendPerfStats(stringBuilder, 0);
         stringBuilder.Replace(',', '.'); // no more patience with NumberFormatInfo
     }
@@ -288,9 +288,16 @@ public abstract class BaseSystem
             sb.Append(group.childSystems.Count);
             sb.Append(']');
         }
+        bool monitored;
+        if (this is SystemGroup) {
+            monitored = ((SystemGroup)this).MonitorPerf;
+        } else {
+            monitored = parentGroup?.MonitorPerf ?? false;
+        }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
-        sb.Append(enabled ? " +" : " -");
+        sb.Append(enabled   ? "+ " : "- ");
+        sb.Append(monitored ? "m" : " ");
         sb.Append($" {(double)Perf.LastMs,12:0.000}"); // (double) prevents allocation
         sb.Append($" {(double)Perf.SumMs,12:0.000}");
         sb.Append($" {Perf.UpdateCount,12}");

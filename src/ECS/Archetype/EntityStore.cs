@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS.Utils;
-using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -117,8 +116,7 @@ public abstract partial class EntityStoreBase
     // use nested class to minimize noise in debugger
     internal static class Static
     {
-        internal static readonly    TypeStore       TypeStore       = new TypeStore();
-        internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes(TypeStore);
+        internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes();
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
         internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[EntitySchema.maxStructIndex];
         
@@ -190,6 +188,7 @@ public abstract partial class EntityStoreBase
         return new ArgumentException($"id: {id}. expect in [0, current max id: {store.nodes.Length - 1}]");
     }
     
+    /*
     internal static ArgumentException AddRelationException(int id, int structIndex) {
         var componentType   = Static.EntitySchema.components[structIndex];
         var type            = componentType.Name;
@@ -201,7 +200,7 @@ public abstract partial class EntityStoreBase
         var type            = componentType.Name;
         var keyType         = componentType.RelationKeyType.Name;
         return new ArgumentException($"relation component must be removed with:  entity.{nameof(RelationExtensions.RemoveRelation)}<{type},{keyType}>(key);  id: {id}");
-    }
+    }*/
     #endregion
 }
 

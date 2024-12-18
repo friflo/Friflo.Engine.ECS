@@ -97,7 +97,13 @@ public partial class EntityStore
         } else {
             entity = CreateFromDataEntityRandomPid (dataEntity);
         }
+        // stash current component values to update indexed components
+        var oldType = entity.archetype;
+        foreach (var heap in oldType.structHeaps) {
+            heap.StashComponent(entity.compIndex);   
+        }
         error = reader.Read(dataEntity, entity, this, options);
+        UpdateComponentIndexes(entity, oldType);
         return entity;
     }
     
@@ -174,6 +180,37 @@ public partial class EntityStore
             return;
         }
         ArrayUtils.Resize(ref idBuffer, Math.Max(2 * idBuffer.Length, count));
+    }
+    
+    private static void UpdateComponentIndexes(Entity entity, Archetype oldType)
+    {
+        var newType         = entity.archetype;
+        var indexTypesMask  = Static.EntitySchema.indexTypes.bitSet.l0;
+        var oldIndexBits    = oldType.componentTypes.bitSet.l0 & indexTypesMask;
+        var newIndexBits    = newType.componentTypes.bitSet.l0 & indexTypesMask;
+        var indexBits       = oldIndexBits | newIndexBits;
+        if (indexBits == 0) {
+            return;
+        }
+        var indexTypes = new ComponentTypes ();
+        indexTypes.bitSet.l0 = indexBits;
+        foreach (var type in indexTypes)
+        {
+            var oldHeap = oldType.heapMap[type.StructIndex];
+            var newHeap = newType.heapMap[type.StructIndex];
+            if (oldHeap == null) {
+                // case: indexed component added
+                newHeap.AddIndex(entity);
+                continue;
+            }
+            if (newHeap != null) {
+                // case: indexed component updated
+                oldHeap.UpdateIndex(entity);
+                continue;
+            }
+            // case: indexed component removed
+            oldHeap.RemoveIndex(entity);
+        }
     }
     #endregion
 }

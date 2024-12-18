@@ -12,13 +12,13 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Enables <see cref="JobExecution.Parallel"/> query execution returning the specified components.
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>
 /// </summary>
 public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
 {
     internal            QueryChunks<T1, T2, T3, T4>     Chunks      => new (query);     // only for debugger
     internal            QueryEntities                   Entities    => query.Entities;  // only for debugger
@@ -55,7 +55,7 @@ public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
     }
     
     /// <summary>Execute the query.
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job">Example.</a>.<br/>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>.<br/>
     /// All chunks having at least <see cref="QueryJob.MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
     /// components are executed <see cref="JobExecution.Parallel"/>. 
     /// </summary>
@@ -102,10 +102,10 @@ public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
     
     private static int GetMultiple()
     {
-        int lcm1 = ComponentType<T1>.ComponentMultiple;
-        int lcm2 = ComponentType<T2>.ComponentMultiple;
-        int lcm3 = ComponentType<T3>.ComponentMultiple;
-        int lcm4 = ComponentType<T4>.ComponentMultiple;
+        int lcm1 = StructPadding<T1>.ComponentMultiple;
+        int lcm2 = StructPadding<T2>.ComponentMultiple;
+        int lcm3 = StructPadding<T3>.ComponentMultiple;
+        int lcm4 = StructPadding<T4>.ComponentMultiple;
         int lcm12 = LeastComponentMultiple(lcm1,  lcm2);
         int lcm34 = LeastComponentMultiple(lcm3,  lcm4);
         return      LeastComponentMultiple(lcm12, lcm34);

@@ -16,26 +16,30 @@ namespace Friflo.Engine.ECS.Serialize;
 /// </summary>
 internal sealed class ComponentWriter
 {
-    private  readonly   ObjectWriter                    componentWriter;
-    private             Utf8JsonWriter                  writer;
+    internal readonly   ObjectWriter                    componentWriter;
+    internal            Utf8JsonWriter                  writer;
     internal            Bytes                           buffer;
     private  readonly   ComponentType[]                 structTypes;
     private  readonly   Dictionary<Type, ScriptType>    scriptTypeByType;
     private  readonly   int                             unresolvedIndex;
+    private  readonly   ComponentTypes                  relationTypes;
     
-    internal ComponentWriter() {
+    
+    internal ComponentWriter(TypeStore typeStore) {
         buffer              = new Bytes(128);
-        componentWriter     = new ObjectWriter(EntityStoreBase.Static.TypeStore);
+        componentWriter     = new ObjectWriter(typeStore);
         var schema          = EntityStoreBase.Static.EntitySchema;
         structTypes         = schema.components;
         scriptTypeByType    = schema.scriptTypeByType;
         unresolvedIndex     = schema.unresolvedType.StructIndex;
+        relationTypes       = schema.relationTypes;
     }
     
     internal JsonValue Write(Entity entity, List<JsonValue> members, bool pretty)
     {
         var archetype = entity.archetype;
-        if (entity.ComponentCount() == 0) {
+        var relationTypesL0 = entity.store.nodes[entity.Id].isOwner & relationTypes.bitSet.l0;
+        if (entity.ComponentCount() == 0 && relationTypesL0 == 0) {
             return default;
         }
         var componentCount = 0;
@@ -59,6 +63,12 @@ internal sealed class ComponentWriter
             var start           = writer.json.end;
             writer.MemberBytes(keyBytes.AsSpan(), value);
             members?.AddMember(writer, start);
+            componentCount++;
+        }
+        var relationsTypes  = new ComponentTypes();
+        relationsTypes.bitSet.l0 = relationTypesL0;
+        foreach (var relationType in relationsTypes) {
+            relationType.WriteRelations(this, entity);
             componentCount++;
         }
         // --- write scripts

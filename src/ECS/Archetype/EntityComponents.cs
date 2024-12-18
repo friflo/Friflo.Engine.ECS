@@ -78,13 +78,13 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
         return intersect != 0;
     }
     
-    internal IComponent[] GetComponentArray()
+    internal object[] GetComponentArray()
     {
         int count = GetCount();
         if (count == 0) {
-            return Array.Empty<IComponent>();
+            return Array.Empty<object>();
         }
-        var components = new IComponent[count];
+        var components = new object[count];
         int n = 0;
         foreach (var component in this) {
             components[n++] = component.GetValue();
@@ -173,10 +173,10 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
 public readonly struct EntityComponent
 {
     // --- public fields
-    [Browse(Never)] private readonly    Entity          entity;             // 16
-    [Browse(Never)] private readonly    ComponentType   type;               //  8
-    [Browse(Never)] private readonly    EntityRelations entityRelations;    //  8
-    [Browse(Never)] private readonly    int             relationsIndex;     //  4
+    [Browse(Never)] private readonly    Entity                  entity;             // 16
+    [Browse(Never)] private readonly    ComponentType           type;               //  8
+    [Browse(Never)] private readonly    AbstractEntityRelations entityRelations;    //  8
+    [Browse(Never)] private readonly    int                     relationsIndex;     //  4
     
     // --- public properties
     /// <summary>
@@ -187,7 +187,7 @@ public readonly struct EntityComponent
     /// To access a component use <see cref="Entity.GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
-    public              IComponent      Value       => GetValue();
+    public              object          Value       => GetValue();
     
     /// <summary>Return the <see cref="System.Type"/> of an entity component.</summary>
     public              ComponentType   Type        => type;
@@ -199,14 +199,14 @@ public readonly struct EntityComponent
         type        = componentType;
     }
     
-    internal EntityComponent (Entity entity, ComponentType componentType, EntityRelations entityRelations, int relationsIndex) {
+    internal EntityComponent (Entity entity, ComponentType componentType, AbstractEntityRelations entityRelations, int relationsIndex) {
         this.entity             = entity;
         type                    = componentType;
         this.entityRelations    = entityRelations;
         this.relationsIndex     = relationsIndex;
     }
     
-    internal IComponent GetValue() {
+    internal object GetValue() {
         if (entityRelations == null) {
             return entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
         }
@@ -217,7 +217,7 @@ public readonly struct EntityComponent
 internal class EntityComponentsDebugView
 {
     [Browse(RootHidden)]
-    public              IComponent[]        Components => entityComponents.GetComponentArray();
+    public              object    []        Components => entityComponents.GetComponentArray();
 
     [Browse(Never)]
     private readonly    EntityComponents    entityComponents;

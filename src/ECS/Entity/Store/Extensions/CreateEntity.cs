@@ -308,9 +308,25 @@ public static partial class EntityStoreExtensions {
         return new Entity(store, id, revision);
     }
     
+    private static readonly long IndexTypesMask = EntityStoreBase.Static.EntitySchema.indexTypes.bitSet.l0;
+    
+    private static void UpdateIndexedComponents(Entity entity, Archetype archetype, long indexTypesMask)
+    {
+        var indexTypes = new ComponentTypes();
+        indexTypes.bitSet.l0 = indexTypesMask;
+        foreach (var indexType in indexTypes) {
+            archetype.heapMap[indexType.StructIndex].AddIndex(entity);
+        }
+    }
+    
     private static void SendCreateEvents(Entity entity, Archetype archetype, in SignatureIndexes componentTypes)
     {
         var store = entity.store;
+        // --- add indexed components to indexes
+        var indexTypesMask = archetype.componentTypes.bitSet.l0 & IndexTypesMask;
+        if (indexTypesMask != 0) {
+            UpdateIndexedComponents(entity, archetype, indexTypesMask);
+        }
         // --- create entity event
         store.CreateEntityEvent(entity);
         

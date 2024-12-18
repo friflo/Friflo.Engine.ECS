@@ -53,11 +53,11 @@ internal partial struct StoreExtension
     #endregion
     
 #region component indices
-    internal                            ComponentIndex[]        indexMap;                   //  8   - map & its component indexes created on demand
+    internal                        AbstractComponentIndex[]    indexMap;                   //  8   - map & its component indexes created on demand
     #endregion
     
 #region entity relations
-    internal                            EntityRelations[]       relationsMap;               //  8   - map & its EntityRelations created on demand
+    internal                        AbstractEntityRelations[]   relationsMap;               //  8   - map & its AbstractEntityRelations created on demand
     #endregion
     
     internal StoreExtension(PidType pidType)

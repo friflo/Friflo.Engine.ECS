@@ -59,7 +59,7 @@ public static class Test_ComponentReader
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
     [Test]
-    public static void Test_ComponentReader_change_archetype()
+    public static void Test_ComponentReader_change_archetype_add_components()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
@@ -74,6 +74,22 @@ public static class Test_ComponentReader
         IsTrue  (root == rootResult);
         IsTrue  (root.HasScale3);   // could change script and remove all components not present in DataEntity components
         IsTrue  (root.HasPosition);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_change_archetype_remove_component()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var root        = store.CreateEntity(10);
+        root.AddComponent(new Position());
+        IsTrue (root.HasPosition);
+        
+        var rootNode    = new DataEntity { pid = 10, components = new JsonValue() };
+        var rootResult  = converter.DataEntityToEntity(rootNode, store, out _);  // archetype changes
+        IsTrue  (root == rootResult);
+        IsFalse (root.HasPosition);
     }
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
@@ -212,11 +228,11 @@ public static class Test_ComponentReader
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var json    = new JsonValue("{ \"pos\": [] }");
+        var json    = new JsonValue("{ \"pos\": 123 }");
         var node    = new DataEntity { pid = 10, components = json };
         var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
-        AreEqual("'components' element must be an object. was ArrayStart. id: 10, component: 'pos'", error);
+        AreEqual("'components' member must be object or array. was ValueNumber. id: 10, component: 'pos'", error);
     }
     
     [Test]
@@ -228,7 +244,7 @@ public static class Test_ComponentReader
         var node    = new DataEntity { pid = 10, components = new JsonValue("123") };
         var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
-        AreEqual("expect 'components' == object or null. id: 10. was: ValueNumber", error);
+        AreEqual("expect 'components' == object, array or null. id: 10. was: ValueNumber", error);
         
         node        = new DataEntity { pid = 10, components = new JsonValue("invalid") };
         entity      = converter.DataEntityToEntity(node, store, out error);

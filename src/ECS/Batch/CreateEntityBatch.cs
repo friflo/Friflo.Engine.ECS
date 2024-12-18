@@ -22,7 +22,7 @@ public class BatchAlreadyReturnedException : InvalidOperationException
 /// <summary>
 /// A create batch is used to optimize entity creation.<br/>
 /// Components and tags are buffered before creating an entity with <see cref="CreateEntity()"/>.<br/>
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#batch---create-entity">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/batch">Example.</a>
 /// </summary>
 /// <remarks>
 /// Multiple entities can be created using the same batch.<br/>
@@ -142,16 +142,33 @@ public sealed class CreateEntityBatch
         foreach (var heap in archetype.structHeaps) {
             heap.SetBatchComponent(components, compIndex);
         }
+        var entity = new Entity(entityStore, id, revision);
+        
+        // -- add indexed components to indexes
+        var indexTypes = archetype.componentTypes.bitSet.l0 & indexTypesMask;
+        if (indexTypes != 0) {
+            AddIndexedComponents(entity, indexTypes);
+        }
         if (autoReturn) {
             isReturned = true;
             Clear();
             entityStore.ReturnCreateBatch(this);
         }
-        var entity = new Entity(entityStore, id, revision);
         
         // Send event. See: SEND_EVENT notes
         entityStore.CreateEntityEvent(entity);
         return entity;
+    }
+    
+    private readonly long indexTypesMask = EntityStoreBase.Static.EntitySchema.indexTypes.bitSet.l0;
+    
+    private void AddIndexedComponents(Entity entity, long indexTypes)
+    {
+        var types =  new ComponentTypes();
+        types.bitSet.l0 = indexTypes;
+        foreach (var type in types) {
+            archetype.heapMap[type.StructIndex].AddIndex(entity);
+        }
     }
     
     /// <summary>

@@ -17,7 +17,22 @@ public static class Test_Relations_Query
     public static void Test_Relations_query()
     {
         var store   = new EntityStore();
-        var query   = store.Query<AttackRelation>();
+        var query   = store.QueryRelation<AttackRelation>();
+        QueryRelations(query);
+    }
+    
+    [Test]
+    public static void Test_Relations_query_filter()
+    {
+        var store   = new EntityStore();
+        var query   = store.QueryRelation<AttackRelation>(new QueryFilter());
+        QueryRelations(query);
+    }
+    
+    // COMP_TAG
+    private static void QueryRelations(ArchetypeQuery<AttackRelation> query)
+    {
+        var store   = query.Store;
         // --- test query without adding relations before
         AreEqual(0, query.Count);
         int count = 0;
@@ -196,7 +211,7 @@ public static class Test_Relations_Query
         int count = 0;
         var sw = new Stopwatch();
         sw.Start();
-        store.ForAllEntityRelations((ref IntRelation relation, Entity entity) => {
+        store.EntityRelations<IntRelation>().For((ref IntRelation relation, Entity entity) => {
             count++;
         });
         AreEqual(entityCount * relationsPerEntity, count);
@@ -221,7 +236,7 @@ public static class Test_Relations_Query
         int count = 0;
         var sw = new Stopwatch();
         sw.Start();
-        var (entities, relations) = store.GetAllEntityRelations<IntRelation>();
+        var (entities, relations) = store.EntityRelations<IntRelation>().Pairs;
         int length = entities.Count;
         for (int n = 0; n < length; n++) {
             count++;
@@ -232,6 +247,7 @@ public static class Test_Relations_Query
         Console.WriteLine($"Test_Relations_GetAllEntityRelations_Perf - entities: {entityCount}  relationsPerEntity: {relationsPerEntity}  duration: {sw.ElapsedMilliseconds} ms");
     }
     
+    /* COMP_TAG obsolete: using relation components in a Query<>() will not compile 
     [Test]
     public static void Test_Relations_query_exception()
     {
@@ -240,7 +256,7 @@ public static class Test_Relations_Query
             store.Query<AttackRelation, Position>();
         });
         AreEqual("relation component query cannot have other query components", e!.Message);
-    }
+    } */
 }
 
 }

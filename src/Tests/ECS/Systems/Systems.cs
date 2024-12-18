@@ -57,7 +57,13 @@ namespace Tests.ECS.Systems
         internal int endCalled;
         
         public TestGroup() : base("TestGroup") { }
-
+        
+        // ensure OnUpdateGroup() can be overriden 
+        // ReSharper disable once RedundantOverriddenMember
+        protected override void OnUpdateGroup() {
+            base.OnUpdateGroup();
+        }
+        
         protected override void OnUpdateGroupBegin() {
             AreEqual(1, SystemRoot.Stores.Count);
             AreEqual(42, Tick.deltaTime);
@@ -77,7 +83,21 @@ namespace Tests.ECS.Systems
     
     // A custom System class with all possible overrides
     public class MySystem2 : BaseSystem {
+        public      bool     storeAdded;
+        public      bool     storeRemoved;
+            
         public      override string Name => "MySystem2 - custom name";
+        
+        protected override void OnAddStore   (EntityStore store) {
+            base.OnAddStore(store);
+            storeAdded = true;
+        }
+        
+        protected override void OnRemoveStore(EntityStore store) {
+            base.OnRemoveStore(store);
+            storeRemoved = true;
+        }
+        
         
         protected   override void   OnUpdateGroupBegin() { }
         protected   override void   OnUpdateGroupEnd()   { }

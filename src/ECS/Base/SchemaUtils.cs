@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
@@ -23,15 +22,15 @@ internal static class SchemaUtils
     }
     
     [ExcludeFromCodeCoverage]
-    internal static EntitySchema RegisterSchemaTypes(TypeStore typeStore)
+    internal static EntitySchema RegisterSchemaTypes()
     {
         if (!RegisterComponentTypesByReflection()) {
             return NativeAOT.GetSchema();
         }
-        return RegisterTypes(typeStore);
+        return RegisterTypes();
     }
     
-    private static EntitySchema RegisterTypes(TypeStore typeStore)
+    private static EntitySchema RegisterTypes()
     {
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
@@ -45,7 +44,7 @@ internal static class SchemaUtils
                 schemaTypes.AddSchemaType(type);
             }
         }
-        var dependants = schemaTypes.CreateSchemaTypes(typeStore, assemblies);
+        var dependants = schemaTypes.CreateSchemaTypes(assemblies);
         foreach (var dependant in dependants) {
             assemblyLoader.dependants.Add(dependant);
         }
@@ -53,7 +52,7 @@ internal static class SchemaUtils
         return new EntitySchema(dependants, schemaTypes);
     }
     
-    internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex, Type indexType, Type indexValueType, Type relationType, Type keyType)
+    internal static ComponentType CreateComponentType<T>(int structIndex, Type indexType, Type indexValueType)
         where T : struct, IComponent
     {
         string componentKey;
@@ -63,21 +62,35 @@ internal static class SchemaUtils
         } else {
             componentKey = GetComponentKey(type);
         }
-        return new ComponentType<T>(componentKey, structIndex, indexType, indexValueType, typeStore, relationType, keyType);
+        return new ComponentType<T>(componentKey, structIndex, indexType, indexValueType);
     }
     
-    internal static ScriptType CreateScriptType<T>(TypeStore typeStore, int scriptIndex)
+    internal static ComponentType CreateRelationType<T>(int structIndex, Type relationType, Type keyType)
+        where T : struct, IRelation
+    {
+        string componentKey;
+        var type = typeof(T);
+        if (type.IsGenericType) {
+            componentKey = GetGenericComponentKey(type);
+        } else {
+            componentKey = GetComponentKey(type);
+        }
+        return new RelationType<T>(componentKey, structIndex, relationType, keyType);
+    }
+    
+    internal static ScriptType CreateScriptType<T>(int scriptIndex)
         where T : Script, new()
     {
         var scriptKey   = GetComponentKey(typeof(T));
         var isBlittable = SchemaType.GetBlittableType(typeof(T)) == BlittableType.Blittable;
-        CloneScript cloneScript = null;
-        if (isBlittable) {
-            cloneScript = CreateCloneScriptDelegate();
-        }
-        return new ScriptType<T>(scriptKey, scriptIndex, typeStore, isBlittable, cloneScript);
+        // CloneScript cloneScript = null;
+        // if (isBlittable) {
+        //     cloneScript = CreateCloneScriptDelegate();
+        // }
+        return new ScriptType<T>(scriptKey, scriptIndex, isBlittable);
     }
     
+    [ExcludeFromCodeCoverage] // unused - kept as reference. Was used to clone scripts.
     private static CloneScript CreateCloneScriptDelegate()
     {
         var flags           = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;

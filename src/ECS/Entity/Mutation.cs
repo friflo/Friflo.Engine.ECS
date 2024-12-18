@@ -11,7 +11,7 @@ public readonly partial struct  Entity
     /// <summary>
     /// Add the given <paramref name="component"/> to the entity.<br/>
     /// If the entity contains a component of the same type it is updated.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#component">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity#component">Example.</a>
     /// </summary>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component)      where T : struct, IComponent
@@ -26,9 +26,9 @@ public readonly partial struct  Entity
         int structIndex = StructInfo<T>.Index;
         ComponentChangedAction  action;
         bool                    added;
-        if (StructInfo<T>.IsRelation) {
-            throw EntityStoreBase.AddRelationException(id, structIndex);
-        }
+        // if (StructInfo<T>.IsRelation) { obsolete
+        //     throw EntityStoreBase.AddRelationException(id, structIndex);
+        // }
         int localCompIndex  = node.compIndex;
         var oldHeap         = (StructHeap<T>)arch.heapMap[structIndex];
         StructHeap<T> newHeap;
@@ -78,9 +78,9 @@ public readonly partial struct  Entity
         if (arch == null || Revision != node.revision) {
             throw EntityNullException();
         }
-        if (StructInfo<T>.IsRelation) {
+        /* if (StructInfo<T>.IsRelation) {
             throw EntityStoreBase.RemoveRelationException(id, structIndex);
-        }
+        } */
         int localCompIndex  = node.compIndex;
         var heap            = (StructHeap<T>)arch.heapMap[structIndex];
         if (heap == null) {

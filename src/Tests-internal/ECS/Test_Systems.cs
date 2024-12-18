@@ -136,12 +136,12 @@ namespace Internal.ECS {
             root.AppendPerfLog(sb);
             var log = sb.ToString();
             AreEqual(
-@"stores: 0                     on      last ms       sum ms      updates     last mem      sum mem     entities
----------------------         --     --------     --------     --------     --------     --------     --------
-Systems [1]                    +       -1.000        0.000            0            0            0
-| Update [2]                   +       -1.000        0.000            0            0            0
-|   TestSystem1                +       -1.000        0.000            0            0            0            0
-|   MySystem1                  -       -1.000        0.000            0            0            0
+@"stores: 0                     E M      last ms       sum ms      updates     last mem      sum mem     entities
+---------------------         ---     --------     --------     --------     --------     --------     --------
+Systems [1]                   + m       -1.000        0.000            0            0            0
+| Update [2]                  + m       -1.000        0.000            0            0            0
+|   TestSystem1               + m       -1.000        0.000            0            0            0            0
+|   MySystem1                 - m       -1.000        0.000            0            0            0
 ", log);
             
             sb.Clear();

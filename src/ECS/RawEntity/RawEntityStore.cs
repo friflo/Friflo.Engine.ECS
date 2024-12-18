@@ -124,6 +124,7 @@ public sealed class RawEntityStore : EntityStoreBase
     #endregion
 
 #region components
+    [ExcludeFromCodeCoverage]
     public int GetEntityComponentCount(int id) {
         return archs[entities[id].archIndex].componentCount;
     }

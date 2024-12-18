@@ -23,7 +23,6 @@ public abstract class ScriptType : SchemaType
     public   readonly   int             ScriptIndex;    //  4
     /// <summary> Return true if <see cref="Script"/>'s of this type can be copied. </summary>
     public   readonly   bool            IsBlittable;    //  4
-    private  readonly   CloneScript     cloneScript;    //  8
     #endregion
     
 #region methods
@@ -31,19 +30,18 @@ public abstract class ScriptType : SchemaType
     internal abstract   void            ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "MemberwiseClone is part of BCL")]
-    internal ScriptType(string scriptKey, int scriptIndex, Type type, bool isBlittable, CloneScript cloneScript)
+    internal ScriptType(string scriptKey, int scriptIndex, Type type, bool isBlittable)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
-        ScriptIndex         = scriptIndex;
-        IsBlittable         = isBlittable;
-        this.cloneScript    = cloneScript;
+        ScriptIndex = scriptIndex;
+        IsBlittable = isBlittable;
     }
     
-    internal Script CloneScript(Script original)
-    {
+    internal abstract Script CloneScript(Script source);
+    /* {
         var clone = cloneScript(original);
         return (Script)clone;
-    }
+    }*/
     #endregion
 }
 
@@ -64,37 +62,40 @@ internal sealed class ScriptType<T> : ScriptType
     where T : Script, new()
 {
 #region properties
-    /// <summary>
-    /// Create <see cref="TypeMapper"/> on demand.<br/>
-    /// So possible exceptions in <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
-    /// </summary>
-    private             TypeMapper<T>   TypeMapper => typeMapper ??= typeStore.GetTypeMapper<T>();
     public  override    string          ToString() => $"Script: [*{typeof(T).Name}]";
     #endregion
 
-#region fields
-    private             TypeMapper<T>   typeMapper;
-    private readonly    TypeStore       typeStore;
-    #endregion
-    
+   
 #region methods
-    internal ScriptType(string scriptComponentKey, int scriptIndex, TypeStore typeStore, bool isBlittable, CloneScript cloneScript)
-        : base(scriptComponentKey, scriptIndex, typeof(T), isBlittable, cloneScript)
+    internal ScriptType(string scriptComponentKey, int scriptIndex, bool isBlittable)
+        : base(scriptComponentKey, scriptIndex, typeof(T), isBlittable)
     {
-        this.typeStore = typeStore;
     }
     
     internal override Script CreateScript() {
         return new T();
     }
     
+    internal override Script CloneScript(Script source) {
+        var clone = new T();
+        var copyScript = CopyScriptUtils<T>.CopyScript;
+        if (copyScript != null) {
+            copyScript((T)source, clone);
+            return clone;
+        }
+        var name = typeof(T).Name;
+        var msg = $"type: {typeof(T).Namespace}.{name} - expect: static void CopyScript({name} source, {name} target)";
+        throw new MissingMethodException(msg);
+    }
+    
     internal override void ReadScript(ObjectReader reader, JsonValue json, Entity entity) {
+        var mapper = (TypeMapper<T>)reader.TypeCache.GetTypeMapper(typeof(T));
         var script = entity.GetScript<T>();
         if (script != null) { 
-            reader.ReadToMapper(TypeMapper, json, script, true);
+            reader.ReadToMapper(mapper, json, script, true);
             return;
         }
-        script = reader.ReadMapper(TypeMapper, json);
+        script = reader.ReadMapper(mapper, json);
         entity.archetype.entityStore.extension.AppendScript(entity, script);
     }
     #endregion

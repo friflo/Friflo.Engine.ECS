@@ -1,13 +1,17 @@
 ﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
 
+// ReSharper disable UnusedVariable
 // ReSharper disable NotAccessedField.Local
 // ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
-// See: https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types
+// See: https://friflo.gitbook.io/friflo.engine.ecs
+// > Index / Search
+// > Relationships
+// > Relations
 public static class Component_Types
 {
 
@@ -110,10 +114,10 @@ public static void LinkRelations()
 #endregion
 
 
-#region relation component
+#region relation
 
 [Test]
-public static void RelationComponent_Snippets()
+public static void Relation_Snippets()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
@@ -130,14 +134,14 @@ enum ItemType {
     Axe     = 2,
 }
 
-struct InventoryItem : IRelationComponent<ItemType> { // relation key type: ItemType
+struct InventoryItem : IRelation<ItemType> { // relation key type: ItemType
     public  ItemType    type;
     public  int         count;
     public  ItemType    GetRelationKey() => type;     // unique relation key
 }
 
 [Test]
-public static void RelationComponents()
+public static void Relations()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
@@ -171,12 +175,13 @@ struct Player : IIndexedComponent<string>       // indexed field type: string
 public static void IndexedComponents()
 {
     var store   = new EntityStore();
+    var index   = store.ComponentIndex<Player,string>();
     for (int n = 0; n < 1000; n++) {
         var entity = store.CreateEntity();
         entity.AddComponent(new Player { name = $"Player-{n,0:000}"});
     }
     // get all entities where Player.name == "Player-001". O(1)
-    store.GetEntitiesWithComponentValue<Player,string>("Player-001");      // Count: 1
+    var entities = index["Player-001"];                                    // Count: 1
     
     // return same result as lookup using a Query(). O(1)
     store.Query().HasValue    <Player,string>("Player-001");               // Count: 1
@@ -186,7 +191,7 @@ public static void IndexedComponents()
     store.Query().ValueInRange<Player,string>("Player-000", "Player-099"); // Count: 100
     
     // get all unique Player.name's. O(1)
-    store.GetAllIndexedComponentValues<Player,string>();                   // Count: 1000
+    var values = index.Values;                                             // Count: 1000
 }
 
 #endregion

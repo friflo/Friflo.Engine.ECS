@@ -11,10 +11,10 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Enables <see cref="JobExecution.Parallel"/> query execution returning the specified components.
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>
 /// </summary>
 public sealed class QueryJob<T1> : QueryJob
-    where T1 : struct, IComponent
+    where T1 : struct
 {
     internal            QueryChunks<T1>                     Chunks      => new (query);     // only for debugger
     internal            QueryEntities                       Entities    => query.Entities;  // only for debugger
@@ -51,7 +51,7 @@ public sealed class QueryJob<T1> : QueryJob
     }
 
     /// <summary>Execute the query.
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job">Example.</a>.<br/>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>.<br/>
     /// All chunks having at least <see cref="QueryJob.MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
     /// components are executed <see cref="JobExecution.Parallel"/>. 
     /// </summary>
@@ -94,5 +94,5 @@ public sealed class QueryJob<T1> : QueryJob
     }
     
     public  override        int ParallelComponentMultiple   => Multiple;
-    private static readonly int Multiple                    = ComponentType<T1>.ComponentMultiple;
+    private static readonly int Multiple                    = StructPadding<T1>.ComponentMultiple;
 }

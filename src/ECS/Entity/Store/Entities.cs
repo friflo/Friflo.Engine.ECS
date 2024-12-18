@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Friflo.Engine.ECS.Serialize;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
 
@@ -26,7 +25,7 @@ public partial class EntityStore
     
     /// <summary>
     /// Create and return a new <see cref="Entity"/> in the entity store.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/general#entity">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/entity">Example.</a>
     /// </summary>
     /// <returns>An <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()
@@ -91,23 +90,24 @@ public partial class EntityStore
         CreateEntityInternal(archetype, id, out var revision);
         var clone       = new Entity(this, id, revision);
         
-        var isBlittable = IsBlittable(entity);
-
-        // todo optimize - serialize / deserialize only non blittable components and scripts
-        if (isBlittable) {
-            var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
-            // CopyComponents() must be used only in case all component types are blittable
-            Archetype.CopyComponents(archetype, entity.compIndex, clone.compIndex);
-            if (clone.HasComponent<TreeNode>()) {
-                clone.GetComponent<TreeNode>() = default;   // clear child ids. See child entities note in remarks.
-            }
-            // --- clone scripts
-            foreach (var script in entity.Scripts) {
-                var scriptType      = scriptTypeByType[script.GetType()];
-                var scriptClone     = scriptType.CloneScript(script);
-                scriptClone.entity  = clone;
-                extension.AddScript(clone, scriptClone, scriptType);
-            }
+        // var isBlittable = IsBlittable(entity);
+        // if (true) {
+        
+        var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
+        // CopyComponents() must be used only in case all component types are blittable
+        var context = new CopyContext(entity, clone);
+        Archetype.CloneComponents(archetype, context);
+        if (clone.HasComponent<TreeNode>()) {
+            clone.GetComponent<TreeNode>() = default;   // clear child ids. See child entities note in remarks.
+        }
+        // --- clone scripts
+        foreach (var script in entity.Scripts) {
+            var scriptType      = scriptTypeByType[script.GetType()];
+            var scriptClone     = scriptType.CloneScript(script);
+            scriptClone.entity  = clone;
+            extension.AddScript(clone, scriptClone, scriptType);
+        }
+        /* keep old implementation using JSON serialization for reference
         } else {
             // --- serialize entity
             var converter       = EntityConverter.Default;
@@ -119,12 +119,13 @@ public partial class EntityStore
             // convert will use entity created above
             converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
             AssertNoError(error);
-        }
+        } */
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(clone);
         return clone;
     }
     
+    // ReSharper disable once UnusedMember.Local
     [ExcludeFromCodeCoverage]
     private static void AssertNoError(string error) {
         if (error == null) {
@@ -133,6 +134,8 @@ public partial class EntityStore
         throw new InvalidOperationException($"unexpected error: {error}");
     }
     
+    // ReSharper disable once UnusedMember.Local
+    [ExcludeFromCodeCoverage] // unused - method obsolete
     private static bool IsBlittable(Entity original)
     {
         foreach (var componentType in original.Archetype.componentTypes)
@@ -172,10 +175,8 @@ public partial class EntityStore
             return node.compIndex;
         }
         entityCount++;
-        revision++;
         node.compIndex  = Archetype.AddEntity(archetype, id);
         node.archetype  = archetype;
-        node.revision   = revision;   
         // node.flags      = Created;
         return node.compIndex;
     }
@@ -195,7 +196,6 @@ public partial class EntityStore
             ref var node    = ref localNodes[id];
             node.compIndex  = index;
             node.archetype  = archetype;
-            node.revision++;
             // node.flags      = Created;
         }
         if (intern.pidType == PidType.RandomPids) {

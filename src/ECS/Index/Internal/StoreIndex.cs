@@ -7,27 +7,27 @@ namespace Friflo.Engine.ECS.Index;
 internal static class StoreIndex
 {
     internal static void UpdateIndex<TComponent>(EntityStoreBase store, int id, in TComponent component, StructHeap<TComponent> heap)
-        where TComponent : struct, IComponent
+        where TComponent : struct
     {
         var index = GetIndex((EntityStore)store, StructInfo<TComponent>.Index);
         index.Update(id, component, heap);
     }
     
     internal static void AddIndex<TComponent>(EntityStoreBase store, int id, in TComponent component)
-        where TComponent : struct, IComponent
+        where TComponent : struct
     {
         var index = GetIndex((EntityStore)store, StructInfo<TComponent>.Index);
         index.Add(id, component);
     }
     
     internal static void RemoveIndex<TComponent>(EntityStoreBase store, int id, StructHeap<TComponent> heap)
-        where TComponent : struct, IComponent
+        where TComponent : struct
     {
         var index = GetIndex((EntityStore)store, StructInfo<TComponent>.Index);
         index.Remove(id, heap);
     }
     
-    internal static ComponentIndex GetIndex(EntityStore store, int structIndex)
+    internal static AbstractComponentIndex GetIndex(EntityStore store, int structIndex)
     {
         var indexMap = store.extension.indexMap; 
         if (indexMap != null) {
@@ -41,15 +41,15 @@ internal static class StoreIndex
         return indexMap[structIndex]  = CreateIndex(store, structIndex);
     }
     
-    private static ComponentIndex CreateIndex(EntityStore store, int structIndex)
+    private static AbstractComponentIndex CreateIndex(EntityStore store, int structIndex)
     {
         var componentType = EntityStoreBase.Static.EntitySchema.components[structIndex];
         return ComponentIndexUtils.CreateComponentIndex(store, componentType);
     }
     
-    private static ComponentIndex[] CreateStoreIndexMap()
+    private static AbstractComponentIndex[] CreateStoreIndexMap()
     {
         var schema = EntityStoreBase.Static.EntitySchema;
-        return new ComponentIndex[schema.maxIndexedStructIndex];
+        return new AbstractComponentIndex[schema.maxIndexedStructIndex];
     }
 }

@@ -52,7 +52,7 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
-    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <!-- packaging: end -->
 
@@ -66,13 +66,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Friflo.Json.Fliox" Version="1.0.2" />
+    <PackageReference Include="Friflo.Json.Fliox" Version="1.0.3" />
       
     <!-- System.Runtime is required by System.Runtime.CompilerServices.RuntimeFeature for NativeAOT
     <PackageReference Include="System.Runtime" Version="4.3.1" />  -->
       
     <!-- System.Runtime.CompilerServices.Unsafe is required by Unity -->
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>

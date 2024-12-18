@@ -53,7 +53,7 @@ public abstract class QueryJob
     /// </summary>
     public      abstract    void Run();
     /// <summary>Execute the query.
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job">Example.</a>.<br/>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>.<br/>
     /// All chunks having at least <see cref="QueryJob.MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
     /// components are executed <see cref="JobExecution.Parallel"/>. 
     /// </summary>

@@ -12,7 +12,7 @@
 [![Demos](https://img.shields.io/badge/Demos-22aa22?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 [![C# API](https://img.shields.io/badge/C%23%20API-22aaaa?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine-docs)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/nFfrhgQkb8)
-[![Wiki](https://img.shields.io/badge/Wiki-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
+[![Docs](https://img.shields.io/badge/Docs-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
 
 </div>
 
@@ -31,32 +31,34 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
 
 ## News
 
-- [x] ![new](docs/images/new.svg) Finally **Friflo.Engine.ECS** is now in its own new repository!  
-  The ECS is moved including its git history. Everything not related to the ECS is omitted.
+- [x] ![new](docs/images/new.svg) features in v3.0.0  
+      Introduced: **Index / Search** with O(1), **Relationships** 1:1 and 1:many and **Relations**. See [New features in 3.0.0](#new-features-in-300)
 
 - [x] Published [Friflo.Engine.ECS.Boost](https://www.nuget.org/packages/Friflo.Engine.ECS.Boost) to enable
-      [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#boosted-query) with maximum performance.
-
-- [x] Updated [Wiki ⋅ Optimization examples](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#batching). Changes marked with 🔥 **Update**.
-
-- [x] Released v3.0.0-preview  
-      Introduced: **Entity Relationships** 1:1 and 1:many, **Relations** and full-text **Search** in O(1). See [Component Types](#-component-types)
+      [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#boosted-query) with maximum performance.
 
 - [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
 
 ## Contents
 
 * [🔥 Friflo.Engine.ECS](#frifloengineecs)
+  - [Documentation](#documentation)
   - [Feature highlights](#feature-highlights)
   - [Projects using friflo ECS](#projects-using-friflo-ecs)
   - [Demos](#demos)
   - [ECS definition](#ecs-definition)
+  - [New features in 3.0.0](#new-features-in-300)
 * [⏩ Examples](#-examples)
   - [🚀 Hello World](#-hello-world)
-  - [⌘ Component Types](#-component-types)
   - [⚙️ Systems](#️-systems)
-* [📖 Wiki](#-wiki)
 * [🏁 Benchmarks](#-ecs-benchmarks)
+
+
+## Documentation
+
+Get an overview of the feature set or explore various use-cases with examples at
+[**friflo ECS · Docs**](https://friflo.gitbook.io/friflo.engine.ecs).
+
 
 ## Feature highlights
 
@@ -91,7 +93,6 @@ Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.
         <img src="docs/images/access_violation/Unity_access_violation.png"   width="213" height="131"/>
       </details>
 
-Complete feature list at [Wiki ⋅ Features](https://friflo.gitbook.io/friflo.engine.ecs/package/features).
 
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
@@ -151,16 +152,34 @@ An ECS provide two strengths:
 
 <br/>
 
+
+## **New features in 3.0.0**
+
+- [Index / Search](https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index) used to search entities with specific component values in O(1). E.g
+  - To lookup entities having a *TileComponent* with a specific tile id.
+  - To lookup network entities with a *NetComponent* using a custom identifier like a `Guid`,`long` or a `string`.
+
+- [Relationships](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relationships) to create links / connections between entities. Used for:
+  - Attack systems
+  - Path finding / Route tracing
+  - Model social networks. E.g friendship, alliances or rivalries
+  - Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
+    using entities as *nodes* and links or relations as *edges*
+
+- [Relations](https://friflo.gitbook.io/friflo.engine.ecs/documentation/relations) to add multiple *"components"* of the same type to a single entity. E.g.
+  - Inventory systems
+  - To model one-to-many data structures
+
+
+Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
+for the challenge to improve the feature set and performance of this project!
+
+<br/>
+
 # ⏩ Examples
 
 This section contains two typical use cases when using an ECS.  
-More examples are in the GitHub Wiki.
-
-[**Examples - General**](https://friflo.gitbook.io/friflo.engine.ecs/examples/general)  
-Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and how to use them.
-
-[**Examples - Optimization**](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization)  
-Provide techniques how to improve ECS performance.
+More examples describing use of various features are in the [friflo ECS - Documentation](https://friflo.gitbook.io/friflo.engine.ecs).
 
 
 ## **🚀 Hello World**
@@ -185,44 +204,15 @@ public static void HelloWorld()
 ```
 In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
 See:
-[Enumerate Query Chunks](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#enumerate-query-chunks),
-[Parallel Query Job](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job) and
-[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#query-vectorization---simd).  
+[Enumerate Query Chunks](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks),
+[Parallel Query Job](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job) and
+[Query Vectorization - SIMD](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd).  
 All query optimizations are using the same `query` but with different enumeration techniques.
 
 <br/>
 
 
-## **⌘ Component Types**
 
-![new](docs/images/new.svg) in **Friflo.Engine.ECS v3.0.0-preview.2**
-
-For specific use cases there is now a set of specialized component interfaces providing additional features.    
-*Note:* Newly added features do not affect the behavior or performance of existing features.
-
-The specialized component types enable entity relationships, relations and full-text search.  
-Typical use case for entity relationships in a game are:
-- Attack systems
-- Path finding / Route tracing
-- Model social networks. E.g friendship, alliances or rivalries
-- Build any type of a [directed graph](https://en.wikipedia.org/wiki/Directed_graph)
-  using entities as *nodes* and links or relations as *edges*.
-
-Use cases for relations:
-- Inventory systems
-- Add multiple components of the same type to an entity
-
-| Use case / Example                                                                                                        | Component interface type  | Description
-| ------------------------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------
-| [Entity Relationships](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#entity-relationships)  | **Link Component**        | A single link on an entity referencing another entity
-|                                                                                                                           | **Link Relation**         | Multiple links on an entity referencing other entities
-| [Relations](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#relations)                        | **Relation Component**    | Add multiple components of same type to an entity
-| [Search & Range queries](https://friflo.gitbook.io/friflo.engine.ecs/examples/component-types#search)              | **Indexed Component**     | Full text search of component fields executed in O(1).<br/>Range queries on component fields having a sort order.
-
-Big shout out to [**fenn**ecs](https://github.com/outfox/fennecs) and [**flecs**](https://github.com/SanderMertens/flecs)
-for the challenge to improve the feature set and performance of this project!
-
-<br/>
 
 
 ## **⚙️ Systems**
@@ -238,7 +228,7 @@ Using Systems is optional but they have some significant advantages.
 
 - Enable chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes in a
   [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
-  Each group provide a [CommandBuffer](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer).
+  Each group provide a [CommandBuffer](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#commandbuffer).
 
 - A system can have state - fields or properties - which can be used as parameters in `OnUpdate()`.  
   The system state can be serialized to JSON.
@@ -356,33 +346,6 @@ entities            number of entities matching a QuerySystem
 <br/>
 
 
-# 📖 Wiki
-
-The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
-
-- [**Examples - General**](https://friflo.gitbook.io/friflo.engine.ecs/examples/general)  
-  Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.  
-  Contains an example for [Native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot) integration.
-
-- [**Examples - Optimization**](https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization)  
-  Provide you techniques how to improve ECS performance.
-
-- [**Extensions**](https://friflo.gitbook.io/friflo.engine.ecs/extensions/unity-extension)  
-  Projects extending Friflo.Engine.ECS with additional features.
-  
-- [**Features**](https://friflo.gitbook.io/friflo.engine.ecs/package/features)  
-  Integration possibilities, a complete feature list and performance characteristics 🔥.
-
-- [**Library**](https://friflo.gitbook.io/friflo.engine.ecs/package/library)  
-  List supported platforms, properties of the assembly dll and build statistics.
-
-- [**Release Notes**](https://friflo.gitbook.io/friflo.engine.ecs/package/release-notes)  
-  List of changes of every release available on nuget.
-
-<br/>
-
-
-
 # 🏁 ECS Benchmarks
 
 ## ECS.CSharp.Benchmark - Common use-cases
@@ -406,7 +369,7 @@ See [Benchmark results](docs/doraku-benchmark.md).
 
 **License**
 
-This project is licensed under LGPLv3.  
+This project is licensed under MIT.  
 
 Friflo.Engine.ECS  
 Copyright © 2024   Ullrich Praetz - https://github.com/friflo

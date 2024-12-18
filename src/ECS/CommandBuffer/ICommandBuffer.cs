@@ -2,6 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+
+using System;
+
 namespace Friflo.Engine.ECS;
 
 public interface ICommandBuffer
@@ -14,6 +17,7 @@ public interface ICommandBuffer
 #region component
     public void AddComponent  <T>(int entityId)                     where T : struct, IComponent;
     public void AddComponent   <T>(int entityId, in T component)    where T : struct, IComponent;
+    [Obsolete("use AddComponent() instead")]
     public void SetComponent   <T>(int entityId, in T component)    where T : struct, IComponent;
     public void RemoveComponent<T>(int entityId)                    where T : struct, IComponent;
     #endregion

@@ -29,7 +29,7 @@ public enum JobExecution : byte
 
 /// <summary>
 /// Required for parallel - multi threaded - query job execution using <see cref="QueryJob.RunParallel"/>.<br/>
-/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#parallel-query-job">Example.</a>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>
 /// </summary>
 /// <remarks>
 /// <see cref="ParallelJobRunner"/> is thread safe.<br/>

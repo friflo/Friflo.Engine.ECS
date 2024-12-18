@@ -12,7 +12,7 @@ namespace Tests.ECS.Raw {
 public static class Test_RawEntities
 {
     /// <summary>Similar to <see cref="Test_StructComponent.Test_9_RemoveComponent"/></summary>
-    // [Test]
+    // [Test] RawEntityStore will be removed
     public static void Test_RawEntities_Components()
     {
         var store   = new RawEntityStore();

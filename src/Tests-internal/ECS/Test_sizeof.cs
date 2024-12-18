@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using Friflo.Engine.ECS.Utils;
@@ -147,8 +148,11 @@ public static class Test_sizeof
         AreEqual(24, size);
         
         size = sizeof(EntityChange);
-        AreEqual(96, size);
-        
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+            AreEqual(80, size);
+        } else {
+            AreEqual(96, size);
+        }
         size = sizeof(EntityEvent);
         AreEqual(8, size);
     }

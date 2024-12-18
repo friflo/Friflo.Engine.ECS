@@ -26,7 +26,7 @@ public sealed class CommandBufferSynced : ICommandBuffer
 
     /// <summary>
     /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread.<br/>
-    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/examples/optimization#commandbuffer">Example.</a>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#commandbuffer">Example.</a>
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// When recording commands after calling <see cref="Playback"/>.<br/>
@@ -57,6 +57,7 @@ public sealed class CommandBufferSynced : ICommandBuffer
     /// <summary>
     /// Set the given <paramref name="component"/> with type <typeparamref name="T"/> of the entity with the passed <paramref name="entityId"/>.
     /// </summary>
+    [Obsolete("use AddComponent() instead")]
     public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {

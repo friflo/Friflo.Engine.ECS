@@ -227,7 +227,7 @@ public static class Test_Relations
     public static void Test_Relations_EntityReadOnlyCollection()
     {
         var store   = new EntityStore();
-        var entities = store.GetAllEntitiesWithRelations<IntRelation>();
+        var entities = store.EntityRelations<IntRelation>().Entities;
 
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
@@ -288,6 +288,16 @@ public static class Test_Relations
         AreEqual("Relations<IntRelation>[1]",   entity1.GetRelations<IntRelation>().ToString());
     }
     
+    /// Cover <see cref="Friflo.Engine.ECS.Relations.GenericEntityRelations{TRelation,TKey}.RemoveRelation"/>
+    [Test]
+    public static void Test_Relations_remove_missing_relation()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
+        IsFalse(entity1.RemoveRelation<IntRelation, int>(1));
+        AreEqual(0,   entity1.GetRelations<IntRelation>().Length);
+    }
+    
     [Test]
     public static void Test_Relations_int_relation()
     {
@@ -337,6 +347,20 @@ public static class Test_Relations
         IsNull  (entity.GetRelation<StringRelation, string>(null).value);
     }
     
+    /// Cover generic case at <see cref="Friflo.Engine.ECS.SchemaUtils.CreateRelationType{T}"/>
+    [Test]
+    public static void Test_Relations_generic_relation()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddRelation(new GenericRelation<string> { key = 42, value = "test" });
+        AreEqual("{ 42 }", entity.GetRelations<GenericRelation<string>>().Debug());
+        AreEqual("test",   entity.GetRelation<GenericRelation<string>, int>(42).value);
+    }
+    
+    
+    /* COMP_TAG obsolete:
+       Relations do not implement IComponent anymore. So HasComponent(), GetComponent() and AddComponent() will result in a compiler error
     [Test]
     public static void Test_Relations_Entity_Component_methods()
     {
@@ -363,8 +387,7 @@ public static class Test_Relations
         });
         AreEqual("relation component must be added with:  entity.AddRelation(new IntRelation());  id: 1", e!.Message);
         entity.AddRelation(new IntRelation()); // example
-        
-    }
+    } */
     
     [Test]
     public static void Test_Relations_NullReferenceExceptions()

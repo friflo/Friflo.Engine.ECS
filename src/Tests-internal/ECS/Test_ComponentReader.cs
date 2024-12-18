@@ -12,7 +12,7 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_RawComponent() {
         var unresolved      = EntityStore.GetEntitySchema().unresolvedType;
         var rawKey          = new RawKey("test", unresolved);
-        var rawComponent    = new RawComponent(rawKey, 0, 0);
+        var rawComponent    = new RawComponent(RawComponentType.Object, rawKey, 0, 0);
         Assert.AreEqual("test - Unresolved", rawComponent.ToString());
     }
 }

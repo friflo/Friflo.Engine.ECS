@@ -8,11 +8,11 @@ public static partial class QueryExtensions
 {
     public static TEach Each<TEach, T1,T2,T3,T4,T5>(this ArchetypeQuery<T1,T2,T3,T4,T5> query, TEach each)
         where TEach : IEach<T1, T2, T3, T4, T5>
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
+        where T5 : struct
     {
         foreach (var chunk in query.Chunks) {
             chunk.Each(ref each);
@@ -22,11 +22,11 @@ public static partial class QueryExtensions
     
     public static TEachEntity EachEntity<TEachEntity, T1,T2,T3,T4,T5>(this ArchetypeQuery<T1,T2,T3,T4,T5> query, TEachEntity each)
         where TEachEntity : IEachEntity<T1, T2, T3, T4, T5>
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
+        where T5 : struct
     {
         foreach (var chunk in query.Chunks) {
             chunk.EachEntity(ref each);

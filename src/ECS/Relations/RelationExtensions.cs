@@ -18,11 +18,11 @@ public static class RelationExtensions
     /// </summary>
     /// <exception cref="KeyNotFoundException">The relation is not found at the passed entity.</exception>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static ref TComponent GetRelation<TComponent, TKey>(this Entity entity, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+    public static ref TRelation GetRelation<TRelation, TKey>(this Entity entity, TKey key)
+        where TRelation : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return ref EntityRelations.GetRelation<TComponent, TKey>(entity.store, entity.Id, key);
+        return ref AbstractEntityRelations.GetRelation<TRelation, TKey>(entity.store, entity.Id, key);
     }
     
     /// <summary>
@@ -30,49 +30,49 @@ public static class RelationExtensions
     /// Executes in O(N) N: number of entity relations.
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static bool TryGetRelation<TComponent, TKey>(this Entity entity, TKey key, out TComponent value)
-        where TComponent : struct, IRelationComponent<TKey>
+    public static bool TryGetRelation<TRelation, TKey>(this Entity entity, TKey key, out TRelation value)
+        where TRelation : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.TryGetRelation(entity.store, entity.Id, key, out value);
+        return AbstractEntityRelations.TryGetRelation(entity.store, entity.Id, key, out value);
     }
     
     /// <summary>
-    /// Returns all unique relation components of the passed <paramref name="entity"/>.<br/>
-    /// Executes in O(1). In case <typeparamref name="TComponent"/> is a <see cref="ILinkRelation"/> it returns all linked entities.
+    /// Returns all unique relations of the passed <paramref name="entity"/>.<br/>
+    /// Executes in O(1). In case <typeparamref name="TRelation"/> is a <see cref="ILinkRelation"/> it returns all linked entities.
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static RelationComponents<TComponent> GetRelations<TComponent>(this Entity entity)
-        where TComponent : struct, IRelationComponent
+    public static Relations<TRelation> GetRelations<TRelation>(this Entity entity)
+        where TRelation : struct, IRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.GetRelations<TComponent>(entity.store, entity.Id);
+        return AbstractEntityRelations.GetRelations<TRelation>(entity.store, entity.Id);
     }
     
     /// <summary>
-    /// Add the relation component with the specified <typeparamref name="TComponent"/> type to the entity.<br/>
+    /// Add the relation with the specified <typeparamref name="TRelation"/> type to the entity.<br/>
     /// Executes in O(1)
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true - relation is newly added to the entity.<br/> false - relation is updated.</returns>
-    public static bool AddRelation<TComponent>(this Entity entity, in TComponent component)
-        where TComponent : struct, IRelationComponent
+    public static bool AddRelation<TRelation>(this Entity entity, in TRelation component)
+        where TRelation : struct, IRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.AddRelation(entity.store, entity.Id, component);
+        return AbstractEntityRelations.AddRelation(entity.store, entity.Id, component);
     }
     
     /// <summary>
-    /// Removes the relation component with the specified <paramref name="key"/> from an entity.<br/>
+    /// Removes the relation with the specified <paramref name="key"/> from an entity.<br/>
     /// Executes in O(N) N: number of relations of the specific entity.
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true if the entity contained a relation of the given type before. </returns>
-    public static bool RemoveRelation<TComponent, TKey>(this Entity entity, TKey key)
-        where TComponent : struct, IRelationComponent<TKey>
+    public static bool RemoveRelation<TRelation, TKey>(this Entity entity, TKey key)
+        where TRelation : struct, IRelation<TKey>
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity); 
-        return EntityRelations.RemoveRelation<TComponent, TKey>(entity.store, entity.Id, key);
+        return AbstractEntityRelations.RemoveRelation<TRelation, TKey>(entity.store, entity.Id, key);
     }
     
     /// <summary>
@@ -81,30 +81,41 @@ public static class RelationExtensions
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
     /// <returns>true if the entity contained a link relation of the given type before. </returns>
-    public static bool RemoveRelation<TComponent>(this Entity entity, Entity target)
-        where TComponent : struct, ILinkRelation
+    public static bool RemoveRelation<TRelation>(this Entity entity, Entity target)
+        where TRelation : struct, ILinkRelation
     {
         if (entity.IsNull) throw EntityStoreBase.EntityNullException(entity);
-        return EntityRelations.RemoveRelation<TComponent, Entity>(entity.store, entity.Id, target);
+        return AbstractEntityRelations.RemoveRelation<TRelation, Entity>(entity.store, entity.Id, target);
     }
     
     /// <summary>
-    /// Return the entities with a link relation referencing the <paramref name="target"/> entity of the passed <see cref="IRelationComponent"/> type.<br/>
+    /// Return the entities with a link relation referencing the <paramref name="target"/> entity of the passed <see cref="IRelation"/> type.<br/>
     /// Executes in O(1).
     /// </summary>
     /// <exception cref="NullReferenceException">If the entity is null.</exception>
-    public static EntityLinks<TComponent> GetIncomingLinks<TComponent>(this Entity target)
-        where TComponent: struct, IRelationComponent
+    public static EntityLinks<TRelation> GetIncomingLinks<TRelation>(this Entity target)
+        where TRelation: struct, ILinkRelation
     {
         if (target.IsNull) throw EntityStoreBase.EntityNullException(target);
-        var entities = EntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TComponent>.Index, out var relations);
-        return new EntityLinks<TComponent>(target, entities, relations);
+        var entities = AbstractEntityRelations.GetIncomingLinkRelations(target.store, target.Id, StructInfo<TRelation>.Index, out var relations);
+        return new EntityLinks<TRelation>(target, entities, relations);
     }
     #endregion
     
 #region EntityStore
     /// <summary>
-    /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Return the storage for all entity relations of the specified <typeparamref name="TRelation"/> type.
+    /// </summary>
+    public static EntityRelations<TRelation> EntityRelations<TRelation>(this EntityStore store)
+        where TRelation : struct, IRelation
+    {
+        var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
+        return new EntityRelations<TRelation>(relations);
+    }
+    
+    /// <summary>
+    /// Obsolete: Use <see cref="ECS.EntityRelations{TRelation}.Entities"/><br/>
+    /// Returns a collection of entities having one or more relations of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(1).
     /// </summary>
     /// <remarks>
@@ -114,44 +125,45 @@ public static class RelationExtensions
     ///   </item>
     ///   <item>
     ///     To get all entities including their relations (the cartesian product aka CROSS JOIN) use<br/>
-    ///     <see cref="GetAllEntityRelations{TComponent}"/>
+    ///     <see cref="ECS.EntityRelations{TRelation}.Pairs"/>
     ///   </item>
     /// </list>
     /// </remarks>
-    public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TComponent>(this EntityStore store)
-        where TComponent : struct, IRelationComponent
+    [Obsolete("replace with property: EntityRelations<TRelation>().Entities")]
+    [ExcludeFromCodeCoverage]
+    public static EntityReadOnlyCollection GetAllEntitiesWithRelations<TRelation>(this EntityStore store)
+        where TRelation : struct, IRelation
     {
-        var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
+        var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
         return new EntityReadOnlyCollection(store, relations.positionMap.Keys);
     }
     
     /// <summary>
-    /// Iterates all entity relations of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Obsolete: Use <see cref="ECS.EntityRelations{TRelation}.For"/><br/>
+    /// Iterates all entity relations of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(N) N: number of all entity relations.
     /// </summary>
-    public static void ForAllEntityRelations<TComponent>(this EntityStore store, ForEachEntity<TComponent> lambda)
-        where TComponent : struct, IRelationComponent
+    [Obsolete("replace with method: EntityRelations<TRelation>().For()")]
+    [ExcludeFromCodeCoverage]
+    public static void ForAllEntityRelations<TRelation>(this EntityStore store, ForEachEntity<TRelation> lambda)
+        where TRelation : struct, IRelation
     {
-        var relations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
+        var relations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
         relations.ForAllEntityRelations(lambda);
     }
     
     /// <summary>
-    /// Return all entity relations  of the specified <typeparamref name="TComponent"/> type.<br/>
+    /// Obsolete: Use <see cref="ECS.EntityRelations{TRelation}.Pairs"/><br/> 
+    /// Return all entity relations  of the specified <typeparamref name="TRelation"/> type.<br/>
     /// Executes in O(1).  Most efficient way to iterate all entity relations.
     /// </summary>
-    public static (Entities entities, Chunk<TComponent> relations) GetAllEntityRelations<TComponent>(this EntityStore store)
-        where TComponent : struct, IRelationComponent
-    {
-        var entityRelations = EntityRelations.GetEntityRelations(store, StructInfo<TComponent>.Index);
-        return entityRelations.GetAllEntityRelations<TComponent>();
-    }
-    
+    [Obsolete("replace with property: EntityRelations<TRelation>().Pairs")]
     [ExcludeFromCodeCoverage]
-    public static IReadOnlyCollection<Entity> GetAllLinkedEntities<TComponent>(this EntityStore store)
-        where TComponent: struct, IRelationComponent
+    public static (Entities entities, Chunk<TRelation> relations) GetAllEntityRelations<TRelation>(this EntityStore store)
+        where TRelation : struct, IRelation
     {
-        throw new NotImplementedException();
+        var entityRelations = AbstractEntityRelations.GetEntityRelations(store, StructInfo<TRelation>.Index);
+        return entityRelations.GetAllEntityRelations<TRelation>();
     }
     #endregion
 }

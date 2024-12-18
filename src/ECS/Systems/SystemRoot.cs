@@ -67,7 +67,7 @@ public class SystemRoot : SystemGroup
         stores.Add(entityStore);
         var rootSystems = GetSubSystems(ref systemBuffer);
         foreach (var system in rootSystems) {
-            system.AddStoreInternal(entityStore);        
+            system.OnAddStore(entityStore);        
         }
     }
     
@@ -80,7 +80,7 @@ public class SystemRoot : SystemGroup
         stores.Remove(entityStore);
         var rootSystems = GetSubSystems(ref systemBuffer);
         foreach (var system in rootSystems) {
-            system.RemoveStoreInternal(entityStore);        
+            system.OnRemoveStore(entityStore);        
         }
     }
     #endregion
