@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -30,7 +30,7 @@ namespace Friflo.Engine.ECS;
 /// <br/>
 /// Queries can be created via generic <see cref="EntityStoreBase"/>.<c>Query()</c> methods.<br/>
 /// </remarks>
-public sealed class Archetype
+public sealed class Archetype : IDisposable
 {
 #region     public properties
     /// <summary>Number of entities / components stored in the <see cref="Archetype"/></summary>
@@ -223,7 +223,17 @@ public sealed class Archetype
             SetStandardComponentHeaps(heap, ref std);
         }
     }
-    
+
+    public void Dispose()
+    {
+        entityIds = null;
+        foreach (var heap in structHeaps)
+        {
+            if (heap != null)
+                heap.Dispose();
+        }
+    }
+
     private static void SetStandardComponentHeaps(StructHeap heap, ref StandardComponents std)
     {
         var type = heap.StructType;
