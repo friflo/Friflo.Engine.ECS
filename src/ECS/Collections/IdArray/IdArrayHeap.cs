@@ -1,7 +1,8 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertToPrimaryConstructor
@@ -9,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Collections;
 
-internal readonly struct IdArrayHeap
+internal readonly struct IdArrayHeap : IDisposable
 {
 #region properties
     public              int             Count               => GetCount();
@@ -22,6 +23,15 @@ internal readonly struct IdArrayHeap
     
     public IdArrayHeap() {
         pools = new IdArrayPool[32];
+    }
+
+    public void Dispose()
+    {
+        foreach (var pool in pools)
+        {
+            if (pool != null)
+                pool.Dispose();
+        }
     }
 
     internal IdArrayPool GetPool        (int index) => pools[index];
