@@ -55,6 +55,42 @@ class PulseSystem : QuerySystem<Scale3>
     }
 }
 
+[Test]
+public static void CustomSystem()
+{
+    var world = new EntityStore();
+    var entity = world.CreateEntity(new Position(0, 0, 0));
+    var root = new SystemRoot(world) {
+        new CustomQuerySystem()
+    };
+    root.Update(default);
+    
+    Console.WriteLine($"entity: {entity}");  // entity: id: 1  [Position, Velocity]
+}
+
+/// The example shows how to create a custom system that<br/>
+/// - creates a <see cref="customQuery"/> and <br/>
+/// - make structural changes via the parent group <see cref="QuerySystemBase.CommandBuffer"/>.<br/>
+/// <br/>
+/// The system adds a Velocity component for every entity having a Position component. 
+class CustomQuerySystem : QuerySystem
+{
+    private ArchetypeQuery<Position> customQuery;
+    
+    protected override void OnAddStore(EntityStore store) {
+        customQuery = store.Query<Position>();
+        base.OnAddStore(store);
+    }
+    
+    /// Executes the <see cref="customQuery"/> instead of the base class <see cref="QuerySystem.Query"/>.
+    protected override void OnUpdate() {
+        var buffer = CommandBuffer;
+        customQuery.ForEachEntity((ref Position component1, Entity entity) => {
+            buffer.AddComponent(entity.Id, new Velocity());
+        });
+    }
+}
+
 }
 
 }
