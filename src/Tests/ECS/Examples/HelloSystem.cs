@@ -69,8 +69,8 @@ public static void CustomSystem()
 }
 
 /// The example shows how to create a custom system that<br/>
-/// - creates a <see cref="customQuery"/> and <br/>
-/// - make structural changes via the parent group <see cref="QuerySystemBase.CommandBuffer"/>.<br/>
+/// - creates a customQuery and <br/>
+/// - make structural changes via the parent group CommandBuffer.<br/>
 /// <br/>
 /// The system adds a Velocity component for every entity having a Position component. 
 class CustomQuerySystem : QuerySystem
@@ -79,10 +79,10 @@ class CustomQuerySystem : QuerySystem
     
     protected override void OnAddStore(EntityStore store) {
         customQuery = store.Query<Position>();
-        base.OnAddStore(store);
+        base.OnAddStore(store); // must be called to ensure execution of OnUpdate()
     }
     
-    /// Executes the <see cref="customQuery"/> instead of the base class <see cref="QuerySystem.Query"/>.
+    /// Executes the customQuery instead of the base class Query.
     protected override void OnUpdate() {
         var buffer = CommandBuffer;
         customQuery.ForEachEntity((ref Position component1, Entity entity) => {
