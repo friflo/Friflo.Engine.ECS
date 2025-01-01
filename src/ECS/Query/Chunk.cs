@@ -68,7 +68,7 @@ public readonly struct Chunk<T>
     /// </code>
     /// </remarks>
     public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -76,7 +76,7 @@ public readonly struct Chunk<T>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -84,7 +84,7 @@ public readonly struct Chunk<T>
     ///  See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, 0, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a Vector128{T}.
