@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal abstract class StructHeap : IComponentStash
+internal abstract class StructHeap : IComponentStash, IDisposable
 {
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
@@ -49,6 +49,8 @@ internal abstract class StructHeap : IComponentStash
     internal StructHeap(int structIndex) {
         this.structIndex    = structIndex;
     }
+
+    public abstract void Dispose();
 
     internal void SetArchetypeDebug(Archetype archetype) {
 #if DEBUG
