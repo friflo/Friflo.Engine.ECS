@@ -68,14 +68,16 @@ public abstract class QuerySystemBase : BaseSystem
     #endregion
     
 #region store: add / remove
-    protected internal override void OnAddStore(EntityStore entityStore)
+    internal override void AddStoreInternal(EntityStore entityStore)
     {
         var query = CreateQuery(entityStore);
         queries.Add(query);
+        OnAddStore(entityStore);
     }
     
-    protected internal override void OnRemoveStore(EntityStore entityStore)
+    internal override void RemoveStoreInternal(EntityStore entityStore)
     {
+        OnRemoveStore(entityStore);
         foreach (var query in queries) {
             if (query.Store != entityStore) {
                 continue;

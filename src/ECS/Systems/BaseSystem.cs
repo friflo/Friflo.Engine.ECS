@@ -122,8 +122,11 @@ public abstract class BaseSystem
     #endregion
 
 #region virtual - store: add / remove
-    protected internal virtual  void OnRemoveStore(EntityStore store) { }
-    protected internal virtual  void OnAddStore   (EntityStore store) { }
+    internal  virtual  void AddStoreInternal   (EntityStore store) => OnAddStore(store);
+    internal  virtual  void RemoveStoreInternal(EntityStore store) => OnRemoveStore(store);
+    
+    protected virtual  void OnAddStore   (EntityStore store) { }
+    protected virtual  void OnRemoveStore(EntityStore store) { }
     #endregion
     
 #region virtual - system: update
@@ -207,7 +210,7 @@ public abstract class BaseSystem
             system.systemRoot = newRoot;
             newRoot.AddSystemToRoot(system);
             foreach (var store in newRoot.stores) {
-                system.OnAddStore(store);
+                system.AddStoreInternal(store);
             }
         }
     }
@@ -225,7 +228,7 @@ public abstract class BaseSystem
             system.systemRoot = null;
             currentRoot.RemoveSystemFromRoot(system);
             foreach (var store in currentRoot.stores) {
-                system.OnRemoveStore(store);
+                system.RemoveStoreInternal(store);
             }
         }
     }

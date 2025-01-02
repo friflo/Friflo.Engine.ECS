@@ -349,16 +349,29 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemGroup_OnAddRemoveStore()
         {
-            var root        = new SystemRoot("Systems");
             var store       = new EntityStore();
             var mySystem    = new MySystem2();
-            root.Add(mySystem);
+            var myQuery     = new MyQuerySystem();
+            var myGroup     = new MyGroup();
+            var root        = new SystemRoot(store) {
+                mySystem,
+                myQuery,
+                myGroup
+            };
+            AreEqual(1, mySystem.storeAdded);
+            AreEqual(1, myQuery.storeAdded);
+            AreEqual(1, myGroup.storeAdded);
             
-            root.AddStore(store);
-            IsTrue(mySystem.storeAdded);
+            var store2 = new EntityStore();
+            root.AddStore(store2);
+            AreEqual(2, mySystem.storeAdded);
+            AreEqual(2, myQuery.storeAdded);
+            AreEqual(2, myGroup.storeAdded);
             
             root.RemoveStore(store);
-            IsTrue(mySystem.storeRemoved);
+            AreEqual(1, mySystem.storeRemoved);
+            AreEqual(1, myQuery.storeRemoved);
+            AreEqual(1, myGroup.storeRemoved);
         }
         
         [Test]

@@ -79,7 +79,6 @@ class CustomQuerySystem : QuerySystem
     
     protected override void OnAddStore(EntityStore store) {
         customQuery = store.Query<Position>();
-        base.OnAddStore(store); // must be called to ensure execution of OnUpdate()
     }
     
     /// Executes the customQuery instead of the base class Query.

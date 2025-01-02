@@ -81,23 +81,60 @@ namespace Tests.ECS.Systems
         public string value; // used to test serialization
     }
     
-    // A custom System class with all possible overrides
+    // A custom BaseSystem class with all possible overrides
     public class MySystem2 : BaseSystem {
-        public      bool     storeAdded;
-        public      bool     storeRemoved;
+        public      int      storeAdded;
+        public      int      storeRemoved;
             
         public      override string Name => "MySystem2 - custom name";
         
         protected override void OnAddStore   (EntityStore store) {
-            base.OnAddStore(store);
-            storeAdded = true;
+            storeAdded++;
         }
         
         protected override void OnRemoveStore(EntityStore store) {
-            base.OnRemoveStore(store);
-            storeRemoved = true;
+            storeRemoved++;
         }
         
+        protected   override void   OnUpdateGroupBegin() { }
+        protected   override void   OnUpdateGroupEnd()   { }
+        protected   override void   OnUpdateGroup()      { }
+    }
+    
+    // QuerySystem class with all possible overrides
+    public class MyQuerySystem : QuerySystem {
+        public      int     storeAdded;
+        public      int     storeRemoved;
+
+        protected override void OnUpdate() { }
+
+        protected override void OnAddStore   (EntityStore store) {
+            storeAdded++;
+        }
+        
+        protected override void OnRemoveStore(EntityStore store) {
+            storeRemoved++;
+        }
+        
+        protected   override void   OnUpdateGroupBegin() { }
+        protected   override void   OnUpdateGroupEnd()   { }
+        protected   override void   OnUpdateGroup()      { }
+    }
+    
+    // SystemGroup class with all possible overrides
+    public class MyGroup : SystemGroup {
+        public      int     storeAdded;
+        public      int     storeRemoved;
+
+        public MyGroup() : base("MyGroup") { }
+
+        protected override void OnAddStore   (EntityStore store) {
+            storeAdded++;
+        }
+        
+        protected override void OnRemoveStore(EntityStore store) {
+            storeRemoved++;
+        }
         
         protected   override void   OnUpdateGroupBegin() { }
         protected   override void   OnUpdateGroupEnd()   { }
