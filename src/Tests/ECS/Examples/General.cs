@@ -3,7 +3,7 @@ using System.IO;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
-
+using static Friflo.Engine.ECS.ComponentChangedAction;
 
 // ReSharper disable UnusedVariable
 // ReSharper disable MemberCanBePrivate.Global
@@ -177,7 +177,7 @@ public static void AddChildEntities()
 }
 
 [Test]
-public static void AddEventHandlers()
+public static void EventHandlers()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
@@ -191,6 +191,37 @@ public static void AddEventHandlers()
     entity.AddScript(new MyScript());
     entity.AddChild(store.CreateEntity());
 }
+
+[Test]
+public static void ComponentEvents()
+{
+    var store  = new EntityStore();
+    var entity = store.CreateEntity();
+    entity.OnComponentChanged += ev =>
+    {
+        if (ev.Type == typeof(EntityName)) {
+            string log = ev.Action switch
+            {
+                Add    => $"new: {ev.Component<EntityName>()}",
+                Update => $"new: {ev.Component<EntityName>()}  old: {ev.OldComponent<EntityName>()}",
+                Remove => $"old: {ev.OldComponent<EntityName>()}",
+                _      => null
+            };
+            Console.WriteLine($"{ev.Action} {log}");
+        }
+    };
+    entity.AddComponent(new EntityName("Peter"));
+    entity.AddComponent(new EntityName("Paul"));
+    entity.RemoveComponent<EntityName>();
+}
+
+/* Output
+Add new: 'Peter'
+Update new: 'Paul'  old: 'Peter'
+Remove old: 'Paul'
+*/
+
+
 
 public readonly struct MySignal { }
 
