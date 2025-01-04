@@ -222,7 +222,33 @@ Remove old: 'Paul'
 */
 
 
+[Test]
+public static void TagEvents()
+{
+    var store  = new EntityStore();
+    var entity = store.CreateEntity();
+    entity.OnTagsChanged += ev =>
+    {
+        string log = "";
+        if (ev.AddedTags.  Has<MyTag1>()) log += ", added:   MyTag1";
+        if (ev.RemovedTags.Has<MyTag1>()) log += ", removed: MyTag1";
+        
+        if (ev.AddedTags.  Has<MyTag2>()) log += ", added:   MyTag2";
+        if (ev.RemovedTags.Has<MyTag2>()) log += ", removed: MyTag2";
+        
+        Console.WriteLine($"entity {entity.Id}{log}");
+    };
+    entity.AddTag<MyTag1>();
+    entity.RemoveTag<MyTag1>();
+    entity.AddTags(Tags.Get<MyTag1, MyTag2>());
+}
 
+/* Output
+entity 1, added:   MyTag1
+entity 1, removed: MyTag1
+entity 1, added:   MyTag1, added:   MyTag2
+*/
+    
 public readonly struct MySignal { }
 
 [Test]
