@@ -230,11 +230,11 @@ public static void TagEvents()
     entity.OnTagsChanged += ev =>
     {
         string log = "";
-        if (ev.AddedTags.  Has<MyTag1>()) log += ", added:   MyTag1";
-        if (ev.RemovedTags.Has<MyTag1>()) log += ", removed: MyTag1";
+        if (ev.AddedTags.  Has<MyTag1>()) { log += ", added:   MyTag1"; }
+        if (ev.RemovedTags.Has<MyTag1>()) { log += ", removed: MyTag1"; }
         
-        if (ev.AddedTags.  Has<MyTag2>()) log += ", added:   MyTag2";
-        if (ev.RemovedTags.Has<MyTag2>()) log += ", removed: MyTag2";
+        if (ev.AddedTags.  Has<MyTag2>()) { log += ", added:   MyTag2"; }
+        if (ev.RemovedTags.Has<MyTag2>()) { log += ", removed: MyTag2"; }
         
         Console.WriteLine($"entity {entity.Id}{log}");
     };
