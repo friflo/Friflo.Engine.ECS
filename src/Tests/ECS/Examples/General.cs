@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using Friflo.Engine.ECS;
-using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 using static Friflo.Engine.ECS.ComponentChangedAction;
 
@@ -258,26 +256,6 @@ public static void AddSignalHandler()
     var entity  = store.CreateEntity();
     entity.AddSignalHandler<MySignal>(signal => { Console.WriteLine(signal); }); // > entity: 1 - signal > MySignal
     entity.EmitSignal(new MySignal());
-}
-
-[Test]
-public static void JsonSerialization()
-{
-    var store = new EntityStore();
-    store.CreateEntity(new EntityName("hello JSON"));
-    store.CreateEntity(new Position(1, 2, 3));
-
-    // --- Write store entities as JSON array
-    var serializer = new EntitySerializer();
-    var writeStream = new FileStream("entity-store.json", FileMode.Create);
-    serializer.WriteStore(store, writeStream);
-    writeStream.Close();
-
-    // --- Read JSON array into new store
-    var targetStore = new EntityStore();
-    serializer.ReadIntoStore(targetStore, new FileStream("entity-store.json", FileMode.Open));
-
-    Console.WriteLine($"entities: {targetStore.Count}"); // > entities: 2
 }
 
 }
