@@ -29,7 +29,11 @@ public sealed class EntityConverter
     }
     
     /// <summary>
-    /// Returns the passed <see cref="Entity"/> as a <see cref="DataEntity"/> 
+    /// Returns the passed <see cref="Entity"/> as a <see cref="DataEntity"/>
+    /// <param name="pretty">
+    /// If true each component in <see cref="DataEntity.components"/> JSON is written in a separate line.<br/>
+    /// If false <see cref="DataEntity.components"/> JSON has no line feeds.
+    /// </param>
     /// </summary>
     public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity, bool pretty)
     {
