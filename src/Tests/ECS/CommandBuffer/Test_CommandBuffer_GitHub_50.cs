@@ -31,7 +31,7 @@ public static class Test_CommandBuffer_GitHub_50
     
     class ParallelPositionSystem : QuerySystem<MyComponent1>
     {
-        readonly ParallelJobRunner runner = new (Environment.ProcessorCount);
+        readonly ParallelJobRunner runner = new(2);
         
         protected override void OnUpdate()
         {
