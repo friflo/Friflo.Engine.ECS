@@ -15,11 +15,15 @@ public static partial class Test_Index_Query
                                                                               HasValue<IndexedInt,    int>   (123);
         var query4  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        HasValue<AttackComponent, Entity>(cx.target);
         var query5  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        ValueInRange<IndexedInt, int>(100, 1000);
+       
+        
+        
         cx.query1 = query1;
         cx.query2 = query2;
         cx.query3 = query3;
         cx.query4 = query4;
         cx.query5 = query5;
+        
         {
             int count = 0;
             query1.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, ref MyComponent4 _, Entity entity) => {
@@ -82,7 +86,7 @@ public static partial class Test_Index_Query
                 }
             }
             AreEqual(3, count);
-        }
+        } 
     }
 }
 

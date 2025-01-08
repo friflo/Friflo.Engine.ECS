@@ -165,6 +165,32 @@ public static class Test_Query_EachEntity
         }
     }
     
+    [Test]
+    public static void Test_Query_EachEntity7()
+    {
+        var store   = CreateStore();
+        var query   = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>();
+        var each    = query.EachEntity(new Each7());
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(63, entity.GetComponent<MyComponent1>().a);
+        }
+        Mem.AreEqual(100, each.count);
+    }
+    
+    [Test]
+    public static void Test_Query_Chunks_EachEntity7()
+    {
+        var store   = CreateStore();
+        var query   = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>();
+        var each    = new Each7();
+        foreach (var chunk in query.Chunks) {
+            chunk.EachEntity(ref each);
+        }
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(63, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
     
     private static EntityStore CreateStore()
     {
@@ -176,7 +202,8 @@ public static class Test_Query_EachEntity
                 new MyComponent3{ b = 2 },
                 new MyComponent4{ b = 4 },
                 new MyComponent5{ b = 8 },
-                new MyComponent6{ b = 16 });
+                new MyComponent6{ b = 16 },
+                new MyComponent7{ b = 32 });
         }
         return store;
     }
@@ -231,6 +258,15 @@ public static class Test_Query_EachEntity
         internal int count;
         public void Execute(ref MyComponent1 c1, ref MyComponent2 c2, ref MyComponent3 c3, ref MyComponent4 c4, ref MyComponent5 c5, ref MyComponent6 c6, int id) {
             c1.a = c2.b + c3.b + c4.b + c5.b + c6.b;
+            Mem.AreEqual(++count, id);
+        }
+    }
+    
+    private struct Each7 : IEachEntity<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>
+    {
+        internal int count;
+        public void Execute(ref MyComponent1 c1, ref MyComponent2 c2, ref MyComponent3 c3, ref MyComponent4 c4, ref MyComponent5 c5, ref MyComponent6 c6, ref MyComponent7 c7, int id) {
+            c1.a = c2.b + c3.b + c4.b + c5.b + c6.b + c7.b;
             Mem.AreEqual(++count, id);
         }
     }

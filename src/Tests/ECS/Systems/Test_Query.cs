@@ -29,7 +29,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 1) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1, MyComponent2]  entities: 1", chunk.ToString());
                 var positions = chunk.Chunk1;
                 Mem.AreEqual("Position[1]", positions.ToString());
                 Mem.AreEqual(1, positions[0].x);
@@ -71,7 +71,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 1) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1, MyComponent2]  entities: 1", chunk.ToString());
             }
         }
         Mem.AreEqual(2, chunkCount);
@@ -141,7 +141,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 1) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1, MyComponent2]  entities: 1", chunk.ToString());
             }
         }
         Mem.AreEqual(2, chunkCount);
@@ -177,11 +177,10 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 0) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1, MyComponent2]  entities: 1", chunk.ToString());
             }
         }
         Mem.AreEqual(1, chunkCount);
-        AssertChunkExtensions(query);
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
@@ -192,7 +191,80 @@ public static class Test_Query
         Mem.AssertNoAlloc(start);
     }
     
-    private static void AssertChunkExtensions(ArchetypeQuery<Position, Rotation, Scale3, Transform, EntityName> query) {
+    [Test]
+    public static void Test_Query_arg_count_6()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new SystemSet { argCount = 6 });
+        
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, Scale3, EntityName>());
+        for (int n = 2; n <= 1000; n++) {
+            var child = archetype.CreateEntity();
+            child.Position      = new Position(n, 0, 0);
+            child.Rotation      = new Rotation(n, 0, 0, 0);
+            child.Scale3        = new Scale3  (n, 0, 0);
+            child.Name.value    = "child";
+            root.AddChild(child);
+        }
+        // --- force one time allocations
+        var  query = store.Query<Position, Rotation, Scale3, Transform, EntityName, MyComponent1>();
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) {
+                Mem.AreEqual(1, chunk.Length);
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1, MyComponent2]  entities: 1", chunk.ToString());
+            }
+        }
+        Mem.AreEqual(1, chunkCount);
+        
+        // --- run perf
+        var start = Mem.GetAllocatedBytes();
+        // 10_000_000 ~ #PC: 1078 ms
+        for (long n = 0; n < Count; n++) {
+            foreach (var (_, _, _, _, _, _, _) in query.Chunks) { }
+        }
+        Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
+    public static void Test_Query_arg_count_7()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new SystemSet { argCount = 6 });
+        
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, Scale3, EntityName>());
+        for (int n = 2; n <= 1000; n++) {
+            var child = archetype.CreateEntity();
+            child.Position      = new Position(n, 0, 0);
+            child.Rotation      = new Rotation(n, 0, 0, 0);
+            child.Scale3        = new Scale3  (n, 0, 0);
+            child.Name.value    = "child";
+            root.AddChild(child);
+        }
+        // --- force one time allocations
+        var  query = store.Query<Position, Rotation, Scale3, Transform, EntityName, MyComponent1, MyComponent2>();
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) {
+                Mem.AreEqual(1, chunk.Length);
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1, MyComponent2]  entities: 1", chunk.ToString());
+            }
+        }
+        Mem.AreEqual(1, chunkCount);
+        AssertChunkExtensions(query);
+        
+        // --- run perf
+        var start = Mem.GetAllocatedBytes();
+        // 10_000_000 ~ #PC: 1078 ms
+        for (long n = 0; n < Count; n++) {
+            foreach (var (_, _, _, _, _, _, _, _) in query.Chunks) { }
+        }
+        Mem.AssertNoAlloc(start);
+    }
+    
+    private static void AssertChunkExtensions(ArchetypeQuery<Position, Rotation, Scale3, Transform, EntityName, MyComponent1, MyComponent2> query) {
 
         foreach (var chunk in query.Chunks) {
             var length = chunk.Entities.Length;
@@ -221,6 +293,7 @@ public static class Test_Query
         root.AddComponent<Transform>();
         root.AddComponent<Scale3>();
         root.AddComponent<MyComponent1>();
+        root.AddComponent<MyComponent2>();
         store.SetStoreRoot(root);
         return store;
     }
