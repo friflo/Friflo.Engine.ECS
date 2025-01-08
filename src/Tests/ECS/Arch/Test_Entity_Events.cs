@@ -221,6 +221,17 @@ public static class Test_Entity_Events
     }
     
     [Test]
+    public static void Test_Entity_Events_remove_lambda()
+    {
+        var store  = new EntityStore();
+        var entity = store.CreateEntity(1);
+        var handler = entity.AddSignalHandler<MyEvent2>(signal => {});
+        AreEqual(1, entity.DebugEventHandlers.HandlerCount);
+        entity.RemoveSignalHandler(handler);
+        AreEqual(0, entity.DebugEventHandlers.HandlerCount);
+    }
+    
+    [Test]
     public static void Test_Events_EntityHandlers()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
