@@ -247,15 +247,22 @@ entity 1, removed: MyTag1
 entity 1, added:   MyTag1, added:   MyTag2
 */
     
-public readonly struct MySignal { }
+public struct CollisionSignal {
+    public Entity other;
+}
 
 [Test]
 public static void AddSignalHandler()
 {
-    var store   = new EntityStore();
-    var entity  = store.CreateEntity();
-    entity.AddSignalHandler<MySignal>(signal => { Console.WriteLine(signal); }); // > entity: 1 - signal > MySignal
-    entity.EmitSignal(new MySignal());
+    var store  = new EntityStore();
+    var player = store.CreateEntity(1);
+    player.AddSignalHandler<CollisionSignal>(signal => {
+        Console.WriteLine($"player collision with entity: {signal.Event.other.Id}");
+        // > player collision with entity: 2
+    });
+    var npc = store.CreateEntity(2);
+    // ... detect collision. e.g. with a collision system. In case of collision:
+    player.EmitSignal(new CollisionSignal{ other = npc });
 }
 
 }
