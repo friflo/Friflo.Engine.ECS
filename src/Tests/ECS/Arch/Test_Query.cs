@@ -236,18 +236,21 @@ public static class Test_Query
         var sig3 = Signature.Get<Position, Rotation, Scale3>();
         var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
         var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        var sig6 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3>();
         //
         var query1 =    store.Query(sig1);
         var query2 =    store.Query(sig2);
         var query3 =    store.Query(sig3);
         var query4 =    store.Query(sig4);
         var query5 =    store.Query(sig5);
+        var query6 =    store.Query(sig6);
         
         AreEqual("Query: [Position]  Count: 0",                                               query1.ToString());
         AreEqual("Query: [Position, Rotation]  Count: 0",                                     query2.ToString());
         AreEqual("Query: [Position, Rotation, Scale3]  Count: 0",                             query3.ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]  Count: 0",               query4.ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]  Count: 0", query5.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3]  Count: 0", query6.ToString());
         
         AreEqual(0, query1.Archetypes.Length);
         AreEqual(0, query2.Archetypes.Length);
@@ -289,6 +292,14 @@ public static class Test_Query
         AreEqual(3, query3.Archetypes.Length);
         AreEqual(2, query4.Archetypes.Length);
         AreEqual(1, query5.Archetypes.Length);
+        
+        entity.AddComponent<MyComponent3>();
+        AreEqual(6, query1.Archetypes.Length);
+        AreEqual(5, query2.Archetypes.Length);
+        AreEqual(4, query3.Archetypes.Length);
+        AreEqual(3, query4.Archetypes.Length);
+        AreEqual(2, query5.Archetypes.Length);
+        AreEqual(1, query6.Archetypes.Length);
     }
     
     [Test]

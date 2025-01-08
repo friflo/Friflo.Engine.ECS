@@ -255,4 +255,53 @@ public partial class EntityStoreBase
         return result;
     }
     #endregion
+    
+#region args - 6
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
+    /// </summary>
+    public ArchetypeQuery<T1, T2, T3, T4, T5, T6> Query<T1, T2, T3, T4, T5, T6> (Signature<T1, T2, T3, T4, T5, T6> signature)
+        where T1: struct, IComponent
+        where T2: struct, IComponent
+        where T3: struct, IComponent
+        where T4: struct, IComponent
+        where T5: struct, IComponent
+        where T6: struct, IComponent
+    {
+        var result = new ArchetypeQuery<T1, T2, T3, T4, T5, T6>(this, signature, null);
+        return result;
+    }
+    
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given component types.<br/>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
+    /// </summary>
+    public ArchetypeQuery<T1, T2, T3, T4, T5, T6> Query<T1, T2, T3, T4, T5, T6> ()
+        where T1: struct, IComponent
+        where T2: struct, IComponent
+        where T3: struct, IComponent
+        where T4: struct, IComponent
+        where T5: struct, IComponent
+        where T6: struct, IComponent
+    {
+        var result = new ArchetypeQuery<T1, T2, T3, T4, T5, T6>(this, Signature.Get<T1, T2, T3, T4, T5, T6>(), null);
+        return result;
+    }
+    
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
+    public ArchetypeQuery<T1, T2, T3, T4, T5, T6> Query<T1, T2, T3, T4, T5, T6> (QueryFilter filter)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+    {
+        var result = new ArchetypeQuery<T1,T2,T3,T4,T5,T6>(this, Signature.Get<T1,T2,T3,T4,T5,T6>(), filter);
+        return result;
+    }
+#endregion
 }

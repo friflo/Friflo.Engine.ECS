@@ -24,7 +24,7 @@ public static class Test_QueryJob
     public static void Test_QueryJob_ToString()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var types   = ComponentTypes.Get<MyComponent1, MyComponent2, Position, Rotation, Scale3>();
+        var types   = ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3, MyComponent4, Position, Rotation, Scale3>();
         var archetype   = store.GetArchetype(types);
         for (int n = 0; n < 32; n++) {
             archetype.CreateEntity();
@@ -59,7 +59,20 @@ public static class Test_QueryJob
             AreEqual(32, job.Entities.Count);
             AreEqual("QueryJob [MyComponent1, MyComponent2, Position, Rotation, Scale3]", job.ToString());
             AssertMissingRunner(job);
+        } {
+            var job = store.Query<MyComponent1, MyComponent2, MyComponent3, Position, Rotation, Scale3>().ForEach((_, _, _, _, _, _, _) => { });
+            AreEqual(32, job.Chunks.Count);
+            AreEqual(32, job.Entities.Count);
+            AreEqual("QueryJob [MyComponent1, MyComponent2, MyComponent3, Position, Rotation, Scale3]", job.ToString());
+            AssertMissingRunner(job);
         }
+        // {
+        //     var job = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, Position, Rotation, Scale3>().ForEach((_, _, _, _, _, _, _, _) => { });
+        //     AreEqual(32, job.Chunks.Count);
+        //     AreEqual(32, job.Entities.Count);
+        //     AreEqual("QueryJob [MyComponent1, MyComponent2, MyComponent3, MyComponent4, Position, Rotation, Scale3]", job.ToString());
+        //     AssertMissingRunner(job);
+        // }
     }
 
     [Test]
