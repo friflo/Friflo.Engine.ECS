@@ -24,7 +24,7 @@ public readonly struct UpdateTick
     /// <summary> The elapsed time since previous <see cref="SystemGroup.Update"/> execution. </summary>
     public readonly float deltaTime;
     
-    /// <summary> The time at the beginning of the current frame. </summary>
+    /// <summary> The time at the beginning of the current frame since application start. </summary>
     public readonly float time;
 
     public override string ToString() => $"deltaTime: {deltaTime}";
