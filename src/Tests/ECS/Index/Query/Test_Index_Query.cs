@@ -44,7 +44,9 @@ public static partial class Test_Index_Query
                 new Rotation(),
                 new MyComponent1 { a = n },
                 new MyComponent2 { b = n },
-                new MyComponent3 { b = n });
+                new MyComponent3 { b = n },
+                new MyComponent4 { b = n },
+                new MyComponent5 { b = n });
             entities.Add(entity);
         }
         cx.target   = targets[0];
@@ -147,6 +149,22 @@ public static partial class Test_Index_Query
     {
         var cx = Query_Setup();
         QueryArg5(cx);
+        Query_Assertions(cx);
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg6()
+    {
+        var cx = Query_Setup();
+        QueryArg6(cx);
+        Query_Assertions(cx);
+    }
+    
+    [Test]
+    public static void Test_Index_Component_Add_Remove_Arg7()
+    {
+        var cx = Query_Setup();
+        QueryArg7(cx);
         Query_Assertions(cx);
     }
 }

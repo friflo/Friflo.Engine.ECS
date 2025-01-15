@@ -22,6 +22,8 @@ public class SystemSet : Script
             3 => new MySystem_Arg3(),
             4 => new MySystem_Arg4(),
             5 => new MySystem_Arg5(),
+            6 => new MySystem_Arg6(),
+            7 => new MySystem_Arg7(),
             _ => throw new ArgumentException($"value: {argCount}", nameof(argCount))
         };
         Systems.Add(system);
@@ -181,6 +183,67 @@ public class MySystem_Arg5 : QuerySystem<Position, Rotation, EntityName, Scale3,
     }
 }
 
+public class MySystem_Arg6 : QuerySystem<Position, Rotation, EntityName, Scale3, Transform, MyComponent1>
+{
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
+    protected override void OnUpdate()
+    {
+        var store       = Query.Store;
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3, Transform, MyComponent1>());
+        int chunkCount  = 0;
+        foreach (var (positions, rotation, name, scale, transform, myComponent1, entities) in Query.Chunks) {
+            var matrix4X4   = transform.AsSpanMatrix4x4();
+            var length      = entities.Length;
+            Mem.AreEqual(length,                    matrix4X4.Length);
+            Mem.AreEqual(length,                    positions.Length);
+            Mem.AreEqual(length,                    rotation.Length);
+            Mem.AreEqual(length,                    name.Length);
+            Mem.AreEqual(length,                    scale.Length);
+            Mem.AreEqual(length,                    transform.Length);
+            Mem.AreEqual(length,                    myComponent1.Length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
+            switch(chunkCount++) {
+                case 0:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        }
+        Mem.AreEqual(2, chunkCount);
+    }
+}
+
+public class MySystem_Arg7 : QuerySystem<Position, Rotation, EntityName, Scale3, Transform, MyComponent1, MyComponent2>
+{
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
+    protected override void OnUpdate()
+    {
+        var store       = Query.Store;
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3, Transform, MyComponent1, MyComponent2>());
+        int chunkCount  = 0;
+        foreach (var (positions, rotation, name, scale, transform, myComponent1,myComponent2, entities) in Query.Chunks) {
+            var matrix4X4   = transform.AsSpanMatrix4x4();
+            var length      = entities.Length;
+            Mem.AreEqual(length,                    matrix4X4.Length);
+            Mem.AreEqual(length,                    positions.Length);
+            Mem.AreEqual(length,                    rotation.Length);
+            Mem.AreEqual(length,                    name.Length);
+            Mem.AreEqual(length,                    scale.Length);
+            Mem.AreEqual(length,                    transform.Length);
+            Mem.AreEqual(length,                    myComponent1.Length);
+            Mem.AreEqual(length,                    myComponent2.Length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
+            switch(chunkCount++) {
+                case 0:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        }
+        Mem.AreEqual(2, chunkCount);
+    }
+}
+
 public static class Test_ScriptSystems
 {
     [Test]
@@ -320,6 +383,66 @@ public static class Test_ScriptSystems
         ExecuteSystems(store, count);
     }
     
+    [Test]
+    public static void Test_ScriptSystems_query_arg_count_6()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new SystemSet { argCount = 6 });
+        
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        child.AddComponent(new Position(2, 0, 0));
+        child.AddComponent(new Rotation(2, 0, 0, 0));
+        child.AddComponent(new Scale3  (2, 0, 0));
+        child.AddComponent<Transform>();
+        child.AddComponent(new EntityName("child"));
+        child.AddComponent(new MyComponent1());
+        for (int n = 3; n <= 1000; n++) {
+            child = child.Archetype.CreateEntity();
+            child.Position      = new Position(n, 0, 0);
+            child.Rotation      = new Rotation(n, 0, 0, 0);
+            child.Scale3        = new Scale3  (n, 0, 0);
+            child.AddComponent(new MyComponent1());
+            child.Name.value    = "child";
+            root.AddChild(child);
+        }
+        CreateSystems(store);
+        int count = 10; // 10_000_000 ~ #PC: 1847 ms
+        ExecuteSystems(store, count);
+    }
+    
+    [Test]
+    public static void Test_ScriptSystems_query_arg_count_7()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new SystemSet { argCount = 7 });
+        
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        child.AddComponent(new Position(2, 0, 0));
+        child.AddComponent(new Rotation(2, 0, 0, 0));
+        child.AddComponent(new Scale3  (2, 0, 0));
+        child.AddComponent<Transform>();
+        child.AddComponent(new EntityName("child"));
+        child.AddComponent(new MyComponent1());
+        child.AddComponent(new MyComponent2());
+        for (int n = 3; n <= 1000; n++) {
+            child = child.Archetype.CreateEntity();
+            child.Position      = new Position(n, 0, 0);
+            child.Rotation      = new Rotation(n, 0, 0, 0);
+            child.Scale3        = new Scale3  (n, 0, 0);
+            child.AddComponent(new MyComponent1());
+            child.AddComponent(new MyComponent2());
+            child.Name.value    = "child";
+            root.AddChild(child);
+        }
+        CreateSystems(store);
+        int count = 10; // 10_000_000 ~ #PC: 1847 ms
+        ExecuteSystems(store, count);
+    }
+    
     internal static EntityStore SetupTestStore() {
         var store   = new EntityStore();
         
@@ -330,6 +453,7 @@ public static class Test_ScriptSystems
         root.AddComponent<Transform>();
         root.AddComponent<Scale3>();
         root.AddComponent<MyComponent1>();
+        root.AddComponent<MyComponent2>();
         store.SetStoreRoot(root);
         return store;
     }
