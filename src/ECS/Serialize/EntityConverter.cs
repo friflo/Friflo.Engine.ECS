@@ -30,6 +30,8 @@ public sealed class EntityConverter
     
     /// <summary>
     /// Returns the passed <see cref="Entity"/> as a <see cref="DataEntity"/>
+    /// <param name="entity">Source entity.</param>
+    /// <param name="dataEntity">The target entity data is copied to.</param>
     /// <param name="pretty">
     /// If true each component in <see cref="DataEntity.components"/> JSON is written in a separate line.<br/>
     /// If false <see cref="DataEntity.components"/> JSON has no line feeds.
