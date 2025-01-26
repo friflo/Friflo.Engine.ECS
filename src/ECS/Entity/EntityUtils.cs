@@ -70,10 +70,10 @@ public static class EntityUtils
         return type.componentCount + entity.Scripts.Length;
     }
     
-    internal static Exception NotImplemented(int id, string use) {
+    /* internal static Exception NotImplemented(int id, string use) {
         var msg = $"to avoid excessive boxing. Use {use} or {nameof(EntityUtils)}.{nameof(EqualityComparer)}. id: {id}";
         return new NotImplementedException(msg);
-    }
+    } */
     
     internal static string EntityToString(Entity entity) {
         if (entity.store == null) {

@@ -664,13 +664,16 @@ public readonly partial struct Entity : IEquatable<Entity>
     public          bool    Equals(Entity other)                => rawEntity == other.rawEntity && store == other.store;
 
     // --- object
-    /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
-    /// <remarks> Use <see cref="operator=="/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
-    public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(Id, "== Equals(Entity)");
+    public override bool    Equals(object obj) {
+        if (obj is Entity other) {
+            return rawEntity == other.rawEntity && store == other.store;
+        }
+        return false;
+    }
+    // was: public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(Id, "== Equals(Entity)");
     
-    /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
-    /// <remarks> Use <see cref="Id"/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
-    public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
+    public override int     GetHashCode()       => Id ^ Revision;
+    // was: public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
     
     public override string  ToString()          => EntityUtils.EntityToString(this);
     

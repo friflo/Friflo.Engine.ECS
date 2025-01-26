@@ -342,6 +342,8 @@ public static class Test_Entity
         var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
+        var entity1obj  = (object)entity1;
+        var entity2obj  = (object)entity2;
         
         // --- operator ==, !=
         IsFalse (entity1 == entity2);
@@ -356,21 +358,58 @@ public static class Test_Entity
         var start = Mem.GetAllocatedBytes();
         Mem.AreEqual (false, entity1.Equals(entity2));
         Mem.AreEqual (true,  entity1.Equals(entity1));
-        Mem.AssertNoAlloc(start);
         
         // --- object.GetHashCode()
-        var e = Throws<NotImplementedException>(() => {
-            _ = entity1.GetHashCode();
-        });
-        AreEqual("to avoid excessive boxing. Use Id or EntityUtils.EqualityComparer. id: 1", e!.Message);
+        Mem.AreEqual(1, entity1.GetHashCode());
         
         // --- object.Equals()
-        e = Throws<NotImplementedException>(() => {
-            object obj = entity1;
-            _ = obj.Equals(entity2);
-        });
-        AreEqual("to avoid excessive boxing. Use == Equals(Entity) or EntityUtils.EqualityComparer. id: 1", e!.Message);
+        Mem.IsFalse(entity1.Equals(null));
+        Mem.IsTrue (entity1.Equals(entity1obj));
+        Mem.IsFalse(entity1.Equals(entity2obj));
+        Mem.AssertNoAlloc(start);
     }
+    
+    [Test]
+    public static void Test_Entity_Dictionary_object()
+    {
+        var store = new EntityStore();
+        var map = new Dictionary<object, int>();
+        map.EnsureCapacity(10);
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        // all subsequent statements cause boxing
+        map.Add(entity1, 1);
+        map.Add(entity2, 2);
+        map.Add(entity3, 3);
+        Mem.AreEqual (2, map[entity2]);
+        Mem.IsTrue(map.ContainsKey(entity2));
+        Mem.IsTrue(map.TryGetValue(entity2, out _));
+    }
+    
+    [Test]
+    public static void Test_Entity_Dictionary_generic()
+    {
+        var store = new EntityStore();
+        var map = new Dictionary<Entity, int>();
+        map.EnsureCapacity(10);
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var entity3 = store.CreateEntity(3);
+        map.Add(entity1, 1);                    // force one time allocation
+        _ = map[entity1];                       // force one time allocation
+        _ = map.ContainsKey(entity1);           // force one time allocation
+        _ = map.TryGetValue(entity1, out _);    // force one time allocation
+        
+        var start = Mem.GetAllocatedBytes();    // force one time allocation
+        map.Add(entity2, 2);
+        map.Add(entity3, 3);
+        Mem.AreEqual (2, map[entity2]);
+        Mem.IsTrue(map.ContainsKey(entity2));
+        Mem.IsTrue(map.TryGetValue(entity2, out _));
+        Mem.AssertNoAlloc(start);
+    }
+    
     
     [Test]
     public static void Test_Entity_Enabled()
