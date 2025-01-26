@@ -137,7 +137,7 @@ namespace Internal.ECS {
             var log = sb.ToString();
             AreEqual(
 @"stores: 0                     E M      last ms       sum ms      updates     last mem      sum mem     entities
----------------------         ---     --------     --------     --------     --------     --------     --------
+----------------------------- ---     --------     --------     --------     --------     --------     --------
 Systems [1]                   + m       -1.000        0.000            0            0            0
 | Update [2]                  + m       -1.000        0.000            0            0            0
 |   TestSystem1               + m       -1.000        0.000            0            0            0            0

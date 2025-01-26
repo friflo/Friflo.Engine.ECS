@@ -154,4 +154,9 @@ namespace Tests.ECS.Systems
             }
         }
     }
+    
+    public class TestSystem_long_____123456789_123456789_ : QuerySystem<Position>
+    {
+        protected override void OnUpdate() { }
+    }
 }

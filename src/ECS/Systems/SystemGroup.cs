@@ -346,11 +346,11 @@ public class SystemGroup : BaseSystem, IEnumerable
         }
     }
     
-    internal override void AppendPerfStats(StringBuilder sb, int depth)
+    internal override void AppendPerfStats(StringBuilder sb, int depth, int nameColLen)
     {
-        base.AppendPerfStats(sb, depth);
+        base.AppendPerfStats(sb, depth, nameColLen);
         foreach (var child in childSystems) {
-            child.AppendPerfStats(sb, depth + 1);
+            child.AppendPerfStats(sb, depth + 1, nameColLen);
         }
     }
     #endregion

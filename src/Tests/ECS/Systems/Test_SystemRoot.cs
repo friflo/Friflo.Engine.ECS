@@ -114,7 +114,7 @@ namespace Tests.ECS.Systems
             Console.WriteLine(root.GetPerfLog());
 AreEqual(
                 @"stores: 1                     E M      last ms       sum ms      updates     last mem      sum mem     entities
----------------------         ---     --------     --------     --------     --------     --------     --------
+----------------------------- ---     --------     --------     --------     --------     --------     --------
 Systems [1]                   +         -1.000        0.000            0            0            0
 | Update [1]                  +         -1.000        0.000            0            0            0
 |   TestSystem1               +         -1.000        0.000            0            0            0            1
@@ -124,7 +124,7 @@ Systems [1]                   +         -1.000        0.000            0        
             Console.WriteLine(root.GetPerfLog());
             AreEqual(
 @"stores: 1                     E M      last ms       sum ms      updates     last mem      sum mem     entities
----------------------         ---     --------     --------     --------     --------     --------     --------
+----------------------------- ---     --------     --------     --------     --------     --------     --------
 Systems [1]                   + m       -1.000        0.000            0            0            0
 | Update [1]                  + m       -1.000        0.000            0            0            0
 |   TestSystem1               + m       -1.000        0.000            0            0            0            1
@@ -132,7 +132,7 @@ Systems [1]                   + m       -1.000        0.000            0        
             
             AreEqual(
 @"stores: 1                     E M      last ms       sum ms      updates     last mem      sum mem     entities
----------------------         ---     --------     --------     --------     --------     --------     --------
+----------------------------- ---     --------     --------     --------     --------     --------     --------
 TestSystem1                   + m       -1.000        0.000            0            0            0            1
 ", testSystem1.GetPerfLog());
             
@@ -143,6 +143,44 @@ TestSystem1                   + m       -1.000        0.000            0        
             AreEqual(42, testSystem1.Tick.deltaTime);
             AreEqual(42, testGroup.Tick.deltaTime);
             AreEqual(42, root.Tick.deltaTime);
+        }
+        
+        [Test]
+        public static void Test_SystemRoot_PerfLog_truncate_long_names()
+        {
+            var store       = new EntityStore();
+            var root        = new SystemRoot(store, "SystemRoot_long_____123456789_123456789_");
+            var testGroup   = new SystemGroup("SystemGroup_long____123456789_123456789_");
+            root.Add(testGroup);
+            var testSystem1 = new TestSystem_long_____123456789_123456789_();
+            testGroup.Add(testSystem1);
+            AreEqual("TestSystem_long_____123456789_123456789_ - [Position]", testSystem1.ToString());
+            Console.WriteLine(root.GetPerfLog());
+AreEqual(
+@"stores: 1                     E M      last ms       sum ms      updates     last mem      sum mem     entities
+----------------------------- ---     --------     --------     --------     --------     --------     --------
+SystemRoot_long_____123456789 +         -1.000        0.000            0            0            0
+| SystemGroup_long____1234567 +         -1.000        0.000            0            0            0
+|   TestSystem_long_____12345 +         -1.000        0.000            0            0            0            0
+", root.GetPerfLog());
+
+Console.WriteLine(root.GetPerfLog(50));
+AreEqual(
+@"stores: 1                                         E M      last ms       sum ms      updates     last mem      sum mem     entities
+------------------------------------------------- ---     --------     --------     --------     --------     --------     --------
+SystemRoot_long_____123456789_123456789_ [1]      +         -1.000        0.000            0            0            0
+| SystemGroup_long____123456789_123456789_ [1]    +         -1.000        0.000            0            0            0
+|   TestSystem_long_____123456789_123456789_      +         -1.000        0.000            0            0            0            0
+", root.GetPerfLog(50));
+
+    Console.WriteLine(root.GetPerfLog(1));
+AreEqual(
+@"stores: 1   E M      last ms       sum ms      updates     last mem      sum mem     entities
+ ---     --------     --------     --------     --------     --------     --------
+ +         -1.000        0.000            0            0            0
+ +         -1.000        0.000            0            0            0
+ +         -1.000        0.000            0            0            0            0
+", root.GetPerfLog(1));
         }
         
         [Test]
