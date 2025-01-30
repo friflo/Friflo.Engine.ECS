@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -168,10 +168,23 @@ public sealed partial class EntityStore : EntityStoreBase
         dataBuffer          = new DataEntity();
         Info                = new EntityStoreInfo(this);
     }
-    #endregion
-    
 
-#region id / pid conversion
+    public override void Dispose()
+    {
+        var cmd = GetCommandBuffer();
+        foreach (var entity in Entities)
+        {
+            cmd.DeleteEntity(entity.Id);
+        }
+        cmd.Playback();
+        ReturnCommandBuffer(cmd);
+        extension.Dispose();
+        base.Dispose();
+    }
+    #endregion
+
+
+    #region id / pid conversion
     /// <summary>
     /// Return the <see cref="Entity.Id"/> for the passed entity <paramref name="pid"/>.
     /// </summary>
@@ -180,7 +193,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
     /// as this method performs a <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
-    public  int             PidToId(long pid)   => extension.pid2Id != null ? extension.pid2Id[pid] : (int)pid;
+    public int             PidToId(long pid)   => extension.pid2Id != null ? extension.pid2Id[pid] : (int)pid;
 
     /// <summary>
     /// Return the <see cref="Entity.Pid"/> for the passed entity <paramref name="id"/>.

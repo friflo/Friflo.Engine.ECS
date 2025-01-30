@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -7,7 +7,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Collections;
 
-internal sealed class IdArrayPool
+internal sealed class IdArrayPool : IDisposable
 {
     public              int             Count       => count;
     internal            int             FreeCount   => freeStarts.Count;
@@ -27,7 +27,12 @@ internal sealed class IdArrayPool
         ids         = Array.Empty<int>();
         freeStarts  = new StackArray<int>(Array.Empty<int>());
     }
-    
+
+    public void Dispose()
+    {
+        ids = null;
+    }
+
     internal static int[] GetIds(int count, IdArrayHeap heap)
     {
         return heap.pools[IdArrayHeap.PoolIndex(count)].ids;

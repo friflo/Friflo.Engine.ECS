@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -21,7 +21,7 @@ namespace Friflo.Engine.ECS;
 /// - Permanent ids (pid's) of type long used as an alternative identifier for id of type int.<br/>
 /// - Entity <see cref="Script"/>'s to support entity components via OOP.<br/> 
 /// </summary>
-internal partial struct StoreExtension
+internal partial struct StoreExtension : IDisposable
 {
 #region pid storage
     internal                            Random                  randPid;                    //  8   - generate random pid's                       - null if UsePidAsId
@@ -73,7 +73,28 @@ internal partial struct StoreExtension
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
         entityScriptCount   = 1;
     }
-    
+
+    public void Dispose()
+    {
+        childHeap.Dispose();
+        if (indexMap != null)
+        {
+            foreach (var index in indexMap)
+            {
+                if (index != null)
+                    index.Dispose();
+            }
+        }
+        if (relationsMap != null)
+        {
+            foreach (var relation in relationsMap)
+            {
+                if (relation != null)
+                    relation.Dispose();
+            }
+        }
+    }
+
     internal void RemoveEntity(int id) {
         if (id2Pid != null) {
             var pid = id2Pid[id];
