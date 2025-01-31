@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable MemberCanBeProtected.Global
@@ -12,11 +13,14 @@ using Friflo.Engine.ECS.Collections;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Relations;
 
+internal delegate AbstractEntityRelations CreateEntityRelations(ComponentType componentType, Archetype archetype, StructHeap heap);
+
 internal abstract class AbstractEntityRelations
 {
     internal            int                         Count       => archetype.Count;
     public    override  string                      ToString()  => $"relation count: {archetype.Count}";
 
+    internal static readonly Dictionary<Type, CreateEntityRelations> CreateEntityRelationsNativeAot = new ();
 #region fields
     /// Single <see cref="Archetype"/> containing all relations of a specific <see cref="IRelation{TKey}"/>
     internal  readonly  Archetype                   archetype;
@@ -58,7 +62,6 @@ internal abstract class AbstractEntityRelations
         return new KeyNotFoundException($"relation not found. key '{key}' id: {id}");        
     }
     
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
     internal static AbstractEntityRelations GetEntityRelations(EntityStoreBase store, int structIndex)
     {
         var relationsMap    = ((EntityStore)store).extension.relationsMap ??= CreateRelationsMap();
@@ -67,12 +70,32 @@ internal abstract class AbstractEntityRelations
             return relations;
         }
         var componentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
-        var heap            = componentType.CreateHeap();
-        var config          = EntityStoreBase.GetArchetypeConfig(store);
-        var archetype       = new Archetype(config, heap);
-        var obj             = Activator.CreateInstance(componentType.RelationType, componentType, archetype, heap);
-        return relationsMap[structIndex] = (AbstractEntityRelations)obj;
-        //  return store.relationsMap[structIndex] = new RelationArchetype<TRelation, TKey>(archetype, heap);
+        return relationsMap[structIndex] = CreateEntityRelations(store, componentType);
+    }
+
+    /// Call constructors of<br/>
+    /// <see cref="GenericEntityRelations{TRelation,TKey}"/>
+    /// <see cref="EntityLinkRelations{TRelation}"/>
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO
+    private static AbstractEntityRelations CreateEntityRelations(EntityStoreBase store, ComponentType componentType)
+    {
+        var heap        = componentType.CreateHeap();
+        var config      = EntityStoreBase.GetArchetypeConfig(store);
+        var archetype   = new Archetype(config, heap);
+        
+        var flags       = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
+        var paramTypes  = new [] { typeof(ComponentType), typeof(Archetype), typeof(StructHeap) };
+        var constructor = componentType.RelationType.GetConstructor(flags, null, paramTypes, null);
+        if (constructor == null) {
+            // constructor is null in Native AOT
+            if (!CreateEntityRelationsNativeAot.TryGetValue(componentType.Type, out var create)) {
+                throw new InvalidOperationException($"Native AOT requires registration of IRelation with aot.RegisterRelation(). type: {componentType.Type}.");   
+            }
+            return create(componentType, archetype, heap);
+        }
+        var args        = new object[] { componentType, archetype, heap };
+        var obj         = constructor.Invoke(args);
+        return (AbstractEntityRelations)obj;
     }
     
     private static AbstractEntityRelations[] CreateRelationsMap() {

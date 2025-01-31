@@ -22,7 +22,7 @@ internal static class RelationUtils
         return (GetRelationKey<TRelation,TKey>)genericDelegate;
     }
     
-    private static TKey GetRelationKey<TRelation,TKey>(in TRelation component)
+    internal static TKey GetRelationKey<TRelation,TKey>(in TRelation component)
         where TRelation : struct, IRelation<TKey>
     {
         return component.GetRelationKey();

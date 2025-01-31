@@ -28,7 +28,7 @@ internal struct StringRelation : IRelation<string>
     public override string  ToString()          => value;
 }
 
-internal enum InventoryItemType {
+public enum InventoryItemType {
     Axe     = 1,
     Gun     = 2,
     Sword   = 3,
@@ -37,7 +37,7 @@ internal enum InventoryItemType {
 
 /// <summary> <see cref="IRelation{TKey}"/> using an enum as relation key. </summary>
 [ComponentKey("item")]
-internal struct InventoryItem : IRelation<InventoryItemType>
+public struct InventoryItem : IRelation<InventoryItemType>
 {
     public          InventoryItemType   type;
     public          int                 amount;

@@ -22,7 +22,7 @@ internal static class IndexedValueUtils
         return (GetIndexedValue<TComponent,TValue>)genericDelegate;
     }
     
-    private static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component)
+    internal static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component)
         where TComponent : struct, IIndexedComponent<TValue>
     {
         return component.GetIndexedValue();

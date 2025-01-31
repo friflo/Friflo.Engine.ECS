@@ -2,20 +2,38 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
+internal delegate AbstractComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType);
+
 internal static class ComponentIndexUtils
 {
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2077", Justification = "TODO")] // TODO
+    internal static readonly Dictionary<Type, CreateComponentIndex> CreateComponentIndexNativeAot = new ();
+    
+    /// Call constructors of<br/>
+    /// <see cref="ValueStructIndex{TIndexedComponent,TValue}"/>
+    /// <see cref="ValueClassIndex{TIndexedComponent,TValue}"/>
+    /// <see cref="EntityIndex{TIndexedComponent}"/>
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO
     internal static AbstractComponentIndex CreateComponentIndex(EntityStore store, ComponentType componentType)
     {
         var flags   = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance;
+        var paramTypes = new [] { typeof(EntityStore), typeof(ComponentType) };
+        var constructor = componentType.IndexType.GetConstructor(flags, null, paramTypes, null);
+        if (constructor == null) {
+            // constructor is null in Native AOT
+            if (!CreateComponentIndexNativeAot.TryGetValue(componentType.Type, out var create)) {
+                throw new InvalidOperationException($"Native AOT requires registration of IIndexedComponent with aot.RegisterIndexedComponent(). type: {componentType.Type}.");   
+            }
+            return create(store, componentType);
+        }
         var args    = new object[] { store, componentType };
-        var obj     = Activator.CreateInstance(componentType.IndexType, flags, null, args, null);
+        var obj     = constructor.Invoke(args);
         var index   = (AbstractComponentIndex)obj!;
         return index;
     }

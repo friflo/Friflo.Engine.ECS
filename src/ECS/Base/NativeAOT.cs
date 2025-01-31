@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Friflo.Engine.ECS.Index;
+using Friflo.Engine.ECS.Relations;
 
 // ReSharper disable UseRawString
 // ReSharper disable once CheckNamespace
@@ -125,6 +127,68 @@ A type initializer threw an exception. To determine which type, inspect the Inne
         }
     }
     
+    public void RegisterIndexedComponentClass<T, TValue>()
+        where T : struct, IIndexedComponent<TValue>
+        where TValue : class
+    {
+        InitSchema();
+        if (typeSet.Add(typeof(T)))
+        {
+            AddType(typeof(T), SchemaTypeKind.Component);
+            SchemaUtils.CreateComponentType<T>(0, null, null);              // dummy call to prevent trimming required type info
+            IndexedValueUtils.GetIndexedComponentValue<T, TValue>(default); // dummy call to prevent trimming required type info
+            ComponentIndexUtils.CreateComponentIndexNativeAot[typeof(T)] = (store, componentType) => {
+                return new ValueClassIndex<T, TValue>(store, componentType);
+            };
+        }
+    }
+    
+    public void RegisterIndexedComponentStruct<T, TValue>()
+        where T : struct, IIndexedComponent<TValue>
+        where TValue : struct
+    {
+        InitSchema();
+        if (typeSet.Add(typeof(T)))
+        {
+            AddType(typeof(T), SchemaTypeKind.Component);
+            SchemaUtils.CreateComponentType<T>(0, null, null);              // dummy call to prevent trimming required type info
+            IndexedValueUtils.GetIndexedComponentValue<T, TValue>(default); // dummy call to prevent trimming required type info
+            ComponentIndexUtils.CreateComponentIndexNativeAot[typeof(T)] = (store, componentType) => {
+                return new ValueStructIndex<T, TValue>(store, componentType);
+            };
+        }
+    }
+    
+    public void RegisterIndexedComponentEntity<T>()
+        where T : struct, ILinkComponent
+    {
+        InitSchema();
+        if (typeSet.Add(typeof(T)))
+        {
+            AddType(typeof(T), SchemaTypeKind.Component);
+            SchemaUtils.CreateComponentType<T>(0, null, null);              // dummy call to prevent trimming required type info
+            IndexedValueUtils.GetIndexedComponentValue<T, Entity>(default); // dummy call to prevent trimming required type info
+            ComponentIndexUtils.CreateComponentIndexNativeAot[typeof(T)] = (store, componentType) => {
+                return new EntityIndex<T>(store, componentType);
+            };
+        }
+    }
+    
+    public void RegisterRelation<T, TKey>()
+        where T : struct, IRelation<TKey>
+    {
+        InitSchema();
+        if (typeSet.Add(typeof(T)))
+        {
+            AddType(typeof(T), SchemaTypeKind.Component);
+            RelationUtils.GetRelationKey<T,TKey>(default);          // dummy call to prevent trimming required type info
+            SchemaUtils.CreateRelationType<T>(0, null, null);       // dummy call to prevent trimming required type info
+            AbstractEntityRelations.CreateEntityRelationsNativeAot[typeof(T)] = (componentType, archetype, heap) => {
+                return new GenericEntityRelations<T, TKey>(componentType, archetype, heap);
+            };
+        }
+    }
+
     public void RegisterTag<T>()  where T : struct, ITag 
     {
         InitSchema();
