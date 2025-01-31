@@ -133,20 +133,28 @@ public static class Test_StructComponent
         var type1   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         var type2   = store.GetArchetype(ComponentTypes.Get<Rotation, Position>());
         AreSame(type1, type2);
+        AreEqual(2, store.Archetypes.Length);
         
         type1   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, MyComponent1>());
         type2   = store.GetArchetype(ComponentTypes.Get<MyComponent1, Position, Rotation>());
         AreSame(type1, type2);
+        AreEqual(3, store.Archetypes.Length);
         
         type1       = store.GetArchetype(ComponentTypes.Get<Position, Rotation, MyComponent1, MyComponent2>());
         type2       = store.GetArchetype(ComponentTypes.Get<MyComponent1, Position, Rotation,  MyComponent2>());
         AreSame(type1, type2);
+        AreEqual(4, store.Archetypes.Length);
         
         type1       = store.GetArchetype(ComponentTypes.Get<Position, Rotation, MyComponent1, Scale3, MyComponent2>());
         type2       = store.GetArchetype(ComponentTypes.Get<Scale3, MyComponent1, Position, Rotation, MyComponent2>());
         AreSame(type1, type2);
-        
         AreEqual(5, store.Archetypes.Length);
+        
+        type1       = store.GetArchetype(ComponentTypes.Get<Position, Rotation, MyComponent1, Scale3, MyComponent2, MyComponent4>());
+        type2       = store.GetArchetype(ComponentTypes.Get<Scale3, MyComponent4, MyComponent1, Position, Rotation, MyComponent2>());
+        AreSame(type1, type2);
+        
+        AreEqual(6, store.Archetypes.Length);
         AreEqual(0, type1.Count);
         AreEqual(0, type2.Count);
     }

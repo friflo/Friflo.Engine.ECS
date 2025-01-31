@@ -42,6 +42,12 @@ public static class Test_Signature
         
         var sig5_ =     Signature.Get<Rotation, Position, Scale3, EntityName, MyComponent1>();
         AreEqual("Signature: [Rotation, Position, Scale3, EntityName, MyComponent1]", sig5_.ToString());
+        
+        var sig6_ =     Signature.Get<Rotation, Position, Scale3, EntityName, MyComponent1, MyComponent2>();
+        AreEqual("Signature: [Rotation, Position, Scale3, EntityName, MyComponent1, MyComponent2]", sig6_.ToString());
+        
+        var sig7_ =     Signature.Get<Rotation, Position, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3>();
+        AreEqual("Signature: [Rotation, Position, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3]", sig7_.ToString());
     }
     
     [Test]
@@ -51,18 +57,24 @@ public static class Test_Signature
         var ct3 = ComponentTypes.Get<Position, Rotation, Scale3>()                          .ToString();
         var ct4 = ComponentTypes.Get<Position, Rotation, Scale3, EntityName>()              .ToString();
         var ct5 = ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1>().ToString();
+        var ct6 = ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2>().ToString();
+        var ct7 = ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3>().ToString();
         
         var s1 = Signature.Get<Position>();
         var s2 = Signature.Get<Position, Rotation>();
         var s3 = Signature.Get<Position, Rotation, Scale3>();
         var s4 = Signature.Get<Position, Rotation, Scale3, EntityName>();
         var s5 = Signature.Get<Position, Rotation, Scale3, EntityName, MyComponent1>();
+        var s6 = Signature.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2>();
+        var s7 = Signature.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3>();
         
         AreEqual(s1.ComponentTypes.ToString(), ct1);
         AreEqual(s2.ComponentTypes.ToString(), ct2);
         AreEqual(s3.ComponentTypes.ToString(), ct3);
         AreEqual(s4.ComponentTypes.ToString(), ct4);
         AreEqual(s5.ComponentTypes.ToString(), ct5);
+        AreEqual(s6.ComponentTypes.ToString(), ct6);
+        AreEqual(s7.ComponentTypes.ToString(), ct7);
     }
 }
 

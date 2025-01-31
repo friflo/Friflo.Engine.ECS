@@ -138,6 +138,58 @@ public static class Test_Query_Each
         }
     }
     
+    [Test]
+    public static void Test_Query_Each6()
+    {
+        var store   = CreateStore();
+        var query   = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6>();
+        var each    = query.Each(new Each6());
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(31, entity.GetComponent<MyComponent1>().a);
+        }
+        Mem.AreEqual(100, each.count);
+    }
+    
+    [Test]
+    public static void Test_Query_Chunks_Each6()
+    {
+        var store   = CreateStore();
+        var query = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6>();
+        var each    = new Each6();
+        foreach (var chunk in query.Chunks) {
+            chunk.Each(ref each);
+        }
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(31, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    [Test]
+    public static void Test_Query_Each7()
+    {
+        var store   = CreateStore();
+        var query   = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>();
+        var each    = query.Each(new Each7());
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(63, entity.GetComponent<MyComponent1>().a);
+        }
+        Mem.AreEqual(100, each.count);
+    }
+    
+    [Test]
+    public static void Test_Query_Chunks_Each7()
+    {
+        var store   = CreateStore();
+        var query = store.Query<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>();
+        var each    = new Each7();
+        foreach (var chunk in query.Chunks) {
+            chunk.Each(ref each);
+        }
+        foreach (var entity in store.Entities) {
+            Mem.AreEqual(63, entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
     
     private static EntityStore CreateStore()
     {
@@ -148,7 +200,9 @@ public static class Test_Query_Each
                 new MyComponent2{ b = 1 },
                 new MyComponent3{ b = 2 },
                 new MyComponent4{ b = 4 },
-                new MyComponent5{ b = 8 });
+                new MyComponent5{ b = 8 },
+                new MyComponent6{ b = 16 },
+                new MyComponent7{ b = 32 });
         }
         return store;
     }
@@ -194,6 +248,25 @@ public static class Test_Query_Each
         internal int count;
         public void Execute(ref MyComponent1 c1, ref MyComponent2 c2, ref MyComponent3 c3, ref MyComponent4 c4, ref MyComponent5 c5) {
             c1.a = c2.b + c3.b + c4.b + c5.b;
+            count++;
+        }
+    }
+    
+    private struct Each6 : IEach<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6>
+    {
+        internal int count;
+        public void Execute(ref MyComponent1 c1, ref MyComponent2 c2, ref MyComponent3 c3, ref MyComponent4 c4, ref MyComponent5 c5, ref MyComponent6 c6) {
+            c1.a = c2.b + c3.b + c4.b + c5.b + c6.b;
+            count++;
+        }
+    }
+    
+    private struct Each7 : IEach<MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>
+    {
+        internal int count;
+        public void Execute(ref MyComponent1 c1, ref MyComponent2 c2, ref MyComponent3 c3, ref MyComponent4 c4, ref MyComponent5 c5, ref MyComponent6 c6, ref MyComponent7 c7)
+        {
+            c1.a = c2.b + c3.b + c4.b + c5.b + c6.b + c7.b;
             count++;
         }
     }
