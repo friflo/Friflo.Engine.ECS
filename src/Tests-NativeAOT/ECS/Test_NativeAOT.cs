@@ -88,7 +88,7 @@ public class Test_AOT
             entity.AddComponent(new MyComponent2());    
         });
     }
-    
+#region IIndexedComponent<>
     [TestMethod]
     public void Test_AOT_IndexedComponents_class()
     {
@@ -161,8 +161,10 @@ public class Test_AOT
         entity3.DeleteEntity();                                         //   1     2
         entity2.HasComponent    <AttackComponent>();        // false
     }
-    
-    // [TestMethod] TODO
+#endregion
+
+#region IRelation<>
+    [TestMethod]
     public void Test_AOT_LinkRelations()
     {
         var store   = new EntityStore();
@@ -212,6 +214,7 @@ public class Test_AOT
         entity.RemoveRelation<InventoryItem,InventoryItemType>(InventoryItemType.Axe);
         entity.GetRelations  <InventoryItem>();                       // { Coin }
     }
+    #endregion
     
     struct Player : IIndexedComponent<string>       // indexed field type: string
     {
@@ -249,7 +252,7 @@ public class Test_AOT
             aot.RegisterIndexedComponentEntity<AttackComponent>();
             
             aot.RegisterRelation<InventoryItem, InventoryItemType>();
-
+            aot.RegisterLinkRelation<AttackRelation>();
             
             return schemaCreated = aot.CreateSchema();
         }

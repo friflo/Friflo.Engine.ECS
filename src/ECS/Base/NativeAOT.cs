@@ -188,6 +188,21 @@ A type initializer threw an exception. To determine which type, inspect the Inne
             };
         }
     }
+    
+    public void RegisterLinkRelation<T>()
+        where T : struct, ILinkRelation
+    {
+        InitSchema();
+        if (typeSet.Add(typeof(T)))
+        {
+            AddType(typeof(T), SchemaTypeKind.Component);
+            RelationUtils.GetRelationKey<T,Entity>(default);        // dummy call to prevent trimming required type info
+            SchemaUtils.CreateRelationType<T>(0, null, null);       // dummy call to prevent trimming required type info
+            AbstractEntityRelations.CreateEntityRelationsNativeAot[typeof(T)] = (componentType, archetype, heap) => {
+                return new EntityLinkRelations<T>(componentType, archetype, heap);
+            };
+        }
+    }
 
     public void RegisterTag<T>()  where T : struct, ITag 
     {
