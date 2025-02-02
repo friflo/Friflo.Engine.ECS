@@ -3,9 +3,12 @@
 
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -14,6 +17,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Contains the relations of a specific entity returned by <see cref="RelationExtensions.GetRelations{TRelation}"/>.
 /// </summary>
+[DebuggerTypeProxy(typeof(RelationsDebugView<>))]
 public readonly struct Relations<TRelation>
     where TRelation : struct
 {
@@ -140,4 +144,29 @@ public struct RelationsEnumerator<TRelation>
     
     // --- IDisposable
     public void Dispose() { }
+}
+
+internal class RelationsDebugView<TRelation> 
+    where TRelation : struct
+{
+    [Browse(RootHidden)]
+    public              TRelation[]        Relations => GetRelations();
+    
+    [Browse(Never)]
+    private readonly    Relations<TRelation> relations;
+        
+    internal RelationsDebugView(Relations<TRelation> relations)
+    {
+        this.relations = relations;
+    }
+    
+    private TRelation[] GetRelations()
+    {
+        var array = new TRelation[relations.Length];
+        int n = 0; 
+        foreach (var relation in relations) {
+            array[n++] = relation;
+        }
+        return array;
+    }
 }

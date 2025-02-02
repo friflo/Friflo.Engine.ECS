@@ -69,6 +69,19 @@ public static class Test_Relations
         LinkRelationUtils.RemoveComponentValue(42, 2, relations);
         AreEqual(1, relations.Count);
     }
+    
+    [Test]
+    public static void Test_Relations_DebugView()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        entity.AddRelation(new StringRelation { value = "test" });
+        var relations = entity.GetRelations<StringRelation>();
+        
+        var debugView       = new RelationsDebugView<StringRelation>(relations);
+        AreEqual(1, debugView.Relations.Length);
+        AreEqual("test", debugView.Relations[0].value);
+    }
 }
 
 }
