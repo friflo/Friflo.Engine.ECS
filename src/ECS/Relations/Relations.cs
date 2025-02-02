@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -85,8 +86,19 @@ public readonly struct Relations<TRelation> : IEnumerable<TRelation>
     /// Return the relation at the given <paramref name="index"/>.<br/>
     /// Executes in O(1).
     /// </summary>
-    public TRelation this[int index] => components[positions != null ? positions[index] : position];
-       
+    public ref TRelation this[int index] {
+        get {
+            if (index >= 0 && index < Length) {
+                return ref components[positions != null ? positions[index] : position];
+            }
+            throw IndexOutOfRangeException(index);
+        }
+    }
+    
+    private IndexOutOfRangeException IndexOutOfRangeException(int index) {
+        return new IndexOutOfRangeException($"index: {index} Length: {Length}");
+    }
+
     // --- IEnumerable<>
     IEnumerator<TRelation>   IEnumerable<TRelation>.GetEnumerator() => new RelationsEnumerator<TRelation>(this);
     

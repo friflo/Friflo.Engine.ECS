@@ -124,7 +124,42 @@ public static class Test_Relations
         IsFalse (entity.RemoveRelation<AttackRelation>(default));
         relations = entity.GetRelations<AttackRelation>();
         AreEqual("{ }", relations.Debug());
-    }    
+    }
+    
+    [Test]
+    public static void Test_Relations_modify_relations()
+    {
+        var store   = new EntityStore();
+        var target1 = store.CreateEntity();
+        var target2 = store.CreateEntity();
+        var entity  = store.CreateEntity();
+        var relations = entity.GetRelations<AttackRelation>();
+        Throws<IndexOutOfRangeException>(() => {
+            _ = relations[0];
+        });
+        // --- add first relation
+        IsTrue  (entity.AddRelation(new AttackRelation { target = target1, speed = 1 }));
+        relations = entity.GetRelations<AttackRelation>();
+        AreEqual("{ 1 }", relations.Debug());
+        relations[0].speed = 11;
+        AreEqual(11, entity.GetRelation<AttackRelation, Entity>(target1).speed);
+        var e = Throws<IndexOutOfRangeException>(() => {
+            _ = relations[1];
+        });
+        AreEqual("index: 1 Length: 1", e!.Message);
+        
+        // --- add second relation
+        IsTrue  (entity.AddRelation(new AttackRelation { target = target2, speed = 2 }));
+        relations = entity.GetRelations<AttackRelation>();
+        AreEqual("{ 1, 2 }", relations.Debug());
+        relations[0].speed = 21;
+        relations[1].speed = 22;
+        AreEqual(21, entity.GetRelation<AttackRelation, Entity>(target1).speed);
+        AreEqual(22, entity.GetRelation<AttackRelation, Entity>(target2).speed);
+        Throws<IndexOutOfRangeException>(() => {
+            _ = relations[2];
+        });
+    }
     
 #pragma warning disable CS0618 // Type or member is obsolete
     [Test]
