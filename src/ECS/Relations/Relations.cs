@@ -3,8 +3,6 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
@@ -16,7 +14,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Contains the relations of a specific entity returned by <see cref="RelationExtensions.GetRelations{TRelation}"/>.
 /// </summary>
-public readonly struct Relations<TRelation> : IEnumerable<TRelation>
+public readonly struct Relations<TRelation>
     where TRelation : struct
 {
     public   override   string          ToString()  => $"Relations<{typeof(TRelation).Name}>[{Length}]";
@@ -99,18 +97,12 @@ public readonly struct Relations<TRelation> : IEnumerable<TRelation>
         return new IndexOutOfRangeException($"index: {index} Length: {Length}");
     }
 
-    // --- IEnumerable<>
-    IEnumerator<TRelation>   IEnumerable<TRelation>.GetEnumerator() => new RelationsEnumerator<TRelation>(this);
-    
-    // --- IEnumerable
-    IEnumerator                           IEnumerable.GetEnumerator() => new RelationsEnumerator<TRelation>(this);
-    
     // --- new
     public RelationsEnumerator<TRelation>            GetEnumerator() => new RelationsEnumerator<TRelation>(this);
 }
 
 
-public struct RelationsEnumerator<TRelation> : IEnumerator<TRelation>
+public struct RelationsEnumerator<TRelation>
     where TRelation : struct
 {
     private  readonly   int[]           positions;
@@ -131,7 +123,7 @@ public struct RelationsEnumerator<TRelation> : IEnumerator<TRelation>
     }
     
     // --- IEnumerator<>
-    public readonly TRelation Current   => components[positions != null ? positions[index] : position];
+    public readonly ref TRelation Current   => ref components[positions != null ? positions[index] : position];
     
     // --- IEnumerator
     public bool MoveNext() {
@@ -146,8 +138,6 @@ public struct RelationsEnumerator<TRelation> : IEnumerator<TRelation>
         index = start;
     }
     
-    object IEnumerator.Current => Current;
-
     // --- IDisposable
     public void Dispose() { }
 }

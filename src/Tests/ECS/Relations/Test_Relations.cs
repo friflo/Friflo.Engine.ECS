@@ -159,6 +159,14 @@ public static class Test_Relations
         Throws<IndexOutOfRangeException>(() => {
             _ = relations[2];
         });
+        
+        // --- modify relation using foreach 
+        int speed = 30;
+        foreach (ref var relation in relations) {
+            relation.speed = ++speed;
+        }
+        AreEqual(31, entity.GetRelation<AttackRelation, Entity>(target1).speed);
+        AreEqual(32, entity.GetRelation<AttackRelation, Entity>(target2).speed);
     }
     
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -223,11 +231,7 @@ public static class Test_Relations
         entity.AddRelation(new AttackRelation { target = target11, speed = 21 });
         
         var relations = entity.GetRelations<AttackRelation>();
-        
-        // --- IEnumerable<>
-        IEnumerable<AttackRelation> enumerable = relations;
-        var enumerator = enumerable.GetEnumerator();
-        using var enumerator1 = enumerator as IDisposable;
+        var enumerator = relations.GetEnumerator();
         int count = 0;
         while (enumerator.MoveNext()) {
             count++;
@@ -240,22 +244,6 @@ public static class Test_Relations
             count++;
         }
         AreEqual(2, count);
-        
-        // --- IEnumerable
-        IEnumerable enumerable2 = relations;
-        count = 0;
-        foreach (var relation in enumerable2) {
-            count++;
-        }
-        AreEqual(2, count);
-        
-        var entity2  = store.CreateEntity(2);
-        enumerable2  = entity2.GetRelations<AttackRelation>();
-        count = 0;
-        foreach (var relation in enumerable2) {
-            count++;
-        }
-        AreEqual(0, count);
     }
     
     [Test]
