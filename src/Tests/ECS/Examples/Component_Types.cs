@@ -160,6 +160,26 @@ public static void Relations()
     entity.RemoveRelation<InventoryItem,ItemType>(ItemType.Axe);
     entity.GetRelations  <InventoryItem>();                       // { Coin }
 }
+
+[Test]
+public static void AllRelations()
+{
+    var store   = new EntityStore();
+    var entity1 = store.CreateEntity();
+    var entity2 = store.CreateEntity();
+    
+    // add relations to multiple entities
+    entity1.AddRelation(new InventoryItem { type = ItemType.Coin, count = 10 });
+    entity2.AddRelation(new InventoryItem { type = ItemType.Coin, count = 20 });
+    entity2.AddRelation(new InventoryItem { type = ItemType.Axe,  count =  1 });
+    
+    var allRelations = store.EntityRelations<InventoryItem>();
+    // all entities with relations
+    var uniqueEntities = allRelations.Entities;     // count: 2
+    
+    // all entity relation pairs
+    var (entities, relations) = allRelations.Pairs; // count: 3
+}
 #endregion
 
 
