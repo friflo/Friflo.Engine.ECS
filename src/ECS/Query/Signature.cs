@@ -135,6 +135,60 @@ public static class Signature
         return new Signature<T1, T2, T3, T4, T5>(indexes);
     }
     
+    /// <summary>
+    /// Returns a query <see cref="Signature{T1,T2,T3,T4,T5,T6}"/> containing the specified component types.<br/>
+    /// </summary>
+    /// <remarks>
+    /// It can be used to query entities with the specified component types with <see cref="EntityStore"/>.Query() methods.
+    /// </remarks>
+    public static Signature<T1, T2, T3, T4, T5, T6> Get<T1, T2, T3, T4, T5, T6>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+    {
+        var schema  = EntityStoreBase.Static.EntitySchema;
+        var indexes = new SignatureIndexes(
+            T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index),
+            T2: schema.CheckStructIndex(typeof(T2), StructInfo<T2>.Index),
+            T3: schema.CheckStructIndex(typeof(T3), StructInfo<T3>.Index),
+            T4: schema.CheckStructIndex(typeof(T4), StructInfo<T4>.Index),
+            T5: schema.CheckStructIndex(typeof(T5), StructInfo<T5>.Index),
+            T6: schema.CheckStructIndex(typeof(T6), StructInfo<T6>.Index)
+        );
+        return new Signature<T1, T2, T3, T4, T5, T6>(indexes);
+    }
+    
+    /// <summary>
+    /// Returns a query <see cref="Signature{T1,T2,T3,T4,T5,T6,T7}"/> containing the specified component types.<br/>
+    /// </summary>
+    /// <remarks>
+    /// It can be used to query entities with the specified component types with <see cref="EntityStore"/>.Query() methods.
+    /// </remarks>
+    public static Signature<T1, T2, T3, T4, T5, T6, T7> Get<T1, T2, T3, T4, T5, T6, T7>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+        where T7 : struct, IComponent
+    {
+        var schema  = EntityStoreBase.Static.EntitySchema;
+        var indexes = new SignatureIndexes(
+            T1: schema.CheckStructIndex(typeof(T1), StructInfo<T1>.Index),
+            T2: schema.CheckStructIndex(typeof(T2), StructInfo<T2>.Index),
+            T3: schema.CheckStructIndex(typeof(T3), StructInfo<T3>.Index),
+            T4: schema.CheckStructIndex(typeof(T4), StructInfo<T4>.Index),
+            T5: schema.CheckStructIndex(typeof(T5), StructInfo<T5>.Index),
+            T6: schema.CheckStructIndex(typeof(T6), StructInfo<T6>.Index),
+            T7: schema.CheckStructIndex(typeof(T7), StructInfo<T7>.Index)
+        );
+        return new Signature<T1, T2, T3, T4, T5, T6, T7>(indexes);
+    }
+    
     internal static string GetSignatureString(in SignatureIndexes indexes) {
         return indexes.GetString("Signature: ");
     }
@@ -243,6 +297,147 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     where T3 : struct
     where T4 : struct
     where T5 : struct
+{
+    /// <summary> Return the component types of the query signature. </summary>
+    public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
+    
+    /// <summary> Gets the number component types of the query signature. </summary>
+    [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
+    
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
+
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
+
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
+    }
+}
+
+/// <summary>
+/// A Signature used to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5,T6}(Signature{T1,T2,T3,T4,T5,T6})"/> with five components.
+/// </summary>
+public readonly struct Signature<T1, T2, T3, T4, T5, T6>
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
+    where T6 : struct
+{
+    /// <summary> Return the component types of the query signature. </summary>
+    public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
+    
+    /// <summary> Gets the number component types of the query signature. </summary>
+    [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
+    
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
+
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
+
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
+    }
+}
+
+/// <summary>
+/// A Signature used to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5,T6,T7}(Signature{T1,T2,T3,T4,T5,T6,T7})"/> with five components.
+/// </summary>
+public readonly struct Signature<T1, T2, T3, T4, T5, T6, T7>
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
+    where T6 : struct
+    where T7 : struct
+{
+    /// <summary> Return the component types of the query signature. </summary>
+    public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
+    
+    /// <summary> Gets the number component types of the query signature. </summary>
+    [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
+    
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
+
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
+
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
+    }
+}
+
+/// <summary>
+/// A Signature used to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5,T6,T7,T8}(Signature{T1,T2,T3,T4,T5,T6,T7,T8})"/> with five components.
+/// </summary>
+public readonly struct Signature<T1, T2, T3, T4, T5, T6, T7, T8>
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
+    where T6 : struct
+    where T7 : struct
+    where T8 : struct
+{
+    /// <summary> Return the component types of the query signature. </summary>
+    public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
+    
+    /// <summary> Gets the number component types of the query signature. </summary>
+    [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
+    
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
+
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
+
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
+    }
+}
+
+
+/// <summary>
+/// A Signature used to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5,T6,T7,T8,T9}(Signature{T1,T2,T3,T4,T5,T6,T7,T8,T9})"/> with five components.
+/// </summary>
+public readonly struct Signature<T1, T2, T3, T4, T5, T6, T7, T8, T9>
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
+    where T6 : struct
+    where T7 : struct
+    where T8 : struct
+    where T9 : struct
+{
+    /// <summary> Return the component types of the query signature. </summary>
+    public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
+    
+    /// <summary> Gets the number component types of the query signature. </summary>
+    [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
+    
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
+
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
+
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
+    }
+}
+
+/// <summary>
+/// A Signature used to create a query using <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5,T6,T7,T8,T9,10}(Signature{T1,T2,T3,T4,T5,T6,T7,T8,T9,10})"/> with five components.
+/// </summary>
+public readonly struct Signature<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+    where T1 : struct
+    where T2 : struct
+    where T3 : struct
+    where T4 : struct
+    where T5 : struct
+    where T6 : struct
+    where T7 : struct
+    where T8 : struct
+    where T9 : struct
+    where T10 : struct
 {
     /// <summary> Return the component types of the query signature. </summary>
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
