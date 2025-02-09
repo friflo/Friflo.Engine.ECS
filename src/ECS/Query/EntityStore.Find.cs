@@ -20,27 +20,18 @@ public partial class EntityStoreBase
     /// </remarks>
     public Entity GetUniqueEntity(string uid)
     {
-        var query = internBase.uniqueEntityQuery ??= CreateUniqueEntityQuery();
-
-        // --- enumerate entities with unique names
-        var foundId = 0;
-        foreach (var (uniqueEntity, entities) in query.Chunks)
-        {
-            var uniqueEntities = uniqueEntity.Span;
-            for (int n = 0; n < uniqueEntities.Length; n++) {
-                if (uniqueEntities[n].uid != uid) {
-                    continue;
-                }
-                if (foundId != 0) {
-                    throw MultipleEntitiesWithSameName(uid);
-                }
-                foundId = entities[n];
-            }
+        // var index    = internBase.uniqueEntityIndex ??= CreateUniqueEntityIndex();
+        // var entities = index.GetHasValueEntities(uid);
+        var index = ((EntityStore)this).ComponentIndex<UniqueEntity, string>();
+        var entities = index[uid];
+        switch (entities.Count) {
+            case 1:
+                return entities[0];
+            case 0:
+                throw FoundNoUniqueEntity(uid);
+            default:
+                throw MultipleEntitiesWithSameName(uid);
         }
-        if (foundId != 0) {
-            return new Entity((EntityStore)this, foundId);
-        }
-        throw new InvalidOperationException($"found no {nameof(UniqueEntity)} with uid: \"{uid}\"");
     }
     
     private QueryEntities GetUniqueEntities()
@@ -51,7 +42,11 @@ public partial class EntityStoreBase
     
     private ArchetypeQuery<UniqueEntity> CreateUniqueEntityQuery() => Query<UniqueEntity>().WithDisabled();
     
-    private static InvalidOperationException MultipleEntitiesWithSameName(string name) {
-        return new InvalidOperationException($"found multiple {nameof(UniqueEntity)}'s with uid: \"{name}\"");
+    private static InvalidOperationException FoundNoUniqueEntity(string name) {
+        return new InvalidOperationException($"found no {nameof(UniqueEntity)} with uid: \"{name}\"");
+    }
+
+    private static InvalidOperationException MultipleEntitiesWithSameName(string uid) {
+        return new InvalidOperationException($"found multiple {nameof(UniqueEntity)}'s with uid: \"{uid}\"");
     }
 }

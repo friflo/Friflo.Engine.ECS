@@ -16,13 +16,14 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 [ComponentKey("unique")]
 [ComponentSymbol("UQ",  "255,145,0")]
-public struct UniqueEntity : IComponent
+public readonly struct UniqueEntity : IIndexedComponent<string>
 {
     /// <summary>Unique string identifier assigned to specific <see cref="Entity"/></summary>
-    public          string  uid;  //  8
+    public readonly string  uid;  //  8
     
-    public override string  ToString() => $"UniqueEntity: '{uid}'";
-
+    public          string  GetIndexedValue() => uid;
+    public override string  ToString()        => $"UniqueEntity: '{uid}'";
+    
     public UniqueEntity (string uid) {
         this.uid = uid;
     }
