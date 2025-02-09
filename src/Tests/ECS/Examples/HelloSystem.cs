@@ -55,24 +55,22 @@ class PulseSystem : QuerySystem<Scale3>
     }
 }
 
+#region custom QuerySystem
+
 [Test]
-public static void CustomSystem()
+public static void CustomizeQuerySystem()
 {
     var world = new EntityStore();
-    var entity = world.CreateEntity(new Position(0, 0, 0));
+    world.CreateEntity(new Position(0, 0, 0));
     var root = new SystemRoot(world) {
         new CustomQuerySystem()
     };
     root.Update(default);
-    
-    Console.WriteLine($"entity: {entity}");  // entity: id: 1  [Position, Velocity]
 }
 
-/// The example shows how to create a custom system that<br/>
-/// - creates a customQuery and <br/>
-/// - make structural changes via the parent group CommandBuffer.<br/>
-/// <br/>
-/// The system adds a Velocity component for every entity having a Position component. 
+// The example shows how to create a custom QuerySystem that:
+// - creates a customQuery and
+// - make structural changes via the parent group CommandBuffer.
 class CustomQuerySystem : QuerySystem
 {
     private ArchetypeQuery<Position> customQuery;
@@ -81,15 +79,47 @@ class CustomQuerySystem : QuerySystem
         customQuery = store.Query<Position>();
     }
     
-    /// Executes the customQuery instead of the base class Query.
     protected override void OnUpdate() {
         var buffer = CommandBuffer;
+        // Executes the customQuery instead of the base class Query.
         customQuery.ForEachEntity((ref Position component1, Entity entity) => {
             buffer.AddComponent(entity.Id, new Velocity());
         });
     }
 }
+#endregion
 
+
+
+#region custom BaseSystem
+
+[Test]
+public static void CustomizeBaseSystem()
+{
+    var world = new EntityStore();
+    world.CreateEntity(new UniqueEntity("Camera"), new Position(0, 0, 0));
+    var root = new SystemRoot(world) {
+        new CameraSystem()
+    };
+    root.Update(default);
+}
+
+// Example of a system that does not require a Query.
+// E.g. find and access a UniqueEntity as shown below. 
+class CameraSystem : BaseSystem
+{
+    private Entity camera;
+    
+    protected override void OnAddStore(EntityStore store) {
+        camera = store.GetUniqueEntity("Camera");
+    }
+    
+    protected override void OnUpdateGroup() {
+        ref var position = ref camera.GetComponent<Position>();
+        // Update camera position based on user input
+    }
+}
+#endregion
 }
 
 }
