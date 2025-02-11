@@ -68,8 +68,12 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             case 3: goto Type3;
             case 4: goto Type4;
             case 5: goto Type5;
+            case 6: goto Type6;
+            case 7: goto Type7;
             default: throw new IndexOutOfRangeException(); // unreachable - already ensured at SignatureIndexes
         }
+        Type7:   bitSet.SetBit(indexes.T7);
+        Type6:   bitSet.SetBit(indexes.T6);
         Type5:   bitSet.SetBit(indexes.T5);
         Type4:   bitSet.SetBit(indexes.T4);
         Type3:   bitSet.SetBit(indexes.T3);
@@ -315,7 +319,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     
     /// <summary>
     /// Create an instance containing the passed <see cref="IComponent"/> types <typeparamref name="T1"/>,
-    /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>  and <typeparamref name="T4"/>.
+    /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>  and <typeparamref name="T5"/>.
     /// </summary>
     public static ComponentTypes Get<T1, T2, T3, T4, T5>()
         where T1 : struct, IComponent
@@ -326,8 +330,13 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     {
         return Generic<T1,T2,T3,T4,T5>.ComponentTypes;
     }
-    /*
-    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6>()
+    
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> types <typeparamref name="T1"/>,
+    /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>, <typeparamref name="T5"/>
+    /// and <typeparamref name="T6"/>.
+    /// </summary>
+    public static ComponentTypes Get<T1, T2, T3, T4, T5, T6>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
@@ -344,93 +353,99 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             StructInfo<T6>.Index);
     }
     
-    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7>()
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
-        where T6 : struct, IComponent
-        where T7 : struct, IComponent
-    {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index,
-            StructInfo<T4>.Index,
-            StructInfo<T5>.Index,
-            StructInfo<T6>.Index,
-            StructInfo<T7>.Index);
-    }
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> types <typeparamref name="T1"/>,
+    /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>, <typeparamref name="T5"/>,
+    /// <typeparamref name="T6"/>  and <typeparamref name="T7"/>.
+    /// </summary>
+    public static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7>()
+         where T1 : struct, IComponent
+         where T2 : struct, IComponent
+         where T3 : struct, IComponent
+         where T4 : struct, IComponent
+         where T5 : struct, IComponent
+         where T6 : struct, IComponent
+         where T7 : struct, IComponent
+     {
+         return new ComponentTypes(
+             StructInfo<T1>.Index,
+             StructInfo<T2>.Index,
+             StructInfo<T3>.Index,
+             StructInfo<T4>.Index,
+             StructInfo<T5>.Index,
+             StructInfo<T6>.Index,
+             StructInfo<T7>.Index);
+     }
     
-    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8>()
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
-        where T6 : struct, IComponent
-        where T7 : struct, IComponent
-        where T8 : struct, IComponent
-    {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index,
-            StructInfo<T4>.Index,
-            StructInfo<T5>.Index,
-            StructInfo<T6>.Index,
-            StructInfo<T7>.Index,
-            StructInfo<T8>.Index);
-    }
-    
-    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9>()
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
-        where T6 : struct, IComponent
-        where T7 : struct, IComponent
-        where T8 : struct, IComponent
-        where T9 : struct, IComponent
-    {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index,
-            StructInfo<T4>.Index,
-            StructInfo<T5>.Index,
-            StructInfo<T6>.Index,
-            StructInfo<T7>.Index,
-            StructInfo<T8>.Index,
-            StructInfo<T9>.Index);
-    }
-    
-    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
-        where T6 : struct, IComponent
-        where T7 : struct, IComponent
-        where T8 : struct, IComponent
-        where T9 : struct, IComponent
-        where T10: struct, IComponent
-    {
-        return new ComponentTypes(
-            StructInfo<T1>.Index,
-            StructInfo<T2>.Index,
-            StructInfo<T3>.Index,
-            StructInfo<T4>.Index,
-            StructInfo<T5>.Index,
-            StructInfo<T6>.Index,
-            StructInfo<T7>.Index,
-            StructInfo<T8>.Index,
-            StructInfo<T9>.Index,
-            StructInfo<T10>.Index);
-    }*/
+    /*
+     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8>()
+         where T1 : struct, IComponent
+         where T2 : struct, IComponent
+         where T3 : struct, IComponent
+         where T4 : struct, IComponent
+         where T5 : struct, IComponent
+         where T6 : struct, IComponent
+         where T7 : struct, IComponent
+         where T8 : struct, IComponent
+     {
+         return new ComponentTypes(
+             StructInfo<T1>.Index,
+             StructInfo<T2>.Index,
+             StructInfo<T3>.Index,
+             StructInfo<T4>.Index,
+             StructInfo<T5>.Index,
+             StructInfo<T6>.Index,
+             StructInfo<T7>.Index,
+             StructInfo<T8>.Index);
+     }
+
+     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+         where T1 : struct, IComponent
+         where T2 : struct, IComponent
+         where T3 : struct, IComponent
+         where T4 : struct, IComponent
+         where T5 : struct, IComponent
+         where T6 : struct, IComponent
+         where T7 : struct, IComponent
+         where T8 : struct, IComponent
+         where T9 : struct, IComponent
+     {
+         return new ComponentTypes(
+             StructInfo<T1>.Index,
+             StructInfo<T2>.Index,
+             StructInfo<T3>.Index,
+             StructInfo<T4>.Index,
+             StructInfo<T5>.Index,
+             StructInfo<T6>.Index,
+             StructInfo<T7>.Index,
+             StructInfo<T8>.Index,
+             StructInfo<T9>.Index);
+     }
+
+     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+         where T1 : struct, IComponent
+         where T2 : struct, IComponent
+         where T3 : struct, IComponent
+         where T4 : struct, IComponent
+         where T5 : struct, IComponent
+         where T6 : struct, IComponent
+         where T7 : struct, IComponent
+         where T8 : struct, IComponent
+         where T9 : struct, IComponent
+         where T10: struct, IComponent
+     {
+         return new ComponentTypes(
+             StructInfo<T1>.Index,
+             StructInfo<T2>.Index,
+             StructInfo<T3>.Index,
+             StructInfo<T4>.Index,
+             StructInfo<T5>.Index,
+             StructInfo<T6>.Index,
+             StructInfo<T7>.Index,
+             StructInfo<T8>.Index,
+             StructInfo<T9>.Index,
+             StructInfo<T10>.Index);
+     }*/
     #endregion
     
 #region internal methods
