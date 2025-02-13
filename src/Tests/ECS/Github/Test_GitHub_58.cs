@@ -17,6 +17,8 @@ namespace Tests.ECS.Github {
     {
         public float CurValue;
         public Tags DeathTag;
+
+        public override string ToString() => $"{CurValue}";
     }
 
     class KillHeroSystem : QuerySystem<Health>
@@ -25,6 +27,7 @@ namespace Tests.ECS.Github {
 
         protected override void OnUpdate()
         {
+            var buffer = CommandBuffer;
             Query.WithoutAnyTags(Tags.Get<Zombie, Monster>())
                 .ForEachEntity(
                     (ref Health health, Entity entity) =>
@@ -34,8 +37,12 @@ namespace Tests.ECS.Github {
                         {
                             // entity.AddTags(health.DeathTag); 
                             // entity.RemoveTags(Tags.Get<Hero>()); // << here is the problem
+                            
                             entity.RemoveTags(Tags.Get<Hero>());
-                            entity.AddTags(health.DeathTag); 
+                            entity.AddTags(health.DeathTag);
+                            
+                            // buffer.RemoveTags(entity.Id, Tags.Get<Hero>());
+                            // buffer.AddTags(entity.Id, health.DeathTag);
                             _etags[entity.Id - 1] = health.DeathTag;
                             Console.WriteLine( $"Hero{entity.Id} -> {health.DeathTag.ToString()}");
                         }
@@ -68,7 +75,7 @@ namespace Tests.ECS.Github {
             const int n = 5;
             var etags = new Tags[n];
 
-            var rnd = new Random();
+            var rnd = new Random(123);
 
             for (var i = 0; i < n; i++)
             {
