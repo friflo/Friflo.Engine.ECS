@@ -36,7 +36,7 @@ public static void QueryException()
         entity.Add(new EntityName("test"));
     });
     
-    // Valid approach using a CommandBuffer 
+    // Solution: Ussing a CommandBuffer 
     var buffer = store.GetCommandBuffer();
     query.ForEachEntity((ref Position position, Entity entity) => {
         buffer.AddComponent(entity.Id, new EntityName("test"));
@@ -63,7 +63,7 @@ class QueryPositionSystem : QuerySystem<Position>
             entity.Add(new EntityName("test"));
         });
         
-        // Valid approach using a CommandBuffer 
+        // Solution: Using the system CommandBuffer 
         var buffer = CommandBuffer;
         Query.ForEachEntity((ref Position component1, Entity entity) => {
             buffer.AddComponent(entity.Id, new EntityName("test"));
