@@ -1,4 +1,5 @@
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 
 
@@ -17,11 +18,11 @@ public static class Test_StructuralChangeException
         store.CreateEntity(new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent4());
         foreach (var entity in store.Entities)
         {
-            TestExceptions(entity);
+            TestExceptions(store, entity);
         }
     }
     
-    private static void TestExceptions(Entity entity)
+    private static void TestExceptions(EntityStore store, Entity entity)
     {
         Assert.Throws<StructuralChangeException>(() => {
             entity.AddTag<TestTag>();
@@ -36,6 +37,28 @@ public static class Test_StructuralChangeException
             entity.RemoveComponent<Position>();
         });
         
+        var buffer = store.GetCommandBuffer();
+        Assert.Throws<StructuralChangeException>(() => {
+            buffer.Playback();
+        });
+        
+        var entityBatch = new EntityBatch();
+        Assert.Throws<StructuralChangeException>(() => {
+            entityBatch.ApplyTo(entity);
+        });
+        
+        TestMultiAddRemoveExceptions(entity);
+        
+        var converter = EntityConverter.Default;
+        var dataEntity = new DataEntity { pid = 1  };
+        Assert.Throws<StructuralChangeException>(() => {
+            converter.DataEntityToEntity(dataEntity, store, out _);
+        });
+    }
+    
+        
+    private static void TestMultiAddRemoveExceptions(Entity entity)
+    {
         // --- add multiple components
         Assert.Throws<StructuralChangeException>(() => {
             entity.Add(new Position());
