@@ -12,6 +12,20 @@ namespace Tests.ECS.Arch {
 public static class Test_StructuralChangeException
 {
     [Test]
+    public static void Test_StructuralChangeException_Message()
+    {
+        var store = new EntityStore();
+        store.CreateEntity();
+        foreach (var entity in store.Entities)
+        {
+            var e = Assert.Throws<StructuralChangeException>(() => {
+                entity.AddTag<TestTag>();
+            });
+            Assert.AreEqual("within query loop. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#structuralchangeexception", e!.Message);
+        }
+    }
+    
+    [Test]
     public static void Test_StructuralChangeException_Entities()
     {
         var store = new EntityStore();

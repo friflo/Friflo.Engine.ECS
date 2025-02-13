@@ -201,7 +201,7 @@ public abstract partial class EntityStoreBase
         }
     */
     internal static StructuralChangeException StructuralChangeWithinQueryLoop() {
-        return new StructuralChangeException("within a query loop");
+        return new StructuralChangeException("within query loop. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#structuralchangeexception");
     }
     
     /*
