@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 
 
@@ -9,10 +10,9 @@ using NUnit.Framework;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch {
 
-[Ignore("source for docs: https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#structuralchangeexception")]
 public static class Test_StructuralChange_Docs
 {
-[Test]
+// [Test]
 public static void CollectionModifiedException()
 {
     var list = new List<int> { 1, 2, 3 };
@@ -23,7 +23,7 @@ public static void CollectionModifiedException()
 }
 
 
-[Test]
+// [Test]
 public static void QueryException()
 {
     var store = new EntityStore();
@@ -43,7 +43,36 @@ public static void QueryException()
     });
     buffer.Playback();
 }
+
+// [Test]
+public static void QuerySystemException() {
+    var store = new EntityStore();
+    store.CreateEntity(new Position());
+
+    var root = new SystemRoot(store) {
+        new QueryPositionSystem()
+    };
+    root.Update(default); 
 }
 
+class QueryPositionSystem : QuerySystem<Position>
+{
+    protected override void OnUpdate() {
+        Query.ForEachEntity((ref Position component1, Entity entity) => {
+            // throws StructuralChangeException: within query loop. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#structuralchangeexception
+            entity.Add(new EntityName("test"));
+        });
+        
+        // Valid approach using a CommandBuffer 
+        var buffer = CommandBuffer;
+        Query.ForEachEntity((ref Position component1, Entity entity) => {
+            buffer.AddComponent(entity.Id, new EntityName("test"));
+        });
+        // change made via CommandBuffer are applied by parent group
+    }
+}
+
+
+}
 }
 
