@@ -43,6 +43,10 @@ namespace Tests.ECS.Github {
                             
                             // buffer.RemoveTags(entity.Id, Tags.Get<Hero>());
                             // buffer.AddTags(entity.Id, health.DeathTag);
+                            
+                            // buffer.AddTags(entity.Id, health.DeathTag);
+                            // buffer.RemoveTags(entity.Id, Tags.Get<Hero>());
+                            
                             _etags[entity.Id - 1] = health.DeathTag;
                             Console.WriteLine( $"Hero{entity.Id} -> {health.DeathTag.ToString()}");
                         }
@@ -116,3 +120,47 @@ namespace Tests.ECS.Github {
     }
 }
 */
+
+
+/* --- Results on GameOver ---
+ 
+entity.RemoveTags(Tags.Get<Hero>());
+entity.AddTags(health.DeathTag);
+
+[0] = {Entity} id: 4  [Health, #Zombie]
+[1] = {Entity} id: 5  [Health, #Zombie]
+[2] = {Entity} id: 1  [Health, #Zombie]
+[3] = {Entity} id: 2  [Health, #Monster]
+[4] = {Entity} id: 3  [Health, #Monster]
+
+
+entity.AddTags(health.DeathTag); 
+entity.RemoveTags(Tags.Get<Hero>()); // << here is the problem
+
+[0] = {Entity} id: 1  [Health, #Hero]
+[1] = {Entity} id: 2  [Health, #Hero]
+[2] = {Entity} id: 3  [Health, #Hero]
+[3] = {Entity} id: 4  [Health, #Monster]
+[4] = {Entity} id: 5  [Health, #Zombie]
+
+
+buffer.RemoveTags(entity.Id, Tags.Get<Hero>());
+buffer.AddTags(entity.Id, health.DeathTag);
+
+[0] = {Entity} id: 4  [Health, #Monster]
+[1] = {Entity} id: 3  [Health, #Monster]
+[2] = {Entity} id: 5  [Health, #Zombie]
+[3] = {Entity} id: 2  [Health, #Zombie]
+[4] = {Entity} id: 1  [Health, #Zombie]
+
+
+buffer.AddTags(entity.Id, health.DeathTag);
+buffer.RemoveTags(entity.Id, Tags.Get<Hero>());
+
+[0] = {Entity} id: 4  [Health, #Monster]
+[1] = {Entity} id: 3  [Health, #Monster]
+[2] = {Entity} id: 5  [Health, #Zombie]
+[3] = {Entity} id: 2  [Health, #Zombie]
+[4] = {Entity} id: 1  [Health, #Zombie]
+ 
+ */
