@@ -35,6 +35,9 @@ public partial class EntityStoreBase
     
     internal void ApplyBatchTo(EntityBatch batch, int entityId)
     {
+        if (internBase.activeQueryLoops > 0) {
+            throw StructuralChangeWithinQueryLoop();
+        }
         ref var node    = ref ((EntityStore)this).nodes[entityId];
         var archetype   = node.archetype;
         var compIndex   = node.compIndex;

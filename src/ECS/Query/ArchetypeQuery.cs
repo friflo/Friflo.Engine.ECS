@@ -61,6 +61,17 @@ public class ArchetypeQuery
     [Browse(Never)]
     public ref readonly ComponentTypes  ComponentTypes  => ref components;
     
+    /// <summary>
+    /// If true (default) a <see cref="StructuralChangeException"/> is thrown when executing a <b>structural change</b> within a query loop.<br/>
+    /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#structuralchangeexception">Query > StructuralChangeException.</a>
+    /// </summary>
+    /// <remarks>
+    /// A structural change is adding / removing components or tags.<br/>
+    /// Use <see cref="CommandBuffer"/> to record changes and <see cref="CommandBuffer.Playback"/> them outside the query loop.
+    /// </remarks>
+    [Browse(Never)]
+    public              bool            ThrowOnStructuralChange  { get => checkChange; set => checkChange = value; }
+    
     
     public override     string          ToString()      => GetString();
     #endregion
@@ -72,7 +83,8 @@ public class ArchetypeQuery
 
 #region private / internal fields
     // --- non blittable types
-    [Browse(Never)] private  readonly   EntityStoreBase     store;              //   8
+    [Browse(Never)] internal            bool                checkChange;        //   1
+    [Browse(Never)] internal readonly   EntityStoreBase     store;              //   8
     [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
     [Browse(Never)] private             int[]               chunkPositions;     //   8  indexes of chunk entities matching a value condition
     [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
@@ -208,6 +220,7 @@ public class ArchetypeQuery
         signatureIndexes= indexes;
         Filter          = filter ?? new QueryFilter();
         relationQuery   = relationType;
+        checkChange    	= true;
     }
     
     /// <summary>
@@ -221,6 +234,7 @@ public class ArchetypeQuery
         chunkPositions  = Array.Empty<int>();
         components      = componentTypes;
         Filter          = filter ?? new QueryFilter();
+        checkChange    	= true;
     }
     
     /// <summary> Called by <see cref="EntityStore.GetEntities"/> </summary>
@@ -230,6 +244,7 @@ public class ArchetypeQuery
         archetypes      = Array.Empty<Archetype>();
         chunkPositions  = Array.Empty<int>();
         Filter          = new QueryFilter(default).FreezeFilter();
+        checkChange    	= true;
     }
     
     /// <summary> Called by <see cref="Archetype.GetEntities"/> </summary>
@@ -240,6 +255,7 @@ public class ArchetypeQuery
         archetypes      = new [] { archetype };
         components      = archetype.componentTypes;
         Filter          = new QueryFilter(archetype.tags).FreezeFilter();
+        checkChange    	= true;
     }
     
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {

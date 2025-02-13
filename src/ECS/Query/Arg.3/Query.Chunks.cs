@@ -100,6 +100,7 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
     private readonly    int                     structIndex2;   //  4
     private readonly    int                     structIndex3;   //  4
     //
+    private readonly    EntityStoreBase         store;          //  8
     private readonly    Archetypes              archetypes;     // 16
     //
     private             int                     archetypePos;   //  4
@@ -113,6 +114,10 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
         structIndex3    = query.signatureIndexes.T3;
         archetypes      = query.GetArchetypes();
         archetypePos    = -1;
+        if (query.checkChange) {
+            store = query.store;
+            store.internBase.activeQueryLoops++;
+        }
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
@@ -173,5 +178,9 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
     }
     
     // --- IDisposable
-    public void Dispose() { }
+    public void Dispose() {
+        if (store != null) {
+            store.internBase.activeQueryLoops--;
+        }
+    }
 }

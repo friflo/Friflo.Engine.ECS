@@ -113,6 +113,9 @@ public partial class EntityStoreBase
         ref int         compIndex,
         ref int         archIndex)
     {
+        if (store.internBase.activeQueryLoops > 0) {
+            throw StructuralChangeWithinQueryLoop();
+        }
         var arch        = archetype;
         var curTags     = arch.tags;
         var newTags     = new Tags (BitSet.Add(curTags.bitSet, tags.bitSet));
@@ -140,6 +143,9 @@ public partial class EntityStoreBase
         ref int         compIndex,
         ref int         archIndex)
     {
+        if (store.internBase.activeQueryLoops > 0) {
+            throw StructuralChangeWithinQueryLoop();
+        }
         var arch        = archetype;
         var curTags     = arch.tags;
         var newTags     = new Tags (BitSet.Remove(curTags.bitSet, tags.bitSet));

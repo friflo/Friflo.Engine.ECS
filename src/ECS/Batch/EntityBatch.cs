@@ -66,7 +66,7 @@ public sealed class  EntityBatch
 #region internal fields
     [Browse(Never)] internal            BatchComponent[]    batchComponents;    //  8
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
-    [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only if owner == EntityStore
+    [Browse(Never)] internal readonly   EntityStoreBase     store;              //  8   - used only if owner == EntityStore
     [Browse(Never)] internal            int                 entityId;           //  4   - used only if owner == EntityStore
     [Browse(Never)] internal            BatchOwner          owner;              //  4
     [Browse(Never)] internal            Tags                tagsAdd;            // 32

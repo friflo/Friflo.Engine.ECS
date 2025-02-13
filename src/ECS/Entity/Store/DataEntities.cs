@@ -91,6 +91,9 @@ public partial class EntityStore
         if (dataEntity == null) {
             throw new ArgumentNullException(nameof(dataEntity));
         }
+        if (internBase.activeQueryLoops > 0) {
+            throw StructuralChangeWithinQueryLoop();
+        }
         Entity entity;
         if (intern.pidType == PidType.UsePidAsId) {
             entity = CreateFromDataEntityUsePidAsId(dataEntity);

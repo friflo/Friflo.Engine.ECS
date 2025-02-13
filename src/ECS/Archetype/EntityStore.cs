@@ -94,6 +94,8 @@ public abstract partial class EntityStoreBase
     /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     internal struct InternBase {
+        internal        int                                         activeQueryLoops;          //  4
+        //
         internal        long                                        archetypesCapacity;     // 16   - sum of all Archetype capacities
         internal        double                                      shrinkRatio;            //  8
         // --- delegates
@@ -188,6 +190,20 @@ public abstract partial class EntityStoreBase
         return new ArgumentException($"id: {id}. expect in [0, current max id: {store.nodes.Length - 1}]");
     }
     
+    /// <summary>
+    /// Exception is thrown by add / remove component or tag operations potentially
+    /// calling <see cref="Archetype.MoveEntityTo"/> when within a query loop.
+    /// </summary>
+    /*
+        All methods calling MoveEntityTo() have a runtime exception upfront before calling MoveEntityTo() like:
+        if (store.internBase.activeQueryLoops > 0) {
+            throw EntityStoreBase.StructuralChangeWithinQueryLoop();
+        }
+    */
+    internal static StructuralChangeException StructuralChangeWithinQueryLoop() {
+        return new StructuralChangeException("within a query loop");
+    }
+    
     /*
     internal static ArgumentException AddRelationException(int id, int structIndex) {
         var componentType   = Static.EntitySchema.components[structIndex];
@@ -202,6 +218,22 @@ public abstract partial class EntityStoreBase
         return new ArgumentException($"relation component must be removed with:  entity.{nameof(RelationExtensions.RemoveRelation)}<{type},{keyType}>(key);  id: {id}");
     }*/
     #endregion
+}
+
+/// <summary>
+/// Exception is thrown when executing a <b>structural change</b> within a query loop.<br/>
+/// A structural change is adding / removing components or tags.<br/>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query#structuralchangeexception">Query > StructuralChangeException.</a>
+/// </summary>
+/// <remarks>
+/// Use <see cref="CommandBuffer"/> to record changes and <see cref="CommandBuffer.Playback"/> them outside the query loop.<br/>
+/// <br/>
+/// To preserve old behavior use the following workaround.<br/> 
+/// Exception is not thrown if <see cref="ArchetypeQuery.ThrowOnStructuralChange"/> of the enclosing query is set to <c>false</c>.<br/>
+/// </remarks>
+public class StructuralChangeException : InvalidOperationException
+{
+    public StructuralChangeException(string message) : base(message) { }
 }
 
 public static partial class EntityStoreExtensions

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,8 +54,22 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
     /// </summary>
     public void ApplyBatch(EntityBatch batch)
     {
-        foreach (var entity in this) {
-            entity.store.ApplyBatchTo(batch, entity.Id);
+        var count = query.Count;
+        var store = query.store;
+        if (count < 16 * 1024) {
+            Span<int> ids = stackalloc int[count];
+            int i = 0;
+            foreach (var entity in query.Entities) {
+                ids[i++] = entity.Id;
+            }
+            foreach (var id in ids) {
+                store.ApplyBatchTo(batch, id);
+            }
+            return;
+        }
+        EntityList entityList = ToEntityList(); // TODO may use a pooled EntityList
+        foreach (var entity in entityList) {
+            store.ApplyBatchTo(batch, entity.Id);
         }
     }
     
@@ -77,6 +92,7 @@ public struct EntitiesEnumerator : IEnumerator<Entity>
 {
     private readonly    EntityStore store;          //  8
     private readonly    Archetypes  archetypes;     // 16
+    private readonly    bool        checkChange;    //  1
     //
     private             int[]       entityIds;      //  8
     private             int         entityIndex;    //  4    
@@ -93,6 +109,10 @@ public struct EntitiesEnumerator : IEnumerator<Entity>
         entityIndex     = -1;
         entityLast      = -1;
         archetypePos    = -1;
+        checkChange     = query.checkChange;
+        if (checkChange) {
+            store.internBase.activeQueryLoops++;
+        }
     }
     
     // --- IEnumerator<>
@@ -142,7 +162,11 @@ public struct EntitiesEnumerator : IEnumerator<Entity>
     }
     
     // --- IDisposable
-    public void Dispose() { }
+    public void Dispose() {
+        if (checkChange) {
+            store.internBase.activeQueryLoops--;
+        }
+    }
 }
 
 internal class QueryEntitiesDebugView

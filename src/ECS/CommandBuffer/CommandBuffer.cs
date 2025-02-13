@@ -153,6 +153,9 @@ public sealed class CommandBuffer : ICommandBuffer
     /// </exception>
     public void Playback()
     {
+        if (intern.store.internBase.activeQueryLoops > 0) {
+            throw EntityStoreBase.StructuralChangeWithinQueryLoop();
+        }
         if (!intern.hasCommands) {
             // early out if command buffer is still empty 
             if (!intern.reuseBuffer) {

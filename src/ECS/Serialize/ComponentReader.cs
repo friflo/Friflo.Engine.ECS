@@ -229,7 +229,7 @@ internal sealed class ComponentReader
         {
             ref var node    = ref entity.store.nodes[entity.Id];
             node.archetype  = newType;
-            node.compIndex  = Archetype.MoveEntityTo(curType, entity.Id, node.compIndex, newType);
+            node.compIndex  = Archetype.MoveEntityTo(curType, entity.Id, node.compIndex, newType); // structural change assertion: DataEntityToEntity()
         }
         if (unresolvedTagList.Count > 0) {
             AddUnresolvedTags(entity);

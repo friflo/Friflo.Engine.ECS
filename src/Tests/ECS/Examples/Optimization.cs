@@ -224,7 +224,8 @@ public static void BulkBatch()
     Console.WriteLine(query);               // > Query: [Position, #MyTag1]  Count: 1000
     
     // Same as: store.Entities.ApplyBatch(batch) above
-    foreach (var entity in store.Entities) {
+    var entities = store.Entities.ToEntityList();
+    foreach (var entity in entities) {
         batch.ApplyTo(entity);
     }
 }

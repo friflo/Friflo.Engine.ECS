@@ -129,6 +129,9 @@ public partial class EntityStoreBase
     
     internal Archetype GetArchetypeAdd(Archetype type, in ComponentTypes addComponents, in Tags addTags)
     {
+        if (internBase.activeQueryLoops > 0) {
+            throw StructuralChangeWithinQueryLoop();
+        }
         var key             = searchKey;
         key.tags            = type.tags;
         key.componentTypes  = type.componentTypes;    
@@ -150,6 +153,9 @@ public partial class EntityStoreBase
     
     internal Archetype GetArchetypeRemove(Archetype type, in ComponentTypes removeComponents, in Tags removeTags)
     {
+        if (internBase.activeQueryLoops > 0) {
+            throw StructuralChangeWithinQueryLoop();
+        }
         var key             = searchKey;
         key.tags            = type.tags;
         key.componentTypes  = type.componentTypes;
