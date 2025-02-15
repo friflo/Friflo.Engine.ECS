@@ -106,20 +106,33 @@ public static void FilterEntityEvents()
     var store   = new EntityStore();
     store.EventRecorder.Enabled = true; // required for EventFilter
     
-    store.CreateEntity(new Position(), Tags.Get<MyTag1>());
+    var entity1 = store.CreateEntity(1);
+    var entity2 = store.CreateEntity(2);
+    var entity3 = store.CreateEntity(3);
+    
+    entity1.AddComponent(new Position());
+    entity2.AddTag<MyTag1>();
     
     var query = store.Query();
     query.EventFilter.ComponentAdded<Position>();
     query.EventFilter.TagAdded<MyTag1>();
     
-    foreach (var entity in store.Entities)
-    {
+    foreach (var entity in store.Entities) {
         bool hasEvent = query.HasEvent(entity.Id);
-        Console.WriteLine($"{entity} - hasEvent: {hasEvent}");
+        Console.WriteLine($"{entity,-20} hasEvent: {hasEvent}");
     }
-    // > id: 1  [] - hasEvent: False
-    // > id: 2  [Position] - hasEvent: True
-    // > id: 3  [#MyTag1] - hasEvent: True
+    // id: 3  []            hasEvent: False
+    // id: 1  [Position]    hasEvent: True
+    // id: 2  [#MyTag1]     hasEvent: True
+    
+    store.EventRecorder.ClearEvents(); // typically called on new frame 
+    foreach (var entity in store.Entities) {
+        bool hasEvent = query.HasEvent(entity.Id);
+        Console.WriteLine($"{entity,-20} hasEvent: {hasEvent}");
+    }
+    // id: 3  []            hasEvent: False
+    // id: 1  [Position]    hasEvent: False
+    // id: 2  [#MyTag1]     hasEvent: False
 }
 
 [Test]
