@@ -23,8 +23,8 @@ internal readonly struct SignatureIndexes
     internal readonly   byte    T3;     // 1
     internal readonly   byte    T4;     // 1
     internal readonly   byte    T5;     // 1
-    private  readonly   byte    T6;     // 1
-    private  readonly   byte    T7;     // 1
+    internal readonly   byte    T6;     // 1
+    internal readonly   byte    T7;     // 1
     private  readonly   byte    T8;     // 1
     private  readonly   byte    T9;     // 1
     private  readonly   byte    T10;    // 1

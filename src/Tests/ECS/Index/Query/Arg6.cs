@@ -6,15 +6,15 @@ namespace Tests.ECS.Index.Query {
 
 public static partial class Test_Index_Query
 {
-    private static void QueryArg5 (IndexContext cx)
+    private static void QueryArg6 (IndexContext cx)
     {
         var store = cx.store;
-        var query1  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<IndexedName,   string>("find-me");
-        var query2  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<IndexedInt,    int>   (123);
-        var query3  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<IndexedName,   string>("find-me").
+        var query1  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        HasValue<IndexedName,   string>("find-me");
+        var query2  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        HasValue<IndexedInt,    int>   (123);
+        var query3  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        HasValue<IndexedName,   string>("find-me").
                                                                               HasValue<IndexedInt,    int>   (123);
-        var query4  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        HasValue<AttackComponent, Entity>(cx.target);
-        var query5  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3>().        ValueInRange<IndexedInt, int>(100, 1000);
+        var query4  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        HasValue<AttackComponent, Entity>(cx.target);
+        var query5  = store.Query<Position, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().        ValueInRange<IndexedInt, int>(100, 1000);
        
         
         
@@ -26,7 +26,7 @@ public static partial class Test_Index_Query
         
         {
             int count = 0;
-            query1.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
+            query1.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, ref MyComponent4 _, Entity entity) => {
                 switch (count++) {
                     case 0: AreEqual(11, entity.Id); AreEqual(11f, pos.x); break;
                     case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
@@ -36,7 +36,7 @@ public static partial class Test_Index_Query
             AreEqual(2, count);
         } { 
             int count = 0;
-            query2.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
+            query2.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, ref MyComponent4 _, Entity entity) => {
                 switch (count++) {
                     case 0: AreEqual(12, entity.Id); AreEqual(12f, pos.x); break;
                     case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
@@ -46,7 +46,7 @@ public static partial class Test_Index_Query
             AreEqual(2, count);
         } { 
             var count = 0;
-            query3.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
+            query3.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, ref MyComponent4 _, Entity entity) => {
                 switch (count++) {
                     case 0: AreEqual(11, entity.Id); AreEqual(11f, pos.x); break;
                     case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
@@ -56,7 +56,7 @@ public static partial class Test_Index_Query
             AreEqual(3, count);
         } {
             var count = 0;
-            query4.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
+            query4.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, ref MyComponent4 _, Entity entity) => {
                 count++;
                 AreEqual(13,        entity.Id);     AreEqual(13f, pos.x);
                 AreEqual(cx.target, entity.GetComponent<AttackComponent>().target);
@@ -64,7 +64,7 @@ public static partial class Test_Index_Query
             AreEqual(1, count);
         } {
             var count = 0;
-            query5.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, Entity entity) => {
+            query5.ForEachEntity((ref Position pos, ref Rotation _, ref MyComponent1 _, ref MyComponent2 _, ref MyComponent3 _, ref MyComponent4 _, Entity entity) => {
                 switch (count++) {
                     case 0: AreEqual(12, entity.Id); AreEqual(12f, pos.x); break;
                     case 1: AreEqual(13, entity.Id); AreEqual(13f, pos.x); break;
@@ -74,7 +74,7 @@ public static partial class Test_Index_Query
             AreEqual(3, count);
         } {
             var count = 0;
-            foreach (var (positions, _, _, _, _, entities) in query5.Chunks) {
+            foreach (var (positions, _, _, _, _, _, entities) in query5.Chunks) {
                 AreEqual(1, positions.Length);
                 AreEqual(1, entities.Length);
                 var pos = positions[0]; // positions.start can be > 0

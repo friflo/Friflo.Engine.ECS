@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -14,6 +15,8 @@ public static class Test_QueryComponents
     private struct Comp3 : IComponent { }
     private struct Comp4 : IComponent { }
     private struct Comp5 : IComponent { }
+    private struct Comp6 : IComponent { }
+    private struct Comp7 : IComponent { }
     
     [Test]
     public static void Test_QueryComponents_AllComponents()
@@ -23,19 +26,25 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1>());
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2>());
-        AssertResult("7, 8, 9, 10",     query);
+        AssertResult("102, 103, 104, 105, 106, 107",     query);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3>());
-        AssertResult("8, 9, 10",        query);
+        AssertResult("103, 104, 105, 106, 107",        query);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4>());
-        AssertResult("9, 10",           query);
+        AssertResult("104, 105, 106, 107",           query);
 
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5>());
-        AssertResult("10",              query);
+        AssertResult("105, 106, 107",               query);
+        
+        query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5, Comp6>());
+        AssertResult("106, 107",                   query);
+        
+        query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5, Comp6, Comp7>());
+        AssertResult("107",                   query);
     }
     
     [Test]
@@ -46,19 +55,25 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp1>());
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp2>());
-        AssertResult("3, 7, 8, 9, 10",  query);
+        AssertResult("12, 102, 103, 104, 105, 106, 107",  query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp3>());
-        AssertResult("4, 8, 9, 10",     query);
+        AssertResult("13, 103, 104, 105, 106, 107",     query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp4>());
-        AssertResult("5, 9, 10",        query);
+        AssertResult("14, 104, 105, 106, 107",        query);
 
         query = query.AnyComponents(ComponentTypes.Get<Comp5>());
-        AssertResult("6, 10",           query);
+        AssertResult("15, 105, 106, 107",           query);
+        
+        query = query.AnyComponents(ComponentTypes.Get<Comp6>());
+        AssertResult("16, 106, 107",           query);
+        
+        query = query.AnyComponents(ComponentTypes.Get<Comp7>());
+        AssertResult("17, 107",           query);
     }
 
     [Test]
@@ -71,19 +86,25 @@ public static class Test_QueryComponents
         var all = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
         
         query = query.AnyComponents(ComponentTypes.Get<Comp1>()).AllComponents(all);
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp2>()).AllComponents(all);
-        AssertResult("3, 7, 8, 9, 10",  query);
+        AssertResult("12, 102, 103, 104, 105, 106, 107",  query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp3>()).AllComponents(all);
-        AssertResult("4, 8, 9, 10",     query);
+        AssertResult("13, 103, 104, 105, 106, 107",     query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp4>()).AllComponents(all);
-        AssertResult("5, 8, 9, 10",     query);
+        AssertResult("14, 103, 104, 105, 106, 107",     query);
 
         query = query.AnyComponents(ComponentTypes.Get<Comp5>()).AllComponents(all);
-        AssertResult("6, 8, 9, 10",     query);
+        AssertResult("15, 103, 104, 105, 106, 107",     query);
+        
+        query = query.AnyComponents(ComponentTypes.Get<Comp6>()).AllComponents(all);
+        AssertResult("16, 103, 104, 105, 106, 107",     query);
+        
+        query = query.AnyComponents(ComponentTypes.Get<Comp7>()).AllComponents(all);
+        AssertResult("17, 103, 104, 105, 106, 107",     query);
     }
     
     [Test]
@@ -94,19 +115,25 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1>());
-        AssertResult("1, 3, 4, 5, 6",               query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",               query);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2>());
-        AssertResult("1, 2, 3, 4, 5, 6",            query);
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 17",            query);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3>());
-        AssertResult("1, 2, 3, 4, 5, 6, 7",         query);
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 17, 102",         query);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4>());
-        AssertResult("1, 2, 3, 4, 5, 6, 7, 8",      query);
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 17, 102, 103",      query);
 
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5>());
-        AssertResult("1, 2, 3, 4, 5, 6, 7, 8, 9",   query);
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 17, 102, 103, 104",   query);
+        
+        query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5, Comp6>());
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 17, 102, 103, 104, 105",   query);
+        
+        query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5, Comp6, Comp7>());
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 17, 102, 103, 104, 105, 106",   query);
     }
     
     [Test]
@@ -117,19 +144,25 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp1>());
-        AssertResult("1, 3, 4, 5, 6",           query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",           query);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp2>());
-        AssertResult("1, 2, 4, 5, 6",           query);
+        AssertResult("1, 11, 13, 14, 15, 16, 17",           query);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp3>());
-        AssertResult("1, 2, 3, 5, 6, 7",        query);
+        AssertResult("1, 11, 12, 14, 15, 16, 17, 102",        query);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp4>());
-        AssertResult("1, 2, 3, 4, 6, 7, 8",     query);
+        AssertResult("1, 11, 12, 13, 15, 16, 17, 102, 103",     query);
 
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp5>());
-        AssertResult("1, 2, 3, 4, 5, 7, 8, 9",  query);
+        AssertResult("1, 11, 12, 13, 14, 16, 17, 102, 103, 104",  query);
+        
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp6>());
+        AssertResult("1, 11, 12, 13, 14, 15, 17, 102, 103, 104, 105",  query);
+        
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp7>());
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 102, 103, 104, 105, 106",  query);
     }
     
     [Test]
@@ -139,27 +172,28 @@ public static class Test_QueryComponents
         var sig     = Signature.Get<Position>();
         var query   = store.Query(sig);
         
-        var all = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
+        var all = ComponentTypes.Get<Comp2, Comp3>(); 
         
-        // without: 1, 3, 4, 5, 6
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp1>()).WithoutAllComponents(all);
-        AssertResult("1, 3, 4, 5, 6",           query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",           query);
         
-        // without: 1, 2, 4, 5, 6
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp2>()).WithoutAllComponents(all);
-        AssertResult("1, 2, 4, 5, 6",           query);
+        AssertResult("1, 11, 13, 14, 15, 16, 17",           query);
         
-        // without: 1, 2, 3, 5, 6, 7
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp3>()).WithoutAllComponents(all);
-        AssertResult("1, 2, 3, 5, 6, 7",        query);
+        AssertResult("1, 11, 12, 14, 15, 16, 17, 102",        query);
         
-        // without: 1, 2, 3, 4, 6, 7, 8
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp4>()).WithoutAllComponents(all);
-        AssertResult("1, 2, 3, 4, 6, 7",        query);
+        AssertResult("1, 11, 12, 13, 15, 16, 17, 102",        query);
 
-        // without: 1, 2, 3, 4, 5, 7, 8, 9
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp5>()).WithoutAllComponents(all);
-        AssertResult("1, 2, 3, 4, 5, 7",        query);
+        AssertResult("1, 11, 12, 13, 14, 16, 17, 102",        query);
+        
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp6>()).WithoutAllComponents(all);
+        AssertResult("1, 11, 12, 13, 14, 15, 17, 102",        query);
+        
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp7>()).WithoutAllComponents(all);
+        AssertResult("1, 11, 12, 13, 14, 15, 16, 102",        query);
     }
     
     private static EntityStore CreateTestStore()
@@ -167,16 +201,20 @@ public static class Test_QueryComponents
         var store   = new EntityStore(PidType.UsePidAsId);
         CreateEntity(store,  1, new ComponentTypes());    
         
-        CreateEntity(store,  2, ComponentTypes.Get<Comp1>());
-        CreateEntity(store,  3, ComponentTypes.Get<Comp2>());
-        CreateEntity(store,  4, ComponentTypes.Get<Comp3>());
-        CreateEntity(store,  5, ComponentTypes.Get<Comp4>());
-        CreateEntity(store,  6, ComponentTypes.Get<Comp5>());
+        CreateEntity(store,  11,  ComponentTypes.Get<Comp1>());
+        CreateEntity(store,  12,  ComponentTypes.Get<Comp2>());
+        CreateEntity(store,  13,  ComponentTypes.Get<Comp3>());
+        CreateEntity(store,  14,  ComponentTypes.Get<Comp4>());
+        CreateEntity(store,  15,  ComponentTypes.Get<Comp5>());
+        CreateEntity(store,  16,  ComponentTypes.Get<Comp6>());
+        CreateEntity(store,  17,  ComponentTypes.Get<Comp7>());
         
-        CreateEntity(store,  7, ComponentTypes.Get<Comp1, Comp2>());
-        CreateEntity(store,  8, ComponentTypes.Get<Comp1, Comp2, Comp3>());
-        CreateEntity(store,  9, ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4>());
-        CreateEntity(store, 10, ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5>());
+        CreateEntity(store,  102, ComponentTypes.Get<Comp1, Comp2>());
+        CreateEntity(store,  103, ComponentTypes.Get<Comp1, Comp2, Comp3>());
+        CreateEntity(store,  104, ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4>());
+        CreateEntity(store,  105, ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5>());
+        CreateEntity(store,  106, ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5, Comp6>());
+        CreateEntity(store,  107, ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5, Comp6, Comp7>());
         return store;
     }
     
@@ -221,19 +259,19 @@ public static class Test_QueryComponents
         var any = ComponentTypes.Get<Comp1>();
         
         var query = store.Query().AllComponents(all).AnyComponents(any);
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
         
         query = store.Query<Position, Rotation>().AllComponents(all).AnyComponents(any);
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
     
         query = store.Query<Position, Rotation, EntityName>().AllComponents(all).AnyComponents(any);
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
 
         query = store.Query<Position, Rotation, EntityName, Scale3>().AllComponents(all).AnyComponents(any);
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
         
         query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().AllComponents(all).AnyComponents(any);
-        AssertResult("2, 7, 8, 9, 10",  query);
+        AssertResult("11, 102, 103, 104, 105, 106, 107",  query);
     }
     
     [Test]
@@ -245,19 +283,19 @@ public static class Test_QueryComponents
         var any = ComponentTypes.Get<Comp1>();
         
         var query = store.Query().WithoutAllComponents(all).WithoutAnyComponents(any);
-        AssertResult("1, 3, 4, 5, 6",  query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",  query);
         
         query = store.Query<Position, Rotation>().WithoutAllComponents(all).WithoutAnyComponents(any);
-        AssertResult("1, 3, 4, 5, 6",  query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",  query);
     
         query = store.Query<Position, Rotation, EntityName>().WithoutAllComponents(all).WithoutAnyComponents(any);
-        AssertResult("1, 3, 4, 5, 6",  query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",  query);
 
         query = store.Query<Position, Rotation, EntityName, Scale3>().WithoutAllComponents(all).WithoutAnyComponents(any);
-        AssertResult("1, 3, 4, 5, 6",  query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",  query);
         
         query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().WithoutAllComponents(all).WithoutAnyComponents(any);
-        AssertResult("1, 3, 4, 5, 6",  query);
+        AssertResult("1, 12, 13, 14, 15, 16, 17",  query);
     }
     
     [Test]
