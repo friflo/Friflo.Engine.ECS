@@ -473,7 +473,7 @@ public readonly partial struct Entity : IEquatable<Entity>
     /// <summary>Gets the script with the passed <typeparamref name="TScript"/> <see cref="Type"/>.</summary>
     /// <returns>
     /// Returns true if the entity has a script the passed <typeparamref name="TScript"/> <see cref="Type"/>.<br/>
-    /// Otherwise false.
+    /// Otherwise, false.
     /// </returns>
     public bool     TryGetScript<TScript>(out TScript result)
         where TScript : Script, new()
@@ -495,7 +495,7 @@ public readonly partial struct Entity : IEquatable<Entity>
     }
     /// <summary>Remove the script with the given <typeparamref name="TScript"/> <see cref="Type"/> from the entity.</summary>
     /// <returns>
-    /// The script the script with the passed <typeparamref name="TScript"/> <see cref="Type"/> previously added to the entity.<br/>
+    /// The script with the passed <typeparamref name="TScript"/> <see cref="Type"/> previously added to the entity.<br/>
     /// Or null if the entity has no script with the passed <typeparamref name="TScript"/> <see cref="Type"/>.
     /// </returns>
     /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative.</remarks>
@@ -779,7 +779,7 @@ public readonly partial struct Entity : IEquatable<Entity>
     // ------------------------------------ internal properties -----------------------------------
 #region internal properties
     // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
-    [Browse(Never)] internal        Archetype      archetype    =>     store. nodes[Id].archetype;
+    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[Id].archetype;
     [Browse(Never)] internal        int            compIndex    =>     store.nodes[Id].compIndex;
     
     internal Archetype GetArchetype() {

@@ -73,16 +73,14 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         targetHeap.components[targetPos] = components[sourcePos];
     }
     
-    /// <remarks>
-    /// Copying a component using an assignment can only be done for <see cref="ComponentType.IsBlittable"/>
-    /// <see cref="ComponentType"/>'s.<br/>
-    /// If not <see cref="ComponentType.IsBlittable"/> serialization must be used.
-    /// </remarks>
-    internal override void CloneComponent(int sourcePos, int targetPos, in CopyContext context)
+    internal override void CloneComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context)
     {
+        if (typeof(T) == typeof(TreeNode)) {
+            return;
+        }
         var copyValue = CopyValueUtils<T>.CopyValue;
-        ref var source = ref components[sourcePos];
-        ref var target = ref components[targetPos];
+        ref T source = ref components[sourcePos];
+        ref T target = ref ((StructHeap<T>)targetHeap).components[targetPos];
         if (copyValue == null) {
             target = source;
         } else {

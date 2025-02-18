@@ -77,6 +77,31 @@ public partial class EntityStore
     }
     
     /// <summary>
+    /// Copy all components, tags and scripts of the <paramref name="source"/> entity to the <paramref name="target"/> entity.<br/>
+    /// The <paramref name="source"/> and <paramref name="target"/> entities can be in the same or different stores.
+    /// </summary>
+    /// <remarks>
+    /// Child entities of the passed <paramref name="source"/> are not copied to the <paramref name="target"/> entity.<br/>
+    /// If doing this these child entities would be children of both entities.
+    /// </remarks>
+    public static void CopyEntity(Entity source, Entity target)
+    {
+        var sourceArch      = source.GetArchetype() ?? throw EntityArgumentNullException(source, nameof(source));
+        var curTargetArch   = target.GetArchetype() ?? throw EntityArgumentNullException(target, nameof(target));
+        var targetStore     = target.store;
+        var targetArch      = targetStore.GetArchetype(sourceArch.componentTypes, sourceArch.Tags);
+        if (targetArch != curTargetArch) {
+            ref var node    = ref targetStore.nodes[target.Id];
+            node.compIndex  = Archetype.MoveEntityTo(curTargetArch, target.Id, node.compIndex, targetArch);
+            node.archetype  = targetArch;
+        }
+        var context = new CopyContext(source, target);
+        Archetype.CloneComponents(sourceArch, targetArch, context);
+        
+        targetStore.CloneScrips(source, target);
+    }
+    
+    /// <summary>
     /// Create and return a clone of the passed <paramref name="entity"/> in the store.
     /// </summary>
     /// <remarks>
@@ -93,20 +118,14 @@ public partial class EntityStore
         // var isBlittable = IsBlittable(entity);
         // if (true) {
         
-        var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
-        // CopyComponents() must be used only in case all component types are blittable
         var context = new CopyContext(entity, clone);
-        Archetype.CloneComponents(archetype, context);
-        if (clone.HasComponent<TreeNode>()) {
+        Archetype.CloneComponents(archetype, archetype, context);
+        
+        CloneScrips(entity, clone);
+        
+        /* if (clone.HasComponent<TreeNode>()) {
             clone.GetComponent<TreeNode>() = default;   // clear child ids. See child entities note in remarks.
-        }
-        // --- clone scripts
-        foreach (var script in entity.Scripts) {
-            var scriptType      = scriptTypeByType[script.GetType()];
-            var scriptClone     = scriptType.CloneScript(script);
-            scriptClone.entity  = clone;
-            extension.AddScript(clone, scriptClone, scriptType);
-        }
+        } */
         /* keep old implementation using JSON serialization for reference
         } else {
             // --- serialize entity
@@ -123,6 +142,17 @@ public partial class EntityStore
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(clone);
         return clone;
+    }
+    
+    private void CloneScrips(Entity entity, Entity clone)
+    {
+        var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
+        foreach (var script in entity.Scripts) {
+            var scriptType      = scriptTypeByType[script.GetType()];
+            var scriptClone     = scriptType.CloneScript(script);
+            scriptClone.entity  = clone;
+            extension.AddScript(clone, scriptClone, scriptType);
+        }
     }
     
     // ReSharper disable once UnusedMember.Local
