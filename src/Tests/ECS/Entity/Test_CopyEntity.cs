@@ -1,6 +1,7 @@
 using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS.Index;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable EqualExpressionComparison
@@ -11,6 +12,31 @@ namespace Tests.ECS {
 
 public static class Test_CopyEntity
 {
+    [Test]
+    public static void Test_CopyEntity_CloneStore_subset()
+    {
+        var store       = new EntityStore();
+        var targetStore = new EntityStore();
+        
+        store.CreateEntity(new Position(1,1,1));                        // 1
+        store.CreateEntity(new Position(2,2,2), Tags.Get<TestTag>());   // 2
+        store.CreateEntity(new Position(3,3,3));                        // 3
+        store.CreateEntity(new Position(4,4,4), Tags.Get<TestTag>());   // 4
+        store.CreateEntity(new Position(5,5,5));                        // 5
+        
+        // Query will copy only entities [2, 4]
+        var query = store.Query().AllTags(Tags.Get<TestTag>());
+        foreach (var entity in query.Entities) {
+            // preserve same entity ids in target store
+            if (!targetStore.TryGetEntityById(entity.Id, out Entity targetEntity)) {
+                targetEntity = targetStore.CreateEntity(entity.Id);
+            }
+            EntityStore.CopyEntity(entity, targetEntity);
+        }
+        AreEqual(new Position(2,2,2), targetStore.GetEntityById(2).GetComponent<Position>());
+        AreEqual(new Position(4,4,4), targetStore.GetEntityById(4).GetComponent<Position>());
+    }
+    
     [Test]
     public static void Test_CopyEntity_different_stores()
     {
@@ -66,6 +92,39 @@ public static class Test_CopyEntity
         IsTrue(target4.Tags.Has<TestTag>());
         IsTrue(target5.Tags.Has<TestTag>());
         IsTrue(target6.Tags.Has<TestTag2>());
+    }
+    
+    [Test]
+    public static void Test_CopyEntity_IndexedComponent()
+    {
+        var store  = new EntityStore();
+        var index  = store.ComponentIndex<IndexedInt,int>();
+        
+        var entity1 = store.CreateEntity(new IndexedInt { value = 11 });
+        var entity2 = store.CreateEntity(2);
+        AreEqual("{ 1 }",       index[11].Debug());
+       
+        EntityStore.CopyEntity(entity1, entity2);
+        AreEqual("{ 1, 2 }",    index[11].Debug());
+        AreEqual(2, store.Count);
+        AreEqual(new IndexedInt { value = 11 }, entity2.GetComponent<IndexedInt>());
+        
+        entity1.AddComponent(new IndexedInt { value = 42 });
+        AreEqual("{ 2 }",       index[11].Debug());
+        AreEqual("{ 1 }",       index[42].Debug());
+        
+        EntityStore.CopyEntity(entity1, entity2);
+        AreEqual("{ }",         index[11].Debug());
+        AreEqual("{ 1, 2 }",    index[42].Debug());
+        AreEqual(new IndexedInt { value = 42 }, entity2.GetComponent<IndexedInt>());
+        
+        entity1.RemoveComponent<IndexedInt>();
+        AreEqual("{ }",         index[11].Debug());
+        AreEqual("{ 2 }",       index[42].Debug());
+        
+        EntityStore.CopyEntity(entity1, entity2);
+        AreEqual("{ }",         index[11].Debug());
+        AreEqual("{ }",         index[42].Debug());
     }
     
     [Test]

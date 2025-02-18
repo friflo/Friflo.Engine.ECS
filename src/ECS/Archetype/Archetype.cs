@@ -308,20 +308,20 @@ public sealed class Archetype
     }
     
     /// <summary>
-    /// <see cref="TreeNode"/> components are not copied.<br/>
+    /// <see cref="TreeNode"/> components (child entities) are not copied.<br/>
     /// Otherwise, two different entities would have the same child entities.
     /// </summary>
-    internal static void CloneComponents(Archetype sourceArch, Archetype targetArch, in CopyContext context)
+    internal static void CopyComponents(Archetype sourceArch, Archetype targetArch, in CopyContext context, long updateIndexTypes)
     {
         var sourceIndex = context.source.compIndex;
         var targetIndex = context.target.compIndex;
         if (sourceArch == targetArch) {
             foreach (var sourceHeap in sourceArch.structHeaps) {
-                sourceHeap.CloneComponent(sourceIndex, sourceHeap, targetIndex, context);
+                sourceHeap.CopyComponent(sourceIndex, sourceHeap, targetIndex, context, updateIndexTypes);
             }
         } else {
             foreach (var sourceHeap in sourceArch.structHeaps) {
-                sourceHeap.CloneComponent(sourceIndex, targetArch.heapMap[sourceHeap.structIndex], targetIndex, context);
+                sourceHeap.CopyComponent(sourceIndex, targetArch.heapMap[sourceHeap.structIndex], targetIndex, context, updateIndexTypes);
             }
         }
     }

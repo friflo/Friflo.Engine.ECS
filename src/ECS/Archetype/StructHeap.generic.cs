@@ -73,24 +73,33 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         targetHeap.components[targetPos] = components[sourcePos];
     }
     
-    internal override void CloneComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context)
+    internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
     {
         if (typeof(T) == typeof(TreeNode)) {
             return;
         }
-        var copyValue = CopyValueUtils<T>.CopyValue;
-        ref T source = ref components[sourcePos];
-        ref T target = ref ((StructHeap<T>)targetHeap).components[targetPos];
+        var copyValue       = CopyValueUtils<T>.CopyValue;
+        ref T source        = ref components[sourcePos];
+        var typedTargetHeap = (StructHeap<T>)targetHeap;
+        ref T target        = ref typedTargetHeap.components[targetPos];
+        if (StructInfo<T>.HasIndex) {
+            AddOrUpdateIndex(source, target, context.target, typedTargetHeap, updateIndexTypes);
+        }
         if (copyValue == null) {
             target = source;
         } else {
             copyValue(source, ref target, context);
         }
-        if (!StructInfo<T>.HasIndex) {
-            return;
+    }
+    
+    private static void AddOrUpdateIndex(in T source, in T target, in Entity targetEntity, StructHeap<T> targetHeap, long updateIndexTypes)
+    {
+        if (((1 << StructInfo<T>.Index) & updateIndexTypes) == 0) {
+            StoreIndex.AddIndex(targetEntity.store, targetEntity.Id, source);
+        } else {
+            targetHeap.componentStash = target;
+            StoreIndex.UpdateIndex(targetEntity.store, targetEntity.Id, source, targetHeap);
         }
-        var targetEntity = context.target;
-        StoreIndex.AddIndex(targetEntity.store, targetEntity.Id, source);
     }
     
     internal  override  void SetComponentDefault (int compIndex) {

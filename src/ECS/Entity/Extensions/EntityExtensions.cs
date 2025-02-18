@@ -15,7 +15,7 @@ namespace Friflo.Engine.ECS;
 public static partial class EntityExtensions
 {
 #region add components
-    private static readonly long IndexTypesMask = EntityStoreBase.Static.EntitySchema.indexTypes.bitSet.l0;
+    internal static readonly long IndexTypesMask = EntityStoreBase.Static.EntitySchema.indexTypes.bitSet.l0;
     
     private static void UpdateIndexedComponents(Entity entity, Archetype archetype, long indexTypesMask)
     {

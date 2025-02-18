@@ -51,6 +51,11 @@ public static class Test_StructuralChangeException
             entity.RemoveComponent<Position>();
         });
         
+        var target = store.CreateEntity();
+        Assert.Throws<StructuralChangeException>(() => {
+            EntityStore.CopyEntity(entity, target);
+        });
+        
         var buffer = store.GetCommandBuffer();
         Assert.Throws<StructuralChangeException>(() => {
             buffer.Playback();
