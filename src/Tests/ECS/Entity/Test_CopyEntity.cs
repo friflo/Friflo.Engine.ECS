@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS.Index;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable EqualExpressionComparison
