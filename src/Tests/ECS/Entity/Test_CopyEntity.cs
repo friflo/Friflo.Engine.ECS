@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS.Index;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable EqualExpressionComparison
@@ -148,6 +150,33 @@ public static class Test_CopyEntity
             EntityStore.CopyEntity(entity1, entity2);
         });
         AreEqual("entity is null. id: 1 (Parameter 'source')", e!.Message);
+    }
+    
+    [Test]
+    public static void Test_CopyEntity_Perf()
+    {
+        int count       = 10; // Test_CopyEntity_Perf() - count: 100000 repeat: 100 duration: 624 ms
+        int repeat      = 100;
+        var store       = new EntityStore();
+        var targetStore = new EntityStore();
+        
+        for (int i = 0; i < count; i++) {
+            store.CreateEntity(new Position(), new Scale3(), new MyComponent1(), new MyComponent2(), new MyComponent3());
+        }
+        var start = new Stopwatch();
+        start.Start();
+        for (int i = 0; i < repeat; i++) {
+            foreach (var entity in store.Entities) {
+                // preserve same entity ids in target store
+                if (!targetStore.TryGetEntityById(entity.Id, out Entity targetEntity)) {
+                    targetEntity = targetStore.CreateEntity(entity.Id);
+                }
+                EntityStore.CopyEntity(entity, targetEntity);
+            }
+        }
+        var msg = $"Test_CopyEntity_Perf() - count: {count} repeat: {repeat} duration: {start.ElapsedMilliseconds} ms";
+        Console.WriteLine(msg);
+        AreEqual(count, targetStore.Count);
     }
 }
 
