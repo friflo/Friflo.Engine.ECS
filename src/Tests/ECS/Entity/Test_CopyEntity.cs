@@ -25,7 +25,7 @@ public static class Test_CopyEntity
         store.CreateEntity(new Position(5,5,5));                        // 5
         
         // Query will copy only entities [2, 4]
-        var query = store.Query().AllTags(Tags.Get<TestTag>());
+        var query = store.Query().AnyTags(Tags.Get<TestTag>());
         foreach (var entity in query.Entities) {
             // preserve same entity ids in target store
             if (!targetStore.TryGetEntityById(entity.Id, out Entity targetEntity)) {
