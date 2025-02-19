@@ -154,7 +154,7 @@ public static class Test_CopyEntity
     [Test]
     public static void Test_CopyEntity_Perf()
     {
-        int count       = 10; // Test_CopyEntity_Perf() - count: 100000 repeat: 100 duration: 624 ms
+        int count       = 10; // Test_CopyEntity_Perf() - count: 100000 repeat: 1000 duration: 4465 ms
         int repeat      = 100;
         var store       = new EntityStore();
         var targetStore = new EntityStore();
