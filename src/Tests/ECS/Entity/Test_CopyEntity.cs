@@ -32,7 +32,7 @@ public static class Test_CopyEntity
             if (!targetStore.TryGetEntityById(entity.Id, out Entity targetEntity)) {
                 targetEntity = targetStore.CreateEntity(entity.Id);
             }
-            EntityStore.CopyEntity(entity, targetEntity);
+            entity.CopyEntity(targetEntity);
         }
         AreEqual(new Position(2,2,2), targetStore.GetEntityById(2).GetComponent<Position>());
         AreEqual(new Position(4,4,4), targetStore.GetEntityById(4).GetComponent<Position>());
@@ -52,9 +52,9 @@ public static class Test_CopyEntity
         var target2 = target.CreateEntity(entity2.Id);
         var target1 = target.CreateEntity(entity1.Id);
         
-        EntityStore.CopyEntity(entity1, target1);
-        EntityStore.CopyEntity(entity2, target2);
-        EntityStore.CopyEntity(entity3, target3);
+        entity1.CopyEntity(target1);
+        entity2.CopyEntity(target2);
+        entity3.CopyEntity(target3);
         
         AreEqual(3, target.Count);
         
@@ -80,9 +80,9 @@ public static class Test_CopyEntity
         var target5 = store.CreateEntity(5);
         var target6 = store.CreateEntity(6);
         
-        EntityStore.CopyEntity(entity1, target4);
-        EntityStore.CopyEntity(entity2, target5);
-        EntityStore.CopyEntity(entity3, target6);
+        entity1.CopyEntity(target4);
+        entity3.CopyEntity(target6);
+        entity2.CopyEntity(target5);
         
         AreEqual(6, store.Count);
         
@@ -105,7 +105,7 @@ public static class Test_CopyEntity
         var entity2 = store.CreateEntity(2);
         AreEqual("{ 1 }",       index[11].Debug());
        
-        EntityStore.CopyEntity(entity1, entity2);
+        entity1.CopyEntity(entity2);
         AreEqual("{ 1, 2 }",    index[11].Debug());
         AreEqual(2, store.Count);
         AreEqual(new IndexedInt { value = 11 }, entity2.GetComponent<IndexedInt>());
@@ -114,7 +114,7 @@ public static class Test_CopyEntity
         AreEqual("{ 2 }",       index[11].Debug());
         AreEqual("{ 1 }",       index[42].Debug());
         
-        EntityStore.CopyEntity(entity1, entity2);
+        entity1.CopyEntity(entity2);
         AreEqual("{ }",         index[11].Debug());
         AreEqual("{ 1, 2 }",    index[42].Debug());
         AreEqual(new IndexedInt { value = 42 }, entity2.GetComponent<IndexedInt>());
@@ -123,7 +123,7 @@ public static class Test_CopyEntity
         AreEqual("{ }",         index[11].Debug());
         AreEqual("{ 2 }",       index[42].Debug());
         
-        EntityStore.CopyEntity(entity1, entity2);
+        entity1.CopyEntity(entity2);
         AreEqual("{ }",         index[11].Debug());
         AreEqual("{ }",         index[42].Debug());
     }
@@ -136,17 +136,17 @@ public static class Test_CopyEntity
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
-        EntityStore.CopyEntity(entity1, entity2);
+        entity1.CopyEntity(entity2);
         
         entity2.DeleteEntity();
         var e = Throws<ArgumentException>(() => {
-            EntityStore.CopyEntity(entity1, entity2);
+            entity1.CopyEntity(entity2);
         });
         AreEqual("entity is null. id: 2 (Parameter 'target')", e!.Message);
         
         entity1.DeleteEntity();
         e = Throws<ArgumentException>(() => {
-            EntityStore.CopyEntity(entity1, entity2);
+            entity1.CopyEntity(entity2);
         });
         AreEqual("entity is null. id: 1 (Parameter 'source')", e!.Message);
     }
@@ -170,7 +170,7 @@ public static class Test_CopyEntity
                 if (!targetStore.TryGetEntityById(entity.Id, out Entity targetEntity)) {
                     targetEntity = targetStore.CreateEntity(entity.Id);
                 }
-                EntityStore.CopyEntity(entity, targetEntity);
+                entity.CopyEntity(targetEntity);
             }
         }
         var msg = $"Test_CopyEntity_Perf() - count: {count} repeat: {repeat} duration: {start.ElapsedMilliseconds} ms";

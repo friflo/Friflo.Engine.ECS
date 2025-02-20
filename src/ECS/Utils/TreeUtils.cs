@@ -47,7 +47,7 @@ public static class TreeUtils
                 indexes[pos++] = -1;
                 continue;
             }
-            var clone       = store.CloneEntity(entity);
+            var clone       = entity.CloneEntity();
             var index       = parent.AddChild(clone);
             indexes[pos++]  = index;
             DuplicateChildren(entity, clone, store);
@@ -59,7 +59,7 @@ public static class TreeUtils
     {
         foreach (var childId in entity.ChildIds) {
             var child       = store.GetEntityById(childId);
-            var childClone  = store.CloneEntity(child);
+            var childClone  = child.CloneEntity();
             clone.AddChild(childClone);
             
             DuplicateChildren(child, childClone, store);

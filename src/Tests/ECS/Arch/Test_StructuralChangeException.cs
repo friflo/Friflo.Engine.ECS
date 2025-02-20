@@ -53,7 +53,7 @@ public static class Test_StructuralChangeException
         
         var target = store.CreateEntity();
         Assert.Throws<StructuralChangeException>(() => {
-            EntityStore.CopyEntity(entity, target);
+            entity.CopyEntity(target);
         });
         
         var buffer = store.GetCommandBuffer();

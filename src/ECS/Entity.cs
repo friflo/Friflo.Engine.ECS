@@ -654,6 +654,27 @@ public readonly partial struct Entity : IEquatable<Entity>
 
     // ------------------------------------ general methods ---------------------------------------
 #region general - methods
+    /// <summary>
+    /// Copy all components, tags and scripts of this entity to the given <paramref name="target"/> entity.<br/>
+    /// This entity and the <paramref name="target"/> entity can be in the same or different stores.<br/>
+    /// This method can be used to "clone" all or a subset of entities to a different store.
+    /// </summary>
+    /// <remarks>
+    /// Children of this are not copied to the <paramref name="target"/> entity.<br/>
+    /// If doing this both entities would have the same children.
+    /// </remarks>
+    public          void    CopyEntity (Entity target) => EntityStore.CopyEntity(this, target);
+    
+    /// <summary>
+    /// Create and return a clone of this entity.<br/>
+    /// The cloned entity will have the same components and tags as this entity.
+    /// </summary>
+    /// <remarks>
+    /// Children of this entity are not copied to the cloned entity.<br/>
+    /// If doing this both entities would have the same children.
+    /// </remarks>
+    public          Entity  CloneEntity() => store.CloneEntity(this);
+
     /// <summary> Return true if the passed entities have the same <see cref="Entity.Id"/>'s. </summary>
     public static   bool    operator == (Entity a, Entity b)    => a.rawEntity == b.rawEntity && a.store == b.store;
     

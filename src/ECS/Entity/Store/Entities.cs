@@ -133,6 +133,7 @@ public partial class EntityStore
     public Entity CloneEntity(Entity entity)
     {
         var archetype   = entity.GetArchetype() ?? throw EntityArgumentNullException(entity, nameof(entity));
+        if (this != entity.store)                  throw InvalidStoreException(nameof(entity));
         var id          = NewId();
         CreateEntityInternal(archetype, id, out var revision);
         var clone       = new Entity(this, id, revision);

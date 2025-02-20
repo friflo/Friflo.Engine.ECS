@@ -107,7 +107,7 @@ public static class Test_Entity_NRE
         AreEqual(expect, nre!.Message);
         
         var ane = Throws<ArgumentException>(() => {
-            store.CloneEntity(entity);
+            entity.CloneEntity();
         });
         AreEqual(expectArg, ane!.Message);
     }
