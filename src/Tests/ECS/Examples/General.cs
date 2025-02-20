@@ -246,6 +246,44 @@ entity: 1 - added:   MyTag1
 entity: 1 - removed: MyTag1
 entity: 1 - added:   MyTag1 added:   MyTag2
 */
+
+[Test]
+public static void CloneEntity()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity(new Position(1,2,3), Tags.Get<MyTag1>());
+    
+    var clone = entity.CloneEntity();
+    // the cloned entity have the same components and tags as the original entity.
+}
+
+public struct NetTag : ITag { }
+
+/// Copy subset of entities to another store
+[Test]
+public static void CopyEntity()
+{
+    var store       = new EntityStore();
+    var targetStore = new EntityStore();
+        
+    store.CreateEntity(new Position(1,1,1));                     // 1
+    store.CreateEntity(new Position(2,2,2), Tags.Get<NetTag>()); // 2
+    store.CreateEntity(new Position(3,3,3));                     // 3
+    store.CreateEntity(new Position(4,4,4), Tags.Get<NetTag>()); // 4
+    store.CreateEntity(new Position(5,5,5));                     // 5
+        
+    // Query will copy only entities [2, 4] having a NetTag
+    var query = store.Query().AnyTags(Tags.Get<NetTag>());
+    foreach (var entity in query.Entities) {
+        // preserve same entity ids in target store
+        if (!targetStore.TryGetEntityById(entity.Id, out Entity targetEntity)) {
+            targetEntity = targetStore.CreateEntity(entity.Id);
+        }
+        entity.CopyEntity(targetEntity);
+    }
+    // target store contains two entities [2, 4] with same components and tags as in the original store
+} 
+
     
 public struct CollisionSignal {
     public Entity other;
