@@ -322,6 +322,19 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Test_EntityStore_CloneEntity_different_store_exception()
+    {
+        var store   = new EntityStore();
+        var store2  = new EntityStore();
+        var entity  = store.CreateEntity();
+
+        var e = Throws<ArgumentException>(() => {
+            store2.CloneEntity(entity);    
+        });
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Entity_EqualityComparer()
     {
         var store       = new EntityStore(PidType.RandomPids);
