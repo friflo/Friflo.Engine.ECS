@@ -261,7 +261,7 @@ public struct NetTag : ITag { }
 
 /// Copy subset of entities to another store
 [Test]
-public static void CopyEntity()
+public static void CopyEntities()
 {
     var store       = new EntityStore();
     var targetStore = new EntityStore();
