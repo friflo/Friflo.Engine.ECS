@@ -99,10 +99,10 @@ public struct ComponentField<TField> where TField : IComparable<TField>
             case SortOrder.None:
                 return fields;
             case SortOrder.Ascending:
-                Array.Sort(fields, 0, count, ComparerAsc);
+                Array.Sort(fields, 0, count, ComparerAsc);  // allocates a single System.Comparision<ComponentField<>> instance
                 break;
             case SortOrder.Descending:
-                Array.Sort(fields, 0, count, ComparerDesc);
+                Array.Sort(fields, 0, count, ComparerDesc); // allocates a single System.Comparision<ComponentField<>> instance
                 break;
         }
         for (int n = 0; n < count; n++) {
