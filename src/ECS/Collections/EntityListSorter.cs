@@ -31,23 +31,25 @@ internal static class ComponentField<TComponent, TField>  where TComponent : str
 internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component) where TComponent : struct;
 
 
-internal class GenericComparerAsc<T> : IComparer<SortField<T>>
+internal class GenericComparerAsc<TField> : IComparer<SortField<TField>>
+    where TField : IComparable<TField>
 {
-    public int Compare(SortField<T> e1, SortField<T> e2) {
+    public int Compare(SortField<TField> e1, SortField<TField> e2) {
         var hasValueDiff = e1.hasValue - e2.hasValue;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e1.fieldValue, e2.fieldValue);
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e1.fieldValue, e2.fieldValue);
     }
 }
     
-internal class GenericComparerDesc<T> : IComparer<SortField<T>>
+internal class GenericComparerDesc<TField> : IComparer<SortField<TField>>
+    where TField : IComparable<TField>
 {
-    public int Compare(SortField<T> e1, SortField<T> e2) {
+    public int Compare(SortField<TField> e1, SortField<TField> e2) {
         var hasValueDiff = e2.hasValue - e1.hasValue;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e2.fieldValue, e1.fieldValue);
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e2.fieldValue, e1.fieldValue);
     }
 }
 
-public struct SortField<TField>
+public struct SortField<TField> where TField : IComparable<TField>
 {
     public  int     entityId;
     public  byte    hasValue;
