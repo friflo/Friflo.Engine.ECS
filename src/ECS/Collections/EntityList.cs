@@ -198,14 +198,10 @@ public sealed class EntityList : IList<Entity>
     #endregion
     
 #region sort
-    private static readonly SortArgs SortArgs = new ();
-    
     [Obsolete("WIP")]
     public void SortByComponentField<TComponent,TField>(string memberName, SortOrder sortOrder) where TComponent : struct, IComponent
     {
-        var structIndex = StructInfo<TComponent>.Index;
-        SortArgs.Set(this, structIndex, memberName, sortOrder);
-        ComponentField<TField>.Sort<TComponent>(SortArgs);
+        ComponentField<TField>.Sort<TComponent>(this, memberName, sortOrder);
     }
     #endregion
     

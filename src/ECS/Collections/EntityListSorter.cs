@@ -12,21 +12,6 @@ public enum SortOrder
     Descending
 }
 
-internal class SortArgs
-{
-    internal    EntityList  entities;
-    internal    int         structIndex;
-    internal    string      memberName;
-    internal    SortOrder   sortOrder;
-    
-    internal void Set(EntityList  entities, int structIndex, string memberName, SortOrder sortOrder) {
-        this.entities       = entities;
-        this.structIndex    = structIndex;
-        this.memberName     = memberName;
-        this.sortOrder      = sortOrder;
-    }
-}
-
 internal static class ComponentField<TComponent, TField>  where TComponent : struct
 {
     private static readonly Dictionary<string, MemberGetter<TComponent,TField>> GetterMap = new();   
@@ -70,10 +55,10 @@ internal struct ComponentField<TField>
     private static readonly GenericComparerAsc<TField>  ComparerAsc  = new GenericComparerAsc<TField>();
     private static readonly GenericComparerDesc<TField> ComparerDesc = new GenericComparerDesc<TField>();
     
-    internal static void Sort<TComponent>(SortArgs args)
+    internal static void Sort<TComponent>(EntityList  entities, string memberName, SortOrder sortOrder)
         where TComponent : struct, IComponent
     {
-        var entities    = args.entities;
+        var structIndex = StructInfo<TComponent>.Index;
         var count       = entities.Count;
         if (SortEntriesArray.Length < count) {
             SortEntriesArray = new ComponentField<TField>[count];
@@ -81,13 +66,13 @@ internal struct ComponentField<TField>
         var entries = SortEntriesArray;
         var nodes   = entities.entityStore.nodes;
         var ids     = entities.Ids;
-        var getter  = ComponentField<TComponent, TField>.GetGetter(args.memberName);
+        var getter  = ComponentField<TComponent, TField>.GetGetter(memberName);
         int index   = 0;
         
         foreach (var id in ids)
         {
             ref var node    = ref nodes[id];
-            var heap        = node.archetype?.heapMap[args.structIndex];
+            var heap        = node.archetype?.heapMap[structIndex];
             ref var entry   = ref entries[index++];
             entry.id        = id;
             if (heap == null) {
@@ -98,7 +83,7 @@ internal struct ComponentField<TField>
             entry.value = getter(component);
         }
 
-        switch (args.sortOrder) {
+        switch (sortOrder) {
             case SortOrder.None:
                 return;
             case SortOrder.Ascending:
