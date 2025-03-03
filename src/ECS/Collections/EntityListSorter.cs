@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace Friflo.Engine.ECS;
@@ -11,16 +12,17 @@ public enum SortOrder
     Descending
 }
 
-internal static class ComponentField<TComponent, TField>  where TComponent : struct
+internal static class TypeMember<TComponent, TField>
 {
     private static readonly Dictionary<string, MemberGetter<TComponent,TField>> GetterMap = new();   
     
-    internal static MemberGetter<TComponent,TField> GetGetter(string memberName)
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
+    internal static MemberGetter<TComponent,TField> Getter(string memberName)
     {
         if (GetterMap.TryGetValue(memberName, out var getter)) {
             return getter;
         }
-        var arg         = Expression.Parameter(typeof(TComponent), "component");
+        var arg         = Expression.Parameter(typeof(TComponent), "component"); // "component" parameter name in MemberGetter<,>
         var expr        = Expression.PropertyOrField(arg, memberName);
         var compiled    = Expression.Lambda<MemberGetter<TComponent, TField>>(expr, arg).Compile();
         GetterMap.Add(memberName, compiled);
@@ -28,7 +30,7 @@ internal static class ComponentField<TComponent, TField>  where TComponent : str
     }
 }
 
-internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component) where TComponent : struct;
+internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
 
 
 internal class GenericComparerAsc<TField> : IComparer<SortField<TField>>
@@ -75,7 +77,7 @@ public struct SortField<TField> where TField : IComparable<TField>
         }
         var nodes   = entities.entityStore.nodes;
         var ids     = entities.ids;
-        var getter  = ComponentField<TComponent, TField>.GetGetter(memberName);
+        var getter  = TypeMember<TComponent, TField>.Getter(memberName);
         
         for (int index = 0; index < count; index++)
         {
