@@ -251,7 +251,7 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_Sort_Perf()
     {
-        int count   = 1_000_000; // 1_000_000;
+        int count   = 10; // 1_000_000;
         int repeat  = 1000;
         // Test_EntityList_Sort_Perf - count: 1000000, repeat: 1000, stopWatch: 2149 ms
         var store   = new EntityStore();

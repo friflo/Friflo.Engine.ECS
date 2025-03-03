@@ -69,15 +69,15 @@ internal struct ComponentField<TField>
         }
         var entries = SortEntriesArray;
         var nodes   = entities.entityStore.nodes;
-        var ids     = entities.Ids;
+        var ids     = entities.ids;
         var getter  = ComponentField<TComponent, TField>.GetGetter(memberName);
-        int index   = 0;
         
-        foreach (var id in ids)
+        for (int index = 0; index < count; index++)
         {
+            var id          = ids[index];
             ref var node    = ref nodes[id];
             var heap        = node.archetype?.heapMap[structIndex];
-            ref var entry   = ref entries[index++];
+            ref var entry   = ref entries[index];
             entry.id        = id;
             if (heap == null) {
                 entry.hasValue = 0;
@@ -98,9 +98,8 @@ internal struct ComponentField<TField>
                 Array.Sort(entries, 0, count, ComparerDesc);
                 break;
         }
-        entities.Clear();
         for (int n = 0; n < count; n++) {
-            entities.Add(entries[n].id);
+            ids[n] = entries[n].id;
         }
     }
 }
