@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
-
 
 namespace Friflo.Engine.ECS;
 
@@ -33,41 +31,39 @@ internal static class ComponentField<TComponent, TField>  where TComponent : str
 internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component) where TComponent : struct;
 
 
-internal class GenericComparerAsc<T> : IComparer<ComponentField<T>>
+internal class GenericComparerAsc<T> : IComparer<SortField<T>>
 {
-    public int Compare(ComponentField<T> e1, ComponentField<T> e2) {
+    public int Compare(SortField<T> e1, SortField<T> e2) {
         var hasValueDiff = e1.hasValue - e2.hasValue;
         return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e1.value, e2.value);
     }
 }
     
-internal class GenericComparerDesc<T> : IComparer<ComponentField<T>>
+internal class GenericComparerDesc<T> : IComparer<SortField<T>>
 {
-    public int Compare(ComponentField<T> e1, ComponentField<T> e2) {
+    public int Compare(SortField<T> e1, SortField<T> e2) {
         var hasValueDiff = e2.hasValue - e1.hasValue;
         return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e2.value, e1.value);
     }
 }
 
-internal struct ComponentField<TField>
+public struct SortField<TField>
 {
-    private     int     id;
-    internal    byte    hasValue;
-    internal    TField  value;
+    public  int     id;
+    public  byte    hasValue;
+    public  TField  value;
     
-    private static          ComponentField<TField>[]    SortEntriesArray = [];
     private static readonly GenericComparerAsc<TField>  ComparerAsc  = new GenericComparerAsc<TField>();
     private static readonly GenericComparerDesc<TField> ComparerDesc = new GenericComparerDesc<TField>();
     
-    internal static void Sort<TComponent>(EntityList  entities, string memberName, SortOrder sortOrder)
+    internal static SortField<TField>[] Sort<TComponent>(EntityList  entities, string memberName, SortOrder sortOrder, SortField<TField>[] fields)
         where TComponent : struct, IComponent
     {
         var structIndex = StructInfo<TComponent>.Index;
         var count       = entities.Count;
-        if (SortEntriesArray.Length < count) {
-            SortEntriesArray = new ComponentField<TField>[count];
+        if (fields == null || fields.Length < count) {
+            fields = new SortField<TField>[count];
         }
-        var entries = SortEntriesArray;
         var nodes   = entities.entityStore.nodes;
         var ids     = entities.ids;
         var getter  = ComponentField<TComponent, TField>.GetGetter(memberName);
@@ -77,7 +73,7 @@ internal struct ComponentField<TField>
             var id          = ids[index];
             ref var node    = ref nodes[id];
             var heap        = node.archetype?.heapMap[structIndex];
-            ref var entry   = ref entries[index];
+            ref var entry   = ref fields[index];
             entry.id        = id;
             if (heap == null) {
                 entry.hasValue = 0;
@@ -90,16 +86,17 @@ internal struct ComponentField<TField>
 
         switch (sortOrder) {
             case SortOrder.None:
-                return;
+                return fields;
             case SortOrder.Ascending:
-                Array.Sort(entries, 0, count, ComparerAsc);
+                Array.Sort(fields, 0, count, ComparerAsc);
                 break;
             case SortOrder.Descending:
-                Array.Sort(entries, 0, count, ComparerDesc);
+                Array.Sort(fields, 0, count, ComparerDesc);
                 break;
         }
         for (int n = 0; n < count; n++) {
-            ids[n] = entries[n].id;
+            ids[n] = fields[n].id;
         }
+        return fields;
     }
 }

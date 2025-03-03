@@ -199,9 +199,10 @@ public sealed class EntityList : IList<Entity>
     
 #region sort
     [Obsolete("WIP")]
-    public void SortByComponentField<TComponent,TField>(string memberName, SortOrder sortOrder) where TComponent : struct, IComponent
+    public SortField<TField>[] SortByComponentField<TComponent,TField>(string memberName, SortOrder sortOrder, SortField<TField>[] fields = null)
+        where TComponent : struct, IComponent
     {
-        ComponentField<TField>.Sort<TComponent>(this, memberName, sortOrder);
+        return SortField<TField>.Sort<TComponent>(this, memberName, sortOrder, fields);
     }
     #endregion
     
