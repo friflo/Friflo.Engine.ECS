@@ -47,6 +47,11 @@ public struct MyComponent6 : IComponent { public int b; }
 [ComponentKey("my7")]
 public struct MyComponent7 : IComponent { public int b; }
 
+public struct MyPropertyComponent : IComponent
+{
+    public int value { private get;  set; } // ensure access to private getter
+}
+
 /// <summary>
 /// Component contains a non blittable field typ. This requires a <see cref="CopyValue"/> method.
 /// </summary>

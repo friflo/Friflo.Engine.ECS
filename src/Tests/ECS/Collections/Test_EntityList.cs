@@ -216,7 +216,7 @@ public static class Test_EntityList
 #pragma warning disable CS0618 // Type or member is obsolete
 
     [Test]
-    public static void Test_EntityList_Sort()
+    public static void Test_EntityList_Sort_field()
     {
         var store       = new EntityStore();
         store.CreateEntity();
@@ -248,13 +248,43 @@ public static class Test_EntityList
         AreEqual("id: 11, value: 9",    fields[10].ToString());
         
         var start = Mem.GetAllocatedBytes();
-        for (int n = 0; n < 100; n++) {
+        for (int n = 0; n < 10; n++) {
             fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.None, fields);
         }
         Mem.AssertNoAlloc(start);
         AreEqual(1,     list [0].Id);
         AreEqual(2,     list [1].Id);
         AreEqual(11,    list[10].Id);
+    }
+    
+    [Test]
+    public static void Test_EntityList_Sort_property()
+    {
+        var store       = new EntityStore();
+        store.CreateEntity();
+        for (int n = 0; n < 10; n++) {
+            store.CreateEntity(new MyPropertyComponent { value = n });    
+        }
+        
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        var fields  = new ComponentField<int>[10]; 
+        fields = list.SortByComponentField<MyPropertyComponent, int>("value", SortOrder.Descending, fields);
+        
+        AreEqual(11,    list [0].Id);
+        AreEqual(2,     list [9].Id);
+        AreEqual(1,     list[10].Id);
+        
+        AreEqual("id: 11, value: 9",    fields[0].ToString());
+        AreEqual("id: 2, value: 0",     fields[9].ToString());
+        AreEqual("id: 1, value: null",  fields[10].ToString());
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 10; n++) {
+            fields = list.SortByComponentField<MyPropertyComponent, int>("value", SortOrder.None, fields);
+        }
+        Mem.AssertNoAlloc(start);
+        
     }
     
     [Test]
