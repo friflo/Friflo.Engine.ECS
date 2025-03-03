@@ -249,7 +249,7 @@ public static class Test_EntityList
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
-            fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.None, fields);
+            fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.Ascending, fields);
         }
         Mem.AssertNoAlloc(start);
         AreEqual(1,     list [0].Id);
@@ -281,10 +281,9 @@ public static class Test_EntityList
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
-            fields = list.SortByComponentField<MyPropertyComponent, int>("value", SortOrder.None, fields);
+            fields = list.SortByComponentField<MyPropertyComponent, int>("value", SortOrder.Ascending, fields);
         }
         Mem.AssertNoAlloc(start);
-        
     }
     
     [Test]
@@ -304,7 +303,7 @@ public static class Test_EntityList
         var list    = query.ToEntityList();
         var fields  = Array.Empty<ComponentField<int>>();
         for (int n = 0; n < repeat; n++) {
-            fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.None, fields);
+            fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.Ascending, fields);
         }
         Console.WriteLine($"Test_EntityList_Sort_Perf - count: {count}, repeat: {repeat}, stopWatch: {stopWatch.ElapsedMilliseconds} ms");
     }

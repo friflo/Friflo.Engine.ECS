@@ -33,23 +33,7 @@ internal static class TypeMember<TComponent, TField>
 internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
 
 
-internal class GenericComparerAsc<TField> : IComparer<ComponentField<TField>>
-    where TField : IComparable<TField>
-{
-    public int Compare(ComponentField<TField> e1, ComponentField<TField> e2) {
-        var hasValueDiff = e1.hasField - e2.hasField;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e1.field, e2.field);
-    }
-}
-    
-internal class GenericComparerDesc<TField> : IComparer<ComponentField<TField>>
-    where TField : IComparable<TField>
-{
-    public int Compare(ComponentField<TField> e1, ComponentField<TField> e2) {
-        var hasValueDiff = e2.hasField - e1.hasField;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e2.field, e1.field);
-    }
-}
+
 
 public struct ComponentField<TField> where TField : IComparable<TField>
 {
@@ -63,9 +47,38 @@ public struct ComponentField<TField> where TField : IComparable<TField>
         }
         return $"id: {entityId}, value: {field}";
     }
+    
+#if !NET5_0_OR_GREATER
+    private class GenericComparerAsc : IComparer<ComponentField<TField>>
+    {
+        public int Compare(ComponentField<TField> e1, ComponentField<TField> e2) {
+            var hasValueDiff = e1.hasField - e2.hasField;
+            return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e1.field, e2.field);
+        }
+    }
+    
+    private class GenericComparerDesc : IComparer<ComponentField<TField>>
+    {
+        public int Compare(ComponentField<TField> e1, ComponentField<TField> e2) {
+            var hasValueDiff = e2.hasField - e1.hasField;
+            return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e2.field, e1.field);
+        }
+    }
 
-    private static readonly GenericComparerAsc<TField>  ComparerAsc  = new GenericComparerAsc<TField>();
-    private static readonly GenericComparerDesc<TField> ComparerDesc = new GenericComparerDesc<TField>();
+    private static readonly GenericComparerAsc  ComparerAsc  = new ();
+    private static readonly GenericComparerDesc ComparerDesc = new ();
+#endif
+
+    private static readonly Comparison<ComponentField<TField>> ComparisonAsc = (e1, e2) => {
+        var hasValueDiff = e1.hasField - e2.hasField;
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e1.field, e2.field);
+    };
+    
+    private static readonly Comparison<ComponentField<TField>> ComparisonDesc = (e1, e2) => {
+        var hasValueDiff = e2.hasField - e1.hasField;
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e2.field, e1.field);
+    };
+
     
     internal static ComponentField<TField>[] Sort<TComponent>(EntityList  entities, string memberName, SortOrder sortOrder, ComponentField<TField>[] fields)
         where TComponent : struct, IComponent
@@ -99,10 +112,20 @@ public struct ComponentField<TField> where TField : IComparable<TField>
             case SortOrder.None:
                 return fields;
             case SortOrder.Ascending:
+                Span<ComponentField<TField>> span = new Span<ComponentField<TField>>(fields, 0, count);
+#if NET5_0_OR_GREATER
+                span.Sort(ComparisonAsc);
+#else
                 Array.Sort(fields, 0, count, ComparerAsc);  // allocates a single System.Comparision<ComponentField<>> instance
+#endif
                 break;
             case SortOrder.Descending:
-                Array.Sort(fields, 0, count, ComparerDesc); // allocates a single System.Comparision<ComponentField<>> instance
+                span = new Span<ComponentField<TField>>(fields, 0, count);
+#if NET5_0_OR_GREATER
+                span.Sort(ComparisonDesc);
+#else
+                Array.Sort(fields, 0, count, ComparerDesc);  // allocates a single System.Comparision<ComponentField<>> instance
+#endif
                 break;
         }
         for (int n = 0; n < count; n++) {
