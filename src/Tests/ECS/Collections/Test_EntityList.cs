@@ -226,13 +226,13 @@ public static class Test_EntityList
         
         var query   = store.Query();
         var list    = query.ToEntityList();
-        list.SortByComponentField<MyComponent1, int>("a", SortOrder.Descending);
+        list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.Descending);
         
         AreEqual(11,    list [0].Id);
         AreEqual(2,     list [9].Id);
         AreEqual(1,     list[10].Id);
         
-        list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
+        list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.Ascending);
         
         AreEqual(1,     list [0].Id);
         AreEqual(2,     list [1].Id);
@@ -240,7 +240,7 @@ public static class Test_EntityList
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 100; n++) {
-            list.SortByComponentField<MyComponent1, int>("a", SortOrder.None);
+            list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.None);
         }
         Mem.AssertNoAlloc(start);
         AreEqual(1,     list [0].Id);
@@ -251,7 +251,7 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_Sort_Perf()
     {
-        int count   = 10; // 1_000_000;
+        int count   = 1_000_000; // 1_000_000;
         int repeat  = 1000;
         // Test_EntityList_Sort_Perf - count: 1000000, repeat: 1000, stopWatch: 2149 ms
         var store   = new EntityStore();
@@ -264,7 +264,7 @@ public static class Test_EntityList
         var query   = store.Query();
         var list    = query.ToEntityList();
         for (int n = 0; n < repeat; n++) {
-            list.SortByComponentField<MyComponent1, int>("a", SortOrder.None);
+            list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.None);
         }
         Console.WriteLine($"Test_EntityList_Sort_Perf - count: {count}, repeat: {repeat}, stopWatch: {stopWatch.ElapsedMilliseconds} ms");
     }
