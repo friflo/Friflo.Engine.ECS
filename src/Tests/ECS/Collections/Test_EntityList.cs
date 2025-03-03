@@ -226,7 +226,7 @@ public static class Test_EntityList
         
         var query   = store.Query();
         var list    = query.ToEntityList();
-        var fields  = new SortField<int>[10]; 
+        var fields  = new ComponentField<int>[10]; 
         fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.Descending, fields);
         
         AreEqual(11,    list [0].Id);
@@ -272,7 +272,7 @@ public static class Test_EntityList
         stopWatch.Start();
         var query   = store.Query();
         var list    = query.ToEntityList();
-        var fields  = Array.Empty<SortField<int>>();
+        var fields  = Array.Empty<ComponentField<int>>();
         for (int n = 0; n < repeat; n++) {
             fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.None, fields);
         }
