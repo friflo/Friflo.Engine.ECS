@@ -35,7 +35,7 @@ internal class GenericComparerAsc<T> : IComparer<SortField<T>>
 {
     public int Compare(SortField<T> e1, SortField<T> e2) {
         var hasValueDiff = e1.hasValue - e2.hasValue;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e1.value, e2.value);
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e1.fieldValue, e2.fieldValue);
     }
 }
     
@@ -43,16 +43,23 @@ internal class GenericComparerDesc<T> : IComparer<SortField<T>>
 {
     public int Compare(SortField<T> e1, SortField<T> e2) {
         var hasValueDiff = e2.hasValue - e1.hasValue;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e2.value, e1.value);
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e2.fieldValue, e1.fieldValue);
     }
 }
 
 public struct SortField<TField>
 {
-    public  int     id;
+    public  int     entityId;
     public  byte    hasValue;
-    public  TField  value;
-    
+    public  TField  fieldValue;
+
+    public override string ToString() {
+        if (hasValue == 0) {
+            return $"id: {entityId}, value: null";    
+        }
+        return $"id: {entityId}, value: {fieldValue}";
+    }
+
     private static readonly GenericComparerAsc<TField>  ComparerAsc  = new GenericComparerAsc<TField>();
     private static readonly GenericComparerDesc<TField> ComparerDesc = new GenericComparerDesc<TField>();
     
@@ -74,13 +81,13 @@ public struct SortField<TField>
             ref var node    = ref nodes[id];
             var heap        = node.archetype?.heapMap[structIndex];
             ref var entry   = ref fields[index];
-            entry.id        = id;
+            entry.entityId  = id;
             if (heap == null) {
                 entry.hasValue = 0;
                 continue;
             }
             ref var component = ref ((StructHeap<TComponent>)heap).components[node.compIndex];
-            entry.value     = getter(component);
+            entry.fieldValue     = getter(component);
             entry.hasValue  = 1;
         }
 
@@ -95,7 +102,7 @@ public struct SortField<TField>
                 break;
         }
         for (int n = 0; n < count; n++) {
-            ids[n] = fields[n].id;
+            ids[n] = fields[n].entityId;
         }
         return fields;
     }

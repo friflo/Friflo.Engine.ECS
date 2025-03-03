@@ -233,11 +233,19 @@ public static class Test_EntityList
         AreEqual(2,     list [9].Id);
         AreEqual(1,     list[10].Id);
         
+        AreEqual("id: 11, value: 9",    fields[0].ToString());
+        AreEqual("id: 2, value: 0",     fields[9].ToString());
+        AreEqual("id: 1, value: null",  fields[10].ToString());
+        
         fields = list.SortByComponentField<MyComponent1, int>(nameof(MyComponent1.a), SortOrder.Ascending, fields);
         
         AreEqual(1,     list [0].Id);
         AreEqual(2,     list [1].Id);
         AreEqual(11,    list[10].Id);
+        
+        AreEqual("id: 1, value: null",  fields[0].ToString());
+        AreEqual("id: 2, value: 0",     fields[1].ToString());
+        AreEqual("id: 11, value: 9",    fields[10].ToString());
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 100; n++) {
