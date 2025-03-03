@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 
 
 namespace Friflo.Engine.ECS;
@@ -32,24 +33,27 @@ internal static class ComponentField<TComponent, TField>  where TComponent : str
 internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component) where TComponent : struct;
 
 
-internal class GenericComparerAsc<T> : IComparer<ComponentField<T>> {
+internal class GenericComparerAsc<T> : IComparer<ComponentField<T>>
+{
     public int Compare(ComponentField<T> e1, ComponentField<T> e2) {
-        return Comparer<T>.Default.Compare(e1.value, e2.value);
+        var hasValueDiff = e1.hasValue - e2.hasValue;
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e1.value, e2.value);
     }
 }
     
-internal class GenericComparerDesc<T> : IComparer<ComponentField<T>> {
+internal class GenericComparerDesc<T> : IComparer<ComponentField<T>>
+{
     public int Compare(ComponentField<T> e1, ComponentField<T> e2) {
-        return Comparer<T>.Default.Compare(e2.value, e1.value);
+        var hasValueDiff = e2.hasValue - e1.hasValue;
+        return hasValueDiff != 0 ? hasValueDiff : Comparer<T>.Default.Compare(e2.value, e1.value);
     }
 }
 
 internal struct ComponentField<TField>
 {
-    private     int id;
-#nullable enable
-    internal    TField?  value;
-#nullable disable
+    private     int     id;
+    internal    byte    hasValue;
+    internal    TField  value;
     
     private static          ComponentField<TField>[]    SortEntriesArray = [];
     private static readonly GenericComparerAsc<TField>  ComparerAsc  = new GenericComparerAsc<TField>();
@@ -76,11 +80,12 @@ internal struct ComponentField<TField>
             ref var entry   = ref entries[index++];
             entry.id        = id;
             if (heap == null) {
-                entry.value = default;
+                entry.hasValue = 0;
                 continue;
             }
             ref var component = ref ((StructHeap<TComponent>)heap).components[node.compIndex];
-            entry.value = getter(component);
+            entry.value     = getter(component);
+            entry.hasValue  = 1;
         }
 
         switch (sortOrder) {

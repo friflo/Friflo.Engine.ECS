@@ -218,50 +218,55 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_Sort()
     {
-        var store   = new EntityStore();
+        var store       = new EntityStore();
         store.CreateEntity();
-        store.CreateEntity(new MyComponent1 { a = 1 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-        store.CreateEntity(new MyComponent1 { a = 2 });
-
+        for (int n = 0; n < 10; n++) {
+            store.CreateEntity(new MyComponent1 { a = n });    
+        }
+        
         var query   = store.Query();
         var list    = query.ToEntityList();
         list.SortByComponentField<MyComponent1, int>("a", SortOrder.Descending);
-
+        
+        AreEqual(11,    list [0].Id);
+        AreEqual(2,     list [9].Id);
+        AreEqual(1,     list[10].Id);
         
         list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
         
+        AreEqual(1,     list [0].Id);
+        AreEqual(2,     list [1].Id);
+        AreEqual(11,    list[10].Id);
+        
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 100; n++) {
-            list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
+            list.SortByComponentField<MyComponent1, int>("a", SortOrder.None);
         }
-        // Mem.AssertNoAlloc(start);
+        Mem.AssertNoAlloc(start);
+        AreEqual(1,     list [0].Id);
+        AreEqual(2,     list [1].Id);
+        AreEqual(11,    list[10].Id);
     }
     
     [Test]
     public static void Test_EntityList_Sort_Perf()
     {
-        int count   = 10; // 100_000;
+        int count   = 10; // 1_000_000;
         int repeat  = 1000;
+        // Test_EntityList_Sort_Perf - count: 1000000, repeat: 1000, stopWatch: 2149 ms
         var store   = new EntityStore();
         store.CreateEntity();
         for (int n = 0; n < count; n++) {
             store.CreateEntity(new MyComponent1 { a = n });
         }
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
         var query   = store.Query();
         var list    = query.ToEntityList();
         for (int n = 0; n < repeat; n++) {
-            list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
+            list.SortByComponentField<MyComponent1, int>("a", SortOrder.None);
         }
+        Console.WriteLine($"Test_EntityList_Sort_Perf - count: {count}, repeat: {repeat}, stopWatch: {stopWatch.ElapsedMilliseconds} ms");
     }
         
 }
