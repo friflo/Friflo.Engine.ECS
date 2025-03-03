@@ -279,6 +279,10 @@ public static class Test_EntityList
         AreEqual("id: 2, value: 0",     fields[9].ToString());
         AreEqual("id: 1, value: null",  fields[10].ToString());
         
+        AreEqual(11,    fields[0].entityId);
+        AreEqual(9,     fields[0].field);
+        AreEqual(1,     fields[0].hasField);
+        
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
             fields = list.SortByComponentField<MyPropertyComponent, int>("value", SortOrder.Ascending, fields);
