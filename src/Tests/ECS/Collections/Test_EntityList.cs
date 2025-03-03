@@ -212,6 +212,58 @@ public static class Test_EntityList
         });
         AreEqual("EntityList must be empty when calling SetStore()", e!.Message);
     }
+    
+#pragma warning disable CS0618 // Type or member is obsolete
+
+    [Test]
+    public static void Test_EntityList_Sort()
+    {
+        var store   = new EntityStore();
+        store.CreateEntity();
+        store.CreateEntity(new MyComponent1 { a = 1 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+        store.CreateEntity(new MyComponent1 { a = 2 });
+
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        list.SortByComponentField<MyComponent1, int>("a", SortOrder.Descending);
+
+        
+        list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 100; n++) {
+            list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
+        }
+        // Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
+    public static void Test_EntityList_Sort_Perf()
+    {
+        int count   = 10; // 100_000;
+        int repeat  = 1000;
+        var store   = new EntityStore();
+        store.CreateEntity();
+        for (int n = 0; n < count; n++) {
+            store.CreateEntity(new MyComponent1 { a = n });
+        }
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        for (int n = 0; n < repeat; n++) {
+            list.SortByComponentField<MyComponent1, int>("a", SortOrder.Ascending);
+        }
+    }
+        
 }
 
 }

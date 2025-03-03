@@ -86,7 +86,7 @@ public sealed class EntityList : IList<Entity>
         ids = newIds;
     }
     #endregion
-
+    
 #region add entities
     /// <summary> Removes all entities from the <see cref="EntityList"/>. </summary>
     public void Clear()
@@ -194,6 +194,18 @@ public sealed class EntityList : IList<Entity>
         foreach (var id in Ids) {
             store.ApplyBatchTo(batch, id);
         }
+    }
+    #endregion
+    
+#region sort
+    private static readonly SortArgs SortArgs = new ();
+    
+    [Obsolete("WIP")]
+    public void SortByComponentField<TComponent,TField>(string memberName, SortOrder sortOrder) where TComponent : struct, IComponent
+    {
+        var structIndex = StructInfo<TComponent>.Index;
+        SortArgs.Set(this, structIndex, memberName, sortOrder);
+        ComponentField<TField>.Sort<TComponent>(SortArgs);
     }
     #endregion
     
