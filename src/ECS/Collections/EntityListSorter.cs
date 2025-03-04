@@ -124,16 +124,16 @@ public struct ComponentField<TField>
             case SortOrder.None:
                 return fields;
             case SortOrder.Ascending:
-                Span<ComponentField<TField>> span = new Span<ComponentField<TField>>(fields, 0, count);
 #if NET5_0_OR_GREATER
+                Span<ComponentField<TField>> span = new Span<ComponentField<TField>>(fields, 0, count);
                 span.Sort(ComparisonAsc);
 #else
                 Array.Sort(fields, 0, count, ComparerAsc);  // allocates a single System.Comparision<ComponentField<>> instance
 #endif
                 break;
             case SortOrder.Descending:
-                span = new Span<ComponentField<TField>>(fields, 0, count);
 #if NET5_0_OR_GREATER
+                span = new Span<ComponentField<TField>>(fields, 0, count);
                 span.Sort(ComparisonDesc);
 #else
                 Array.Sort(fields, 0, count, ComparerDesc);  // allocates a single System.Comparision<ComponentField<>> instance
