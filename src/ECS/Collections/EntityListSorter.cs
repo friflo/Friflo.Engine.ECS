@@ -33,7 +33,7 @@ internal static class TypeMember<TComponent, TField>
 internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
 
 
-public struct ComponentField<TField> where TField : IComparable<TField>
+public struct ComponentField<TField>
 {
     public  int     entityId;
     public  byte    hasField;

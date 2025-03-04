@@ -201,7 +201,6 @@ public sealed class EntityList : IList<Entity>
     [Obsolete("WIP")]
     public ComponentField<TField>[] SortByComponentField<TComponent,TField>(string memberName, SortOrder sortOrder, ComponentField<TField>[] fields = null)
         where TComponent    : struct, IComponent
-        where TField        : IComparable<TField>
     {
         return ComponentField<TField>.Sort<TComponent>(this, memberName, sortOrder, fields);
     }

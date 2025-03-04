@@ -52,6 +52,25 @@ public struct MyPropertyComponent : IComponent
     public int value { private get;  set; } // ensure access to private getter
 }
 
+public struct MyEnumComponent : IComponent {
+    public SortEnum value;
+}
+
+public enum SortEnum
+{
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+
 /// <summary>
 /// Component contains a non blittable field typ. This requires a <see cref="CopyValue"/> method.
 /// </summary>
