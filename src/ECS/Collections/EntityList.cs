@@ -198,6 +198,10 @@ public sealed class EntityList : IList<Entity>
     #endregion
     
 #region sort
+    /// <summary>
+    /// Sort the entities by the component field/property with the given <see cref="memberName"/>.<br/> 
+    /// </summary>
+    /// <returns>An array containing all entity id and their field/property value.</returns>
     [Obsolete("WIP")]
     public ComponentField<TField>[] SortByComponentField<TComponent,TField>(string memberName, SortOrder sortOrder, ComponentField<TField>[] fields = null)
         where TComponent    : struct, IComponent

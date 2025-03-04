@@ -5,10 +5,20 @@ using System.Linq.Expressions;
 
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Specify the sort order in <see cref="EntityList.SortByComponentField{TComponent,TField}"/>.
+/// </summary>
 public enum SortOrder
 {
+    /// <summary>
+    /// Leave entity order unchanged.<br/>
+    /// A custom sort can be applied to the <see cref="ComponentField{TField}"/> array returned
+    /// by <see cref="EntityList.SortByComponentField{TComponent,TField}"/>.
+    /// </summary> 
     None,
+    /// Sort entities in ascending order
     Ascending,
+    /// Sort entities in descending order
     Descending
 }
 
@@ -32,11 +42,16 @@ internal static class TypeMember<TComponent, TField>
 
 internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
 
-
+/// <summary>
+/// Contains an entity and its component field/property value returned by <see cref="EntityList.SortByComponentField{TComponent,TField}"/>. 
+/// </summary>
 public struct ComponentField<TField>
 {
+    /// Entity id
     public  int     entityId;
+    /// Is 1 if the entity has a component field. Otherwise, 0.
     public  byte    hasField;
+    /// The component field value if <see cref="hasField"/> == 1.
     public  TField  field;
 
     public override string ToString() {
