@@ -101,8 +101,7 @@ public struct ComponentField<TField>
                 entry.hasField = 0;
                 continue;
             }
-            ref var component = ref ((StructHeap<TComponent>)heap).components[node.compIndex];
-            entry.field     = getter(component);
+            entry.field     = getter(((StructHeap<TComponent>)heap).components[node.compIndex]);
             entry.hasField  = 1;
         }
 
