@@ -65,16 +65,20 @@ public struct ComponentField<TField>
     private class GenericComparerAsc : IComparer<ComponentField<TField>>
     {
         public int Compare(ComponentField<TField> e1, ComponentField<TField> e2) {
-            var hasValueDiff = e1.hasField - e2.hasField;
-            return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e1.field, e2.field);
+            if (e1.hasField == 1 && e2.hasField == 1) {
+                return Comparer<TField>.Default.Compare(e1.field, e2.field);
+            }
+            return e1.hasField - e2.hasField;
         }
     }
     
     private class GenericComparerDesc : IComparer<ComponentField<TField>>
     {
         public int Compare(ComponentField<TField> e1, ComponentField<TField> e2) {
-            var hasValueDiff = e2.hasField - e1.hasField;
-            return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e2.field, e1.field);
+            if (e1.hasField == 1 && e2.hasField == 1) {
+                return Comparer<TField>.Default.Compare(e2.field, e1.field);
+            }
+            return e2.hasField - e1.hasField;
         }
     }
 
@@ -83,13 +87,17 @@ public struct ComponentField<TField>
 #endif
 
     private static readonly Comparison<ComponentField<TField>> ComparisonAsc = (e1, e2) => {
-        var hasValueDiff = e1.hasField - e2.hasField;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e1.field, e2.field);
+        if (e1.hasField == 1 && e2.hasField == 1) {
+            return Comparer<TField>.Default.Compare(e1.field, e2.field);
+        }
+        return e1.hasField - e2.hasField;
     };
     
     private static readonly Comparison<ComponentField<TField>> ComparisonDesc = (e1, e2) => {
-        var hasValueDiff = e2.hasField - e1.hasField;
-        return hasValueDiff != 0 ? hasValueDiff : Comparer<TField>.Default.Compare(e2.field, e1.field);
+        if (e1.hasField == 1 && e2.hasField == 1) {
+            return Comparer<TField>.Default.Compare(e2.field, e1.field);
+        }
+        return e2.hasField - e1.hasField;
     };
 
     
@@ -113,7 +121,8 @@ public struct ComponentField<TField>
             ref var entry   = ref fields[index];
             entry.entityId  = id;
             if (heap == null) {
-                entry.hasField = 0;
+                entry.hasField  = 0;
+                entry.field     = default;
                 continue;
             }
             entry.field     = getter(((StructHeap<TComponent>)heap).components[node.compIndex]);
