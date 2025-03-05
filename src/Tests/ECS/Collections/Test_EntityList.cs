@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -185,6 +186,46 @@ public static class Test_EntityList
         
         list[1] = list[0];
         AreEqual(list[1], list[0]);
+    }
+    
+    [Test]
+    public static void Test_EntityList_IList_mutate()
+    {
+        var store   = new EntityStore();
+        var list    = new EntityList(store);
+
+        for (int n = 0; n < 5; n++) {
+            var entity = store.CreateEntity(n + 1);
+            list.Add(entity);
+        }
+        // --- RemoveAt()
+        list.RemoveAt(1);
+        AreEqual("{ 1, 3, 4, 5 }", list.Debug());
+        
+        Throws<IndexOutOfRangeException>(() => {
+            list.RemoveAt(4);
+        });
+        // --- Insert
+        var entity6 = store.CreateEntity(6);
+        list.Insert(3, entity6);
+        AreEqual("{ 1, 3, 4, 6, 5 }", list.Debug());
+        
+        Throws<IndexOutOfRangeException>(() => {
+            list.RemoveAt(5);
+        });
+        // --- IndexOf() / Contains()
+        AreEqual(3, list.IndexOf(entity6));
+        IsTrue  (   list.Contains(entity6));
+        
+        var entity7 = store.CreateEntity(7);
+        AreEqual(-1, list.IndexOf(entity7));
+        IsFalse (    list.Contains(entity7));
+        
+        // --- Remove()
+        IsTrue(list.Remove(entity6));
+        AreEqual("{ 1, 3, 4, 5 }", list.Debug());
+        
+        IsFalse(list.Remove(entity7));
     }
     
     [Test]
