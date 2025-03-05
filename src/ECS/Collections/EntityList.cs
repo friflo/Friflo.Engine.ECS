@@ -215,7 +215,7 @@ public sealed class EntityList : IList<Entity>
     /// <summary> Return the entity at the given <paramref name="index"/>.</summary>
     public Entity this[int index]
     {
-        get => new Entity(entityStore, ids[index]);
+        get => (index >= 0 && index < count) ? new Entity(entityStore, ids[index]) : throw new IndexOutOfRangeException();
         set => ids[index] = value.Id;
     }
 

@@ -139,6 +139,9 @@ public static class Test_EntityList
         AreEqual(2,             list.Count);
         AreEqual(1,             list[0].Id);
         AreEqual(2,             list[1].Id);
+        Throws<IndexOutOfRangeException>(() => {
+            _ = list[2];
+        });
         {
             int count = 0;
             foreach (var entity in list) {
