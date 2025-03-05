@@ -238,7 +238,7 @@ public sealed class EntityList : IList<Entity>
     }
 
     public void Insert  (int index, Entity item) {
-        if (index < 0 || index >= Count) throw new IndexOutOfRangeException();
+        if (index < 0 || index >= count) throw new IndexOutOfRangeException();
         if (ids.Length == count) {
             ResizeIds();
         }
@@ -248,7 +248,7 @@ public sealed class EntityList : IList<Entity>
     }
 
     public void RemoveAt(int index) {
-        if (index < 0 || index >= Count) throw new IndexOutOfRangeException();
+        if (index < 0 || index >= count) throw new IndexOutOfRangeException();
         var len = count-- - index;
         Array.Copy(ids, index + 1, ids, index, len);
     }
