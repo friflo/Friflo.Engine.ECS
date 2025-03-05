@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -365,6 +364,41 @@ public static class Test_EntityList
             fields = list.SortByComponentField<MyEnumComponent, SortEnum>("value", SortOrder.Ascending, fields);
         }
         Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
+    public static void Test_EntityList_Sort_Entity()
+    {
+        var store       = new EntityStore();
+        store.CreateEntity();
+        var entities = new List<Entity>();
+        
+        for (int n = 0; n < 20; n++) {
+            entities.Add(store.CreateEntity());
+        }
+        for (int n = 0; n < 10; n++) {
+            entities[n].AddComponent(new EntityReference { entity = entities[10 - n]});
+        }
+        entities[10].AddComponent(new EntityReference()); // add component with default entity
+        entities[11].AddComponent(new EntityReference()); // add component with default entity
+        
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        var fields  = new ComponentField<Entity>[10]; 
+        fields = list.SortByComponentField<EntityReference, Entity>("entity", SortOrder.Descending, fields);
+        
+        AreEqual("{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 12, 14, 15, 16, 17, 18, 19, 20, 21, 1 }", list.Debug());
+        
+        AreEqual("id: 2, value: id: 12  [EntityReference]", fields[0].ToString());
+        AreEqual("id: 11, value: id: 3  [EntityReference]", fields[9].ToString());
+        AreEqual("id: 13, value: null",                     fields[10].ToString());
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 10; n++) {
+            fields = list.SortByComponentField<EntityReference, Entity>("entity", SortOrder.Ascending, fields);
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual("{ 1, 20, 19, 18, 17, 16, 15, 14, 21, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 }", list.Debug());
     }
     
     [Test]

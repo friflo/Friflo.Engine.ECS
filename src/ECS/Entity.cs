@@ -177,7 +177,7 @@ namespace Friflo.Engine.ECS;
 [CLSCompliant(true)]
 [StructLayout(LayoutKind.Explicit)]
 [Json.Fliox.TypeMapper(typeof(Serialize.TypeMapperEntity))]
-public readonly partial struct Entity : IEquatable<Entity>
+public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
 {
     // ------------------------------------ general properties ------------------------------------
 #region general properties
@@ -683,6 +683,13 @@ public readonly partial struct Entity : IEquatable<Entity>
 
     // --- IEquatable<T>
     public          bool    Equals(Entity other)                => rawEntity == other.rawEntity && store == other.store;
+
+    // --- IComparable<T>
+    public          int     CompareTo(Entity other) {
+        if (Id < other.Id) return -1;
+        if (Id > other.Id) return +1;
+        return 0;
+    }
 
     // --- object
     public override bool    Equals(object obj) {
