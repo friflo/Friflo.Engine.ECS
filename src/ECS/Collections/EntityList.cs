@@ -249,7 +249,7 @@ public sealed class EntityList : IList<Entity>
 
     public void RemoveAt(int index) {
         if (index < 0 || index >= count) throw new IndexOutOfRangeException();
-        var len = count-- - index;
+        var len = --count - index;
         Array.Copy(ids, index + 1, ids, index, len);
     }
     
