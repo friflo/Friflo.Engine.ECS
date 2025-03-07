@@ -71,3 +71,20 @@ public sealed class GenericInstanceTypeAttribute : Attribute {
     /// <summary> Register generic component / tag type with three generic parameters. </summary>
     public GenericInstanceTypeAttribute (string componentKey, Type type1, Type type2, Type type3) { }
 }
+
+
+#region Friflo ImGui attributes 
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class UiTypeDrawerAttribute : Attribute
+{ 
+    // ReSharper disable once UnusedParameter.Local
+    public UiTypeDrawerAttribute(string style) { }
+}
+
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class UiDragAttribute : Attribute
+{ 
+    // ReSharper disable once UnusedParameter.Local
+    public UiDragAttribute(float speed = 1, float min = 0, float max= 0, string? format = null) { }
+}
+#endregion
