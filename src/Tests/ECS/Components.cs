@@ -205,6 +205,16 @@ public struct TestTag4 : ITag { }
 
 public struct TestTag5 : ITag { }
 
+public struct TestTag6 : ITag { }
+
+public struct TestTag7 : ITag { }
+
+public struct TestTag8 : ITag { }
+
+public struct TestTag9 : ITag { }
+
+public struct TestTag10 : ITag { }
+
 
 // ------------------------------------------------ scripts
 [CodeCoverageTest]

@@ -240,6 +240,22 @@ public static class Test_QueryTags
         query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().WithoutAllTags(allTags).WithoutAnyTags(anyTags);
         AreEqual("1, 3, 4, 5, 6",  query.Ids());
     }
+    
+    [Test]
+    public static void Test_Tags_Get()
+    {
+        AreEqual(1,  Tags.Get<TestTag>().Count);
+        AreEqual(2,  Tags.Get<TestTag, TestTag2>().Count);
+        AreEqual(3,  Tags.Get<TestTag, TestTag2, TestTag3>().Count);
+        AreEqual(4,  Tags.Get<TestTag, TestTag2, TestTag3, TestTag4>().Count);
+        AreEqual(5,  Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5>().Count);
+        AreEqual(6,  Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5, TestTag6>().Count);
+        AreEqual(7,  Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5, TestTag6, TestTag7>().Count);
+        AreEqual(8,  Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5, TestTag6, TestTag7, TestTag8>().Count);
+        AreEqual(9,  Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5, TestTag6, TestTag7, TestTag8, TestTag9>().Count);
+        AreEqual(10, Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5, TestTag6, TestTag7, TestTag8, TestTag9, TestTag10>().Count);
+    }
+    
 }
 
 }

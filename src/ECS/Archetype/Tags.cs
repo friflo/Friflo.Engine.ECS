@@ -216,6 +216,117 @@ public struct Tags : IEnumerable<TagType>, IEquatable<Tags>
         return tags;
     }
     
+    public static Tags Get<T1, T2, T3, T4, T5, T6>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+        where T5 : struct, ITag
+        where T6 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
+        tags.bitSet.SetBit(TagInfo<T5>.Index);
+        tags.bitSet.SetBit(TagInfo<T6>.Index);
+        return tags;
+    }
+    
+    public static Tags Get<T1, T2, T3, T4, T5, T6, T7>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+        where T5 : struct, ITag
+        where T6 : struct, ITag
+        where T7 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
+        tags.bitSet.SetBit(TagInfo<T5>.Index);
+        tags.bitSet.SetBit(TagInfo<T6>.Index);
+        tags.bitSet.SetBit(TagInfo<T7>.Index);
+        return tags;
+    }
+    
+    public static Tags Get<T1, T2, T3, T4, T5, T6, T7, T8>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+        where T5 : struct, ITag
+        where T6 : struct, ITag
+        where T7 : struct, ITag
+        where T8 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
+        tags.bitSet.SetBit(TagInfo<T5>.Index);
+        tags.bitSet.SetBit(TagInfo<T6>.Index);
+        tags.bitSet.SetBit(TagInfo<T7>.Index);
+        tags.bitSet.SetBit(TagInfo<T8>.Index);
+        return tags;
+    }
+    
+    public static Tags Get<T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+        where T5 : struct, ITag
+        where T6 : struct, ITag
+        where T7 : struct, ITag
+        where T8 : struct, ITag
+        where T9 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
+        tags.bitSet.SetBit(TagInfo<T5>.Index);
+        tags.bitSet.SetBit(TagInfo<T6>.Index);
+        tags.bitSet.SetBit(TagInfo<T7>.Index);
+        tags.bitSet.SetBit(TagInfo<T8>.Index);
+        tags.bitSet.SetBit(TagInfo<T9>.Index);
+        return tags;
+    }
+    
+    
+    public static Tags Get<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+        where T5 : struct, ITag
+        where T6 : struct, ITag
+        where T7 : struct, ITag
+        where T8 : struct, ITag
+        where T9 : struct, ITag
+        where T10 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
+        tags.bitSet.SetBit(TagInfo<T5>.Index);
+        tags.bitSet.SetBit(TagInfo<T6>.Index);
+        tags.bitSet.SetBit(TagInfo<T7>.Index);
+        tags.bitSet.SetBit(TagInfo<T8>.Index);
+        tags.bitSet.SetBit(TagInfo<T9>.Index);
+        tags.bitSet.SetBit(TagInfo<T10>.Index);
+        return tags;
+    }
+    
     private readonly string GetString()
     {
         var sb          = new StringBuilder();

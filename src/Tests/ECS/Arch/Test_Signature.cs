@@ -64,6 +64,22 @@ public static class Test_Signature
         AreEqual(s4.ComponentTypes.ToString(), ct4);
         AreEqual(s5.ComponentTypes.ToString(), ct5);
     }
+    
+    [Test]
+    public static void Test_Signature_GetComponentTypes_Get()
+    {
+        AreEqual(1, ComponentTypes.Get<Position>().Count);
+        AreEqual(2, ComponentTypes.Get<Position, Rotation>().Count);
+        AreEqual(3, ComponentTypes.Get<Position, Rotation, Scale3>().Count);
+        AreEqual(4, ComponentTypes.Get<Position, Rotation, Scale3, EntityName>().Count);
+        AreEqual(5, ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1>().Count);
+        AreEqual(6, ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2>().Count);
+        AreEqual(7, ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3>().Count);
+        AreEqual(8, ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3, MyComponent4>().Count);
+        AreEqual(9, ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5>().Count);
+        AreEqual(10,ComponentTypes.Get<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6>().Count);
+        
+    }
 }
 
 }
