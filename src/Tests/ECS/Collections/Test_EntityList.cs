@@ -257,22 +257,41 @@ public static class Test_EntityList
     }
     
     [Test]
+    public static void Test_EntityList_Filter()
+    {
+        var store       = new EntityStore();
+        for (int n = 1; n <= 10; n++) {
+            store.CreateEntity(n);
+        }
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        AreEqual("{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }", list.Debug());
+        
+        store.GetEntityById(2).DeleteEntity();
+        store.GetEntityById(7).DeleteEntity();
+        store.GetEntityById(9).DeleteEntity();
+        
+        list.Filter(static entity => !entity.IsNull);
+        AreEqual(7, list.Count);
+        AreEqual("{ 1, 3, 4, 5, 6, 8, 10 }", list.Debug());
+    }
+    
+    [Test]
     public static void Test_EntityList_Sort_Id() {
         var store       = new EntityStore();
-        store.CreateEntity();
-        for (int n = 0; n < 5; n++) {
-            store.CreateEntity();
+        for (int n = 1; n <= 5; n++) {
+            store.CreateEntity(n);
         }
         var query   = store.Query();
         var list    = query.ToEntityList();
         
-        list.SortById(SortOrder.Descending);
-        list.SortById(SortOrder.None);
-        AreEqual("{ 6, 5, 4, 3, 2, 1 }", list.Debug());
+        list.SortByEntityId(SortOrder.Descending);
+        list.SortByEntityId(SortOrder.None);
+        AreEqual("{ 5, 4, 3, 2, 1 }", list.Debug());
         
-        list.SortById(SortOrder.Ascending);
-        list.SortById(SortOrder.None);
-        AreEqual("{ 1, 2, 3, 4, 5, 6 }", list.Debug());
+        list.SortByEntityId(SortOrder.Ascending);
+        list.SortByEntityId(SortOrder.None);
+        AreEqual("{ 1, 2, 3, 4, 5 }", list.Debug());
     }
     
 

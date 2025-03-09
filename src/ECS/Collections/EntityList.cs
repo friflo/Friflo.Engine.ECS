@@ -196,7 +196,7 @@ public sealed class EntityList : IList<Entity>
     }
     #endregion
     
-#region sort
+#region sort / filter
     /// <summary>
     /// Sort the entities by the component field/property with the given <see cref="memberName"/>.<br/> 
     /// </summary>
@@ -213,7 +213,10 @@ public sealed class EntityList : IList<Entity>
     
     private static readonly IdComparerDesc IdDesc = new ();
     
-    public void SortById(SortOrder sortOrder)
+    /// <summary>
+    /// Sort the entities by entity Id.<br/> 
+    /// </summary>
+    public void SortByEntityId(SortOrder sortOrder)
     {
         if (sortOrder == SortOrder.None) {
             return;
@@ -223,6 +226,27 @@ public sealed class EntityList : IList<Entity>
         } else {
             Array.Sort(ids, 0, count, IdDesc); 
         }
+    }
+    
+    /// <summary>
+    /// Removes all entities not matching the passed filter
+    /// </summary>
+    public void Filter(Func<Entity, bool> filter)
+    {
+        var length      = count;
+        var store       = entityStore;
+        var idsLocal    = ids;
+        var nodes       = store.nodes;
+        var index       = 0;
+        for (int n = 0; n < length; n++)
+        {
+            var id = idsLocal[n];
+            var entity = new Entity(store, id, nodes[id].revision);
+            if (filter(entity)) {
+                idsLocal[index++] = id;
+            }
+        }
+        count = index;
     }
     #endregion
     
