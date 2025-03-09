@@ -256,7 +256,25 @@ public static class Test_EntityList
         AreEqual("EntityList must be empty when calling SetStore()", e!.Message);
     }
     
-#pragma warning disable CS0618 // Type or member is obsolete
+    [Test]
+    public static void Test_EntityList_Sort_Id() {
+        var store       = new EntityStore();
+        store.CreateEntity();
+        for (int n = 0; n < 5; n++) {
+            store.CreateEntity();
+        }
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        
+        list.SortById(SortOrder.Descending);
+        list.SortById(SortOrder.None);
+        AreEqual("{ 6, 5, 4, 3, 2, 1 }", list.Debug());
+        
+        list.SortById(SortOrder.Ascending);
+        list.SortById(SortOrder.None);
+        AreEqual("{ 1, 2, 3, 4, 5, 6 }", list.Debug());
+    }
+    
 
     [Test]
     public static void Test_EntityList_Sort_field()

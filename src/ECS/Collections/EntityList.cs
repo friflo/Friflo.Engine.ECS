@@ -206,6 +206,24 @@ public sealed class EntityList : IList<Entity>
     {
         return ComponentField<TField>.Sort<TComponent>(this, memberName, sortOrder, fields);
     }
+    
+    private class IdComparerDesc : IComparer<int> {
+        public int Compare(int e1, int e2) => e2 - e1;
+    }
+    
+    private static readonly IdComparerDesc IdDesc = new ();
+    
+    public void SortById(SortOrder sortOrder)
+    {
+        if (sortOrder == SortOrder.None) {
+            return;
+        }
+        if (sortOrder == SortOrder.Ascending) {
+            Array.Sort(ids, 0, count, Comparer<int>.Default); 
+        } else {
+            Array.Sort(ids, 0, count, IdDesc); 
+        }
+    }
     #endregion
     
 #region IList<>
