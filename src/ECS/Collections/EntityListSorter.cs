@@ -48,17 +48,17 @@ internal delegate TField MemberGetter<in TComponent, out TField> (TComponent com
 public struct ComponentField<TField>
 {
     /// Entity id
-    public  int     entityId;
+    public  RawEntity   entityId;
     /// Is 1 if the entity has a component field. Otherwise, 0.
-    public  byte    hasField;
+    public  byte        hasField;
     /// The component field value if <see cref="hasField"/> == 1.
-    public  TField  field;
+    public  TField      field;
 
     public override string ToString() {
         if (hasField == 0) {
-            return $"id: {entityId}, value: null";    
+            return $"id: {entityId.Id}, value: null";    
         }
-        return $"id: {entityId}, value: {field}";
+        return $"id: {entityId.Id}, value: {field}";
     }
     
 #if !NET5_0_OR_GREATER
@@ -116,7 +116,7 @@ public struct ComponentField<TField>
         for (int index = 0; index < count; index++)
         {
             var id          = ids[index];
-            ref var node    = ref nodes[id];
+            ref var node    = ref nodes[id.Id];
             var heap        = node.archetype?.heapMap[structIndex];
             ref var entry   = ref fields[index];
             entry.entityId  = id;

@@ -372,7 +372,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
     [Browse(Never)]
-    [FieldOffset(8)]    internal    readonly    RawEntity   rawEntity;  // (8)
+    [FieldOffset(8)]    public      readonly    RawEntity   RawEntity;  // (8)
     [FieldOffset(8)]    public      readonly    int         Id;         //  4
     [Browse(Never)]
     [FieldOffset(12)]   public      readonly    short       Revision;   //  2
@@ -676,13 +676,13 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     public          Entity  CloneEntity() => store.CloneEntity(this);
 
     /// <summary> Return true if the passed entities have the same <see cref="Entity.Id"/>'s. </summary>
-    public static   bool    operator == (Entity a, Entity b)    => a.rawEntity == b.rawEntity && a.store == b.store;
+    public static   bool    operator == (Entity a, Entity b)    => a.RawEntity == b.RawEntity && a.store == b.store;
     
     /// <summary> Return true if the passed entities have the different <see cref="Entity.Id"/>'s. </summary>
-    public static   bool    operator != (Entity a, Entity b)    => a.rawEntity != b.rawEntity || a.store != b.store;
+    public static   bool    operator != (Entity a, Entity b)    => a.RawEntity != b.RawEntity || a.store != b.store;
 
     // --- IEquatable<T>
-    public          bool    Equals(Entity other)                => rawEntity == other.rawEntity && store == other.store;
+    public          bool    Equals(Entity other)                => RawEntity == other.RawEntity && store == other.store;
 
     // --- IComparable<T>
     public          int     CompareTo(Entity other) {
@@ -694,7 +694,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     // --- object
     public override bool    Equals(object obj) {
         if (obj is Entity other) {
-            return rawEntity == other.rawEntity && store == other.store;
+            return RawEntity == other.RawEntity && store == other.store;
         }
         return false;
     }
@@ -715,6 +715,11 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
         store       = entityStore;
         Id          = id;
         Revision    = revision;
+    }
+    
+    internal Entity(EntityStore entityStore, RawEntity rawEntity) {
+        store           = entityStore;
+        this.RawEntity  = rawEntity;
     }
 
     /// <summary>

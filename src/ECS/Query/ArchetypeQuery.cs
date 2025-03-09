@@ -190,7 +190,7 @@ public class ArchetypeQuery
         list.Clear();
         list.entityStore = Store;
         foreach (var entity in Entities) {
-            list.AddInternal(entity.Id);   
+            list.AddInternal(entity.RawEntity);   
         }
         return list;
     }

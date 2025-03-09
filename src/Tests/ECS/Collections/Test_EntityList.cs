@@ -359,7 +359,7 @@ public static class Test_EntityList
         AreEqual("id: 2, value: 0",     fields[9].ToString());
         AreEqual("id: 1, value: null",  fields[10].ToString());
         
-        AreEqual(11,    fields[0].entityId);
+        AreEqual(11,    fields[0].entityId.Id);
         AreEqual(9,     fields[0].field);
         AreEqual(1,     fields[0].hasField);
         
@@ -392,7 +392,7 @@ public static class Test_EntityList
         AreEqual("id: 2, value: Value0",    fields[9].ToString());
         AreEqual("id: 1, value: null",      fields[10].ToString());
         
-        AreEqual(11,                fields[0].entityId);
+        AreEqual(11,                fields[0].entityId.Id);
         AreEqual(SortEnum.Value9,   fields[0].field);
         AreEqual(1,                 fields[0].hasField);
         

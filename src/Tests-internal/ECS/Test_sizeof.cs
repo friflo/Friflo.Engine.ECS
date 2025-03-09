@@ -31,6 +31,9 @@ public static class Test_sizeof
     public static unsafe void Test_sizeof_Entity() {
         var size = sizeof(Entity);
         AreEqual(16, size);
+        
+        size = sizeof(RawEntity);
+        AreEqual(8, size);
     }
     
     [Test]

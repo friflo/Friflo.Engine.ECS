@@ -43,7 +43,7 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
         list.Clear();
         list.entityStore = query.Store;
         foreach (var entity in query.Entities) {
-            list.AddInternal(entity.Id);   
+            list.AddInternal(entity.RawEntity);   
         }
         return list;
     }
