@@ -32,9 +32,13 @@ internal static class TypeMember<TComponent, TField>
         if (GetterMap.TryGetValue(memberName, out var getter)) {
             return getter;
         }
-        var arg         = Expression.Parameter(typeof(TComponent), "component"); // "component" parameter name in MemberGetter<,>
-        var expr        = Expression.PropertyOrField(arg, memberName);
-        var compiled    = Expression.Lambda<MemberGetter<TComponent, TField>>(expr, arg).Compile();
+        var fields = memberName.Split('.', StringSplitOptions.RemoveEmptyEntries);
+        var arg = Expression.Parameter(typeof(TComponent), "component"); // "component" parameter name in MemberGetter<,>
+        Expression fieldExpr = arg;
+        foreach (var field in fields) {
+            fieldExpr = Expression.PropertyOrField(fieldExpr, field);
+        }
+        var compiled = Expression.Lambda<MemberGetter<TComponent, TField>>(fieldExpr, arg).Compile();
         GetterMap.Add(memberName, compiled);
         return compiled;
     }

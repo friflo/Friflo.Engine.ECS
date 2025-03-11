@@ -338,6 +338,48 @@ public static class Test_EntityList
     }
     
     [Test]
+    public static void Test_EntityList_Sort_sub_field()
+    {
+        var store       = new EntityStore();
+        store.CreateEntity();
+        for (int n = 0; n < 10; n++) {
+            store.CreateEntity(new Position(n,0,0));    
+        }
+        
+        var query   = store.Query();
+        var list    = query.ToEntityList();
+        var fields  = new ComponentField<float>[10]; 
+        fields = list.SortByComponentField<Position, float>("value.X", SortOrder.Descending, fields);
+        
+        AreEqual(11,    list [0].Id);
+        AreEqual(2,     list [9].Id);
+        AreEqual(1,     list[10].Id);
+        
+        AreEqual("id: 11, value: 9",    fields[0].ToString());
+        AreEqual("id: 2, value: 0",     fields[9].ToString());
+        AreEqual("id: 1, value: null",  fields[10].ToString());
+        
+        fields = list.SortByComponentField<Position, float>("value.X", SortOrder.Ascending, fields);
+        
+        AreEqual(1,     list [0].Id);
+        AreEqual(2,     list [1].Id);
+        AreEqual(11,    list[10].Id);
+        
+        AreEqual("id: 1, value: null",  fields[0].ToString());
+        AreEqual("id: 2, value: 0",     fields[1].ToString());
+        AreEqual("id: 11, value: 9",    fields[10].ToString());
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 10; n++) {
+            fields = list.SortByComponentField<Position, float>("value.X", SortOrder.Ascending, fields);
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(1,     list [0].Id);
+        AreEqual(2,     list [1].Id);
+        AreEqual(11,    list[10].Id);
+    }
+    
+    [Test]
     public static void Test_EntityList_Sort_property()
     {
         var store       = new EntityStore();
