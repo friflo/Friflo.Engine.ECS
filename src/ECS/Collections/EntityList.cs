@@ -21,7 +21,7 @@ namespace Friflo.Engine.ECS;
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/batch">Example.</a>
 /// </summary>
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
-public sealed class EntityList : IList<Entity>
+public sealed class EntityList : IList<Entity>, IReadOnlyList<Entity>
 {
 #region properties
     /// <summary> Returns the number of entities stored in the container. </summary>
