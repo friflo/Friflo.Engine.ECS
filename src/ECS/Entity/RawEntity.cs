@@ -28,6 +28,8 @@ public readonly struct RawEntity  : IEquatable<RawEntity>
     public override bool    Equals(object obj)  => throw new NotImplementedException("by intention to avoid boxing");
     public override int     GetHashCode()       => Id ^ Revision;
     
+    public override string  ToString()          => Id.ToString();
+    
     internal RawEntity(int id, short revision) {
         Id          = id;
         Revision    = revision;
