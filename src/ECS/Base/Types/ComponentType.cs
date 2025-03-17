@@ -34,7 +34,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     
     internal readonly   Type        RelationKeyType;//  8
     
-    internal            int         nameSortIndex;  //  4
+    internal            int         nameSortOrder;  //  4
     #endregion
 
 #region methods
@@ -64,7 +64,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     #endregion
 
     public int CompareTo(ComponentType other) {
-        return nameSortIndex - other.nameSortIndex;
+        return nameSortOrder - other.nameSortOrder;
     }
 }
 

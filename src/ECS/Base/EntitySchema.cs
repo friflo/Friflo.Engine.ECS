@@ -227,7 +227,7 @@ public sealed class EntitySchema
         }
         Array.Sort(entries);
         for (int i = 0; i < entries.Length; i++) {
-            componentArray[entries[i].index].nameSortIndex = i;
+            componentArray[entries[i].index].nameSortOrder = i;
         }
         // --- TagType
         var tagsArray   = tags;
@@ -237,7 +237,7 @@ public sealed class EntitySchema
         }
         Array.Sort(entries);
         for (int i = 0; i < entries.Length; i++) {
-            tagsArray[entries[i].index].nameSortIndex = i;
+            tagsArray[entries[i].index].nameSortOrder = i;
         }
     }
     

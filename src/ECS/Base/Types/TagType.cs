@@ -19,7 +19,7 @@ public sealed class TagType : SchemaType, IComparable<TagType>
     /// <summary> The index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Tags"/>. </summary>
     public   readonly   int     TagIndex;       //  4
     
-    internal            int     nameSortIndex;  //  4
+    internal            int     nameSortOrder;  //  4
     #endregion
 
 #region methods
@@ -34,7 +34,7 @@ public sealed class TagType : SchemaType, IComparable<TagType>
     }
     
     public int CompareTo(TagType other) {
-        return nameSortIndex - other.nameSortIndex;
+        return nameSortOrder - other.nameSortOrder;
     }
     #endregion
 }
