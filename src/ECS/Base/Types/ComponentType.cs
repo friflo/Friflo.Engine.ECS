@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Provide meta data for an <see cref="IComponent"/> struct.
 /// </summary>
-public abstract class ComponentType : SchemaType
+public abstract class ComponentType : SchemaType, IComparable<ComponentType>
 {
 #region fields
     /// <summary> The index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Components"/>. </summary>
@@ -33,6 +33,8 @@ public abstract class ComponentType : SchemaType
     internal readonly   Type        RelationType;   //  8
     
     internal readonly   Type        RelationKeyType;//  8
+    
+    internal            int         nameSortIndex;  //  4
     #endregion
 
 #region methods
@@ -60,6 +62,10 @@ public abstract class ComponentType : SchemaType
         RelationKeyType = keyType;
     }
     #endregion
+
+    public int CompareTo(ComponentType other) {
+        return nameSortIndex - other.nameSortIndex;
+    }
 }
 
 internal static class StructInfo<T>

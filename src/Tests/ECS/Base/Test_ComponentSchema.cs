@@ -1,6 +1,10 @@
+using System;
+using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS.Index;
 using Tests.ECS.Relations;
+using Tests.Examples;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -191,6 +195,26 @@ public static class Test_ComponentSchema
         AreEqual("test",            schema.ScriptTypeByType[typeof(TestComponent)].ComponentKey);
         
         AssertBlittableScript<TestComponent>(schema, true);
+    }
+    
+    [Test]
+    public static void Test_ComponentTypes_Sorting()
+    {
+        var schema      = EntityStore.GetEntitySchema();
+        var components = schema.ComponentTypeByType.Values.ToArray();
+        Array.Sort(components);
+        IsTrue(components[0].Type   == typeof(AttackComponent));
+        IsTrue(components[^1].Type  == typeof(Velocity));
+    }
+    
+    [Test]
+    public static void Test_Tags_Sorting()
+    {
+        var schema  = EntityStore.GetEntitySchema();
+        var tags    = schema.TagTypeByType.Values.ToArray();
+        Array.Sort(tags);
+        IsTrue(tags[0].Type   == typeof(ExampleECS.Cat));
+        IsTrue(tags[^1].Type  == typeof(TestTag9));
     }
 }
 

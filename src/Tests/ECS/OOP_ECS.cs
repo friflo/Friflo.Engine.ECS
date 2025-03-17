@@ -13,8 +13,8 @@ public static class ExampleECS
 {
 
 // No base class Animal in ECS
-struct Dog : ITag { }
-struct Cat : ITag { }
+public struct Dog : ITag { }
+public struct Cat : ITag { }
 
 [Test]
 public static void ECS()

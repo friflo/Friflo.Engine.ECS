@@ -11,13 +11,15 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Provide meta data for an <see cref="ITag"/> struct.
 /// </summary>
-public sealed class TagType : SchemaType 
+public sealed class TagType : SchemaType, IComparable<TagType>
 {
 #region fields
     /// <summary> The key name of an <see cref="ITag"/> used for JSON serialization. </summary>
     public   readonly   string  TagName;        //  8
     /// <summary> The index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Tags"/>. </summary>
     public   readonly   int     TagIndex;       //  4
+    
+    internal            int     nameSortIndex;  //  4
     #endregion
 
 #region methods
@@ -29,6 +31,10 @@ public sealed class TagType : SchemaType
     {
         TagName    = tagName;
         TagIndex   = tagIndex;
+    }
+    
+    public int CompareTo(TagType other) {
+        return nameSortIndex - other.nameSortIndex;
     }
     #endregion
 }

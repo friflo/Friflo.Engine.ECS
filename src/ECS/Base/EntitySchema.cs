@@ -148,6 +148,7 @@ public sealed class EntitySchema
             tagTypeByType.Add       (tagType.Type,                  tagType);
             tags                    [tagType.TagIndex] =            tagType;
         }
+        CreateNameSortIndexes();
     }
     
     private static void DuplicateComponentKey(SchemaType schemaType)
@@ -214,7 +215,43 @@ public sealed class EntitySchema
     
     private string GetString() {
         return $"components: {components.Length - 1}  scripts: {scripts.Length - 1}  entity tags: {tags.Length - 1}";
-    } 
+    }
+    
+    private void CreateNameSortIndexes()
+    {
+        // --- ComponentType
+        var componentArray  = components;
+        var entries         = new SortIndexEntry[componentArray.Length - 1];
+        for (int i = 1; i < componentArray.Length; i++) {
+            entries[i - 1] = new SortIndexEntry { index = i, name = componentArray[i].Name };
+        }
+        Array.Sort(entries);
+        for (int i = 0; i < entries.Length; i++) {
+            componentArray[entries[i].index].nameSortIndex = i;
+        }
+        // --- TagType
+        var tagsArray   = tags;
+        entries         = new SortIndexEntry[tagsArray.Length - 1];
+        for (int i = 1; i < tagsArray.Length; i++) {
+            entries[i - 1] = new SortIndexEntry { index = i, name = tagsArray[i].Name };
+        }
+        Array.Sort(entries);
+        for (int i = 0; i < entries.Length; i++) {
+            tagsArray[entries[i].index].nameSortIndex = i;
+        }
+    }
+    
+    struct SortIndexEntry : IComparable<SortIndexEntry>
+    {
+        internal int        index;
+        internal string     name;
+
+        public override string ToString() => $"{name} index: {index}";
+
+        public int CompareTo(SortIndexEntry other) {
+            return string.Compare(name, other.name, StringComparison.Ordinal);
+        }
+    }
     #endregion
 }
 
