@@ -45,6 +45,8 @@ internal abstract class StructHeap : IComponentStash
     internal  abstract  void        UpdateIndex             (Entity entity);
     internal  abstract  void        AddIndex                (Entity entity);
     internal  abstract  void        RemoveIndex             (Entity entity);
+    internal  abstract  TField      GetComponentField<TField>(int compIndex, ComponentFieldInfo info);
+    internal  abstract  void        SetComponentField<TField>(int compIndex, ComponentFieldInfo info, TField value);
 
     internal StructHeap(int structIndex) {
         this.structIndex    = structIndex;

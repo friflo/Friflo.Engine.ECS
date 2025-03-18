@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Friflo.Engine.ECS;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
@@ -105,6 +106,52 @@ public static class Test_Entity
         AreEqual("comp-value", name.value);
     }
     
+    [Test]
+    public static void Test_Entity_GetEntityComponentField()
+    {
+        var store  = new EntityStore();        
+        var entity = store.CreateEntity(new EntityName("comp-value"));
+        var schema          = EntityStore.GetEntitySchema();
+        var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
+        var nameInfo        = ComponentFieldInfo.Get(componentType, nameof(EntityName.value));
+        var name            = EntityUtils.GetEntityComponentField<string>(entity, nameInfo);
+        AreEqual("comp-value", name);
+        
+        var nameLengthInfo  = ComponentFieldInfo.Get(componentType, "value.Length");
+        var length          = EntityUtils.GetEntityComponentField<int>(entity, nameLengthInfo);
+        AreEqual("comp-value".Length, length);
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 10; n++) {
+            EntityUtils.GetEntityComponentField<string>(entity, nameInfo);
+        }
+        Mem.AssertNoAlloc(start);
+        
+        EntityUtils.SetEntityComponentField(entity, nameInfo, "changed");
+        AreEqual("changed", entity.GetComponent<EntityName>().value);
+        
+        start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 10; n++) {
+            EntityUtils.SetEntityComponentField(entity, nameInfo, "changed 2");
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual("changed 2", entity.GetComponent<EntityName>().value);
+    }
+    
+    [Test]
+    public static void Test_Entity_GetEntityComponentField_ref()
+    {
+        var store  = new EntityStore();        
+        var entity = store.CreateEntity(new EntityName("comp-value"));
+        var schema          = EntityStore.GetEntitySchema();
+        var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
+        var mi = (FieldInfo)typeof(EntityName).GetMember("value")[0];
+        
+        for (int n = 0; n < 10; n++) {
+            var component = EntityUtils.GetEntityComponent(entity, componentType);
+            mi.GetValue(component);
+        }
+    }
     
 
     [Test]

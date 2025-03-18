@@ -37,6 +37,16 @@ public static class EntityUtils
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
         return (IComponent)type.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
+    
+    public static  TField   GetEntityComponentField<TField>(Entity entity, ComponentFieldInfo info) {
+        var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        return type.heapMap[info.infoKey.structIndex].GetComponentField<TField>(entity.compIndex, info);
+    }
+    
+    public static  void   SetEntityComponentField<TField>(Entity entity, ComponentFieldInfo info, TField value) {
+        var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
+        type.heapMap[info.infoKey.structIndex].SetComponentField<TField>(entity.compIndex, info, value);
+    }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)
     {

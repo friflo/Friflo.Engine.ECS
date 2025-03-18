@@ -472,12 +472,13 @@ public static class Test_EntityList
         AreEqual("id: 11, value: id: 3  [EntityReference]", fields[9].ToString());
         AreEqual("id: 13, value: null",                     fields[10].ToString());
         
+        list.SortByComponentField<EntityReference, Entity>("entity", SortOrder.Ascending, fields); // force one time allocation
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
             fields = list.SortByComponentField<EntityReference, Entity>("entity", SortOrder.Ascending, fields);
         }
         Mem.AssertNoAlloc(start);
-        AreEqual("{ 1, 20, 19, 18, 17, 16, 15, 14, 21, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 }", list.Debug());
+        AreEqual("{ 1, 20, 19, 18, 17, 16, 15, 14, 21, 12, 13, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 }", list.Debug());
     }
     
     [Test]

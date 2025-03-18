@@ -22,29 +22,6 @@ public enum SortOrder
     Descending
 }
 
-internal static class TypeMember<TComponent, TField>
-{
-    private static readonly Dictionary<string, MemberGetter<TComponent,TField>> GetterMap = new();   
-    
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
-    internal static MemberGetter<TComponent,TField> Getter(string memberName)
-    {
-        if (GetterMap.TryGetValue(memberName, out var getter)) {
-            return getter;
-        }
-        var fields = memberName.Split('.', StringSplitOptions.RemoveEmptyEntries);
-        var arg = Expression.Parameter(typeof(TComponent), "component"); // "component" parameter name in MemberGetter<,>
-        Expression fieldExpr = arg;
-        foreach (var field in fields) {
-            fieldExpr = Expression.PropertyOrField(fieldExpr, field);
-        }
-        var compiled = Expression.Lambda<MemberGetter<TComponent, TField>>(fieldExpr, arg).Compile();
-        GetterMap.Add(memberName, compiled);
-        return compiled;
-    }
-}
-
-internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
 
 /// <summary>
 /// Contains an entity and its component field/property value returned by <see cref="EntityList.SortByComponentField{TComponent,TField}"/>. 
@@ -105,17 +82,18 @@ public struct ComponentField<TField>
     };
 
     
-    internal static ComponentField<TField>[] Sort<TComponent>(EntityList  entities, string memberName, SortOrder sortOrder, ComponentField<TField>[] fields)
+    internal static ComponentField<TField>[] Sort<TComponent>(EntityList entities, string memberName, SortOrder sortOrder, ComponentField<TField>[] fields)
         where TComponent : struct, IComponent
     {
-        var structIndex = StructInfo<TComponent>.Index;
-        var count       = entities.Count;
+        var structIndex     = StructInfo<TComponent>.Index;
+        var componentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
+        var count           = entities.Count;
         if (fields == null || fields.Length < count) {
             fields = new ComponentField<TField>[count];
         }
-        var nodes   = entities.entityStore.nodes;
-        var ids     = entities.ids;
-        var getter  = TypeMember<TComponent, TField>.Getter(memberName);
+        var nodes       = entities.entityStore.nodes;
+        var ids         = entities.ids;
+        var getter      = (MemberGetter<TComponent, TField>)ComponentFieldInfo.Get(componentType, memberName).getter;
         
         for (int index = 0; index < count; index++)
         {
