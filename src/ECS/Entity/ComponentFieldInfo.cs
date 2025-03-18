@@ -36,8 +36,8 @@ internal readonly struct ComponentFieldInfoKey : IEquatable<ComponentFieldInfoKe
     }
 }
 
-internal delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
-internal delegate void   MemberSetter<TComponent, in  TField> (ref TComponent component, TField value);
+public delegate TField MemberGetter<in TComponent, out TField> (TComponent component);
+public delegate void   MemberSetter<TComponent, in  TField> (ref TComponent component, TField value);
 
 public sealed class ComponentFieldInfo 
 {
@@ -45,9 +45,9 @@ public sealed class ComponentFieldInfo
     // ReSharper disable once InconsistentNaming
     public   readonly   Type                    Type;
     /// Type: <see cref="MemberGetter{T, TField}"/>
-    internal readonly   object                  getter;
+    public   readonly   object                  getter;
     /// Type: <see cref="MemberSetter{T, TField}"/>. Is null if not writeable
-    internal readonly   object                  setter;
+    public   readonly   object                  setter;
     
     private static readonly Dictionary<ComponentFieldInfoKey, ComponentFieldInfo> Map = new();
 
