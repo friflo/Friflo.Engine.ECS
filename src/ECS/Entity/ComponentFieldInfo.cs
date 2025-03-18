@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
-
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -47,7 +46,7 @@ public sealed class ComponentFieldInfo
     public   readonly   Type                    Type;
     /// Type: <see cref="MemberGetter{T, TField}"/>
     internal readonly   object                  getter;
-    /// Type: <see cref="MemberSetter{T, TField}"/>
+    /// Type: <see cref="MemberSetter{T, TField}"/>. Is null if not writeable
     internal readonly   object                  setter;
     
     private static readonly Dictionary<ComponentFieldInfoKey, ComponentFieldInfo> Map = new();
@@ -63,6 +62,7 @@ public sealed class ComponentFieldInfo
     
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;
     
+    /// Calls <see cref="CreateGetter{TComponent,TField}"/> and <see cref="CreateSetter{TComponent,TField}"/> 
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2075", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "Not called for NativeAOT")]
@@ -75,8 +75,9 @@ public sealed class ComponentFieldInfo
         }
         var pathItems   = path.Split('.', StringSplitOptions.RemoveEmptyEntries);
         var type        = componentType.Type;
-        bool canWrite = true;
-        for (int i = 0; i < pathItems.Length; i++) {
+        bool canWrite   = true;
+        for (int i = 0; i < pathItems.Length; i++)
+        {
             var memberInfos = type.GetMember(pathItems[i], Flags);
             var memberInfo  = memberInfos[0];
             if (memberInfo is FieldInfo fieldInfo) {
@@ -90,26 +91,27 @@ public sealed class ComponentFieldInfo
                 throw new InvalidOperationException();
             }
         }
-        var typeParams      = new Type[]{ componentType.Type, type };
+        var typeParams      = new []{ componentType.Type, type };
         
-        var getterMethod    = typeof(ComponentFieldInfo).GetMethod("Getter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string[])], null)!;
+        var getterMethod    = typeof(ComponentFieldInfo).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string[])], null)!;
         var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
         var getter          = genericGetter.Invoke(null, [pathItems]);
         
         object setter = null;
         if (canWrite) {
-            var setterMethod    = typeof(ComponentFieldInfo).GetMethod("Setter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string[])], null)!;
+            var setterMethod    = typeof(ComponentFieldInfo).GetMethod("CreateSetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string[])], null)!;
             var genericSetter   = setterMethod.MakeGenericMethod(typeParams);
             setter              = genericSetter.Invoke(null, [pathItems]);
         }
         
-        var result          = new ComponentFieldInfo(key, type, getter, setter);
-        Map.Add(key, result);
-        return result;
+        var info = new ComponentFieldInfo(key, type, getter, setter);
+        Map.Add(key, info);
+        return info;
     }
     
+    // ReSharper disable UnusedMember.Local
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
-    private static MemberGetter<TComponent,TField> Getter<TComponent,TField>(string[] fields)
+    private static MemberGetter<TComponent,TField> CreateGetter<TComponent,TField>(string[] fields)
     {
         var arg = Expression.Parameter(typeof(TComponent), "component"); // "component" parameter name in MemberGetter<,>
         Expression fieldExpr = arg;
@@ -120,7 +122,7 @@ public sealed class ComponentFieldInfo
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
-    private static MemberSetter<TComponent,TField> Setter<TComponent,TField>(string[] fields)
+    private static MemberSetter<TComponent,TField> CreateSetter<TComponent,TField>(string[] fields)
     {
         var arg   = Expression.Parameter(typeof(TComponent).MakeByRefType(), "component"); // "component" parameter name in MemberSetter<,>
         var value = Expression.Parameter(typeof(TField),                     "value");     // "value" parameter name in MemberSetter<,>
@@ -131,6 +133,4 @@ public sealed class ComponentFieldInfo
         var assign = Expression.Assign(fieldExpr, value);
         return Expression.Lambda<MemberSetter<TComponent, TField>>(assign, arg, value).Compile();
     }
-    
-    
 }
