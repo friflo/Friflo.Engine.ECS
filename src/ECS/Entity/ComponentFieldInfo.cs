@@ -43,6 +43,8 @@ public sealed class ComponentFieldInfo
 {
     public   readonly   Type                                type;
     
+    public   readonly   ComponentType                       componentType;
+    
     public   readonly   IEnumerable<CustomAttributeData>    customAttributes;
     
     internal readonly   ComponentFieldInfoKey               infoKey;
@@ -60,13 +62,14 @@ public sealed class ComponentFieldInfo
 
     public override     string          ToString() => infoKey.GetString();
 
-    private ComponentFieldInfo(string path, ComponentFieldInfoKey key, Type type,  IEnumerable<CustomAttributeData> customAttributes, object getter, object setter) {
-        this.path       = path;
-        infoKey         = key;
-        this.type       = type;
-        this.customAttributes = customAttributes;
-        this.getter     = getter;
-        this.setter     = setter;
+    private ComponentFieldInfo(ComponentType componentType, string path, ComponentFieldInfoKey key, Type type,  IEnumerable<CustomAttributeData> customAttributes, object getter, object setter) {
+        this.componentType      = componentType;        
+        this.path               = path;
+        infoKey                 = key;
+        this.type               = type;
+        this.customAttributes   = customAttributes;
+        this.getter             = getter;
+        this.setter             = setter;
     }
     
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;
@@ -124,7 +127,7 @@ public sealed class ComponentFieldInfo
             setter              = genericSetter.Invoke(null, [memberInfos]);
         }
         path = string.Join('.', pathItems);
-        var info = new ComponentFieldInfo(path, key, type, customAttributes, getter, setter);
+        var info = new ComponentFieldInfo(componentType, path, key, type, customAttributes, getter, setter);
         Map.Add(key, info);
         return info;
     }
