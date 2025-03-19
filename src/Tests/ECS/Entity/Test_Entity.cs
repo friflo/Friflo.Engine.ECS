@@ -117,9 +117,12 @@ public static class Test_Entity
         var name            = EntityUtils.GetEntityComponentField<string>(entity, nameInfo);
         AreEqual("comp-value", name);
         
-        var nameLengthInfo  = ComponentFieldInfo.Get(componentType, "value.Length");
+        var nameLengthInfo  = ComponentFieldInfo.Get(componentType, " value . Length ");
         var length          = EntityUtils.GetEntityComponentField<int>(entity, nameLengthInfo);
-        AreEqual("comp-value".Length, length);
+        AreEqual("comp-value".Length,   length);
+        AreEqual("value.Length",        nameLengthInfo.path);
+        AreEqual(typeof(int),           nameLengthInfo.type);
+        AreEqual(0,                     nameLengthInfo.customAttributes.Count());
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
