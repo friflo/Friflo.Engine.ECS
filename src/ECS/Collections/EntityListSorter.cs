@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 
 namespace Friflo.Engine.ECS;
 
@@ -93,7 +91,7 @@ public struct ComponentField<TField>
         }
         var nodes       = entities.entityStore.nodes;
         var ids         = entities.ids;
-        var getter      = (MemberGetter<TComponent, TField>)ComponentFieldInfo.Get(componentType, memberName).getter;
+        var getter      = (MemberPathGetter<TComponent, TField>)MemberPath.Get(componentType.Type, memberName).getter;
         
         for (int index = 0; index < count; index++)
         {

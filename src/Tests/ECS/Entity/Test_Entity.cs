@@ -111,18 +111,19 @@ public static class Test_Entity
     {
         var store  = new EntityStore();        
         var entity = store.CreateEntity(new EntityName("comp-value"));
-        var schema          = EntityStore.GetEntitySchema();
-        var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
-        var nameInfo        = ComponentFieldInfo.Get(componentType, nameof(EntityName.value));
+        var componentType   = typeof(EntityName);
+        var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
         var name            = EntityUtils.GetEntityComponentField<string>(entity, nameInfo);
         AreEqual("comp-value", name);
         
-        var nameLengthInfo  = ComponentFieldInfo.Get(componentType, " value . Length ");
+        var nameLengthInfo  = MemberPath.Get(componentType, " value . Length ");
         var length          = EntityUtils.GetEntityComponentField<int>(entity, nameLengthInfo);
-        AreEqual("comp-value".Length,   length);
-        AreEqual("value.Length",        nameLengthInfo.path);
-        AreEqual(typeof(int),           nameLengthInfo.type);
-        AreEqual(0,                     nameLengthInfo.customAttributes.Count());
+        AreEqual("comp-value".Length,               length);
+        AreEqual("value.Length",                    nameLengthInfo.path);
+        AreEqual(typeof(int),                       nameLengthInfo.memberType);
+        AreEqual(typeof(EntityName),                nameLengthInfo.declarationType);
+        AreEqual(0,                                 nameLengthInfo.customAttributes.Count());
+        AreEqual("EntityName value.Length : Int32", nameLengthInfo.ToString());
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
