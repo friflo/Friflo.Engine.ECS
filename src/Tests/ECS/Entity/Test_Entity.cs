@@ -122,6 +122,7 @@ public static class Test_Entity
         AreEqual("value.Length",                    nameLengthInfo.path);
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
         AreEqual(typeof(EntityName),                nameLengthInfo.declaringType);
+        AreEqual(typeof(EntityName),                nameLengthInfo.componentType.Type);
         AreEqual(0,                                 nameLengthInfo.customAttributes.Count());
         AreEqual("EntityName value.Length : Int32", nameLengthInfo.ToString());
         

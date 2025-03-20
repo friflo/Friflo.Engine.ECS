@@ -54,6 +54,9 @@ public sealed class MemberPath
     /// Returns the Type containing the field / property.
     public              Type                                declaringType => key.type;
     
+    /// Returns the components Type containing the field / property.
+    public              ComponentType                       componentType;
+    
     /// Returns the custom attributes of the field / property.
     public   readonly   IEnumerable<CustomAttributeData>    customAttributes;
     
@@ -74,8 +77,9 @@ public sealed class MemberPath
     private static readonly Dictionary<MemberPathKey, MemberPath> Map = new();
 
 
-    private MemberPath(MemberPathKey key, int structIndex, Type type, IEnumerable<CustomAttributeData> customAttributes, object getter, object setter) {
+    private MemberPath(MemberPathKey key, ComponentType componentType, int structIndex, Type type, IEnumerable<CustomAttributeData> customAttributes, object getter, object setter) {
         this.key                = key;
+        this.componentType      = componentType;
         this.memberType         = type;
         this.customAttributes   = customAttributes;
         this.getter             = getter;
@@ -150,7 +154,7 @@ public sealed class MemberPath
         if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
             structIndex = componentType.StructIndex;
         }
-        var memberPath = new MemberPath(key, structIndex, memberType, customAttributes, getter, setter);
+        var memberPath = new MemberPath(key, componentType, structIndex, memberType, customAttributes, getter, setter);
         Map.Add(key, memberPath);
         return memberPath;
     }
