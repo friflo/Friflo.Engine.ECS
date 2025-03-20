@@ -129,9 +129,9 @@ public sealed class MemberPath
         if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(declarationType, out var componentType)) {
             structIndex = componentType.StructIndex;
         }
-        var info = new MemberPath(key, structIndex, type, customAttributes, getter, setter);
-        Map.Add(key, info);
-        return info;
+        var memberPath = new MemberPath(key, structIndex, type, customAttributes, getter, setter);
+        Map.Add(key, memberPath);
+        return memberPath;
     }
     
     // ReSharper disable UnusedMember.Local
