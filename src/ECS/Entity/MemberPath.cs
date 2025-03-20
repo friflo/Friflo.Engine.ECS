@@ -95,10 +95,10 @@ public sealed class MemberPath
         IEnumerable<CustomAttributeData> customAttributes = null;
         for (int i = 0; i < pathItems.Length; i++)
         {
-            var members = type.GetMember(pathItems[i], Flags);
-            var memberInfo  = members[0];
-            memberInfos[i] = memberInfo;
-            customAttributes = memberInfo.CustomAttributes;
+            var members         = type.GetMember(pathItems[i], Flags);
+            var memberInfo      = members[0];
+            memberInfos[i]      = memberInfo;
+            customAttributes    = memberInfo.CustomAttributes;
             if (memberInfo is FieldInfo fieldInfo) {
                 type = fieldInfo.FieldType;
                 if (fieldInfo.IsInitOnly) {
