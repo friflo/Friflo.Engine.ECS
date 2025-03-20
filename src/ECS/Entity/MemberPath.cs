@@ -37,29 +37,39 @@ public delegate TField MemberPathGetter<in T, out TField> (T root);
 public delegate void   MemberPathSetter<T, in  TField> (ref T root, TField value);
 
 
+/// <summary>
+/// Provide the attributes for a specific field / property within a specific <see cref="Type"/>.<br/>
+/// It also enables to read / write the value of the field / property.
+/// </summary>
 public sealed class MemberPath 
 {
     private  readonly   MemberPathKey                       key;
     
     internal readonly   int                                 structIndex;
 
+    /// Returns the Type of the field / property.
     public   readonly   Type                                memberType;
     
     // ReSharper disable once InconsistentNaming
-    public              Type                                declarationType => key.type;
+    /// Returns the Type containing the field / property.
+    public              Type                                declaringType => key.type;
     
+    /// Returns the custom attributes of the field / property.
     public   readonly   IEnumerable<CustomAttributeData>    customAttributes;
     
+    /// Identifies the field / property within its <see cref="declaringType"/>.
     // ReSharper disable once InconsistentNaming
     public              string                              path => key.path;
     
+    /// Returns a delegate used to read the value of the field / property.<br/>
     /// Type: <see cref="MemberPathGetter{T,TField}"/>
     public   readonly   object                              getter;
     
+    /// Returns a delegate used to set the value of the field / property.<br/>
     /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable
     public   readonly   object                              setter;
 
-    public override     string                              ToString() => $"{declarationType.Name} {path} : {memberType.Name}";
+    public override     string                              ToString() => $"{declaringType.Name} {path} : {memberType.Name}";
     
     private static readonly Dictionary<MemberPathKey, MemberPath> Map = new();
 
@@ -75,45 +85,56 @@ public sealed class MemberPath
     
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;
     
-    /// Calls <see cref="CreateGetter{TComponent,TField}"/> and <see cref="CreateSetter{TComponent,TField}"/> 
+    /// <summary>
+    /// Returns a <see cref="MemberPath"/> identifying a specific field / property by its <paramref name="path"/>
+    /// within the passed <paramref name="type"/>.
+    /// </summary>
+    /// <remarks>
+    /// Internal note: Calls <see cref="CreateGetter{TComponent,TField}"/> and <see cref="CreateSetter{TComponent,TField}"/>
+    /// </remarks>
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2055", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2075", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "Not called for NativeAOT")]
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
-    public static MemberPath Get(Type declarationType, string path)
+    public static MemberPath Get(Type type, string path)
     {
         path = Regex.Replace(path, @"\s+", "");
-        var key = new MemberPathKey(declarationType, path);
+        var key = new MemberPathKey(type, path);
         if (Map.TryGetValue(key, out var componentFieldInfo)) {
             return componentFieldInfo;
         }
         var pathItems   = path.Split('.', StringSplitOptions.RemoveEmptyEntries);
         var memberInfos = new MemberInfo[pathItems.Length];
-        var type        = declarationType;
+        var memberType  = type;
         bool canWrite   = true;
         IEnumerable<CustomAttributeData> customAttributes = null;
         for (int i = 0; i < pathItems.Length; i++)
         {
-            var members         = type.GetMember(pathItems[i], Flags);
+            var memberName      = pathItems[i];
+            var members         = memberType.GetMember(memberName, Flags);
+            if (members.Length == 0) {
+                throw new InvalidOperationException($"Member '{memberName}' not found in '{type.Name}'");
+            }
             var memberInfo      = members[0];
             memberInfos[i]      = memberInfo;
             customAttributes    = memberInfo.CustomAttributes;
             if (memberInfo is FieldInfo fieldInfo) {
-                type = fieldInfo.FieldType;
+                memberType = fieldInfo.FieldType;
                 if (fieldInfo.IsInitOnly) {
                     canWrite = false;
                 }
             } else if (memberInfo is PropertyInfo propertyInfo) {
-                type = propertyInfo.PropertyType;
+                memberType = propertyInfo.PropertyType;
                 if (!propertyInfo.CanWrite) {
                     canWrite = false;
                 }
-            } else {
-                throw new InvalidOperationException();
             }
+            /* else { // not reachable with the given Flags
+                // throw new InvalidOperationException($"Member '{memberName}' is not a field or property in '{type.Name}'");
+            } */
         }
-        var typeParams      = new []{ declarationType, type };
+        var typeParams      = new []{ type, memberType };
         
         var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
         var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
@@ -126,10 +147,10 @@ public sealed class MemberPath
             setter              = genericSetter.Invoke(null, [memberInfos]);
         }
         var structIndex = 0;
-        if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(declarationType, out var componentType)) {
+        if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
             structIndex = componentType.StructIndex;
         }
-        var memberPath = new MemberPath(key, structIndex, type, customAttributes, getter, setter);
+        var memberPath = new MemberPath(key, structIndex, memberType, customAttributes, getter, setter);
         Map.Add(key, memberPath);
         return memberPath;
     }

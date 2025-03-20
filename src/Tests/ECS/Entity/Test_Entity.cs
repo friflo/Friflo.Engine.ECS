@@ -121,7 +121,7 @@ public static class Test_Entity
         AreEqual("comp-value".Length,               length);
         AreEqual("value.Length",                    nameLengthInfo.path);
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
-        AreEqual(typeof(EntityName),                nameLengthInfo.declarationType);
+        AreEqual(typeof(EntityName),                nameLengthInfo.declaringType);
         AreEqual(0,                                 nameLengthInfo.customAttributes.Count());
         AreEqual("EntityName value.Length : Int32", nameLengthInfo.ToString());
         
@@ -156,6 +156,30 @@ public static class Test_Entity
             mi.GetValue(component);
         }
     }
+    
+    [Test]
+    public static void Test_Entity_MemberPath_errors()
+    {
+        var e1 = Throws<InvalidOperationException>(() => {
+            MemberPath.Get(typeof(EntityName), "unknown");
+        });
+        AreEqual("Member 'unknown' not found in 'EntityName'", e1!.Message);
+        
+        var store       = new EntityStore();        
+        var entity      = store.CreateEntity(new EntityName("some name"));
+        var nameInfo    = MemberPath.Get(typeof(EntityName), nameof(EntityName.value));
+        
+        var e2 = Throws<InvalidCastException>(() => {
+            EntityUtils.GetEntityComponentField<int>(entity, nameInfo);
+        });
+        StringAssert.StartsWith("Unable to cast object of type", e2!.Message);
+
+        var e3 = Throws<InvalidCastException>(() => {
+            EntityUtils.SetEntityComponentField<int>(entity, nameInfo, 42);
+        });
+        StringAssert.StartsWith("Unable to cast object of type", e3!.Message);
+    }
+
     
 
     [Test]
