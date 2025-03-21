@@ -38,12 +38,12 @@ public static class EntityUtils
         return (IComponent)type.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
     
-    public static  TField   GetEntityComponentField<TField>(Entity entity, MemberPath memberPath) {
+    public static  TField   GetEntityComponentMember<TField>(Entity entity, MemberPath memberPath) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
         return type.heapMap[memberPath.structIndex].GetComponentField<TField>(entity.compIndex, memberPath);
     }
     
-    public static  void   SetEntityComponentField<TField>(Entity entity, MemberPath memberPath, TField value) {
+    public static  void   SetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, TField value) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
         type.heapMap[memberPath.structIndex].SetComponentField<TField>(entity.compIndex, memberPath, value);
     }
