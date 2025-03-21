@@ -75,10 +75,10 @@ public sealed class GenericInstanceTypeAttribute : Attribute {
 
 #region Friflo ImGui attributes 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class UiTypeDrawerAttribute : Attribute
+public class UiTypeDomainAttribute : Attribute
 { 
     // ReSharper disable once UnusedParameter.Local
-    public UiTypeDrawerAttribute(string style) { }
+    public UiTypeDomainAttribute(string style) { }
 }
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
