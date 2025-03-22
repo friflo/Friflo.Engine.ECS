@@ -243,13 +243,19 @@ public sealed class EntityList : IList<Entity>, IReadOnlyList<Entity>
         var store       = entityStore;
         var idsLocal    = ids;
         var index       = 0;
-        for (int n = 0; n < length; n++)
-        {
-            var id = idsLocal[n];
-            var entity = new Entity(store, id.Id, id.Revision);
-            if (filter(entity)) {
-                idsLocal[index++] = id;
+        RawEntity rawEntity = default;
+        try {
+            for (int n = 0; n < length; n++)
+            {
+                rawEntity = idsLocal[n];
+                var entity = new Entity(store, rawEntity.Id, rawEntity.Revision);
+                if (filter(entity)) {
+                    idsLocal[index++] = rawEntity;
+                }
             }
+        }
+        catch (Exception e) {
+            throw new FilterException($"at entity {rawEntity.Id} - {e.GetType().Name}: {e.Message}", e);
         }
         count = index;
     }
@@ -388,3 +394,10 @@ internal sealed class EntityListDebugView
         return result;
     }
 } 
+
+internal class FilterException : Exception
+{
+    internal FilterException(string message, Exception innerException)
+        : base (message, innerException)
+    { }
+}
