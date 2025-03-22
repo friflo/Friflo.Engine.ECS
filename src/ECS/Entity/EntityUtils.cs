@@ -40,12 +40,12 @@ public static class EntityUtils
     
     public static  TField   GetEntityComponentMember<TField>(Entity entity, MemberPath memberPath) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
-        return type.heapMap[memberPath.structIndex].GetComponentField<TField>(entity.compIndex, memberPath);
+        return type.heapMap[memberPath.structIndex].GetComponentMember<TField>(entity.compIndex, memberPath);
     }
     
     public static  void   SetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, TField value) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
-        type.heapMap[memberPath.structIndex].SetComponentField<TField>(entity.compIndex, memberPath, value);
+        type.heapMap[memberPath.structIndex].SetComponentMember<TField>(entity.compIndex, memberPath, value);
     }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)

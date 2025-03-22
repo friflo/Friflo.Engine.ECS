@@ -143,12 +143,12 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         StoreIndex.RemoveIndex(entity.store, entity.Id, this);
     }
     
-    internal  override  TField GetComponentField<TField> (int compIndex, MemberPath memberPath) {
+    internal  override  TField GetComponentMember<TField> (int compIndex, MemberPath memberPath) {
         var getter = (MemberPathGetter<T, TField>)memberPath.getter;
         return getter(components[compIndex]);
     }
     
-    internal  override  void SetComponentField<TField>(int compIndex, MemberPath memberPath, TField value) {
+    internal  override  void SetComponentMember<TField>(int compIndex, MemberPath memberPath, TField value) {
         var setter = (MemberPathSetter<T, TField>)memberPath.setter;
         setter(ref components[compIndex], value);
     }
