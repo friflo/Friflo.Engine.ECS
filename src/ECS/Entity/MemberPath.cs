@@ -109,7 +109,6 @@ public sealed class MemberPath
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "Not called for NativeAOT")]
     public static MemberPath Get(Type type, string path)
     {
-        path = Regex.Replace(path, @"\s+", "");
         var key = new MemberPathKey(type, path);
         if (Map.TryGetValue(key, out var componentFieldInfo)) {
             return componentFieldInfo;

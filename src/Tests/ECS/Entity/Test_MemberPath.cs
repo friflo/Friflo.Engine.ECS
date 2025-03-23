@@ -66,7 +66,7 @@ public static class Test_MemberPath
         AreEqual("comp-value", name);
         IsNull  (exception);
         
-        var nameLengthInfo  = MemberPath.Get(componentType, " value . Length ");
+        var nameLengthInfo  = MemberPath.Get(componentType, "value.Length");
         IsTrue(EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out  exception));
         IsNull  (exception);
         AreEqual("comp-value".Length,               length);
@@ -111,7 +111,7 @@ public static class Test_MemberPath
     }
     
     [Test]
-    public static void Test_MemberPath_MemberPath_errors()
+    public static void Test_MemberPath_MemberPath_exceptions()
     {
         var e1 = Throws<InvalidOperationException>(() => {
             MemberPath.Get(typeof(EntityName), "unknown");
@@ -131,6 +131,11 @@ public static class Test_MemberPath
             EntityUtils.SetEntityComponentMember<int>(entity, nameInfo, 42, out _);
         });
         StringAssert.StartsWith("Unable to cast object of type", e3!.Message);
+        
+        var e4 = Throws<InvalidOperationException>(() => {
+            MemberPath.Get(typeof(EntityName), " name");
+        });
+        StringAssert.StartsWith("Member ' name' not found in 'EntityName'", e4!.Message);
     }
 }
 
