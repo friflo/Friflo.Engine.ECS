@@ -111,7 +111,7 @@ public static class Test_MemberPath
     }
     
     [Test]
-    public static void Test_MemberPath_MemberPath_exceptions()
+    public static void Test_MemberPath_Get_exceptions()
     {
         var e1 = Throws<InvalidOperationException>(() => {
             MemberPath.Get(typeof(EntityName), "unknown");
