@@ -56,8 +56,9 @@ public sealed class MemberPath
     /// Returns the components Type containing the field / property.
     public              ComponentType                       componentType;
     
-    /// Returns the custom attributes of the field / property.
-    public   readonly   IEnumerable<CustomAttributeData>    customAttributes;
+    /// Returns the custom attributes of the field / property.<br/>
+    /// Is null if <see cref="path"/> == ""
+    public   readonly   MemberInfo                          memberInfo;
     
     /// Identifies the field / property within its <see cref="declaringType"/>.
     // ReSharper disable once InconsistentNaming
@@ -82,14 +83,14 @@ public sealed class MemberPath
         return $"{declaringType.Name} {path} : {memberType.Name}";
     }
 
-    private MemberPath(MemberPathKey key, ComponentType componentType, int structIndex, Type type, IEnumerable<CustomAttributeData> customAttributes, object getter, object setter) {
-        this.key                = key;
-        this.componentType      = componentType;
-        this.memberType         = type;
-        this.customAttributes   = customAttributes;
-        this.getter             = getter;
-        this.setter             = setter;
-        this.structIndex        = structIndex;
+    private MemberPath(MemberPathKey key, ComponentType componentType, int structIndex, Type type, MemberInfo memberInfo, object getter, object setter) {
+        this.key            = key;
+        this.componentType  = componentType;
+        this.memberType     = type;
+        this.memberInfo     = memberInfo;
+        this.getter         = getter;
+        this.setter         = setter;
+        this.structIndex    = structIndex;
     }
     
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;
@@ -116,7 +117,7 @@ public sealed class MemberPath
         var memberInfos = new MemberInfo[pathItems.Length];
         var memberType  = type;
         bool canWrite   = true;
-        IEnumerable<CustomAttributeData> customAttributes = type.CustomAttributes;
+        MemberInfo memberInfo = null;
         for (int i = 0; i < pathItems.Length; i++)
         {
             var memberName      = pathItems[i];
@@ -124,9 +125,8 @@ public sealed class MemberPath
             if (members.Length == 0) {
                 throw new InvalidOperationException($"Member '{memberName}' not found in '{type.Name}'");
             }
-            var memberInfo      = members[0];
+            memberInfo          = members[0];
             memberInfos[i]      = memberInfo;
-            customAttributes    = memberInfo.CustomAttributes;
             if (memberInfo is FieldInfo fieldInfo) {
                 memberType = fieldInfo.FieldType;
                 if (fieldInfo.IsInitOnly) {
@@ -158,7 +158,7 @@ public sealed class MemberPath
         if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
             structIndex = componentType.StructIndex;
         }
-        var memberPath = new MemberPath(key, componentType, structIndex, memberType, customAttributes, getter, setter);
+        var memberPath = new MemberPath(key, componentType, structIndex, memberType, memberInfo, getter, setter);
         Map.Add(key, memberPath);
         return memberPath;
     }

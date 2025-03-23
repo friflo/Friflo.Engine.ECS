@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -26,7 +25,7 @@ public static class Test_MemberPath
         AreEqual(typeof(EntityName),    selfInfo.memberType);
         AreEqual(typeof(EntityName),    selfInfo.declaringType);
         AreEqual(typeof(EntityName),    selfInfo.componentType.Type);
-        AreEqual(2,                     selfInfo.customAttributes.Count());
+        IsNull  (                       selfInfo.memberInfo);
         AreEqual("EntityName",          selfInfo.ToString());
         IsTrue(EntityUtils.GetEntityComponentMember<EntityName>(entity, selfInfo, out var self, out _));
         AreEqual("self-1",              self.value);
@@ -74,7 +73,7 @@ public static class Test_MemberPath
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
         AreEqual(typeof(EntityName),                nameLengthInfo.declaringType);
         AreEqual(typeof(EntityName),                nameLengthInfo.componentType.Type);
-        AreEqual(0,                                 nameLengthInfo.customAttributes.Count());
+        NotNull (                                   nameLengthInfo.memberInfo);
         AreEqual("EntityName value.Length : Int32", nameLengthInfo.ToString());
         
         var start = Mem.GetAllocatedBytes();
