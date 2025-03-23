@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Friflo.Engine.ECS;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
@@ -105,104 +104,6 @@ public static class Test_Entity
         var name = (EntityName)component;
         AreEqual("comp-value", name.value);
     }
-    
-    [Test]
-    public static void Test_Entity_GetEntityComponentSelf()
-    {
-        var store  = new EntityStore();        
-        var entity = store.CreateEntity(new EntityName("self-1"));
-        var componentType   = typeof(EntityName);
-        var selfInfo        = MemberPath.Get(componentType, "");
-        AreEqual("",                    selfInfo.path);
-        AreEqual(typeof(EntityName),    selfInfo.memberType);
-        AreEqual(typeof(EntityName),    selfInfo.declaringType);
-        AreEqual(typeof(EntityName),    selfInfo.componentType.Type);
-        AreEqual(2,                     selfInfo.customAttributes.Count());
-        AreEqual("EntityName",          selfInfo.ToString());
-        IsTrue(EntityUtils.GetEntityComponentMember<EntityName>(entity, selfInfo, out var self, out _));
-        AreEqual("self-1",              self.value);
-        IsTrue(EntityUtils.SetEntityComponentMember(entity, selfInfo, new EntityName("self-2"), out _));
-        AreEqual("self-2",              entity.GetComponent<EntityName>().value);
-    }
-    
-    [Test]
-    public static void Test_Entity_GetEntityComponentField()
-    {
-        var store  = new EntityStore();        
-        var entity = store.CreateEntity(new EntityName("comp-value"));
-        var componentType   = typeof(EntityName);
-        
-        entity.GetComponent<EntityName>().value = "comp-value";
-        var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
-        IsTrue(EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out _));
-        AreEqual("comp-value", name);
-        
-        var nameLengthInfo  = MemberPath.Get(componentType, " value . Length ");
-        IsTrue(EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out _));
-        AreEqual("comp-value".Length,               length);
-        AreEqual("value.Length",                    nameLengthInfo.path);
-        AreEqual(typeof(int),                       nameLengthInfo.memberType);
-        AreEqual(typeof(EntityName),                nameLengthInfo.declaringType);
-        AreEqual(typeof(EntityName),                nameLengthInfo.componentType.Type);
-        AreEqual(0,                                 nameLengthInfo.customAttributes.Count());
-        AreEqual("EntityName value.Length : Int32", nameLengthInfo.ToString());
-        
-        var start = Mem.GetAllocatedBytes();
-        for (int n = 0; n < 10; n++) {
-            EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out _, out _);
-        }
-        Mem.AssertNoAlloc(start);
-        
-        EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed", out _);
-        AreEqual("changed", entity.GetComponent<EntityName>().value);
-        
-        start = Mem.GetAllocatedBytes();
-        for (int n = 0; n < 10; n++) {
-            EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed 2", out _);
-        }
-        Mem.AssertNoAlloc(start);
-        AreEqual("changed 2", entity.GetComponent<EntityName>().value);
-    }
-    
-    [Test]
-    public static void Test_Entity_GetEntityComponentField_ref()
-    {
-        var store  = new EntityStore();        
-        var entity = store.CreateEntity(new EntityName("comp-value"));
-        var schema          = EntityStore.GetEntitySchema();
-        var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
-        var mi = (FieldInfo)typeof(EntityName).GetMember("value")[0];
-        
-        for (int n = 0; n < 10; n++) {
-            var component = EntityUtils.GetEntityComponent(entity, componentType);
-            mi.GetValue(component);
-        }
-    }
-    
-    [Test]
-    public static void Test_Entity_MemberPath_errors()
-    {
-        var e1 = Throws<InvalidOperationException>(() => {
-            MemberPath.Get(typeof(EntityName), "unknown");
-        });
-        AreEqual("Member 'unknown' not found in 'EntityName'", e1!.Message);
-        
-        var store       = new EntityStore();        
-        var entity      = store.CreateEntity(new EntityName("some name"));
-        var nameInfo    = MemberPath.Get(typeof(EntityName), nameof(EntityName.value));
-        
-        var e2 = Throws<InvalidCastException>(() => {
-            EntityUtils.GetEntityComponentMember<int>(entity, nameInfo, out _, out _);
-        });
-        StringAssert.StartsWith("Unable to cast object of type", e2!.Message);
-
-        var e3 = Throws<InvalidCastException>(() => {
-            EntityUtils.SetEntityComponentMember<int>(entity, nameInfo, 42, out _);
-        });
-        StringAssert.StartsWith("Unable to cast object of type", e3!.Message);
-    }
-
-    
 
     [Test]
     public static void Test_Entity_TryGetEntityByPid()
