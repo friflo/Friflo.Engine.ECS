@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
@@ -16,20 +15,20 @@ internal readonly struct MemberPathKey : IEquatable<MemberPathKey>
 {
     internal readonly   Type    type;
     internal readonly   string  path;
+    private  readonly   int     hashCode;
 
     public   override   string  ToString() => $"{type.Name} {path}";
+
+    public override int GetHashCode() => hashCode;
 
     public bool Equals(MemberPathKey other) {
         return type == other.type && path == other.path;
     }
 
-    public override int GetHashCode() {
-        return type.GetHashCode() ^ path.GetHashCode();
-    }
-
     internal MemberPathKey(Type type, string  path) {
-        this.type    = type;
-        this.path    = path;
+        this.type   = type;
+        this.path   = path;
+        hashCode    = type.TypeHandle.GetHashCode() ^ path.GetHashCode();
     }
 }
 
