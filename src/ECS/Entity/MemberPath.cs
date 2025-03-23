@@ -72,10 +72,16 @@ public sealed class MemberPath
     /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable
     public   readonly   object                              setter;
 
-    public override     string                              ToString() => $"{declaringType.Name} {path} : {memberType.Name}";
+    public override     string                              ToString() => GetString();
     
     private static readonly Dictionary<MemberPathKey, MemberPath> Map = new();
 
+    private string GetString() {
+        if (path == "") {
+            return declaringType.Name;
+        }
+        return $"{declaringType.Name} {path} : {memberType.Name}";
+    }
 
     private MemberPath(MemberPathKey key, ComponentType componentType, int structIndex, Type type, IEnumerable<CustomAttributeData> customAttributes, object getter, object setter) {
         this.key                = key;
@@ -112,7 +118,7 @@ public sealed class MemberPath
         var memberInfos = new MemberInfo[pathItems.Length];
         var memberType  = type;
         bool canWrite   = true;
-        IEnumerable<CustomAttributeData> customAttributes = null;
+        IEnumerable<CustomAttributeData> customAttributes = type.CustomAttributes;
         for (int i = 0; i < pathItems.Length; i++)
         {
             var memberName      = pathItems[i];

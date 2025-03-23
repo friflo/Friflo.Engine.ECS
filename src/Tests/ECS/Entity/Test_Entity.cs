@@ -107,17 +107,38 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Test_Entity_GetEntityComponentSelf()
+    {
+        var store  = new EntityStore();        
+        var entity = store.CreateEntity(new EntityName("self-1"));
+        var componentType   = typeof(EntityName);
+        var selfInfo        = MemberPath.Get(componentType, "");
+        AreEqual("",                    selfInfo.path);
+        AreEqual(typeof(EntityName),    selfInfo.memberType);
+        AreEqual(typeof(EntityName),    selfInfo.declaringType);
+        AreEqual(typeof(EntityName),    selfInfo.componentType.Type);
+        AreEqual(2,                     selfInfo.customAttributes.Count());
+        AreEqual("EntityName",          selfInfo.ToString());
+        IsTrue(EntityUtils.GetEntityComponentMember<EntityName>(entity, selfInfo, out var self, out _));
+        AreEqual("self-1",              self.value);
+        IsTrue(EntityUtils.SetEntityComponentMember(entity, selfInfo, new EntityName("self-2"), out _));
+        AreEqual("self-2",              entity.GetComponent<EntityName>().value);
+    }
+    
+    [Test]
     public static void Test_Entity_GetEntityComponentField()
     {
         var store  = new EntityStore();        
         var entity = store.CreateEntity(new EntityName("comp-value"));
         var componentType   = typeof(EntityName);
+        
+        entity.GetComponent<EntityName>().value = "comp-value";
         var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
-        EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out _);
+        IsTrue(EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out _));
         AreEqual("comp-value", name);
         
         var nameLengthInfo  = MemberPath.Get(componentType, " value . Length ");
-        EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out _);
+        IsTrue(EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out _));
         AreEqual("comp-value".Length,               length);
         AreEqual("value.Length",                    nameLengthInfo.path);
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
