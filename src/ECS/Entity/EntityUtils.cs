@@ -38,14 +38,14 @@ public static class EntityUtils
         return (IComponent)type.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
     
-    public static  TField   GetEntityComponentMember<TField>(Entity entity, MemberPath memberPath) {
+    public static  bool  GetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, out TField value, out Exception exception) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
-        return type.heapMap[memberPath.structIndex].GetComponentMember<TField>(entity.compIndex, memberPath);
+        return type.heapMap[memberPath.structIndex].GetComponentMember(entity.compIndex, memberPath, out value, out exception);
     }
     
-    public static  void   SetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, TField value) {
+    public static  bool   SetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, out Exception exception) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
-        type.heapMap[memberPath.structIndex].SetComponentMember<TField>(entity.compIndex, memberPath, value);
+        return type.heapMap[memberPath.structIndex].SetComponentMember(entity.compIndex, memberPath, value, out exception);
     }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)
