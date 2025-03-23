@@ -113,11 +113,11 @@ public static class Test_Entity
         var entity = store.CreateEntity(new EntityName("comp-value"));
         var componentType   = typeof(EntityName);
         var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
-        var name            = EntityUtils.GetEntityComponentMember<string>(entity, nameInfo);
+        EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out _);
         AreEqual("comp-value", name);
         
         var nameLengthInfo  = MemberPath.Get(componentType, " value . Length ");
-        var length          = EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo);
+        EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out _);
         AreEqual("comp-value".Length,               length);
         AreEqual("value.Length",                    nameLengthInfo.path);
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
@@ -128,16 +128,16 @@ public static class Test_Entity
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
-            EntityUtils.GetEntityComponentMember<string>(entity, nameInfo);
+            EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out _, out _);
         }
         Mem.AssertNoAlloc(start);
         
-        EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed");
+        EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed", out _);
         AreEqual("changed", entity.GetComponent<EntityName>().value);
         
         start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
-            EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed 2");
+            EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed 2", out _);
         }
         Mem.AssertNoAlloc(start);
         AreEqual("changed 2", entity.GetComponent<EntityName>().value);
@@ -171,12 +171,12 @@ public static class Test_Entity
         var nameInfo    = MemberPath.Get(typeof(EntityName), nameof(EntityName.value));
         
         var e2 = Throws<InvalidCastException>(() => {
-            EntityUtils.GetEntityComponentMember<int>(entity, nameInfo);
+            EntityUtils.GetEntityComponentMember<int>(entity, nameInfo, out _, out _);
         });
         StringAssert.StartsWith("Unable to cast object of type", e2!.Message);
 
         var e3 = Throws<InvalidCastException>(() => {
-            EntityUtils.SetEntityComponentMember<int>(entity, nameInfo, 42);
+            EntityUtils.SetEntityComponentMember<int>(entity, nameInfo, 42, out _);
         });
         StringAssert.StartsWith("Unable to cast object of type", e3!.Message);
     }
