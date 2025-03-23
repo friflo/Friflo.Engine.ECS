@@ -62,11 +62,13 @@ public static class Test_MemberPath
         
         entity.GetComponent<EntityName>().value = "comp-value";
         var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
-        IsTrue(EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out _));
+        IsTrue(EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out var exception));
         AreEqual("comp-value", name);
+        IsNull  (exception);
         
         var nameLengthInfo  = MemberPath.Get(componentType, " value . Length ");
-        IsTrue(EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out _));
+        IsTrue(EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out  exception));
+        IsNull  (exception);
         AreEqual("comp-value".Length,               length);
         AreEqual("value.Length",                    nameLengthInfo.path);
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
@@ -81,7 +83,8 @@ public static class Test_MemberPath
         }
         Mem.AssertNoAlloc(start);
         
-        EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed", out _);
+        IsTrue(EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed", out exception));
+        IsNull  (exception);
         AreEqual("changed", entity.GetComponent<EntityName>().value);
         
         start = Mem.GetAllocatedBytes();
