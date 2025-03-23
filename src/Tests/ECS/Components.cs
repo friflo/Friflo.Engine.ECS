@@ -180,6 +180,11 @@ public struct Component64       : IComponent
     public long  val8;
 }
 
+public struct MemberExceptionComponent : IComponent
+{
+    public int value { get => throw new InvalidOperationException("get"); set => throw new InvalidOperationException("set"); } 
+}
+
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
 public static class MyEntityExtensions
 {

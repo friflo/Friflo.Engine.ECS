@@ -15,7 +15,7 @@ namespace Tests.ECS {
 public static class Test_MemberPath
 {
     [Test]
-    public static void Test_Entity_GetEntityComponentSelf()
+    public static void Test_MemberPath_GetEntityComponentSelf()
     {
         var store  = new EntityStore();        
         var entity = store.CreateEntity(new EntityName("self-1"));
@@ -35,7 +35,26 @@ public static class Test_MemberPath
     }
     
     [Test]
-    public static void Test_Entity_GetEntityComponentField()
+    public static void Test_MemberPath_EntityComponentField_errors()
+    {
+        var store           = new EntityStore();        
+        var entity          = store.CreateEntity(new MemberExceptionComponent());
+        var componentType   = typeof(MemberExceptionComponent);
+        var valuePath       = MemberPath.Get(componentType, nameof(MemberExceptionComponent.value));
+        
+        IsFalse(EntityUtils.GetEntityComponentMember<int>(entity, valuePath, out var value, out var exception));
+        AreEqual(0, value);
+        IsTrue(typeof(InvalidOperationException) == exception.GetType());
+        AreEqual("get", exception.Message);
+        
+        IsFalse(EntityUtils.SetEntityComponentMember(entity, valuePath, 42, out exception));
+        IsTrue(typeof(InvalidOperationException) == exception.GetType());
+        AreEqual("set", exception.Message);
+    }
+    
+    
+    [Test]
+    public static void Test_MemberPath_GetEntityComponentField()
     {
         var store  = new EntityStore();        
         var entity = store.CreateEntity(new EntityName("comp-value"));
@@ -74,7 +93,7 @@ public static class Test_MemberPath
     }
     
     [Test]
-    public static void Test_Entity_GetEntityComponentField_ref()
+    public static void Test_MemberPath_GetEntityComponentField_ref()
     {
         var store  = new EntityStore();        
         var entity = store.CreateEntity(new EntityName("comp-value"));
@@ -89,7 +108,7 @@ public static class Test_MemberPath
     }
     
     [Test]
-    public static void Test_Entity_MemberPath_errors()
+    public static void Test_MemberPath_MemberPath_errors()
     {
         var e1 = Throws<InvalidOperationException>(() => {
             MemberPath.Get(typeof(EntityName), "unknown");
