@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
+// ReSharper disable ArrangeThisQualifier
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -42,37 +43,40 @@ public delegate void   MemberPathSetter<T, in  TField> (ref T root, TField value
 /// </summary>
 public sealed class MemberPath 
 {
-    private  readonly   MemberPathKey                       key;
+    private  readonly   MemberPathKey   key;
     
-    internal readonly   int                                 structIndex;
+    internal readonly   int             structIndex;
 
     /// Returns the Type of the field / property.
-    public   readonly   Type                                memberType;
+    public   readonly   Type            memberType;
     
     // ReSharper disable once InconsistentNaming
     /// Returns the Type containing the field / property.
-    public              Type                                declaringType => key.type;
+    public              Type            declaringType => key.type;
     
     /// Returns the components Type containing the field / property.
-    public              ComponentType                       componentType;
+    public              ComponentType   componentType;
     
     /// Returns the custom attributes of the field / property.<br/>
     /// Is null if <see cref="path"/> == ""
-    public   readonly   MemberInfo                          memberInfo;
+    public   readonly   MemberInfo      memberInfo;
     
     /// Identifies the field / property within its <see cref="declaringType"/>.
     // ReSharper disable once InconsistentNaming
-    public              string                              path => key.path;
+    public              string          path => key.path;
+    
+    /// Name of the leaf member. E.g. path: "value.Length" => name: "Length" 
+    public              string          name;
     
     /// Returns a delegate used to read the value of the field / property.<br/>
     /// Type: <see cref="MemberPathGetter{T,TField}"/>
-    public   readonly   object                              getter;
+    public   readonly   object          getter;
     
     /// Returns a delegate used to set the value of the field / property.<br/>
     /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable
-    public   readonly   object                              setter;
+    public   readonly   object          setter;
 
-    public override     string                              ToString() => GetString();
+    public override     string          ToString() => GetString();
     
     private static readonly Dictionary<MemberPathKey, MemberPath> Map = new();
 
@@ -91,6 +95,7 @@ public sealed class MemberPath
         this.getter         = getter;
         this.setter         = setter;
         this.structIndex    = structIndex;
+        this.name           = memberInfo?.Name ?? type.Name;
     }
     
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;

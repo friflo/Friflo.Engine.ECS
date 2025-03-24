@@ -22,6 +22,7 @@ public static class Test_MemberPath
         var selfInfo        = MemberPath.Get(componentType, "");
         
         AreEqual("",                    selfInfo.path);
+        AreEqual("EntityName",          selfInfo.name);
         AreEqual(typeof(EntityName),    selfInfo.memberType);
         AreEqual(typeof(EntityName),    selfInfo.declaringType);
         AreEqual(typeof(EntityName),    selfInfo.componentType.Type);
@@ -62,18 +63,26 @@ public static class Test_MemberPath
         entity.GetComponent<EntityName>().value = "comp-value";
         var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
         IsTrue(EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out var exception));
-        AreEqual("comp-value", name);
         IsNull  (exception);
+        AreEqual("comp-value",                      name);
+        AreEqual("value",                           nameInfo.path);
+        AreEqual("value",                           nameInfo.name);
+        AreEqual(typeof(string),                    nameInfo.memberType);
+        AreEqual(typeof(EntityName),                nameInfo.declaringType);
+        AreEqual(typeof(EntityName),                nameInfo.componentType.Type);
+        NotNull ("value",                           nameInfo.memberInfo.Name);
+        AreEqual("EntityName value : String",       nameInfo.ToString());
         
         var nameLengthInfo  = MemberPath.Get(componentType, "value.Length");
         IsTrue(EntityUtils.GetEntityComponentMember<int>(entity, nameLengthInfo, out var length, out  exception));
         IsNull  (exception);
         AreEqual("comp-value".Length,               length);
         AreEqual("value.Length",                    nameLengthInfo.path);
+        AreEqual("Length",                          nameLengthInfo.name);
         AreEqual(typeof(int),                       nameLengthInfo.memberType);
         AreEqual(typeof(EntityName),                nameLengthInfo.declaringType);
         AreEqual(typeof(EntityName),                nameLengthInfo.componentType.Type);
-        NotNull (                                   nameLengthInfo.memberInfo);
+        NotNull ("Length",                          nameLengthInfo.memberInfo.Name);
         AreEqual("EntityName value.Length : Int32", nameLengthInfo.ToString());
         
         var start = Mem.GetAllocatedBytes();
