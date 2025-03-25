@@ -54,7 +54,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
         : base (componentKey, type, Component)
     {
         StructIndex     = structIndex;
-        IsBlittable     = GetBlittableType(type) == BlittableType.Blittable;
+        IsBlittable     = GetBlittableType(type, true) == BlittableType.Blittable;
         StructSize      = byteSize;
         IndexType       = indexType;
         IndexValueType  = indexValueType;

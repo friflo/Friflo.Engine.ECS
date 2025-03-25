@@ -82,7 +82,7 @@ internal static class SchemaUtils
         where T : Script, new()
     {
         var scriptKey   = GetComponentKey(typeof(T));
-        var isBlittable = SchemaType.GetBlittableType(typeof(T)) == BlittableType.Blittable;
+        var isBlittable = SchemaType.GetBlittableType(typeof(T), true) == BlittableType.Blittable;
         // CloneScript cloneScript = null;
         // if (isBlittable) {
         //     cloneScript = CreateCloneScriptDelegate();

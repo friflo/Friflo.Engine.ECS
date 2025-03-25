@@ -108,6 +108,7 @@ public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, 
 public struct NonBlittableCycle         : IComponent { internal CycleClass              cycle;  }
 public struct NonBlittableCycle2        : IComponent { internal CycleClass1             cycle1; }
 public struct NonBlittableComponent     : IComponent { internal int[]                   array;  }
+public struct NonBlittableClass         : IComponent { internal object                  obj;    }
 
 public struct BlittableEnum             : IComponent { public BlittableEnumType value;       }
 public struct BlittableDatetime         : IComponent { public DateTime          dateTime;    }

@@ -112,10 +112,11 @@ public abstract class SchemaType
         types.Add(typeof(Entity),       blittable);
         //
         types.Add(typeof(string),       blittable);
+        types.Add(typeof(Uri),          blittable);
     }
     
     // todo - add test assertion EntityName is a blittable type 
-    internal static BlittableType GetBlittableType(Type type)
+    internal static BlittableType GetBlittableType(Type type, bool isBaseType)
     {
         // if (type.Name == "CycleClass") { _ = 42; }
         if (BlittableTypes.TryGetValue(type, out BlittableType blittable)) {
@@ -123,7 +124,9 @@ public abstract class SchemaType
         }
         if (type.IsArray) {
             blittable = BlittableType.NonBlittable;    
-        } else if (type.IsClass || type.IsValueType) {
+        } else if (type.IsClass && !isBaseType) {
+            blittable = BlittableType.NonBlittable;
+        } else if (type.IsValueType) {
             // detect cycle in class type hierarchy by adding a temporary unknown
             BlittableTypes.Add(type, BlittableType.Unknown);
             blittable = AreAllMembersBlittable(type);
@@ -147,7 +150,7 @@ public abstract class SchemaType
             switch (member) {
                 case FieldInfo fieldInfo:
                     var fieldType = fieldInfo.FieldType;
-                    if (GetBlittableType(fieldType) == BlittableType.Blittable) {
+                    if (GetBlittableType(fieldType, false) == BlittableType.Blittable) {
                         continue;
                     }
                     return BlittableType.NonBlittable;
