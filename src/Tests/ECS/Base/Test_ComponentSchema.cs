@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -118,6 +119,18 @@ public static class Test_ComponentSchema
         AssertBlittableComponent<NonBlittableCycle2>    (schema, false);
         AssertBlittableComponent<NonBlittableComponent> (schema, false);
         AssertBlittableComponent<NonBlittableClass>     (schema, false);
+    }
+    
+    [Test]
+    public static void Test_ComponentTypes_CopyComponent()
+    {
+        var c1 = EntityUtils.CopyComponent(new MyComponent1{ a = 55 }, default, default); // blittable component
+        AreEqual(55, c1.a);
+        
+        var list1 = new List<int> { 20 };
+        var c2 = EntityUtils.CopyComponent(new CopyComponent{ list = list1 }, default, default); // non blittable component
+        list1[0] = 30;              // changing the list has no effect on the copied component.
+        AreEqual(20, c2.list[0]);   // still 20
     }
     
     [Test]

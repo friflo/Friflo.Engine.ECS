@@ -60,6 +60,19 @@ public static class EntityUtils
     public static  bool AddEntityComponentValue(Entity entity, ComponentType componentType, object value) {
         return componentType.AddEntityComponentValue(entity, value);
     }
+    
+    public static T CopyComponent<T>(T component, Entity source, Entity target)
+        where T : struct, IComponent
+    {
+        var copyValue = CopyValueUtils<T>.CopyValue;
+        if (copyValue == null) {
+            return component;
+        }
+        T targetComponent   = new T();
+        var context         = new CopyContext(source, target);
+        copyValue(component, ref targetComponent, context);
+        return targetComponent;
+    }
     #endregion
     
 #region non generic script - methods
