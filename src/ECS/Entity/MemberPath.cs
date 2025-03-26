@@ -39,7 +39,7 @@ public delegate void   MemberPathSetter<T, in  TField> (ref T root, TField value
 
 /// <summary>
 /// Provide the attributes for a specific field / property within a specific <see cref="Type"/>.<br/>
-/// It also enables to read / write the value of the field / property.
+/// It enables to read / write the value of a field / property with the given <see cref="path"/>.
 /// </summary>
 public sealed class MemberPath 
 {
