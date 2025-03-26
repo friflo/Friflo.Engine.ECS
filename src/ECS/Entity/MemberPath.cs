@@ -33,7 +33,7 @@ internal readonly struct MemberPathKey : IEquatable<MemberPathKey>
     }
 }
 
-public delegate TField MemberPathGetter<in T, out TField> (T root);
+public delegate TField MemberPathGetter<T, out TField> (in T root);
 public delegate void   MemberPathSetter<T, in  TField> (ref T root, TField value);
 
 
@@ -176,7 +176,7 @@ public sealed class MemberPath
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
     private static MemberPathGetter<TComponent,TField> CreateGetter<TComponent,TField>(MemberInfo[] fields)
     {
-        var arg = Expression.Parameter(typeof(TComponent), "component"); // "component" parameter name in MemberGetter<,>
+        var arg = Expression.Parameter(typeof(TComponent).MakeByRefType(), "root");     // "root" parameter name in MemberPathGetter<,>
         Expression fieldExpr = arg;
         foreach (var field in fields) {
             fieldExpr = PropertyOrField(fieldExpr, field);
@@ -187,8 +187,8 @@ public sealed class MemberPath
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
     private static MemberPathSetter<TComponent,TField> CreateSetter<TComponent,TField>(MemberInfo[] fields)
     {
-        var arg   = Expression.Parameter(typeof(TComponent).MakeByRefType(), "component"); // "component" parameter name in MemberSetter<,>
-        var value = Expression.Parameter(typeof(TField),                     "value");     // "value" parameter name in MemberSetter<,>
+        var arg   = Expression.Parameter(typeof(TComponent).MakeByRefType(), "root");   // "root" parameter name in MemberPathSetter<,>
+        var value = Expression.Parameter(typeof(TField),                     "value");  // "value" parameter name in MemberPathSetter<,>
         Expression fieldExpr = arg;
         foreach (var field in fields) {
             fieldExpr = PropertyOrField(fieldExpr, field);
