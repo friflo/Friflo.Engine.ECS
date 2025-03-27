@@ -203,11 +203,24 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Returns the <see cref="Entity"/> with the passed <paramref name="id"/>.<br/>
     /// The returned entity can be null (<see cref="Entity.IsNull"/> == true).
     /// </summary>
-    /// <exception cref="IndexOutOfRangeException"> In case passed <paramref name="id"/> invalid (id >= <see cref="Capacity"/>). </exception>
+    /// <exception cref="IndexOutOfRangeException"> In case passed <paramref name="id"/> is invalid (id >= <see cref="Capacity"/>). </exception>
     public  Entity  GetEntityById(int id) {
         var localNodes = nodes;
         if (0 <= id && id < localNodes.Length) {
             return new Entity(this, id, localNodes[id].revision);
+        }
+        throw IdOutOfRangeException(this, id);
+    }
+    
+    /// <summary>
+    /// Returns the <see cref="Entity"/> with the passed <paramref name="rawEntity"/>.<br/>
+    /// The returned entity can be null (<see cref="Entity.IsNull"/> == true).
+    /// </summary>
+    /// <exception cref="IndexOutOfRangeException"> In case passed <see cref="RawEntity.Id"/> is invalid (id >= <see cref="Capacity"/>). </exception>
+    public  Entity  GetEntityByRawEntity(RawEntity rawEntity) {
+        var id = rawEntity.Id;
+        if (id < nodes.Length) {
+            return new Entity(this, id, rawEntity.Revision);
         }
         throw IdOutOfRangeException(this, id);
     }

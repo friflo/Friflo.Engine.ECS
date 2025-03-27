@@ -257,6 +257,17 @@ public static class Test_Entity
         var expect = "Incompatible method signature: Tests.ECS.NonBlittableArgumentException.CopyValue() - expect: static void CopyValue(in NonBlittableArgumentException source, ref NonBlittableArgumentException target, in CopyContext context)";
         AreEqual(expect, e!.Message);
     }
+    
+    [Test]
+    public static void Test_Entity_GetEntityByRawEntity()
+    {
+        var store   = new EntityStore();
+        var rawEntity  = new RawEntity(store.NodeMaxId + 1, 0);
+        var e = Throws<ArgumentException>(() => {
+            store.GetEntityByRawEntity(rawEntity);
+        });
+        AreEqual("id: 128. expect in [0, current max id: 127]", e!.Message);
+    }
 }
 
 internal struct MyTag : ITag { }

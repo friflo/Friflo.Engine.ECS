@@ -160,6 +160,11 @@ public static class Test_Entity
             store.GetEntityById(128);
         });
         AreEqual("id: 128. expect in [0, current max id: 127]", e!.Message);
+        
+        var entity2    = store.GetEntityById(2);
+        var entity2Raw = store.GetEntityByRawEntity(entity2.RawEntity);
+        IsFalse(entity2Raw.IsNull);
+        AreEqual(2, entity2Raw.Id);
     }
     
     [Test]
