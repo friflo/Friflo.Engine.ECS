@@ -73,11 +73,11 @@ public sealed class MemberPath
     public              string          name;
     
     /// Returns a delegate used to read the value of the field / property.<br/>
-    /// Type: <see cref="MemberPathGetter{T,TField}"/>
+    /// Type: <see cref="MemberPathGetter{T,TField}"/>. Is null if not readable.
     public   readonly   object          getter;
     
     /// Returns a delegate used to set the value of the field / property.<br/>
-    /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable
+    /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable.
     public   readonly   object          setter;
 
     public override     string          ToString() => GetString();
@@ -126,6 +126,7 @@ public sealed class MemberPath
         var memberInfos = new MemberInfo[pathItems.Length];
         var memberType  = type;
         bool canWrite   = true;
+        bool canRead    = true;
         MemberInfo memberInfo = null;
         for (int i = 0; i < pathItems.Length; i++)
         {
@@ -147,16 +148,21 @@ public sealed class MemberPath
                     canWrite = false;
                 }
             }
+            if (IsInvalidType(memberType)) {
+                canRead  = false;
+                canWrite = false;
+            }
             /* else { // not reachable with the given Flags
                 // throw new InvalidOperationException($"Member '{memberName}' is not a field or property in '{type.Name}'");
             } */
         }
         var typeParams      = new []{ type, memberType };
-        
-        var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
-        var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
-        var getter          = genericGetter.Invoke(null, [memberInfos]);
-        
+        object getter = null;
+        if (canRead) {
+            var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
+            var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
+            getter          = genericGetter.Invoke(null, [memberInfos]);
+        }
         object setter = null;
         if (canWrite) {
             var setterMethod    = typeof(MemberPath).GetMethod("CreateSetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
@@ -171,6 +177,12 @@ public sealed class MemberPath
         Map.Add(key, memberPath);
         return memberPath;
     }
+    
+    // See ThrowIfTypeNeverValidGenericArgument() at:
+    // https://github.com/dotnet/runtime/blob/4f5c6938d09e935830492c006aa8381611b65ad8/src/libraries/System.Private.CoreLib/src/System/RuntimeType.cs#L736
+    private static bool IsInvalidType(Type type) {
+        return type.IsPointer || type.IsByRef || type == typeof(void);
+    } 
     
     // ReSharper disable UnusedMember.Local
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]

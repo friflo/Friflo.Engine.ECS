@@ -145,6 +145,15 @@ public static class Test_MemberPath
         });
         StringAssert.StartsWith("Member ' name' not found in 'EntityName'", e4!.Message);
     }
+    
+    [Test]
+    public static void Test_MemberPath_Get_ref_return()
+    {
+        var tags = MemberPath.Get(typeof(Entity), nameof(Entity.Tags));
+        IsNull(tags.getter);
+        IsNull(tags.setter);
+        AreEqual(typeof(Tags).MakeByRefType(), tags.memberType);
+    }
 }
 
 }
