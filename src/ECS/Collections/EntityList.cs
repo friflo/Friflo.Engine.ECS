@@ -215,10 +215,13 @@ public sealed class EntityList : IList<Entity>, IReadOnlyList<Entity>
     private class IdComparerDesc : IComparer<RawEntity> {
         public int Compare(RawEntity e1, RawEntity e2) => e2.Id - e1.Id;
     }
-    
     private static readonly IdComparerAsc  IdAsc = new ();
     private static readonly IdComparerDesc IdDesc = new ();
     
+#if NET5_0_OR_GREATER
+    private static readonly Comparison<RawEntity> IsAscComparison  = (e1, e2) => e1.Id - e2.Id;
+    private static readonly Comparison<RawEntity> IsDescComparison = (e1, e2) => e2.Id - e1.Id;
+#endif
     /// <summary>
     /// Sort the entities by entity Id.<br/> 
     /// </summary>
@@ -227,11 +230,12 @@ public sealed class EntityList : IList<Entity>, IReadOnlyList<Entity>
         if (sortOrder == SortOrder.None) {
             return;
         }
-        if (sortOrder == SortOrder.Ascending) {
-            Array.Sort(ids, 0, count, IdAsc); 
-        } else {
-            Array.Sort(ids, 0, count, IdDesc); 
-        }
+#if NET5_0_OR_GREATER
+        var span = new Span<RawEntity>(ids, 0, count) ;
+        span.Sort(sortOrder == SortOrder.Ascending ? IsAscComparison : IsDescComparison);
+#else
+        Array.Sort(ids, 0, count, sortOrder == SortOrder.Ascending ? IdAsc : IdDesc);
+#endif
     }
     
     /// <summary>
