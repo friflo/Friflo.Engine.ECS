@@ -133,7 +133,7 @@ public sealed class MemberPath
             var memberName      = pathItems[i];
             var members         = memberType.GetMember(memberName, Flags);
             if (members.Length == 0) {
-                throw new InvalidOperationException($"Member '{memberName}' not found in '{type.Name}'");
+                throw new InvalidOperationException($"Member '{memberName}' not found in Type '{type.Name}'");
             }
             memberInfo          = members[0];
             memberInfos[i]      = memberInfo;

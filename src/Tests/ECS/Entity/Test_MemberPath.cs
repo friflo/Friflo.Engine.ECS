@@ -124,7 +124,7 @@ public static class Test_MemberPath
         var e1 = Throws<InvalidOperationException>(() => {
             MemberPath.Get(typeof(EntityName), "unknown");
         });
-        AreEqual("Member 'unknown' not found in 'EntityName'", e1!.Message);
+        AreEqual("Member 'unknown' not found in Type 'EntityName'", e1!.Message);
         
         var store       = new EntityStore();        
         var entity      = store.CreateEntity(new EntityName("some name"));
@@ -143,7 +143,7 @@ public static class Test_MemberPath
         var e4 = Throws<InvalidOperationException>(() => {
             MemberPath.Get(typeof(EntityName), " name");
         });
-        StringAssert.StartsWith("Member ' name' not found in 'EntityName'", e4!.Message);
+        AreEqual("Member ' name' not found in Type 'EntityName'", e4!.Message);
     }
     
     [Test]
