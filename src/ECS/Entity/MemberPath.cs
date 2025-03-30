@@ -61,7 +61,7 @@ public sealed class MemberPath
     /// Returns the components Type containing the field / property.
     public              ComponentType   componentType;
     
-    /// Returns the custom attributes of the field / property.<br/>
+    /// Returns the <see cref="MemberInfo"/> of the leaf member in the <see cref="path"/>.<br/>
     /// Is null if <see cref="path"/> == ""
     public   readonly   MemberInfo      memberInfo;
     
