@@ -87,4 +87,9 @@ public class UiDragAttribute : Attribute
     // ReSharper disable once UnusedParameter.Local
     public UiDragAttribute(float speed = 1, float min = 0, float max= 0, string format = null) { }
 }
+
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class UiFlagsAttribute : Attribute
+{ }
+
 #endregion
