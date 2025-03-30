@@ -88,8 +88,7 @@ public class UiDragAttribute : Attribute
     public UiDragAttribute(float speed = 1, float min = 0, float max= 0, string format = null) { }
 }
 
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class UiFlagsAttribute : Attribute
-{ }
+// [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+// public class UiFlagsAttribute : Attribute { }
 
 #endregion
