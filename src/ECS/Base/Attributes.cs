@@ -91,7 +91,7 @@ public class UiDragAttribute : Attribute
 [AttributeUsage(AttributeTargets.Enum)]
 public class UiFlagsAttribute : Attribute
 {
-    public UiFlagsAttribute(int groupSize, bool ascending) { }
+    public UiFlagsAttribute(int groupSize, bool ascending, int groupSpacing) { }
 }
 
 #endregion
