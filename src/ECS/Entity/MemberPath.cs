@@ -51,17 +51,17 @@ public sealed class MemberPath
     
     internal readonly   int             structIndex;
 
-    /// Returns the Type of the field / property.
+    /// The Type of the field / property.
     public   readonly   Type            memberType;
     
     // ReSharper disable once InconsistentNaming
-    /// Returns the Type containing the field / property.
+    /// The Type containing the field / property.
     public              Type            declaringType => key.type;
     
-    /// Returns the components Type containing the field / property.
+    /// The components Type containing the field / property.
     public              ComponentType   componentType;
     
-    /// Returns the <see cref="MemberInfo"/> of the leaf member in the <see cref="path"/>.<br/>
+    /// The <see cref="MemberInfo"/> of the leaf member in the <see cref="path"/>.<br/>
     /// Is null if <see cref="path"/> == ""
     public   readonly   MemberInfo      memberInfo;
     
@@ -72,11 +72,11 @@ public sealed class MemberPath
     /// Name of the leaf member. E.g. path: "value.Length" => name: "Length" 
     public              string          name;
     
-    /// Returns a delegate used to read the value of the field / property.<br/>
+    /// A delegate used to read the value of the field / property.<br/>
     /// Type: <see cref="MemberPathGetter{T,TField}"/>. Is null if not readable.
     public   readonly   Delegate        getter;
     
-    /// Returns a delegate used to set the value of the field / property.<br/>
+    /// A delegate used to set the value of the field / property.<br/>
     /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable.
     public   readonly   Delegate        setter;
 
