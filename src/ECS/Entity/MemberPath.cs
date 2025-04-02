@@ -74,11 +74,11 @@ public sealed class MemberPath
     
     /// Returns a delegate used to read the value of the field / property.<br/>
     /// Type: <see cref="MemberPathGetter{T,TField}"/>. Is null if not readable.
-    public   readonly   object          getter;
+    public   readonly   Delegate        getter;
     
     /// Returns a delegate used to set the value of the field / property.<br/>
     /// Type: <see cref="MemberPathSetter{T,TField}"/>. Is null if not writeable.
-    public   readonly   object          setter;
+    public   readonly   Delegate        setter;
 
     public override     string          ToString() => GetString();
     
@@ -91,7 +91,7 @@ public sealed class MemberPath
         return $"{declaringType.Name} {path} : {memberType.Name}";
     }
 
-    private MemberPath(MemberPathKey key, ComponentType componentType, int structIndex, Type type, MemberInfo memberInfo, object getter, object setter) {
+    private MemberPath(MemberPathKey key, ComponentType componentType, int structIndex, Type type, MemberInfo memberInfo, Delegate getter, Delegate setter) {
         this.key            = key;
         this.componentType  = componentType;
         this.memberType     = type;
@@ -156,18 +156,18 @@ public sealed class MemberPath
                 // throw new InvalidOperationException($"Member '{memberName}' is not a field or property in '{type.Name}'");
             } */
         }
-        var typeParams      = new []{ type, memberType };
-        object getter = null;
+        var typeParams  = new []{ type, memberType };
+        Delegate getter = null;
         if (canRead) {
             var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
             var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
-            getter          = genericGetter.Invoke(null, [memberInfos]);
+            getter              = (Delegate)genericGetter.Invoke(null, [memberInfos]);
         }
-        object setter = null;
+        Delegate setter = null;
         if (canWrite) {
             var setterMethod    = typeof(MemberPath).GetMethod("CreateSetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
             var genericSetter   = setterMethod.MakeGenericMethod(typeParams);
-            setter              = genericSetter.Invoke(null, [memberInfos]);
+            setter              = (Delegate)genericSetter.Invoke(null, [memberInfos]);
         }
         var structIndex = 0;
         if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
