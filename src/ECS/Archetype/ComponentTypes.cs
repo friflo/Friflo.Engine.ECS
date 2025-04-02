@@ -226,6 +226,15 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     {
         return bitSet.HasAny(componentTypes.bitSet);
     }
+    
+    /// <summary>
+    /// Return true if it contains the passed <paramref name="componentType"/>.
+    /// </summary>
+    public readonly bool Contains (ComponentType componentType)
+    {
+        var types = new ComponentTypes(componentType);
+        return bitSet.HasAll(types.bitSet);
+    }
     #endregion
     
 #region component types mutation

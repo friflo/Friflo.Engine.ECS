@@ -41,6 +41,11 @@ public static class Test_ComponentTypes
         IsFalse(types.Has<Position, Rotation, Scale3>());
         IsTrue (types.HasAll(twoStructs));
         IsTrue (types.HasAny(twoStructs));
+        
+        var typeMap = EntityStore.GetEntitySchema().ComponentTypeByType;
+        IsTrue (types.Contains(typeMap[typeof(Position)]));
+        IsTrue (types.Contains(typeMap[typeof(Rotation)]));
+        IsFalse(types.Contains(typeMap[typeof(MyComponent2)]));
 
         var copy = new ComponentTypes();
         copy.Add(types);
