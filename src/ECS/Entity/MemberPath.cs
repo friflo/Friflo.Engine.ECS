@@ -156,19 +156,21 @@ public sealed class MemberPath
                 // throw new InvalidOperationException($"Member '{memberName}' is not a field or property in '{type.Name}'");
             } */
         }
-        var name 		= path == "" ? type.Name : $"{type.Name} {path}";
+        
         var typeParams  = new []{ type, memberType };
         Delegate getter = null;
         if (canRead) {
+            var name 		    = path == "" ? $"get: ({type.Name} => this)" :  $"get: ({type.Name} => {path})";
             var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string), typeof(MemberInfo[])], null)!;
             var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
-            getter              = (Delegate)genericGetter.Invoke(null, ["get => " + name, memberInfos]);
+            getter              = (Delegate)genericGetter.Invoke(null, [name, memberInfos]);
         }
         Delegate setter = null;
         if (canWrite) {
+            var name 		    = path == "" ? $"set: ({type.Name} => this)" :  $"set: ({type.Name} => {path})";
             var setterMethod    = typeof(MemberPath).GetMethod("CreateSetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string), typeof(MemberInfo[])], null)!;
             var genericSetter   = setterMethod.MakeGenericMethod(typeParams);
-            setter              = (Delegate)genericSetter.Invoke(null, ["set => " + name, memberInfos]);
+            setter              = (Delegate)genericSetter.Invoke(null, [name, memberInfos]);
         }
         var structIndex = 0;
         if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
