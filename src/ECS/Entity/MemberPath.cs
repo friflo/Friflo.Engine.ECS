@@ -38,8 +38,8 @@ public delegate void   MemberPathSetter<T, in  TField> (ref T root, TField value
 
 
 /// <summary>
-/// Provide the attributes for a specific field / property within a specific <see cref="Type"/>.<br/>
-/// It enables to read / write the value of a field / property with the given <see cref="path"/>.
+/// Identifies a specific field / property by its <see cref="path"/> within a specific <see cref="Type"/>.<br/>
+/// It enables to read and write the field / property using the <see cref="getter"/> and <see cref="setter"/>.
 /// </summary>
 /// <remarks>
 /// <see cref="MemberPath"/> instances are immutable.<br/>
