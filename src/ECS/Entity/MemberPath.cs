@@ -156,18 +156,19 @@ public sealed class MemberPath
                 // throw new InvalidOperationException($"Member '{memberName}' is not a field or property in '{type.Name}'");
             } */
         }
+        var name 		= path == "" ? type.Name : $"{type.Name} {path}";
         var typeParams  = new []{ type, memberType };
         Delegate getter = null;
         if (canRead) {
-            var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
+            var getterMethod    = typeof(MemberPath).GetMethod("CreateGetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string), typeof(MemberInfo[])], null)!;
             var genericGetter   = getterMethod.MakeGenericMethod(typeParams);
-            getter              = (Delegate)genericGetter.Invoke(null, [memberInfos]);
+            getter              = (Delegate)genericGetter.Invoke(null, ["get => " + name, memberInfos]);
         }
         Delegate setter = null;
         if (canWrite) {
-            var setterMethod    = typeof(MemberPath).GetMethod("CreateSetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(MemberInfo[])], null)!;
+            var setterMethod    = typeof(MemberPath).GetMethod("CreateSetter", BindingFlags.Static | BindingFlags.NonPublic, null, [typeof(string), typeof(MemberInfo[])], null)!;
             var genericSetter   = setterMethod.MakeGenericMethod(typeParams);
-            setter              = (Delegate)genericSetter.Invoke(null, [memberInfos]);
+            setter              = (Delegate)genericSetter.Invoke(null, ["set => " + name, memberInfos]);
         }
         var structIndex = 0;
         if (EntityStoreBase.Static.EntitySchema.ComponentTypeByType.TryGetValue(type, out var componentType)) {
@@ -186,18 +187,18 @@ public sealed class MemberPath
     
     // ReSharper disable UnusedMember.Local
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
-    private static MemberPathGetter<TComponent,TField> CreateGetter<TComponent,TField>(MemberInfo[] fields)
+    private static MemberPathGetter<TComponent,TField> CreateGetter<TComponent,TField>(string name, MemberInfo[] fields)
     {
         var arg = Expression.Parameter(typeof(TComponent).MakeByRefType(), "root");     // "root" parameter name in MemberPathGetter<,>
         Expression fieldExpr = arg;
         foreach (var field in fields) {
             fieldExpr = PropertyOrField(fieldExpr, field);
         }
-        return Expression.Lambda<MemberPathGetter<TComponent, TField>>(fieldExpr, arg).Compile();
+        return Expression.Lambda<MemberPathGetter<TComponent, TField>>(fieldExpr, name, [arg]).Compile();
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
-    private static MemberPathSetter<TComponent,TField> CreateSetter<TComponent,TField>(MemberInfo[] fields)
+    private static MemberPathSetter<TComponent,TField> CreateSetter<TComponent,TField>(string name, MemberInfo[] fields)
     {
         var arg   = Expression.Parameter(typeof(TComponent).MakeByRefType(), "root");   // "root" parameter name in MemberPathSetter<,>
         var value = Expression.Parameter(typeof(TField),                     "value");  // "value" parameter name in MemberPathSetter<,>
@@ -206,7 +207,7 @@ public sealed class MemberPath
             fieldExpr = PropertyOrField(fieldExpr, field);
         }
         var assign = Expression.Assign(fieldExpr, value);
-        return Expression.Lambda<MemberPathSetter<TComponent, TField>>(assign, arg, value).Compile();
+        return Expression.Lambda<MemberPathSetter<TComponent, TField>>(assign, name, [arg, value]).Compile();
     }
     
     /// <summary>

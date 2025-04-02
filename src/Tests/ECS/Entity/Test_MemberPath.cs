@@ -26,6 +26,8 @@ public static class Test_MemberPath
         AreEqual(typeof(EntityName),    selfInfo.memberType);
         AreEqual(typeof(EntityName),    selfInfo.declaringType);
         AreEqual(typeof(EntityName),    selfInfo.componentType.Type);
+        AreEqual("get => EntityName",   selfInfo.getter.Method.Name);
+        AreEqual("set => EntityName",   selfInfo.setter.Method.Name);
         IsNull  (                       selfInfo.memberInfo);
         AreEqual("EntityName",          selfInfo.ToString());
         IsTrue(EntityUtils.GetEntityComponentMember<EntityName>(entity, selfInfo, out var self, out _));
@@ -70,6 +72,8 @@ public static class Test_MemberPath
         AreEqual(typeof(string),                    nameInfo.memberType);
         AreEqual(typeof(EntityName),                nameInfo.declaringType);
         AreEqual(typeof(EntityName),                nameInfo.componentType.Type);
+        AreEqual("get => EntityName value",         nameInfo.getter.Method.Name);
+        AreEqual("set => EntityName value",         nameInfo.setter.Method.Name);
         NotNull ("value",                           nameInfo.memberInfo.Name);
         AreEqual("EntityName value : String",       nameInfo.ToString());
         
@@ -136,7 +140,7 @@ public static class Test_MemberPath
         StringAssert.StartsWith("Unable to cast object of type", e2!.Message);
 
         var e3 = Throws<InvalidCastException>(() => {
-            EntityUtils.SetEntityComponentMember<int>(entity, nameInfo, 42, out _);
+            EntityUtils.SetEntityComponentMember(entity, nameInfo, 42, out _);
         });
         StringAssert.StartsWith("Unable to cast object of type", e3!.Message);
         
