@@ -95,14 +95,17 @@ A type initializer threw an exception. To determine which type, inspect the Inne
         }
         engineTypesRegistered = true;
 
+        // components
         RegisterComponent<EntityName>();
         RegisterComponent<Position>();
         RegisterComponent<Rotation>();
         RegisterComponent<Scale3>();
         RegisterComponent<Transform>();
         RegisterComponent<TreeNode>();
-        RegisterComponent<UniqueEntity>();
         RegisterComponent<Unresolved>();
+        
+        // indexed components
+        RegisterIndexedComponentClass<UniqueEntity, string>();
 
         RegisterTag<Disabled>();
     }

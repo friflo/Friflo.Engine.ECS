@@ -114,6 +114,26 @@ public class Test_AOT
         var values = index.Values;                                             // Count: 1000
     }
     
+    // [TestMethod]
+    public void Test_AOT_UniqueEntity()
+    {
+        CreateSchema();
+        var store   = new EntityStore();
+        
+        var index   = store.ComponentIndex<UniqueEntity, string>();
+        for (int n = 0; n < 10; n++) {
+            var entity = store.CreateEntity();
+            entity.AddComponent(new UniqueEntity($"id-{n}"));
+        }
+        var entities = index["id-1"];
+        Assert.AreEqual(1, entities.Count);
+    
+        var result = store.Query().ValueInRange<UniqueEntity,string>("id-0", "id-4");
+        Assert.AreEqual(5, result.Count);
+    
+        Assert.AreEqual(10, index.Values.Count);
+    }
+    
     [TestMethod]
     public void Test_AOT_IndexedComponents_struct()
     {
