@@ -114,7 +114,7 @@ public class Test_AOT
         var values = index.Values;                                             // Count: 1000
     }
     
-    // [TestMethod]
+    [TestMethod]
     public void Test_AOT_UniqueEntity()
     {
         CreateSchema();
