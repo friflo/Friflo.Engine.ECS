@@ -32,7 +32,13 @@ public static class Test_MemberPath
         AreEqual("EntityName",                  selfInfo.ToString());
         IsTrue(EntityUtils.GetEntityComponentMember<EntityName>(entity, selfInfo, out var self, out _));
         AreEqual("self-1",                      self.value);
-        IsTrue(EntityUtils.SetEntityComponentMember(entity, selfInfo, new EntityName("self-2"), out _));
+        OnMemberChanged<EntityName> handler = (ref EntityName value, Entity entity1, string path, in EntityName old) => {
+            AreEqual(1,     entity1.Id);
+            AreEqual("",    path);
+            AreEqual("self-2", value.value);
+            AreEqual("self-1", old.value);
+        };
+        IsTrue(EntityUtils.SetEntityComponentMember(entity, selfInfo, new EntityName("self-2"), handler, out _));
         AreEqual("self-2",                      entity.GetComponent<EntityName>().value);
     }
     
@@ -49,7 +55,7 @@ public static class Test_MemberPath
         IsTrue(typeof(InvalidOperationException) == exception.GetType());
         AreEqual("get", exception.Message);
         
-        IsFalse(EntityUtils.SetEntityComponentMember(entity, valuePath, 42, out exception));
+        IsFalse(EntityUtils.SetEntityComponentMember(entity, valuePath, 42, null, out exception));
         IsTrue(typeof(InvalidOperationException) == exception.GetType());
         AreEqual("set", exception.Message);
     }
@@ -95,13 +101,13 @@ public static class Test_MemberPath
         }
         Mem.AssertNoAlloc(start);
         
-        IsTrue(EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed", out exception));
+        IsTrue(EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed", null, out exception));
         IsNull  (exception);
         AreEqual("changed", entity.GetComponent<EntityName>().value);
         
         start = Mem.GetAllocatedBytes();
         for (int n = 0; n < 10; n++) {
-            EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed 2", out _);
+            EntityUtils.SetEntityComponentMember(entity, nameInfo, "changed 2", null, out _);
         }
         Mem.AssertNoAlloc(start);
         AreEqual("changed 2", entity.GetComponent<EntityName>().value);
@@ -140,7 +146,7 @@ public static class Test_MemberPath
         StringAssert.StartsWith("Unable to cast object of type", e2!.Message);
 
         var e3 = Throws<InvalidCastException>(() => {
-            EntityUtils.SetEntityComponentMember(entity, nameInfo, 42, out _);
+            EntityUtils.SetEntityComponentMember(entity, nameInfo, 42, null, out _);
         });
         StringAssert.StartsWith("Unable to cast object of type", e3!.Message);
         

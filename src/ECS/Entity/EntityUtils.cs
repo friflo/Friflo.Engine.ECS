@@ -43,9 +43,13 @@ public static class EntityUtils
         return type.heapMap[memberPath.structIndex].GetComponentMember(entity.compIndex, memberPath, out value, out exception);
     }
     
-    public static  bool   SetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, out Exception exception) {
+    /// <summary>
+    /// <paramref name="onMemberChanged"/> can be null or must be of type <see cref="OnMemberChanged{T}"/>
+    /// with T = <see cref="MemberPath.componentType"/>
+    /// </summary>
+    public static  bool   SetEntityComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception) {
         var type = entity.GetArchetype() ?? throw EntityStoreBase.EntityArgumentNullException(entity, nameof(entity));
-        return type.heapMap[memberPath.structIndex].SetComponentMember(entity.compIndex, memberPath, value, out exception);
+        return type.heapMap[memberPath.structIndex].SetComponentMember(entity, memberPath, value, onMemberChanged, out exception);
     }
 
     public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)

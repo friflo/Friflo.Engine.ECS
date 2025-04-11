@@ -35,7 +35,7 @@ internal readonly struct MemberPathKey : IEquatable<MemberPathKey>
 
 public delegate TField MemberPathGetter<T, out TField> (in T root);
 public delegate void   MemberPathSetter<T, in  TField> (ref T root, TField value);
-
+public delegate void   OnMemberChanged<T>(ref T value, Entity entity, string path, in T old);
 
 /// <summary>
 /// Identifies a specific field / property by its <see cref="path"/> within a specific <see cref="Type"/>.<br/>

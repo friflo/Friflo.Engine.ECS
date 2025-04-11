@@ -8,6 +8,7 @@ using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable UseNullPropagation
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -157,11 +158,17 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         }
     }
     
-    internal  override  bool SetComponentMember<TField>(int compIndex, MemberPath memberPath, TField value, out Exception exception) {
-        var setter = (MemberPathSetter<T, TField>)memberPath.setter;
+    internal  override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
+    {
+        var setter          = (MemberPathSetter<T, TField>)memberPath.setter;
+        ref var component   = ref components[entity.compIndex];
+        var oldValue        = component;
         try {
             exception = null;
-            setter(ref components[compIndex], value);
+            setter(ref component, value);
+            if (onMemberChanged != null) {
+                ((OnMemberChanged<T>)onMemberChanged)(ref component, entity, memberPath.path, oldValue);
+            }
             return true;
         }
         catch (Exception e) {
