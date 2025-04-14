@@ -92,6 +92,12 @@ public class UiDragAttribute : Attribute
 public class UiHideAttribute : Attribute
 { }
 
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class UiNameAttribute : Attribute
+{
+    public UiNameAttribute(string name) { }
+}
+
 [AttributeUsage(AttributeTargets.Enum)]
 public class UiFlagsAttribute : Attribute
 {
