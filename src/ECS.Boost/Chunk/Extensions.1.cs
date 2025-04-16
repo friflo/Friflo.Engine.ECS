@@ -37,6 +37,14 @@ public static partial class ChunkExtensions
         var entities    = chunks.Entities;
         var start       = entities.Start;
         var length      = entities.Length;
+        
+        // TODO use arr.AsSpan()[..length]; to avoid usage of unsafe code as recommended by paperClip
+        /* var spanIds     = entities.Archetype.EntityIds                   [start..length];
+        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents)[start..length];
+        for (int i = 0; i < length; i++) {
+            each.Execute(ref span1[i], spanIds[i]);
+        } */
+
         var spanIds     = entities.Archetype.EntityIds.Slice             (start, length);
         var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
         
