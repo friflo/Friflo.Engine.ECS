@@ -74,6 +74,7 @@ public sealed class GenericInstanceTypeAttribute : Attribute {
 
 
 #region Friflo ImGui attributes 
+
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class UiTypeDomainAttribute : Attribute
 { 
@@ -81,6 +82,9 @@ public class UiTypeDomainAttribute : Attribute
     public UiTypeDomainAttribute(string style) { }
 }
 
+/// <summary>
+/// Enables changing a number field or property with mouse dragging in EcGui.
+/// </summary>
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class UiDragAttribute : Attribute
 { 
@@ -88,20 +92,31 @@ public class UiDragAttribute : Attribute
     public UiDragAttribute(float speed = 1, float min = 0, float max= 0, string format = null) { }
 }
 
+/// <summary>
+/// Hides the annotated field or property in EcGui.
+/// </summary>
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class UiHideAttribute : Attribute
 { }
 
-[AttributeUsage(AttributeTargets.Field)]
-public class UiFlagAttribute : Attribute
-{
-    public UiFlagAttribute(string name) { }
-}
 
+/// <summary>
+/// Defines the layout of a <c>[Flags] enum</c> type in EcGui.<br/>
+/// The size of a group, their spacing and the sort order of flags.
+/// </summary>
 [AttributeUsage(AttributeTargets.Enum)]
 public class UiFlagsAttribute : Attribute
 {
     public UiFlagsAttribute(int groupSize, bool ascending, int groupSpacing) { }
+}
+
+/// <summary>
+/// Display short name for a <c>[Flags] enum</c> field in EcGui instead its bit index.<br/>
+/// </summary>
+[AttributeUsage(AttributeTargets.Field)]
+public class UiFlagAttribute : Attribute
+{
+    public UiFlagAttribute(string name) { }
 }
 
 #endregion
