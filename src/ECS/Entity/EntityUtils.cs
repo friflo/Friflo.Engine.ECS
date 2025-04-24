@@ -91,14 +91,14 @@ public static class EntityUtils
     #endregion
     
 #region relations
-    public static ComponentTypes GetRelations(Entity entity)
+    public static ComponentTypes GetRelationTypes(Entity entity)
     {
         var isOwner = entity.store.nodes[entity.Id].isOwner; 
         if (isOwner == 0) {
             return default;
         }
         ComponentTypes relationTypes = new ComponentTypes();
-        relationTypes.bitSet.l0 = isOwner & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;;
+        relationTypes.bitSet.l0 = isOwner & EntityStoreBase.Static.EntitySchema.relationTypes.bitSet.l0;
         return relationTypes;
     }
     #endregion
