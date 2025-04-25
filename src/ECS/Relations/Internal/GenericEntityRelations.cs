@@ -81,10 +81,10 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
     
 #region mutation
 
-    /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    internal override bool AddComponent<T>(int id, in T component)
+    /// <returns>true - relation is newly added to the entity.<br/> false - relation is updated.</returns>
+    internal override bool AddRelation<T>(int id, in T relation)
     {
-        var relationKey = RelationUtils<T, TKey>.GetRelationKey(component);
+        var relationKey = RelationUtils<T, TKey>.GetRelationKey(relation);
     //  var relationKey = ((IRelation<TKey>)component).GetRelationKey(); // boxing version
         var added       = true;
         var position    = FindRelationPosition(id, relationKey, out var positions, out _);
@@ -94,7 +94,7 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
         }
         position = AddEntityRelation(id, positions);
     AssignComponent:
-        ((StructHeap<T>)heap).components[position] = component;
+        ((StructHeap<T>)heap).components[position] = relation;
         return added;
     }
 

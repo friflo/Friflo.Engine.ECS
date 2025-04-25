@@ -51,7 +51,7 @@ internal abstract class AbstractEntityRelations
         relationBit     = (int)types.bitSet.l0;
     }
     
-    internal  abstract bool                 AddComponent<TRelation>      (int id, in TRelation component) where TRelation : struct, IRelation;
+    internal  abstract bool                 AddRelation<TRelation>       (int id, in TRelation relation) where TRelation : struct, IRelation;
     internal  abstract IRelation            GetRelationAt                (int id, int index);
     internal  virtual  ref TRelation        GetEntityRelation<TRelation >(int id, int target)              where TRelation  : struct   => throw new InvalidOperationException($"type: {GetType().Name}");
     internal  virtual  void                 AddIncomingRelations         (int target, List<EntityLink> result)                         => throw new InvalidOperationException($"type: {GetType().Name}");
@@ -189,11 +189,11 @@ internal abstract class AbstractEntityRelations
     #endregion
     
 #region mutation
-    internal static bool AddRelation<TRelation>(EntityStoreBase store, int id, in TRelation component)
+    internal static bool AddRelation<TRelation>(EntityStoreBase store, int id, in TRelation relation)
         where TRelation : struct, IRelation
     {
         var relations = GetEntityRelations(store, StructInfo<TRelation>.Index);
-        return relations.AddComponent(id, component);
+        return relations.AddRelation(id, relation);
     }
         
     internal static bool RemoveRelation<TRelation, TKey>(EntityStoreBase store, int id, TKey key)

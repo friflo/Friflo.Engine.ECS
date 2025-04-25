@@ -46,10 +46,10 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
     
 #region mutation
 
-    /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
-    internal override bool AddComponent<T>(int id, in T component)
+    /// <returns>true - relation is newly added to the entity.<br/> false - relation is updated.</returns>
+    internal override bool AddRelation<T>(int id, in T relation)
     {
-        Entity target   = RelationUtils<T, Entity>.GetRelationKey(component);
+        Entity target   = RelationUtils<T, Entity>.GetRelationKey(relation);
         bool added      = true;
         int position    = FindRelationPosition(id, target, out var positions, out _);
         if (position >= 0) {
@@ -59,7 +59,7 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
         position = AddEntityRelation(id, positions);
         LinkRelationUtils.AddComponentValue(id, target.Id, this);
     AssignComponent:
-        ((StructHeap<T>)heap).components[position] = component;
+        ((StructHeap<T>)heap).components[position] = relation;
         return added;
     }
 
