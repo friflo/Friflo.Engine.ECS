@@ -181,10 +181,12 @@ public static class Test_Relations
         var components = entity.Components;
         entity.AddComponent(new Position());
         AreEqual(1, components.Count);
+        AreEqual(0, EntityUtils.GetRelationTypes(entity).Count);
 
         entity.AddRelation(new AttackRelation { target = target10, speed = 20 });
         AreEqual("Components: [Position] +1 relations", components.ToString());
         AreEqual(2, components.Count);
+        AreEqual(1, EntityUtils.GetRelationTypes(entity).Count);
         int count = 0;
         foreach (var component in components) {
             switch (count++) {
@@ -201,6 +203,7 @@ public static class Test_Relations
         entity.AddRelation(new AttackRelation { target = target11, speed = 21 });
         AreEqual("Components: [Position] +2 relations", components.ToString());
         AreEqual(3, components.Count);
+        AreEqual(1, EntityUtils.GetRelationTypes(entity).Count);
         count = 0;
         foreach (var component in components) {
             switch (count++) {
@@ -349,12 +352,14 @@ public static class Test_Relations
                 Mem.IsTrue(entity.AddRelation(new IntRelation{ value = n }));
             }
             Mem.AreEqual(relationCount, entity.Components.Count);
+            Mem.AreEqual(1, EntityUtils.GetRelationTypes(entity).Count);
         }
         foreach (var entity in entities) {
             for (int n = 0; n < relationCount; n++) {
                 Mem.IsTrue(entity.RemoveRelation<IntRelation, int>(n));
             }
             Mem.AreEqual(0, entity.Components.Count);
+            Mem.AreEqual(0, EntityUtils.GetRelationTypes(entity).Count);
         }
         Mem.AssertNoAlloc(start);
     }
