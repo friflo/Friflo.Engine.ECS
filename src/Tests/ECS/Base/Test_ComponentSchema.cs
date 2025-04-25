@@ -60,6 +60,8 @@ public static class Test_ComponentSchema
         
         AreEqual(84,    schema.SchemaTypeByKey.Count);
         AreEqual(78,    schema.ComponentTypeByType.Count);
+        AreEqual(71,    schema.ComponentTypes.Count);
+        AreEqual( 7,    schema.RelationTypes.Count);
         AreEqual(10,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);

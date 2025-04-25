@@ -57,6 +57,10 @@ public sealed class EntitySchema
     /// <summary> A map to lookup <see cref="TagType"/>'s by <see cref="System.Type"/>. </summary>
     public   IReadOnlyDictionary<Type,   TagType>       TagTypeByType       => tagTypeByType;
     
+    public   ComponentTypes                             ComponentTypes      => componentTypes;
+    
+    public   ComponentTypes                             RelationTypes       => relationTypes;
+    
     public   override string                            ToString()          => GetString();
 
     #endregion
@@ -77,6 +81,7 @@ public sealed class EntitySchema
     [Browse(Never)] internal readonly   Dictionary<string, TagType>         tagTypeByName;
     [Browse(Never)] private  readonly   Dictionary<Type,   TagType>         tagTypeByType;
     // --- component type masks
+    [Browse(Never)] internal readonly   ComponentTypes                      componentTypes;
     [Browse(Never)] internal readonly   ComponentTypes                      relationTypes;
     [Browse(Never)] internal readonly   ComponentTypes                      indexTypes;
     [Browse(Never)] internal readonly   ComponentTypes                      linkComponentTypes;
@@ -117,7 +122,9 @@ public sealed class EntitySchema
             }
             componentTypeByType.Add (componentType.Type,            componentType);
             components              [componentType.StructIndex] =   componentType;
-            if (componentType.RelationType != null) {
+            if (componentType.RelationType == null) {
+                componentTypes.Add(new ComponentTypes(componentType));
+            } else {
                 relationTypes.Add(new ComponentTypes(componentType));
                 if (componentType.RelationKeyType == typeof(Entity)) {
                     linkRelationTypes.Add(new ComponentTypes(componentType));
