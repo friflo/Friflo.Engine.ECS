@@ -32,7 +32,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     
     internal readonly   Type        RelationType;   //  8
     
-    internal readonly   Type        RelationKeyType;//  8
+    public   readonly   Type        RelationKeyType;//  8
     
     internal            int         nameSortOrder;  //  4
     #endregion
