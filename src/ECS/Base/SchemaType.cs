@@ -128,7 +128,9 @@ public abstract class SchemaType
         if (BlittableTypes.TryGetValue(type, out BlittableType blittable)) {
             return blittable;
         }
-        if (type.Namespace == "System.Collections.Immutable") {
+        if (type.IsEnum) {
+            blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
+        } else if (type.Namespace == "System.Collections.Immutable") {
             blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
         } else if (typeof(Delegate).IsAssignableFrom(type)) {
             blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net

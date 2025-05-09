@@ -127,6 +127,7 @@ public struct BlittableTypes : IComponent {
     internal    Version                 version;
     internal    DBNull                  dbNull;
     internal    ImmutableArray<int>     immutableArray;
+    internal    Action                  action;
 }
 
 
