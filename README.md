@@ -373,4 +373,4 @@ See [Benchmark results](docs/doraku-benchmark.md).
 This project is licensed under MIT.  
 
 Friflo.Engine.ECS  
-Copyright © 2024   Ullrich Praetz - https://github.com/friflo
+Copyright © 2025   Ullrich Praetz - https://github.com/friflo
