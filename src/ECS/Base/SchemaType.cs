@@ -104,15 +104,21 @@ public abstract class SchemaType
         types.Add(typeof(float),        blittable);
         types.Add(typeof(double),       blittable);
         //
-        types.Add(typeof(Guid),         blittable);
-        types.Add(typeof(DateTime),     blittable);
-        types.Add(typeof(BigInteger),   blittable);
-        //
         types.Add(typeof(JsonValue),    blittable);
         types.Add(typeof(Entity),       blittable);
+        // immutable value types in BCL:   https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
+        types.Add(typeof(Guid),             blittable);
+        types.Add(typeof(DateTime),         blittable);
+        types.Add(typeof(TimeSpan),         blittable);
+        types.Add(typeof(DateTimeOffset),   blittable);
+        types.Add(typeof(BigInteger),       blittable);
         //
-        types.Add(typeof(string),       blittable);
-        types.Add(typeof(Uri),          blittable);
+        // immutable reference types in BCL
+        types.Add(typeof(string),           blittable);
+        types.Add(typeof(Uri),              blittable);
+        types.Add(typeof(Type),             blittable);
+        types.Add(typeof(Version),          blittable);
+        types.Add(typeof(DBNull),           blittable);
     }
     
     // todo - add test assertion EntityName is a blittable type 
@@ -122,7 +128,11 @@ public abstract class SchemaType
         if (BlittableTypes.TryGetValue(type, out BlittableType blittable)) {
             return blittable;
         }
-        if (type.IsArray) {
+        if (type.Namespace == "System.Collections.Immutable") {
+            blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
+        } else if (typeof(Delegate).IsAssignableFrom(type)) {
+            blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
+        } else if (type.IsArray) {
             blittable = BlittableType.NonBlittable;    
         } else if (type.IsClass && !isBaseType) {
             blittable = BlittableType.NonBlittable;

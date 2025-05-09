@@ -54,13 +54,13 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 78  scripts: 10  entity tags: 22", schema.ToString());
-        AreEqual(79,    components.Length);
+        AreEqual("components: 79  scripts: 10  entity tags: 22", schema.ToString());
+        AreEqual(80,    components.Length);
         AreEqual(11,    scripts.Length);
         
-        AreEqual(84,    schema.SchemaTypeByKey.Count);
-        AreEqual(78,    schema.ComponentTypeByType.Count);
-        AreEqual(71,    schema.ComponentTypes.Count);
+        AreEqual(85,    schema.SchemaTypeByKey.Count);
+        AreEqual(79,    schema.ComponentTypeByType.Count);
+        AreEqual(72,    schema.ComponentTypes.Count);
         AreEqual( 7,    schema.RelationTypes.Count);
         AreEqual(10,    schema.ScriptTypeByType.Count);
         
@@ -106,6 +106,7 @@ public static class Test_ComponentSchema
         AssertBlittableComponent<BlittableGuid>         (schema, true);
         AssertBlittableComponent<BlittableBigInteger>   (schema, true);
         AssertBlittableComponent<BlittableUri>          (schema, true);
+        AssertBlittableComponent<BlittableTypes>        (schema, true);
         
         
         // --- Test blittable types

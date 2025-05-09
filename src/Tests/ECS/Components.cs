@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
 using Friflo.Engine.ECS;
@@ -115,6 +116,19 @@ public struct BlittableDatetime         : IComponent { public DateTime          
 public struct BlittableGuid             : IComponent { public Guid              guid;        }
 public struct BlittableBigInteger       : IComponent { public BigInteger        bigInteger;  }
 public struct BlittableUri              : IComponent { public Uri               uri;         } // throws exception when serialized
+
+// see immutable types:  https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
+public struct BlittableTypes : IComponent {
+    internal    DateTime                dateTime;
+    internal    TimeSpan                timeSpan;
+    internal    DateTimeOffset          dateTimeOffset;
+    internal    string                  str;
+    internal    Type                    type;
+    internal    Version                 version;
+    internal    DBNull                  dbNull;
+    internal    ImmutableArray<int>     immutableArray;
+}
+
 
 public enum BlittableEnumType
 {
