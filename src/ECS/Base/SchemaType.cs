@@ -134,6 +134,8 @@ public abstract class SchemaType
             blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
         } else if (typeof(Delegate).IsAssignableFrom(type)) {
             blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
+        } else if (IsAssetType(type)) {
+            blittable = BlittableType.Blittable;
         } else if (type.IsArray) {
             blittable = BlittableType.NonBlittable;    
         } else if (type.IsClass && !isBaseType) {
@@ -145,6 +147,21 @@ public abstract class SchemaType
         }
         BlittableTypes[type] = blittable;
         return blittable;
+    }
+    
+    private static bool IsAssetType(Type type)
+    {
+        if (!type.IsGenericType) {
+            return false;
+        }
+        if (type.Name != "Asset`1") {
+            return false;
+        }
+        var genericType = type.GetGenericTypeDefinition();
+        if (genericType.Namespace == "Friflo.Engine.Runtime" && genericType.Name == "Asset`1") {
+            return true;
+        }
+        return false;
     }
     
     private const BindingFlags MemberFlags =
