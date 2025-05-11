@@ -184,8 +184,9 @@ public sealed class MemberPath
     // See ThrowIfTypeNeverValidGenericArgument() at:
     // https://github.com/dotnet/runtime/blob/4f5c6938d09e935830492c006aa8381611b65ad8/src/libraries/System.Private.CoreLib/src/System/RuntimeType.cs#L736
     private static bool IsInvalidType(Type type) {
-        return type.IsPointer || type.IsByRef || type == typeof(void);
-    } 
+        return  type.IsPointer || type.IsByRef || type == typeof(void) ||
+                type.IsByRefLike; // type is a ref struct. E.g. Span<>
+    }
     
     // ReSharper disable UnusedMember.Local
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
