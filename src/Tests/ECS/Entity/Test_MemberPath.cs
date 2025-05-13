@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable EqualExpressionComparison
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
@@ -18,8 +19,7 @@ public static class Test_MemberPath
     {
         var store  = new EntityStore();        
         var entity = store.CreateEntity(new EntityName("self-1"));
-        var componentType   = typeof(EntityName);
-        var selfInfo        = MemberPath.Get(componentType, "");
+        var selfInfo = MemberPath.Get(typeof(EntityName), "");
         
         AreEqual("",                            selfInfo.path);
         AreEqual("EntityName",                  selfInfo.name);
@@ -45,10 +45,9 @@ public static class Test_MemberPath
     [Test]
     public static void Test_MemberPath_EntityComponentField_errors()
     {
-        var store           = new EntityStore();        
-        var entity          = store.CreateEntity(new MemberExceptionComponent());
-        var componentType   = typeof(MemberExceptionComponent);
-        var valuePath       = MemberPath.Get(componentType, nameof(MemberExceptionComponent.value));
+        var store       = new EntityStore();        
+        var entity      = store.CreateEntity(new MemberExceptionComponent());
+        var valuePath   = MemberPath.Get(typeof(MemberExceptionComponent), nameof(MemberExceptionComponent.value));
         
         IsFalse(EntityUtils.GetEntityComponentMember<int>(entity, valuePath, out var value, out var exception));
         AreEqual(0, value);
@@ -69,7 +68,7 @@ public static class Test_MemberPath
         var componentType   = typeof(EntityName);
         
         entity.GetComponent<EntityName>().value = "comp-value";
-        var nameInfo        = MemberPath.Get(componentType, nameof(EntityName.value));
+        var nameInfo = MemberPath.Get(componentType, nameof(EntityName.value));
         IsTrue(EntityUtils.GetEntityComponentMember<string>(entity, nameInfo, out var name, out var exception));
         IsNull  (exception);
         AreEqual("comp-value",                      name);
@@ -163,6 +162,66 @@ public static class Test_MemberPath
         IsNull(tags.getter);
         IsNull(tags.setter);
         AreEqual(typeof(Tags).MakeByRefType(), tags.memberType);
+    }
+    
+#pragma warning disable CS0649   // Field ... is never assigned to, and will always have its default value
+
+    class ClassAccess
+    {
+        internal            int  field;
+        internal readonly   int  fieldReadonly;
+        internal            int  property           { get; set; }
+        internal            int  propertyReadonly   { get; }
+        
+        internal            StructAccess structField;
+        internal readonly   StructAccess structFieldReadonly;
+        internal            StructAccess structProperty         { get; set; }
+        internal            StructAccess structPropertyReadonly { get; }
+    }
+    
+    struct StructAccess
+    {
+        internal            int  field;
+    }
+    
+    [Test]
+    public static void Test_MemberPath_readonly()
+    {
+        {
+            var path = MemberPath.Get(typeof(ClassAccess), nameof(ClassAccess.field));
+            NotNull(path.getter);
+            NotNull(path.setter);
+        } {
+            var path = MemberPath.Get(typeof(ClassAccess), nameof(ClassAccess.fieldReadonly));
+            NotNull(path.getter);
+            IsNull (path.setter);
+        } {
+            var path = MemberPath.Get(typeof(ClassAccess), nameof(ClassAccess.property));
+            NotNull(path.getter);
+            NotNull(path.setter);
+        } {
+            var path = MemberPath.Get(typeof(ClassAccess), nameof(ClassAccess.propertyReadonly));
+            NotNull(path.getter);
+            IsNull (path.setter);
+        }
+        // --- struct
+        {
+            var path = MemberPath.Get(typeof(ClassAccess), "structField.field");
+            NotNull(path.getter);
+            NotNull(path.setter);
+        } {
+            var path = MemberPath.Get(typeof(ClassAccess), "structFieldReadonly.field");
+            NotNull(path.getter);
+            IsNull (path.setter);
+        } {
+            var path = MemberPath.Get(typeof(ClassAccess), "structProperty.field");
+            NotNull(path.getter);
+            NotNull(path.setter);
+        } {
+            var path = MemberPath.Get(typeof(ClassAccess), "structPropertyReadonly.field");
+            NotNull(path.getter);
+            IsNull (path.setter);
+        }
     }
 }
 
