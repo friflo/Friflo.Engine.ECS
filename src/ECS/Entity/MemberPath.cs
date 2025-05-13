@@ -128,6 +128,7 @@ public sealed class MemberPath
         bool canWrite   = true;
         bool canRead    = true;
         MemberInfo memberInfo = null;
+        var leafIndex = pathItems.Length - 1;
         for (int i = 0; i < pathItems.Length; i++)
         {
             var memberName      = pathItems[i];
@@ -140,12 +141,16 @@ public sealed class MemberPath
             if (memberInfo is FieldInfo fieldInfo) {
                 memberType = fieldInfo.FieldType;
                 if (fieldInfo.IsInitOnly) {
-                    canWrite = false;
+                    if (i == leafIndex || memberType.IsValueType) {
+                        canWrite = false;
+                    }
                 }
             } else if (memberInfo is PropertyInfo propertyInfo) {
                 memberType = propertyInfo.PropertyType;
                 if (!propertyInfo.CanWrite) {
-                    canWrite = false;
+                    if (i == leafIndex || memberType.IsValueType) {
+                        canWrite = false;
+                    }
                 }
             }
             if (IsInvalidType(memberType)) {
