@@ -235,6 +235,9 @@ internal static class IdArrayExtensions {
     internal static int GetAt(this IdArray array, int positionIndex, IdArrayHeap heap)
     {
         int count = array.count;
+        if (positionIndex < 0 || positionIndex >= count) {
+            throw new IndexOutOfRangeException("Index was out of range. Must be >= 0 and < ChildEntities.Count");
+        }
         int start = array.start;
         if (count == 1) {   // index is 0
             return start;

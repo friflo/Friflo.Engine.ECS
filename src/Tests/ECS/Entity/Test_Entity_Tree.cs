@@ -699,6 +699,22 @@ public static class Test_Entity_Tree
         AreEqual(4, childIds[1]);
     }
     
+    [Test]
+    public static void Test_Entity_Tree_ChildEntities()
+    {
+        var store = new EntityStore();
+        var root = store.CreateEntity(1);
+        var child = store.CreateEntity(10);
+        root.AddChild(child);
+        AreEqual(1, root.ChildEntities.Count);
+        AreEqual(10, root.ChildEntities[0].Id);
+        
+        var e = Throws<IndexOutOfRangeException>(() => {
+            _ = root.ChildEntities[1];
+        });
+        AreEqual("Index was out of range. Must be >= 0 and < ChildEntities.Count", e!.Message);
+    }
+    
     /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>
     [Test]
     public static void Test_Entity_Tree_GetChildIndex()
