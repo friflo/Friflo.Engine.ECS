@@ -57,6 +57,6 @@ internal static class StoreIndex
     }
     
     internal static void ThrowIndexedComponentValueNotFound() {
-        throw new InvalidOperationException("Indexed component value not found. Reason: indexed values mus not be changed. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index#indexed-components");
+        throw new InvalidOperationException("Indexed component value not found. Reason: indexed values MUST NOT be changed. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index#indexed-components");
     }
 }
