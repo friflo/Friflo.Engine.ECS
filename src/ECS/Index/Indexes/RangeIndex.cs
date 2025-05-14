@@ -65,6 +65,9 @@ public sealed class RangeIndex<TIndexedComponent,TValue> : GenericComponentIndex
         map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);
         var index   = idSpan.IndexOf(id);
+        if (index == -1) {
+            StoreIndex.ThrowIndexedComponentValueNotFound();
+        }
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             map.Remove(value);

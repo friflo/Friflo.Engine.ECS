@@ -85,6 +85,9 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
         map.TryGetValue(linkedEntity, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);
         int index   = idSpan.IndexOf(id);
+        if (index == -1) {
+            StoreIndex.ThrowIndexedComponentValueNotFound();
+        }
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {
             map.Remove(linkedEntity);
