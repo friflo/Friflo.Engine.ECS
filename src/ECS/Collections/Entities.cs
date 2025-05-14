@@ -50,13 +50,16 @@ public readonly struct Entities : IReadOnlyList<Entity>
         count       = 1;
     }
     
+    private const string IndexError = "Index was out of range. Must be >= 0 and < Entities.Count";
+    
     public Entity this[int index] {
         get {
             if (ids != null) {
+                if (index < 0 || index >= count) throw new IndexOutOfRangeException(IndexError);
                 return new Entity(store, ids[start + index]);
             }
             // case: count == 1
-            if (index != 0) throw new IndexOutOfRangeException();
+            if (index != 0) throw new IndexOutOfRangeException(IndexError);
             return new Entity(store, start);
         }
     }

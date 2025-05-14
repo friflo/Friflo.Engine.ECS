@@ -195,6 +195,42 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_Entities_indexer()
+    {
+        var store   = new EntityStore();
+        var index   = store.ComponentIndex<IndexedInt, int>();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var error   = "Index was out of range. Must be >= 0 and < Entities.Count";
+        
+        // --- result: Entities.Count = 0
+        var entities = index[37];
+        IndexOutOfRangeException e;
+        {
+            AreEqual(0, entities.Count);
+            e = Throws<IndexOutOfRangeException>(() => { _ = entities[0]; });   AreEqual(error, e.Message);
+            e = Throws<IndexOutOfRangeException>(() => { _ = entities[-1]; });  AreEqual(error, e.Message);
+        }
+        
+        // --- result: Entities.Count = 1
+        {
+            entity1.AddComponent(new IndexedInt { value = 37 });
+            entities = index[37];
+            AreEqual(1, entities.Count);
+            _ = entities[0]; // OK
+            e = Throws<IndexOutOfRangeException>(() => { _ = entities[1]; });   AreEqual(error, e.Message);
+        } {
+            // --- result: Entities.Count = 2
+            entity2.AddComponent(new IndexedInt { value = 37 });
+            entities = index[37];
+            AreEqual(2, entities.Count);
+            _ = entities[0]; // OK
+            _ = entities[1]; // OK
+            e = Throws<IndexOutOfRangeException>(() => { _ = entities[2]; });   AreEqual(error, e.Message);
+        }
+    }
+    
+    [Test]
     public static void Test_Index_exceptions()
     {
         var store   = new EntityStore();
