@@ -56,7 +56,7 @@ internal static class StoreIndex
         return new AbstractComponentIndex[schema.maxIndexedStructIndex];
     }
     
-    internal static void ThrowIndexedComponentValueNotFound() {
-        throw new InvalidOperationException("Indexed component value not found. Reason: indexed values MUST NOT be changed. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index#indexed-components");
+    internal static void ThrowIndexedComponentValueNotFound<TIndexedComponent>() {
+        throw new InvalidOperationException($"Indexed value of '{typeof(TIndexedComponent).Name}' not found. Reason: indexed values MUST NOT be changed. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index#indexed-components");
     }
 }

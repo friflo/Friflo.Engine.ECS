@@ -86,7 +86,7 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
         var idSpan  = idArray.GetSpan(heap, store);
         int index   = idSpan.IndexOf(id);
         if (index == -1) {
-            StoreIndex.ThrowIndexedComponentValueNotFound();
+            StoreIndex.ThrowIndexedComponentValueNotFound<TIndexedComponent>();
         }
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {

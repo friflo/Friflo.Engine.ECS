@@ -57,7 +57,7 @@ internal sealed class ValueStructIndex<TIndexedComponent,TValue>  : GenericCompo
         var idSpan  = idArray.GetSpan(heap, store);
         var index   = idSpan.IndexOf(id);
         if (index == -1) {
-            StoreIndex.ThrowIndexedComponentValueNotFound();
+            StoreIndex.ThrowIndexedComponentValueNotFound<TIndexedComponent>();
         }
         idArray.RemoveAt(index, heap);
         if (idArray.Count == 0) {

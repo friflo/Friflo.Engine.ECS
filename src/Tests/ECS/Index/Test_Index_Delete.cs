@@ -191,7 +191,7 @@ public static class Test_Index_Delete
         var e = Throws<InvalidOperationException>(() => {
             child.DeleteEntity();    
         });
-        AreEqual("Indexed component value not found. Reason: indexed values MUST NOT be changed. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index#indexed-components", e!.Message);
+        AreEqual("Indexed value of 'AttackComponent' not found. Reason: indexed values MUST NOT be changed. See: https://friflo.gitbook.io/friflo.engine.ecs/documentation/component-index#indexed-components", e!.Message);
     }
 }
 
