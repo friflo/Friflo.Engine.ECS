@@ -158,7 +158,7 @@ public abstract class SchemaType
             return false;
         }
         var genericType = type.GetGenericTypeDefinition();
-        if (genericType.Namespace == "Friflo.Engine.Runtime" && genericType.Name == "Asset`1") {
+        if (genericType.Name == "Asset`1" && genericType.Namespace == "Friflo.Engine.ECS") {
             return true;
         }
         return false;
