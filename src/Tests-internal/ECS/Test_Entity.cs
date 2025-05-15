@@ -268,6 +268,23 @@ public static class Test_Entity
         });
         AreEqual("id: 128. expect in [0, current max id: 127]", e!.Message);
     }
+
+    private struct StructWithConstructor : IComponent {
+        public int value = 123;
+        public StructWithConstructor() { } // requires C# 10
+    }
+    
+    [Test]
+    public static void Test_Entity_AddEntityComponent()
+    {
+        var store           = new EntityStore();
+        var entity          = store.CreateEntity();
+        var schema          = EntityStore.GetEntitySchema();
+        var componentType   = schema.ComponentTypeByType[typeof(StructWithConstructor)];
+        EntityUtils.AddEntityComponent(entity, componentType);
+        var component = entity.GetComponent<StructWithConstructor>();
+        AreEqual(123, component.value);
+    }
 }
 
 internal struct MyTag : ITag { }

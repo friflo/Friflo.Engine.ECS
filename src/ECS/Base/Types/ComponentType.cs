@@ -98,7 +98,7 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override bool AddEntityComponent(Entity entity) {
-        return entity.AddComponent<T>(default);
+        return entity.AddComponent(new T());
     }
     
     internal override bool AddEntityComponentValue(Entity entity, object value) {
