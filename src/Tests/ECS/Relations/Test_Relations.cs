@@ -460,6 +460,67 @@ public static class Test_Relations
         });
         AreEqual(expect, nre!.Message);
     }
+    
+    [Test]
+    // Issue:   Relations<TRelation> [index] operator sometimes returns the wrong TRelation
+    //          https://github.com/friflo/Friflo.Engine.ECS/issues/70
+    //
+    // When adding / removing relations all Relations<> instances of that relation type get outdated.
+    // 
+    // To prevent using outdated Relations<> instances Friflo.Engine.ECS 3.4.0 (or higher) now throws:   
+    //
+    // InvalidOperationException : Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().
+
+    public static void Test_Relations_runtime_assertion()
+    {
+    /*
+        struct IntRelation : IRelation<int>
+        {
+            public          int     value;
+            public          int     GetRelationKey()    => value;
+
+            public override string  ToString()          => value.ToString();
+        }
+    */
+        var store = new EntityStore();
+
+        var entity = store.CreateEntity();
+        entity.AddRelation(new IntRelation { value = 10 });
+
+        Relations<IntRelation> relations = entity.GetRelations<IntRelation>();
+        
+        var r0 = relations[0];                  // OK
+        AreEqual(10, r0.value);
+
+        foreach (var r in relations) { }        // OK
+        
+        var length = relations.Length;          // OK
+        AreEqual(1, length);
+        
+        entity.RemoveRelation<IntRelation,int>(10);         // <-- invalidate Relations<IntRelation> instances
+        entity.AddRelation(new IntRelation { value = 12} ); // <-- invalidate Relations<IntRelation> instances
+        
+        
+        var e1 = Throws<InvalidOperationException>(() => {
+            var r = relations[0];               // not OK. relations outdated 
+        });
+        AreEqual("Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().", e1!.Message);
+        
+        var e2 = Throws<InvalidOperationException>(() => {
+            foreach (var r in relations) { }    // not OK. relations outdated 
+        });
+        AreEqual("Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().", e2!.Message);
+        
+        var e3 = Throws<InvalidOperationException>(() => {
+            _ = relations.Length;               // not OK. relations outdated 
+        });
+        AreEqual("Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().", e3!.Message);
+        
+        var e4 = Throws<InvalidOperationException>(() => {
+            _ = relations.ToString();           // not OK. relations outdated 
+        });
+        AreEqual("Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().", e4!.Message);
+    }
 }
 
 }

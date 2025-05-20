@@ -17,6 +17,7 @@ internal delegate AbstractEntityRelations CreateEntityRelations(ComponentType co
 
 internal abstract class AbstractEntityRelations
 {
+    internal            int                         version;
     internal            int                         Count       => archetype.Count;
     public    override  string                      ToString()  => $"relation count: {archetype.Count}";
 
@@ -113,19 +114,16 @@ internal abstract class AbstractEntityRelations
     internal static Relations<TRelation> GetRelations<TRelation>(EntityStore store, int id)
         where TRelation : struct, IRelation
     {
-        var relations = store.extension.relationsMap?[StructInfo<TRelation>.Index];
-        if (relations == null) {
-            return default;
-        }
+        var relations = GetEntityRelations(store, StructInfo<TRelation>.Index);
         relations.positionMap.TryGetValue(id, out var positions);
         int count       = positions.count;
         var components  = ((StructHeap<TRelation>)relations.heap).components;
         switch (count) {
-            case 0: return  new Relations<TRelation>();
-            case 1: return  new Relations<TRelation>(components, positions.start);
+            case 0: return  new Relations<TRelation>(relations);
+            case 1: return  new Relations<TRelation>(components, positions.start, relations);
         }
         var poolPositions = IdArrayPool.GetIds(count, relations.idHeap);
-        return new Relations<TRelation>(components, poolPositions, positions.start, positions.count);
+        return new Relations<TRelation>(components, poolPositions, positions.start, positions.count, relations);
     }
     
     internal static ref TRelation GetRelation<TRelation, TKey>(EntityStore store, int id, TKey key)
@@ -193,6 +191,7 @@ internal abstract class AbstractEntityRelations
         where TRelation : struct, IRelation
     {
         var relations = GetEntityRelations(store, StructInfo<TRelation>.Index);
+        relations.version++;
         return relations.AddRelation(id, relation);
     }
         
@@ -200,6 +199,7 @@ internal abstract class AbstractEntityRelations
         where TRelation : struct, IRelation<TKey>
     {
         var relations = (GenericEntityRelations<TRelation,TKey>)GetEntityRelations(store, StructInfo<TRelation>.Index);
+        relations.version++;
         return relations.RemoveRelation(id, key);
     }
     

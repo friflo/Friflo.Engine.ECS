@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
+using Friflo.Engine.ECS.Relations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -21,31 +22,49 @@ namespace Friflo.Engine.ECS;
 public readonly struct Relations<TRelation>
     where TRelation : struct
 {
-    public   override   string          ToString()  => $"Relations<{typeof(TRelation).Name}>[{Length}]";
+    public   override   string                  ToString()  => $"Relations<{typeof(TRelation).Name}>[{Length}]";
     /// <summary>
     /// Return the number of relations.<br/>
     /// Executes in O(1).
     /// </summary>
-    public   readonly   int             Length;     //  4
-    internal readonly   int             start;      //  4
-    internal readonly   int[]           positions;  //  8
-    internal readonly   TRelation[]     components; //  8
-    internal readonly   int             position;   //  4
+    public              int                     Length => GetLength();
     
-    internal Relations(TRelation[] components, int[] positions, int start, int length)
+    internal readonly   int                     length;         //  4
+    internal readonly   int                     start;          //  4
+    internal readonly   int[]                   positions;      //  8
+    internal readonly   TRelation[]             components;     //  8
+    internal readonly   int                     position;       //  4
+    internal readonly   int                     version;        //  4
+    internal readonly   AbstractEntityRelations entityRelations;//  8
+    
+    internal Relations(TRelation[] components, int[] positions, int start, int length, AbstractEntityRelations relations)
     {
-        this.components = components;
-        this.positions  = positions;
-        this.start      = start;
-        Length          = length;
+        this.components     = components;
+        this.positions      = positions;
+        this.start          = start;
+        this.length         = length;
+        entityRelations     = relations;
+        version             = relations.version;
     }
    
-    internal Relations(TRelation[] components, int position) {
-        this.components = components;
-        this.position   = position;
-        Length          = 1;
+    internal Relations(TRelation[] components, int position, AbstractEntityRelations relations) {
+        this.components     = components;
+        this.position       = position;
+        length              = 1;
+        entityRelations     = relations;
+        version             = relations.version;
     }
-
+    
+    internal Relations(AbstractEntityRelations relations) {
+        entityRelations     = relations;
+        version             = relations.version;
+    }
+    
+    private int GetLength() {
+        if (version != entityRelations.version) throw RelationsModifiedException();
+        return length;
+    }
+    
     // ReSharper disable twice StaticMemberInGenericType
     private static readonly bool        isEntity;
     private static readonly MethodInfo  GetRelationKey = MakeGetRelationKey(out isEntity);
@@ -90,15 +109,21 @@ public readonly struct Relations<TRelation>
     /// </summary>
     public ref TRelation this[int index] {
         get {
-            if (index >= 0 && index < Length) {
+            if (version != entityRelations.version) throw RelationsModifiedException();
+            if (index >= 0 && index < length) {
                 return ref components[positions != null ? positions[index] : position];
             }
             throw IndexOutOfRangeException(index);
         }
     }
     
+    internal static InvalidOperationException RelationsModifiedException() {
+        var name = typeof(TRelation).Name;
+        return new InvalidOperationException($"Relations<{name}> outdated. Added / Removed relations after calling GetRelations<{name}>().");
+    }
+    
     private IndexOutOfRangeException IndexOutOfRangeException(int index) {
-        return new IndexOutOfRangeException($"index: {index} Length: {Length}");
+        return new IndexOutOfRangeException($"index: {index} Length: {length}");
     }
 
     // --- new
@@ -109,21 +134,25 @@ public readonly struct Relations<TRelation>
 public struct RelationsEnumerator<TRelation>
     where TRelation : struct
 {
-    private  readonly   int[]           positions;
-    private  readonly   int             position;
-    private  readonly   TRelation[]     components;
-    private  readonly   int             start;
-    private  readonly   int             last;
-    private             int             index;
+    private  readonly   int[]                   positions;
+    private  readonly   int                     position;
+    private  readonly   TRelation[]             components;
+    private  readonly   int                     start;
+    private  readonly   int                     last;
+    private  readonly   int                     version;
+    private  readonly   AbstractEntityRelations entityRelations;
+    private             int                     index;
     
     
     internal RelationsEnumerator(in Relations<TRelation> relations) {
-        positions   = relations.positions;
-        position    = relations.position;
-        components  = relations.components;
-        start       = relations.start - 1;
-        last        = start + relations.Length;
-        index       = start;
+        positions       = relations.positions;
+        position        = relations.position;
+        components      = relations.components;
+        start           = relations.start - 1;
+        last            = start + relations.length;
+        version         = relations.version;
+        entityRelations = relations.entityRelations;
+        index           = start;
     }
     
     // --- IEnumerator<>
@@ -132,6 +161,7 @@ public struct RelationsEnumerator<TRelation>
     // --- IEnumerator
     public bool MoveNext() {
         if (index < last) {
+            if (version != entityRelations.version) throw Relations<TRelation>.RelationsModifiedException();
             index++;
             return true;
         }
