@@ -79,6 +79,7 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
     /// Executes in O(N * M).  N: number link relations  M: RemoveRelation() executes in O(M)
     internal override void RemoveLinksWithTarget(int targetId)
     {
+        version++;
         linkEntityMap.TryGetValue(targetId, out var sourceIds);
         var sourceIdSpan = sourceIds.GetSpan(linkIdsHeap, store);
         // TODO check if it necessary to make a copy of idSpan - e.g. by stackalloc
@@ -90,6 +91,7 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
     
     internal override void RemoveEntityRelations(int id)
     {
+        version++;
         positionMap.TryGetValue(id, out var positions);
         RemoveIncomingLinks(positions, id);
         while (positions.count > 0) {

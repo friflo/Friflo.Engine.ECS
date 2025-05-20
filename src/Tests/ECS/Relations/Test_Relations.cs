@@ -471,7 +471,7 @@ public static class Test_Relations
     //
     // InvalidOperationException : Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().
 
-    public static void Test_Relations_runtime_assertion()
+    public static void Test_Relations_outdated_remove_relation()
     {
     /*
         struct IntRelation : IRelation<int>
@@ -520,6 +520,42 @@ public static class Test_Relations
             _ = relations.ToString();           // not OK. relations outdated 
         });
         AreEqual("Relations<IntRelation> outdated. Added / Removed relations after calling GetRelations<IntRelation>().", e4!.Message);
+    }
+    
+    [Test]
+    public static void Test_Relations_outdated_DeleteEntity_target()
+    {
+        var store = new EntityStore();
+
+        var source = store.CreateEntity();
+        var target = store.CreateEntity();
+        source.AddRelation(new AttackRelation { target = target });
+        var relations = source.GetRelations<AttackRelation>();
+        _ = relations.Length;       // OK
+        
+        target.DeleteEntity();
+        var e1 = Throws<InvalidOperationException>(() => {
+            _ = relations.Length;   // NOK
+        });
+        AreEqual("Relations<AttackRelation> outdated. Added / Removed relations after calling GetRelations<AttackRelation>().", e1!.Message);
+    }
+    
+    [Test]
+    public static void Test_Relations_outdated_DeleteEntity_source()
+    {
+        var store = new EntityStore();
+
+        var source = store.CreateEntity();
+        var target = store.CreateEntity();
+        source.AddRelation(new AttackRelation { target = target });
+        var relations = source.GetRelations<AttackRelation>();
+        _ = relations.Length;       // OK
+        
+        source.DeleteEntity();
+        var e1 = Throws<InvalidOperationException>(() => {
+            _ = relations.Length;   // NOK
+        });
+        AreEqual("Relations<AttackRelation> outdated. Added / Removed relations after calling GetRelations<AttackRelation>().", e1!.Message);
     }
 }
 
