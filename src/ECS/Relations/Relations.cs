@@ -78,7 +78,7 @@ public readonly struct Relations<TRelation>
     }
     
     internal int GetPosition(int index) {
-        return positions != null ? positions[index] : position;
+        return positions != null ? positions[start + index] : position;
     }
     
     /// <summary>
@@ -111,7 +111,7 @@ public readonly struct Relations<TRelation>
         get {
             if (version != entityRelations.version) throw RelationsModifiedException();
             if (index >= 0 && index < length) {
-                return ref components[positions != null ? positions[index] : position];
+                return ref components[positions != null ? positions[start + index] : position];
             }
             throw IndexOutOfRangeException(index);
         }

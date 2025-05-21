@@ -557,6 +557,45 @@ public static class Test_Relations
         });
         AreEqual("Relations<AttackRelation> outdated. Added / Removed relations after calling GetRelations<AttackRelation>().", e1!.Message);
     }
+    
+    [Test]
+    // Regression test for issue in Relations<> indexer (missed to use start)
+    // Issue detected at:   [Relations<TRelation> [index] operator sometimes returns the wrong TRelation]
+    //                      https://github.com/friflo/Friflo.Engine.ECS/issues/70#issuecomment-2896790850
+    public static void Test_Relations_indexer()
+    {
+        var store = new EntityStore();
+
+        var entity1 = store.CreateEntity();
+        entity1.AddRelation(new IntRelation { value = 10 });
+        entity1.AddRelation(new IntRelation { value = 11 });
+        entity1.AddRelation(new IntRelation { value = 12 });
+        entity1.AddRelation(new IntRelation { value = 13 });
+        
+        var entity2 = store.CreateEntity();
+        entity2.AddRelation(new IntRelation { value = 20 });
+        entity2.AddRelation(new IntRelation { value = 21 });
+        entity2.AddRelation(new IntRelation { value = 22 });
+        entity2.AddRelation(new IntRelation { value = 23 });
+
+        var relations1 = entity1.GetRelations<IntRelation>();
+        var relations2 = entity2.GetRelations<IntRelation>();
+        
+        // Both relations must have same length for this test.
+        // So they are using the same Relations<TRelation>.positions with different Relations<TRelation>.start values
+        AreEqual(relations1.Length, relations2.Length); 
+        {
+            int index = 0;
+            foreach (var relation in relations1) {
+                AreEqual(relations1[index++].value, relation.value);
+            }
+        } {
+            int index = 0;
+            foreach (var relation in relations2) {
+                AreEqual(relations2[index++].value, relation.value);
+            }
+        }
+    }
 }
 
 }

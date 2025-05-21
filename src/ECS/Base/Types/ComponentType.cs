@@ -154,8 +154,7 @@ internal sealed class RelationType<T> : ComponentType
             } else {
                 writer.writer.json.AppendChar(',');
             }
-            var index = relations.start + n;
-            var position = relations.GetPosition(index);
+            var position = relations.GetPosition(n);
             var bytes = heap!.Write(writer.componentWriter, position);
             writer.writer.json.AppendBytes(bytes);
         }
