@@ -1,4 +1,7 @@
 // ReSharper disable once CheckNamespace
+
+using System.IO;
+
 namespace Friflo.Engine.Runtime;
 
 /// <summary>
@@ -6,6 +9,13 @@ namespace Friflo.Engine.Runtime;
 /// </summary>
 public static class AssetDatabase
 {
+    internal static string AssetFolder = Directory.GetCurrentDirectory();
+    
+    public static void SetAssetFolder(string folder) {
+        folder = Path.GetFullPath(folder);
+        AssetFolder = folder;
+    }
+    
     public static void RegisterAssetLoader<TAsset>(IAssetLoader<TAsset> loader) {
         Asset<TAsset>.RegisterLoader(loader);
     }
