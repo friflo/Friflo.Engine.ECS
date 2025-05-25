@@ -41,6 +41,27 @@ public static class Test_Asset
         AreEqual("res://assets/string_asset.txt",   asset.path);
         AreEqual(AssetSchema.RES,                   asset.schema);
     }
+    
+    [Test]
+    public static void Test_Asset_errors()
+    {
+        RegisterAssetLoaders();
+        {
+            var asset = Asset<string>.Get("xxx://assets/foo");
+            IsNull(asset.Resource);
+            AreEqual("xxx://assets/foo",        asset.path);
+            AreEqual(AssetSchema.NONE,          asset.schema);
+            AreEqual(AssetError.INVALID_SCHEMA, asset.Error);
+            AreEqual("IS",                      AbstractAsset.GetErrorCode(asset));
+        } {
+            var asset = Asset<string>.Get("res://not_found");
+            IsNull(asset.Resource);
+            AreEqual("res://not_found",         asset.path);
+            AreEqual(AssetSchema.RES,           asset.schema);
+            AreEqual(AssetError.FILE_NOT_FOUND, asset.Error);
+            AreEqual("FNF",                     AbstractAsset.GetErrorCode(asset));
+        }
+    }
 }
 
 }

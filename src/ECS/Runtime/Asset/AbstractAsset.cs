@@ -36,6 +36,7 @@ public abstract class AbstractAsset
 {
     public  readonly    string      path;
     public  readonly    AssetSchema schema;
+    public              AssetError  Error => error;
     
     public override     string      ToString()  => GetString();
     
