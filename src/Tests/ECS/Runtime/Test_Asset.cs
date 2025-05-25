@@ -145,6 +145,19 @@ public static class Test_Asset
             var test = JsonSerializer.Deserialize<TestAsset>(json);
             AreEqual("res://assets/string_asset.txt", test.asset.path);
         }
+        
+        var jsonNull = "{}";
+        {
+            var test = new TestAsset {
+                asset  = null,
+            };
+            var jsonAsset = JsonSerializer.Serialize(test);
+            AreEqual(jsonNull, jsonAsset);
+        }
+        {
+            var test = JsonSerializer.Deserialize<TestAsset>(jsonNull);
+            AreEqual(null, test.asset);
+        }
     }
     
     class TestHandle
