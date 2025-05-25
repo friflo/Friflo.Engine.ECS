@@ -124,7 +124,7 @@ public static class Test_Asset
         AreEqual("rt://test_string",        asset.ToString());
     }
     
-    class TestClass
+    class TestAsset
     {
         public  Asset<string>  asset;
     }
@@ -135,15 +135,38 @@ public static class Test_Asset
         RegisterAssetLoaders();
         var json = "{\"asset\":\"res://assets/string_asset.txt\"}";
         {
-            var test = new TestClass {
+            var test = new TestAsset {
                 asset  = Asset<string>.Get("res://assets/string_asset.txt"),
             };
             var jsonAsset = JsonSerializer.Serialize(test);
             AreEqual(json, jsonAsset);
         }
         {
-            var test = JsonSerializer.Deserialize<TestClass>(json);
+            var test = JsonSerializer.Deserialize<TestAsset>(json);
             AreEqual("res://assets/string_asset.txt", test.asset.path);
+        }
+    }
+    
+    class TestHandle
+    {
+        public  Handle<string>  handle;
+    }
+    
+    // [Test]
+    public static void Test_Asset_serialize_handle()
+    {
+        RegisterAssetLoaders();
+        var json = "{\"handle\":\"res://assets/string_asset.txt\"}";
+        {
+            var test = new TestHandle {
+                handle  = Handle<string>.CreateInstance("res://assets/string_asset.txt"),
+            };
+            var jsonAsset = JsonSerializer.Serialize(test);
+            AreEqual(json, jsonAsset);
+        }
+        {
+            var test = JsonSerializer.Deserialize<TestHandle>(json);
+            AreEqual("res://assets/string_asset.txt", test.handle.path);
         }
         
     }
