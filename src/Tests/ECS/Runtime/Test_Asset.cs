@@ -60,6 +60,14 @@ public static class Test_Asset
     }
     
     [Test]
+    public static void Test_Asset_null()
+    {
+        RegisterAssetLoaders();
+        var asset = Asset<string>.Get(null);
+        IsNull(asset);
+    }
+    
+    [Test]
     public static void Test_Asset_load_error()
     {
         RegisterAssetLoaders();
