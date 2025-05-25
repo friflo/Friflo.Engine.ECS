@@ -133,11 +133,19 @@ public static class Test_Asset
     public static void Test_Asset_serialize_asset()
     {
         RegisterAssetLoaders();
-        var test = new TestClass {
-            asset  = Asset<string>.Get("res://assets/string_asset.txt"),
-        };
-        var jsonAsset = JsonSerializer.Serialize(test);
-        AreEqual("{\"asset\":\"res://assets/string_asset.txt\"}", jsonAsset);
+        var json = "{\"asset\":\"res://assets/string_asset.txt\"}";
+        {
+            var test = new TestClass {
+                asset  = Asset<string>.Get("res://assets/string_asset.txt"),
+            };
+            var jsonAsset = JsonSerializer.Serialize(test);
+            AreEqual(json, jsonAsset);
+        }
+        {
+            var test = JsonSerializer.Deserialize<TestClass>(json);
+            AreEqual("res://assets/string_asset.txt", test.asset.path);
+        }
+        
     }
 }
 
