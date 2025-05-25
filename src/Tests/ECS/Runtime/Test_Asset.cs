@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using Friflo.Engine.ECS;
 using Friflo.Engine.Runtime;
+using Friflo.Json.Fliox;
 using NUnit.Framework;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InlineOutVariableDeclaration
@@ -57,6 +54,7 @@ public static class Test_Asset
         AreEqual("res://assets/string_asset.txt",   asset.path);
         AreEqual(AssetSchema.RES,                   asset.schema);
         AreEqual("res://assets/string_asset.txt",   asset.ToString());
+        AreEqual("res://assets",                    asset.GetDirectoryPath().ToString());
     }
     
     [Test]
@@ -124,6 +122,22 @@ public static class Test_Asset
         AreEqual(AssetError.NONE,           asset.Error);
         AreEqual("",                        AbstractAsset.GetErrorCode(asset));
         AreEqual("rt://test_string",        asset.ToString());
+    }
+    
+    class TestClass
+    {
+        public  Asset<string>  asset;
+    }
+    
+    [Test]
+    public static void Test_Asset_serialize_asset()
+    {
+        RegisterAssetLoaders();
+        var test = new TestClass {
+            asset  = Asset<string>.Get("res://assets/string_asset.txt"),
+        };
+        var jsonAsset = JsonSerializer.Serialize(test);
+        AreEqual("{\"asset\":\"res://assets/string_asset.txt\"}", jsonAsset);
     }
 }
 

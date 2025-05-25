@@ -28,7 +28,7 @@ internal sealed class AssetMatcher : ITypeMatcher
 internal sealed class AssetMapper<T> : TypeMapper<Asset<T>>
 {
     public override string  DataTypeName()              => $"Asset<{typeof(T).Name}>";
-    public override bool    IsNull(ref Asset<T> value)  => true;
+    public override bool    IsNull(ref Asset<T> value)  => value.Resource == null;
     
     public AssetMapper(StoreConfig config, Type type) :
         base(config, type, true, false) {
