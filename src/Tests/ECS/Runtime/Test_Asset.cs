@@ -22,6 +22,9 @@ public static class Test_Asset
     private class StringLoader : IAssetLoader<string>, IInstanceFactory<string>
     {
         public string LoadAsset(string path, AssetSchema assetSchema) {
+            if (path.Contains("load_error")) {
+                throw new InvalidOperationException();
+            }
             return File.ReadAllText(path);
         }
         
@@ -57,6 +60,19 @@ public static class Test_Asset
     }
     
     [Test]
+    public static void Test_Asset_load_error()
+    {
+        RegisterAssetLoaders();
+        var asset = Asset<string>.Get("res://assets/load_error.txt");
+        IsNull(asset.Resource);
+        AreEqual("res://assets/load_error.txt",     asset.path);
+        AreEqual(AssetSchema.RES,                   asset.schema);
+        AreEqual(AssetError.LOAD_ERROR,             asset.Error);
+        
+        AreEqual("res://assets/load_error.txt",     asset.ToString());
+    }
+    
+    [Test]
     public static void Test_Asset_errors()
     {
         RegisterAssetLoaders();
@@ -87,6 +103,19 @@ public static class Test_Asset
         AreEqual("Hello Asset!",                    handle.instance);
         AreEqual("res://assets/string_asset.txt",   handle.path);
         AreEqual("res://assets/string_asset.txt",   handle.ToString());
+    }
+    
+    [Test]
+    public static void Test_Asset_runtime()
+    {
+        Asset<string>.Set("rt://test_string", "foo");
+        var asset = Asset<string>.Get("rt://test_string");
+        AreEqual("foo",                     asset.Resource);
+        AreEqual("rt://test_string",        asset.path);
+        AreEqual(AssetSchema.RT,            asset.schema);
+        AreEqual(AssetError.NONE,           asset.Error);
+        AreEqual("",                        AbstractAsset.GetErrorCode(asset));
+        AreEqual("rt://test_string",        asset.ToString());
     }
 }
 
