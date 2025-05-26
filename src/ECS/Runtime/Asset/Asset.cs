@@ -40,7 +40,7 @@ public class Asset<TAsset> : AbstractAsset
     private static readonly     Dictionary<string, Asset<TAsset>>   AssetMap = new();
 
 
-    protected Asset(string path, AssetSchema assetSchema) : base(path, assetSchema) { }
+    private Asset(string path, AssetSchema assetSchema) : base(path, assetSchema) { }
 
     
     internal static void RegisterLoader(IAssetLoader<TAsset> loader) {
