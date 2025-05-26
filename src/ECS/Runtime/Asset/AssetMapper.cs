@@ -5,7 +5,7 @@ using Friflo.Json.Fliox.Mapper.Map;
 
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.Runtime;
+namespace Friflo.Engine.Assets;
 
 internal sealed class AssetMatcher : ITypeMatcher
 {

@@ -2,7 +2,7 @@
 using Friflo.Json.Fliox;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.Runtime;
+namespace Friflo.Engine.Assets;
 
 
 /// <summary>

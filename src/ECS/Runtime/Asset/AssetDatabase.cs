@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace Friflo.Engine.Runtime;
+namespace Friflo.Engine.Assets;
 
 /// <summary>
 /// <b>API in Friflo.Engine.Runtime is WIP and may change</b><br/>

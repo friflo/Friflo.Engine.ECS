@@ -7,7 +7,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.Runtime;
+namespace Friflo.Engine.Assets;
 
 /// <summary>
 /// <b>API in Friflo.Engine.Runtime is WIP and may change</b><br/>

@@ -6,7 +6,7 @@ using System.Text;
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.Runtime;
+namespace Friflo.Engine.Assets;
 
 public enum AssetSchema
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Friflo.Engine.Runtime;
+using Friflo.Engine.Assets;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -12,7 +12,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS.Relations {
+namespace Tests.ECS.Assets {
 
 public static class Test_Asset
 {
