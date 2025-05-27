@@ -92,9 +92,8 @@ public class Asset<TAsset> : AbstractAsset
     
     public static Asset<TAsset> Set(string path, TAsset resource)
     {
-        var assetSchema = GetAssetSchema(path);
-        var asset = new Asset<TAsset>(path, assetSchema);
-        switch (assetSchema) {
+        var asset = Get(path);
+        switch (asset.schema) {
             case AssetSchema.RES:
             case AssetSchema.RT:
                 asset.resource = resource;
@@ -103,7 +102,7 @@ public class Asset<TAsset> : AbstractAsset
                 asset.error = AssetError.INVALID_SCHEMA;
                 break;
         }
-        AssetMap.Add(path, asset);
+        AssetMap[path] = asset;
         return asset;
     }
 }
