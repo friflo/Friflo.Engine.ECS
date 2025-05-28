@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
+using Friflo.Engine.Assets;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using static Friflo.Engine.ECS.SchemaTypeKind;
@@ -154,11 +155,8 @@ public abstract class SchemaType
         if (!type.IsGenericType) {
             return false;
         }
-        if (type.Name != "Asset`1") {
-            return false;
-        }
         var genericType = type.GetGenericTypeDefinition();
-        if (genericType.Name == "Asset`1" && genericType.Namespace == "Friflo.Engine.ECS") {
+        if (genericType == typeof(Asset<>)) {
             return true;
         }
         return false;
