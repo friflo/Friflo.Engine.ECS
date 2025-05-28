@@ -16,6 +16,13 @@ public static class AssetDatabase
         AssetFolder = folder;
     }
     
+    public static string ToAssetPath(string path) {
+        if (!path.StartsWith(AssetFolder)) {
+            return null;
+        }
+        return $"res://{path.Substring(AssetFolder.Length + 1)}";
+    }
+    
     public static void RegisterAssetLoader<TAsset>(IAssetLoader<TAsset> loader) {
         Asset<TAsset>.RegisterLoader(loader);
     }
