@@ -9,7 +9,7 @@ namespace Friflo.Engine.Assets;
 /// </summary>
 public static class AssetDatabase
 {
-    internal static string AssetFolder = Directory.GetCurrentDirectory();
+    public static string AssetFolder = Directory.GetCurrentDirectory();
     
     public static void SetAssetFolder(string folder) {
         folder = Path.GetFullPath(folder);
