@@ -68,6 +68,10 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
         
         public ReadOnlyListEnumerator<T>    GetEnumerator() => new ReadOnlyListEnumerator<T>(list);
         
+        public Mutate() {
+            list = new ReadOnlyList<T>([]);
+        }
+            
         public Mutate(T[] array) {
             list = new ReadOnlyList<T>(array);
         }

@@ -18,7 +18,7 @@ namespace Tests.ECS.Collections {
         [Test]
         public static void Test_Array_mutate()
         {
-            var list = new ReadOnlyList<object>.Mutate(Array.Empty<object>());
+            var list = new ReadOnlyList<object>.Mutate();
             var object1 = new object();
             var object2 = new object();
             var object3 = new object();
