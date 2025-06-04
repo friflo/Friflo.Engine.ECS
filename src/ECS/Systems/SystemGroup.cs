@@ -34,10 +34,10 @@ public class SystemGroup : BaseSystem, IEnumerable
     [Browse(Never)] public          bool                        MonitorPerf     => monitorPerf;
 
     /// <summary> The child systems added to the group. </summary>
-    [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems.list;
+    [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems.List;
 
     /// <summary> The <see cref="ECS.CommandBuffer"/>'s shared by all <see cref="ChildSystems"/>. </summary>
-                    internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers.list; // only for debug view
+                    internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers.List; // only for debug view
     
                     // only for display in debugger
                     internal        Item[]                      AllSystems      => Item.GetAllSystems(this);
@@ -78,8 +78,8 @@ public class SystemGroup : BaseSystem, IEnumerable
     /// <summary>
     /// Returns an enumerator that iterates through the <see cref="ChildSystems"/>.
     /// </summary>
-    public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems.list);
-    IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems.list);
+    public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems.List);
+    IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems.List);
     #endregion
     
 #region group: add / insert / remove - system
@@ -126,7 +126,7 @@ public class SystemGroup : BaseSystem, IEnumerable
         if (system == null)             throw new ArgumentNullException(nameof(system));
         if (system.ParentGroup != this) throw ExceptionUtils.ArgumentException($"system not child of Group '{Name}'", nameof(system));
         var oldRoot = system.SystemRoot;
-        var index   = childSystems.list.IndexOf(system); // index never -1
+        var index   = childSystems.List.IndexOf(system); // index never -1
         childSystems.RemoveAt(index);
         system.ClearParentAndRoot();
         // Send event. See: SEND_EVENT notes

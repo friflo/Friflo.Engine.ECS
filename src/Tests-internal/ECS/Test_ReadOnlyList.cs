@@ -21,7 +21,7 @@ namespace Internal.ECS {
             var object2 = new object();
             list.Add(object1);
             list.Add(object2);
-            var debugView = new ReadOnlyListDebugView<object>(list.list);
+            var debugView = new ReadOnlyListDebugView<object>(list.List);
             
             
             AreEqual(2, list.Count);

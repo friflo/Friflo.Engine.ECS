@@ -22,7 +22,7 @@ public class SystemRoot : SystemGroup
 {
 #region properties
     /// <summary> Returns the <see cref="EntityStore"/>'s added to the root system. </summary>
-    [Browse(Never)] public  ReadOnlyList<EntityStore>   Stores      => stores.list;
+    [Browse(Never)] public  ReadOnlyList<EntityStore>   Stores      => stores.List;
     
                     public override string              ToString()  => $"'{Name}' Root - child systems: {childSystems.Count}";
     #endregion

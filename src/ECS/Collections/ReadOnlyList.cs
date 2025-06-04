@@ -70,8 +70,8 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
         public ReadOnlyListEnumerator<T>    GetEnumerator() => new ReadOnlyListEnumerator<T>(list);
         public override string              ToString()      => $"{typeof(T).Name}[{list.count}]";
 
-        // --- internal fields
-        internal                            ReadOnlyList<T>  list;
+        // --- private fields
+        private                             ReadOnlyList<T>  list;
 
 
         public Mutate() {
@@ -223,7 +223,7 @@ internal class ReadOnlyListDebugView<T> where T : class
     
     internal ReadOnlyListDebugView(ReadOnlyList<T>.Mutate readOnlyList)
     {
-        this.readOnlyList = readOnlyList.list;
+        this.readOnlyList = readOnlyList.List;
     }
     
     private T[] GetItems()

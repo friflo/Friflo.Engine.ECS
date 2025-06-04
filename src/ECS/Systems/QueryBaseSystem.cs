@@ -42,7 +42,7 @@ public abstract class QuerySystemBase : BaseSystem
     [Browse(Never)] public          ComponentTypes      ComponentTypes  => componentTypes;
 
     /// <summary> Return all system queries. One per store in <see cref="SystemRoot.Stores"/>. </summary>
-                    public ReadOnlyList<ArchetypeQuery> Queries         => queries.list;
+                    public ReadOnlyList<ArchetypeQuery> Queries         => queries.List;
 
     /// <summary> Return the <see cref="CommandBuffer"/> of its <see cref="BaseSystem.ParentGroup"/>.</summary>
     [Browse(Never)] protected       CommandBuffer       CommandBuffer   => commandBuffer;
@@ -95,7 +95,7 @@ public abstract class QuerySystemBase : BaseSystem
     protected internal override void OnUpdateGroup()
     {
         var commandBuffers = ParentGroup.commandBuffers;
-        for (int n = 0; n < queries.list.count; n++)
+        for (int n = 0; n < queries.Count; n++)
         {
             var query       = queries[n];
             commandBuffer   = commandBuffers[n];
