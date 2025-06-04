@@ -26,8 +26,8 @@ namespace Tests.ECS.Collections {
             list.Add(object2);
             list.Add(object3);
             AreEqual(3, list.Count);
-            AreEqual(3, list.list.Span.Length);
-            AreEqual("Object[3]", list.list.ToString());
+            AreEqual(3, list.List.Span.Length);
+            AreEqual("Object[3]", list.List.ToString());
             AreSame(object1, list[0]);
             AreSame(object2, list[1]);
             AreSame(object3, list[2]);
@@ -47,8 +47,8 @@ namespace Tests.ECS.Collections {
             IsNull  (           list[2]);
             AreSame (object1,   list[0]);
             AreSame (object3,   list[1]);
-            AreEqual(1,         list.list.IndexOf(object3));
-            AreEqual(-1,        list.list.IndexOf(object4));
+            AreEqual(1,         list.List.IndexOf(object3));
+            AreEqual(-1,        list.List.IndexOf(object4));
             //
             var list2= new ReadOnlyList<object>.Mutate(Array.Empty<object>());
             list2.Insert(0, object1); // cover resize
@@ -61,7 +61,7 @@ namespace Tests.ECS.Collections {
             var object1 = new object();
             list.Add(object1);
             {
-                IEnumerable enumerable = list.list;
+                IEnumerable enumerable = list.List;
                 IEnumerator enumerator = enumerable.GetEnumerator();
                 using var enumerator1 = enumerator as IDisposable;
                 int count = 0;
@@ -79,7 +79,7 @@ namespace Tests.ECS.Collections {
                 AreEqual(1, count);
             }
             {
-                IEnumerable<object> enumerable = list.list;
+                IEnumerable<object> enumerable = list.List;
                 using var enumerator = enumerable.GetEnumerator();
                 int count = 0;
                 while (enumerator.MoveNext()) {
