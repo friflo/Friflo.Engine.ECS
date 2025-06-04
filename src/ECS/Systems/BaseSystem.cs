@@ -274,7 +274,7 @@ public abstract class BaseSystem
     public void AppendPerfLog(StringBuilder sb, int nameColLen = 0)
     {
         nameColLen = nameColLen <= 0 ? DefaultNameColLen : nameColLen;
-        var stores  = SystemRoot?.stores.List.count ?? 0;
+        var stores  = SystemRoot?.stores.Count ?? 0;
         var start = sb.Length;
         sb.Append($"stores: {stores,-3} ");
         var len = nameColLen - (sb.Length - start);
