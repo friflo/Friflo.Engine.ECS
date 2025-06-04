@@ -29,5 +29,21 @@ namespace Internal.ECS {
             AreSame(object2, debugView.Items[1]);
         }
         
+        [Test]
+        public static void Test_Array_Mutate_DebugView()
+        {
+            var list = new ReadOnlyList<object>.Mutate();
+            var object1 = new object();
+            var object2 = new object();
+            list.Add(object1);
+            list.Add(object2);
+            AreEqual("Object[2]", list.ToString());
+            var debugView = new ReadOnlyListDebugView<object>(list);
+            
+            AreEqual(2, list.Count);
+            AreSame(object1, debugView.Items[0]);
+            AreSame(object2, debugView.Items[1]);
+        }
+        
     }
 }

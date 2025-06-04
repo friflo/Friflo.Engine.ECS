@@ -59,6 +59,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
         this.array  = array;
     }
     
+    [DebuggerTypeProxy(typeof(ReadOnlyListDebugView<>))]
     public struct Mutate
     {
         public ReadOnlyList<T>  list;
@@ -67,7 +68,8 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
         public          T                   this[int index] => list.array[index];
         
         public ReadOnlyListEnumerator<T>    GetEnumerator() => new ReadOnlyListEnumerator<T>(list);
-        
+        public override string              ToString()      => $"{typeof(T).Name}[{list.count}]";
+
         public Mutate() {
             list = new ReadOnlyList<T>([]);
         }
@@ -213,6 +215,11 @@ internal class ReadOnlyListDebugView<T> where T : class
     internal ReadOnlyListDebugView(ReadOnlyList<T> readOnlyList)
     {
         this.readOnlyList = readOnlyList;
+    }
+    
+    internal ReadOnlyListDebugView(ReadOnlyList<T>.Mutate readOnlyList)
+    {
+        this.readOnlyList = readOnlyList.list;
     }
     
     private T[] GetItems()
