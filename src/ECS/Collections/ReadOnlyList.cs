@@ -21,16 +21,24 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
 {
 #region public properties
     /// <summary> Returns the number of elements contained in the list. </summary>
-    public          int             Count           => count;
+    public          int     Count           => count;
     
     /// <summary> Returns an <see cref="ReadOnlySpan{T}"/> of the list elements. </summary>
-    public          ReadOnlySpan<T> Span            => new (array, 0, count);
+    public ReadOnlySpan<T>  Span            => new (array, 0, count);
     
-    public override string          ToString()      => $"{typeof(T).Name}[{count}]";
+    public override string  ToString()      => $"{typeof(T).Name}[{count}]";
     
     /// <summary> Gets the element at the specified index. </summary>
     // No set by intention. public interface is read only
-    public          T               this[int index] => array[index];
+    public          T       this[int index] => array[index];
+    
+    // --- internal
+    internal        T[]     Array           => array;
+    #endregion
+    
+#region private fields
+    private         T[]     array;     //  8
+    private         int     count;     //  4
     #endregion
     
 #region public methods
@@ -47,10 +55,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     }
     #endregion
 
-#region private fields
-    internal T[] array;     //  8
-    internal int count;     //  4
-    #endregion
+
     
 #region Mutate
     // internal by intention. public interface is read only
@@ -177,8 +182,8 @@ public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
     #endregion
 
     internal ReadOnlyListEnumerator(ReadOnlyList<T> list) {
-        array  = list.array;
-        count  = list.count - 1;
+        array  = list.Array;
+        count  = list.Count - 1;
         index       = -1;
     }
 
@@ -228,9 +233,9 @@ internal class ReadOnlyListDebugView<T> where T : class
     
     private T[] GetItems()
     {
-        var count       = readOnlyList.count;
+        var count       = readOnlyList.Count;
         var result      = new T[count];
-        Span<T> source  = new (readOnlyList.array, 0, count);
+        Span<T> source  = new (readOnlyList.Array, 0, count);
         Span<T> target  = result;
         source.CopyTo(target);
         return result;
