@@ -22,16 +22,16 @@ public class SystemRoot : SystemGroup
 {
 #region properties
     /// <summary> Returns the <see cref="EntityStore"/>'s added to the root system. </summary>
-    [Browse(Never)] public  ReadOnlyList<EntityStore>   Stores      => stores;
+    [Browse(Never)] public  ReadOnlyList<EntityStore>   Stores      => stores.list;
     
                     public override string              ToString()  => $"'{Name}' Root - child systems: {childSystems.Count}";
     #endregion
 
 #region internal fields
-    [Browse(Never)] private readonly    Dictionary<int, BaseSystem> systemMap = new();
-    [Browse(Never)] private             int                         nextId;
-    [Browse(Never)] internal            ReadOnlyList<EntityStore>   stores;
-    [Browse(Never)] internal            ReadOnlyList<BaseSystem>    systemBuffer;
+    [Browse(Never)] private readonly    Dictionary<int, BaseSystem>         systemMap = new();
+    [Browse(Never)] private             int                                 nextId;
+    [Browse(Never)] internal            ReadOnlyList<EntityStore>.Mutate    stores;
+    [Browse(Never)] internal            ReadOnlyList<BaseSystem>.Mutate     systemBuffer;
     #endregion
 
     
@@ -42,8 +42,8 @@ public class SystemRoot : SystemGroup
     /// <param name="name"></param>
     public SystemRoot (string name = null) : base (name ?? "Systems") {
         SetRoot(this);
-        systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
-        stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());
+        systemBuffer    = new ReadOnlyList<BaseSystem>.Mutate (Array.Empty<BaseSystem>());
+        stores          = new ReadOnlyList<EntityStore>.Mutate(Array.Empty<EntityStore>());
     }
 
     /// <summary>
@@ -51,8 +51,8 @@ public class SystemRoot : SystemGroup
     /// </summary>
     public SystemRoot (EntityStore entityStore, string name = null) : base (name ?? "Systems") {
         SetRoot(this);
-        systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
-        stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());
+        systemBuffer    = new ReadOnlyList<BaseSystem>.Mutate (Array.Empty<BaseSystem>());
+        stores          = new ReadOnlyList<EntityStore>.Mutate(Array.Empty<EntityStore>());
         AddStore(entityStore);
     }
     #endregion

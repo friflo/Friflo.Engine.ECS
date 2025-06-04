@@ -34,10 +34,10 @@ public class SystemGroup : BaseSystem, IEnumerable
     [Browse(Never)] public          bool                        MonitorPerf     => monitorPerf;
 
     /// <summary> The child systems added to the group. </summary>
-    [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
+    [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems.list;
 
     /// <summary> The <see cref="ECS.CommandBuffer"/>'s shared by all <see cref="ChildSystems"/>. </summary>
-                    internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
+                    internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers.list; // only for debug view
     
                     // only for display in debugger
                     internal        Item[]                      AllSystems      => Item.GetAllSystems(this);
@@ -46,10 +46,10 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region fields
-    [Browse(Never)] [Serialize] private     string                      name;
-    [Browse(Never)]             internal    ReadOnlyList<BaseSystem>    childSystems;
-    [Browse(Never)]             internal    ReadOnlyList<CommandBuffer> commandBuffers;
-    [Browse(Never)] [Ignore]    private     bool                        monitorPerf;
+    [Browse(Never)] [Serialize] private     string                              name;
+    [Browse(Never)]             internal    ReadOnlyList<BaseSystem>.Mutate     childSystems;
+    [Browse(Never)]             internal    ReadOnlyList<CommandBuffer>.Mutate  commandBuffers;
+    [Browse(Never)] [Ignore]    private     bool                                monitorPerf;
     #endregion
     
 #region constructor
@@ -59,8 +59,8 @@ public class SystemGroup : BaseSystem, IEnumerable
     /// </summary>
     internal SystemGroup() {
         name            = "System";
-        childSystems    = new ReadOnlyList<BaseSystem>(Array.Empty<BaseSystem>());
-        commandBuffers  = new ReadOnlyList<CommandBuffer>(Array.Empty<CommandBuffer>());
+        childSystems    = new ReadOnlyList<BaseSystem>.Mutate(Array.Empty<BaseSystem>());
+        commandBuffers  = new ReadOnlyList<CommandBuffer>.Mutate(Array.Empty<CommandBuffer>());
     } 
     
     /// <summary>
@@ -69,8 +69,8 @@ public class SystemGroup : BaseSystem, IEnumerable
     public SystemGroup(string name) {
         if (name is null or "") throw new ArgumentException("group name must not be null or empty");
         this.name       = name;
-        childSystems    = new ReadOnlyList<BaseSystem>(Array.Empty<BaseSystem>());
-        commandBuffers  = new ReadOnlyList<CommandBuffer>(Array.Empty<CommandBuffer>());
+        childSystems    = new ReadOnlyList<BaseSystem>.Mutate(Array.Empty<BaseSystem>());
+        commandBuffers  = new ReadOnlyList<CommandBuffer>.Mutate(Array.Empty<CommandBuffer>());
     }
     #endregion
     
@@ -78,8 +78,8 @@ public class SystemGroup : BaseSystem, IEnumerable
     /// <summary>
     /// Returns an enumerator that iterates through the <see cref="ChildSystems"/>.
     /// </summary>
-    public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
-    IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
+    public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems.list);
+    IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems.list);
     #endregion
     
 #region group: add / insert / remove - system
@@ -126,7 +126,7 @@ public class SystemGroup : BaseSystem, IEnumerable
         if (system == null)             throw new ArgumentNullException(nameof(system));
         if (system.ParentGroup != this) throw ExceptionUtils.ArgumentException($"system not child of Group '{Name}'", nameof(system));
         var oldRoot = system.SystemRoot;
-        var index   = childSystems.IndexOf(system); // index never -1
+        var index   = childSystems.list.IndexOf(system); // index never -1
         childSystems.RemoveAt(index);
         system.ClearParentAndRoot();
         // Send event. See: SEND_EVENT notes

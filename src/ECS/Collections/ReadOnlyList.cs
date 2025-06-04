@@ -8,6 +8,7 @@ using System.Diagnostics;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -51,69 +52,82 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     internal int count;     //  4
     #endregion
     
-#region internal mutations
+#region Mutate
     // internal by intention. public interface is read only
-    internal ReadOnlyList(T[] array) {
+    private ReadOnlyList(T[] array) {
         count       = 0;
         this.array  = array;
     }
     
-    // internal by intention. public interface is read only
-    internal void Clear() {
-        for (int i = 0; i < count; i++) {
-            array[i] = null;
-        }
-        count = 0;
-    }
-    
-    // internal by intention. public interface is read only
-    internal void Add(T item)
+    public struct Mutate
     {
-        if (count == array.Length) { 
-            Resize(ref array, Math.Max(4, 2 * count));
+        public ReadOnlyList<T>  list;
+        
+        public int                          Count           => list.Count;
+        public          T                   this[int index] => list.array[index];
+        
+        public ReadOnlyListEnumerator<T>    GetEnumerator() => new ReadOnlyListEnumerator<T>(list);
+        
+        public Mutate(T[] array) {
+            list = new ReadOnlyList<T>(array);
         }
-        array[count++] = item;
-    }
     
-    // internal by intention. public interface is read only
-    internal void Insert(int index, T item)
-    {
-        if (count == array.Length) { 
-            Resize(ref array, Math.Max(4, 2 * count));
-        }
-        for (int n = count; n > index; n--) {
-            array[n] = array[n - 1];    
-        }
-        array[index] = item;
-        count++;
-    }
-    
-    // internal by intention. public interface is read only
-    internal int Remove(T item)
-    {
-        var arr = array;
-        for (int n = 0; n < count; n++) {
-            if (!ReferenceEquals(item, arr[n])) {
-                continue;
+        public void Clear() {
+            var array = list.array;
+            for (int i = 0; i < list.count; i++) {
+                array[i] = null;
             }
-            count--;
-            for (int i = n; i < count; i++) {
+            list.count = 0;
+        }
+        
+        public void Add(T item)
+        {
+            if (list.count == list.array.Length) { 
+                Resize(ref list.array, Math.Max(4, 2 * list.count));
+            }
+            list.array[list.count++] = item;
+        }
+        
+        public void Insert(int index, T item)
+        {
+            var array = list.array;
+            if (list.count == array.Length) { 
+                Resize(ref list.array, Math.Max(4, 2 * list.count));
+                array = list.array;
+            }
+            for (int n = list.count; n > index; n--) {
+                array[n] = array[n - 1];
+            }
+            array[index] = item;
+            list.count++;
+        }
+        
+        public int Remove(T item)
+        {
+            var arr = list.array;
+            for (int n = 0; n < list.count; n++) {
+                if (!ReferenceEquals(item, arr[n])) {
+                    continue;
+                }
+                list.count--;
+                for (int i = n; i < list.count; i++) {
+                    arr[i] = arr[i + 1];   
+                }
+                arr[list.count] = null;
+                return n;
+            }
+            return -1;
+        }
+        
+        public void RemoveAt(int index)
+        {
+            var arr = list.array;
+            list.count--;
+            for (int i = index; i < list.count; i++) {
                 arr[i] = arr[i + 1];   
             }
-            array[count] = null;
-            return n;
+            arr[list.count] = null;
         }
-        return -1;
-    }
-    
-    internal void RemoveAt(int index)
-    {
-        var arr = array;
-        count--;
-        for (int i = index; i < count; i++) {
-            arr[i] = arr[i + 1];   
-        }
-        array[count] = null;
     }
     #endregion
     

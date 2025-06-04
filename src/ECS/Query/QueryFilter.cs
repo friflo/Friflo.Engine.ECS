@@ -67,7 +67,7 @@ public class QueryFilter
     internal                    int             version;                    //   4  incremented if filter changes
     private                     bool            frozen;                     //   1  if true the filter cannot be changed anymore
                     
-    internal       ReadOnlyList<ValueCondition> valueConditions;            //  16
+    internal       ReadOnlyList<ValueCondition>.Mutate valueConditions;            //  16
     #endregion
     
     
@@ -77,13 +77,13 @@ public class QueryFilter
         withoutDisabled = true;
         withoutAnyTags  = EntityUtils.Disabled;
         Condition       = new FilterCondition(this); 
-        valueConditions = new ReadOnlyList<ValueCondition>(Array.Empty<ValueCondition>());
+        valueConditions = new ReadOnlyList<ValueCondition>.Mutate(Array.Empty<ValueCondition>());
     }
     
     internal QueryFilter(in Tags allTags) {
         this.allTags    = allTags;
         Condition       = new FilterCondition(this);
-        valueConditions = new ReadOnlyList<ValueCondition>(Array.Empty<ValueCondition>());
+        valueConditions = new ReadOnlyList<ValueCondition>.Mutate(Array.Empty<ValueCondition>());
     }
     #endregion
 

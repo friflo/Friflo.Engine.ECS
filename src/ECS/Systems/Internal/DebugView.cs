@@ -28,7 +28,7 @@ internal sealed class View
     
 internal class SystemGroupDebugView
 {
-    public ReadOnlyList<BaseSystem>     ChildSystems    => group.childSystems;
+    public ReadOnlyList<BaseSystem>     ChildSystems    => group.childSystems.list;
 //  public View                         System          => new View(group);
     
     [Browse(Never)] private readonly SystemGroup group;
@@ -40,8 +40,8 @@ internal class SystemGroupDebugView
 
 internal class SystemRootDebugView
 {
-    public ReadOnlyList<BaseSystem>     ChildSystems    => root.childSystems;
-    public ReadOnlyList<EntityStore>    Stores          => root.stores;
+    public ReadOnlyList<BaseSystem>     ChildSystems    => root.childSystems.list;
+    public ReadOnlyList<EntityStore>    Stores          => root.stores.list;
 //  public View                         System          => new View(root);
     
     [Browse(Never)] private readonly SystemRoot root;

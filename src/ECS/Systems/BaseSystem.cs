@@ -235,14 +235,14 @@ public abstract class BaseSystem
     #endregion
     
 #region get systems of systems sub tree
-    internal ReadOnlyList<BaseSystem> GetSubSystems(ref ReadOnlyList<BaseSystem> systemBuffer)
+    internal ReadOnlyList<BaseSystem>.Mutate GetSubSystems(ref ReadOnlyList<BaseSystem>.Mutate systemBuffer)
     {
         systemBuffer.Clear();
         AddSubSystems(ref systemBuffer, this);
         return systemBuffer;
     }
     
-    private static void AddSubSystems(ref ReadOnlyList<BaseSystem> readOnlyList, BaseSystem system)
+    private static void AddSubSystems(ref ReadOnlyList<BaseSystem>.Mutate readOnlyList, BaseSystem system)
     {
         readOnlyList.Add(system);
         if (system is SystemGroup systemGroup) {
@@ -274,7 +274,7 @@ public abstract class BaseSystem
     public void AppendPerfLog(StringBuilder sb, int nameColLen = 0)
     {
         nameColLen = nameColLen <= 0 ? DefaultNameColLen : nameColLen;
-        var stores  = SystemRoot?.stores.count ?? 0;
+        var stores  = SystemRoot?.stores.list.count ?? 0;
         var start = sb.Length;
         sb.Append($"stores: {stores,-3} ");
         var len = nameColLen - (sb.Length - start);

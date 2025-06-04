@@ -37,7 +37,7 @@ internal struct Item
         
     internal static Item[] GetAllSystems(SystemGroup systemGroup)
     {
-        var systemBuffer = new ReadOnlyList<BaseSystem>(Array.Empty<BaseSystem>());
+        var systemBuffer = new ReadOnlyList<BaseSystem>.Mutate(Array.Empty<BaseSystem>());
         systemGroup.GetSubSystems(ref systemBuffer);
         var result = new Item[systemBuffer.Count];
         for (int n = 0; n < systemBuffer.Count; n++) {
