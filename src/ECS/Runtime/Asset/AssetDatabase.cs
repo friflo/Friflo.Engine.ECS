@@ -9,25 +9,25 @@ namespace Friflo.Engine.Assets;
 /// </summary>
 public static class AssetDatabase
 {
-    public static string AssetFolder = Directory.GetCurrentDirectory();
-    
+    public  static  string  Folder { get; private set; } = Directory.GetCurrentDirectory();
+
     public static void SetAssetFolder(string folder) {
         folder = Path.GetFullPath(folder);
-        AssetFolder = folder;
+        Folder = folder;
     }
     
     public static string ToAssetPath(string path) {
-        if (!path.StartsWith(AssetFolder)) {
+        if (!path.StartsWith(Folder)) {
             return null;
         }
-        return $"res://{path.Substring(AssetFolder.Length + 1)}";
+        return $"res://{path.Substring(Folder.Length + 1)}";
     }
     
     public static string FromAssetPath(string path) {
         if (!path.StartsWith("res://")) {
             return null;
         }
-        return $"{AssetFolder}/{path.Substring("res://".Length)}";
+        return $"{Folder}/{path.Substring("res://".Length)}";
     }
     
     public static void RegisterAssetLoader<TAsset>(IAssetLoader<TAsset> loader) {

@@ -168,7 +168,7 @@ public abstract class AbstractAsset
     internal bool GetFilePath(out string filePath)
     {
         var assetPath   = path.Substring(PrefixRes.Length);
-        filePath        = Path.Combine(AssetDatabase.AssetFolder, assetPath);
+        filePath        = Path.Combine(AssetDatabase.Folder, assetPath);
         return File.Exists(filePath);
     }
     
