@@ -33,7 +33,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     public          T       this[int index] => array[index];
     
     // --- internal
-    internal        T[]     Array           => array;
+    internal        T[]     GetArray()      => array;
     #endregion
     
 #region private fields
@@ -182,7 +182,7 @@ public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
     #endregion
 
     internal ReadOnlyListEnumerator(ReadOnlyList<T> list) {
-        array  = list.Array;
+        array  = list.GetArray();
         count  = list.Count - 1;
         index       = -1;
     }
@@ -235,7 +235,7 @@ internal class ReadOnlyListDebugView<T> where T : class
     {
         var count       = readOnlyList.Count;
         var result      = new T[count];
-        Span<T> source  = new (readOnlyList.Array, 0, count);
+        Span<T> source  = new (readOnlyList.GetArray(), 0, count);
         Span<T> target  = result;
         source.CopyTo(target);
         return result;
