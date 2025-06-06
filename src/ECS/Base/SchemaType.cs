@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
-using Friflo.Engine.Assets;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using static Friflo.Engine.ECS.SchemaTypeKind;
@@ -135,8 +134,8 @@ public abstract class SchemaType
             blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
         } else if (typeof(Delegate).IsAssignableFrom(type)) {
             blittable = BlittableType.Blittable;    // https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
-        } else if (IsAssetType(type)) {
-            blittable = BlittableType.Blittable;
+    /*  } else if (IsAssetType(type)) {
+            blittable = BlittableType.Blittable; */
         } else if (type.IsArray) {
             blittable = BlittableType.NonBlittable;    
         } else if (type.IsClass && !isBaseType) {
@@ -150,17 +149,17 @@ public abstract class SchemaType
         return blittable;
     }
     
-    private static bool IsAssetType(Type type)
+/*  private static bool IsAssetType(Type type)
     {
         if (!type.IsGenericType) {
             return false;
         }
         var genericType = type.GetGenericTypeDefinition();
-        if (genericType == typeof(Asset<>)) {
+        if (genericType == typeof(Asset<>)) { // TODO ASSET_TAG
             return true;
         }
         return false;
-    }
+    } */
     
     private const BindingFlags MemberFlags =
         BindingFlags.Public             |
