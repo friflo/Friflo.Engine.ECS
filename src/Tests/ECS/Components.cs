@@ -119,16 +119,29 @@ public struct BlittableUri              : IComponent { public Uri               
 
 // see immutable types:  https://stackoverflow.com/questions/31721466/examples-of-immutable-types-in-net
 public struct BlittableTypes : IComponent {
-    internal    DateTime                dateTime;
-    internal    TimeSpan                timeSpan;
-    internal    DateTimeOffset          dateTimeOffset;
-    internal    string                  str;
-    internal    Type                    type;
-    internal    Version                 version;
-    internal    DBNull                  dbNull;
-    internal    ImmutableArray<int>     immutableArray;
-    internal    Action                  action;
+    internal    DateTime                    dateTime;
+    internal    TimeSpan                    timeSpan;
+    internal    DateTimeOffset              dateTimeOffset;
+    internal    string                      str;
+    internal    Type                        type;
+    internal    Version                     version;
+    internal    DBNull                      dbNull;
+    internal    ImmutableArray<int>         immutableArray;
+    internal    Action                      action;
+    internal    BlittableGeneric<object>    blittableGeneric;
+    internal    BlittableClass              blittableClass;
 }
+
+[BlittableType]
+public class BlittableGeneric<T> {
+    public T value; 
+}
+
+[BlittableType]
+public class BlittableClass {
+    public int value; 
+}
+
 
 
 public enum BlittableEnumType

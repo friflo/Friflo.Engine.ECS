@@ -72,6 +72,15 @@ public sealed class GenericInstanceTypeAttribute : Attribute {
     public GenericInstanceTypeAttribute (string componentKey, Type type1, Type type2, Type type3) { }
 }
 
+/// <summary>
+/// The annotated type behaves as a value type.<br/>
+/// Instances of these type can be copied in <see cref="Entity.CopyEntity"/> or <see cref="EntityStore.CloneEntity"/>
+/// without the need of a <c>CopyValue()</c> method.
+/// </summary>
+[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
+public sealed class BlittableTypeAttribute : Attribute
+{ }
+
 
 #region Friflo ImGui attributes 
 
