@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <PublishAot>true</PublishAot>
         <!-- <DefineConstants Condition="'$(PublishAot)' == 'true'">
             $(DefineConstants);IS_NATIVE_AOT
         </DefineConstants> -->
