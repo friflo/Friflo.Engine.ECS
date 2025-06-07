@@ -4,7 +4,6 @@
 // Hard rule: this file MUST NOT use type: Entity
 
 using System;
-using Friflo.Engine.ECS.Compat;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
@@ -187,7 +186,11 @@ public partial class EntityStoreBase
         }
         store.archs[store.archsCount] = archetype;
         store.archsCount++;
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        store.archSet.Add(archetype.key, archetype.key);
+#else
         store.archSet.Add(archetype.key);
+#endif
     }
     #endregion
 }
