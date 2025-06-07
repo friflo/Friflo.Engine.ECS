@@ -92,7 +92,11 @@ internal readonly struct PerfResource
     
     [ExcludeFromCodeCoverage]
     internal static long GetAllocatedBytes() {
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        return 0; 
+#else
         return Platform.IsUnityRuntime ? 0 : GC.GetAllocatedBytesForCurrentThread(); 
+#endif
     }
 }
 

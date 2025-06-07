@@ -80,7 +80,12 @@ public static class TreeUtils
     public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, IReadOnlyList<DataEntity> dataEntities)
     {
         var entityCount     = dataEntities.Count;
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        var childEntities   = new HashSet<long>         ();
+        childEntities.EnsureCapacity(entityCount);
+#else
         var childEntities   = new HashSet<long>         (entityCount);
+#endif
         var oldToNewPid     = new Dictionary<long, long>(entityCount);
         var newToOldPid     = new Dictionary<long, long>(entityCount);
         var store           = targetEntity.Store;
