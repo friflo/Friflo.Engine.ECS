@@ -74,14 +74,16 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     /// </summary>
     public void ForEachEntity(ForEachEntity<T1, T2> lambda)
     {
-        var store = Store;
+        var localStore = Store;
+        var nodes = localStore.nodes;
         foreach (var (chunk1, chunk2, entities) in Chunks)
         {
             var span1   = chunk1.Span;
             var span2   = chunk2.Span;
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
-                lambda(ref span1[n], ref span2[n], new Entity(store, ids[n]));    
+                var id = ids[n];
+                lambda(ref span1[n], ref span2[n], new Entity(localStore, id, nodes[id].revision));
             }
         }
     }

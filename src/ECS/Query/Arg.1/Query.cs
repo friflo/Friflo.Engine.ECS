@@ -71,13 +71,15 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     /// </summary>
     public void ForEachEntity(ForEachEntity<T1> lambda)
     {
-        var store = Store;
+        var localStore = Store;
+        var nodes = localStore.nodes;
         foreach (var (chunk1, entities) in Chunks)
         {
             var span1   = chunk1.Span;
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
-                lambda(ref span1[n], new Entity(store, ids[n]));
+                var id = ids[n];
+                lambda(ref span1[n], new Entity(localStore, id, nodes[id].revision));
             }
         }
     }

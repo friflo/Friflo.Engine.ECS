@@ -79,7 +79,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     /// </summary>
     public void ForEachEntity(ForEachEntity<T1, T2, T3, T4, T5> lambda)
     {
-        var store = Store;
+        var localStore = Store;
+        var nodes = localStore.nodes;
         foreach (var (chunk1, chunk2, chunk3, chunk4, chunk5, entities) in Chunks)
         {
             var span1   = chunk1.Span;
@@ -89,7 +90,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
             var span5   = chunk5.Span;
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
-                lambda(ref span1[n], ref span2[n], ref span3[n], ref span4[n], ref span5[n], new Entity(store, ids[n]));    
+                var id = ids[n];
+                lambda(ref span1[n], ref span2[n], ref span3[n], ref span4[n], ref span5[n], new Entity(localStore, id, nodes[id].revision));
             }
         }
     }
