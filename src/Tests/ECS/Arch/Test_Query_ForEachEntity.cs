@@ -9,7 +9,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch {
 
-public static class Test_Query_ForEachEntity
+public static class Test_Query_ForEach
 {
     [Test]
     public static void Test_Query_ForEach_Revision()
@@ -54,7 +54,7 @@ public static class Test_Query_ForEachEntity
     }
     
     [Test]
-    public static void Test_Query_ForEachEntity_Perf()
+    public static void Test_Query_ForEach_Entity_Perf()
     {
         var count = 5; // 5_000_000
         var store   = new EntityStore();
@@ -66,6 +66,25 @@ public static class Test_Query_ForEachEntity
             query.ForEachEntity(static (ref Position position, Entity entity) => {
                 position.x++;
             });
+        }
+    }
+    
+    [Test]
+    public static void Test_Query_ForEach_Chunks_Perf()
+    {
+        var count = 5; // 5_000_000
+        var store   = new EntityStore();
+        for (int n = 1; n <= 1000; n++) {
+            store.CreateEntity(new Position());
+        }
+        var query = store.Query<Position>();
+        for (int n = 1; n <= count; n++) {
+            foreach (var (positions, entities) in query.Chunks) {
+                var chunkSpan = positions.Span;
+                for (int i = 0; i < chunkSpan.Length; i++) {
+                    chunkSpan[i].x++;                    
+                }
+            }
         }
     }
 }
