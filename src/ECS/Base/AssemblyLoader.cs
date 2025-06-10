@@ -82,8 +82,13 @@ internal sealed class AssemblyLoader
         if (!checkedAssemblies.Add(assembly)) {
             return;
         }
-        // if (assembly.FullName.Contains("Tests,"))           { int i = 3; }
-        // if (assembly.FullName.Contains("Tests-internal,"))  { int i = 3; }
+        var assemblyName= assembly.GetName().Name;
+        if (assemblyName != null && AssemblyLoaderUtils.SystemAssemblyNames.Contains(assemblyName)) {
+            checkedAssemblies.Add(assembly);
+            return;
+        }
+        // Console.WriteLine(assemblyName);
+
         var referencedAssemblies = assembly.GetReferencedAssemblies();
         foreach (var referencedAssemblyName in referencedAssemblies)
         {
