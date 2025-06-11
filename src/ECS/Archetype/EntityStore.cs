@@ -78,7 +78,11 @@ public abstract partial class EntityStoreBase
     // --- archetypes
     [Browse(Never)] internal            Archetype[]             archs;              //  8   - array of all archetypes. never null
     [Browse(Never)] private             int                     archsCount;         //  4   - number of archetypes
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+    [Browse(Never)] private  readonly   Dictionary<ArchetypeKey, ArchetypeKey> archSet; //  8   - Set<> to get archetypes by key
+#else
     [Browse(Never)] private  readonly   HashSet<ArchetypeKey>   archSet;            //  8   - Set<> to get archetypes by key
+#endif
     /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.ComponentTypes"/> and <see cref="Archetype.Tags"/>.<br/>
     /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8   - default archetype. has no components & tags
@@ -142,7 +146,11 @@ public abstract partial class EntityStoreBase
     protected EntityStoreBase()
     {
         archs               = new Archetype[2];
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        archSet             = new Dictionary<ArchetypeKey, ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
+#else
         archSet             = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
+#endif
         var config          = GetArchetypeConfig(this);
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
