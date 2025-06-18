@@ -106,6 +106,9 @@ internal sealed class AssemblyLoader
     [ExcludeFromCodeCoverage] // running tests without debugging load all assemblies successful
     private void CheckReferencedAssembly(AssemblyName assemblyName)
     {
+        if (AssemblyLoaderUtils.SystemAssemblyNames.Contains(assemblyName.Name)) {
+            return;
+        }
         var referencedAssembly = LoadAssembly(assemblyName);
         if (referencedAssembly == null) {
             return; // case not reached in unit tests. Can be reached when using a debugger
