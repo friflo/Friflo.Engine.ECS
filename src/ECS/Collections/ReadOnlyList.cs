@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [DebuggerTypeProxy(typeof(ReadOnlyListDebugView<>))]
-public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
+public struct ReadOnlyList<T> : IReadOnlyList<T>
 {
 #region public properties
     /// <summary> Returns the number of elements contained in the list. </summary>
@@ -45,13 +45,8 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     /// <summary>
     /// Returns the zero-based index of the first occurrence of a value within the entire list.
     /// </summary>
-    public int IndexOf(T element)
-    {
-        var local = array;
-        for (int index = 0; index < count; index++) {
-            if (local[index] == element) return index;
-        }
-        return -1;
+    public int IndexOf(T element) {
+        return Array.IndexOf(array, element, 0, count);
     }
     #endregion
 
@@ -90,7 +85,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
         public void Clear() {
             var array = list.array;
             for (int i = 0; i < list.count; i++) {
-                array[i] = null;
+                array[i] = default;
             }
             list.count = 0;
         }
@@ -128,7 +123,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
                 for (int i = n; i < list.count; i++) {
                     arr[i] = arr[i + 1];   
                 }
-                arr[list.count] = null;
+                arr[list.count] = default;
                 return n;
             }
             return -1;
@@ -141,7 +136,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
             for (int i = index; i < list.count; i++) {
                 arr[i] = arr[i + 1];   
             }
-            arr[list.count] = null;
+            arr[list.count] = default;
         }
     }
     #endregion
@@ -173,7 +168,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
 /// <summary>
 /// Enumerates the elements of a <see cref="ReadOnlyList{T}"/>.
 /// </summary>
-public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
+public struct ReadOnlyListEnumerator<T> : IEnumerator<T>
 {
 #region private fields
     private readonly    T[]     array;  //  8
@@ -213,7 +208,7 @@ public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
     #endregion
 }
 
-internal class ReadOnlyListDebugView<T> where T : class
+internal class ReadOnlyListDebugView<T>
 {
     [Browse(RootHidden)]
     public              T[]             Items => GetItems();
