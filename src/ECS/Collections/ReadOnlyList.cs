@@ -114,19 +114,11 @@ public struct ReadOnlyList<T> : IReadOnlyList<T>
         
         public int Remove(T item)
         {
-            var arr = list.array;
-            for (int n = 0; n < list.count; n++) {
-                if (!ReferenceEquals(item, arr[n])) {
-                    continue;
-                }
-                list.count--;
-                for (int i = n; i < list.count; i++) {
-                    arr[i] = arr[i + 1];   
-                }
-                arr[list.count] = default;
-                return n;
+            var index = list.IndexOf(item);
+            if (index != -1) {
+                RemoveAt(index);
             }
-            return -1;
+            return index;
         }
         
         public void RemoveAt(int index)
@@ -134,7 +126,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T>
             var arr = list.array;
             list.count--;
             for (int i = index; i < list.count; i++) {
-                arr[i] = arr[i + 1];   
+                arr[i] = arr[i + 1];
             }
             arr[list.count] = default;
         }
