@@ -18,7 +18,11 @@ internal static class SchemaUtils
         if (Platform.IsUnityRuntime) {
             return true;
         }
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        return true;
+#else
         return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
+#endif
     }
     
     [ExcludeFromCodeCoverage]

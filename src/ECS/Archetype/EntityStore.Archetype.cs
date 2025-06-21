@@ -186,7 +186,11 @@ public partial class EntityStoreBase
         }
         store.archs[store.archsCount] = archetype;
         store.archsCount++;
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        store.archSet.Add(archetype.key, archetype.key);
+#else
         store.archSet.Add(archetype.key);
+#endif
     }
     #endregion
 }

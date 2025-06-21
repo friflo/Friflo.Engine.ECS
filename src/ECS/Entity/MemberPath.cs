@@ -104,6 +104,10 @@ public sealed class MemberPath
     
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;
     
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+    private static readonly char[] SplitDotArray = ['.'];
+#endif
+    
     /// <summary>
     /// Returns a <see cref="MemberPath"/> identifying a specific field / property by its <paramref name="path"/>
     /// within the passed <paramref name="type"/>.
@@ -122,7 +126,11 @@ public sealed class MemberPath
         if (Map.TryGetValue(key, out var componentFieldInfo)) {
             return componentFieldInfo;
         }
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+        var pathItems   = path.Split(SplitDotArray, StringSplitOptions.RemoveEmptyEntries);
+#else
         var pathItems   = path.Split('.', StringSplitOptions.RemoveEmptyEntries);
+#endif
         var memberInfos = new MemberInfo[pathItems.Length];
         var memberType  = type;
         bool canWrite   = true;
@@ -188,10 +196,24 @@ public sealed class MemberPath
     
     // See ThrowIfTypeNeverValidGenericArgument() at:
     // https://github.com/dotnet/runtime/blob/4f5c6938d09e935830492c006aa8381611b65ad8/src/libraries/System.Private.CoreLib/src/System/RuntimeType.cs#L736
-    private static bool IsInvalidType(Type type) {
-        return  type.IsPointer || type.IsByRef || type == typeof(void) ||
-                type.IsByRefLike; // type is a ref struct. E.g. Span<>
+private static bool IsInvalidType(Type type)
+{
+    if (type.IsPointer || type.IsByRef || type == typeof(void))
+        return true;
+#if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
+    if (type.IsByRef)
+        return true;
+    if (type.IsGenericType)
+    {
+        var genericTypeDef = type.GetGenericTypeDefinition();
+        if (genericTypeDef == typeof(Span<>) || genericTypeDef == typeof(ReadOnlySpan<>))
+            return true;
     }
+    return false;
+#else
+    return type.IsByRefLike; // type is a ref struct. E.g. Span<>
+#endif
+}
     
     // ReSharper disable UnusedMember.Local
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
