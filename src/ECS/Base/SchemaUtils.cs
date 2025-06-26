@@ -18,7 +18,9 @@ internal static class SchemaUtils
         if (Platform.IsUnityRuntime) {
             return true;
         }
-        return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
+        // Android does not require AOT. No need to register components via: new NativeAOT()
+        return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported;
+    //  return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
     }
     
     [ExcludeFromCodeCoverage]
