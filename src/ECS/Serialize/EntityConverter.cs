@@ -28,6 +28,11 @@ public sealed class EntityConverter
         writer = new ComponentWriter(TypeStore);
     }
     
+    public void SetMapperContext<T>(T context) where T : class, IMapperContext {
+        reader.componentReader.SetMapperContext(context);
+        writer.componentWriter.SetMapperContext(context);
+    }
+    
     /// <summary>
     /// Returns the passed <see cref="Entity"/> as a <see cref="DataEntity"/>
     /// <param name="entity">Source entity.</param>

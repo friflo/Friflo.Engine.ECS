@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
+using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable UseUtf8StringLiteral
@@ -48,6 +49,10 @@ public sealed class EntitySerializer
         };
         writeEntity      = new DataEntity();
     }
+    
+    public void SetMapperContext<T>(T context) where T : class, IMapperContext {
+        converter.SetMapperContext(context);
+    } 
     #endregion
 
 #region write entities
