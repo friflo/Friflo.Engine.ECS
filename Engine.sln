@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-NativeAOT", "src\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Engine.ECS.Boost", "src\ECS.Boost\Friflo.Engine.ECS.Boost.csproj", "{542074FB-7752-44FC-9480-F2BE60DB3681}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen", "src\CodeGen\CodeGen.csproj", "{F1DF8513-7BE0-4449-9E0C-9E14409997B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,9 @@ Global
 		{542074FB-7752-44FC-9480-F2BE60DB3681}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{542074FB-7752-44FC-9480-F2BE60DB3681}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{542074FB-7752-44FC-9480-F2BE60DB3681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
