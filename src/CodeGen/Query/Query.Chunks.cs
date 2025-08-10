@@ -95,11 +95,9 @@ public readonly struct QueryChunks<{{args}}> : IEnumerable <Chunks<{{args}}>>
 }
 
 public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
-    where T1 : struct
-    where T2 : struct
+{{Where(count)}}
 {
-    private readonly    int                     structIndex1;   //  4
-    private readonly    int                     structIndex2;   //  4
+{{Join(count, n => $"    private readonly    int                     structIndex{n};   //  4", "\r\n")}}
     //
     private readonly    EntityStoreBase         store;          //  8
     private readonly    Archetypes              archetypes;     // 16
@@ -110,8 +108,7 @@ public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
     
     internal  ChunkEnumerator(ArchetypeQuery<{{args}}> query)
     {
-        structIndex1    = query.signatureIndexes.T1;
-        structIndex2    = query.signatureIndexes.T2;
+{{Join(count, n => $"        structIndex{n}    = query.signatureIndexes.T{n};", "\r\n")}}
         archetypes      = query.GetArchetypes();
         archetypePos    = -1;
         if (query.checkChange) {
@@ -156,13 +153,11 @@ public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
     SetChunks:
         archetypePos    = pos;
         var heapMap     = archetype.heapMap;
-        var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
-        var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
+{{Join(count, n => $"        var chunks{n}     = (StructHeap<T{n}>)heapMap[structIndex{n}];", "\r\n")}}
 
-        var chunk1      = new Chunk<T1>(chunks1.components, count, start);
-        var chunk2      = new Chunk<T2>(chunks2.components, count, start);
+{{Join(count, n => $"        var chunk{n}      = new Chunk<T{n}>(chunks{n}.components, count, start);", "\r\n")}}
         var entities    = new ChunkEntities(archetype,      count, start);
-        chunks          = new Chunks<{{args}}>(chunk1, chunk2, entities);
+        chunks          = new Chunks<{{args}}>({{Join(count, n => $"chunk{n}", ", ")}}, entities);
         return true;
     SingleEntity:
         if (pos >= types.last) {

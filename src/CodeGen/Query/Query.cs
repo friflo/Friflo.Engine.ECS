@@ -20,7 +20,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{{{args}}}.ForEachEntity"/>.
 /// </summary>
-public delegate void ForEachEntity<{{args}}>(ref T1 component1, ref T2 component2, Entity entity)
+public delegate void ForEachEntity<{{args}}>({{Join(count, n => $"ref T{n} component{n}", ", ")}}, Entity entity)
 {{Where(count)}};
 
 
@@ -76,7 +76,7 @@ public sealed class ArchetypeQuery<{{args}}> : ArchetypeQuery // : IEnumerable <
     /// <summary>
     /// Returns a <see cref="QueryJob"/> that enables <see cref="JobExecution.Parallel"/> query execution.  
     /// </summary>
-    public QueryJob<{{args}}> ForEach(Action<Chunk<T1>, Chunk<T2>, ChunkEntities> action)  => new (this, action);
+    public QueryJob<{{args}}> ForEach(Action<{{Join(count, n => $"Chunk<T{n}>", ", ")}}, ChunkEntities> action)  => new (this, action);
     
     /// <summary>
     /// Executes the given <paramref name="lambda"/> for each entity in the query result.
