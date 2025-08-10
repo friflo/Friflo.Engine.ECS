@@ -1,4 +1,6 @@
-﻿namespace CodeGen.Query;
+﻿using static CodeGen.Gen;
+
+namespace CodeGen.Query;
 
 static partial class QueryGen {
     
