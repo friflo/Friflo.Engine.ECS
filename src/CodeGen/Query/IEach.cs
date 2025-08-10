@@ -1,10 +1,15 @@
-﻿namespace CodeGen.Query;
+﻿using static CodeGen.Gen;
+
+namespace CodeGen.Query;
+
 
 static partial class QueryGen {
     
-    public static string IEach_generator(int argCount) {
+    public static string IEach_generator(int count)
+    {
+        var param = Join(count, n => $"ref T{n} c{n}", ", ");
         
-    return """
+    return $$"""
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
@@ -14,12 +19,12 @@ namespace Friflo.Engine.ECS;
 
 public interface IEach<T1, T2>
 {
-    void Execute(ref T1 c1, ref T2 c2);
+    void Execute({{param}});
 }
 
 public interface IEachEntity<T1, T2>
 {
-    void Execute(ref T1 c1, ref T2 c2, int id);
+    void Execute({{param}}, int id);
 }
 """;
 }

@@ -2,7 +2,7 @@
 
 static partial class QueryGen {
     
-    public static string QueryJob_generator(int argCount) {
+    public static string QueryJob_generator(int count) {
         
     return """
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
