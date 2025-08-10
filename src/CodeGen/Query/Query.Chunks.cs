@@ -4,7 +4,9 @@ namespace CodeGen.Query;
 
 static partial class QueryGen {
     
-    public static string Query_Chunks_generator(int count) {
+    public static string Query_Chunks_generator(int count)
+    {
+        var args = Join(count, n => $"T{n}", ",");
         
     return $$"""
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
@@ -25,7 +27,7 @@ namespace Friflo.Engine.ECS;
 /// Contains the components returned by a component query.
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
-public readonly struct Chunks<T1, T2>
+public readonly struct Chunks<{{args}}>
 {{Where(count)}}
 {
     public              int             Length => Chunk1.Length;
@@ -41,7 +43,7 @@ public readonly struct Chunks<T1, T2>
         Entities   = entities;
     }
     
-    internal Chunks(in Chunks<T1, T2> chunks, int start, int length, int taskIndex) {
+    internal Chunks(in Chunks<{{args}}> chunks, int start, int length, int taskIndex) {
         Chunk1      = new Chunk<T1>    (chunks.Chunk1,   start, length);
         Chunk2      = new Chunk<T2>    (chunks.Chunk2,   start, length);
         Entities    = new ChunkEntities(chunks.Entities, start, length, taskIndex);
@@ -62,10 +64,10 @@ public readonly struct Chunks<T1, T2>
 /// Contains the component chunks returned by a component query.
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
-public readonly struct QueryChunks<T1, T2> : IEnumerable <Chunks<T1,T2>>
+public readonly struct QueryChunks<{{args}}> : IEnumerable <Chunks<{{args}}>>
 {{Where(count)}}
 {
-    private readonly ArchetypeQuery<T1, T2> query;
+    private readonly ArchetypeQuery<{{args}}> query;
 
     public              int     Count       => query.Count;
     
@@ -75,24 +77,24 @@ public readonly struct QueryChunks<T1, T2> : IEnumerable <Chunks<T1,T2>>
     
     public  override    string  ToString()  => query.GetQueryChunksString();
 
-    internal QueryChunks(ArchetypeQuery<T1, T2> query) {
+    internal QueryChunks(ArchetypeQuery<{{args}}> query) {
         this.query = query;
     }
     
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
-    IEnumerator<Chunks<T1,T2>>
-    IEnumerable<Chunks<T1,T2>>.GetEnumerator() => new ChunkEnumerator<T1, T2> (query);
+    IEnumerator<Chunks<{{args}}>>
+    IEnumerable<Chunks<{{args}}>>.GetEnumerator() => new ChunkEnumerator<{{args}}> (query);
     
     // --- IEnumerable
     [ExcludeFromCodeCoverage]
-    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2> (query);
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<{{args}}> (query);
     
     // --- IEnumerable
-    public ChunkEnumerator<T1, T2> GetEnumerator() => new (query);
+    public ChunkEnumerator<{{args}}> GetEnumerator() => new (query);
 }
 
-public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
+public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
     where T1 : struct
     where T2 : struct
 {
@@ -103,10 +105,10 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     private readonly    Archetypes              archetypes;     // 16
     //
     private             int                     archetypePos;   //  4
-    private             Chunks<T1, T2>          chunks;         // 46
+    private             Chunks<{{args}}>          chunks;         // 46
     
     
-    internal  ChunkEnumerator(ArchetypeQuery<T1, T2> query)
+    internal  ChunkEnumerator(ArchetypeQuery<{{args}}> query)
     {
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
@@ -119,7 +121,7 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly Chunks<T1,T2> Current   => chunks;
+    public readonly Chunks<{{args}}> Current   => chunks;
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]
@@ -160,7 +162,7 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
         var chunk1      = new Chunk<T1>(chunks1.components, count, start);
         var chunk2      = new Chunk<T2>(chunks2.components, count, start);
         var entities    = new ChunkEntities(archetype,      count, start);
-        chunks          = new Chunks<T1, T2>(chunk1, chunk2, entities);
+        chunks          = new Chunks<{{args}}>(chunk1, chunk2, entities);
         return true;
     SingleEntity:
         if (pos >= types.last) {
