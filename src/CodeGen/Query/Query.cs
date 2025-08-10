@@ -85,14 +85,13 @@ public sealed class ArchetypeQuery<{{args}}> : ArchetypeQuery // : IEnumerable <
     {
         var localStore = Store;
         var nodes = localStore.nodes;
-        foreach (var (chunk1, chunk2, entities) in Chunks)
+        foreach (var ({{Join(count, n => $"chunk{n}", ", ")}}, entities) in Chunks)
         {
-            var span1   = chunk1.Span;
-            var span2   = chunk2.Span;
+{{Join(count, n => $"            var span{n}   = chunk{n}.Span;\r\n")}}
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
                 var id = ids[n];
-                lambda(ref span1[n], ref span2[n], new Entity(localStore, id, nodes[id].revision));
+                lambda({{Join(count, n => $"ref span{n}[n]", ", ")}}, new Entity(localStore, id, nodes[id].revision));
             }
         }
     }
