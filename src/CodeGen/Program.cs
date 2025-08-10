@@ -5,27 +5,33 @@ using CodeGen.Query;
 
 namespace CodeGen;
 
-public class Program {
+public static class Program {
 
     public static void Main(string[] args)
     {
-        Console.WriteLine("Generate code");
         var dir = Path.GetFullPath("../../../../../src/ECS/", Directory.GetCurrentDirectory());
+        Console.WriteLine($"Generate at: {dir}");
         for (int n = 2; n <= 2; n++)
         {
             var iEach = QueryGen.IEach_generator(n);
-            File.WriteAllText($"{dir}/Query/Arg.{n}/IEach.txt", iEach, Encoding.UTF8);
+            Write(dir, $"Query/Arg.{n}/IEach.txt", iEach);
             
             var query = QueryGen.Query_generator(n);
-            File.WriteAllText($"{dir}/Query/Arg.{n}/Query.txt", query, Encoding.UTF8);
+            Write(dir, $"Query/Arg.{n}/Query.txt", query);
             
             var queryChunks = QueryGen.Query_Chunks_generator(n);
-            File.WriteAllText($"{dir}/Query/Arg.{n}/Query.Chunks.txt", queryChunks, Encoding.UTF8);
+            Write(dir, $"Query/Arg.{n}/Query.Chunks.txt", queryChunks);
             
             var queryJob = QueryGen.QueryJob_generator(n);
-            File.WriteAllText($"{dir}/Query/Arg.{n}/QueryJob.txt", queryJob, Encoding.UTF8);
+            Write(dir, $"Query/Arg.{n}/QueryJob.txt", queryJob);
         }
-    }    
+    }
+    
+    private static void Write(string dir, string path, string src)
+    {
+        Console.WriteLine($"  {path}");
+        File.WriteAllText($"{dir}{path}", src, Encoding.UTF8);
+    }
 }
 
 
