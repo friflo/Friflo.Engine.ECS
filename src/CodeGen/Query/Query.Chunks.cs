@@ -37,8 +37,7 @@ public readonly struct Chunks<{{args}}>
     public override     string          ToString() => Entities.GetChunksString();
 
     internal Chunks({{Join(count, n => $"Chunk<T{n}> chunk{n}", ", ")}}, in ChunkEntities entities) {
-        Chunk1     = chunk1;
-        Chunk2     = chunk2;
+    {{Join(count, n => $"        Chunk{n}     = chunk{n};", "\r\n ")}}
         Entities   = entities;
     }
     
