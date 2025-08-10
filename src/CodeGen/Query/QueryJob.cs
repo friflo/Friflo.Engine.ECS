@@ -34,21 +34,21 @@ public sealed class QueryJob<{{args}}> : QueryJob
 
     [Browse(Never)]
     private readonly    ArchetypeQuery<{{args}}>                      query;      //  8
-    private readonly    Action<Chunk<T1>, Chunk<T2>, ChunkEntities> action;     //  8
+    private readonly    Action<{{Join(count, n => $"Chunk<T{n}>", ", ")}}, ChunkEntities> action;     //  8
     [Browse(Never)]
     private             QueryJobTask[]                              jobTasks;   //  8
 
 
     private class QueryJobTask : JobTask {
-        internal    Action<Chunk<T1>, Chunk<T2>, ChunkEntities>     action;
+        internal    Action<{{Join(count, n => $"Chunk<T{n}>", ", ")}}, ChunkEntities>     action;
         internal    Chunks<{{args}}>                                  chunks;
         
-        internal  override void ExecuteTask()  => action(chunks.Chunk1, chunks.Chunk2, chunks.Entities);
+        internal  override void ExecuteTask()  => action({{Join(count, n => $"chunks.Chunk{n}", ", ")}}, chunks.Entities);
     }
     
     internal QueryJob(
         ArchetypeQuery<{{args}}>                      query,
-        Action<Chunk<T1>, Chunk<T2>, ChunkEntities> action)
+        Action<{{Join(count, n => $"Chunk<T{n}>", ", ")}}, ChunkEntities> action)
     {
         this.query  = query;
         this.action = action;
@@ -58,7 +58,7 @@ public sealed class QueryJob<{{args}}> : QueryJob
     public override void Run()
     {
         foreach (Chunks<{{args}}> chunk in query.Chunks) {
-            action(chunk.Chunk1, chunk.Chunk2, chunk.Entities);
+            action({{Join(count, n => $"chunks.Chunk{n}", ", ")}}, chunk.Entities);
         }
     }
     
@@ -76,7 +76,7 @@ public sealed class QueryJob<{{args}}> : QueryJob
         {
             var chunkLength = chunks.Length;
             if (ExecuteSequential(taskCount, chunkLength)) {
-                action(chunks.Chunk1, chunks.Chunk2, chunks.Entities);
+                action({{Join(count, n => $"chunks.Chunk{n}", ", ")}}, chunks.Entities);
                 continue;
             }
             var tasks = jobTasks;

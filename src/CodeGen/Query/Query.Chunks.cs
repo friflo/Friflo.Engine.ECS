@@ -31,21 +31,19 @@ public readonly struct Chunks<{{args}}>
 {{Where(count)}}
 {
     public              int             Length => Chunk1.Length;
-    public readonly     Chunk<T1>       Chunk1;     //  16
-    public readonly     Chunk<T2>       Chunk2;     //  16
+{{Join(count, n => $"    public readonly     Chunk<T{n}>       Chunk{n};     //  16", "\r\n ")}}
     public readonly     ChunkEntities   Entities;   //  32
 
     public override     string          ToString() => Entities.GetChunksString();
 
-    internal Chunks(Chunk<T1> chunk1, Chunk<T2> chunk2, in ChunkEntities entities) {
+    internal Chunks({{Join(count, n => $"Chunk<T{n}> chunk{n}", ", ")}}, in ChunkEntities entities) {
         Chunk1     = chunk1;
         Chunk2     = chunk2;
         Entities   = entities;
     }
     
     internal Chunks(in Chunks<{{args}}> chunks, int start, int length, int taskIndex) {
-        Chunk1      = new Chunk<T1>    (chunks.Chunk1,   start, length);
-        Chunk2      = new Chunk<T2>    (chunks.Chunk2,   start, length);
+{{Join(count, n => $"        Chunk{n}      = new Chunk<T{n}>    (chunks.Chunk{n},   start, length);", "\r\n ")}}
         Entities    = new ChunkEntities(chunks.Entities, start, length, taskIndex);
     }
     
@@ -53,9 +51,8 @@ public readonly struct Chunks<{{args}}>
         Entities   = new ChunkEntities(entities, taskIndex);
     }
     
-    public void Deconstruct(out Chunk<T1> chunk1, out Chunk<T2> chunk2, out ChunkEntities entities) {
-        chunk1      = Chunk1;
-        chunk2      = Chunk2;
+    public void Deconstruct({{Join(count, n => $"out Chunk<T{n}> chunk{n}", ", ")}}, out ChunkEntities entities) {
+{{Join(count, n => $"        chunk{n}      = Chunk{n};", "\r\n ")}}
         entities    = Entities;
     }
 }

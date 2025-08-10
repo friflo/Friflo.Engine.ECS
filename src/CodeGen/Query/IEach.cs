@@ -7,6 +7,7 @@ static partial class QueryGen {
     
     public static string IEach_generator(int count)
     {
+        var args = Join(count, n => $"T{n}", ",");
         var param = Join(count, n => $"ref T{n} c{n}", ", ");
         
     return $$"""
@@ -17,12 +18,12 @@ static partial class QueryGen {
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public interface IEach<T1, T2>
+public interface IEach<{{args}}>
 {
     void Execute({{param}});
 }
 
-public interface IEachEntity<T1, T2>
+public interface IEachEntity<{{args}}>
 {
     void Execute({{param}}, int id);
 }
