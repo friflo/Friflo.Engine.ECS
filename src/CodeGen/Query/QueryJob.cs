@@ -6,7 +6,7 @@ static partial class QueryGen {
     
     public static string QueryJob_generator(int count) {
         
-    return """
+    return $$"""
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
@@ -24,8 +24,7 @@ namespace Friflo.Engine.ECS;
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#parallel-query-job">Example.</a>
 /// </summary>
 public sealed class QueryJob<T1, T2> : QueryJob
-    where T1 : struct
-    where T2 : struct
+{{Where(count)}}
 {
     internal            QueryChunks<T1, T2> Chunks      => new (query);     // only for debugger
     internal            QueryEntities       Entities    => query.Entities;  // only for debugger

@@ -6,7 +6,7 @@ static partial class QueryGen {
     
     public static string Query_Chunks_generator(int count) {
         
-    return """
+    return $$"""
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
@@ -26,8 +26,7 @@ namespace Friflo.Engine.ECS;
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct Chunks<T1, T2>
-    where T1 : struct
-    where T2 : struct
+{{Where(count)}}
 {
     public              int             Length => Chunk1.Length;
     public readonly     Chunk<T1>       Chunk1;     //  16
@@ -64,8 +63,7 @@ public readonly struct Chunks<T1, T2>
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct QueryChunks<T1, T2> : IEnumerable <Chunks<T1,T2>>
-    where T1 : struct
-    where T2 : struct
+{{Where(count)}}
 {
     private readonly ArchetypeQuery<T1, T2> query;
 
