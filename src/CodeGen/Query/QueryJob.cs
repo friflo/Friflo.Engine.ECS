@@ -110,9 +110,8 @@ public sealed class QueryJob<{{args}}> : QueryJob
     
     private static int GetMultiple()
     {
-        int lcm1 = StructPadding<T1>.ComponentMultiple;
-        int lcm2 = StructPadding<T2>.ComponentMultiple;
-        return LeastComponentMultiple(lcm1, lcm2);
+{{JoinLn(count, n => $"        int lcm{n} = StructPadding<T{n}>.ComponentMultiple;")}}
+        return LeastComponentMultipleOfSpan(stackalloc int[{{count}}] { {{Join(count, n => $"lcm{n}", ", ")}} });
     }
 }
 

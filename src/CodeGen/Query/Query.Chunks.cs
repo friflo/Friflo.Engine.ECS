@@ -99,7 +99,7 @@ public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
     private readonly    Archetypes              archetypes;     // 16
     //
     private             int                     archetypePos;   //  4
-    private             Chunks<{{args}}>          chunks;         // 46
+    private             Chunks<{{args}}>          chunks;
     
     
     internal  ChunkEnumerator(ArchetypeQuery<{{args}}> query)

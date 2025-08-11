@@ -11,7 +11,7 @@ public static class Program {
     {
         var dir = Path.GetFullPath("../../../../../src/ECS/", Directory.GetCurrentDirectory());
         Console.WriteLine($"Generate at: {dir}");
-        for (int n = 2; n <= 3; n++)
+        for (int n = 2; n <= 5; n++)
         {
             var iEach = QueryGen.IEach_generator(n);
             Write(dir, $"Query/Arg.{n}/IEach.txt", iEach);
