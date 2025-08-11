@@ -48,8 +48,8 @@ public sealed class QueryJob<T1, T2, T3> : QueryJob
     
     public override void Run()
     {
-        foreach (Chunks<T1, T2, T3> chunk in query.Chunks) {
-            action(chunk.Chunk1, chunk.Chunk2, chunk.Chunk3, chunk.Entities);
+        foreach (Chunks<T1, T2, T3> chunks in query.Chunks) {
+            action(chunks.Chunk1, chunks.Chunk2, chunks.Chunk3, chunks.Entities);
         }
     }
     

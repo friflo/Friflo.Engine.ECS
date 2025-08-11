@@ -57,8 +57,8 @@ public sealed class QueryJob<{{args}}> : QueryJob
     
     public override void Run()
     {
-        foreach (Chunks<{{args}}> chunk in query.Chunks) {
-            action({{Join(count, n => $"chunks.Chunk{n}", ", ")}}, chunk.Entities);
+        foreach (Chunks<{{args}}> chunks in query.Chunks) {
+            action({{Join(count, n => $"chunks.Chunk{n}", ", ")}}, chunks.Entities);
         }
     }
     
