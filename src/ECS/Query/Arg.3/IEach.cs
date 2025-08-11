@@ -5,12 +5,12 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public interface IEach<T1, T2, T3>
+public interface IEach<T1,T2,T3>
 {
     void Execute(ref T1 c1, ref T2 c2, ref T3 c3);
 }
 
-public interface IEachEntity<T1, T2, T3>
+public interface IEachEntity<T1,T2,T3>
 {
     void Execute(ref T1 c1, ref T2 c2, ref T3 c3, int id);
 }

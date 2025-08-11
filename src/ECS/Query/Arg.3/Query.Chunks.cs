@@ -16,10 +16,10 @@ namespace Friflo.Engine.ECS;
 /// Contains the components returned by a component query.
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
-public readonly struct Chunks<T1, T2, T3>
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
+public readonly struct Chunks<T1,T2,T3>
+where T1 : struct
+where T2 : struct
+where T3 : struct
 {
     public              int             Length => Chunk1.Length;
     public readonly     Chunk<T1>       Chunk1;     //  16
@@ -30,13 +30,13 @@ public readonly struct Chunks<T1, T2, T3>
     public override     string          ToString() => Entities.GetChunksString();
 
     internal Chunks(Chunk<T1> chunk1, Chunk<T2> chunk2, Chunk<T3> chunk3, in ChunkEntities entities) {
-        Chunk1     = chunk1;
+            Chunk1     = chunk1;
         Chunk2     = chunk2;
         Chunk3     = chunk3;
         Entities   = entities;
     }
     
-    internal Chunks(in Chunks<T1, T2, T3> chunks, int start, int length, int taskIndex) {
+    internal Chunks(in Chunks<T1,T2,T3> chunks, int start, int length, int taskIndex) {
         Chunk1      = new Chunk<T1>    (chunks.Chunk1,   start, length);
         Chunk2      = new Chunk<T2>    (chunks.Chunk2,   start, length);
         Chunk3      = new Chunk<T3>    (chunks.Chunk3,   start, length);
@@ -59,14 +59,14 @@ public readonly struct Chunks<T1, T2, T3>
 /// Contains the component chunks returned by a component query.
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
-public readonly struct QueryChunks<T1, T2, T3>  : IEnumerable <Chunks<T1, T2, T3>>
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
+public readonly struct QueryChunks<T1,T2,T3> : IEnumerable <Chunks<T1,T2,T3>>
+where T1 : struct
+where T2 : struct
+where T3 : struct
 {
-    private readonly    ArchetypeQuery<T1, T2, T3>  query;
+    private readonly ArchetypeQuery<T1,T2,T3> query;
 
-    public              int     Count => query.Count;
+    public              int     Count       => query.Count;
     
     /// <summary> Obsolete. Renamed to <see cref="Count"/>. </summary>
     [Obsolete($"Renamed to {nameof(Count)}")] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -74,27 +74,27 @@ public readonly struct QueryChunks<T1, T2, T3>  : IEnumerable <Chunks<T1, T2, T3
     
     public  override    string  ToString()  => query.GetQueryChunksString();
 
-    internal QueryChunks(ArchetypeQuery<T1, T2, T3> query) {
+    internal QueryChunks(ArchetypeQuery<T1,T2,T3> query) {
         this.query = query;
     }
     
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
-    IEnumerator<Chunks<T1, T2, T3>>
-    IEnumerable<Chunks<T1, T2, T3>>.GetEnumerator() => new ChunkEnumerator<T1, T2, T3> (query);
+    IEnumerator<Chunks<T1,T2,T3>>
+    IEnumerable<Chunks<T1,T2,T3>>.GetEnumerator() => new ChunkEnumerator<T1,T2,T3> (query);
     
     // --- IEnumerable
     [ExcludeFromCodeCoverage]
-    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2, T3> (query);
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1,T2,T3> (query);
     
     // --- IEnumerable
-    public ChunkEnumerator<T1, T2, T3> GetEnumerator() => new (query);
+    public ChunkEnumerator<T1,T2,T3> GetEnumerator() => new (query);
 }
 
-public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
+public struct ChunkEnumerator<T1,T2,T3> : IEnumerator<Chunks<T1,T2,T3>>
+where T1 : struct
+where T2 : struct
+where T3 : struct
 {
     private readonly    int                     structIndex1;   //  4
     private readonly    int                     structIndex2;   //  4
@@ -104,10 +104,10 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
     private readonly    Archetypes              archetypes;     // 16
     //
     private             int                     archetypePos;   //  4
-    private             Chunks<T1, T2, T3>      chunks;         // 72
+    private             Chunks<T1,T2,T3>          chunks;
     
     
-    internal  ChunkEnumerator(ArchetypeQuery<T1, T2, T3> query)
+    internal  ChunkEnumerator(ArchetypeQuery<T1,T2,T3> query)
     {
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
@@ -121,7 +121,7 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly Chunks<T1, T2, T3> Current   => chunks;
+    public readonly Chunks<T1,T2,T3> Current   => chunks;
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]
@@ -164,7 +164,7 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
         var chunk2      = new Chunk<T2>(chunks2.components, count, start);
         var chunk3      = new Chunk<T3>(chunks3.components, count, start);
         var entities    = new ChunkEntities(archetype,      count, start);
-        chunks          = new Chunks<T1, T2, T3>(chunk1, chunk2, chunk3, entities);
+        chunks          = new Chunks<T1,T2,T3>(chunk1, chunk2, chunk3, entities);
         return true;
     SingleEntity:
         if (pos >= types.last) {

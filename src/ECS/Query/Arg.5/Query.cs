@@ -9,75 +9,76 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}.ForEachEntity"/>.
 /// </summary>
-public delegate void ForEachEntity<T1, T2, T3, T4, T5>(ref T1 component1, ref T2 component2, ref T3 component3, ref T4 component4, ref T5 component5, Entity entity)
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
-    where T4 : struct
-    where T5 : struct;
+public delegate void ForEachEntity<T1,T2,T3,T4,T5>(ref T1 component1, ref T2 component2, ref T3 component3, ref T4 component4, ref T5 component5, Entity entity)
+where T1 : struct
+where T2 : struct
+where T3 : struct
+where T4 : struct
+where T5 : struct;
 
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query">Example.</a>
 /// </summary>
-public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
-    where T4 : struct
-    where T5 : struct
+public sealed class ArchetypeQuery<T1,T2,T3,T4,T5> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
+where T1 : struct
+where T2 : struct
+where T3 : struct
+where T4 : struct
+where T5 : struct
 {
-    /// <inheritdoc          cref="ArchetypeQuery.AllTags"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.AnyTags"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.WithDisabled"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithDisabled  ()             { SetWithDisabled();         return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.WithoutAllTags"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.WithoutAnyTags"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> AllTags       (in Tags tags) { SetHasAllTags(tags);      return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AnyTags"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> AnyTags       (in Tags tags) { SetHasAnyTags(tags);      return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithDisabled"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> WithDisabled  ()             { SetWithDisabled();        return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAllTags"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);  return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAnyTags"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);  return this; }
     
-    /// <inheritdoc          cref="ArchetypeQuery.AllComponents"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.AnyComponents"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.WithoutAllComponents"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
-    /// <inheritdoc          cref="ArchetypeQuery.WithoutAnyComponents"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AllComponents"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AnyComponents"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAllComponents"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAnyComponents"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
     /// <inheritdoc cref="QueryFilter.HasValue{TComponent,TValue}"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> HasValue    <TComponent,TValue>(TValue value)           where TComponent : struct, IIndexedComponent<TValue>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> HasValue    <TComponent,TValue>(TValue value)           where TComponent : struct, IIndexedComponent<TValue>
     { base.HasValue    <TComponent, TValue>(value);    return this; }
     
     /// <inheritdoc cref="QueryFilter.ValueInRange{TComponent,TValue}"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> ValueInRange<TComponent,TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> ValueInRange<TComponent,TValue>(TValue min, TValue max) where TComponent : struct, IIndexedComponent<TValue> where TValue : IComparable<TValue>
     { base.ValueInRange<TComponent, TValue>(min, max); return this; }
     
-    /// <inheritdoc          cref="ArchetypeQuery.FreezeFilter"/>
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> FreezeFilter() { SetFreezeFilter();   return this; }
     
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature, QueryFilter filter)
+    /// <inheritdoc cref="ArchetypeQuery.FreezeFilter"/>
+    public new ArchetypeQuery<T1,T2,T3,T4,T5> FreezeFilter() { SetFreezeFilter();   return this; }
+    
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1,T2,T3,T4,T5> signature, QueryFilter filter)
         : base(store, signature.signatureIndexes, filter, null) {
     }
     
     /// <summary>
     /// Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}"/>.<br/>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#enumerate-query-chunks">Example.</a>
-    /// </summary>
-    public      QueryChunks    <T1, T2, T3, T4, T5>  Chunks         => new (this);
+    /// </summary> 
+    public      QueryChunks    <T1,T2,T3,T4,T5>  Chunks                                      => new (this);
     
     /// <summary>
     /// Returns a <see cref="QueryJob"/> that enables <see cref="JobExecution.Parallel"/> query execution.  
     /// </summary>
-    public QueryJob<T1, T2, T3, T4, T5> ForEach(Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities> action)  => new (this, action);
+    public QueryJob<T1,T2,T3,T4,T5> ForEach(Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities> action)  => new (this, action);
     
     /// <summary>
     /// Executes the given <paramref name="lambda"/> for each entity in the query result.
     /// </summary>
-    public void ForEachEntity(ForEachEntity<T1, T2, T3, T4, T5> lambda)
+    public void ForEachEntity(ForEachEntity<T1,T2,T3,T4,T5> lambda)
     {
         var localStore = Store;
         var nodes = localStore.nodes;

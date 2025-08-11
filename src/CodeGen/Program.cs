@@ -14,16 +14,16 @@ public static class Program {
         for (int n = 2; n <= 5; n++)
         {
             var iEach = QueryGen.IEach_generator(n);
-            Write(dir, $"Query/Arg.{n}/IEach.txt", iEach);
+            Write(dir, $"Query/Arg.{n}/IEach.cs", iEach);
             
             var query = QueryGen.Query_generator(n);
-            Write(dir, $"Query/Arg.{n}/Query.txt", query);
+            Write(dir, $"Query/Arg.{n}/Query.cs", query);
             
             var queryChunks = QueryGen.Query_Chunks_generator(n);
-            Write(dir, $"Query/Arg.{n}/Query.Chunks.txt", queryChunks);
+            Write(dir, $"Query/Arg.{n}/Query.Chunks.cs", queryChunks);
             
             var queryJob = QueryGen.QueryJob_generator(n);
-            Write(dir, $"Query/Arg.{n}/QueryJob.txt", queryJob);
+            Write(dir, $"Query/Arg.{n}/QueryJob.cs", queryJob);
         }
     }
     
