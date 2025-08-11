@@ -31,18 +31,18 @@ public readonly struct Chunks<{{args}}>
 {{Where(count)}}
 {
     public              int             Length => Chunk1.Length;
-{{Join(count, n => $"    public readonly     Chunk<T{n}>       Chunk{n};     //  16", "\r\n ")}}
+{{JoinLn(count, n => $"    public readonly     Chunk<T{n}>       Chunk{n};     //  16")}}
     public readonly     ChunkEntities   Entities;   //  32
 
     public override     string          ToString() => Entities.GetChunksString();
 
     internal Chunks({{Join(count, n => $"Chunk<T{n}> chunk{n}", ", ")}}, in ChunkEntities entities) {
-    {{Join(count, n => $"        Chunk{n}     = chunk{n};", "\r\n ")}}
+    {{JoinLn(count, n => $"        Chunk{n}     = chunk{n};")}}
         Entities   = entities;
     }
     
     internal Chunks(in Chunks<{{args}}> chunks, int start, int length, int taskIndex) {
-{{Join(count, n => $"        Chunk{n}      = new Chunk<T{n}>    (chunks.Chunk{n},   start, length);", "\r\n ")}}
+{{JoinLn(count, n => $"        Chunk{n}      = new Chunk<T{n}>    (chunks.Chunk{n},   start, length);")}}
         Entities    = new ChunkEntities(chunks.Entities, start, length, taskIndex);
     }
     
@@ -51,7 +51,7 @@ public readonly struct Chunks<{{args}}>
     }
     
     public void Deconstruct({{Join(count, n => $"out Chunk<T{n}> chunk{n}", ", ")}}, out ChunkEntities entities) {
-{{Join(count, n => $"        chunk{n}      = Chunk{n};", "\r\n ")}}
+{{JoinLn(count, n => $"        chunk{n}      = Chunk{n};")}}
         entities    = Entities;
     }
 }
@@ -93,7 +93,7 @@ public readonly struct QueryChunks<{{args}}> : IEnumerable <Chunks<{{args}}>>
 public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
 {{Where(count)}}
 {
-{{Join(count, n => $"    private readonly    int                     structIndex{n};   //  4", "\r\n")}}
+{{JoinLn(count, n => $"    private readonly    int                     structIndex{n};   //  4")}}
     //
     private readonly    EntityStoreBase         store;          //  8
     private readonly    Archetypes              archetypes;     // 16
@@ -104,7 +104,7 @@ public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
     
     internal  ChunkEnumerator(ArchetypeQuery<{{args}}> query)
     {
-{{Join(count, n => $"        structIndex{n}    = query.signatureIndexes.T{n};", "\r\n")}}
+{{JoinLn(count, n => $"        structIndex{n}    = query.signatureIndexes.T{n};")}}
         archetypes      = query.GetArchetypes();
         archetypePos    = -1;
         if (query.checkChange) {
@@ -149,9 +149,9 @@ public struct ChunkEnumerator<{{args}}> : IEnumerator<Chunks<{{args}}>>
     SetChunks:
         archetypePos    = pos;
         var heapMap     = archetype.heapMap;
-{{Join(count, n => $"        var chunks{n}     = (StructHeap<T{n}>)heapMap[structIndex{n}];", "\r\n")}}
+{{JoinLn(count, n => $"        var chunks{n}     = (StructHeap<T{n}>)heapMap[structIndex{n}];")}}
 
-{{Join(count, n => $"        var chunk{n}      = new Chunk<T{n}>(chunks{n}.components, count, start);", "\r\n")}}
+{{JoinLn(count, n => $"        var chunk{n}      = new Chunk<T{n}>(chunks{n}.components, count, start);")}}
         var entities    = new ChunkEntities(archetype,      count, start);
         chunks          = new Chunks<{{args}}>({{Join(count, n => $"chunk{n}", ", ")}}, entities);
         return true;

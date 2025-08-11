@@ -26,6 +26,11 @@ public static class Gen
         return sb.ToString();
     }
     
+    public static string JoinLn(int count, Func<int, string> part)
+    {
+        return Join(count, part, "\r\n");
+    }
+    
     public static string Where(int count)
     {
         return Join(count, n => $"where T{n} : struct", "\r\n");
