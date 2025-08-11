@@ -145,7 +145,7 @@ public abstract class QueryJob
         return GreatestCommonDivider(b, a % b); */
     }
     
-    internal static int LeastComponentMultiple(int a, int b)
+    private static int LeastComponentMultiple(int a, int b)
     {
         var lcm = LeastCommonMultiple(a, b);
         if (lcm <= ArchetypeUtils.MaxComponentMultiple) {
@@ -165,5 +165,15 @@ public abstract class QueryJob
         }
         return b / divider * a;  
     }
+    
+    internal static int LeastComponentMultipleOfSpan(Span<int> span)
+    {
+        var lcm = span[0];
+        for (int n = 1; n < span.Length; n++) {
+            lcm = LeastComponentMultiple(lcm, span[n]);
+        }
+        return lcm;
+    }
+
     #endregion
 }

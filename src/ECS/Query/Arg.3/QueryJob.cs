@@ -104,7 +104,6 @@ public sealed class QueryJob<T1, T2, T3> : QueryJob
         int lcm1 = StructPadding<T1>.ComponentMultiple;
         int lcm2 = StructPadding<T2>.ComponentMultiple;
         int lcm3 = StructPadding<T3>.ComponentMultiple;
-        int lcm12 = LeastComponentMultiple(lcm1,  lcm2);
-        return      LeastComponentMultiple(lcm12, lcm3);
+        return LeastComponentMultipleOfSpan(stackalloc int[3] { lcm1, lcm2, lcm3 });
     }
 }
