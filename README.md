@@ -80,6 +80,7 @@ Get an overview of the feature set or explore various use-cases with examples at
 - [x] SIMD Support 🧮
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
+- [x] CLS Compliant API - supporting all .NET languages: C#, F#, VB.NET, ...
 - [x] Debug Tools 🐞: Watch entities, components, tags, relations, query results, systems, ...
       <details>
         <summary>Screenshot - Watch ad-hoc query result in debugger</summary>
