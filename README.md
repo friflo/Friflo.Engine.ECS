@@ -12,7 +12,7 @@
 [![CI-Engine](https://img.shields.io/github/actions/workflow/status/friflo/Friflo.Engine.ECS/.github%2Fworkflows%2Fengine.yml?logo=github-actions&logoColor=white&label=CI)](https://github.com/friflo/Friflo.Engine.ECS/actions/workflows/engine.yml)
 [![Demos](https://img.shields.io/badge/Demos-22aa22?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 [![C# API](https://img.shields.io/badge/C%23%20API-22aaaa?logo=github&logoColor=white)](https://github.com/friflo/Friflo.Engine-docs)
-[![Discord](https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/nFfrhgQkb8)
+[![Discord](https://img.shields.io/discord/1209072279904976896?label=Discord&logo=discord&logoColor=white&labelColor=5E6AE9&color=4149A1)](https://discord.gg/nFfrhgQkb8)
 [![Docs](https://img.shields.io/badge/Docs-A200FF?logo=gitbook&logoColor=white)](https://friflo.gitbook.io/friflo.engine.ecs)
 
 </div>
