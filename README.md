@@ -106,12 +106,31 @@ dotnet add package Friflo.Engine.ECS
 
 ## Projects using friflo ECS
 
+### [RaygueLike Challenge](https://github.com/d-bucur/rl2025)
+
+<a href="https://github.com/d-bucur/rl2025"><img src="https://img.itch.zone/aW1nLzIzMDEyMjQ3LnBuZw==/original/us69f5.png" width="460" height="268"/></a>  
+
+![raylib](https://img.shields.io/badge/raylib-F5F5F5?logo=raylib&logoColor=black)
+![WASM](https://img.shields.io/badge/WASM-624DE8?logo=webassembly&logoColor=white)
+[Play in Browser](https://sirdorius.itch.io/rayguelike-2025)
+
+Project is hosted on GitHub and supports Desktop and WASM. It combines a 3D environment with 2D sprites.  
+Interesting note: Combines behavior trees with ECS.
+
+
 ### [Horse Runner DX](https://store.steampowered.com/app/2955320/Horse_Runner_DX)
 
-<a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2955320/library_header.jpg" width="230" height="108"/></a>  
+<a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2955320/library_header.jpg" width="460" height="215"/></a>  
+
+![MonoGame](https://img.shields.io/badge/MonoGame-E73C00?logo=monogame&logoColor=white)  
 Quote from developer: *"Just wanted to let you know that Friflo ECS 2.0.0 works like a charm in my little game.  
 I use it for basically everything (landscape segments, vegetation, players, animations,  collisions and even the floating dust particles are entities).  
 After some optimization there is no object allocation during gameplay - the allocation graph just stays flat - no garbage collection."*
+
+
+**Want to add a project?**  
+Create a GitHub [Discussion](https://github.com/friflo/Friflo.Engine.ECS/discussions/categories/show-and-tell) or message on [Discord](https://discord.gg/nFfrhgQkb8).
+
 
 ## Demos
 
