@@ -112,7 +112,8 @@ dotnet add package Friflo.Engine.ECS
 ![raylib](https://img.shields.io/badge/raylib-F5F5F5?logo=raylib&logoColor=black)
 ![WASM](https://img.shields.io/badge/WASM-624DE8?logo=webassembly&logoColor=white)
 [Play in Browser](https://sirdorius.itch.io/rayguelike-2025)  
-Project is hosted on GitHub and supports Desktop and WASM. It combines a 3D environment with 2D sprites.  
+Project is hosted on GitHub and supports Desktop and WASM.  
+Rendering of 3D environment and 2D sprites is implemented with Raylib.  
 Interesting note: It combines behavior trees with ECS.
 
 
