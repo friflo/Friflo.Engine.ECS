@@ -121,7 +121,8 @@ Interesting note: Combines behavior trees with ECS.
 
 <a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2955320/library_header.jpg" width="460" height="215"/></a>  
 
-![MonoGame](https://img.shields.io/badge/MonoGame-E73C00?logo=monogame&logoColor=white)  
+![MonoGame](https://img.shields.io/badge/MonoGame-E73C00?logo=monogame&logoColor=white)
+![Steam](https://img.shields.io/badge/Steam-00ADEF?logo=steam&logoColor=white)  
 Quote from developer: *"Just wanted to let you know that Friflo ECS 2.0.0 works like a charm in my little game.  
 I use it for basically everything (landscape segments, vegetation, players, animations,  collisions and even the floating dust particles are entities).  
 After some optimization there is no object allocation during gameplay - the allocation graph just stays flat - no garbage collection."*
