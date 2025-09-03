@@ -110,8 +110,9 @@ dotnet add package Friflo.Engine.ECS
 
 <a href="https://github.com/d-bucur/rl2025"><img src="https://img.itch.zone/aW1nLzIzMDEyMjQ3LnBuZw==/original/us69f5.png" width="460" height="268"/></a>  
 ![raylib](https://img.shields.io/badge/raylib-F5F5F5?logo=raylib&logoColor=black)
-![WASM](https://img.shields.io/badge/WASM-624DE8?logo=webassembly&logoColor=white)
-[Play in Browser](https://sirdorius.itch.io/rayguelike-2025)  
+![WASM](https://img.shields.io/badge/WASM-624DE8?logo=webassembly&logoColor=white)    
+[Play in Browser](https://sirdorius.itch.io/rayguelike-2025) ·
+[GitHub](https://github.com/d-bucur/rl2025)  
 Project is hosted on GitHub and supports Desktop and WASM.  
 Rendering of 3D environment and 2D sprites is implemented with Raylib.  
 Interesting note: It combines behavior trees with ECS.
