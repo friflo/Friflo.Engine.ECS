@@ -386,6 +386,10 @@ See [Benchmark results](docs/doraku-benchmark.md).
 
 <br/>
 
+*You Like this project?*  
+Leave a ⭐ at  [friflo ECS](https://github.com/friflo/Friflo.Engine.ECS)
+
+<br/>
 
 **License**
 
