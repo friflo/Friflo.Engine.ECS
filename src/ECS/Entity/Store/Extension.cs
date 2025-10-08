@@ -105,7 +105,9 @@ internal partial struct StoreExtension
         for (int n = 1; n <= len; n++) {
             if (scripts[n].id != id) continue;
             for (; n < len; n++) {
-                scripts[n] = scripts[n + 1];
+                var script = scripts[n + 1];
+                scripts[n] = script;
+                scriptMap[script.id] = n;
             }
             entityScriptCount   = len;
             scripts[len]        = default;
