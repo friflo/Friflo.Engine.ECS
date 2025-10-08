@@ -384,7 +384,7 @@ public static class Test_Script
 
         AreEqual("id: 2  [*TestScript1]", entity2.ToString());
     }
-    }
+}
 
 }
 
