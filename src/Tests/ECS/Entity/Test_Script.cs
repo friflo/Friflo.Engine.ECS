@@ -369,6 +369,21 @@ public static class Test_Script
         test.Start();
         test.Update();
     }
+
+    [Test]
+    public static void Test_DeleteEntity()
+    {
+        var store = new EntityStore(PidType.RandomPids);
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+
+        entity1.AddScript(new TestScript1());
+        entity2.AddScript(new TestScript1());
+
+        entity1.DeleteEntity();
+
+        AreEqual("id: 2  [*TestScript1]", entity2.ToString());
+    }
 }
 
 }
