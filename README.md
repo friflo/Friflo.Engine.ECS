@@ -16,76 +16,63 @@
 
 </div>
 
-# Friflo.Engine.ECS
+# friflo ECS
 
-***The ECS for finishers 🏁***  
-Leading performance in most ECS aspects.  
-Performance Ratio - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)
+Friflo ECS is a high performance C# ECS with focus on simplicity and reliability.  
+The library is designed for easy integration and a smooth developer experience.  
+Among various C# ECS projects, it is currently the only one fully implemented in Managed C#.  
+By this no use of `unsafe` code preventing crashes due to memory corruption.
 
-|         |     friflo | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
-| ------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
-| *Ratio* |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |       2.57 |       3.81 |      21.09 |
-| *Notes* |            |            |            |            |            | [^sparse]  | [^sparse]  | [^sparse]  |
+<details>
+<summary>What is ECS - Entity Component System?</summary>
+An ECS is a software architecture pattern. See [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).  
+It is often used in the Gaming industry - e.g. Minecraft - and used for high performant data processing.  
+An ECS provide two strengths:
 
-[^sparse]: Sparse Set based ECS projects.
-
-## News
-
-- [x] ![new](docs/images/new.svg) features in v3.0.0  
-      Introduced: **Index / Search** with O(1), **Relationships** 1:1 and 1:many and **Relations**. See [New features in 3.0.0](#new-features-in-300)
-
-- [x] Published [Friflo.Engine.ECS.Boost](https://www.nuget.org/packages/Friflo.Engine.ECS.Boost) to enable
-      [boosted queries](https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#boosted-query) with maximum performance.
-
-- [x] New GitHub benchmark repository [ECS.CSharp.Benchmark - Common use-cases](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)  
-
-## Contents
-
-* [🔥 Friflo.Engine.ECS](#frifloengineecs)
-  - [Documentation](#documentation)
-  - [Feature highlights](#feature-highlights)
-  - [Projects using friflo ECS](#projects-using-friflo-ecs)
-  - [Demos](#demos)
-  - [ECS definition](#ecs-definition)
-  - [New features in 3.0.0](#new-features-in-300)
-* [⏩ Examples](#-examples)
-  - [🚀 Hello World](#-hello-world)
-  - [⚙️ Systems](#️-systems)
-* [🏁 Benchmarks](#-ecs-benchmarks)
+1. It enables writing *highly decoupled code*. Data is stored in **Components** which are assigned to objects - aka **Entities** - at runtime.  
+   Code decoupling is accomplished by dividing implementation in pure data structures (**Component types**) - and code (**Systems**) to process them.  
+  
+2. It enables *high performant system execution* by storing components in continuous memory to leverage CPU caches L1, L2 & L3.  
+   It improves CPU branch prediction by minimizing conditional branches when processing components in tight loops.
+</details>
 
 
-## Documentation
+### Highlights
+* 🔥 **Top Performance** - C/C++/Rust speed and memory efficiency. Various benchmarks below.
+* 🧩 **Bare Essentials** - Provide only ECS core concepts: components, tags, relations and systems. Thats it!
+* 🎯 **Simple** - Clean & Simple API. No boilerplate. Check the [Documentation](https://friflo.gitbook.io/friflo.engine.ecs) with many examples.
+* 🛡️ **Reliable** - Built for production. Fully Managed C# - No unsafe code. High test coverage.
+* 🙏 **Community** - Helpful and welcoming support on [Discord](https://discord.gg/nFfrhgQkb8) and Github.
 
-Get an overview of the feature set or explore various use-cases with examples at
-[**friflo ECS · Docs**](https://friflo.gitbook.io/friflo.engine.ecs).
 
+## Features
 
-## Feature highlights
-
-- [x] Simple API - no boilerplate, rock-solid 🗿 and bulletproof 🛡️
-- [x] High-performance 🔥 compact ECS
-- [x] Low memory footprint 👣. Create 100.000.000 entities in 1.5 sec
-- [x] Zero ⦰ allocations after buffers are large enough. No struct boxing
-- [x] High performant / type-safe queries ⊆
-- [x] Efficient multithreaded queries ⇶
-- [x] Entity component Search in O(1) ∈ 
-- [x] Fast batch / bulk operations ⏩
-- [x] Command buffers / deferred operations ⏭️
-- [x] Entity relationships and relations ⌘
-- [x] Entity hierarchy / tree ⪪
-- [x] Fully reactive / entity events ⚡
-- [x] Systems / System groups ⚙️
-- [x] JSON Serialization 💿
-- [x] SIMD Support 🧮
-- [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
-  WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and Native AOT
+- [x] High performant / type-safe queries
+- [x] Efficient multithreaded queries
+- [x] Fast batch / bulk operations
+- [x] Command buffers *aka* deferred operations
+- [x] Entity hierarchy *aka* scene tree
+- [x] Relationships and relations
+- [x] Component Search in O(1)
+- [x] Entity / component events
+- [x] Allocation free enumerators
+- [x] Systems and groups
+- [x] JSON Serialization
+- [x] SIMD Support
+- [x] Type-safe Add/Remove/Get component. No potential memory corruption like in Arch.
+- [x] Single library. No exclusion of feature combinations such as events, assertions or debug/release.
+- [x] Zero allocations after buffers are large enough.
+- [x] Automatic component type registration
+- [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8 .NET 9 .NET 10
+  WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame
+- [x] Native AOT
 - [x] CLS Compliant API - supporting all .NET languages: C#, F#, VB.NET, ...
-- [x] Debug Tools 🐞: Watch entities, components, tags, relations, query results, systems, ...
+- [x] Debug Tools: Watch entities, components, tags, relations, query results, systems, ...
       <details>
         <summary>Screenshot - Watch ad-hoc query result in debugger</summary>
         <img src="docs/images/watch-query-result-set.png" width="656" height="202"/>
       </details>
-- [x] **100%** verifiably safe 🔒 C#. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
+- [x] Fully Managed C#. No [*unsafe code*](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code),
       *native dll bindings* and *access violations*. 
       <details>
         <summary>Behavior of access violation bugs using unsafe code</summary>
@@ -157,19 +144,6 @@ Demo projects on GitHub below.
 All example Demos - **Windows**, **macOS** & **Linux** - available as projects for **MonoGame**, **Unity** and **Godot**.  
 See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
-
-## ECS definition
-
-An entity-component-system (**ECS**) is a software architecture pattern. See [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).  
-It is often used in the Gaming industry - e.g. Minecraft - and used for high performant data processing.  
-An ECS provide two strengths:
-
-1. It enables writing *highly decoupled code*. Data is stored in **Components** which are assigned to objects - aka **Entities** - at runtime.  
-   Code decoupling is accomplished by dividing implementation in pure data structures (**Component types**) - and code (**Systems**) to process them.  
-  
-2. It enables *high performant system execution* by storing components in continuous memory to leverage CPU caches L1, L2 & L3.  
-   It improves CPU branch prediction by minimizing conditional branches when processing components in tight loops.
-
 <br/>
 
 
@@ -199,7 +173,7 @@ for the challenge to improve the feature set and performance of this project!
 # ⏩ Examples
 
 This section contains two typical use cases when using an ECS.  
-More examples describing use of various features are in the [friflo ECS - Documentation](https://friflo.gitbook.io/friflo.engine.ecs).
+More examples describing use of various features are at [friflo ECS - Documentation](https://friflo.gitbook.io/friflo.engine.ecs).
 
 
 ## **🚀 Hello World**
@@ -375,6 +349,11 @@ It compares the performance of multiple ECS projects with **simple** benchmarks.
 So they can be used as a **guide to migrate** form one ECS to another.  
 See discussion of [reddit announcement Post](https://www.reddit.com/r/EntityComponentSystem/comments/1e0qo62/just_published_new_github_repo_ecs_c_benchmark/).
 
+**Performance Ratio Overview - see [C# ECS Benchmark](https://github.com/friflo/ECS.CSharp.Benchmark-common-use-cases)**
+
+|         |     friflo | Flecs.NET  | TinyEcs    | Arch       | fennecs    | Leopotam   | DefaultEcs | Morpeh     |
+| ------- | ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:| ----------:|
+| *Ratio* |       1.00 |       2.55 |       3.42 |       6.96 |      19.02 |       2.57 |       3.81 |      21.09 |
 
 ## ECS.CSharp.Benchmark
 
