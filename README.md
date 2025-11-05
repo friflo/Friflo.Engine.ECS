@@ -60,7 +60,7 @@ An ECS provide two strengths:
 - [x] JSON Serialization
 - [x] SIMD Support
 - [x] Type-safe Add/Remove/Get component. No potential memory corruption like in Arch.
-- [x] Single library. No exclusion of feature combinations such as events, assertions or debug/release.
+- [x] Single library. No exclusive feature combinations such as events, assertions or debug/release.
 - [x] Zero allocations after buffers are large enough.
 - [x] Automatic component type registration
 - [x] Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8 .NET 9 .NET 10
