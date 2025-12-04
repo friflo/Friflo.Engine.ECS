@@ -51,6 +51,7 @@ An ECS provide two strengths:
 - [x] Efficient multithreaded queries
 - [x] Fast batch / bulk operations
 - [x] Command buffers *aka* deferred operations
+- [x] Clone / Copy entities
 - [x] Entity hierarchy *aka* scene tree
 - [x] Relationships and relations
 - [x] Component Search in O(1)
