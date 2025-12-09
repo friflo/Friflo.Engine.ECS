@@ -1,4 +1,4 @@
-﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
 using System;
@@ -180,7 +180,7 @@ internal sealed class AssemblyLoader
                     continue;
                 }
             }
-            if (isClass && type.IsSubclassOf(typeof(Script))) {
+            if (isClass && !type.IsAbstract && type.IsSubclassOf(typeof(Script))) {
                 componentTypes.Add(new AssemblyType(type, SchemaTypeKind.Script, assemblyIndex));
             }
         }
