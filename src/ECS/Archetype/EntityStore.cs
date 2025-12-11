@@ -120,7 +120,8 @@ public abstract partial class EntityStoreBase
     {
         internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes();
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
-        internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[EntitySchema.maxStructIndex];
+        internal static             StructHeap[]    DefaultHeapMap  = new StructHeap[EntitySchema.InitialCapacity];
+        private  static readonly    object          HeapMapLock     = new();
         
         /// <summary>The index of the <see cref="EntityStoreBase.defaultArchetype"/> - index is always 0</summary>
         internal const              int             DefaultArchIndex        =  0;
@@ -135,6 +136,22 @@ public abstract partial class EntityStoreBase
     //  internal const              int             StoreRootParentId       = -1;
     
         internal const              int             SingleMax               = 32;
+        
+        /// <summary>
+        /// Resizes the DefaultHeapMap when new component types are registered at runtime.
+        /// </summary>
+        internal static void ResizeDefaultHeapMap(int newCapacity)
+        {
+            lock (HeapMapLock)
+            {
+                if (newCapacity <= DefaultHeapMap.Length)
+                    return;
+                    
+                var newHeapMap = new StructHeap[newCapacity];
+                Array.Copy(DefaultHeapMap, newHeapMap, DefaultHeapMap.Length);
+                DefaultHeapMap = newHeapMap;
+            }
+        }
     }
     #endregion
     

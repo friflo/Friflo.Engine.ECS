@@ -34,11 +34,16 @@ internal static class SchemaUtils
     
     private static EntitySchema RegisterTypes()
     {
+        // Mark schema as created - future runtime registrations will be added dynamically
+        RuntimeTypeRegistry.MarkSchemaCreated();
+        
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
         
         var schemaTypes     = new SchemaTypes();
         var types           = new List<AssemblyType>();
+        
+        // First, add types discovered from assemblies
         for (int n = 0; n < assemblies.Length; n++) {
             var assembly = assemblies[n];
             AssemblyLoader.GetComponentTypes(assembly, n, types);
@@ -46,6 +51,43 @@ internal static class SchemaUtils
                 schemaTypes.AddSchemaType(type);
             }
         }
+        
+        // Then, add types registered at runtime via RuntimeTypeRegistry
+        var runtimeTypes = RuntimeTypeRegistry.GetPendingTypes();
+        var assemblyMap = new Dictionary<Assembly, int>();
+        for (int n = 0; n < assemblies.Length; n++) {
+            assemblyMap[assemblies[n]] = n;
+        }
+        
+        // Build list of new assemblies from runtime-registered types
+        var newAssemblies = new List<Assembly>();
+        foreach (var runtimeType in runtimeTypes) {
+            var assembly = runtimeType.type.Assembly;
+            if (!assemblyMap.ContainsKey(assembly)) {
+                var newIndex = assemblies.Length + newAssemblies.Count;
+                assemblyMap[assembly] = newIndex;
+                newAssemblies.Add(assembly);
+            }
+        }
+        
+        // Merge assemblies if there are new ones from runtime registration
+        if (newAssemblies.Count > 0) {
+            var mergedAssemblies = new Assembly[assemblies.Length + newAssemblies.Count];
+            Array.Copy(assemblies, mergedAssemblies, assemblies.Length);
+            for (int i = 0; i < newAssemblies.Count; i++) {
+                mergedAssemblies[assemblies.Length + i] = newAssemblies[i];
+            }
+            assemblies = mergedAssemblies;
+        }
+        
+        // Add runtime-registered types with correct assembly indices
+        foreach (var runtimeType in runtimeTypes) {
+            var assembly = runtimeType.type.Assembly;
+            var assemblyIndex = assemblyMap[assembly];
+            var correctedType = new AssemblyType(runtimeType.type, runtimeType.kind, assemblyIndex);
+            schemaTypes.AddSchemaType(correctedType);
+        }
+        
         var dependants = schemaTypes.CreateSchemaTypes(assemblies);
         foreach (var dependant in dependants) {
             assemblyLoader.dependants.Add(dependant);
