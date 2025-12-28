@@ -97,12 +97,12 @@ dotnet add package Friflo.Engine.ECS
 ### [Louis Adventure](https://sergeik.itch.io/louis-adventure)
 
 <a href="https://sergeik.itch.io/louis-adventure"><img src="https://github.com/user-attachments/assets/ecf9357a-d240-414f-aa2f-edb0dfd551bd" width="460" height="287"/></a>  
-![raylib](https://img.shields.io/badge/Unity-000000?logo=unity&logoColor=white)
+![Unity](https://img.shields.io/badge/Unity-000000?logo=unity&logoColor=white)
 ![WASM](https://img.shields.io/badge/WASM-624DE8?logo=webassembly&logoColor=white)    
 [Play in Browser](https://sergeik.itch.io/louis-adventure)  
 Tech Demo of a 2D platformer with focus on movement mechanics.  
 ECS is used for core game logic, component-base abilities, physics / collisions & triggers,  
-state machines / behavior logic, gameplay events and UI integration. [more details...](https://github.com/friflo/Friflo.Engine.ECS/discussions/119)
+state machines / behavior logic, gameplay events and UI integration. [more ...](https://github.com/friflo/Friflo.Engine.ECS/discussions/119)
 
 
 ### [RaygueLike Challenge](https://github.com/d-bucur/rl2025)
