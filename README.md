@@ -115,7 +115,7 @@ state machines / behavior logic, gameplay events and UI integration. [more ...](
 [GitHub](https://github.com/d-bucur/rl2025)  
 Project is hosted on GitHub and supports Desktop and WASM.  
 Rendering of 3D environment and 2D sprites is implemented with Raylib.  
-Interesting note: It combines behavior trees with ECS.
+Interesting note: It combines behavior trees with ECS. [more ...](https://github.com/friflo/Friflo.Engine.ECS/discussions/90)
 
 
 ### [Horse Runner DX](https://store.steampowered.com/app/2955320/Horse_Runner_DX)
