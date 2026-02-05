@@ -388,4 +388,4 @@ Leave a ⭐ at  [friflo ECS](https://github.com/friflo/Friflo.Engine.ECS)
 This project is licensed under MIT.  
 
 Friflo.Engine.ECS  
-Copyright © 2025   Ullrich Praetz - https://github.com/friflo
+Copyright © 2026   Ullrich Praetz - https://github.com/friflo
