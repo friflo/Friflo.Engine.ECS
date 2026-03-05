@@ -18,7 +18,7 @@ namespace Tests.ECS.Base {
 /// <code>
 /// public enum CombatType
 /// {
-///                                 Undefined,
+///                                 Undefined = 0, // is 0 so unassigned component types switch to default case 
 ///     [TypeId(typeof(Melee))]     Melee,
 ///     [TypeId(typeof(Ranged))]    Ranged,
 ///     [TypeId(typeof(Tank))]      Tank,
