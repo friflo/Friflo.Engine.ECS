@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -63,6 +64,7 @@ public static class Test_ComponentTypeInfo
     
 #region CLR type info performance
     // [Test]
+    // [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     // execution: 197 ms (Release) 
     public static void Test_IsAssignableFrom_Perf_is()
     {
@@ -73,6 +75,7 @@ public static class Test_ComponentTypeInfo
     }
     
     // [Test]
+    // [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     // execution: 3373 ms (Release) 
     public static void Test_IsAssignableFrom_Perf_IsAssignableFrom()
     {
