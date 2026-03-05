@@ -9,7 +9,7 @@ namespace Tests.ECS.Base {
     
 /// <summary>
 /// Utility class that enables to implement switch statements for specific component types.<br/>
-/// E.g. when using <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.
+/// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.
 /// </summary>
 /// <remarks> 
 /// This is done by creating and enum type and assign its values to specific component types.
@@ -20,6 +20,18 @@ namespace Tests.ECS.Base {
 ///     [TypeId(typeof(Melee))]     Melee,
 ///     [TypeId(typeof(Ranged))]    Ranged,
 ///     [TypeId(typeof(Tank))]      Tank,
+/// }
+///
+/// // switch statement on enum CombatType
+/// foreach (var component in entity.Components)
+/// {
+///     CombatType combatType = TypeId&lt;CombatType>.Of(component.Type);
+///     switch (combatType) {
+///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...
+///         case CombatType.Ranged:  ...
+///         case CombatType.Tank:   ...
+///         default:                ...
+///     }
 /// }
 /// </code>
 /// This helper class may become part of the ECS library.
