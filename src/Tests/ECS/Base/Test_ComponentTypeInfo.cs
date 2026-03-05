@@ -49,11 +49,13 @@ public static class Test_ComponentTypeInfo
 
         foreach (var componentType in entity.Archetype.ComponentTypes)
         {
-            bool IsAssignableFrom = ComponentTypeInfo<ITestableInterface>.IsAssignableFrom(componentType);
+            bool isAssignableFrom = ComponentTypeInfo<ITestableInterface>.IsAssignableFrom(componentType);
+            AreEqual(typeof(ITestableInterface).IsAssignableFrom(componentType.Type), isAssignableFrom);
+            
             if (componentType.Type == typeof(TestInterfaceComponent)) {
-                IsTrue(IsAssignableFrom);
+                IsTrue(isAssignableFrom);
             } else {
-                IsFalse(IsAssignableFrom);
+                IsFalse(isAssignableFrom);
             }
         }
     }
