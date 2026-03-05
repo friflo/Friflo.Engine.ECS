@@ -8,11 +8,13 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS.Base {
     
 /// <summary>
-/// Utility class that enables to implement switch statements for specific component types.<br/>
-/// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.
+/// Utility class that enables to implement switch statements on component types.<br/>
+/// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.<br/>
+/// Or to handle specific component types in event handler like <see cref="ComponentChanged.ComponentType"/>.<br/>
+/// It enables to group specific component types by using an enum.
 /// </summary>
 /// <remarks> 
-/// This is done by creating and enum type and assign its values to specific component types.
+/// This is done by creating and enum type and attribute its values to specific component types with <c>[TypeId()]</c>.
 /// <code>
 /// public enum CombatType
 /// {
@@ -27,10 +29,10 @@ namespace Tests.ECS.Base {
 /// {
 ///     CombatType combatType = TypeId&lt;CombatType>.Of(component.Type);
 ///     switch (combatType) {
-///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...
-///         case CombatType.Ranged:  ...
-///         case CombatType.Tank:   ...
-///         default:                ...
+///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...  break;
+///         case CombatType.Ranged: ...  break;
+///         case CombatType.Tank:   ...  break;
+///         default:                ...  break;
 ///     }
 /// }
 /// </code>
