@@ -63,7 +63,7 @@ public static class Test_ComponentTypeInfo
     
 #region CLR type info performance
     // [Test]
-    // execution: 397 ms
+    // execution: 197 ms (Release) 
     public static void Test_IsAssignableFrom_Perf_is()
     {
         var component = new TestInterfaceComponent();
@@ -73,7 +73,7 @@ public static class Test_ComponentTypeInfo
     }
     
     // [Test]
-    // execution: 6283 ms
+    // execution: 3373 ms (Release) 
     public static void Test_IsAssignableFrom_Perf_IsAssignableFrom()
     {
         var componentType = typeof(TestInterfaceComponent);
