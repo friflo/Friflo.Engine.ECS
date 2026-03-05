@@ -84,6 +84,17 @@ public static class Test_ComponentTypeInfo
             _ = typeof(ITestableInterface).IsAssignableFrom(componentType);
         }        
     }
+    
+    // [Test]
+    // execution: 197 ms (Release) 
+    public static void Test_IsAssignableFrom_Perf_ComponentTypeInfo()
+    {
+        var schema = EntityStore.GetEntitySchema();
+        var componentType = schema.ComponentTypeByType[typeof(TestInterfaceComponent)];
+        for (int n = 0; n < 1_000_000_000; n++) {
+            _ = ComponentTypeInfo<ITestableInterface>.IsAssignableFrom(componentType);
+        }        
+    }
     #endregion
 
 }
