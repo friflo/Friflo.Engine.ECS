@@ -54,13 +54,13 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 80  scripts: 10  entity tags: 22", schema.ToString());
-        AreEqual(81,    components.Length);
+        AreEqual("components: 84  scripts: 10  entity tags: 22", schema.ToString());
+        AreEqual(85,    components.Length);
         AreEqual(11,    scripts.Length);
         
-        AreEqual(86,    schema.SchemaTypeByKey.Count);
-        AreEqual(80,    schema.ComponentTypeByType.Count);
-        AreEqual(73,    schema.ComponentTypes.Count);
+        AreEqual(90,    schema.SchemaTypeByKey.Count);
+        AreEqual(84,    schema.ComponentTypeByType.Count);
+        AreEqual(77,    schema.ComponentTypes.Count);
         AreEqual( 7,    schema.RelationTypes.Count);
         AreEqual(10,    schema.ScriptTypeByType.Count);
         
@@ -223,7 +223,7 @@ public static class Test_ComponentSchema
         var schema      = EntityStore.GetEntitySchema();
         var components = schema.ComponentTypeByType.Values.ToArray();
         Array.Sort(components);
-        IsTrue(components[0].Type   == typeof(AttackComponent));
+        IsTrue(components[0].Type   == typeof(AaaFirstComponent));
         IsTrue(components[^1].Type  == typeof(Velocity));
     }
     
