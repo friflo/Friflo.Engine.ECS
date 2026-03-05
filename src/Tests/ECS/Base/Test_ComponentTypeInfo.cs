@@ -59,6 +59,30 @@ public static class Test_ComponentTypeInfo
             }
         }
     }
+
+    
+#region CLR type info performance
+    // [Test]
+    // execution: 397 ms
+    public static void Test_IsAssignableFrom_Perf_is()
+    {
+        var component = new TestInterfaceComponent();
+        for (int n = 0; n < 1_000_000_000; n++) {
+            _ = component is ITestableInterface;
+        }        
+    }
+    
+    // [Test]
+    // execution: 6283 ms
+    public static void Test_IsAssignableFrom_Perf_IsAssignableFrom()
+    {
+        var componentType = typeof(TestInterfaceComponent);
+        for (int n = 0; n < 1_000_000_000; n++) {
+            _ = typeof(ITestableInterface).IsAssignableFrom(componentType);
+        }        
+    }
+    #endregion
+
 }
 
 }
