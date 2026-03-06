@@ -39,7 +39,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 public static class ComponentId<TEnum> where TEnum : struct, Enum
 {
-    private static readonly TEnum[] IdMap = CreateIdMap();
+    internal static readonly TEnum[] IdMap = CreateIdMap();
     
     /// <summary>
     /// Returns the enum id mapped to a component type with a <c>[MapComponent()]</c> attribute.<br/>

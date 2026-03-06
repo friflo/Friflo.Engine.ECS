@@ -39,7 +39,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 public static class TagId<TEnum> where TEnum : struct, Enum
 {
-    private static readonly TEnum[] IdMap = CreateIdMap();
+    internal static readonly TEnum[] IdMap = CreateIdMap();
     
     /// <summary>
     /// Returns the enum id mapped to a tag type with a <c>[MapTag()]</c> attribute.<br/>

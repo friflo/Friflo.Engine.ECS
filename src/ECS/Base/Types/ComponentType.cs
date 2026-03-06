@@ -66,6 +66,8 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     public int CompareTo(ComponentType other) {
         return nameSortOrder - other.nameSortOrder;
     }
+    
+    public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => ComponentId<TEnum>.IdMap[StructIndex];
 }
 
 internal static class StructInfo<T>

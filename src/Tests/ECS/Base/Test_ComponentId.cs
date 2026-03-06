@@ -35,7 +35,7 @@ public static class Test_TypeId
 
         foreach (var component in entity.Components)
         {
-            CombatType combatId = ComponentId<CombatType>.Of(component.Type);
+            CombatType combatId = component.Type.AsEnum<CombatType>();
             switch (combatId) {
                 case CombatType.Melee:
                     foundMelee = true;

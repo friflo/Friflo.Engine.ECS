@@ -35,7 +35,7 @@ public static class Test_TagId
 
         foreach (var tag in entity.Tags)
         {
-            var tagId = TagId<CombatTags>.Of(tag);
+            var tagId = tag.AsEnum<CombatTags>();
             switch (tagId) {
                 case CombatTags.Melee:
                     foundMelee = true;

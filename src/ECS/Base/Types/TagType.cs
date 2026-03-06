@@ -36,6 +36,8 @@ public sealed class TagType : SchemaType, IComparable<TagType>
     public int CompareTo(TagType other) {
         return nameSortOrder - other.nameSortOrder;
     }
+    
+    public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => TagId<TEnum>.IdMap[TagIndex];
     #endregion
 }
 
