@@ -5,7 +5,7 @@ using System;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Utility class used to get an enum id mapped to a component type.<br/>
+/// Utility class used to get the enum id mapped to a component type.<br/>
 /// This enables the use of switch statements on <see cref="ComponentType"/>'s.<br/>
 /// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.<br/>
 /// Or to handle specific <see cref="ComponentType"/>'s in event handlers like <see cref="ComponentChanged"/>.<br/>
