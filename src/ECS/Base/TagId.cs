@@ -1,0 +1,79 @@
+using System.Reflection;
+using System;
+
+// ReSharper disable once CheckNamespace
+namespace Friflo.Engine.ECS;
+
+/// <summary>
+/// Utility class used get an enum id mapped to a tag type.<br/>
+/// This enables the use of switch statements on <see cref="TagType"/>'s.<br/>
+/// E.g. when iterating <see cref="Entity.Tags"/> or <see cref="Archetype.Tags"/>.<br/>
+/// Or to handle specific <see cref="TagType"/>'s in event handlers like <see cref="TagsChanged"/>.<br/>
+/// It also improves project overview by grouping a domain of tag types to an enum.
+/// </summary>
+/// <remarks>
+/// Usage:<br/>
+/// Declare an <c>enum</c> and map tag types to enum ids with <c>[MapTag()]</c>.
+/// <code>
+/// public enum CombatTags
+/// {
+///     Undefined = 0, // 0 => unmapped tag types switch to default case 
+///     [MapTag(typeof(MeleeTag))]      Melee,
+///     [MapTag(typeof(RangedTag))]     Ranged,
+///     [MapTag(typeof(TankTag))]       Tank,
+/// }
+///
+/// // switch statement on enum CombatTags
+/// foreach (var tag in entity.Tags)
+/// {
+///     var combatType = TagId&lt;CombatTags>.Of(tag);
+///     switch (combatType) {
+///         case CombatType.Melee:  ...  break;
+///         case CombatType.Ranged: ...  break;
+///         case CombatTags.Tank:   ...  break;
+///         default:                ...  break;
+///     }
+/// }
+/// </code>
+/// This helper class may become part of the ECS library.
+/// </remarks>
+public struct TagId<TEnum> where TEnum : struct, Enum
+{
+    private static readonly TEnum[] IdMap = CreateTypeIds();
+    
+    /// <summary>
+    /// Returns the enum id mapped to a tag type with a <c>[MapTag()]</c> attribute.
+    /// </summary>
+    /// <remarks> Executes in O(1). Simply an array index lookup. </remarks>
+    public static TEnum Of(TagType from) => IdMap[from.TagIndex];
+    
+    private static TEnum[] CreateTypeIds()
+    {
+        var schema = EntityStore.GetEntitySchema();
+        var tagTypes = schema.Tags;
+        var ids = new TEnum[tagTypes.Length];
+        var enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
+        foreach (var value in enumValues)
+        {
+            var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
+            var attribute = (MapTagAttribute)memberInfo.GetCustomAttribute(typeof(MapTagAttribute), false);
+            if (attribute == null) {
+                continue;
+            }
+            var tagType = schema.TagTypeByType[attribute.type];
+            ids[tagType.TagIndex] = value;
+        }
+        return ids;
+    }
+}
+
+/// <summary>
+/// Maps a tag type to an enum id.<br/>
+/// This enables the use of switch statements for <see cref="TagType"/>'s.<br/>
+/// Usage see: <see cref="TagId{TEnum}"/>
+/// </summary>
+[AttributeUsage(AttributeTargets.Field)]
+public sealed class MapTagAttribute : Attribute {
+    public readonly Type type;
+    public MapTagAttribute (Type type) => this.type = type;
+}

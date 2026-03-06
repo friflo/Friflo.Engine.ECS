@@ -16,7 +16,7 @@ public static class Test_ComponentSchema
     [Test]
     public static void Test_EntityTags() {
         var schema      = EntityStore.GetEntitySchema();
-        AreEqual(23,     schema.Tags.Length);
+        AreEqual(26,     schema.Tags.Length);
         
         var tags = schema.Tags;
         IsNull(tags[0]);
@@ -26,8 +26,8 @@ public static class Test_ComponentSchema
             AreEqual(SchemaTypeKind.Tag, type.Kind);
             IsNull  (type.ComponentKey);
         }
-        AreEqual(22,                     schema.TagTypeByType.Count);
-        AreEqual(21,                     schema.TagTypeByName.Count);
+        AreEqual(25,                     schema.TagTypeByType.Count);
+        AreEqual(24,                     schema.TagTypeByName.Count);
         {
             var testTagType = schema.TagTypeByType[typeof(TestTag)];
             AreEqual(typeof(TestTag),       testTagType.Type);
@@ -54,7 +54,7 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 84  scripts: 10  entity tags: 22", schema.ToString());
+        AreEqual("components: 84  scripts: 10  entity tags: 25", schema.ToString());
         AreEqual(85,    components.Length);
         AreEqual(11,    scripts.Length);
         
