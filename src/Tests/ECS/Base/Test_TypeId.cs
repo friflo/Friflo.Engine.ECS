@@ -29,7 +29,7 @@ namespace Tests.ECS.Base {
 /// // switch statement on enum CombatType
 /// foreach (var component in entity.Components)
 /// {
-///     CombatType combatType = ComponentId&lt;CombatType>.Of(component.Type);
+///     var combatType = ComponentId&lt;CombatType>.Of(component.Type);
 ///     switch (combatType) {
 ///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...  break;
 ///         case CombatType.Ranged: ...  break;
@@ -40,7 +40,7 @@ namespace Tests.ECS.Base {
 /// </code>
 /// This helper class may become part of the ECS library.
 /// </remarks>
-public static class ComponentId<TEnum> where TEnum : Enum
+public struct ComponentId<TEnum> where TEnum : Enum
 {
     private static readonly TEnum[] idMap = CreateTypeIds();
     
