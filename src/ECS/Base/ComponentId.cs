@@ -27,8 +27,8 @@ namespace Friflo.Engine.ECS;
 /// // switch statement on enum CombatType
 /// foreach (var component in entity.Components)
 /// {
-///     var combatType = ComponentId&lt;CombatType>.Of(component.Type);
-///     switch (combatType) {
+///     var combatId = ComponentId&lt;CombatType>.Of(component.Type);
+///     switch (combatId) {
 ///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...  break;
 ///         case CombatType.Ranged: ...  break;
 ///         case CombatType.Tank:   ...  break;
