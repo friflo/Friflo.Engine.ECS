@@ -37,7 +37,7 @@ namespace Friflo.Engine.ECS;
 /// </code>
 /// This helper class may become part of the ECS library.
 /// </remarks>
-public struct ComponentId<TEnum> where TEnum : Enum
+public struct ComponentId<TEnum> where TEnum : struct, Enum
 {
     private static readonly TEnum[] IdMap = CreateTypeIds();
     
@@ -52,7 +52,7 @@ public struct ComponentId<TEnum> where TEnum : Enum
         var schema = EntityStore.GetEntitySchema();
         var componentTypes = schema.Components;
         var ids = new TEnum[componentTypes.Length];
-        var enumValues = Enum.GetValues(typeof(TEnum));
+        var enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
         foreach (var value in enumValues)
         {
             var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
@@ -61,7 +61,7 @@ public struct ComponentId<TEnum> where TEnum : Enum
                 continue;
             }
             var componentType = schema.ComponentTypeByType[attribute.type];
-            ids[componentType.StructIndex] = (TEnum)value;
+            ids[componentType.StructIndex] = value;
         }
         return ids;
     }
