@@ -8,10 +8,11 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS.Base {
     
 /// <summary>
-/// Utility class that enables to implement switch statements on component types.<br/>
+/// Utility class used to map component types to custom enum ids.<br/>
+/// This enables the use of switch statements on <see cref="ComponentType"/>'s.<br/>
 /// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.<br/>
-/// Or to handle specific component types in event handler like <see cref="ComponentChanged.ComponentType"/>.<br/>
-/// It enables to group specific component types by using an enum.
+/// Or to handle specific <see cref="ComponentType"/>'s in event handlers like <see cref="ComponentChanged"/>.<br/>
+/// It also improves project overview by grouping a domain of component types to an enum.
 /// </summary>
 /// <remarks> 
 /// This is done by creating and enum type and attribute its values to specific component types with <c>[TypeId()]</c>.
