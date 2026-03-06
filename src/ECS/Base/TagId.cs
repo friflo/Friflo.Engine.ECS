@@ -37,7 +37,7 @@ namespace Friflo.Engine.ECS;
 /// }
 /// </code>
 /// </remarks>
-public struct TagId<TEnum> where TEnum : struct, Enum
+public static class TagId<TEnum> where TEnum : struct, Enum
 {
     private static readonly TEnum[] IdMap = CreateIdMap();
     
