@@ -5,7 +5,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Base {
     
-// -------- example implementing a switch statement on component types --------
+// -------- example implementing a switch statement on tag types --------
 struct MeleeTag  : ITag { }
 struct RangedTag : ITag { }
 struct TankTag   : ITag { }
@@ -35,8 +35,8 @@ public static class Test_TagId
 
         foreach (var tag in entity.Tags)
         {
-            var combatType = TagId<CombatTags>.Of(tag);
-            switch (combatType) {
+            var tagId = TagId<CombatTags>.Of(tag);
+            switch (tagId) {
                 case CombatTags.Melee:
                     foundMelee = true;
                     break;

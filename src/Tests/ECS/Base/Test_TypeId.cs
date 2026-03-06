@@ -35,8 +35,8 @@ public static class Test_TypeId
 
         foreach (var component in entity.Components)
         {
-            CombatType combatType = ComponentId<CombatType>.Of(component.Type);
-            switch (combatType) {
+            CombatType combatId = ComponentId<CombatType>.Of(component.Type);
+            switch (combatId) {
                 case CombatType.Melee:
                     foundMelee = true;
                     _ = entity.GetComponent<Melee>();
