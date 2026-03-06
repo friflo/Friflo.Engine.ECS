@@ -5,7 +5,7 @@ using System;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Utility class used get an enum id mapped to a tag type.<br/>
+/// Utility class used to get an enum id mapped to a tag type.<br/>
 /// This enables the use of switch statements on <see cref="TagType"/>'s.<br/>
 /// E.g. when iterating <see cref="Entity.Tags"/> or <see cref="Archetype.Tags"/>.<br/>
 /// Or to handle specific <see cref="TagType"/>'s in event handlers like <see cref="TagsChanged"/>.<br/>
