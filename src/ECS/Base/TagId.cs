@@ -26,10 +26,10 @@ namespace Friflo.Engine.ECS;
 /// // switch statement on enum CombatTags
 /// foreach (var tag in entity.Tags)
 /// {
-///     var combatType = TagId&lt;CombatTags>.Of(tag);
-///     switch (combatType) {
-///         case CombatType.Melee:  ...  break;
-///         case CombatType.Ranged: ...  break;
+///     var combatId = TagId&lt;CombatTags>.Of(tag);
+///     switch (combatId) {
+///         case CombatTags.Melee:  ...  break;
+///         case CombatTags.Ranged: ...  break;
 ///         case CombatTags.Tank:   ...  break;
 ///         default:                ...  break;
 ///     }
