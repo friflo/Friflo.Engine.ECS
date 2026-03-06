@@ -8,27 +8,28 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS.Base {
     
 /// <summary>
-/// Utility class used to map component types to custom enum ids.<br/>
+/// Utility class used get an enum id mapped to component type.<br/>
 /// This enables the use of switch statements on <see cref="ComponentType"/>'s.<br/>
 /// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.<br/>
 /// Or to handle specific <see cref="ComponentType"/>'s in event handlers like <see cref="ComponentChanged"/>.<br/>
 /// It also improves project overview by grouping a domain of component types to an enum.
 /// </summary>
-/// <remarks> 
-/// This is done by creating and enum type and attribute its values to specific component types with <c>[TypeId()]</c>.
+/// <remarks>
+/// Usage:<br/>
+/// Declare an <c>enum</c> and map component types to enum ids with <c>[MapComponent()]</c>.
 /// <code>
 /// public enum CombatType
 /// {
 ///     Undefined = 0, // 0 => unmapped component types switch to default case 
-///     [TypeId(typeof(Melee))]     Melee,
-///     [TypeId(typeof(Ranged))]    Ranged,
-///     [TypeId(typeof(Tank))]      Tank,
+///     [MapComponent(typeof(Melee))]   Melee,
+///     [MapComponent(typeof(Ranged))]  Ranged,
+///     [MapComponent(typeof(Tank))]    Tank,
 /// }
 ///
 /// // switch statement on enum CombatType
 /// foreach (var component in entity.Components)
 /// {
-///     CombatType combatType = TypeId&lt;CombatType>.Of(component.Type);
+///     CombatType combatType = ComponentId&lt;CombatType>.Of(component.Type);
 ///     switch (combatType) {
 ///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...  break;
 ///         case CombatType.Ranged: ...  break;
@@ -39,12 +40,15 @@ namespace Tests.ECS.Base {
 /// </code>
 /// This helper class may become part of the ECS library.
 /// </remarks>
-public static class TypeId<TEnum> where TEnum : Enum
+public static class ComponentId<TEnum> where TEnum : Enum
 {
-    private static readonly TEnum[] typeIds = CreateTypeIds();
+    private static readonly TEnum[] idMap = CreateTypeIds();
     
-    /// <summary> return type id in O(1). Simply an index lookup </summary>
-    public static TEnum Of(ComponentType from) => typeIds[from.StructIndex];
+    /// <summary>
+    /// Returns the enum id mapped to a component type with a <c>[MapComponent()]</c> attribute.
+    /// </summary>
+    /// <remarks> Executes in O(1). Simply an index lookup. </remarks>
+    public static TEnum Of(ComponentType from) => idMap[from.StructIndex];
     
     private static TEnum[] CreateTypeIds()
     {
@@ -55,7 +59,7 @@ public static class TypeId<TEnum> where TEnum : Enum
         foreach (var value in enumValues)
         {
             var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
-            var attribute = (TypeIdAttribute)memberInfo.GetCustomAttribute(typeof(TypeIdAttribute), false);
+            var attribute = (MapComponentAttribute)memberInfo.GetCustomAttribute(typeof(MapComponentAttribute), false);
             if (attribute == null) {
                 continue;
             }
@@ -66,10 +70,15 @@ public static class TypeId<TEnum> where TEnum : Enum
     }
 }
 
+/// <summary>
+/// Maps a component type to a custom enum id.<br/>
+/// This enables the use of switch statements for <see cref="ComponentType"/>'s.<br/>
+/// Usage see: <see cref="ComponentId{TEnum}"/>
+/// </summary>
 [AttributeUsage(AttributeTargets.Field)]
-public sealed class TypeIdAttribute : Attribute {
+public sealed class MapComponentAttribute : Attribute {
     public readonly Type type;
-    public TypeIdAttribute (Type type) => this.type = type;
+    public MapComponentAttribute (Type type) => this.type = type;
 }
 
 
@@ -82,10 +91,10 @@ struct Tank   : IComponent { }
     
 public enum CombatType
 {
-                                Undefined,
-    [TypeId(typeof(Melee))]     Melee,
-    [TypeId(typeof(Ranged))]    Ranged,
-    [TypeId(typeof(Tank))]      Tank,
+                                    Undefined,
+    [MapComponent(typeof(Melee))]   Melee,
+    [MapComponent(typeof(Ranged))]  Ranged,
+    [MapComponent(typeof(Tank))]    Tank,
 }
 
 
@@ -105,7 +114,7 @@ public static class Test_TypeId
 
         foreach (var component in entity.Components)
         {
-            CombatType combatType = TypeId<CombatType>.Of(component.Type);
+            CombatType combatType = ComponentId<CombatType>.Of(component.Type);
             switch (combatType) {
                 case CombatType.Melee:
                     foundMelee = true;
