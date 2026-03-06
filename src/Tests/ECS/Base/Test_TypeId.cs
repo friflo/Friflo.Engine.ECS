@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS.Base {
     
 /// <summary>
-/// Utility class used get an enum id mapped to component type.<br/>
+/// Utility class used get an enum id mapped to a component type.<br/>
 /// This enables the use of switch statements on <see cref="ComponentType"/>'s.<br/>
 /// E.g. when iterating <see cref="Entity.Components"/> or <see cref="Archetype.ComponentTypes"/>.<br/>
 /// Or to handle specific <see cref="ComponentType"/>'s in event handlers like <see cref="ComponentChanged"/>.<br/>
@@ -71,7 +71,7 @@ public struct ComponentId<TEnum> where TEnum : Enum
 }
 
 /// <summary>
-/// Maps a component type to a custom enum id.<br/>
+/// Maps a component type to an enum id.<br/>
 /// This enables the use of switch statements for <see cref="ComponentType"/>'s.<br/>
 /// Usage see: <see cref="ComponentId{TEnum}"/>
 /// </summary>
