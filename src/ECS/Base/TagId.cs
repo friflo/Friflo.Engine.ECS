@@ -39,7 +39,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 public struct TagId<TEnum> where TEnum : struct, Enum
 {
-    private static readonly TEnum[] IdMap = CreateTypeIds();
+    private static readonly TEnum[] IdMap = CreateIdMap();
     
     /// <summary>
     /// Returns the enum id mapped to a tag type with a <c>[MapTag()]</c> attribute.
@@ -47,7 +47,7 @@ public struct TagId<TEnum> where TEnum : struct, Enum
     /// <remarks> Executes in O(1). Simply an array index lookup. </remarks>
     public static TEnum Of(TagType from) => IdMap[from.TagIndex];
     
-    private static TEnum[] CreateTypeIds()
+    private static TEnum[] CreateIdMap()
     {
         var schema = EntityStore.GetEntitySchema();
         var tagTypes = schema.Tags;
