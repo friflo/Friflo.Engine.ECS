@@ -22,7 +22,8 @@ namespace Friflo.Engine.ECS;
 ///     [MapComponent(typeof(Ranged))]  Ranged,
 ///     [MapComponent(typeof(Tank))]    Tank,
 /// }
-///
+/// </code>
+/// <code>
 /// // switch statement on enum CombatType
 /// foreach (var component in entity.Components)
 /// {
@@ -35,7 +36,6 @@ namespace Friflo.Engine.ECS;
 ///     }
 /// }
 /// </code>
-/// This helper class may become part of the ECS library.
 /// </remarks>
 public struct ComponentId<TEnum> where TEnum : struct, Enum
 {

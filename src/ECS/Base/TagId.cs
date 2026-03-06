@@ -22,7 +22,8 @@ namespace Friflo.Engine.ECS;
 ///     [MapTag(typeof(RangedTag))]     Ranged,
 ///     [MapTag(typeof(TankTag))]       Tank,
 /// }
-///
+/// </code>
+/// <code>
 /// // switch statement on enum CombatTags
 /// foreach (var tag in entity.Tags)
 /// {
@@ -35,7 +36,6 @@ namespace Friflo.Engine.ECS;
 ///     }
 /// }
 /// </code>
-/// This helper class may become part of the ECS library.
 /// </remarks>
 public struct TagId<TEnum> where TEnum : struct, Enum
 {
