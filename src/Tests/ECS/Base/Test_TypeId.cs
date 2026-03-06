@@ -47,7 +47,7 @@ public struct ComponentId<TEnum> where TEnum : Enum
     /// <summary>
     /// Returns the enum id mapped to a component type with a <c>[MapComponent()]</c> attribute.
     /// </summary>
-    /// <remarks> Executes in O(1). Simply an index lookup. </remarks>
+    /// <remarks> Executes in O(1). Simply an array index lookup. </remarks>
     public static TEnum Of(ComponentType from) => idMap[from.StructIndex];
     
     private static TEnum[] CreateTypeIds()
