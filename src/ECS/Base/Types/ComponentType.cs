@@ -73,7 +73,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     /// Usage see: <see cref="MapComponentAttribute"/>.
     /// </summary>
     /// <remarks> Executes in O(1). Simply an array index lookup. </remarks>
-    public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => ComponentId<TEnum>.IdMap[StructIndex];
+    public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => ComponentEnum<TEnum>.IdMap[StructIndex];
 }
 
 internal static class StructInfo<T>

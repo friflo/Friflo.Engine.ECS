@@ -43,7 +43,7 @@ public sealed class TagType : SchemaType, IComparable<TagType>
     /// See example: <see cref="MapTagAttribute"/>
     /// </summary>
     /// <remarks> Executes in O(1). Simply an array index lookup. </remarks>
-    public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => TagId<TEnum>.IdMap[TagIndex];
+    public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => TagEnum<TEnum>.IdMap[TagIndex];
     #endregion
 }
 

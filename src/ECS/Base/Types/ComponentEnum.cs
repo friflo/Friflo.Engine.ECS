@@ -5,7 +5,7 @@ using System;
 namespace Friflo.Engine.ECS;
 
 
-internal static class ComponentId<TEnum> where TEnum : struct, Enum
+internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
 {
     internal static readonly TEnum[] IdMap = CreateIdMap();
     

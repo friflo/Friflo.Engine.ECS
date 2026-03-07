@@ -4,7 +4,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal static class TagId<TEnum> where TEnum : struct, Enum
+internal static class TagEnum<TEnum> where TEnum : struct, Enum
 {
     internal static readonly TEnum[] IdMap = CreateIdMap();
     
