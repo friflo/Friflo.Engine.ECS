@@ -57,9 +57,9 @@ public sealed class MapComponentAttribute : Attribute {
 /// public enum CombatType
 /// {
 ///     Undefined = 0, // 0 => unmapped component types switch to default case 
-///     [MapComponent(typeof(Melee))]   Melee,
-///     [MapComponent(typeof(Ranged))]  Ranged,
-///     [MapComponent(typeof(Tank))]    Tank,
+///     [MapComponent&lt;Melee>]    Melee,
+///     [MapComponent&lt;Ranged>]   Ranged,
+///     [MapComponent&lt;Tank>]     Tank,
 /// }
 /// </code>
 /// <code>
