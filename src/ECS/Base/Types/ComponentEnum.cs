@@ -4,31 +4,6 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-
-internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
-{
-    internal static readonly TEnum[] IdMap = CreateIdMap();
-    
-    private static TEnum[] CreateIdMap()
-    {
-        var schema = EntityStore.GetEntitySchema();
-        var componentTypes = schema.Components;
-        var ids = new TEnum[componentTypes.Length];
-        var enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
-        foreach (var value in enumValues)
-        {
-            var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
-            var attribute = (MapComponentAttribute)memberInfo.GetCustomAttribute(typeof(MapComponentAttribute), false);
-            if (attribute == null) {
-                continue;
-            }
-            var componentType = schema.ComponentTypeByType[attribute.type];
-            ids[componentType.StructIndex] = value;
-        }
-        return ids;
-    }
-}
-
 /// <summary>
 /// Maps a component type to an enum id.<br/>
 /// This enables the use of switch statements on component types using <see cref="ComponentType.AsEnum{TEnum}"/>.<br/>
@@ -66,4 +41,30 @@ internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
 public sealed class MapComponentAttribute : Attribute {
     public readonly Type type;
     public MapComponentAttribute (Type type) => this.type = type;
+}
+
+
+
+internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
+{
+    internal static readonly TEnum[] IdMap = CreateIdMap();
+    
+    private static TEnum[] CreateIdMap()
+    {
+        var schema = EntityStore.GetEntitySchema();
+        var componentTypes = schema.Components;
+        var ids = new TEnum[componentTypes.Length];
+        var enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
+        foreach (var value in enumValues)
+        {
+            var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
+            var attribute = (MapComponentAttribute)memberInfo.GetCustomAttribute(typeof(MapComponentAttribute), false);
+            if (attribute == null) {
+                continue;
+            }
+            var componentType = schema.ComponentTypeByType[attribute.type];
+            ids[componentType.StructIndex] = value;
+        }
+        return ids;
+    }
 }

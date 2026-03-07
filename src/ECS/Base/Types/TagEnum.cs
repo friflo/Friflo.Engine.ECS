@@ -4,30 +4,6 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal static class TagEnum<TEnum> where TEnum : struct, Enum
-{
-    internal static readonly TEnum[] IdMap = CreateIdMap();
-    
-    private static TEnum[] CreateIdMap()
-    {
-        var schema = EntityStore.GetEntitySchema();
-        var tagTypes = schema.Tags;
-        var ids = new TEnum[tagTypes.Length];
-        var enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
-        foreach (var value in enumValues)
-        {
-            var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
-            var attribute = (MapTagAttribute)memberInfo.GetCustomAttribute(typeof(MapTagAttribute), false);
-            if (attribute == null) {
-                continue;
-            }
-            var tagType = schema.TagTypeByType[attribute.type];
-            ids[tagType.TagIndex] = value;
-        }
-        return ids;
-    }
-}
-
 /// <summary>
 /// Maps a tag type to an enum id.<br/>
 /// This enables the use of switch statements on tag types using <see cref="TagType.AsEnum{TEnum}"/>.<br/>
@@ -65,4 +41,30 @@ internal static class TagEnum<TEnum> where TEnum : struct, Enum
 public sealed class MapTagAttribute : Attribute {
     public readonly Type type;
     public MapTagAttribute (Type type) => this.type = type;
+}
+
+
+
+internal static class TagEnum<TEnum> where TEnum : struct, Enum
+{
+    internal static readonly TEnum[] IdMap = CreateIdMap();
+    
+    private static TEnum[] CreateIdMap()
+    {
+        var schema = EntityStore.GetEntitySchema();
+        var tagTypes = schema.Tags;
+        var ids = new TEnum[tagTypes.Length];
+        var enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
+        foreach (var value in enumValues)
+        {
+            var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
+            var attribute = (MapTagAttribute)memberInfo.GetCustomAttribute(typeof(MapTagAttribute), false);
+            if (attribute == null) {
+                continue;
+            }
+            var tagType = schema.TagTypeByType[attribute.type];
+            ids[tagType.TagIndex] = value;
+        }
+        return ids;
+    }
 }
