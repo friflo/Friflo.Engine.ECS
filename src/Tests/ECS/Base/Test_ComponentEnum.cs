@@ -19,10 +19,10 @@ public enum CombatType
 }
 
 
-public static class Test_TypeId
+public static class Test_ComponentEnum
 {
     [Test]
-    public static void Test_TypeId_switch()
+    public static void Test_ComponentEnum_switch()
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();

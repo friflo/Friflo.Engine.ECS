@@ -19,10 +19,10 @@ public enum CombatTags
 }
 
 
-public static class Test_TagId
+public static class Test_TagEnum
 {
     [Test]
-    public static void Test_TagId_switch()
+    public static void Test_TagEnum_switch()
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
