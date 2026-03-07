@@ -11,7 +11,7 @@
         <!-- packaging -->
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
         <IsPackable>false</IsPackable>
-        <LangVersion>10</LangVersion>
+        <LangVersion>11</LangVersion>
         <!-- packaging: end -->
     </PropertyGroup>
 
