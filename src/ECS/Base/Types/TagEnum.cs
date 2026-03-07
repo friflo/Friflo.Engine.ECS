@@ -12,6 +12,7 @@ namespace Friflo.Engine.ECS;
 /// It also improves project overview by grouping a domain of tag types to an enum.
 /// </summary>
 /// <remarks>
+/// <b>Note</b>: use non-generic attribute only for C# 10 or lower<br/>
 /// Usage:<br/>
 /// Declare an <c>enum</c> and map tag types to enum ids with <c>[MapTag()]</c>.
 /// <code>

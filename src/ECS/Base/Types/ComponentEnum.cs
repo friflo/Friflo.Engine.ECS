@@ -12,6 +12,7 @@ namespace Friflo.Engine.ECS;
 /// It also improves project overview by grouping a domain of component types to an enum.
 /// </summary>
 /// <remarks>
+/// <b>Note</b>: use non-generic attribute only for C# 10 or lower<br/>
 /// Usage:<br/>
 /// Declare an <c>enum</c> and map component types to enum ids with <c>[MapComponent()]</c>.
 /// <code>
