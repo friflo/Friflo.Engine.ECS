@@ -67,6 +67,9 @@ public readonly struct  ComponentChanged
     public              Entity                  Entity              => new Entity(Store, EntityId);
     
     /// <summary>The <see cref="ECS.ComponentType"/> of the added / removed component.</summary>
+    /// <remarks>
+    /// Use <see cref="ComponentType.AsEnum{TEnum}"/> to handle specific component types with a switch statement.
+    /// </remarks>
     [Browse(Never)]
     public              ComponentType           ComponentType       => Static.ComponentTypes[StructIndex];
     
