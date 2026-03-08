@@ -69,7 +69,7 @@ public sealed class MapComponentAttribute : Attribute {
 /// {
 ///     var combatId = component.Type.AsEnum&lt;CombatType>();
 ///     switch (combatId) {
-///         case CombatType.Melee:  var ranged = entity.GetComponent&lt;Melee>(); ...  break;
+///         case CombatType.Melee:  var melee = entity.GetComponent&lt;Melee>(); ...  break;
 ///         case CombatType.Ranged: ...  break;
 ///         case CombatType.Tank:   ...  break;
 ///         default:                ...  break;
