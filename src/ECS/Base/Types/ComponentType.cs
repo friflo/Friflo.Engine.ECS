@@ -70,7 +70,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     /// <summary>
     /// Returns the enum id mapped to a component type with a <c>[MapComponent()]</c> attribute.<br/>
     /// Returns 0 if the component type is not mapped.<br/>
-    /// Usage see: <see cref="MapComponentAttribute"/>.
+    /// Usage see: <see cref="MapComponentAttribute{TComponent}"/>.
     /// </summary>
     /// <remarks> Executes in O(1). Simply an array index lookup. </remarks>
     public TEnum AsEnum<TEnum>()  where TEnum : struct, Enum => ComponentEnum<TEnum>.IdMap[StructIndex];
