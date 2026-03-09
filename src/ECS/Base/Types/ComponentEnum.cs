@@ -78,7 +78,7 @@ public sealed class MapComponentAttribute : Attribute {
 /// </code>
 /// </remarks>
 [AttributeUsage(AttributeTargets.Field)]
-public sealed class MapComponentAttribute<T> : Attribute where T : struct, IComponent { }
+public sealed class MapComponentAttribute<TComponent> : Attribute where TComponent : struct, IComponent { }
 
 
 internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
