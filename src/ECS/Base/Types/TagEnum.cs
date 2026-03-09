@@ -1,5 +1,6 @@
 using System.Reflection;
 using System;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -98,6 +99,10 @@ internal static class TagEnum<TEnum> where TEnum : struct, Enum
                 continue;
             }
             var tagType = schema.TagTypeByType[type];
+            var id = ids[tagType.TagIndex];
+            if (!EqualityComparer<TEnum>.Default.Equals(id, default)) {
+                throw new InvalidOperationException($"Map error: [MapTag<{type.Name}>] {typeof(TEnum).Name}.{value} - Already mapped to: {typeof(TEnum).Name}.{id}");
+            }
             ids[tagType.TagIndex] = value;
         }
         return ids;

@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -16,6 +17,13 @@ public enum CombatTags
     [MapTag(typeof(MeleeTag))]   Melee,
     [MapTag(typeof(RangedTag))]  Ranged,
     [MapTag(typeof(TankTag))]    Tank,
+}
+
+public enum MapTagError
+{
+    Undefined,
+    [MapTag(typeof(TestTag))]   TestTag,
+    [MapTag(typeof(TestTag))]   MapException,
 }
 
 
@@ -55,6 +63,18 @@ public static class Test_TagEnum
         IsTrue(foundMelee);
         IsTrue(foundRanged);
         IsTrue(foundTank);
+    }
+    
+    [Test]
+    public static void Test_TagEnum_Map_exception()
+    {
+        var schema = EntityStore.GetEntitySchema();
+        var type = schema.TagTypeByType[typeof(TestTag)];
+        
+        var e = Throws<TypeInitializationException>(() => {
+            type.AsEnum<MapTagError>();
+        });
+        AreEqual("Map error: [MapTag<TestTag>] MapTagError.MapException - Already mapped to: MapTagError.TestTag", e.InnerException.Message);
     }
 }
 
