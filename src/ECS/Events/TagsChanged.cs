@@ -40,9 +40,39 @@ public readonly struct  TagsChanged
     public              Entity      Entity      => new Entity(Store, EntityId);
     
     /// <summary>The <see cref="ECS.Tags"/> added to the <see cref="Entity"/>.</summary>
+    /// <remarks>
+    /// In case having many <c>AddedTags.Has&lt;>()</c> branches consider using a <c>foreach</c> loop
+    /// and switch on <see cref="TagType.AsEnum{TEnum}"/>.
+    /// <code>
+    /// foreach (var tag in AddedTags)
+    /// {
+    ///     switch (tag.AsEnum&lt;CombatTags>()) {
+    ///         case CombatTags.Melee:  ... break;
+    ///         case CombatTags.Ranged: ... break;
+    ///         case CombatTags.Tank:   ... break;
+    ///         default:                ... break;
+    ///     }
+    /// }
+    /// </code>
+    /// </remarks>
     public              Tags        AddedTags   => new(BitSet.Added  (OldTags.bitSet, Tags.bitSet));
     
     /// <summary>The <see cref="ECS.Tags"/> removed from the <see cref="Entity"/>.</summary>
+    /// <remarks>
+    /// In case having many <c>RemovedTags.Has&lt;>()</c> branches consider using a <c>foreach</c> loop
+    /// and switch on <see cref="TagType.AsEnum{TEnum}"/>.
+    /// <code>
+    /// foreach (var tag in RemovedTags)
+    /// {
+    ///     switch (tag.AsEnum&lt;CombatTags>()) {
+    ///         case CombatTags.Melee:  ... break;
+    ///         case CombatTags.Ranged: ... break;
+    ///         case CombatTags.Tank:   ... break;
+    ///         default:                ... break;
+    ///     }
+    /// }
+    /// </code>
+    /// </remarks>
     public              Tags        RemovedTags => new(BitSet.Removed(OldTags.bitSet, Tags.bitSet));
     
     /// <summary>The changed (removed / added) entity <see cref="ECS.Tags"/>.</summary>
