@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -16,6 +17,13 @@ public enum CombatType
     [MapComponent(typeof(Melee))]   Melee,
     [MapComponent(typeof(Ranged))]  Ranged,
     [MapComponent(typeof(Tank))]    Tank,
+}
+
+public enum MapComponentError
+{
+    Undefined,
+    [MapComponent(typeof(Position))]    Position,
+    [MapComponent(typeof(Position))]    MapException,
 }
 
 
@@ -58,6 +66,18 @@ public static class Test_ComponentEnum
         IsTrue(foundMelee);
         IsTrue(foundRanged);
         IsTrue(foundTank);
+    }
+    
+    [Test]
+    public static void Test_ComponentEnum_Map_exception()
+    {
+        var schema = EntityStore.GetEntitySchema();
+        var type = schema.ComponentTypeByType[typeof(Position)];
+        
+        var e = Throws<TypeInitializationException>(() => {
+            type.AsEnum<MapComponentError>();
+        });
+        AreEqual("Map error: [MapComponent<Position>] MapComponentError.MapException - Already mapped to: MapComponentError.Position", e.InnerException.Message);
     }
 }
 

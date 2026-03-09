@@ -1,5 +1,6 @@
 using System.Reflection;
 using System;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -98,6 +99,10 @@ internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
                 continue;
             }
             var componentType = schema.ComponentTypeByType[type];
+            var id = ids[componentType.StructIndex];
+            if (!EqualityComparer<TEnum>.Default.Equals(id, default)) {
+                throw new InvalidOperationException($"Map error: [MapComponent<{type.Name}>] {typeof(TEnum).Name}.{value} - Already mapped to: {typeof(TEnum).Name}.{id}");
+            }
             ids[componentType.StructIndex] = value;
         }
         return ids;
