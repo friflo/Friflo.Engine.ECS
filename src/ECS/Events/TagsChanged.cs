@@ -41,6 +41,7 @@ public readonly struct  TagsChanged
     
     /// <summary>The <see cref="ECS.Tags"/> added to the <see cref="Entity"/>.</summary>
     /// <remarks>
+    /// <see cref="AddedTags"/> typically contains no or only a single tag.<br/>
     /// In case having many <c>AddedTags.Has&lt;>()</c> branches consider using a <c>foreach</c> loop
     /// and switch on <see cref="TagType.AsEnum{TEnum}"/>.
     /// <code>
@@ -59,6 +60,7 @@ public readonly struct  TagsChanged
     
     /// <summary>The <see cref="ECS.Tags"/> removed from the <see cref="Entity"/>.</summary>
     /// <remarks>
+    /// <see cref="RemovedTags"/> typically contains no or only a single tag.<br/>
     /// In case having many <c>RemovedTags.Has&lt;>()</c> branches consider using a <c>foreach</c> loop
     /// and switch on <see cref="TagType.AsEnum{TEnum}"/>.
     /// <code>
