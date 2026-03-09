@@ -41,8 +41,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 [AttributeUsage(AttributeTargets.Field)]
 public sealed class MapComponentAttribute : Attribute {
-    public readonly Type type;
-    public MapComponentAttribute (Type type) => this.type = type;
+    public MapComponentAttribute (Type componentType) { }
 }
 
 /// <summary>
@@ -111,9 +110,9 @@ internal static class ComponentEnum<TEnum> where TEnum : struct, Enum
     private static Type GetAttributeType(TEnum value)
     {
         var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
-        var attribute = (MapComponentAttribute)memberInfo.GetCustomAttribute(typeof(MapComponentAttribute), false);
-        if (attribute != null) {
-            return attribute.type;
+        var type = EnumUtils.GetCustomAttributeType (memberInfo, typeof(MapComponentAttribute));
+        if (type != null) {
+            return type;
         }
         // generic attributes requires C# 11 or higher
         var attributeGeneric = memberInfo.GetCustomAttribute(typeof(MapComponentAttribute<>), false);

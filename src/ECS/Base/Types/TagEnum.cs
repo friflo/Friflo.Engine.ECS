@@ -41,8 +41,7 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 [AttributeUsage(AttributeTargets.Field)]
 public sealed class MapTagAttribute : Attribute {
-    public readonly Type type;
-    public MapTagAttribute (Type type) => this.type = type;
+    public MapTagAttribute (Type tagType) { }
 }
 
 /// <summary>
@@ -111,9 +110,9 @@ internal static class TagEnum<TEnum> where TEnum : struct, Enum
     private static Type GetAttributeType(TEnum value)
     {
         var memberInfo = typeof(TEnum).GetMember(value.ToString()!)[0];
-        var attribute = (MapTagAttribute)memberInfo.GetCustomAttribute(typeof(MapTagAttribute), false);
-        if (attribute != null) {
-            return attribute.type;
+        var type = EnumUtils.GetCustomAttributeType (memberInfo, typeof(MapTagAttribute));
+        if (type != null) {
+            return type;
         }
         // generic attributes requires C# 11 or higher
         var attributeGeneric = memberInfo.GetCustomAttribute(typeof(MapTagAttribute<>), false);
@@ -122,4 +121,19 @@ internal static class TagEnum<TEnum> where TEnum : struct, Enum
         }
         return null;
     }
+}
+
+internal static class EnumUtils
+{
+    internal static Type GetCustomAttributeType(MemberInfo memberInfo, Type attributeType)
+    {
+        foreach (var attr in memberInfo.CustomAttributes) {
+            if (attr.AttributeType != attributeType) {
+                continue;
+            }
+            var arg = attr.ConstructorArguments; // ensure Unity compatibility
+            return (Type)arg[0].Value;
+        }
+        return null;
+    }  
 }
