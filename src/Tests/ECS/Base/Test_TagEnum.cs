@@ -11,6 +11,7 @@ struct MeleeTag  : ITag { }
 struct RangedTag : ITag { }
 struct TankTag   : ITag { }
     
+// Using typeof() attribute for mapping as <LangVersion> is set to C# 9 in project
 public enum CombatTags
 {
                                  Undefined,
@@ -19,6 +20,7 @@ public enum CombatTags
     [MapTag(typeof(TankTag))]    Tank,
 }
 
+// Using typeof() attribute for mapping as <LangVersion> is set to C# 9 in project
 public enum MapTagError
 {
     Undefined,

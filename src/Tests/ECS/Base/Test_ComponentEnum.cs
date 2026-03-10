@@ -10,7 +10,8 @@ namespace Tests.ECS.Base {
 struct Melee  : IComponent { }
 struct Ranged : IComponent { }
 struct Tank   : IComponent { }
-    
+
+// Using typeof() attribute for mapping as <LangVersion> is set to C# 9 in project
 public enum CombatType
 {
                                     Undefined,
@@ -19,6 +20,7 @@ public enum CombatType
     [MapComponent(typeof(Tank))]    Tank,
 }
 
+// Using typeof() attribute for mapping as <LangVersion> is set to C# 9 in project
 public enum MapComponentError
 {
     Undefined,
