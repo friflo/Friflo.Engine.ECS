@@ -23,10 +23,6 @@ The library is designed for easy integration and a smooth developer experience.
 Among various C# ECS projects, it is currently the only one fully implemented in Managed C#.  
 By this no use of `unsafe` code preventing crashes due to memory corruption.
 
-**🚀 New in v3.5.0**  
-Introduced new pattern to process events on adding/removing components or tags more performant and concise.  
-See: [Map components to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-components-to-enums)
-and [Map tags to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-tags-to-enums).
 
 <details>
 <summary>What is ECS - Entity Component System?</summary>
@@ -51,6 +47,11 @@ An ECS provide two strengths:
 
 
 ## Features
+
+**🚀 New in v3.5.0**  
+Introduced new pattern to process events on adding/removing components or tags more performant and concise.  
+See: [Map components to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-components-to-enums)
+and [Map tags to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-tags-to-enums).
 
 - [x] High performant / type-safe queries
 - [x] Efficient multithreaded queries
