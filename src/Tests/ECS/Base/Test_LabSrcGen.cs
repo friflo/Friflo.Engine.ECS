@@ -19,6 +19,9 @@ partial class TestClass
     public static void MovePositionQuery(EntityStore store)
     {
          var query = (ArchetypeQuery<Position>)null; // store.GetCachedQuery(queryKey);
+         if (query == null) {
+             query = store.Query<Position>();
+         }
          foreach (var (components, entities) in query.Chunks)
          {
              var componentsSpan = components.Span;
@@ -35,7 +38,7 @@ namespace Tests.ECS.Base {
 
 public static class Test_SrcGen
 {
-    // [Test]
+    [Test]
     public static void Test_SrcGen_Call() {
         var store = new EntityStore();
         TestClass.MovePositionQuery(store);
