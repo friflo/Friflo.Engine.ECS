@@ -83,36 +83,36 @@ public sealed partial class EntityStore : EntityStoreBase
 
 #region user data
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public object UserDataGet(int key)
+    public object UserDataGet(int slot)
     {
-        if (key < userDataMap.Length) { 
-            return userDataMap[key];
+        if (slot < userDataSlots.Length) { 
+            return userDataSlots[slot];
         }
         return null;
     }
     
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void UserDataSet(int key, object data)
+    public void UserDataSet(int slot, object data)
     {
-        if (key >= userDataMap.Length) {
-            var map = new object[UserDataMax];
-            Array.Copy(userDataMap, map, userDataMap.Length);
-            userDataMap = map;
+        if (slot >= userDataSlots.Length) {
+            var map = new object[UserDataMaxSlot];
+            Array.Copy(userDataSlots, map, userDataSlots.Length);
+            userDataSlots = map;
         }
-        userDataMap[key] = data;
+        userDataSlots[slot] = data;
     }
     
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static int UserDataNewKey() {
-        return UserDataMax++;
+    public static int UserDataNewSlot() {
+        return UserDataMaxSlot++;
     }
     
     [Browse(Never)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    private object[] userDataMap = [];
+    private object[] userDataSlots = [];
     
     [Browse(Never)]
-    private static int UserDataMax;
+    private static int UserDataMaxSlot;
     #endregion
 
 #region events

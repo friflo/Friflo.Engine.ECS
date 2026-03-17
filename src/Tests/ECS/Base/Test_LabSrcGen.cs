@@ -11,14 +11,14 @@ partial class TestClass
         position.x += 1;
     }
     
-    private static readonly int MovePositionKey = EntityStore.UserDataNewKey();
+    private static readonly int MovePositionSlot = EntityStore.UserDataNewSlot();
     
     public static void MovePositionQuery(EntityStore store)
     {
-         var query = (ArchetypeQuery<Position>)store.UserDataGet(MovePositionKey);
+         var query = (ArchetypeQuery<Position>)store.UserDataGet(MovePositionSlot);
          if (query == null) {
              query = store.Query<Position>();
-             store.UserDataSet(MovePositionKey, query);
+             store.UserDataSet(MovePositionSlot, query);
          }
          foreach (var (components, entities) in query.Chunks)
          {
