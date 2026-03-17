@@ -5,34 +5,40 @@ using static NUnit.Framework.Assert;
 
 
 
-class TestClass
+partial class TestClass
 {
     public void MyMethod() {}
    
-    public void ForEach() {
-        var store = new EntityStore();
-        store.Query(this, nameof(MyMethod), 1);
+    // [Query]
+    public static void MovePosition(ref Position position) {
+        position.y += 1;
+    }
+    
+    private static readonly int queryKey = 1; // EntityStore.CreateQueryKey();
+    
+    public static void MovePositionQuery(EntityStore store)
+    {
+         var query = (ArchetypeQuery<Position>)null; // store.GetCachedQuery(queryKey);
+         foreach (var (components, entities) in query.Chunks)
+         {
+             var componentsSpan = components.Span;
+             for (int n = 0; n < entities.Length; n++) {
+                 MovePosition(ref componentsSpan[n]);
+             }
+         }
     }
 }
 
-public static class QueryExt
-{
-    public static void Query<T, TUniform>(this EntityStore store, T instance, string method, TUniform uniform) { }
-    public static void Query<T>          (this EntityStore store, T instance, string method) { }
-    
-    public static void Query<T, TUniform>(this EntityStore store, string method, TUniform uniform) { }
-    public static void Query<T>          (this EntityStore store, string method) { }
-}
 
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Base {
 
 public static class Test_SrcGen
 {
-    [Test]
+    // [Test]
     public static void Test_SrcGen_Call() {
         var store = new EntityStore();
-        store.Query<TestClass>(nameof(TestClass.MyMethod));
+        TestClass.MovePositionQuery(store);
     }
 }
 
