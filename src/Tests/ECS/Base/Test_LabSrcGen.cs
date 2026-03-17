@@ -12,6 +12,7 @@ partial class TestClass
         position.x += 1;
     }
     
+#region will be generated
     private static readonly int MovePositionSlot = EntityStore.UserDataNewSlot();
     
     public static void MovePositionQuery(EntityStore store)
@@ -29,6 +30,7 @@ partial class TestClass
              }
          }
     }
+    #endregion
 }
 
 
