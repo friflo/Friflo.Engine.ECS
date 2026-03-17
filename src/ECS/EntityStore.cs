@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Friflo.Engine.ECS.Serialize;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
@@ -79,7 +80,41 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Return the largest entity <see cref="Entity.Id"/> store in the entity store. </summary>
     [Browse(Never)] public              int                 NodeMaxId        => nodes.Length - 1;
     #endregion
+
+#region user data
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public object UserDataGet(int key)
+    {
+        if (key < userDataMap.Length) { 
+            return userDataMap[key];
+        }
+        return null;
+    }
     
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public void UserDataSet(int key, object data)
+    {
+        if (key >= userDataMap.Length) {
+            var map = new object[UserDataMax];
+            Array.Copy(userDataMap, map, userDataMap.Length);
+            userDataMap = map;
+        }
+        userDataMap[key] = data;
+    }
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static int UserDataNewKey() {
+        return UserDataMax++;
+    }
+    
+    [Browse(Never)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private object[] userDataMap = [];
+    
+    [Browse(Never)]
+    private static int UserDataMax;
+    #endregion
+
 #region events
     /// <summary>Add / remove an event handler for <see cref="ECS.ChildEntitiesChanged"/> events triggered by:<br/>
     /// <see cref="Entity.AddChild"/> <br/> <see cref="Entity.InsertChild"/> <br/> <see cref="Entity.RemoveChild"/>.</summary>
