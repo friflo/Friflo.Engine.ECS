@@ -26,13 +26,13 @@ public partial class MyExample
     
     [Query]
     [AllComponents<MyComponent1>]
-    [AnyComponents<MyComponent2>]
-    [WithoutAllComponents<MyComponent3>]
-    [WithoutAnyComponents<MyComponent4>]
+    [AnyComponents<MyComponent2, MyComponent3>]
+    [WithoutAllComponents<MyComponent4>]
+    [WithoutAnyComponents<MyComponent5, MyComponent6>]
     [AllTags<TestTag>]
-    [AnyTags<TestTag2>]
-    [WithoutAllTags<TestTag3>]
-    [WithoutAnyTags<TestTag4>]
+    [AnyTags<TestTag2, TestTag3>]
+    [WithoutAllTags<TestTag4>]
+    [WithoutAnyTags<TestTag5, TestTag6>]
     void TestFilters(ref Position position) {
         position.x = 1;
     }
