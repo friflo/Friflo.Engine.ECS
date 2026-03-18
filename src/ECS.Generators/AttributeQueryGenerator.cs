@@ -9,6 +9,12 @@ public class AttributeQueryGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+#if DEBUG_XXX
+        if (!System.Diagnostics.Debugger.IsAttached)
+        {
+            System.Diagnostics.Debugger.Launch();
+        }
+#endif
         // 1. Filter for methods with the attribute
         var methodDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(
             "Friflo.Engine.ECS.QueryAttribute",

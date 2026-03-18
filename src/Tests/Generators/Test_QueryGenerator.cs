@@ -11,7 +11,7 @@ public partial class MyExample
     void MoveExample() { }
 }
 
-public static class TestGreeter
+public static class Test_QueryGenerator
 {
     [Test]
     public static void Test_Entity_new_EntityStore_Perf()
