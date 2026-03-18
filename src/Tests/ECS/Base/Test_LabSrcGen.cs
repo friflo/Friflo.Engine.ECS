@@ -13,6 +13,10 @@ partial class TestClass
     [AnyComponents<MyComponent2>]
     [WithoutAllComponents<MyComponent3>]
     [WithoutAnyComponents<MyComponent4>]
+    [AllTags<TestTag>]
+    [AnyTags<TestTag2>]
+    [WithoutAllTags<TestTag3>]
+    [WithoutAnyTags<TestTag4>]
     public static void MovePosition(ref Position position) {
         position.x += 1;
     }
