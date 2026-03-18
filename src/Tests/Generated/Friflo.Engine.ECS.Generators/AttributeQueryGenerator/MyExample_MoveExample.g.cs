@@ -2,7 +2,8 @@
 using System;
 using Friflo.Engine.ECS;
 
-namespace GeneratedCode {
+namespace GeneratedCode
+{
     public partial class MyExample
     {
         private static readonly int MoveExampleSlot = EntityStore.UserDataNewSlot();
@@ -11,17 +12,17 @@ namespace GeneratedCode {
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery MoveExampleQuery(EntityStore store)
         {
-            // this.MoveExample(); // Call the original method
             var query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MoveExampleSlot);
             if (query == null) {
                 query = store.Query<global::Friflo.Engine.ECS.Position>();
                 store.UserDataSet(MoveExampleSlot, query);
             }
-            foreach (var (components, entities) in query.Chunks)
+            foreach (var chunk in query.Chunks)
             {
-                var componentsSpan = components.Span;
+                var entities = chunk.Entities;
+                var componentSpan = chunk.Chunk1.Span;
                 for (int n = 0; n < entities.Length; n++) {
-                     // MovePosition(ref componentsSpan[n]);
+                    MoveExample(ref componentSpan[n]);
                 }
             }
             return query;

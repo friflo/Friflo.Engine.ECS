@@ -11,17 +11,17 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery MovePositionQuery(EntityStore store)
         {
-            // this.MovePosition(); // Call the original method
             var query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MovePositionSlot);
             if (query == null) {
                 query = store.Query<global::Friflo.Engine.ECS.Position>();
                 store.UserDataSet(MovePositionSlot, query);
             }
-            foreach (var (components, entities) in query.Chunks)
+            foreach (var chunk in query.Chunks)
             {
-                var componentsSpan = components.Span;
+                var entities = chunk.Entities;
+                var componentSpan = chunk.Chunk1.Span;
                 for (int n = 0; n < entities.Length; n++) {
-                     // MovePosition(ref componentsSpan[n]);
+                    MovePosition(ref componentSpan[n]);
                 }
             }
             return query;
