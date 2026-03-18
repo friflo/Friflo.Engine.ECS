@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
 
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
@@ -14,8 +13,6 @@
     <AssemblyName>Friflo.Engine.ECS.Generators</AssemblyName>
     <LangVersion>12.0</LangVersion>
       
-    <IsTrimmable>true</IsTrimmable>
-
     <!-- packaging -->
     <PackageVersion>0.0.0</PackageVersion>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
@@ -23,7 +20,7 @@
 
     <Title>friflo ECS - Source Generator</Title>
     <Authors>Ullrich Praetz</Authors>
-    <Description>Source Generator for Entity Component System: friflo ECS</Description>
+    <Description>Source Generator to generate Query methods for: friflo ECS</Description>
     <Copyright>Ullrich Praetz</Copyright>
     <PackageProjectUrl>https://github.com/friflo/Friflo.Engine.ECS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/friflo/Friflo.Engine.ECS</RepositoryUrl>
@@ -54,7 +51,6 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

@@ -41,6 +41,10 @@
       <ProjectReference Include="..\Hub\Engine.Hub.csproj" />
     </ItemGroup>
 
-
+    <ItemGroup>
+        <ProjectReference Include="..\ECS.Generators\Friflo.Engine.ECS.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
 
 </Project>
