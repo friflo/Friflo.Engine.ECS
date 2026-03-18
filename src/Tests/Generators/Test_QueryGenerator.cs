@@ -18,6 +18,10 @@ public partial class MyExample
     [Query]
     static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue) {
         myComponent1.a = someValue;
+        AreEqual(0, myComponent2.b);
+        AreEqual(123, someValue);
+        AreEqual(456, inValue);
+        AreEqual("abc", refValue);
     } 
 }
 
