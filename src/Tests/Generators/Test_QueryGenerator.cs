@@ -11,7 +11,7 @@ public partial class MyExample
 {
     [Query]
     void MoveExample(ref Position position, Entity entity) {
-        AreEqual(1, entity.Id);
+        AreEqual(1, entity.Id); 
         position.x = 1;
     }
     
@@ -22,7 +22,17 @@ public partial class MyExample
         AreEqual(123, someValue);
         AreEqual(456, inValue);
         refValue = "xyz";
-    } 
+    }
+    
+    [Query]
+    [AllComponents<MyComponent1>]
+    [AnyComponents<MyComponent2>]
+    [WithoutAllComponents<MyComponent3>]
+    [WithoutAnyComponents<MyComponent4>]
+    void TestFilters(ref Position position) {
+        position.x = 1;
+    }
+
 }
 
 public static class Test_QueryGenerator
@@ -45,5 +55,17 @@ public static class Test_QueryGenerator
             AreEqual(1, query.Count);
             AreEqual("xyz", str);
         }
+    }
+    
+    [Test]
+    public static void Test_QueryGenerator_filters()
+    {
+        var tester = new MyExample();
+        var store = new EntityStore();
+        var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
+
+        var query = tester.TestFiltersQuery(store);
+        AreEqual(1, entity.GetComponent<Position>().x);
+        AreEqual(1, query.Count);
     }
 }
