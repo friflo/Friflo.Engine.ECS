@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -16,11 +17,12 @@ public partial class MyExample
     }
     
     [Query]
-    static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue) {
+    static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
         myComponent1.a = someValue;
         AreEqual(0, myComponent2.b);
         AreEqual(123, someValue);
         AreEqual(456, inValue);
+        AreEqual(new DateTime(2026,03,18), dateTime);
         refValue = "xyz";
     }
     
@@ -54,7 +56,7 @@ public static class Test_QueryGenerator
         }
         {
             var str = "abc";
-            var query = MyExample.MoveExample2Query(store, 123, 456, ref str);
+            var query = MyExample.MoveExample2Query(store, 123, 456, ref str, new DateTime(2026,03,18));
             AreEqual(123, entity.GetComponent<MyComponent1>().a);
             AreEqual(1, query.Count);
             AreEqual("xyz", str);
