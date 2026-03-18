@@ -31,6 +31,7 @@ partial class TestClass
          var query = (ArchetypeQuery<Position>)store.UserDataGet(MovePositionSlot_);
          if (query == null) {
              query = store.Query<Position>();
+             query.AllComponents(ComponentTypes.Get<MyComponent1>());
              store.UserDataSet(MovePositionSlot_, query);
          }
          foreach (var chunk in query.Chunks)
@@ -55,7 +56,7 @@ public static class Test_SrcGen
     [Test]
     public static void Test_SrcGen_Call() {
         var store = new EntityStore();
-        var entity = store.CreateEntity(new Position());
+        var entity = store.CreateEntity(new Position(), new MyComponent1());
         
         TestClass.MovePositionQuery_(store);
         AreEqual(1.0f, entity.GetComponent<Position>().x);
