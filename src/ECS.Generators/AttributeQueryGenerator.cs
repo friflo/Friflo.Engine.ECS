@@ -61,7 +61,7 @@ using Friflo.Engine.ECS;
             foreach (var chunk in query.Chunks)
             {{
                 var entities = chunk.Entities;
-                {chunkVariables}
+{chunkVariables}
                 for (int n = 0; n < entities.Length; n++) {{
                     {methodName}({lambdaParameters});
                 }}
@@ -114,9 +114,9 @@ using Friflo.Engine.ECS;
         foreach (var component in components) {
             // e.g. var componentSpan = chunk.Chunk1.Span;
             if (sb.Length > 0) {
-                sb.Append(", ");
+                sb.AppendLine("");
             }
-            sb.Append("var ");
+            sb.Append("                var ");
             sb.Append(component.Name);
             sb.Append("Span = chunk.Chunk");
             sb.Append(index++);

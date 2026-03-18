@@ -12,17 +12,18 @@ namespace GeneratedCode
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MoveExample2Query(EntityStore store, int someValue, in float inValue, ref string refValue)
         {
-            var query = (ArchetypeQuery<global::Tests.ECS.MyComponent1>)store.UserDataGet(MoveExample2Slot);
+            var query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)store.UserDataGet(MoveExample2Slot);
             if (query == null) {
-                query = store.Query<global::Tests.ECS.MyComponent1>();
+                query = store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
                 store.UserDataSet(MoveExample2Slot, query);
             }
             foreach (var chunk in query.Chunks)
             {
                 var entities = chunk.Entities;
                 var myComponent1Span = chunk.Chunk1.Span;
+                var myComponent2Span = chunk.Chunk2.Span;
                 for (int n = 0; n < entities.Length; n++) {
-                    MoveExample2(ref myComponent1Span[n], someValue, in inValue, ref refValue);
+                    MoveExample2(ref myComponent1Span[n], myComponent2Span[n], someValue, in inValue, ref refValue);
                 }
             }
             return query;

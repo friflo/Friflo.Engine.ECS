@@ -14,7 +14,7 @@ public partial class MyExample
     void MoveExample(ref Position position) { position.x = 1; }
     
     [Query] // This triggers the generator
-    static void MoveExample2(ref MyComponent1 myComponent1, int someValue, in float inValue, ref string refValue) { myComponent1.a = someValue; } 
+    static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue) { myComponent1.a = someValue; } 
 }
 
 public static class Test_QueryGenerator
@@ -24,7 +24,7 @@ public static class Test_QueryGenerator
     {
         var tester = new MyExample();
         var store = new EntityStore();
-        var entity = store.CreateEntity(new Position(), new MyComponent1());
+        var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
         {
             var query = tester.MoveExampleQuery(store);
             AreEqual(1, entity.GetComponent<Position>().x);
