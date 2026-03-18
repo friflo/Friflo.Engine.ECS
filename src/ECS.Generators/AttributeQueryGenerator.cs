@@ -43,6 +43,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             var isGlobalNamespace = methodSymbol.ContainingNamespace.IsGlobalNamespace;
             var namespaceName = methodSymbol.ContainingType.ContainingNamespace.ToDisplayString();
             var attributes = methodSymbol.GetAttributes();
+            var attributeCode = EmitFilters(attributes);
             var parameters = methodSymbol.Parameters;
             var components = GetComponents(parameters, types);
             var componentArgs = EmitComponentArgs(components);
@@ -65,6 +66,7 @@ using Friflo.Engine.ECS;
             var query = (ArchetypeQuery<{componentArgs}>)store.UserDataGet({methodName}Slot);
             if (query == null) {{
                 query = store.Query<{componentArgs}>();
+{attributeCode}
                 store.UserDataSet({methodName}Slot, query);
             }}
             foreach (var chunk in query.Chunks)
@@ -189,5 +191,52 @@ using Friflo.Engine.ECS;
                 sb.Append("out ");
                 break;
         }
+    }
+    
+    private static string EmitFilters(ImmutableArray<AttributeData> attributes)
+    {
+        var sb = new StringBuilder();
+        foreach (var attribute in attributes) {
+            INamedTypeSymbol attributeClass = attribute.AttributeClass;
+            if (attributeClass == null) {
+                continue;
+            }
+            string ns = attributeClass.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+            if (ns == null || ns != "Friflo.Engine.ECS") {
+                continue;
+            }
+            switch (attributeClass.Name) {
+                case "AllComponentsAttribute":
+                case "AnyComponentsAttribute":
+                case "WithoutAllComponentsAttribute":
+                case "WithoutAnyComponentsAttribute":
+                    var name = attributeClass.Name.Substring(0, attributeClass.Name.Length - "Attribute".Length);
+                    var args = GetGenericTypeArguments(attributeClass);
+                    sb.AppendLine($"                query.{name}(ComponentTypes.Get<{args}>());");
+                    break;
+                case "AllTagsAttribute":
+                case "AnyTagsAttribute":
+                case "WithoutAllTagsAttribute":
+                case "WithoutAnyTagsAttribute":
+                    name = attributeClass.Name.Substring(0, attributeClass.Name.Length - "Attribute".Length);
+                    args = GetGenericTypeArguments(attributeClass);
+                    sb.AppendLine($"                query.{name}(Tags.Get<{args}>());");
+                    break;
+            }
+        }
+        return sb.ToString();
+    }
+    
+    private static string GetGenericTypeArguments(INamedTypeSymbol symbol)
+    {
+        var sb = new StringBuilder();
+        foreach (var arg in symbol.TypeArguments) {
+            if (sb.Length > 0) {
+                sb.Append(", ");
+            }
+            var name = arg.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            sb.Append(name);
+        }
+        return sb.ToString();
     }
 }

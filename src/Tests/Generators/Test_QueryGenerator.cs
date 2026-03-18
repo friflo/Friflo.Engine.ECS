@@ -29,6 +29,10 @@ public partial class MyExample
     [AnyComponents<MyComponent2>]
     [WithoutAllComponents<MyComponent3>]
     [WithoutAnyComponents<MyComponent4>]
+    [AllTags<TestTag>]
+    [AnyTags<TestTag2>]
+    [WithoutAllTags<TestTag3>]
+    [WithoutAnyTags<TestTag4>]
     void TestFilters(ref Position position) {
         position.x = 1;
     }
@@ -60,9 +64,9 @@ public static class Test_QueryGenerator
     [Test]
     public static void Test_QueryGenerator_filters()
     {
-        var tester = new MyExample();
+        var tester = new MyExample(); 
         var store = new EntityStore();
-        var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
+        var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2(), Tags.Get<TestTag, TestTag2>());
 
         var query = tester.TestFiltersQuery(store);
         AreEqual(1, entity.GetComponent<Position>().x);

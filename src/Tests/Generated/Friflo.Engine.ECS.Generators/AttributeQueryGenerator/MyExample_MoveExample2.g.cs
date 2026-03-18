@@ -15,6 +15,7 @@ namespace Tests.Generators
             var query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)store.UserDataGet(MoveExample2Slot);
             if (query == null) {
                 query = store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
+
                 store.UserDataSet(MoveExample2Slot, query);
             }
             foreach (var chunk in query.Chunks)

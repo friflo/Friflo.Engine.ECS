@@ -15,6 +15,7 @@ namespace Tests.Generators
             var query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MoveExampleSlot);
             if (query == null) {
                 query = store.Query<global::Friflo.Engine.ECS.Position>();
+
                 store.UserDataSet(MoveExampleSlot, query);
             }
             foreach (var chunk in query.Chunks)
