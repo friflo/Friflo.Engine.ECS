@@ -10,6 +10,9 @@ partial class TestClass
 {
     [Query]
     [AllComponents<MyComponent1>]
+    [AnyComponents<MyComponent2>]
+    [WithoutAllComponents<MyComponent3>]
+    [WithoutAnyComponents<MyComponent4>]
     public static void MovePosition(ref Position position) {
         position.x += 1;
     }
