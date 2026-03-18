@@ -10,6 +10,9 @@ public partial class MyExample
 {
     [Query] // This triggers the generator
     void MoveExample(ref Position position) { }
+    
+    [Query] // This triggers the generator
+    void MoveExample2(ref MyComponent1 myComponent1, int deltaTime) { } 
 }
 
 public static class Test_QueryGenerator

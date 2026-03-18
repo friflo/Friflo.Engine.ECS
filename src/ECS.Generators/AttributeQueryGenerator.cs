@@ -133,26 +133,13 @@ using Friflo.Engine.ECS;
             }
             bool isComponent = parameter.Type.AllInterfaces.Contains(componentInterface);
             if (isComponent) {
-                switch (parameter.RefKind) {
-                    case RefKind.Ref:
-                        sb.Append("ref ");
-                        break;
-                    case RefKind.In:
-                        sb.Append("in ");
-                        break;
-                    case RefKind.Out:
-                        sb.Append("out ");
-                        break;
-                }
+                AppendRefKind(sb, parameter.RefKind);
                 sb.Append(parameter.Name);
                 sb.Append("Span[n]");
                 continue;
             }
-            /* sb.Append(", ");
-            string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            sb.Append(type);
-            sb.Append(" ");
-            sb.Append(parameter.Name);*/
+            AppendRefKind(sb, parameter.RefKind);
+            sb.Append(parameter.Name);
         }
         return sb.ToString();
     }
@@ -169,5 +156,18 @@ using Friflo.Engine.ECS;
         }
         return result;
     }
-    
+
+    private static void AppendRefKind(StringBuilder sb, RefKind refKind) {
+        switch (refKind) {
+            case RefKind.Ref:
+                sb.Append("ref ");
+                break;
+            case RefKind.In:
+                sb.Append("in ");
+                break;
+            case RefKind.Out:
+                sb.Append("out ");
+                break;
+        }
+    }
 }
