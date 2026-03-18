@@ -21,7 +21,7 @@ public partial class MyExample
         AreEqual(0, myComponent2.b);
         AreEqual(123, someValue);
         AreEqual(456, inValue);
-        AreEqual("abc", refValue);
+        refValue = "xyz";
     } 
 }
 
@@ -43,6 +43,7 @@ public static class Test_QueryGenerator
             var query = MyExample.MoveExample2Query(store, 123, 456, ref str);
             AreEqual(123, entity.GetComponent<MyComponent1>().a);
             AreEqual(1, query.Count);
+            AreEqual("xyz", str);
         }
     }
 }
