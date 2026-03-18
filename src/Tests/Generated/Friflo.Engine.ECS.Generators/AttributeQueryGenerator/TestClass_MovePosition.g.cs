@@ -9,11 +9,11 @@ using Friflo.Engine.ECS;
 
         /// <summary>Query method generated for: <see cref="MovePosition"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MovePositionQuery(EntityStore store)
+        public static ArchetypeQuery MovePositionQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MovePositionSlot);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(MovePositionSlot);
             if (_query == null) {
-                _query = store.Query<global::Friflo.Engine.ECS.Position>();
+                _query = _store.Query<global::Friflo.Engine.ECS.Position>();
                 _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
                 _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2>());
                 _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent3>());
@@ -23,7 +23,7 @@ using Friflo.Engine.ECS;
                 _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
                 _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
 
-                store.UserDataSet(MovePositionSlot, _query);
+                _store.UserDataSet(MovePositionSlot, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

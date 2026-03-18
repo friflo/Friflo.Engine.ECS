@@ -10,13 +10,13 @@ namespace Tests.Generators
 
         /// <summary>Query method generated for: <see cref="MoveExample"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery MoveExampleQuery(EntityStore store)
+        public ArchetypeQuery MoveExampleQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MoveExampleSlot);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(MoveExampleSlot);
             if (_query == null) {
-                _query = store.Query<global::Friflo.Engine.ECS.Position>();
+                _query = _store.Query<global::Friflo.Engine.ECS.Position>();
 
-                store.UserDataSet(MoveExampleSlot, _query);
+                _store.UserDataSet(MoveExampleSlot, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

@@ -10,11 +10,11 @@ namespace Tests.Generators
 
         /// <summary>Query method generated for: <see cref="TestFilters"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery TestFiltersQuery(EntityStore store)
+        public ArchetypeQuery TestFiltersQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(TestFiltersSlot);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(TestFiltersSlot);
             if (_query == null) {
-                _query = store.Query<global::Friflo.Engine.ECS.Position>();
+                _query = _store.Query<global::Friflo.Engine.ECS.Position>();
                 _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
                 _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2, global::Tests.ECS.MyComponent3>());
                 _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
@@ -24,7 +24,7 @@ namespace Tests.Generators
                 _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
                 _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
 
-                store.UserDataSet(TestFiltersSlot, _query);
+                _store.UserDataSet(TestFiltersSlot, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

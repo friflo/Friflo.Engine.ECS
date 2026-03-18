@@ -63,11 +63,11 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref=""ArchetypeQuery""/> for debugging purposes</returns>
         public {(methodSymbol.IsStatic ? "static " : "")}ArchetypeQuery {methodName}Query({EmitMethodSignature(parameters, types)})
         {{
-            var _query = (ArchetypeQuery<{componentArgs}>)store.UserDataGet({methodName}Slot);
+            var _query = (ArchetypeQuery<{componentArgs}>)_store.UserDataGet({methodName}Slot);
             if (_query == null) {{
-                _query = store.Query<{componentArgs}>();
+                _query = _store.Query<{componentArgs}>();
 {attributeCode}
-                store.UserDataSet({methodName}Slot, _query);
+                _store.UserDataSet({methodName}Slot, _query);
             }}
             foreach (var chunk in _query.Chunks)
             {{
@@ -89,7 +89,7 @@ using Friflo.Engine.ECS;
     private static string EmitMethodSignature(ImmutableArray<IParameterSymbol> parameters, Types types)
     {
         var sb = new StringBuilder();
-        sb.Append("EntityStore store");
+        sb.Append("EntityStore _store");
         foreach (var parameter in parameters) {
             bool isComponent = parameter.Type.AllInterfaces.Contains(types.componentInterface);
             if (isComponent) {

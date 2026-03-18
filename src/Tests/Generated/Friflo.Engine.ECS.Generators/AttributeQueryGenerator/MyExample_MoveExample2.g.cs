@@ -10,13 +10,13 @@ namespace Tests.Generators
 
         /// <summary>Query method generated for: <see cref="MoveExample2"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MoveExample2Query(EntityStore store, int someValue, in float inValue, ref string refValue, global::System.DateTime dateTime)
+        public static ArchetypeQuery MoveExample2Query(EntityStore _store, int someValue, in float inValue, ref string refValue, global::System.DateTime dateTime)
         {
-            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)store.UserDataGet(MoveExample2Slot);
+            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)_store.UserDataGet(MoveExample2Slot);
             if (_query == null) {
-                _query = store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
+                _query = _store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
 
-                store.UserDataSet(MoveExample2Slot, _query);
+                _store.UserDataSet(MoveExample2Slot, _query);
             }
             foreach (var chunk in _query.Chunks)
             {
