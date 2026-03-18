@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -13,7 +14,7 @@ public partial class MyExample
     void MoveExample(ref Position position) { position.x = 1; }
     
     [Query] // This triggers the generator
-    static void MoveExample2(ref MyComponent1 myComponent1, int someValue) { myComponent1.a = someValue; } 
+    static void MoveExample2(ref MyComponent1 myComponent1, int someValue, in float inValue, ref string refValue) { myComponent1.a = someValue; } 
 }
 
 public static class Test_QueryGenerator
@@ -28,7 +29,8 @@ public static class Test_QueryGenerator
         tester.MoveExampleQuery(store);
         AreEqual(1, entity.GetComponent<Position>().x);
         
-        MyExample.MoveExample2Query(store, 123);
+        var str = "abc";
+        MyExample.MoveExample2Query(store, 123, 456, ref str);
         AreEqual(123, entity.GetComponent<MyComponent1>().a);
     }
 }

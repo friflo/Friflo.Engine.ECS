@@ -85,6 +85,7 @@ using Friflo.Engine.ECS;
                 continue;
             }
             sb.Append(", ");
+            AppendRefKind(sb, parameter.RefKind);
             string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             sb.Append(type);
             sb.Append(" ");
@@ -157,7 +158,8 @@ using Friflo.Engine.ECS;
         return result;
     }
 
-    private static void AppendRefKind(StringBuilder sb, RefKind refKind) {
+    private static void AppendRefKind(StringBuilder sb, RefKind refKind)
+    {
         switch (refKind) {
             case RefKind.Ref:
                 sb.Append("ref ");
