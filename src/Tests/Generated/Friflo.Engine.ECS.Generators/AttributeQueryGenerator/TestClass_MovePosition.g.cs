@@ -11,29 +11,29 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MovePositionQuery(EntityStore store)
         {
-            var query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MovePositionSlot);
-            if (query == null) {
-                query = store.Query<global::Friflo.Engine.ECS.Position>();
-                query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
-                query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2>());
-                query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent3>());
-                query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
-                query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
-                query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2>());
-                query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
-                query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(MovePositionSlot);
+            if (_query == null) {
+                _query = store.Query<global::Friflo.Engine.ECS.Position>();
+                _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
+                _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2>());
+                _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent3>());
+                _query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
+                _query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
+                _query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2>());
+                _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
+                _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
 
-                store.UserDataSet(MovePositionSlot, query);
+                store.UserDataSet(MovePositionSlot, _query);
             }
-            foreach (var chunk in query.Chunks)
+            foreach (var chunk in _query.Chunks)
             {
-                var entities = chunk.Entities;
+                var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
-                for (int n = 0; n < entities.Length; n++) {
+                for (int n = 0; n < _entities.Length; n++) {
                     MovePosition(ref positionSpan[n]);
                 }
             }
-            return query;
+            return _query;
         }
     }
 

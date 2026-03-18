@@ -12,22 +12,22 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MoveExample2Query(EntityStore store, int someValue, in float inValue, ref string refValue, global::System.DateTime dateTime)
         {
-            var query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)store.UserDataGet(MoveExample2Slot);
-            if (query == null) {
-                query = store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
+            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)store.UserDataGet(MoveExample2Slot);
+            if (_query == null) {
+                _query = store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
 
-                store.UserDataSet(MoveExample2Slot, query);
+                store.UserDataSet(MoveExample2Slot, _query);
             }
-            foreach (var chunk in query.Chunks)
+            foreach (var chunk in _query.Chunks)
             {
-                var entities = chunk.Entities;
+                var _entities = chunk.Entities;
                 var myComponent1Span = chunk.Chunk1.Span;
                 var myComponent2Span = chunk.Chunk2.Span;
-                for (int n = 0; n < entities.Length; n++) {
+                for (int n = 0; n < _entities.Length; n++) {
                     MoveExample2(ref myComponent1Span[n], myComponent2Span[n], someValue, in inValue, ref refValue, dateTime);
                 }
             }
-            return query;
+            return _query;
         }
     }
 }

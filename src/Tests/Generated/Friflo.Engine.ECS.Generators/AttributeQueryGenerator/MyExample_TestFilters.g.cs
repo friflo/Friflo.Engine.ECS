@@ -12,29 +12,29 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery TestFiltersQuery(EntityStore store)
         {
-            var query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(TestFiltersSlot);
-            if (query == null) {
-                query = store.Query<global::Friflo.Engine.ECS.Position>();
-                query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
-                query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2, global::Tests.ECS.MyComponent3>());
-                query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
-                query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent5, global::Tests.ECS.MyComponent6>());
-                query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
-                query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2, global::Tests.ECS.TestTag3>());
-                query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
-                query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)store.UserDataGet(TestFiltersSlot);
+            if (_query == null) {
+                _query = store.Query<global::Friflo.Engine.ECS.Position>();
+                _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
+                _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2, global::Tests.ECS.MyComponent3>());
+                _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
+                _query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent5, global::Tests.ECS.MyComponent6>());
+                _query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
+                _query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2, global::Tests.ECS.TestTag3>());
+                _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
+                _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
 
-                store.UserDataSet(TestFiltersSlot, query);
+                store.UserDataSet(TestFiltersSlot, _query);
             }
-            foreach (var chunk in query.Chunks)
+            foreach (var chunk in _query.Chunks)
             {
-                var entities = chunk.Entities;
+                var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
-                for (int n = 0; n < entities.Length; n++) {
+                for (int n = 0; n < _entities.Length; n++) {
                     TestFilters(ref positionSpan[n]);
                 }
             }
-            return query;
+            return _query;
         }
     }
 }

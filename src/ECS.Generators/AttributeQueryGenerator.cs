@@ -63,21 +63,21 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref=""ArchetypeQuery""/> for debugging purposes</returns>
         public {(methodSymbol.IsStatic ? "static " : "")}ArchetypeQuery {methodName}Query({EmitMethodSignature(parameters, types)})
         {{
-            var query = (ArchetypeQuery<{componentArgs}>)store.UserDataGet({methodName}Slot);
-            if (query == null) {{
-                query = store.Query<{componentArgs}>();
+            var _query = (ArchetypeQuery<{componentArgs}>)store.UserDataGet({methodName}Slot);
+            if (_query == null) {{
+                _query = store.Query<{componentArgs}>();
 {attributeCode}
-                store.UserDataSet({methodName}Slot, query);
+                store.UserDataSet({methodName}Slot, _query);
             }}
-            foreach (var chunk in query.Chunks)
+            foreach (var chunk in _query.Chunks)
             {{
-                var entities = chunk.Entities;
+                var _entities = chunk.Entities;
 {chunkVariables}
-                for (int n = 0; n < entities.Length; n++) {{
+                for (int n = 0; n < _entities.Length; n++) {{
                     {methodName}({lambdaParameters});
                 }}
             }}
-            return query;
+            return _query;
         }}
     }}
 {(isGlobalNamespace ? "" : "}")}
@@ -156,7 +156,7 @@ using Friflo.Engine.ECS;
             }
             bool isEntity = parameter.Name == "entity" && SymbolEqualityComparer.Default.Equals(parameter.Type, types.entityStruct);
             if (isEntity) {
-                sb.Append("entities.EntityAt(n)");
+                sb.Append("_entities.EntityAt(n)");
                 continue;
             }
             AppendRefKind(sb, parameter.RefKind);
@@ -212,7 +212,7 @@ using Friflo.Engine.ECS;
                 case "WithoutAnyComponentsAttribute":
                     var name = attributeClass.Name.Substring(0, attributeClass.Name.Length - "Attribute".Length);
                     var args = GetGenericTypeArguments(attributeClass);
-                    sb.AppendLine($"                query.{name}(ComponentTypes.Get<{args}>());");
+                    sb.AppendLine($"                _query.{name}(ComponentTypes.Get<{args}>());");
                     break;
                 case "AllTagsAttribute":
                 case "AnyTagsAttribute":
@@ -220,7 +220,7 @@ using Friflo.Engine.ECS;
                 case "WithoutAnyTagsAttribute":
                     name = attributeClass.Name.Substring(0, attributeClass.Name.Length - "Attribute".Length);
                     args = GetGenericTypeArguments(attributeClass);
-                    sb.AppendLine($"                query.{name}(Tags.Get<{args}>());");
+                    sb.AppendLine($"                _query.{name}(Tags.Get<{args}>());");
                     break;
             }
         }
