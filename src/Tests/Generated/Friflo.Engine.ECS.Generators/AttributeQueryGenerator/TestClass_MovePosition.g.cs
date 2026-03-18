@@ -19,9 +19,9 @@ using Friflo.Engine.ECS;
             foreach (var chunk in query.Chunks)
             {
                 var entities = chunk.Entities;
-                var componentSpan = chunk.Chunk1.Span;
+                var positionSpan = chunk.Chunk1.Span;
                 for (int n = 0; n < entities.Length; n++) {
-                    MovePosition(ref componentSpan[n]);
+                    MovePosition(ref positionSpan[n]);
                 }
             }
             return query;

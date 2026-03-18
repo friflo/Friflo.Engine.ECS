@@ -20,9 +20,9 @@ namespace GeneratedCode
             foreach (var chunk in query.Chunks)
             {
                 var entities = chunk.Entities;
-                var componentSpan = chunk.Chunk1.Span;
+                var positionSpan = chunk.Chunk1.Span;
                 for (int n = 0; n < entities.Length; n++) {
-                    MoveExample(ref componentSpan[n]);
+                    MoveExample(ref positionSpan[n]);
                 }
             }
             return query;
