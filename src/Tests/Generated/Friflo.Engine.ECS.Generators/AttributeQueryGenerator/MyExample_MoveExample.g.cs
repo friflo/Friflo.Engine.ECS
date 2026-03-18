@@ -2,7 +2,7 @@
 using System;
 using Friflo.Engine.ECS;
 
-namespace GeneratedCode
+namespace Tests.Generators
 {
     public partial class MyExample
     {

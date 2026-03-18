@@ -5,8 +5,7 @@ using Tests.ECS;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable CheckNamespace
-namespace GeneratedCode;
-
+namespace Tests.Generators;
 
 public partial class MyExample
 {
