@@ -10,16 +10,21 @@ namespace Tests.Generators;
 public partial class MyExample
 {
     [Query] // This triggers the generator
-    void MoveExample(ref Position position) { position.x = 1; }
+    void MoveExample(ref Position position, Entity entity) {
+        AreEqual(1, entity.Id);
+        position.x = 1;
+    }
     
     [Query] // This triggers the generator
-    static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue) { myComponent1.a = someValue; } 
+    static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue) {
+        myComponent1.a = someValue;
+    } 
 }
 
 public static class Test_QueryGenerator
 {
     [Test]
-    public static void Test_Entity_new_EntityStore_Perf()
+    public static void Test_QueryGenerator_generate()
     {
         var tester = new MyExample();
         var store = new EntityStore();

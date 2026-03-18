@@ -93,6 +93,10 @@ using Friflo.Engine.ECS;
             if (isComponent) {
                 continue;
             }
+            bool isEntity = parameter.Name == "entity" && SymbolEqualityComparer.Default.Equals(parameter.Type, types.entityStruct);
+            if (isEntity) {
+                continue;
+            }
             sb.Append(", ");
             AppendRefKind(sb, parameter.RefKind);
             string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -146,6 +150,11 @@ using Friflo.Engine.ECS;
                 AppendRefKind(sb, parameter.RefKind);
                 sb.Append(parameter.Name);
                 sb.Append("Span[n]");
+                continue;
+            }
+            bool isEntity = parameter.Name == "entity" && SymbolEqualityComparer.Default.Equals(parameter.Type, types.entityStruct);
+            if (isEntity) {
+                sb.Append("entities.EntityAt(n)");
                 continue;
             }
             AppendRefKind(sb, parameter.RefKind);
