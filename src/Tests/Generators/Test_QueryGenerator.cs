@@ -1,21 +1,21 @@
-using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 namespace Tests.Generators;
 
 public partial class MyExample
 {
-    [Query] // This triggers the generator
+    [Query]
     void MoveExample(ref Position position, Entity entity) {
         AreEqual(1, entity.Id);
         position.x = 1;
     }
     
-    [Query] // This triggers the generator
+    [Query]
     static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue) {
         myComponent1.a = someValue;
     } 
