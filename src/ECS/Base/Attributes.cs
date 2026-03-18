@@ -80,6 +80,30 @@ public sealed class GenericInstanceTypeAttribute : Attribute {
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class BlittableTypeAttribute : Attribute
 { }
+    
+/// <summary>
+/// Creates an additional query method for the annotated method. New method has suffix <c>...Query()</c>.<br/>
+/// The generated query method filters all components declared as parameters + additional filters added with attributes.<br/>
+/// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-generator">Query Generator.</a>
+/// </summary>
+/// <remarks>
+/// Component filter attributes
+/// <code>
+///     [AllComponents&lt;>]
+///     [AnyComponents&lt;>]
+///     [WithoutAllComponents&lt;>]
+///     [WithoutAnyComponents&lt;>]
+/// </code>
+/// Tag filter attributes
+/// <code>
+///     [AllTags&lt;>]
+///     [AnyTags&lt;>]
+///     [WithoutAllTags&lt;>]
+///     [WithoutAnyTags&lt;>]
+/// </code>
+/// </remarks>
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class QueryAttribute : Attribute { }
 
 
 #region Friflo ImGui attributes 

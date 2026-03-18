@@ -1,5 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -7,7 +8,8 @@ using static NUnit.Framework.Assert;
 
 partial class TestClass
 {
-    // [Query]
+    [Query]
+    [AllComponents<MyComponent1>]
     public static void MovePosition(ref Position position) {
         position.x += 1;
     }
@@ -15,7 +17,7 @@ partial class TestClass
 #region will be generated
     private static readonly int MovePositionSlot = EntityStore.UserDataNewSlot();
     
-    public static void MovePositionQuery(EntityStore store)
+    public static ArchetypeQuery MovePositionQuery(EntityStore store)
     {
          var query = (ArchetypeQuery<Position>)store.UserDataGet(MovePositionSlot);
          if (query == null) {
@@ -29,6 +31,7 @@ partial class TestClass
                  MovePosition(ref componentsSpan[n]);
              }
          }
+         return query;
     }
     #endregion
 }
