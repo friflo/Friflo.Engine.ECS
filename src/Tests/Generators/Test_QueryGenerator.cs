@@ -25,12 +25,16 @@ public static class Test_QueryGenerator
         var tester = new MyExample();
         var store = new EntityStore();
         var entity = store.CreateEntity(new Position(), new MyComponent1());
-        
-        tester.MoveExampleQuery(store);
-        AreEqual(1, entity.GetComponent<Position>().x);
-        
-        var str = "abc";
-        MyExample.MoveExample2Query(store, 123, 456, ref str);
-        AreEqual(123, entity.GetComponent<MyComponent1>().a);
+        {
+            var query = tester.MoveExampleQuery(store);
+            AreEqual(1, entity.GetComponent<Position>().x);
+            AreEqual(1, query.Count);
+        }
+        {
+            var str = "abc";
+            var query = MyExample.MoveExample2Query(store, 123, 456, ref str);
+            AreEqual(123, entity.GetComponent<MyComponent1>().a);
+            AreEqual(1, query.Count);
+        }
     }
 }
