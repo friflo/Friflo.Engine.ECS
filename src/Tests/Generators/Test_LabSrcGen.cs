@@ -1,4 +1,6 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using System.Diagnostics;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.Utils;
@@ -65,6 +67,20 @@ public static class Test_SrcGen
         TestClass.MovePositionQuery_(store);
         Mem.AssertNoAlloc(start);
         AreEqual(2.0f, entity.GetComponent<Position>().x);
+    }
+    
+    // [Test]
+    public static void Test_SrcGen_perf() {
+        var store = new EntityStore();
+        for (int n = 0; n < 100_000; n++) {
+            store.CreateEntity(new Position(), new MyComponent1());
+        }
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int i = 0; i < 50_000; i++) {
+            TestClass.MovePositionQuery_(store);    
+        }
+        Console.WriteLine($"Test_SrcGen_perf - duration: {sw.ElapsedMilliseconds} ms");
     }
 }
 
