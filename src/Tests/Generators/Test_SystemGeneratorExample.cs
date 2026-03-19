@@ -10,13 +10,13 @@ namespace Tests.Generators;
 public partial class SystemGeneratorExample : BaseSystem
 {
     [Query]
-    static void MoveExample(ref Position position, float move) {
+    static void MovePosition(ref Position position, float move) {
         position.x += move;
     }
 
     protected override void OnUpdateGroup() {
         foreach (var store in SystemRoot.Stores) {
-            MoveExampleQuery(store, 42);
+            MovePositionQuery(store, 42);
         }
     }
 }
