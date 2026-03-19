@@ -53,6 +53,10 @@ Introduced new pattern to process events on adding/removing components or tags m
 See: [Map components to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-components-to-enums)
 and [Map tags to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-tags-to-enums).
 
+**🚀 Coming soon v3.6.0**  
+[New feature: Query Generator](https://github.com/friflo/Friflo.Engine.ECS/issues/124)  
+Generates high-performance query code and reduces boilerplate code to a minimum.
+
 - [x] High performant / type-safe queries
 - [x] Efficient multithreaded queries
 - [x] Fast batch / bulk operations
