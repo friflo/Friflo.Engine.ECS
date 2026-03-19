@@ -87,6 +87,12 @@ public sealed class BlittableTypeAttribute : Attribute
 /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-generator">Query Generator.</a>
 /// </summary>
 /// <remarks>
+/// The parameter values of the annotated <c>[Query]</c> method depend on their <c>Type</c>:
+/// <list type="bullet">
+///   <item> Component types      - the component values of a matching entity. </item>
+///   <item> <c>Entity entity</c> - the current iterated entity. </item>
+///   <item> Other types          - are passed from generated <c>...Query()</c> method. </item>
+/// </list>
 /// Component filter attributes
 /// <code>
 ///     [AllComponents&lt;>]
