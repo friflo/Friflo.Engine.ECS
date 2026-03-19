@@ -17,8 +17,8 @@ public partial class MyExample
     }
     
     [Query]
-    static void MoveExample2(ref MyComponent1 myComponent1, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
-        myComponent1.a = someValue;
+    static void MoveExample2(in MyComponent1 inComponent, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
+        AreEqual(0, inComponent.a);
         AreEqual(0, myComponent2.b);
         AreEqual(123, someValue);
         AreEqual(456, inValue);
@@ -57,7 +57,6 @@ public static class Test_QueryGenerator
         {
             var str = "abc";
             var query = MyExample.MoveExample2Query(store, 123, 456, ref str, new DateTime(2026,03,18));
-            AreEqual(123, entity.GetComponent<MyComponent1>().a);
             AreEqual(1, query.Count);
             AreEqual("xyz", str);
         }
