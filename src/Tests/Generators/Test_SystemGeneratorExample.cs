@@ -1,6 +1,7 @@
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -33,5 +34,9 @@ public static class Test_SystemGeneratorExample
         };
         root.Update(default);
         AreEqual(42, entity.GetComponent<Position>().x);
+        
+        var start = Mem.GetAllocatedBytes();
+        root.Update(default);
+        Mem.AssertNoAlloc(start);
     }
 }
