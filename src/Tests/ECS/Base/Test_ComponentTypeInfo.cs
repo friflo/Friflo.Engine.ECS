@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -69,6 +68,11 @@ public static class Test_ComponentTypeInfo
     public static void Test_IsAssignableFrom_Perf_is()
     {
         var component = new TestInterfaceComponent();
+        IsAssignableFrom_Perf_is(component);
+    }
+    
+    private static void IsAssignableFrom_Perf_is(object component)
+    {
         for (int n = 0; n < 1_000_000_000; n++) {
             _ = component is ITestableInterface;
         }        

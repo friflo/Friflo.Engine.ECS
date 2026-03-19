@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+namespace Friflo.Engine.ECS.Generators;
 
 public struct Types
 {
@@ -31,13 +32,14 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         );
 
         // Generate the source
-        context.RegisterSourceOutput(methodDeclarations, (spc, context) =>
+        context.RegisterSourceOutput(methodDeclarations, (spc, ctx) =>
         {
             // Get the symbol for the interfaces; ITag and IComponent
-            var types = new Types();
-            types.componentInterface = context.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.IComponent");
-            types.entityStruct       = context.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity");
-            var methodSymbol = (IMethodSymbol)context.TargetSymbol;
+            var types = new Types {
+                componentInterface = ctx.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.IComponent"),
+                entityStruct = ctx.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity")
+            };
+            var methodSymbol = (IMethodSymbol)ctx.TargetSymbol;
             var className = methodSymbol.ContainingType.Name;
             var methodName = methodSymbol.Name;
             var isGlobalNamespace = methodSymbol.ContainingNamespace.IsGlobalNamespace;
