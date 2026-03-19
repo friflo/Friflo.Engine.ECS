@@ -17,12 +17,13 @@ public partial class MyExample
     }
     
     [Query]
-    static void MoveExample2(in MyComponent1 inComponent, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
+    private static void MoveExample2(in MyComponent1 inComponent, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
         AreEqual(0, inComponent.a);
         AreEqual(0, myComponent2.b);
         AreEqual(123, someValue);
         AreEqual(456, inValue);
         AreEqual(new DateTime(2026,03,18), dateTime);
+        AreEqual("abc", refValue);
         refValue = "xyz";
     }
     
