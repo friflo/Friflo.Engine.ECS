@@ -91,7 +91,7 @@ public sealed class BlittableTypeAttribute : Attribute
 /// <list type="bullet">
 ///   <item> Component types      - the component values of a matching entity. </item>
 ///   <item> <c>Entity entity</c> - the current iterated entity. </item>
-///   <item> Other types          - are passed from generated <c>...Query()</c> method. </item>
+///   <item> Other types          - are set by the values passed to generated <c>...Query()</c> method call. </item>
 /// </list>
 /// Component filter attributes
 /// <code>
