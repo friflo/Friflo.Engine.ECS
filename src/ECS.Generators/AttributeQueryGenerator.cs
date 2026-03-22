@@ -90,6 +90,7 @@ using Friflo.Engine.ECS;
 {(isGlobalNamespace ? "" : "}")}
 ";
             var fileName = methodSymbol!.ToDisplayString(FullNameFormat).Replace('<', '{').Replace('>', '}');
+            // using hash instead of method signature for file name. Signature would lead to long file names not supported by the OS
             spc.AddSource($"{fileName}{hash}.g.cs", SourceText.From(source, Encoding.UTF8));
         });
     }
