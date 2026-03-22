@@ -89,10 +89,17 @@ using Friflo.Engine.ECS;
     }}
 {(isGlobalNamespace ? "" : "}")}
 ";
-            var fileName = methodSymbol!.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat).Replace('<', '{').Replace('>', '}');
-            spc.AddSource($"{fileName}.g.cs", SourceText.From(source, Encoding.UTF8));
+            var fileName = methodSymbol!.ToDisplayString(FullNameFormat).Replace('<', '{').Replace('>', '}');
+            spc.AddSource($"{fileName}{hash}.g.cs", SourceText.From(source, Encoding.UTF8));
         });
     }
+    
+    private static readonly SymbolDisplayFormat FullNameFormat = new SymbolDisplayFormat(
+        typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+        genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+        memberOptions: SymbolDisplayMemberOptions.IncludeContainingType,
+        parameterOptions: SymbolDisplayParameterOptions.IncludeType // Include this if you want (string x, int y)
+    );
     
     private static string EmitMethodSignature(ImmutableArray<IParameterSymbol> parameters, Types types)
     {
