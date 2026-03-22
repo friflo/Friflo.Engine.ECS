@@ -53,7 +53,7 @@ An ECS provide two strengths:
 and [Map tags to enums](https://friflo.gitbook.io/friflo.engine.ecs/documentation/events#map-tags-to-enums).  
 Introduced new pattern to process events on adding/removing components or tags more performant and concise.
 
-**🚀 3.6.0-preview.1 on nuget**  
+**🚀 3.6.0-preview on nuget**  
 [New feature: Query Generator](https://github.com/friflo/Friflo.Engine.ECS/issues/124)  
 Generates high-performance query code and reduces boilerplate code to a minimum.
 
