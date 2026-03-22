@@ -2,7 +2,7 @@
 using System;
 using Friflo.Engine.ECS;
 
-namespace Tests.Generators_DuplicateNamespace
+namespace Tests.Generators.Duplicate
 {
     public partial class MyExample
     {

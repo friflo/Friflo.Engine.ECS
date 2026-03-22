@@ -1,4 +1,3 @@
-using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -6,7 +5,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
-namespace Tests.Generators_DuplicateNamespace;
+namespace Tests.Generators.Duplicate;
 
 
 /// Test using same class / method name as in <see cref="Tests.Generators.MyExample.MoveExample"/>
@@ -18,9 +17,20 @@ public partial class MyExample
         AreEqual(1, entity.Id); 
         position.x = 1;
     }
-    
+}
+
+public partial class MyExample<T>
+{
+    [Query]
+    void MoveExample(ref Position position, T value) {
+        position.x = 1;
+    }
+}
+
+public static class Test_QueryGeneratorDuplicate
+{
     [Test]
-    public static void Test_QueryGenerator_generate()
+    public static void Test_QueryGeneratorDuplicate_generate()
     {
         var tester = new MyExample();
         var store = new EntityStore();
@@ -30,17 +40,9 @@ public partial class MyExample
         AreEqual(1, entity.GetComponent<Position>().x);
         AreEqual(1, query.Count);
     }
-}
-
-public partial class MyExample<T>
-{
-    [Query]
-    void MoveExample(ref Position position, T value) {
-        position.x = 1;
-    }
     
     [Test]
-    public static void Test_QueryGenerator_generate()
+    public static void Test_QueryGeneratorDuplicate_generic()
     {
         var tester = new MyExample<int>();
         var store = new EntityStore();
