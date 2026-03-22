@@ -18,4 +18,36 @@ public partial class MyExample
         AreEqual(1, entity.Id); 
         position.x = 1;
     }
+    
+    [Test]
+    public static void Test_QueryGenerator_generate()
+    {
+        var tester = new MyExample();
+        var store = new EntityStore();
+        var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
+
+        var query = tester.MoveExampleQuery(store);
+        AreEqual(1, entity.GetComponent<Position>().x);
+        AreEqual(1, query.Count);
+    }
+}
+
+public partial class MyExample<T>
+{
+    [Query]
+    void MoveExample(ref Position position, T value) {
+        position.x = 1;
+    }
+    
+    [Test]
+    public static void Test_QueryGenerator_generate()
+    {
+        var tester = new MyExample<int>();
+        var store = new EntityStore();
+        var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
+
+        var query = tester.MoveExampleQuery(store, 123);
+        AreEqual(1, entity.GetComponent<Position>().x);
+        AreEqual(1, query.Count);
+    }
 }

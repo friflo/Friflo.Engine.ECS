@@ -42,7 +42,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
                 entityStruct = ctx.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity")
             };
             var methodSymbol = (IMethodSymbol)ctx.TargetSymbol;
-            var className = methodSymbol.ContainingType.Name;
+            var className = methodSymbol.ContainingType.ToDisplayString(ClassNameFormat);
             var methodName = methodSymbol.Name;
             var isGlobalNamespace = methodSymbol.ContainingNamespace.IsGlobalNamespace;
             var namespaceName = methodSymbol.ContainingType.ContainingNamespace.ToDisplayString();
@@ -94,6 +94,11 @@ using Friflo.Engine.ECS;
             spc.AddSource($"{fileName}{hash}.g.cs", SourceText.From(source, Encoding.UTF8));
         });
     }
+    
+    private static readonly SymbolDisplayFormat ClassNameFormat = new SymbolDisplayFormat(
+        typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
+        genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters
+    );
     
     private static readonly SymbolDisplayFormat FullNameFormat = new SymbolDisplayFormat(
         typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
