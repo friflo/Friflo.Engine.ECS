@@ -6,17 +6,17 @@ namespace Tests.Generators
 {
     public partial class MyExample
     {
-        private static readonly int MoveExample2Slot = EntityStore.UserDataNewSlot();
+        private static readonly int MoveExample2Slot_7F57827D = EntityStore.UserDataNewSlot();
 
         /// <summary>Query method generated for: <see cref="MoveExample2"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MoveExample2Query(EntityStore _store, int someValue, in float inValue, ref string refValue, global::System.DateTime dateTime)
         {
-            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)_store.UserDataGet(MoveExample2Slot);
+            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)_store.UserDataGet(MoveExample2Slot_7F57827D);
             if (_query == null) {
                 _query = _store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
 
-                _store.UserDataSet(MoveExample2Slot, _query);
+                _store.UserDataSet(MoveExample2Slot_7F57827D, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

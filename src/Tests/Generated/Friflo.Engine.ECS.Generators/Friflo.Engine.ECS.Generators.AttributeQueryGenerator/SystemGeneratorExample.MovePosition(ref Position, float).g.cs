@@ -4,26 +4,26 @@ using Friflo.Engine.ECS;
 
 namespace Tests.Generators
 {
-    public partial class MyExample
+    public partial class SystemGeneratorExample
     {
-        private static readonly int MoveExampleSlot = EntityStore.UserDataNewSlot();
+        private static readonly int MovePositionSlot_E9EEA4EA = EntityStore.UserDataNewSlot();
 
-        /// <summary>Query method generated for: <see cref="MoveExample"/>.</summary>
+        /// <summary>Query method generated for: <see cref="MovePosition"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery MoveExampleQuery(EntityStore _store)
+        public static ArchetypeQuery MovePositionQuery(EntityStore _store, float move)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(MoveExampleSlot);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(MovePositionSlot_E9EEA4EA);
             if (_query == null) {
                 _query = _store.Query<global::Friflo.Engine.ECS.Position>();
 
-                _store.UserDataSet(MoveExampleSlot, _query);
+                _store.UserDataSet(MovePositionSlot_E9EEA4EA, _query);
             }
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
                 for (int n = 0; n < _entities.Length; n++) {
-                    MoveExample(ref positionSpan[n], _entities.EntityAt(n));
+                    MovePosition(ref positionSpan[n], move);
                 }
             }
             return _query;

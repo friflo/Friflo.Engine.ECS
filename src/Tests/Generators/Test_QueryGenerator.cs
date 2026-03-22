@@ -17,6 +17,18 @@ public partial class MyExample
     }
     
     [Query]
+    static void DuplicateMethod(Position position) { }
+
+    // Generates method with duplicate name but different signature
+    [Query]
+    static void DuplicateMethod(Position position, float x, float y) { }
+    
+    // Commented method will result in compiler error:
+    //     Error CS0111 : Type 'MyExample' already defines a member called 'DuplicateMethodQuery' with the same parameter types
+    // [Query]
+    // static void DuplicateMethod(EntityName name) { }
+
+    [Query]
     private static void MoveExample2(in MyComponent1 inComponent, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
         AreEqual(0, inComponent.a);
         AreEqual(0, myComponent2.b);
