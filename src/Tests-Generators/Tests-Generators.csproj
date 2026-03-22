@@ -10,7 +10,7 @@
         <!-- packaging -->
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
         <IsPackable>false</IsPackable>
-        <LangVersion>9</LangVersion>
+        <LangVersion>11</LangVersion>
         <!-- packaging: end -->
     </PropertyGroup>
 
@@ -37,8 +37,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ECS.Boost\Friflo.Engine.ECS.Boost.csproj" />
-      <ProjectReference Include="..\Hub\Engine.Hub.csproj" />
+      <ProjectReference Include="..\Tests\Tests.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ECS.Generators\Friflo.Engine.ECS.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.g.cs" />
     </ItemGroup>
 
 </Project>

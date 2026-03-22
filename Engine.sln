@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen", "src\CodeGen\Code
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Engine.ECS.Generators", "src\ECS.Generators\Friflo.Engine.ECS.Generators.csproj", "{980C2F7E-0127-4489-AF7E-7DFB51B8DFE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-Generators", "src\Tests-Generators\Tests-Generators.csproj", "{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +86,9 @@ Global
 		{980C2F7E-0127-4489-AF7E-7DFB51B8DFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{980C2F7E-0127-4489-AF7E-7DFB51B8DFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{980C2F7E-0127-4489-AF7E-7DFB51B8DFE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
