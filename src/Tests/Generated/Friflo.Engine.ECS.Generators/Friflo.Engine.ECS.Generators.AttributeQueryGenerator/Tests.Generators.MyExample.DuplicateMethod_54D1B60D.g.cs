@@ -12,11 +12,11 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery DuplicateMethodQuery(EntityStore _store, float x, float y)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(DuplicateMethodSlot_54D1B60D);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, DuplicateMethodSlot_54D1B60D);
             if (_query == null) {
                 _query = _store.Query<global::Friflo.Engine.ECS.Position>();
 
-                _store.UserDataSet(DuplicateMethodSlot_54D1B60D, _query);
+                EntityStore.UserDataSet(_store, DuplicateMethodSlot_54D1B60D, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

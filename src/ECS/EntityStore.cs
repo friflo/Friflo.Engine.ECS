@@ -82,26 +82,34 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
 
 #region user data
+    /// <summary> Method not intended to be used by user code. </summary>
+    /// <remarks> Method is used for generated query methods. </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public object UserDataGet(int slot)
+    public static object UserDataGet(EntityStore store, int slot)
     {
-        if (slot < userDataSlots.Length) { 
-            return userDataSlots[slot];
+        var slots = store.userDataSlots;
+        if (slot < slots.Length) { 
+            return slots[slot];
         }
         return null;
     }
-    
+
+    /// <summary> Method not intended to be used by user code. </summary>
+    /// <remarks> Method is used for generated query methods. </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void UserDataSet(int slot, object data)
+    public static void UserDataSet(EntityStore store, int slot, object data)
     {
-        if (slot >= userDataSlots.Length) {
+        var slots = store.userDataSlots;
+        if (slot >= slots.Length) {
             var map = new object[UserDataMaxSlot];
-            Array.Copy(userDataSlots, map, userDataSlots.Length);
-            userDataSlots = map;
+            Array.Copy(slots, map, slots.Length);
+            slots = store.userDataSlots = map;
         }
-        userDataSlots[slot] = data;
+        slots[slot] = data;
     }
     
+    /// <summary> Method not intended to be used by user code. </summary>
+    /// <remarks> Method is used for generated query methods. </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static int UserDataNewSlot() {
         return UserDataMaxSlot++;

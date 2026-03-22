@@ -12,11 +12,11 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MovePositionQuery(EntityStore _store, float move)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(MovePositionSlot_E9EEA4EA);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, MovePositionSlot_E9EEA4EA);
             if (_query == null) {
                 _query = _store.Query<global::Friflo.Engine.ECS.Position>();
 
-                _store.UserDataSet(MovePositionSlot_E9EEA4EA, _query);
+                EntityStore.UserDataSet(_store, MovePositionSlot_E9EEA4EA, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

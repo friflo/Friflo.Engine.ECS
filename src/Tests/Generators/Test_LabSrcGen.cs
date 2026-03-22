@@ -30,11 +30,11 @@ partial class TestClass
     /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
     public static ArchetypeQuery MovePositionQuery_(EntityStore store)
     {
-         var query = (ArchetypeQuery<Position>)store.UserDataGet(MovePositionSlot2);
+         var query = (ArchetypeQuery<Position>)EntityStore.UserDataGet(store, MovePositionSlot2);
          if (query == null) {
              query = store.Query<Position>();
              query.AllComponents(ComponentTypes.Get<MyComponent1>());
-             store.UserDataSet(MovePositionSlot2, query);
+             EntityStore.UserDataSet(store, MovePositionSlot2, query);
          }
          foreach (var chunk in query.Chunks)
          {

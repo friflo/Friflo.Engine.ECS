@@ -12,7 +12,7 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery TestFiltersQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(TestFiltersSlot_C2BFF40F);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, TestFiltersSlot_C2BFF40F);
             if (_query == null) {
                 _query = _store.Query<global::Friflo.Engine.ECS.Position>();
                 _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
@@ -24,7 +24,7 @@ namespace Tests.Generators
                 _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
                 _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
 
-                _store.UserDataSet(TestFiltersSlot_C2BFF40F, _query);
+                EntityStore.UserDataSet(_store, TestFiltersSlot_C2BFF40F, _query);
             }
             foreach (var chunk in _query.Chunks)
             {

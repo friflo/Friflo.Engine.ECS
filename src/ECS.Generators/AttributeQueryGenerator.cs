@@ -70,11 +70,11 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref=""ArchetypeQuery""/> for debugging purposes</returns>
         public {(methodSymbol.IsStatic ? "static " : "")}ArchetypeQuery {methodName}Query({EmitMethodSignature(parameters, types)})
         {{
-            var _query = (ArchetypeQuery<{componentArgs}>)_store.UserDataGet({methodName}Slot{hash});
+            var _query = (ArchetypeQuery<{componentArgs}>)EntityStore.UserDataGet(_store, {methodName}Slot{hash});
             if (_query == null) {{
                 _query = _store.Query<{componentArgs}>();
 {attributeCode}
-                _store.UserDataSet({methodName}Slot{hash}, _query);
+                EntityStore.UserDataSet(_store, {methodName}Slot{hash}, _query);
             }}
             foreach (var chunk in _query.Chunks)
             {{

@@ -11,7 +11,7 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MovePositionQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)_store.UserDataGet(MovePositionSlot_5841FF1E);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, MovePositionSlot_5841FF1E);
             if (_query == null) {
                 _query = _store.Query<global::Friflo.Engine.ECS.Position>();
                 _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
@@ -23,7 +23,7 @@ using Friflo.Engine.ECS;
                 _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
                 _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
 
-                _store.UserDataSet(MovePositionSlot_5841FF1E, _query);
+                EntityStore.UserDataSet(_store, MovePositionSlot_5841FF1E, _query);
             }
             foreach (var chunk in _query.Chunks)
             {
