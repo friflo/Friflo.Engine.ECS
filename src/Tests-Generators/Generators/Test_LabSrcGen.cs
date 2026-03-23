@@ -30,12 +30,7 @@ partial class TestClass
     /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
     public static ArchetypeQuery MovePositionQuery_(EntityStore store)
     {
-         var query = (ArchetypeQuery<Position>)EntityStore.UserDataGet(store, MovePositionSlot2);
-         if (query == null) {
-             query = store.Query<Position>();
-             query.AllComponents(ComponentTypes.Get<MyComponent1>());
-             EntityStore.UserDataSet(store, MovePositionSlot2, query);
-         }
+         var query = MovePosition_GetQuery(store);
          foreach (var chunk in query.Chunks)
          {
              var entities = chunk.Entities;
@@ -45,6 +40,19 @@ partial class TestClass
              }
          }
          return query;
+    }
+    
+    private static ArchetypeQuery<Position> MovePosition_GetQuery(EntityStore store)
+    {
+        var query = (ArchetypeQuery<Position>)EntityStore.UserDataGet(store, MovePositionSlot2);
+        if (query != null) {
+            return query;
+        }
+        query = store.Query<Position>();
+        query.AllComponents(ComponentTypes.Get<MyComponent1>());
+        
+        EntityStore.UserDataSet(store, MovePositionSlot2, query);
+        return query;
     }
     #endregion
 }
@@ -69,7 +77,7 @@ public static class Test_SrcGen
         AreEqual(2.0f, entity.GetComponent<Position>().x);
     }
     
-    // [Test]
+    [Test]
     public static void Test_SrcGen_perf() {
         var store = new EntityStore();
         for (int n = 0; n < 100_000; n++) {
