@@ -10,7 +10,7 @@ using Friflo.Engine.ECS;
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MovePositionQuery(EntityStore _store)
         {
-            var _query = _MovePosition_GetQuery_5841FF1E(_store);
+            var _query = _MovePosition_GetQuery_5841(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -23,12 +23,12 @@ using Friflo.Engine.ECS;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MovePosition_Slot_5841FF1E = EntityStore.UserDataNewSlot();
+        private static readonly int _MovePosition_Slot_5841 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_5841FF1E(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_5841(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MovePosition_Slot_5841FF1E);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MovePosition_Slot_5841);
             if (_query != null) {
                 return _query;
             }
@@ -42,7 +42,7 @@ using Friflo.Engine.ECS;
                 _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
                 _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
 
-            EntityStore.UserDataSet(_store, _MovePosition_Slot_5841FF1E, _query);
+            EntityStore.UserDataSet(_store, _MovePosition_Slot_5841, _query);
             return _query;
         }
     }

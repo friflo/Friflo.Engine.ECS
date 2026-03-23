@@ -11,7 +11,7 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MoveExample2Query(EntityStore _store, int someValue, in float inValue, ref string refValue, global::System.DateTime dateTime)
         {
-            var _query = _MoveExample2_GetQuery_7F57827D(_store);
+            var _query = _MoveExample2_GetQuery_7F57(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -25,18 +25,18 @@ namespace Tests.Generators
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MoveExample2_Slot_7F57827D = EntityStore.UserDataNewSlot();
+        private static readonly int _MoveExample2_Slot_7F57 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2> _MoveExample2_GetQuery_7F57827D(EntityStore _store)
+        private static ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2> _MoveExample2_GetQuery_7F57(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)EntityStore.UserDataGet(_store, _MoveExample2_Slot_7F57827D);
+            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)EntityStore.UserDataGet(_store, _MoveExample2_Slot_7F57);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>();
 
-            EntityStore.UserDataSet(_store, _MoveExample2_Slot_7F57827D, _query);
+            EntityStore.UserDataSet(_store, _MoveExample2_Slot_7F57, _query);
             return _query;
         }
     }

@@ -11,7 +11,7 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery DuplicateMethodQuery(EntityStore _store)
         {
-            var _query = _DuplicateMethod_GetQuery_8346CE7E(_store);
+            var _query = _DuplicateMethod_GetQuery_8346(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -24,18 +24,18 @@ namespace Tests.Generators
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _DuplicateMethod_Slot_8346CE7E = EntityStore.UserDataNewSlot();
+        private static readonly int _DuplicateMethod_Slot_8346 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _DuplicateMethod_GetQuery_8346CE7E(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _DuplicateMethod_GetQuery_8346(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _DuplicateMethod_Slot_8346CE7E);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _DuplicateMethod_Slot_8346);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position>();
 
-            EntityStore.UserDataSet(_store, _DuplicateMethod_Slot_8346CE7E, _query);
+            EntityStore.UserDataSet(_store, _DuplicateMethod_Slot_8346, _query);
             return _query;
         }
     }

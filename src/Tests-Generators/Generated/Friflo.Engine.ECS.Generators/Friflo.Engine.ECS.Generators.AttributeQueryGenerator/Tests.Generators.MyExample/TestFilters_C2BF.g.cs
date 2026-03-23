@@ -11,7 +11,7 @@ namespace Tests.Generators
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery TestFiltersQuery(EntityStore _store)
         {
-            var _query = _TestFilters_GetQuery_C2BFF40F(_store);
+            var _query = _TestFilters_GetQuery_C2BF(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -24,12 +24,12 @@ namespace Tests.Generators
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _TestFilters_Slot_C2BFF40F = EntityStore.UserDataNewSlot();
+        private static readonly int _TestFilters_Slot_C2BF = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _TestFilters_GetQuery_C2BFF40F(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _TestFilters_GetQuery_C2BF(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _TestFilters_Slot_C2BFF40F);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _TestFilters_Slot_C2BF);
             if (_query != null) {
                 return _query;
             }
@@ -43,7 +43,7 @@ namespace Tests.Generators
                 _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
                 _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
 
-            EntityStore.UserDataSet(_store, _TestFilters_Slot_C2BFF40F, _query);
+            EntityStore.UserDataSet(_store, _TestFilters_Slot_C2BF, _query);
             return _query;
         }
     }
