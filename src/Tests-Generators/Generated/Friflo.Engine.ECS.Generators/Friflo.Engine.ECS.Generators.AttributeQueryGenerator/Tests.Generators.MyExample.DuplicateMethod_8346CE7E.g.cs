@@ -7,9 +7,6 @@ namespace Tests.Generators
 {
     public partial class MyExample
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _DuplicateMethod_Slot_8346CE7E = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref="DuplicateMethod"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery DuplicateMethodQuery(EntityStore _store)
@@ -25,6 +22,9 @@ namespace Tests.Generators
             }
             return _query;
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _DuplicateMethod_Slot_8346CE7E = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _DuplicateMethod_GetQuery_8346CE7E(EntityStore _store)

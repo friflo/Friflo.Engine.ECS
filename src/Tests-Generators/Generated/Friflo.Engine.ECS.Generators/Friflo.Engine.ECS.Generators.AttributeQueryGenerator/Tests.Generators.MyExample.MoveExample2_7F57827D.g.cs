@@ -7,9 +7,6 @@ namespace Tests.Generators
 {
     public partial class MyExample
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MoveExample2_Slot_7F57827D = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref="MoveExample2"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MoveExample2Query(EntityStore _store, int someValue, in float inValue, ref string refValue, global::System.DateTime dateTime)
@@ -26,6 +23,9 @@ namespace Tests.Generators
             }
             return _query;
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _MoveExample2_Slot_7F57827D = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2> _MoveExample2_GetQuery_7F57827D(EntityStore _store)

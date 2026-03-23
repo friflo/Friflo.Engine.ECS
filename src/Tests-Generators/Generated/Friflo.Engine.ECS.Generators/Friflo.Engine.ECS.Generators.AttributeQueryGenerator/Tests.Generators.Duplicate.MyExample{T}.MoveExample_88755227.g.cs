@@ -7,9 +7,6 @@ namespace Tests.Generators.Duplicate
 {
     public partial class MyExample<T>
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MoveExample_Slot_88755227 = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref="MoveExample"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery MoveExampleQuery(EntityStore _store, T value)
@@ -25,6 +22,9 @@ namespace Tests.Generators.Duplicate
             }
             return _query;
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _MoveExample_Slot_88755227 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MoveExample_GetQuery_88755227(EntityStore _store)

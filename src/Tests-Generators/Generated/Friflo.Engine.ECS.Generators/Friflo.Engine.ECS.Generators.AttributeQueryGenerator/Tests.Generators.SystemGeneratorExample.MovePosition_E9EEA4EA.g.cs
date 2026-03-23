@@ -7,9 +7,6 @@ namespace Tests.Generators
 {
     public partial class SystemGeneratorExample
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MovePosition_Slot_E9EEA4EA = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref="MovePosition"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MovePositionQuery(EntityStore _store, float move)
@@ -25,6 +22,9 @@ namespace Tests.Generators
             }
             return _query;
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _MovePosition_Slot_E9EEA4EA = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_E9EEA4EA(EntityStore _store)

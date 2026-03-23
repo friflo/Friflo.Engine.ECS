@@ -6,9 +6,6 @@ using Friflo.Engine.ECS;
 
     public partial class TestClass
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MovePosition_Slot_5841FF1E = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref="MovePosition"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MovePositionQuery(EntityStore _store)
@@ -24,6 +21,9 @@ using Friflo.Engine.ECS;
             }
             return _query;
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _MovePosition_Slot_5841FF1E = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_5841FF1E(EntityStore _store)

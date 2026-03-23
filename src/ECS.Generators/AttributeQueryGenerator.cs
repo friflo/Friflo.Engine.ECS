@@ -64,9 +64,6 @@ using Friflo.Engine.ECS;
 {(isGlobalNamespace ? "" : $"namespace {namespaceName}\r\n{{")}
     public partial class {className}
     {{
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _{methodName}_Slot{hash} = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref=""{methodName}""/>.</summary>
         /// <returns>The executed <see cref=""ArchetypeQuery""/> for debugging purposes</returns>
         public {(methodSymbol.IsStatic ? "static " : "")}ArchetypeQuery {methodName}Query({EmitMethodSignature(parameters, types)})
@@ -82,6 +79,9 @@ using Friflo.Engine.ECS;
             }}
             return _query;
         }}
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _{methodName}_Slot{hash} = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<{componentArgs}> _{methodName}_GetQuery{hash}(EntityStore _store)

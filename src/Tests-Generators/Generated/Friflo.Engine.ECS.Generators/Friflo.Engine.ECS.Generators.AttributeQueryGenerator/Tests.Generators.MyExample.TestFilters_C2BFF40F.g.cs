@@ -7,9 +7,6 @@ namespace Tests.Generators
 {
     public partial class MyExample
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _TestFilters_Slot_C2BFF40F = EntityStore.UserDataNewSlot();
-
         /// <summary>Query method generated for: <see cref="TestFilters"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public ArchetypeQuery TestFiltersQuery(EntityStore _store)
@@ -25,6 +22,9 @@ namespace Tests.Generators
             }
             return _query;
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static readonly int _TestFilters_Slot_C2BFF40F = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _TestFilters_GetQuery_C2BFF40F(EntityStore _store)
