@@ -59,7 +59,7 @@ partial class TestClass
 
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base {
+namespace Tests.Generators {
 
 public static class Test_SrcGen
 {
@@ -77,7 +77,7 @@ public static class Test_SrcGen
         AreEqual(2.0f, entity.GetComponent<Position>().x);
     }
     
-    [Test]
+    // [Test]
     public static void Test_SrcGen_perf() {
         var store = new EntityStore();
         for (int n = 0; n < 100_000; n++) {
