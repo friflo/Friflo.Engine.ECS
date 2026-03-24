@@ -33,14 +33,14 @@ using Friflo.Engine.ECS;
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position>();
-                _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
-                _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2>());
-                _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent3>());
-                _query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
-                _query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
-                _query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2>());
-                _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
-                _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
+            _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
+            _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2>());
+            _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent3>());
+            _query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
+            _query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
+            _query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2>());
+            _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag3>());
+            _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag4>());
 
             EntityStore.UserDataSet(_store, _MovePosition_Slot_5841, _query);
             return _query;

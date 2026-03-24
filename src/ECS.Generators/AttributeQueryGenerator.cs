@@ -243,7 +243,7 @@ using Friflo.Engine.ECS;
                 case "WithoutAnyComponentsAttribute":
                     var name = attributeClass.Name.Substring(0, attributeClass.Name.Length - "Attribute".Length);
                     var args = GetGenericTypeArguments(attributeClass);
-                    sb.AppendLine($"                _query.{name}(ComponentTypes.Get<{args}>());");
+                    sb.AppendLine($"            _query.{name}(ComponentTypes.Get<{args}>());");
                     break;
                 case "AllTagsAttribute":
                 case "AnyTagsAttribute":
@@ -251,7 +251,7 @@ using Friflo.Engine.ECS;
                 case "WithoutAnyTagsAttribute":
                     name = attributeClass.Name.Substring(0, attributeClass.Name.Length - "Attribute".Length);
                     args = GetGenericTypeArguments(attributeClass);
-                    sb.AppendLine($"                _query.{name}(Tags.Get<{args}>());");
+                    sb.AppendLine($"            _query.{name}(Tags.Get<{args}>());");
                     break;
             }
         }

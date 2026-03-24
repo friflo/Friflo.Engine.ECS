@@ -34,14 +34,14 @@ namespace Tests.Generators
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position>();
-                _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
-                _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2, global::Tests.ECS.MyComponent3>());
-                _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
-                _query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent5, global::Tests.ECS.MyComponent6>());
-                _query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
-                _query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2, global::Tests.ECS.TestTag3>());
-                _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
-                _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
+            _query.AllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent1>());
+            _query.AnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent2, global::Tests.ECS.MyComponent3>());
+            _query.WithoutAllComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent4>());
+            _query.WithoutAnyComponents(ComponentTypes.Get<global::Tests.ECS.MyComponent5, global::Tests.ECS.MyComponent6>());
+            _query.AllTags(Tags.Get<global::Tests.ECS.TestTag>());
+            _query.AnyTags(Tags.Get<global::Tests.ECS.TestTag2, global::Tests.ECS.TestTag3>());
+            _query.WithoutAllTags(Tags.Get<global::Tests.ECS.TestTag4>());
+            _query.WithoutAnyTags(Tags.Get<global::Tests.ECS.TestTag5, global::Tests.ECS.TestTag6>());
 
             EntityStore.UserDataSet(_store, _TestFilters_Slot_C2BF, _query);
             return _query;
