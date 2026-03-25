@@ -77,7 +77,7 @@ public static class Test_Vectorize_Lab
     
     // Prompt:  Transpose: Vector3[8]  ->  tuple of three Vector256<float> using shuffle in C# with maximum performance
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static unsafe (Vector256<float> X, Vector256<float> Y, Vector256<float> Z) Transpose8Vector3(float* inputPtr)
+    public static unsafe (Vector256<float> X, Vector256<float> Y, Vector256<float> Z) Transpose8Vector3(float* inputPtr)
     {
         // 1. Load 3 contiguous 256-bit blocks
         Vector256<float> r0 = Avx.LoadVector256(inputPtr);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
@@ -122,11 +122,7 @@ public static class Test_Vectorize_Lab
     
     // Prompt:   Complete method to transpose 3 Vector256<float> V to a Vector3[8] array with a float* parameter using Unpacks and Blends in C# with maximum performance
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe void StoreSoAtoAoS (
-        Vector256<float> x, 
-        Vector256<float> y, 
-        Vector256<float> z, 
-        float* ptr)
+    public static unsafe void StoreSoAtoAoS (Vector256<float> x, Vector256<float> y, Vector256<float> z, float* ptr)
     {
         float* f = ptr;
     
