@@ -137,5 +137,71 @@ public static class Test_Vectorize_Lab
         f[18] = x.GetElement(6); f[19] = y.GetElement(6); f[20] = z.GetElement(6);
         f[21] = x.GetElement(7); f[22] = y.GetElement(7); f[23] = z.GetElement(7);
     }
+    
+    private static (Vector3[] position, Vector3[] velocity) CreateTestData()
+    {
+        var position = new Vector3[1024];
+        var velocity = new Vector3[1024];
+        for (int n = 0; n < position.Length; n++) {
+            position[n] = new Vector3(n, n, n);
+            velocity[n] = new Vector3(2, 2, 2);
+        }
+        return (position, velocity);
+    }
+
+    private const int repeatCount = 10; // 100_000;
+    
+    [Test]
+    public static void Test_Vectorize_Multiply_perf()
+    {
+        var (position, velocity) = CreateTestData();
+        for (int n = 0; n < repeatCount; n++) {
+            MultiplyVectorized(position, velocity);
+        }
+    }
+    
+    [Test]
+    public static void Test_Vectorize_Multiply_perf_idiomatic()
+    {
+        var (position, velocity) = CreateTestData();
+        for (int n = 0; n < repeatCount; n++) {
+            MultiplyIdiomatic(position, velocity);
+        }
+    }
+    
+    [Test]
+    public static void Test_Vectorize_Multiply_validate()
+    {
+        var (position1, velocity1) = CreateTestData();
+        var (position2, velocity2) = CreateTestData();
+        
+        MultiplyIdiomatic (position1, velocity1);
+        MultiplyVectorized(position2, velocity2);
+        
+        Assert.AreEqual(position1, position2);
+    }
+    
+    private static unsafe void MultiplyVectorized(Vector3[] position, Vector3[] velocity)
+    {
+        fixed (Vector3* positionPtr =    position) 
+        fixed (Vector3* velocityPtr =    velocity)
+        {
+            for (int i = 0; i < 1024; i += 8) {
+                var (positionX, positionY, positionZ) = Transpose8Vector3((float*)(positionPtr + i));
+                var (velocityX, velocityY, velocityZ) = Transpose8Vector3((float*)(velocityPtr + i));
+                positionX *= velocityX;
+                positionY *= velocityY;
+                positionZ *= velocityZ;
+                StoreSoAtoAoS(positionX, positionY, positionZ, (float*)(positionPtr + i));
+            }
+        }
+    }
+    
+    private static void MultiplyIdiomatic(Vector3[] position, Vector3[] velocity)
+    {
+        for (int i = 0; i < 1024; i++) {
+            position[i] *= velocity[i];
+        }
+    }
 }
 
