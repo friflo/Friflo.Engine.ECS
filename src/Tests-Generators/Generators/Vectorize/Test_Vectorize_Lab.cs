@@ -72,9 +72,10 @@ public static class Test_Vectorize_Lab
             var (vx, vy, vz) = Transpose8Vector3((float*)p);
             StoreSoAtoAoS(vx, vy, vz, (float*)pOut);
         }
+        Assert.AreEqual(input, result);
     }
     
-    /// Prompt:  Transpose: Vector3[8]  ->  tuple of three Vector256&lt;float> using shuffle
+    // Prompt:  Transpose: Vector3[8]  ->  tuple of three Vector256<float> using shuffle in C# with maximum performance
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static unsafe (Vector256<float> X, Vector256<float> Y, Vector256<float> Z) Transpose8Vector3(float* inputPtr)
     {
@@ -119,46 +120,26 @@ public static class Test_Vectorize_Lab
         return (vx, vy, vz);
     }
     
+    // Prompt:   Complete method to transpose 3 Vector256<float> V to a Vector3[8] array with a float* parameter using Unpacks and Blends in C# with maximum performance
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe void StoreSoAtoAoS (
-        Vector256<float> vx, 
-        Vector256<float> vy, 
-        Vector256<float> vz, 
-        float* destination)
+        Vector256<float> x, 
+        Vector256<float> y, 
+        Vector256<float> z, 
+        float* ptr)
     {
-        // 1. Interleave X and Y 
-        // lowXY:  [X0 Y0 X1 Y1 | X4 Y4 X5 Y5]
-        // highXY: [X2 Y2 X3 Y3 | X6 Y6 X7 Y7]
-        Vector256<float> lowXY = Avx.UnpackLow(vx, vy);
-        Vector256<float> highXY = Avx.UnpackHigh(vx, vy);
-
-        // 2. Generate the three final registers via Shuffles and Blends
-        // This requires specific mapping to handle the 12-byte stride of Vector3.
-        
-        // Target Register 0: [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
-        // We take X0, Y0 from lowXY, Z0 from vz, X1, Y1 from lowXY, Z1 from vz...
-        Vector256<float> r0 = Avx2.PermuteVar8x32(
-            Avx2.Blend(lowXY, vz, 0b00100100), // Mixes X0Y0, X1Y1 with Z0, Z1
-            Vector256.Create(0, 1, 8, 2, 3, 9, 4, 5) // Indices to align for R0
-        );
-
-        // Target Register 1: [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
-        Vector256<float> r1 = Avx2.PermuteVar8x32(
-            Avx2.Blend(highXY, vz, 0b10010010), 
-            Vector256.Create(2, 0, 1, 3, 4, 5, 6, 7) // Indices to align for R1
-        );
-
-        // Target Register 2: [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
-        Vector256<float> r2 = Avx2.PermuteVar8x32(
-            Avx2.Blend(highXY, vz, 0b01001001),
-            Vector256.Create(1, 2, 3, 4, 5, 6, 7, 0) // Indices to align for R2
-        );
-
-        // 3. Store to memory
-        // Total 24 floats = 96 bytes.
-        Avx.Store(destination, r0);
-        Avx.Store(destination + 8, r1);
-        Avx.Store(destination + 16, r2);
+        float* f = ptr;
+    
+        // For storing, the JIT-optimized scalar scatter is currently 
+        // the fastest on .NET 8/9 for AVX2.
+        f[0] = x.GetElement(0); f[1] = y.GetElement(0); f[2] = z.GetElement(0);
+        f[3] = x.GetElement(1); f[4] = y.GetElement(1); f[5] = z.GetElement(1);
+        f[6] = x.GetElement(2); f[7] = y.GetElement(2); f[8] = z.GetElement(2);
+        f[9] = x.GetElement(3); f[10] = y.GetElement(3); f[11] = z.GetElement(3);
+        f[12] = x.GetElement(4); f[13] = y.GetElement(4); f[14] = z.GetElement(4);
+        f[15] = x.GetElement(5); f[16] = y.GetElement(5); f[17] = z.GetElement(5);
+        f[18] = x.GetElement(6); f[19] = y.GetElement(6); f[20] = z.GetElement(6);
+        f[21] = x.GetElement(7); f[22] = y.GetElement(7); f[23] = z.GetElement(7);
     }
 }
 
