@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Friflo.Engine.ECS;
@@ -61,16 +62,20 @@ public static class Test_Vectorize_Lab
     [Test]
     public static unsafe void Test_Vectorize_Unzip_Shuffle()
     {
-        var vectors = new Vector3[] {
+        var input = new Vector3[] {
             new ( 1, 2, 3), new (11,12,13), new (21,22,23), new (31,32,33),
             new (41,42,43), new (51,52,53), new (61,62,63), new (71,72,73)
         };
-        fixed (Vector3* p = vectors) {
+        var result = new Vector3[8];
+        fixed (Vector3* p =    input) 
+        fixed (Vector3* pOut = result) {
             var (vx, vy, vz) = Transpose8Vector3((float*)p);
+            StoreSoAtoAoS(vx, vy, vz, (float*)pOut);
         }
     }
     
-    /// Transform: Vector3[8]  ->  tuple of three Vector256&lt;float> 
+    /// Prompt:  Transpose: Vector3[8]  ->  tuple of three Vector256&lt;float> using shuffle
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static unsafe (Vector256<float> X, Vector256<float> Y, Vector256<float> Z) Transpose8Vector3(float* inputPtr)
     {
         // 1. Load 3 contiguous 256-bit blocks
@@ -112,6 +117,48 @@ public static class Test_Vectorize_Lab
         vz = Avx.Blend(vz, z234, 0b00011000);
         vz = Avx.Blend(vz, z567, 0b11100000);
         return (vx, vy, vz);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe void StoreSoAtoAoS (
+        Vector256<float> vx, 
+        Vector256<float> vy, 
+        Vector256<float> vz, 
+        float* destination)
+    {
+        // 1. Interleave X and Y 
+        // lowXY:  [X0 Y0 X1 Y1 | X4 Y4 X5 Y5]
+        // highXY: [X2 Y2 X3 Y3 | X6 Y6 X7 Y7]
+        Vector256<float> lowXY = Avx.UnpackLow(vx, vy);
+        Vector256<float> highXY = Avx.UnpackHigh(vx, vy);
+
+        // 2. Generate the three final registers via Shuffles and Blends
+        // This requires specific mapping to handle the 12-byte stride of Vector3.
+        
+        // Target Register 0: [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
+        // We take X0, Y0 from lowXY, Z0 from vz, X1, Y1 from lowXY, Z1 from vz...
+        Vector256<float> r0 = Avx2.PermuteVar8x32(
+            Avx2.Blend(lowXY, vz, 0b00100100), // Mixes X0Y0, X1Y1 with Z0, Z1
+            Vector256.Create(0, 1, 8, 2, 3, 9, 4, 5) // Indices to align for R0
+        );
+
+        // Target Register 1: [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
+        Vector256<float> r1 = Avx2.PermuteVar8x32(
+            Avx2.Blend(highXY, vz, 0b10010010), 
+            Vector256.Create(2, 0, 1, 3, 4, 5, 6, 7) // Indices to align for R1
+        );
+
+        // Target Register 2: [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
+        Vector256<float> r2 = Avx2.PermuteVar8x32(
+            Avx2.Blend(highXY, vz, 0b01001001),
+            Vector256.Create(1, 2, 3, 4, 5, 6, 7, 0) // Indices to align for R2
+        );
+
+        // 3. Store to memory
+        // Total 24 floats = 96 bytes.
+        Avx.Store(destination, r0);
+        Avx.Store(destination + 8, r1);
+        Avx.Store(destination + 16, r2);
     }
 }
 
