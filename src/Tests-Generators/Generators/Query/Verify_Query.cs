@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
-using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Generators;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using VerifyNUnit;
