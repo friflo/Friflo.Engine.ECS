@@ -22,6 +22,7 @@ using Friflo.Engine.ECS;
             return _query;
         }
 
+    #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static readonly int _MovePosition_Slot_5841 = EntityStore.UserDataNewSlot();
 
@@ -45,5 +46,6 @@ using Friflo.Engine.ECS;
             EntityStore.UserDataSet(_store, _MovePosition_Slot_5841, _query);
             return _query;
         }
+    #endregion
     }
 

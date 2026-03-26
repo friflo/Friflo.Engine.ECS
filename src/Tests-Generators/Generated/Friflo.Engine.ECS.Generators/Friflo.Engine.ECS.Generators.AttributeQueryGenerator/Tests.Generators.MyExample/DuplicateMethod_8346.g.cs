@@ -23,6 +23,7 @@ namespace Tests.Generators
             return _query;
         }
 
+    #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static readonly int _DuplicateMethod_Slot_8346 = EntityStore.UserDataNewSlot();
 
@@ -38,5 +39,6 @@ namespace Tests.Generators
             EntityStore.UserDataSet(_store, _DuplicateMethod_Slot_8346, _query);
             return _query;
         }
+    #endregion
     }
 }

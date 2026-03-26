@@ -23,6 +23,7 @@ namespace Tests.Generators
             return _query;
         }
 
+    #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static readonly int _TestFilters_Slot_C2BF = EntityStore.UserDataNewSlot();
 
@@ -46,5 +47,6 @@ namespace Tests.Generators
             EntityStore.UserDataSet(_store, _TestFilters_Slot_C2BF, _query);
             return _query;
         }
+    #endregion
     }
 }

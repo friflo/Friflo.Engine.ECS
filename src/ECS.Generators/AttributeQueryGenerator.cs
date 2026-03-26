@@ -80,6 +80,7 @@ using Friflo.Engine.ECS;
             return _query;
         }}
 
+    #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static readonly int _{methodName}_Slot{hash} = EntityStore.UserDataNewSlot();
 
@@ -95,6 +96,7 @@ using Friflo.Engine.ECS;
             EntityStore.UserDataSet(_store, _{methodName}_Slot{hash}, _query);
             return _query;
         }}
+    #endregion
     }}
 {(isGlobalNamespace ? "" : "}")}
 ";

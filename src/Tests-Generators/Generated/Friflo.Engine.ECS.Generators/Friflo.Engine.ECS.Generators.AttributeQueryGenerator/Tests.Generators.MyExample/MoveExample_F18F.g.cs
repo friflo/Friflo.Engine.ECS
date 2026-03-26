@@ -23,6 +23,7 @@ namespace Tests.Generators
             return _query;
         }
 
+    #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static readonly int _MoveExample_Slot_F18F = EntityStore.UserDataNewSlot();
 
@@ -38,5 +39,6 @@ namespace Tests.Generators
             EntityStore.UserDataSet(_store, _MoveExample_Slot_F18F, _query);
             return _query;
         }
+    #endregion
     }
 }
