@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Numerics.Tensors;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -171,6 +172,15 @@ public static class Test_Vectorize_Lab
     }
     
     [Test]
+    public static void Test_Vectorize_Multiply_perf_TensorPrimitives()
+    {
+        var (position, velocity) = CreateTestData();
+        for (int n = 0; n < repeatCount; n++) {
+            MultiplyVectorized_TensorPrimitives(position, velocity);
+        }
+    }
+    
+    [Test]
     public static void Test_Vectorize_Multiply_perf_idiomatic()
     {
         var (position, velocity) = CreateTestData();
@@ -185,13 +195,16 @@ public static class Test_Vectorize_Lab
         var (position1, velocity1) = CreateTestData();
         var (position2, velocity2) = CreateTestData();
         var (position3, velocity3) = CreateTestData();
+        var (position4, velocity4) = CreateTestData();
         
-        MultiplyIdiomatic (position1, velocity1);
-        MultiplyVectorized(position2, velocity2);
-        MultiplyVectorizedAvx(position3, velocity3);
+        MultiplyIdiomatic                   (position1, velocity1);
+        MultiplyVectorized                  (position2, velocity2);
+        MultiplyVectorizedAvx               (position3, velocity3);
+        MultiplyVectorized_TensorPrimitives (position4, velocity4);
         
         Assert.That(position2, Is.EqualTo(position1));
         Assert.That(position3, Is.EqualTo(position1));
+        Assert.That(position4, Is.EqualTo(position1));
     }
     
     private static unsafe void MultiplyVectorized(Vector3[] position, Vector3[] velocity)
@@ -214,6 +227,15 @@ public static class Test_Vectorize_Lab
     {
         for (int i = 0; i < 1024; i++) {
             position[i] *= velocity[i];
+        }
+    }
+    
+    private static unsafe void MultiplyVectorized_TensorPrimitives(Span<Vector3> position, Span<Vector3> velocity)
+    {
+        int length = position.Length * 3;
+        fixed (Vector3* positionPtr = position)
+        fixed (Vector3* velocityPtr = velocity) {
+            TensorPrimitives.Multiply(new ReadOnlySpan<float>(positionPtr, length), new ReadOnlySpan<float>(velocityPtr, length), new Span<float>(positionPtr, length));
         }
     }
     
