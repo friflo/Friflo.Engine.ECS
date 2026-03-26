@@ -73,7 +73,7 @@ public static class Test_Vectorize_Lab
             var (vx, vy, vz) = Transpose8Vector3((float*)p);
             StoreSoAtoAoS(vx, vy, vz, (float*)pOut);
         }
-        Assert.AreEqual(input, result);
+        Assert.That(result, Is.EqualTo(input));
     }
     
     // Prompt:  Transpose: Vector3[8]  ->  tuple of three Vector256<float> using shuffle in C# with maximum performance
@@ -190,8 +190,8 @@ public static class Test_Vectorize_Lab
         MultiplyVectorized(position2, velocity2);
         MultiplyVectorizedAvx(position3, velocity3);
         
-        Assert.AreEqual(position1, position2);
-        Assert.AreEqual(position1, position3);
+        Assert.That(position2, Is.EqualTo(position1));
+        Assert.That(position3, Is.EqualTo(position1));
     }
     
     private static unsafe void MultiplyVectorized(Vector3[] position, Vector3[] velocity)

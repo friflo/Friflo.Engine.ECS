@@ -2,7 +2,7 @@ using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
-using static NUnit.Framework.Assert;
+
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -11,8 +11,8 @@ namespace Tests.Generators.Query;
 public partial class MyExample
 {
     [Query]
-    void MoveExample(ref Position position, Entity entity) {
-        AreEqual(1, entity.Id); 
+    void MoveExample(ref Position position, Entity entity) {        
+        Assert.That(entity.Id, Is.EqualTo(1)); 
         position.x = 1;
     }
     
@@ -30,12 +30,12 @@ public partial class MyExample
 
     [Query]
     private static void MoveExample2(in MyComponent1 inComponent, MyComponent2 myComponent2, int someValue, in float inValue, ref string refValue, DateTime dateTime) {
-        AreEqual(0, inComponent.a);
-        AreEqual(0, myComponent2.b);
-        AreEqual(123, someValue);
-        AreEqual(456, inValue);
-        AreEqual(new DateTime(2026,03,18), dateTime);
-        AreEqual("abc", refValue);
+        Assert.That(inComponent.a, Is.EqualTo(0));
+        Assert.That(myComponent2.b, Is.EqualTo(0));
+        Assert.That(someValue, Is.EqualTo(123));
+        Assert.That(inValue, Is.EqualTo(456));
+        Assert.That(dateTime, Is.EqualTo(new DateTime(2026,03,18)));
+        Assert.That(refValue, Is.EqualTo("abc"));
         refValue = "xyz";
     }
     
@@ -64,14 +64,14 @@ public static class Test_QueryGenerator
         var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
         {
             var query = tester.MoveExampleQuery(store);
-            AreEqual(1, entity.GetComponent<Position>().x);
-            AreEqual(1, query.Count);
+            Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(1));
+            Assert.That(query.Count, Is.EqualTo(1));
         }
         {
             var str = "abc";
             var query = MyExample.MoveExample2Query(store, 123, 456, ref str, new DateTime(2026,03,18));
-            AreEqual(1, query.Count);
-            AreEqual("xyz", str);
+            Assert.That(query.Count, Is.EqualTo(1));
+            Assert.That(str, Is.EqualTo("xyz"));
         }
     }
     
@@ -83,7 +83,7 @@ public static class Test_QueryGenerator
         var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2(), Tags.Get<TestTag, TestTag2>());
 
         var query = tester.TestFiltersQuery(store);
-        AreEqual(1, entity.GetComponent<Position>().x);
-        AreEqual(1, query.Count);
+        Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(1));
+        Assert.That(query.Count, Is.EqualTo(1));
     }
 }

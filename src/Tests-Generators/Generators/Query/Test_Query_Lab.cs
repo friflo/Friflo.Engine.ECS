@@ -4,7 +4,6 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.Utils;
-using static NUnit.Framework.Assert;
 
 
 
@@ -69,12 +68,12 @@ public static class Test_Query_Lab
         var entity = store.CreateEntity(new Position(), new MyComponent1());
         
         TestClass.MovePositionQuery_(store);
-        AreEqual(1.0f, entity.GetComponent<Position>().x);
+        Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(1.0f));
         
         var start = Mem.GetAllocatedBytes();
         TestClass.MovePositionQuery_(store);
         Mem.AssertNoAlloc(start);
-        AreEqual(2.0f, entity.GetComponent<Position>().x);
+        Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(2.0f));
     }
     
     // [Test]

@@ -1,7 +1,7 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
-using static NUnit.Framework.Assert;
+
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -14,7 +14,7 @@ public partial class MyExample
 {
     [Query]
     void MoveExample(ref Position position, Entity entity) {
-        AreEqual(1, entity.Id); 
+        Assert.That(entity.Id, Is.EqualTo(1));
         position.x = 1;
     }
 }
@@ -37,8 +37,8 @@ public static class Test_QueryGeneratorDuplicate
         var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
 
         var query = tester.MoveExampleQuery(store);
-        AreEqual(1, entity.GetComponent<Position>().x);
-        AreEqual(1, query.Count);
+        Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(1));
+        Assert.That(query.Count, Is.EqualTo(1));
     }
     
     [Test]
@@ -49,7 +49,7 @@ public static class Test_QueryGeneratorDuplicate
         var entity = store.CreateEntity(new Position(), new MyComponent1(), new MyComponent2());
 
         var query = tester.MoveExampleQuery(store, 123);
-        AreEqual(1, entity.GetComponent<Position>().x);
-        AreEqual(1, query.Count);
+        Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(1));
+        Assert.That(query.Count, Is.EqualTo(1));
     }
 }

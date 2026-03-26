@@ -2,7 +2,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.Utils;
-using static NUnit.Framework.Assert;
+
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -33,7 +33,7 @@ public static class Test_SystemGeneratorExample
             new SystemGeneratorExample()
         };
         root.Update(default);
-        AreEqual(42, entity.GetComponent<Position>().x);
+        Assert.That(entity.GetComponent<Position>().x, Is.EqualTo(42));
         
         var start = Mem.GetAllocatedBytes();
         root.Update(default);
