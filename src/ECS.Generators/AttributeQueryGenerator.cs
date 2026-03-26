@@ -11,6 +11,7 @@ public struct Types
 {
     public INamedTypeSymbol componentInterface;
     public INamedTypeSymbol entityStruct;
+    public INamedTypeSymbol vectorizeAttribute;
 }
 
 [Generator]
@@ -36,9 +37,11 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(methodDeclarations, (spc, ctx) =>
         {
             // Get the symbol for the interfaces; ITag and IComponent
+            var compilation = ctx.SemanticModel.Compilation;
             var types = new Types {
-                componentInterface = ctx.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.IComponent"),
-                entityStruct = ctx.SemanticModel.Compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity")
+                componentInterface  = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.IComponent"),
+                entityStruct        = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity"),
+                vectorizeAttribute  = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.VectorizeAttribute"),
             };
             var methodSymbol = (IMethodSymbol)ctx.TargetSymbol;
             var className = methodSymbol.ContainingType.ToDisplayString(ClassNameFormat);
@@ -47,6 +50,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             var namespaceName = methodSymbol.ContainingType.ContainingNamespace.ToDisplayString();
             var attributes = methodSymbol.GetAttributes();
             var attributeCode = EmitFilters(attributes);
+            var vectorizeCode = Vectorizer.Emit(methodSymbol, attributes, types);
             var parameters = methodSymbol.Parameters;
             var components = GetComponents(parameters, types);
             var componentArgs = EmitComponentArgs(components);
