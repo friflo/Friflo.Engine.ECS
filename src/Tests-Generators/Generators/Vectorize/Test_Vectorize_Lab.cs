@@ -149,7 +149,7 @@ public static class Test_Vectorize_Lab
         return (position, velocity);
     }
 
-    private const int repeatCount = 10; // 100_000;
+    private const int repeatCount = 10; // 1_000_000;
     
     [Test]
     public static void Test_Vectorize_Multiply_perf()
@@ -157,6 +157,15 @@ public static class Test_Vectorize_Lab
         var (position, velocity) = CreateTestData();
         for (int n = 0; n < repeatCount; n++) {
             MultiplyVectorized(position, velocity);
+        }
+    }
+    
+    [Test]
+    public static void Test_Vectorize_Multiply_perf_Avx()
+    {
+        var (position, velocity) = CreateTestData();
+        for (int n = 0; n < repeatCount; n++) {
+            MultiplyVectorizedAvx(position, velocity);
         }
     }
     
@@ -174,11 +183,14 @@ public static class Test_Vectorize_Lab
     {
         var (position1, velocity1) = CreateTestData();
         var (position2, velocity2) = CreateTestData();
+        var (position3, velocity3) = CreateTestData();
         
         MultiplyIdiomatic (position1, velocity1);
         MultiplyVectorized(position2, velocity2);
+        MultiplyVectorizedAvx(position3, velocity3);
         
         Assert.AreEqual(position1, position2);
+        Assert.AreEqual(position1, position3);
     }
     
     private static unsafe void MultiplyVectorized(Vector3[] position, Vector3[] velocity)
@@ -201,6 +213,43 @@ public static class Test_Vectorize_Lab
     {
         for (int i = 0; i < 1024; i++) {
             position[i] *= velocity[i];
+        }
+    }
+    
+    private static unsafe void MultiplyVectorizedAvx(Vector3[] positions, Vector3[] velocities)
+    {
+        var count = positions.Length;
+        fixed (Vector3* posPtr = positions)
+        fixed (Vector3* velPtr = velocities)
+        {
+            // We iterate in steps of 8 (8 * Vector3 = 24 floats = 3 * 256-bit registers)
+            for (int i = 0; i < count; i += 8)
+            {
+                float* pP = (float*)(posPtr + i);
+                float* pV = (float*)(velPtr + i);
+
+                // 1. LOAD: 3 registers filled with interleaved XYZ data
+                Vector256<float> p0 = Avx.LoadVector256(pP);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
+                Vector256<float> p1 = Avx.LoadVector256(pP + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
+                Vector256<float> p2 = Avx.LoadVector256(pP + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
+
+                Vector256<float> v0 = Avx.LoadVector256(pV);
+                Vector256<float> v1 = Avx.LoadVector256(pV + 8);
+                Vector256<float> v2 = Avx.LoadVector256(pV + 16);
+
+                // 2. COMPUTE: Directly in the interleaved state!
+                // Since multiplication is commutative and element-wise, 
+                // we can calculate p0*v0, p1*v1, p2*v2 WITHOUT sorting.
+                // This is the ultimate trick: Computing in "AoS" layout.
+                p0 = Avx.Multiply(p0, v0);
+                p1 = Avx.Multiply(p1, v1);
+                p2 = Avx.Multiply(p2, v2);
+
+                // 3. STORE: 3 fast block writes
+                Avx.Store(pP, p0);
+                Avx.Store(pP + 8, p1);
+                Avx.Store(pP + 16, p2);
+            }
         }
     }
 }
