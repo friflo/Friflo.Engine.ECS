@@ -216,39 +216,39 @@ public static class Test_Vectorize_Lab
         }
     }
     
-    private static unsafe void MultiplyVectorizedAvx(Vector3[] positions, Vector3[] velocities)
+    private static unsafe void MultiplyVectorizedAvx(Vector3[] position, Vector3[] velocity)
     {
-        var count = positions.Length;
-        fixed (Vector3* posPtr = positions)
-        fixed (Vector3* velPtr = velocities)
+        var count = position.Length;
+        fixed (Vector3* position_ptr = position)
+        fixed (Vector3* velocity_ptr = velocity)
         {
             // We iterate in steps of 8 (8 * Vector3 = 24 floats = 3 * 256-bit registers)
             for (int i = 0; i < count; i += 8)
             {
-                float* pP = (float*)(posPtr + i);
-                float* pV = (float*)(velPtr + i);
+                float* position_ptr_scalar = (float*)(position_ptr + i);
+                float* velocity_ptr_scalar = (float*)(velocity_ptr + i);
 
                 // 1. LOAD: 3 registers filled with interleaved XYZ data
-                Vector256<float> p0 = Avx.LoadVector256(pP);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
-                Vector256<float> p1 = Avx.LoadVector256(pP + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
-                Vector256<float> p2 = Avx.LoadVector256(pP + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
+                Vector256<float> position_0 = Avx.LoadVector256(position_ptr_scalar);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
+                Vector256<float> position_1 = Avx.LoadVector256(position_ptr_scalar + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
+                Vector256<float> position_2 = Avx.LoadVector256(position_ptr_scalar + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
 
-                Vector256<float> v0 = Avx.LoadVector256(pV);
-                Vector256<float> v1 = Avx.LoadVector256(pV + 8);
-                Vector256<float> v2 = Avx.LoadVector256(pV + 16);
+                Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr_scalar);
+                Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr_scalar + 8);
+                Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr_scalar + 16);
 
                 // 2. COMPUTE: Directly in the interleaved state!
                 // Since multiplication is commutative and element-wise, 
                 // we can calculate p0*v0, p1*v1, p2*v2 WITHOUT sorting.
                 // This is the ultimate trick: Computing in "AoS" layout.
-                p0 = Avx.Multiply(p0, v0);
-                p1 = Avx.Multiply(p1, v1);
-                p2 = Avx.Multiply(p2, v2);
+                position_0 = Avx.Multiply(position_0, velocity_0);
+                position_1 = Avx.Multiply(position_1, velocity_1);
+                position_2 = Avx.Multiply(position_2, velocity_2);
 
                 // 3. STORE: 3 fast block writes
-                Avx.Store(pP, p0);
-                Avx.Store(pP + 8, p1);
-                Avx.Store(pP + 16, p2);
+                Avx.Store(position_ptr_scalar, position_0);
+                Avx.Store(position_ptr_scalar + 8, position_1);
+                Avx.Store(position_ptr_scalar + 16, position_2);
             }
         }
     }
