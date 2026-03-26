@@ -143,8 +143,8 @@ public static class Test_Vectorize_Lab
         var position = new Vector3[1024];
         var velocity = new Vector3[1024];
         for (int n = 0; n < position.Length; n++) {
-            position[n] = new Vector3(n, n, n);
-            velocity[n] = new Vector3(2, 2, 2);
+            position[n] = new Vector3(n, n + 1, n + 2);
+            velocity[n] = new Vector3(1, 2, 3);
         }
         return (position, velocity);
     }
