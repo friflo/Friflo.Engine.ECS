@@ -30,7 +30,7 @@ public partial class MyExample
 }
 """;
         // 2. Setup (Helper method suggested for readability)
-        var compilation = CreateCompilation(code);
+        var compilation = VerifyUtils.CreateCompilation(code);
         var generator = new AttributeQueryGenerator();
         var driver = CSharpGeneratorDriver.Create(generator);
 
@@ -41,10 +41,4 @@ public partial class MyExample
         // This creates: MyGeneratorTests.Generator_Snapshot_Test.verified.txt
         await Verifier.Verify(runResult);
     }
-    
-    private static Compilation CreateCompilation(string source) =>
-        CSharpCompilation.Create("TestProj",
-            new[] { CSharpSyntaxTree.ParseText(source) },
-            new[] { MetadataReference.CreateFromFile(typeof(QueryAttribute).Assembly.Location) },
-            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 }
