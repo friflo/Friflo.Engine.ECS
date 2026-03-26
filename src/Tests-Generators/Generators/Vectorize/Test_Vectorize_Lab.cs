@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -216,7 +217,8 @@ public static class Test_Vectorize_Lab
         }
     }
     
-    private static unsafe void MultiplyVectorizedAvx(Vector3[] position, Vector3[] velocity)
+    private static unsafe void MultiplyVectorizedAvx(Span<Vector3> position, Span<Vector3> velocity)
+    // private static unsafe void MultiplyVectorizedAvx(Vector3[] position, Vector3[] velocity)
     {
         var count = position.Length;
         fixed (Vector3* position_ptr = position)
