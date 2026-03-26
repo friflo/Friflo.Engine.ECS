@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.Utils;
+
 // ReSharper disable InconsistentNaming
-
-
-
 partial class TestClass
 {
     [Query]
@@ -81,12 +77,10 @@ partial class TestClass
                 Vector256<float> position_1 = Avx.LoadVector256(position_ptr_scalar + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
                 Vector256<float> position_2 = Avx.LoadVector256(position_ptr_scalar + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
                 
-                Vector256<float> value = Vector256.Create(1f);
-
                 // 2. COMPUTE: Directly in the interleaved state!
-                position_0 = Avx.Add(position_0, value);
-                position_1 = Avx.Add(position_1, value);
-                position_2 = Avx.Add(position_2, value);
+                position_0 = Avx.Add(position_0, Vector256.Create(1f));
+                position_1 = Avx.Add(position_1, Vector256.Create(1f));
+                position_2 = Avx.Add(position_2, Vector256.Create(1f));
 
                 // 3. STORE: 3 fast block writes
                 Avx.Store(position_ptr_scalar, position_0);
