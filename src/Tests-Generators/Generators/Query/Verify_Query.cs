@@ -1,63 +1,16 @@
-using System.Collections.Immutable;
-using System.Text;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using VerifyNUnit;
 
 
 namespace Tests.Generators.Query;
 
-[TestFixture]
 public static class Verify_Query
 {
-    // [Test]
-    public static async Task  Verify_Query_MovePosition_xxx()
-    {
-        var code =
-"""
-using Friflo.Engine.ECS;
-
-namespace Verify;
-
-public partial class MyExample
-{
-    [Query]
-    void MoveExample(ref Position position) {
-        position.x = 1;
-    }
-}
-""";
-        
-var expected =
-"""
-using Friflo.Engine.ECS;
-
-namespace Verify;
-
-public partial class MyExample
-{
-    [Query]
-    void MoveExample(ref Position position) {
-        position.x = 1;
-    }
-}
-""";
-        var context = new CSharpSourceGeneratorTest<AttributeQueryGenerator, DefaultVerifier>();
-        context.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
-        context.TestState.AdditionalReferences.Add(typeof(QueryAttribute).Assembly);
-        context.TestState.GeneratedSources.Add((typeof(AttributeQueryGenerator), "Verify.MyExample/MoveExample_19EA.g.cs", SourceText.From(expected, Encoding.UTF8)));
-        context.TestCode = code;
-        await context.RunAsync();
-
-    }
-    
     [Test]
     public static async Task  Verify_Query_MovePosition()
     {
@@ -87,7 +40,6 @@ public partial class MyExample
         // 4. Verify (NUnit adapter)
         // This creates: MyGeneratorTests.Generator_Snapshot_Test.verified.txt
         await Verifier.Verify(runResult);
-
     }
     
     private static Compilation CreateCompilation(string source) =>
