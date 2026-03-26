@@ -5,7 +5,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
-namespace Tests.Generators.Duplicate;
+namespace Tests.Generators.Query.Duplicate;
 
 
 /// Test using same class / method name as in <see cref="Tests.Generators.MyExample.MoveExample"/>

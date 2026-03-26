@@ -3,21 +3,21 @@ using System;
 using System.ComponentModel;
 using Friflo.Engine.ECS;
 
-namespace Tests.Generators
+namespace Tests.Generators.Query.Duplicate
 {
-    public partial class SystemGeneratorExample
+    public partial class MyExample
     {
-        /// <summary>Query method generated for: <see cref="MovePosition"/>.</summary>
+        /// <summary>Query method generated for: <see cref="MoveExample"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MovePositionQuery(EntityStore _store, float move)
+        public ArchetypeQuery MoveExampleQuery(EntityStore _store)
         {
-            var _query = _MovePosition_GetQuery_E9EE(_store);
+            var _query = _MoveExample_GetQuery_F18F(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
                 for (int n = 0; n < _entities.Length; n++) {
-                    MovePosition(ref positionSpan[n], move);
+                    MoveExample(ref positionSpan[n], _entities.EntityAt(n));
                 }
             }
             return _query;
@@ -25,18 +25,18 @@ namespace Tests.Generators
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MovePosition_Slot_E9EE = EntityStore.UserDataNewSlot();
+        private static readonly int _MoveExample_Slot_F18F = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_E9EE(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MoveExample_GetQuery_F18F(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MovePosition_Slot_E9EE);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MoveExample_Slot_F18F);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position>();
 
-            EntityStore.UserDataSet(_store, _MovePosition_Slot_E9EE, _query);
+            EntityStore.UserDataSet(_store, _MoveExample_Slot_F18F, _query);
             return _query;
         }
     #endregion

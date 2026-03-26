@@ -6,7 +6,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
-namespace Tests.Generators;
+namespace Tests.Generators.Query;
 
 public partial class SystemGeneratorExample : BaseSystem
 {

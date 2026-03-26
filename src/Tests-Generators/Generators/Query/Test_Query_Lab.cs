@@ -59,9 +59,9 @@ partial class TestClass
 
 
 // ReSharper disable InconsistentNaming
-namespace Tests.Generators {
+namespace Tests.Generators.Query {
 
-public static class Test_SrcGen
+public static class Test_Query_Lab
 {
     [Test]
     public static void Test_SrcGen_Call() {

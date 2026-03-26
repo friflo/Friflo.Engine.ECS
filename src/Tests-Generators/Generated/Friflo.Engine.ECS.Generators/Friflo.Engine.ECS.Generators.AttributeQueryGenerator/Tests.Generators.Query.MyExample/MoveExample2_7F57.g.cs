@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using Friflo.Engine.ECS;
 
-namespace Tests.Generators
+namespace Tests.Generators.Query
 {
     public partial class MyExample
     {
