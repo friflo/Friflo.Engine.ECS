@@ -33,38 +33,6 @@ public static class Vectorizer
         return null;
     }
     
-    private static void TraverseStatement(Query query, ExpressionStatementSyntax syntax)
-    {
-        if (syntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
-            var left  = assignmentExpressionSyntax.Left;
-            var right = assignmentExpressionSyntax.Right;
-        }
-
-        var signature = new StringBuilder();
-        foreach (var component in query.components) {
-            if (signature.Length > 0) {
-                signature.Append(", ");
-            }
-            signature.Append("Span<");
-            var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            signature.Append(type);
-            signature.Append("> ");
-            signature.Append(component.Name);
-        }
-        var source = $@"
-        private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
-        {{
-            int i = 0;
-            var end = {query.components[0].Name}.Length - 8;
-            for (; i <= end; i += 8)
-            {{
-            }}
-            return i;
-        }}
-";
-        query.avxMethod = source;
-    }
-    
     public static string EmitVectorizeBlock(Query query)
     {
         if (!query.vectorize) {
@@ -86,4 +54,61 @@ public static class Vectorizer
             EntityLoop:";
         return source;
     }
+    
+    private static void TraverseStatement(Query query, ExpressionStatementSyntax syntax)
+    {
+        if (syntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
+            var left  = assignmentExpressionSyntax.Left;
+            var right = assignmentExpressionSyntax.Right;
+        }
+
+        var signature = new StringBuilder();
+        foreach (var component in query.components) {
+            if (signature.Length > 0) {
+                signature.Append(", ");
+            }
+            signature.Append("Span<");
+            var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            signature.Append(type);
+            signature.Append("> ");
+            signature.Append(component.Name);
+        }
+        var fixedStatements = new StringBuilder();
+        foreach (var component in query.components) {
+            fixedStatements.AppendLine();
+            fixedStatements.Append("            fixed (");
+            var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            fixedStatements.Append(type);
+            fixedStatements.Append("* ");
+            fixedStatements.Append(component.Name);
+            fixedStatements.Append("_ptr = ");
+            fixedStatements.Append(component.Name);
+            fixedStatements.Append(")");
+        }
+        var pointers = new StringBuilder();
+        foreach (var component in query.components) {
+            pointers.AppendLine();
+            pointers.Append("                    float* ");
+            pointers.Append(component.Name);
+            pointers.Append("_ptr_scalar = (float*)(");
+            pointers.Append(component.Name);
+            pointers.Append("_ptr + 1);");
+        }
+        var source = $@"
+        private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
+        {{
+            int i = 0;
+            var end = {query.components[0].Name}.Length - 8;{fixedStatements}
+            {{
+                for (; i <= end; i += 8)
+                {{{pointers}
+                }}
+            }}
+            return i;
+        }}
+";
+        query.avxMethod = source;
+    }
+    
+
 }

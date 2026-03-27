@@ -53,8 +53,14 @@ namespace Tests.Generators.Vectorize
         {
             int i = 0;
             var end = position.Length - 8;
-            for (; i <= end; i += 8)
+            fixed (global::Friflo.Engine.ECS.Position* position_ptr = position)
+            fixed (global::Tests.Examples.Velocity* velocity_ptr = velocity)
             {
+                for (; i <= end; i += 8)
+                {
+                    float* position_ptr_scalar = (float*)(position_ptr + 1);
+                    float* velocity_ptr_scalar = (float*)(velocity_ptr + 1);
+                }
             }
             return i;
         }
