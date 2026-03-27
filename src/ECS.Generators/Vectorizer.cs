@@ -81,6 +81,7 @@ public static class Vectorizer
             pointer.AppendLine();
             pointer.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + i);");
         }
+        var vectorizeBlock = VectorizeBlock(query);
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
@@ -89,6 +90,7 @@ public static class Vectorizer
             {{
                 for (; i <= end; i += 8)
                 {{{pointer}
+{vectorizeBlock}
                 }}
             }}
             return i;
@@ -97,5 +99,30 @@ public static class Vectorizer
         query.avxMethod = source;
     }
     
+    private static StringBuilder VectorizeBlock(Query query)
+    {
+        var source = new StringBuilder();
+        var components = query.components;
+        source.AppendLine();
+        source.AppendLine("                    // 1. Load");
+        foreach (var component in components) {
+            for (int n = 0; n < 3; n++) {
+                source.AppendLine($"                    Vector256<float> {component.Name}_{n} = Avx.LoadVector256({component.Name}_ptr_scalar);");
+            }
+            source.AppendLine();
+        }
+        source.AppendLine("                    // 2. Compute");
+        source.AppendLine("                    // ...");
+        source.AppendLine();
+        
+        source.AppendLine("                    // 3. Store");
+        foreach (var component in components) {
+            for (int n = 0; n < 3; n++) {
+                source.AppendLine($"                    Avx.Store({component.Name}_ptr_scalar, {component.Name}_{n});");
+            }
+            source.AppendLine();
+        }
+        return source;
+    }
 
 }

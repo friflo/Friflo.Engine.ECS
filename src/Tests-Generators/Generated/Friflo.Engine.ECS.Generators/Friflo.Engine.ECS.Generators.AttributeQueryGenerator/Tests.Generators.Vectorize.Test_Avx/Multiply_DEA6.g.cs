@@ -60,6 +60,29 @@ namespace Tests.Generators.Vectorize
                 {
                     float* position_ptr_scalar = (float*)(position_ptr + i);
                     float* velocity_ptr_scalar = (float*)(velocity_ptr + i);
+
+                    // 1. Load
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr_scalar);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr_scalar);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr_scalar);
+
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr_scalar);
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr_scalar);
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr_scalar);
+
+                    // 2. Compute
+                    // ...
+
+                    // 3. Store
+                    Avx.Store(position_ptr_scalar, position_0);
+                    Avx.Store(position_ptr_scalar, position_1);
+                    Avx.Store(position_ptr_scalar, position_2);
+
+                    Avx.Store(velocity_ptr_scalar, velocity_0);
+                    Avx.Store(velocity_ptr_scalar, velocity_1);
+                    Avx.Store(velocity_ptr_scalar, velocity_2);
+
+
                 }
             }
             return i;
