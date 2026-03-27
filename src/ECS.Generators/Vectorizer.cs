@@ -81,14 +81,15 @@ public static class Vectorizer
             pointer.AppendLine();
             pointer.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + i);");
         }
-        var vectorizeBlock = VectorizeBlock(query);
+        int step = 8;
+        var vectorizeBlock = VectorizeBlock(query, step);
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
             int i = 0;
-            var end = {query.components[0].Name}.Length - 8;{@fixed}
+            var end = {query.components[0].Name}.Length - {step};{@fixed}
             {{
-                for (; i <= end; i += 8)
+                for (; i <= end; i += {step})
                 {{{pointer}
 {vectorizeBlock}
                 }}
@@ -99,7 +100,7 @@ public static class Vectorizer
         query.avxMethod = source;
     }
     
-    private static StringBuilder VectorizeBlock(Query query)
+    private static StringBuilder VectorizeBlock(Query query, int step)
     {
         var source = new StringBuilder();
         var components = query.components;
@@ -107,7 +108,7 @@ public static class Vectorizer
         source.AppendLine("                    // 1. Load");
         foreach (var component in components) {
             for (int n = 0; n < 3; n++) {
-                source.AppendLine($"                    Vector256<float> {component.Name}_{n} = Avx.LoadVector256({component.Name}_ptr_scalar);");
+                source.AppendLine($"                    Vector256<float> {component.Name}_{n} = Avx.LoadVector256({component.Name}_ptr_scalar + {n*step});");
             }
             source.AppendLine();
         }
@@ -118,7 +119,7 @@ public static class Vectorizer
         source.AppendLine("                    // 3. Store");
         foreach (var component in components) {
             for (int n = 0; n < 3; n++) {
-                source.AppendLine($"                    Avx.Store({component.Name}_ptr_scalar, {component.Name}_{n});");
+                source.AppendLine($"                    Avx.Store({component.Name}_ptr_scalar + {n*step}, {component.Name}_{n});");
             }
             source.AppendLine();
         }
