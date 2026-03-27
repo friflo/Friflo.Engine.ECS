@@ -25,7 +25,7 @@ public partial class MyExample
 {
     [Vectorize][Query]
     void MoveExample(ref Position position, in Velocity velocity) {
-        position.value += velocity.value;
+        position.value *= velocity.value;
     }
 }
 """;
