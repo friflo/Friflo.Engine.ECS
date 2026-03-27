@@ -58,8 +58,8 @@ namespace Tests.Generators.Vectorize
             {
                 for (; i <= end; i += 8)
                 {
-                    float* position_ptr_scalar = (float*)(position_ptr + 1);
-                    float* velocity_ptr_scalar = (float*)(velocity_ptr + 1);
+                    float* position_ptr_scalar = (float*)(position_ptr + i);
+                    float* velocity_ptr_scalar = (float*)(velocity_ptr + i);
                 }
             }
             return i;

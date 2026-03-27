@@ -70,25 +70,25 @@ public static class Vectorizer
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             signature.Append($"Span<{type}> {component.Name}");
         }
-        var fixedBlock = new StringBuilder();
+        var @fixed = new StringBuilder();
         foreach (var component in query.components) {
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            fixedBlock.AppendLine();
-            fixedBlock.Append($"            fixed ({type}* {component.Name}_ptr = {component.Name})");
+            @fixed.AppendLine();
+            @fixed.Append($"            fixed ({type}* {component.Name}_ptr = {component.Name})");
         }
-        var pointerBlock = new StringBuilder();
+        var pointer = new StringBuilder();
         foreach (var component in query.components) {
-            pointerBlock.AppendLine();
-            pointerBlock.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + 1);");
+            pointer.AppendLine();
+            pointer.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + i);");
         }
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
             int i = 0;
-            var end = {query.components[0].Name}.Length - 8;{fixedBlock}
+            var end = {query.components[0].Name}.Length - 8;{@fixed}
             {{
                 for (; i <= end; i += 8)
-                {{{pointerBlock}
+                {{{pointer}
                 }}
             }}
             return i;
