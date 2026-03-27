@@ -31,6 +31,21 @@ public static class Utils
         return sb.ToString();
     }
     
+    public static void AppendRefKind(StringBuilder sb, RefKind refKind)
+    {
+        switch (refKind) {
+            case RefKind.Ref:
+                sb.Append("ref ");
+                break;
+            case RefKind.In:
+                sb.Append("in ");
+                break;
+            case RefKind.Out:
+                sb.Append("out ");
+                break;
+        }
+    }
+    
     public static  IdentifierNameSyntax GetLeft(AssignmentExpressionSyntax assignmentExpressionSyntax)
     {
         if (assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax leftExpressionSyntax) {

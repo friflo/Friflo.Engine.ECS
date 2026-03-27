@@ -40,12 +40,22 @@ public static class Vectorizer
             return "";
         }
         var sb = new StringBuilder();
-        foreach (var component in query.components) {
+        foreach (var parameter in query.parameters) {
             if (sb.Length > 0) {
                 sb.Append(", ");
             }
-            sb.Append(component.Name);
-            sb.Append("Span");
+            bool isComponent = parameter.Type.AllInterfaces.Contains(query.ecsTypes.componentInterface);
+            if (isComponent) {
+                sb.Append(parameter.Name);
+                sb.Append("Span");
+                continue;
+            }
+            bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
+            if (isEntity) {
+                continue;
+            }
+            Utils.AppendRefKind(sb, parameter.RefKind);
+            sb.Append(parameter.Name);
         }
         var source = $@"
                 if (!vectorized) goto EntityLoop;
@@ -62,21 +72,36 @@ public static class Vectorizer
             var left  = assignmentExpressionSyntax.Left;
             var right = assignmentExpressionSyntax.Right;
         }
-
+        // --- method signature
         var signature = new StringBuilder();
-        foreach (var component in query.components) {
+        foreach (var parameter in query.parameters) {
             if (signature.Length > 0) {
                 signature.Append(", ");
             }
-            var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            signature.Append($"Span<{type}> {component.Name}");
+            bool isComponent = parameter.Type.AllInterfaces.Contains(query.ecsTypes.componentInterface);
+            if (isComponent) {
+                var componentType = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                signature.Append($"Span<{componentType}> {parameter.Name}");
+                continue;
+            }
+            bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
+            if (isEntity) {
+                continue;
+            }
+            Utils.AppendRefKind(signature, parameter.RefKind);
+            string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            signature.Append(type);
+            signature.Append(" ");
+            signature.Append(parameter.Name);
         }
+        // --- fixed block
         var @fixed = new StringBuilder();
         foreach (var component in query.components) {
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             @fixed.AppendLine();
             @fixed.Append($"            fixed ({type}* {component.Name}_ptr = {component.Name})");
         }
+        // --- pointer block
         var pointer = new StringBuilder();
         foreach (var component in query.components) {
             pointer.AppendLine();

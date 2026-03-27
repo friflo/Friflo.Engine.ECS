@@ -11,7 +11,7 @@ namespace Tests.Generators.Vectorize;
 
 public static partial class Test_Avx
 {
-    [Vectorize][Query]
+    [Vectorize][Query]  [OmitHash]
     public static void Multiply(ref Position position, in Velocity velocity) {
         position.value *= velocity.value;
     } 
@@ -70,6 +70,28 @@ public static partial class Test_Avx
             query.ForEachEntity(static (ref Position position, ref Velocity velocity, Entity entity) => {
                 position.value *= velocity.value;
             });
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    public static void MultiplyDeltaTime(ref Position position, in Velocity velocity, float deltaTime) {
+        position.value *= velocity.value * deltaTime;
+    }
+    
+    [Test][Ignore("add parameter support for [Vectorize]")]
+    public static void Test_Avx_Multiply_deltaTime()
+    {
+        var store = CreateTestStore();
+        MultiplyDeltaTimeQuery(store, 2, false);
+
+        var storeVectorized = CreateTestStore();
+        MultiplyDeltaTimeQuery(storeVectorized, 2);
+
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
         }
     }
 }

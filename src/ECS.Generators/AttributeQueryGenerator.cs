@@ -50,6 +50,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             var query = new Query {
                 methodSymbol    = methodSymbol,
                 attributes      = attributes,
+                parameters      = parameters, 
                 components      = components,
                 hash            = hash,
                 ecsTypes        = types
@@ -139,7 +140,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
                 continue;
             }
             sb.Append(", ");
-            AppendRefKind(sb, parameter.RefKind);
+            Utils.AppendRefKind(sb, parameter.RefKind);
             string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             sb.Append(type);
             sb.Append(" ");
@@ -191,7 +192,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             }
             bool isComponent = parameter.Type.AllInterfaces.Contains(ecsTypes.componentInterface);
             if (isComponent) {
-                AppendRefKind(sb, parameter.RefKind);
+                Utils.AppendRefKind(sb, parameter.RefKind);
                 sb.Append(parameter.Name);
                 sb.Append("Span[n]");
                 continue;
@@ -201,7 +202,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
                 sb.Append("_entities.EntityAt(n)");
                 continue;
             }
-            AppendRefKind(sb, parameter.RefKind);
+            Utils.AppendRefKind(sb, parameter.RefKind);
             sb.Append(parameter.Name);
         }
         return sb.ToString();
@@ -236,21 +237,6 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         return "_" + Utils.GetMd5Hash(methodSignature).Substring(0, 4); // 8 chars is usually enough
     }
 
-    private static void AppendRefKind(StringBuilder sb, RefKind refKind)
-    {
-        switch (refKind) {
-            case RefKind.Ref:
-                sb.Append("ref ");
-                break;
-            case RefKind.In:
-                sb.Append("in ");
-                break;
-            case RefKind.Out:
-                sb.Append("out ");
-                break;
-        }
-    }
-    
     private static string EmitFilters(ImmutableArray<AttributeData> attributes)
     {
         var sb = new StringBuilder();

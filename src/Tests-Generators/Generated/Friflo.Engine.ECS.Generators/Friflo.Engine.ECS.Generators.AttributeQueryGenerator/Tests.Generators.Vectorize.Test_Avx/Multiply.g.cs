@@ -13,7 +13,7 @@ namespace Tests.Generators.Vectorize
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
         public static ArchetypeQuery MultiplyQuery(EntityStore _store, bool vectorized = true)
         {
-            var _query = _Multiply_GetQuery_DEA6(_store);
+            var _query = _Multiply_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -22,7 +22,7 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Multiply_Avx_DEA6(positionSpan, velocitySpan);
+                    n = _Multiply_Avx(positionSpan, velocitySpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
@@ -34,22 +34,22 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _Multiply_Slot_DEA6 = EntityStore.UserDataNewSlot();
+        private static readonly int _Multiply_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity> _Multiply_GetQuery_DEA6(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity> _Multiply_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>)EntityStore.UserDataGet(_store, _Multiply_Slot_DEA6);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>)EntityStore.UserDataGet(_store, _Multiply_Slot);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>();
 
-            EntityStore.UserDataSet(_store, _Multiply_Slot_DEA6, _query);
+            EntityStore.UserDataSet(_store, _Multiply_Slot, _query);
             return _query;
         }
 
-        private static unsafe int _Multiply_Avx_DEA6(Span<global::Friflo.Engine.ECS.Position> position, Span<global::Tests.Examples.Velocity> velocity)
+        private static unsafe int _Multiply_Avx(Span<global::Friflo.Engine.ECS.Position> position, Span<global::Tests.Examples.Velocity> velocity)
         {
             int i = 0;
             var end = position.Length - 8;
