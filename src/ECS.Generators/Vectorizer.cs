@@ -114,7 +114,9 @@ public static class Vectorizer
             source.AppendLine();
         }
         source.AppendLine("                    // 2. Compute");
-        Compute(source, query, expressionSyntax, step);
+        if (!Compute(source, query, expressionSyntax, step)) {
+            source.AppendLine("                    // not supported");
+        }
         source.AppendLine();
         
         source.AppendLine("                    // 3. Store");
@@ -127,11 +129,10 @@ public static class Vectorizer
         return source;
     }
     
-    private static void Compute(StringBuilder source, Query query, ExpressionSyntax expressionSyntax, int step)
+    private static bool Compute(StringBuilder source, Query query, ExpressionSyntax expressionSyntax, int step)
     {
         if (expressionSyntax is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
-            source.AppendLine("                    // ...");
-            return;
+            return false;
         }
         var avxOperation = expressionSyntax.Kind() switch
         {
@@ -154,12 +155,12 @@ public static class Vectorizer
             }
         }
         if (left is null && right is null) {
-            source.AppendLine("                    // ...");
-            return;
+            return false;
         }
         for (int i = 0; i < 3; i++) {
             source.AppendLine($"                    {left}_{i} = Avx.{avxOperation}({left}_{i}, {right}_{i});");
         }
+        return true;
     }
 
 }
