@@ -10,6 +10,10 @@ public struct EcsTypes
     public INamedTypeSymbol entityStruct;
     public INamedTypeSymbol vectorizeAttribute;
     public INamedTypeSymbol omitHashAttribute;
+    
+    public bool IsEntityParameter(IParameterSymbol parameter) {
+        return parameter.Name == "entity" && SymbolEqualityComparer.Default.Equals(parameter.Type, entityStruct);
+    }
 }
 
 public class Query
@@ -20,5 +24,6 @@ public class Query
     public  EcsTypes                        ecsTypes;
     // --- generated output
     public  string                          hash;
+    public  bool                            vectorize;
     public  string                          avxMethod = "";
 }

@@ -10,7 +10,7 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="MoveExample"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery MoveExampleQuery(EntityStore _store)
+        public ArchetypeQuery MoveExampleQuery(EntityStore _store, bool vectorized = true)
         {
             var _query = _MoveExample_GetQuery(_store);
             foreach (var chunk in _query.Chunks)

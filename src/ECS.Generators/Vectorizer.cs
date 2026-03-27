@@ -16,6 +16,7 @@ public static class Vectorizer
         if (!found) {
             return null;
         }
+        query.vectorize = true;
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
             SyntaxNode node = syntaxReference.GetSyntax();
             if (node is MethodDeclarationSyntax methodDeclarationSyntax) {

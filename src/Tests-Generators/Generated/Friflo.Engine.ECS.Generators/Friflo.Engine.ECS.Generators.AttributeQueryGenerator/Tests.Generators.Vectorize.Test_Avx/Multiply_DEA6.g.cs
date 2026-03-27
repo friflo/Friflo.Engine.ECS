@@ -9,7 +9,7 @@ namespace Tests.Generators.Vectorize
     {
         /// <summary>Query method generated for: <see cref="Multiply"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MultiplyQuery(EntityStore _store)
+        public static ArchetypeQuery MultiplyQuery(EntityStore _store, bool vectorized = true)
         {
             var _query = _Multiply_GetQuery_DEA6(_store);
             foreach (var chunk in _query.Chunks)

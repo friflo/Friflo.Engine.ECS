@@ -23,6 +23,6 @@ public static partial class Test_Avx
         for (int n = 0; n < 100; n++) {
             store.CreateEntity(new Position(n,n,n), new Velocity { value = new Vector3(1,2,3)});
         }
-        MultiplyQuery(store);
+        MultiplyQuery(store, true);
     }
 }
