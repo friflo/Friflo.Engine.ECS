@@ -35,7 +35,8 @@ public static class Vectorizer
     private static void Traverse(ExpressionStatementSyntax syntax)
     {
         if (syntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
-            int i = 1;
+            var left  = assignmentExpressionSyntax.Left;
+            var right = assignmentExpressionSyntax.Right;
         }
     }
 }

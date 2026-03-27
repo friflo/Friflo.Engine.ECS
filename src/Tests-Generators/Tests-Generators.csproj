@@ -39,6 +39,11 @@
 
     <ItemGroup>
         <None Remove="**/*.meta" />
+        <None Update="Generators\Vectorize\Verify_Query.Verify_Query_MovePosition#MoveExample_19EA.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Query</ParentFile>
+          <DependentUpon>Verify_Vectorize.cs</DependentUpon>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

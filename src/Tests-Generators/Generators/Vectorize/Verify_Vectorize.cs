@@ -5,9 +5,9 @@ using NUnit.Framework;
 using VerifyNUnit;
 
 
-namespace Tests.Generators.Query;
+namespace Tests.Generators.Vectorize;
 
-public static class Verify_Query
+public static class Verify_Vectorize
 {
     [Test]
     public static async Task  Verify_Query_MovePosition()
@@ -17,13 +17,15 @@ public static class Verify_Query
 """
 using Friflo.Engine.ECS;
 
-namespace VerifyQuery;
+namespace VerifyVectorize;
+
+public struct Velocity : IComponent { public Vector3 value; }
 
 public partial class MyExample
 {
-    [Query]
-    void MoveExample(ref Position position) {
-        position.x = 1;
+    [Vectorize][Query]
+    void MoveExample(ref Position position, in Velocity velocity) {
+        position.value += velocity.value;
     }
 }
 """;
