@@ -29,9 +29,11 @@ namespace Tests.Generators.Query.Duplicate
         private static readonly int _MoveExample_Slot_8875 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MoveExample_GetQuery_8875(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position>
+            _MoveExample_GetQuery_8875(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MoveExample_Slot_8875);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)
+                EntityStore.UserDataGet(_store, _MoveExample_Slot_8875);
             if (_query != null) {
                 return _query;
             }

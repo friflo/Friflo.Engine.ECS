@@ -91,9 +91,11 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         private static readonly int _{methodName}_Slot{hash} = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<{componentArgs}> _{methodName}_GetQuery{hash}(EntityStore _store)
+        private static ArchetypeQuery<{componentArgs}>
+            _{methodName}_GetQuery{hash}(EntityStore _store)
         {{
-            var _query = (ArchetypeQuery<{componentArgs}>)EntityStore.UserDataGet(_store, _{methodName}_Slot{hash});
+            var _query = (ArchetypeQuery<{componentArgs}>)
+                EntityStore.UserDataGet(_store, _{methodName}_Slot{hash});
             if (_query != null) {{
                 return _query;
             }}

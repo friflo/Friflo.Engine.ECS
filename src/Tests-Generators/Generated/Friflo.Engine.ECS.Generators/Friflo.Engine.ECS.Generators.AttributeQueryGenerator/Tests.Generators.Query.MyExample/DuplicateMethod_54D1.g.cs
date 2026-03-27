@@ -29,9 +29,11 @@ namespace Tests.Generators.Query
         private static readonly int _DuplicateMethod_Slot_54D1 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _DuplicateMethod_GetQuery_54D1(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position>
+            _DuplicateMethod_GetQuery_54D1(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _DuplicateMethod_Slot_54D1);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)
+                EntityStore.UserDataGet(_store, _DuplicateMethod_Slot_54D1);
             if (_query != null) {
                 return _query;
             }

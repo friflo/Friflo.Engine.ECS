@@ -28,9 +28,11 @@ using Friflo.Engine.ECS;
         private static readonly int _MovePosition_Slot_91EC = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_91EC(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position>
+            _MovePosition_GetQuery_91EC(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MovePosition_Slot_91EC);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)
+                EntityStore.UserDataGet(_store, _MovePosition_Slot_91EC);
             if (_query != null) {
                 return _query;
             }

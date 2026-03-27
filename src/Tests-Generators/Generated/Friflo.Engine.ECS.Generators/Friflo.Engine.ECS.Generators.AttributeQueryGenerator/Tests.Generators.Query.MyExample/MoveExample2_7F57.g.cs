@@ -30,9 +30,11 @@ namespace Tests.Generators.Query
         private static readonly int _MoveExample2_Slot_7F57 = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2> _MoveExample2_GetQuery_7F57(EntityStore _store)
+        private static ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>
+            _MoveExample2_GetQuery_7F57(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)EntityStore.UserDataGet(_store, _MoveExample2_Slot_7F57);
+            var _query = (ArchetypeQuery<global::Tests.ECS.MyComponent1, global::Tests.ECS.MyComponent2>)
+                EntityStore.UserDataGet(_store, _MoveExample2_Slot_7F57);
             if (_query != null) {
                 return _query;
             }

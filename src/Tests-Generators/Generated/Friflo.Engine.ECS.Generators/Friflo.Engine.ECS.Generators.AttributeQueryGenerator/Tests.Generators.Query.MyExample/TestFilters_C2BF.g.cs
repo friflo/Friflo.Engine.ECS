@@ -29,9 +29,11 @@ namespace Tests.Generators.Query
         private static readonly int _TestFilters_Slot_C2BF = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _TestFilters_GetQuery_C2BF(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position>
+            _TestFilters_GetQuery_C2BF(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _TestFilters_Slot_C2BF);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)
+                EntityStore.UserDataGet(_store, _TestFilters_Slot_C2BF);
             if (_query != null) {
                 return _query;
             }

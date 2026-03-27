@@ -29,9 +29,11 @@ namespace Tests.Generators.Query
         private static readonly int _MovePosition_Slot_E9EE = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position> _MovePosition_GetQuery_E9EE(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position>
+            _MovePosition_GetQuery_E9EE(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)EntityStore.UserDataGet(_store, _MovePosition_Slot_E9EE);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)
+                EntityStore.UserDataGet(_store, _MovePosition_Slot_E9EE);
             if (_query != null) {
                 return _query;
             }

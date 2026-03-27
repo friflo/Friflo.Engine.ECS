@@ -37,9 +37,11 @@ namespace Tests.Generators.Vectorize
         private static readonly int _Multiply_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity> _Multiply_GetQuery(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>
+            _Multiply_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>)EntityStore.UserDataGet(_store, _Multiply_Slot);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>)
+                EntityStore.UserDataGet(_store, _Multiply_Slot);
             if (_query != null) {
                 return _query;
             }

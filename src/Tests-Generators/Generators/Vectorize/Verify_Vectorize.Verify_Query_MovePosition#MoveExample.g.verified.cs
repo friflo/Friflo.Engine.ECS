@@ -38,9 +38,11 @@ namespace VerifyVectorize
         private static readonly int _MoveExample_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity> _MoveExample_GetQuery(EntityStore _store)
+        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity>
+            _MoveExample_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity>)EntityStore.UserDataGet(_store, _MoveExample_Slot);
+            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity>)
+                EntityStore.UserDataGet(_store, _MoveExample_Slot);
             if (_query != null) {
                 return _query;
             }
