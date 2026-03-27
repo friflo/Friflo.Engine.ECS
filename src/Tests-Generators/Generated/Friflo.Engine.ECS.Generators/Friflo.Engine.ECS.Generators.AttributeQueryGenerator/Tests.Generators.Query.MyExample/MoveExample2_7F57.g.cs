@@ -17,7 +17,8 @@ namespace Tests.Generators.Query
                 var _entities = chunk.Entities;
                 var inComponentSpan = chunk.Chunk1.Span;
                 var myComponent2Span = chunk.Chunk2.Span;
-                for (int n = 0; n < _entities.Length; n++) {
+                int n = 0;
+                for (; n < _entities.Length; n++) {
                     MoveExample2(in inComponentSpan[n], myComponent2Span[n], someValue, in inValue, ref refValue, dateTime);
                 }
             }

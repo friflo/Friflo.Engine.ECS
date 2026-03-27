@@ -21,7 +21,7 @@ namespace VerifyQuery;
 
 public partial class MyExample
 {
-    [Query]
+    [Query][OmitHash]
     void MoveExample(ref Position position) {
         position.x = 1;
     }

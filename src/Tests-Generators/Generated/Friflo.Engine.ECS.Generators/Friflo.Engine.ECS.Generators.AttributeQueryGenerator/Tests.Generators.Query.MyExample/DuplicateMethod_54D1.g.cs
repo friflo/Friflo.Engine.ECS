@@ -16,7 +16,8 @@ namespace Tests.Generators.Query
             {
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
-                for (int n = 0; n < _entities.Length; n++) {
+                int n = 0;
+                for (; n < _entities.Length; n++) {
                     DuplicateMethod(positionSpan[n], x, y);
                 }
             }

@@ -18,7 +18,13 @@ namespace VerifyVectorize
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
                 var velocitySpan = chunk.Chunk2.Span;
-                for (int n = 0; n < _entities.Length; n++) {
+                int n = 0;
+                if (!vectorized) goto EntityLoop;
+                // if (Avx.IsSupported) {
+                    n = _MoveExample_Avx();
+                // }
+            EntityLoop:
+                for (; n < _entities.Length; n++) {
                     MoveExample(ref positionSpan[n], in velocitySpan[n]);
                 }
             }
