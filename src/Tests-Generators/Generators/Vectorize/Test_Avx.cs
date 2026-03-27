@@ -35,9 +35,29 @@ public static partial class Test_Avx
     private static EntityStore CreateTestStore()
     {
         var store = new EntityStore();
-        for (int n = 0; n < 100; n++) {
+        for (int n = 0; n < 1000; n++) {
             store.CreateEntity(new Position(n,n,n), new Velocity { value = new Vector3(1,2,3)});
         }
         return store;
+    }
+    
+    const int RepeatCount = 1; // 1_000_000;
+    
+    [Test]
+    public static void Test_Avx_Multiply_vectorized_perf()
+    {
+        var store = CreateTestStore();
+        for (int i = 0; i < RepeatCount; i++) {
+            MultiplyQuery(store);
+        }
+    }
+    
+    [Test]
+    public static void Test_Avx_Multiply_perf()
+    {
+        var store = CreateTestStore();
+        for (int i = 0; i < RepeatCount; i++) {
+            MultiplyQuery(store);
+        }
     }
 }
