@@ -46,6 +46,7 @@ using Friflo.Engine.ECS;
             EntityStore.UserDataSet(_store, _MovePosition_Slot_5841, _query);
             return _query;
         }
+
     #endregion
     }
 

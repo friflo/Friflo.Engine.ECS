@@ -16,6 +16,8 @@ public class Query
     public  IMethodSymbol                   methodSymbol;
     public  ImmutableArray<AttributeData>   attributes;
     public  List<IParameterSymbol>          components;
-    public  string                          hash;
     public  EcsTypes                        ecsTypes;
+    // --- generated output
+    public  string                          hash;
+    public  string                          avxMethod = "";
 }

@@ -39,6 +39,7 @@ namespace Tests.Generators.Query
             EntityStore.UserDataSet(_store, _MoveExample_Slot_F18F, _query);
             return _query;
         }
+
     #endregion
     }
 }

@@ -100,6 +100,7 @@ using Friflo.Engine.ECS;
             EntityStore.UserDataSet(_store, _{methodName}_Slot{hash}, _query);
             return _query;
         }}
+{query.avxMethod}
     #endregion
     }}
 {(isGlobalNamespace ? "" : "}")}

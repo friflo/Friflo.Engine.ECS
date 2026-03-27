@@ -41,6 +41,17 @@ namespace VerifyVectorize
             EntityStore.UserDataSet(_store, _MoveExample_Slot_5505, _query);
             return _query;
         }
+
+        private static unsafe int _MoveExample_Avx()
+        {
+            int i = 0;
+            var end = 0; // position.Length - 8;
+            for (; i <= end; i += 8)
+            {
+            }
+            return i;
+        }
+
     #endregion
     }
 }

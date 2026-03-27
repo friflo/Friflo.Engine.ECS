@@ -39,6 +39,7 @@ namespace Tests.Generators.Query
             EntityStore.UserDataSet(_store, _MovePosition_Slot_E9EE, _query);
             return _query;
         }
+
     #endregion
     }
 }

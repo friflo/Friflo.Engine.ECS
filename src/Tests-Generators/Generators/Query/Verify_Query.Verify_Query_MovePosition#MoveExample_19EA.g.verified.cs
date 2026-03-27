@@ -40,6 +40,7 @@ namespace VerifyQuery
             EntityStore.UserDataSet(_store, _MoveExample_Slot_19EA, _query);
             return _query;
         }
+
     #endregion
     }
 }

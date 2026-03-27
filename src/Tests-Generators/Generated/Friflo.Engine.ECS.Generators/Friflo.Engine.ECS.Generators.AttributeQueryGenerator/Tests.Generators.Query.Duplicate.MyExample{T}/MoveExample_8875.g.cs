@@ -39,6 +39,7 @@ namespace Tests.Generators.Query.Duplicate
             EntityStore.UserDataSet(_store, _MoveExample_Slot_8875, _query);
             return _query;
         }
+
     #endregion
     }
 }

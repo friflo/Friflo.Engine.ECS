@@ -37,5 +37,17 @@ public static class Vectorizer
             var left  = assignmentExpressionSyntax.Left;
             var right = assignmentExpressionSyntax.Right;
         }
+        var source = $@"
+        private static unsafe int _{query.methodSymbol.Name}_Avx()
+        {{
+            int i = 0;
+            var end = 0; // position.Length - 8;
+            for (; i <= end; i += 8)
+            {{
+            }}
+            return i;
+        }}
+";
+        query.avxMethod = source;
     }
 }

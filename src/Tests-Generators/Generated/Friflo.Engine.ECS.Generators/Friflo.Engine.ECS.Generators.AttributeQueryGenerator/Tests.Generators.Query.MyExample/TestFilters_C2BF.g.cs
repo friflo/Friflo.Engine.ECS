@@ -47,6 +47,7 @@ namespace Tests.Generators.Query
             EntityStore.UserDataSet(_store, _TestFilters_Slot_C2BF, _query);
             return _query;
         }
+
     #endregion
     }
 }

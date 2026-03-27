@@ -39,6 +39,7 @@ namespace Tests.Generators.Query
             EntityStore.UserDataSet(_store, _DuplicateMethod_Slot_8346, _query);
             return _query;
         }
+
     #endregion
     }
 }
