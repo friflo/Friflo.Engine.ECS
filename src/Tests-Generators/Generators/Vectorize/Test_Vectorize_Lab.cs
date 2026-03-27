@@ -151,13 +151,13 @@ public static class Test_Vectorize_Lab
         return (position, velocity);
     }
 
-    private const int repeatCount = 10; // 1_000_000;
+    private const int RepeatCount = 10; // 1_000_000;
     
     [Test]
     public static void Test_Vectorize_Multiply_perf()
     {
         var (position, velocity) = CreateTestData();
-        for (int n = 0; n < repeatCount; n++) {
+        for (int n = 0; n < RepeatCount; n++) {
             MultiplyVectorized(position, velocity);
         }
     }
@@ -166,7 +166,7 @@ public static class Test_Vectorize_Lab
     public static void Test_Vectorize_Multiply_perf_Avx()
     {
         var (position, velocity) = CreateTestData();
-        for (int n = 0; n < repeatCount; n++) {
+        for (int n = 0; n < RepeatCount; n++) {
             MultiplyVectorizedAvx(position, velocity);
         }
     }
@@ -175,7 +175,7 @@ public static class Test_Vectorize_Lab
     public static void Test_Vectorize_Multiply_perf_TensorPrimitives()
     {
         var (position, velocity) = CreateTestData();
-        for (int n = 0; n < repeatCount; n++) {
+        for (int n = 0; n < RepeatCount; n++) {
             MultiplyVectorized_TensorPrimitives(position, velocity);
         }
     }
@@ -184,7 +184,7 @@ public static class Test_Vectorize_Lab
     public static void Test_Vectorize_Multiply_perf_idiomatic()
     {
         var (position, velocity) = CreateTestData();
-        for (int n = 0; n < repeatCount; n++) {
+        for (int n = 0; n < RepeatCount; n++) {
             MultiplyIdiomatic(position, velocity);
         }
     }

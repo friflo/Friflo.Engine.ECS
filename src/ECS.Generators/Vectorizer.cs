@@ -23,7 +23,7 @@ public static class Vectorizer
                 if (body == null) continue;
                 foreach (var statement in body.Statements) {
                     if (statement is ExpressionStatementSyntax expressionStatement) {
-                        Traverse(query, expressionStatement);
+                        TraverseStatement(query, expressionStatement);
                     }
                 }
             }
@@ -31,7 +31,7 @@ public static class Vectorizer
         return null;
     }
     
-    private static void Traverse(Query query, ExpressionStatementSyntax syntax)
+    private static void TraverseStatement(Query query, ExpressionStatementSyntax syntax)
     {
         if (syntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
             var left  = assignmentExpressionSyntax.Left;

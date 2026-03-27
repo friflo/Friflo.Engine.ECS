@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 
@@ -14,6 +15,7 @@ public class Query
 {
     public  IMethodSymbol                   methodSymbol;
     public  ImmutableArray<AttributeData>   attributes;
+    public  List<IParameterSymbol>          components;
     public  string                          hash;
     public  EcsTypes                        ecsTypes;
 }
