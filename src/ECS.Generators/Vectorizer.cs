@@ -150,7 +150,7 @@ public static class Vectorizer
         }
         var left    = Utils.GetLeft(assignmentExpressionSyntax)?.Identifier.Text;
         var right   = Utils.GetRight(assignmentExpressionSyntax)?.Identifier.Text;
-        if (left is null && right is null) {
+        if (left is null || right is null) {
             return false;
         }
         for (int i = 0; i < 3; i++) {
