@@ -72,6 +72,7 @@ public static class Vectorizer
             var left  = assignmentExpressionSyntax.Left;
             var right = assignmentExpressionSyntax.Right;
         }
+        var passedParams = new StringBuilder();
         // --- method signature
         var signature = new StringBuilder();
         foreach (var parameter in query.parameters) {
@@ -93,9 +94,13 @@ public static class Vectorizer
             signature.Append(type);
             signature.Append(" ");
             signature.Append(parameter.Name);
+            // 
+            switch (parameter.Type.SpecialType) {
+                case  SpecialType.System_Single:
+                    passedParams.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
+                    break;
+            }
         }
-        // --- parameter block
-        var passedParams = new StringBuilder(); 
         
         // --- fixed block
         var @fixed = new StringBuilder();
@@ -115,7 +120,7 @@ public static class Vectorizer
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
-            int i = 0;
+{passedParams}            int i = 0;
             var end = {query.components[0].Name}.Length - {step};{@fixed}
             {{
                 for (; i <= end; i += {step})
