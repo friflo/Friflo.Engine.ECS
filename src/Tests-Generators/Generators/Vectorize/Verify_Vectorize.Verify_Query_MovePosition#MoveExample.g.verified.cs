@@ -23,7 +23,7 @@ namespace VerifyVectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _MoveExample_Avx();
+                    n = _MoveExample_Avx(positionSpan, velocitySpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
@@ -50,10 +50,10 @@ namespace VerifyVectorize
             return _query;
         }
 
-        private static unsafe int _MoveExample_Avx()
+        private static unsafe int _MoveExample_Avx(Span<global::Friflo.Engine.ECS.Position> position, Span<global::VerifyVectorize.Velocity> velocity)
         {
             int i = 0;
-            var end = 0; // position.Length - 8;
+            var end = position.Length - 8;
             for (; i <= end; i += 8)
             {
             }

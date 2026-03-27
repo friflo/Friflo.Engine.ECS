@@ -22,7 +22,7 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Multiply_Avx_DEA6();
+                    n = _Multiply_Avx_DEA6(positionSpan, velocitySpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
@@ -49,10 +49,10 @@ namespace Tests.Generators.Vectorize
             return _query;
         }
 
-        private static unsafe int _Multiply_Avx_DEA6()
+        private static unsafe int _Multiply_Avx_DEA6(Span<global::Friflo.Engine.ECS.Position> position, Span<global::Tests.Examples.Velocity> velocity)
         {
             int i = 0;
-            var end = 0; // position.Length - 8;
+            var end = position.Length - 8;
             for (; i <= end; i += 8)
             {
             }
