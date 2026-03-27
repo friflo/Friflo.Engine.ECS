@@ -66,17 +66,17 @@ partial class TestClass
     {
         int i = 0;
         var end = position.Length - 8;
-        fixed (Position* position_ptr = position)
+        fixed (Position* position_first = position)
         {
             // We iterate in steps of 8 (8 * Vector3 = 24 floats = 3 * 256-bit registers)
             for (; i <= end; i += 8)
             {
-                float* position_ptr_scalar = (float*)(position_ptr + i);
+                float* position_ptr = (float*)(position_first + i);
 
                 // 1. LOAD: 3 registers filled with interleaved XYZ data
-                Vector256<float> position_0 = Avx.LoadVector256(position_ptr_scalar);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
-                Vector256<float> position_1 = Avx.LoadVector256(position_ptr_scalar + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
-                Vector256<float> position_2 = Avx.LoadVector256(position_ptr_scalar + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
+                Vector256<float> position_0 = Avx.LoadVector256(position_ptr);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
+                Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
+                Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
                 
                 // 2. COMPUTE: Directly in the interleaved state!
                 position_0 = Avx.Add(position_0, Vector256.Create(1f));
@@ -84,9 +84,9 @@ partial class TestClass
                 position_2 = Avx.Add(position_2, Vector256.Create(1f));
 
                 // 3. STORE: 3 fast block writes
-                Avx.Store(position_ptr_scalar, position_0);
-                Avx.Store(position_ptr_scalar + 8, position_1);
-                Avx.Store(position_ptr_scalar + 16, position_2);
+                Avx.Store(position_ptr, position_0);
+                Avx.Store(position_ptr + 8, position_1);
+                Avx.Store(position_ptr + 16, position_2);
             }
         }
         return i;
