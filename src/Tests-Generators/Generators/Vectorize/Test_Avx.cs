@@ -57,7 +57,7 @@ public static partial class Test_Avx
     {
         var store = CreateTestStore();
         for (int i = 0; i < RepeatCount; i++) {
-            MultiplyQuery(store);
+            MultiplyQuery(store, false);
         }
     }
 }
