@@ -44,7 +44,7 @@ public static partial class Test_Avx
     const int RepeatCount = 1; // 1_000_000;
     
     [Test]
-    public static void Test_Avx_Multiply_vectorized_perf()
+    public static void Test_Avx_Multiply_perf_Query_vectorized()
     {
         var store = CreateTestStore();
         for (int i = 0; i < RepeatCount; i++) {
@@ -53,11 +53,23 @@ public static partial class Test_Avx
     }
     
     [Test]
-    public static void Test_Avx_Multiply_perf()
+    public static void Test_Avx_Multiply_perf_Query()
     {
         var store = CreateTestStore();
         for (int i = 0; i < RepeatCount; i++) {
             MultiplyQuery(store, false);
+        }
+    }
+    
+    [Test]
+    public static void Test_Avx_Multiply_perf_ForEachEntity()
+    {
+        var store = CreateTestStore();
+        var query = store.Query<Position, Velocity>();
+        for (int i = 0; i < RepeatCount; i++) {
+            query.ForEachEntity(static (ref Position position, ref Velocity velocity, Entity entity) => {
+                position.value *= velocity.value;
+            });
         }
     }
 }
