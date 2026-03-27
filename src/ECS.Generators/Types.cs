@@ -14,6 +14,10 @@ public struct EcsTypes
     public bool IsEntityParameter(IParameterSymbol parameter) {
         return parameter.Name == "entity" && SymbolEqualityComparer.Default.Equals(parameter.Type, entityStruct);
     }
+
+    public bool IsComponent(ITypeSymbol typeSymbol) {
+        return typeSymbol.AllInterfaces.Contains(componentInterface);
+    }
 }
 
 public class Query

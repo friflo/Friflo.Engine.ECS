@@ -131,7 +131,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         var sb = new StringBuilder();
         sb.Append("EntityStore _store");
         foreach (var parameter in parameters) {
-            bool isComponent = parameter.Type.AllInterfaces.Contains(ecsTypes.componentInterface);
+            bool isComponent = ecsTypes.IsComponent(parameter.Type);
             if (isComponent) {
                 continue;
             }
@@ -190,7 +190,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             if (sb.Length > 0) {
                 sb.Append(", ");
             }
-            bool isComponent = parameter.Type.AllInterfaces.Contains(ecsTypes.componentInterface);
+            bool isComponent = ecsTypes.IsComponent(parameter.Type);
             if (isComponent) {
                 Utils.AppendRefKind(sb, parameter.RefKind);
                 sb.Append(parameter.Name);
@@ -213,7 +213,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         var result = new List<IParameterSymbol>();
         foreach (var parameter in parameters)
         {
-            bool isComponent = parameter.Type.AllInterfaces.Contains(ecsTypes.componentInterface);
+            bool isComponent = ecsTypes.IsComponent(parameter.Type);
             if (isComponent) {
                 result.Add(parameter);   
             }

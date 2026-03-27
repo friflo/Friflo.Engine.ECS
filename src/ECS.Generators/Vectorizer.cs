@@ -44,7 +44,7 @@ public static class Vectorizer
             if (sb.Length > 0) {
                 sb.Append(", ");
             }
-            bool isComponent = parameter.Type.AllInterfaces.Contains(query.ecsTypes.componentInterface);
+            bool isComponent = query.ecsTypes.IsComponent(parameter.Type);
             if (isComponent) {
                 sb.Append(parameter.Name);
                 sb.Append("Span");
@@ -78,7 +78,7 @@ public static class Vectorizer
             if (signature.Length > 0) {
                 signature.Append(", ");
             }
-            bool isComponent = parameter.Type.AllInterfaces.Contains(query.ecsTypes.componentInterface);
+            bool isComponent = query.ecsTypes.IsComponent(parameter.Type);
             if (isComponent) {
                 var componentType = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 signature.Append($"Span<{componentType}> {parameter.Name}");
@@ -94,6 +94,9 @@ public static class Vectorizer
             signature.Append(" ");
             signature.Append(parameter.Name);
         }
+        // --- parameter block
+        var passedParams = new StringBuilder(); 
+        
         // --- fixed block
         var @fixed = new StringBuilder();
         foreach (var component in query.components) {
