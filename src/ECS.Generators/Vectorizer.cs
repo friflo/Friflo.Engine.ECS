@@ -67,41 +67,28 @@ public static class Vectorizer
             if (signature.Length > 0) {
                 signature.Append(", ");
             }
-            signature.Append("Span<");
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            signature.Append(type);
-            signature.Append("> ");
-            signature.Append(component.Name);
+            signature.Append($"Span<{type}> {component.Name}");
         }
-        var fixedStatements = new StringBuilder();
+        var fixedBlock = new StringBuilder();
         foreach (var component in query.components) {
-            fixedStatements.AppendLine();
-            fixedStatements.Append("            fixed (");
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            fixedStatements.Append(type);
-            fixedStatements.Append("* ");
-            fixedStatements.Append(component.Name);
-            fixedStatements.Append("_ptr = ");
-            fixedStatements.Append(component.Name);
-            fixedStatements.Append(")");
+            fixedBlock.AppendLine();
+            fixedBlock.Append($"            fixed ({type}* {component.Name}_ptr = {component.Name})");
         }
-        var pointers = new StringBuilder();
+        var pointerBlock = new StringBuilder();
         foreach (var component in query.components) {
-            pointers.AppendLine();
-            pointers.Append("                    float* ");
-            pointers.Append(component.Name);
-            pointers.Append("_ptr_scalar = (float*)(");
-            pointers.Append(component.Name);
-            pointers.Append("_ptr + 1);");
+            pointerBlock.AppendLine();
+            pointerBlock.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + 1);");
         }
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
             int i = 0;
-            var end = {query.components[0].Name}.Length - 8;{fixedStatements}
+            var end = {query.components[0].Name}.Length - 8;{fixedBlock}
             {{
                 for (; i <= end; i += 8)
-                {{{pointers}
+                {{{pointerBlock}
                 }}
             }}
             return i;
