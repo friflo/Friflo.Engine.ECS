@@ -55,9 +55,9 @@ public static class Vectorizer
         return source;
     }
     
-    private static void TraverseStatement(Query query, ExpressionStatementSyntax syntax)
+    private static void TraverseStatement(Query query, ExpressionStatementSyntax expressionSyntax)
     {
-        if (syntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
+        if (expressionSyntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
             var left  = assignmentExpressionSyntax.Left;
             var right = assignmentExpressionSyntax.Right;
         }
@@ -82,7 +82,7 @@ public static class Vectorizer
             pointer.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + i);");
         }
         int step = 8;
-        var vectorizeBlock = VectorizeBlock(query, step);
+        var vectorizeBlock = VectorizeBlock(query, expressionSyntax.Expression, step);
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
@@ -100,7 +100,7 @@ public static class Vectorizer
         query.avxMethod = source;
     }
     
-    private static StringBuilder VectorizeBlock(Query query, int step)
+    private static StringBuilder VectorizeBlock(Query query, ExpressionSyntax expressionSyntax, int step)
     {
         var source = new StringBuilder();
         var components = query.components;
@@ -113,7 +113,7 @@ public static class Vectorizer
             source.AppendLine();
         }
         source.AppendLine("                    // 2. Compute");
-        source.AppendLine("                    // ...");
+        Compute(source, query, expressionSyntax, step);
         source.AppendLine();
         
         source.AppendLine("                    // 3. Store");
@@ -124,6 +124,33 @@ public static class Vectorizer
             source.AppendLine();
         }
         return source;
+    }
+    
+    private static void Compute(StringBuilder source, Query query, ExpressionSyntax expressionSyntax, int step)
+    {
+        if (expressionSyntax is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
+            source.AppendLine("                    // ...");
+            return;
+        }
+        string left = null;
+        string right = null;
+        if (assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax leftExpressionSyntax) {
+            if (leftExpressionSyntax.Expression is IdentifierNameSyntax identifierNameSyntax) {
+                left = identifierNameSyntax.Identifier.Text;
+            }
+        }
+        if (assignmentExpressionSyntax.Right is MemberAccessExpressionSyntax rightExpressionSyntax) {
+            if (rightExpressionSyntax.Expression is IdentifierNameSyntax identifierNameSyntax) {
+                right = identifierNameSyntax.Identifier.Text;
+            }
+        }
+        if (left is null && right is null) {
+            source.AppendLine("                    // ...");
+            return;
+        }
+        for (int i = 0; i < 3; i++) {
+            source.AppendLine($"                    {left}_{i} = Avx.Multiply({left}_{i}, {right}_{i});");
+        }
     }
 
 }
