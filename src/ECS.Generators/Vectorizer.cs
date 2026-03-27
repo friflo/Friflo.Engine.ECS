@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Friflo.Engine.ECS.Generators;
@@ -132,6 +133,14 @@ public static class Vectorizer
             source.AppendLine("                    // ...");
             return;
         }
+        var avxOperation = expressionSyntax.Kind() switch
+        {
+            SyntaxKind.AddAssignmentExpression      => "Add",
+            SyntaxKind.SubtractAssignmentExpression => "Subtract",
+            SyntaxKind.MultiplyAssignmentExpression => "Multiply",
+            SyntaxKind.DivideAssignmentExpression   => "Divide",
+            _                                       => null
+        };
         string left = null;
         string right = null;
         if (assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax leftExpressionSyntax) {
@@ -149,7 +158,7 @@ public static class Vectorizer
             return;
         }
         for (int i = 0; i < 3; i++) {
-            source.AppendLine($"                    {left}_{i} = Avx.Multiply({left}_{i}, {right}_{i});");
+            source.AppendLine($"                    {left}_{i} = Avx.{avxOperation}({left}_{i}, {right}_{i});");
         }
     }
 
