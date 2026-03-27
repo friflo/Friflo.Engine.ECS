@@ -120,12 +120,15 @@ public static class Vectorizer
         source.AppendLine();
         
         source.AppendLine("                    // 3. Store");
-        foreach (var component in components) {
-            for (int n = 0; n < 3; n++) {
-                source.AppendLine($"                    Avx.Store({component.Name}_ptr_scalar + {n*step}, {component.Name}_{n});");
-            }
-            source.AppendLine();
+        if (expressionSyntax is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
+            source.AppendLine("                    // found no assignment");
+            return source;
         }
+        var left = Utils.GetLeft(assignmentExpressionSyntax)?.Identifier.Text;
+        for (int n = 0; n < 3; n++) {
+            source.AppendLine($"                    Avx.Store({left}_ptr_scalar + {n*step}, {left}_{n});");
+        }
+        source.AppendLine();
         return source;
     }
     
@@ -142,18 +145,11 @@ public static class Vectorizer
             SyntaxKind.DivideAssignmentExpression   => "Divide",
             _                                       => null
         };
-        string left = null;
-        string right = null;
-        if (assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax leftExpressionSyntax) {
-            if (leftExpressionSyntax.Expression is IdentifierNameSyntax identifierNameSyntax) {
-                left = identifierNameSyntax.Identifier.Text;
-            }
+        if (avxOperation is null) {
+            return false;
         }
-        if (assignmentExpressionSyntax.Right is MemberAccessExpressionSyntax rightExpressionSyntax) {
-            if (rightExpressionSyntax.Expression is IdentifierNameSyntax identifierNameSyntax) {
-                right = identifierNameSyntax.Identifier.Text;
-            }
-        }
+        var left    = Utils.GetLeft(assignmentExpressionSyntax)?.Identifier.Text;
+        var right   = Utils.GetRight(assignmentExpressionSyntax)?.Identifier.Text;
         if (left is null && right is null) {
             return false;
         }

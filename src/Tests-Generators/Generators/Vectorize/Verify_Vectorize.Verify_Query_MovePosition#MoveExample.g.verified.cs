@@ -81,10 +81,6 @@ namespace VerifyVectorize
                     Avx.Store(position_ptr_scalar + 8, position_1);
                     Avx.Store(position_ptr_scalar + 16, position_2);
 
-                    Avx.Store(velocity_ptr_scalar + 0, velocity_0);
-                    Avx.Store(velocity_ptr_scalar + 8, velocity_1);
-                    Avx.Store(velocity_ptr_scalar + 16, velocity_2);
-
 
                 }
             }

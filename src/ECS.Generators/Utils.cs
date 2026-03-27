@@ -2,6 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Friflo.Engine.ECS.Generators;
 
@@ -28,5 +29,21 @@ public static class Utils
             sb.Append(name);
         }
         return sb.ToString();
+    }
+    
+    public static  IdentifierNameSyntax GetLeft(AssignmentExpressionSyntax assignmentExpressionSyntax)
+    {
+        if (assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax leftExpressionSyntax) {
+            return leftExpressionSyntax.Expression as IdentifierNameSyntax;
+        }
+        return null;
+    }
+    
+    public static  IdentifierNameSyntax GetRight(AssignmentExpressionSyntax assignmentExpressionSyntax)
+    {
+        if (assignmentExpressionSyntax.Right is MemberAccessExpressionSyntax leftExpressionSyntax) {
+            return leftExpressionSyntax.Expression as IdentifierNameSyntax;
+        }
+        return null;
     }
 }
