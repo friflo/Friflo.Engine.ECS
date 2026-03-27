@@ -1,3 +1,9 @@
+/* 
+Obsolete approach for testing C# Source Generator using:
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing" Version="1.1.3" />
+Instead using:
+    <PackageReference Include="Verify.SourceGenerators" Version="2.5.0" />
+
 using System.Text;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
@@ -52,3 +58,4 @@ public class Verify_CodeAnalysis
         await context.RunAsync();
     }
 }
+*/
