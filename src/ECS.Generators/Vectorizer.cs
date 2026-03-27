@@ -99,13 +99,13 @@ public static class Vectorizer
         foreach (var component in query.components) {
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             @fixed.AppendLine();
-            @fixed.Append($"            fixed ({type}* {component.Name}_ptr = {component.Name})");
+            @fixed.Append($"            fixed ({type}* {component.Name}_first = {component.Name})");
         }
         // --- pointer block
         var pointer = new StringBuilder();
         foreach (var component in query.components) {
             pointer.AppendLine();
-            pointer.Append($"                    float* {component.Name}_ptr_scalar = (float*)({component.Name}_ptr + i);");
+            pointer.Append($"                    float* {component.Name}_ptr = (float*)({component.Name}_first + i);");
         }
         int step = 8;
         var vectorizeBlock = VectorizeBlock(query, expressionSyntax.Expression, step);
@@ -134,7 +134,7 @@ public static class Vectorizer
         source.AppendLine("                    // 1. Load");
         foreach (var component in components) {
             for (int n = 0; n < 3; n++) {
-                source.AppendLine($"                    Vector256<float> {component.Name}_{n} = Avx.LoadVector256({component.Name}_ptr_scalar + {n*step});");
+                source.AppendLine($"                    Vector256<float> {component.Name}_{n} = Avx.LoadVector256({component.Name}_ptr + {n*step});");
             }
             source.AppendLine();
         }
@@ -151,7 +151,7 @@ public static class Vectorizer
         }
         var left = Utils.GetLeft(assignmentExpressionSyntax)?.Identifier.Text;
         for (int n = 0; n < 3; n++) {
-            source.AppendLine($"                    Avx.Store({left}_ptr_scalar + {n*step}, {left}_{n});");
+            source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
         }
         source.AppendLine();
         return source;

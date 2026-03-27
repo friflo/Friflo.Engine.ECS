@@ -53,22 +53,22 @@ namespace Tests.Generators.Vectorize
         {
             int i = 0;
             var end = position.Length - 8;
-            fixed (global::Friflo.Engine.ECS.Position* position_ptr = position)
-            fixed (global::Tests.Examples.Velocity* velocity_ptr = velocity)
+            fixed (global::Friflo.Engine.ECS.Position* position_first = position)
+            fixed (global::Tests.Examples.Velocity* velocity_first = velocity)
             {
                 for (; i <= end; i += 8)
                 {
-                    float* position_ptr_scalar = (float*)(position_ptr + i);
-                    float* velocity_ptr_scalar = (float*)(velocity_ptr + i);
+                    float* position_ptr = (float*)(position_first + i);
+                    float* velocity_ptr = (float*)(velocity_first + i);
 
                     // 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr_scalar + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr_scalar + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr_scalar + 16);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
 
-                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr_scalar + 0);
-                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr_scalar + 8);
-                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr_scalar + 16);
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
 
                     // 2. Compute
                     position_0 = Avx.Multiply(position_0, velocity_0);
@@ -76,9 +76,9 @@ namespace Tests.Generators.Vectorize
                     position_2 = Avx.Multiply(position_2, velocity_2);
 
                     // 3. Store
-                    Avx.Store(position_ptr_scalar + 0, position_0);
-                    Avx.Store(position_ptr_scalar + 8, position_1);
-                    Avx.Store(position_ptr_scalar + 16, position_2);
+                    Avx.Store(position_ptr + 0, position_0);
+                    Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr + 16, position_2);
 
 
                 }
