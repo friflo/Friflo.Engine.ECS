@@ -77,12 +77,12 @@ public static class Vectorizer
         var signature = new StringBuilder();
         foreach (var parameter in query.parameters) {
             if (signature.Length > 0) {
-                signature.Append(", ");
+                signature.Append(",");
             }
             bool isComponent = query.ecsTypes.IsComponent(parameter.Type);
             if (isComponent) {
                 var componentType = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                signature.Append($"Span<{componentType}> {parameter.Name}");
+                signature.Append($"\n            Span<{componentType}> {parameter.Name}");
                 continue;
             }
             bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
@@ -91,9 +91,7 @@ public static class Vectorizer
             }
             Utils.AppendRefKind(signature, parameter.RefKind);
             string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            signature.Append(type);
-            signature.Append(" ");
-            signature.Append(parameter.Name);
+            signature.Append($"\n            {type} {parameter.Name}");
             // 
             switch (parameter.Type.SpecialType) {
                 case  SpecialType.System_Single:

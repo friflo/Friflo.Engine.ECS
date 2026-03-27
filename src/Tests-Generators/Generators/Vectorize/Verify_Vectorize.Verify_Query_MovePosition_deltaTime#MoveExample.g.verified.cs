@@ -50,7 +50,10 @@ namespace VerifyVectorize
             return _query;
         }
 
-        private static unsafe int _MoveExample_Avx(Span<global::Friflo.Engine.ECS.Position> position, Span<global::VerifyVectorize.Velocity> velocity, float deltaTime)
+        private static unsafe int _MoveExample_Avx(
+            Span<global::Friflo.Engine.ECS.Position> position,
+            Span<global::VerifyVectorize.Velocity> velocity,
+            float deltaTime)
         {
             var deltaTime_scalar = Vector256.Create(deltaTime);
             int i = 0;

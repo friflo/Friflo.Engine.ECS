@@ -50,7 +50,9 @@ namespace VerifyVectorize
             return _query;
         }
 
-        private static unsafe int _MoveExample_Avx(Span<global::Friflo.Engine.ECS.Position> position, Span<global::VerifyVectorize.Velocity> velocity)
+        private static unsafe int _MoveExample_Avx(
+            Span<global::Friflo.Engine.ECS.Position> position,
+            Span<global::VerifyVectorize.Velocity> velocity)
         {
             int i = 0;
             var end = position.Length - 8;
