@@ -118,6 +118,9 @@ public sealed class QueryAttribute : Attribute { }
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class VectorizeAttribute : Attribute { }
 
+[AttributeUsage(AttributeTargets.Method)]
+public sealed class OmitHashAttribute : Attribute { }
+
 #region Friflo ImGui attributes 
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]

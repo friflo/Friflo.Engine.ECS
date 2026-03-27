@@ -9,6 +9,7 @@ public struct EcsTypes
     public INamedTypeSymbol componentInterface;
     public INamedTypeSymbol entityStruct;
     public INamedTypeSymbol vectorizeAttribute;
+    public INamedTypeSymbol omitHashAttribute;
 }
 
 public class Query

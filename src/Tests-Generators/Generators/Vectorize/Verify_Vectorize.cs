@@ -23,7 +23,7 @@ public struct Velocity : IComponent { public Vector3 value; }
 
 public partial class MyExample
 {
-    [Vectorize][Query]
+    [Vectorize][Query][OmitHash]
     void MoveExample(ref Position position, in Velocity velocity) {
         position.value *= velocity.value;
     }

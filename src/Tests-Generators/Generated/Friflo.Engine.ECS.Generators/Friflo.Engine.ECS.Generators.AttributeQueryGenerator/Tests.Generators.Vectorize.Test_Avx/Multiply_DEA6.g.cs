@@ -41,7 +41,7 @@ namespace Tests.Generators.Vectorize
             return _query;
         }
 
-        private static unsafe int _Multiply_Avx()
+        private static unsafe int _Multiply_Avx_DEA6()
         {
             int i = 0;
             var end = 0; // position.Length - 8;

@@ -38,7 +38,7 @@ public static class Vectorizer
             var right = assignmentExpressionSyntax.Right;
         }
         var source = $@"
-        private static unsafe int _{query.methodSymbol.Name}_Avx()
+        private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}()
         {{
             int i = 0;
             var end = 0; // position.Length - 8;

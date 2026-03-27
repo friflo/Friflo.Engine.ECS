@@ -35,6 +35,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
                 componentInterface  = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.IComponent"),
                 entityStruct        = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity"),
                 vectorizeAttribute  = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.VectorizeAttribute"),
+                omitHashAttribute   = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.OmitHashAttribute"),
             };
             var methodSymbol        = (IMethodSymbol)ctx.TargetSymbol;
             var className           = methodSymbol.ContainingType.ToDisplayString(ClassNameFormat);
@@ -43,11 +44,9 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             var namespaceName       = methodSymbol.ContainingType.ContainingNamespace.ToDisplayString();
             var attributes          = methodSymbol.GetAttributes();
             var attributeCode       = EmitFilters(attributes);
-            var methodSignature     = methodSymbol!.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat);
             var parameters          = methodSymbol.Parameters;
             var components          = GetComponents(parameters, types);
-            // made required static symbols unique to prevent duplicate symbol names
-            var hash = "_" + Utils.GetMd5Hash(methodSignature).Substring(0, 4); // 8 chars is usually enough
+            var hash                = GetHash(methodSymbol, attributes, types);
             var query = new Query {
                 methodSymbol    = methodSymbol,
                 attributes      = attributes,
@@ -214,6 +213,22 @@ using Friflo.Engine.ECS;
             }
         }
         return result;
+    }
+    
+    // made required static symbols unique to prevent duplicate symbol names
+    private static string GetHash(IMethodSymbol methodSymbol, ImmutableArray<AttributeData> attributes, EcsTypes ecsTypes)
+    {
+        var search = ecsTypes.omitHashAttribute.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        bool found = false;
+        foreach (var attributeData in attributes) {
+            // if (SymbolEqualityComparer.Default.Equals(ecsTypes.omitHashAttribute, attributeData.AttributeClass)) found = true;
+            if (attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) == search) found = true;
+        }
+        if (found) {
+            return "";
+        }
+        var methodSignature = methodSymbol!.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat);
+        return "_" + Utils.GetMd5Hash(methodSignature).Substring(0, 4); // 8 chars is usually enough
     }
 
     private static void AppendRefKind(StringBuilder sb, RefKind refKind)
