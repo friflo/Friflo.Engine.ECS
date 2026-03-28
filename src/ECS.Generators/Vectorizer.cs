@@ -148,7 +148,15 @@ public static class Vectorizer
             source.AppendLine();
         }
         source.AppendLine("                    // 2. Compute");
-        if (!Compute(source, query, expressionSyntax, step)) {
+        var computeLanes = new StringBuilder[3];
+        for (int n = 0; n < 3; n++) {
+            computeLanes[n] = new StringBuilder();
+        }
+        if (Compute(computeLanes, query, expressionSyntax, step)) {
+            for (int n = 0; n < 3; n++) {
+                source.AppendLine($"                    {computeLanes[n]}");
+            }
+        } else {
             source.AppendLine("                    // not supported");
         }
         source.AppendLine();
@@ -166,7 +174,7 @@ public static class Vectorizer
         return source;
     }
     
-    private static bool Compute(StringBuilder source, Query query, ExpressionSyntax expressionSyntax, int step)
+    private static bool Compute(StringBuilder[] computeLanes, Query query, ExpressionSyntax expressionSyntax, int step)
     {
         if (expressionSyntax is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
             return false;
@@ -188,7 +196,7 @@ public static class Vectorizer
             return false;
         }
         for (int i = 0; i < 3; i++) {
-            source.AppendLine($"                    {left}_{i} = Avx.{avxOperation}({left}_{i}, {right}_{i});");
+            computeLanes[i].Append($"{left}_{i} = Avx.{avxOperation}({left}_{i}, {right}_{i});");
         }
         return true;
     }
