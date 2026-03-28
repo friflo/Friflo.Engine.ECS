@@ -3,12 +3,11 @@
 
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Friflo.Engine.ECS.Generators;
 
-public static class Vectorizer
+public static partial class Vectorizer
 {
     public static string Emit(Query query)
     {
@@ -152,7 +151,7 @@ public static class Vectorizer
         for (int n = 0; n < 3; n++) {
             computeLanes[n] = new StringBuilder();
         }
-        if (Compute(computeLanes, query, expressionSyntax, step)) {
+        if (Compute(computeLanes, query, expressionSyntax)) {
             for (int n = 0; n < 3; n++) {
                 source.AppendLine($"                    {computeLanes[n]}");
             }
@@ -174,31 +173,11 @@ public static class Vectorizer
         return source;
     }
     
-    private static bool Compute(StringBuilder[] computeLanes, Query query, ExpressionSyntax expressionSyntax, int step)
+    private static bool Compute(StringBuilder[] computeLanes, Query query, ExpressionSyntax syntax)
     {
-        if (expressionSyntax is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
-            return false;
+        if (syntax is AssignmentExpressionSyntax assignment) {
+            return Compute_Assignment(computeLanes, query, assignment);
         }
-        var avxOperation = expressionSyntax.Kind() switch
-        {
-            SyntaxKind.AddAssignmentExpression      => "Add",
-            SyntaxKind.SubtractAssignmentExpression => "Subtract",
-            SyntaxKind.MultiplyAssignmentExpression => "Multiply",
-            SyntaxKind.DivideAssignmentExpression   => "Divide",
-            _                                       => null
-        };
-        if (avxOperation is null) {
-            return false;
-        }
-        var left    = Utils.GetMemberName(assignmentExpressionSyntax.Left)?.Identifier.Text;
-        var right   = Utils.GetMemberName(assignmentExpressionSyntax.Right)?.Identifier.Text;
-        if (left is null || right is null) {
-            return false;
-        }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append($"{left}_{i} = Avx.{avxOperation}({left}_{i}, {right}_{i});");
-        }
-        return true;
+        return false;
     }
-
 }
