@@ -18,11 +18,11 @@ public static class Test_Lab_Scalar
 {
     [Test]
     public static void Test_Lab_Scalar_Call() {
-        var position = new Position[8];
-        var value   = new float[8];
-        for (int n = 0; n < 8; n++) {
+        var position = new Position[16];
+        var value   = new float[16];
+        for (int n = 0; n < 16; n++) {
             position[n] = new Position(1, 1, 1);
-            value[n] = n + 1;
+            value[n] = n;
         }
         MultiplayScalarArray_Avx(position, value);
     }
@@ -50,14 +50,14 @@ public static class Test_Lab_Scalar
                 
                 Vector256<float> value_scalar = Avx.LoadVector256(scalar_ptr);
                 
-                Vector256<float> value_spread_0 = Avx2.PermuteVar8x32(value_scalar, value_mask_0);
-                Vector256<float> value_spread_1 = Avx2.PermuteVar8x32(value_scalar, value_mask_1);
-                Vector256<float> value_spread_2 = Avx2.PermuteVar8x32(value_scalar, value_mask_2);
+                Vector256<float> value_0 = Avx2.PermuteVar8x32(value_scalar, value_mask_0);
+                Vector256<float> value_1 = Avx2.PermuteVar8x32(value_scalar, value_mask_1);
+                Vector256<float> value_2 = Avx2.PermuteVar8x32(value_scalar, value_mask_2);
                 
                 // 2. COMPUTE: Directly in the interleaved state!
-                position_0 = Avx.Add(position_0, value_spread_0);
-                position_1 = Avx.Add(position_1, value_spread_1);
-                position_2 = Avx.Add(position_2, value_spread_2);
+                position_0 = Avx.Add(position_0, value_0);
+                position_1 = Avx.Add(position_1, value_1);
+                position_2 = Avx.Add(position_2, value_2);
 
                 // 3. STORE: 3 fast block writes
                 Avx.Store(position_ptr, position_0);
