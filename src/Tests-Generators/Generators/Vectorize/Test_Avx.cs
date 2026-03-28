@@ -96,7 +96,6 @@ public static partial class Test_Avx
     }
     
     // -----------------------------------------------------------------------------------------------------
-
     [Vectorize][Query]  [OmitHash]
     public static void MultiplyVector(ref Position position, in Velocity velocity, Vector3 vector3) {
         position.value *= velocity.value * vector3;
@@ -110,6 +109,28 @@ public static partial class Test_Avx
 
         var storeVectorized = CreateTestStore();
         MultiplyVectorQuery(storeVectorized, new Vector3(1,2,3));
+
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    public static void MultiplyAdd(ref Position position, ref Velocity velocity, float deltaTime) {
+        position.value += velocity.value * deltaTime;
+    }
+    
+    [Test]
+    public static void Test_Avx_MultiplyAdd()
+    {
+        var store = CreateTestStore();
+        MultiplyAddQuery(store, 0.1f, false);
+
+        var storeVectorized = CreateTestStore();
+        MultiplyAddQuery(storeVectorized, 0.1f);
 
         foreach (var entity in store.Entities)
         {
