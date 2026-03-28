@@ -148,13 +148,13 @@ public static partial class Vectorizer
             source.AppendLine();
         }
         source.AppendLine("                    // 2. Compute");
-        var computeLanes = new StringBuilder[3];
-        for (int n = 0; n < 3; n++) {
-            computeLanes[n] = new StringBuilder();
+        var lanes = new StringBuilder[3];
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n] = new StringBuilder();
         }
-        if (Compute(computeLanes, query, expressionSyntax)) {
-            for (int n = 0; n < 3; n++) {
-                source.AppendLine($"                    {computeLanes[n]}");
+        if (Compute(lanes, query, expressionSyntax)) {
+            for (int n = 0; n < lanes.Length; n++) {
+                source.AppendLine($"                    {lanes[n]}");
             }
         } else {
             source.AppendLine("                    // not supported");

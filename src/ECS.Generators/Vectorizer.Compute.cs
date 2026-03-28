@@ -9,36 +9,36 @@ namespace Friflo.Engine.ECS.Generators;
 
 public static partial class Vectorizer
 {
-    private static bool Compute_MemberAccess(StringBuilder[] computeLanes, Query query, MemberAccessExpressionSyntax memberAccess)
+    private static bool Compute_MemberAccess(StringBuilder[] lanes, Query query, MemberAccessExpressionSyntax memberAccess)
     {
         if (memberAccess.Expression is not IdentifierNameSyntax identifierNameSyntax) {
             return false;
         }
         var name = identifierNameSyntax.Identifier.Text;
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append($"{name}_{i}");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append($"{name}_{i}");
         }
         return true;
     }
     
-    private static bool Compute_IdentifierName(StringBuilder[] computeLanes, Query query, IdentifierNameSyntax identifierName)
+    private static bool Compute_IdentifierName(StringBuilder[] lanes, Query query, IdentifierNameSyntax identifierName)
     {
         var name = identifierName.Identifier.Text;
         if (query.paramTypes.TryGetValue(name, out var type)) {
             if (type == ParamType.Scalar) {
-                for (int i = 0; i < 3; i++) {
-                    computeLanes[i].Append($"{name}_scalar");
+                for (int i = 0; i < lanes.Length; i++) {
+                    lanes[i].Append($"{name}_scalar");
                 }
                 return true;
             }
         }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append($"{name}_{i}");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append($"{name}_{i}");
         }
         return true;
     }
     
-    private static bool Compute_Assignment(StringBuilder[] computeLanes, Query query, AssignmentExpressionSyntax assignment)
+    private static bool Compute_Assignment(StringBuilder[] lanes, Query query, AssignmentExpressionSyntax assignment)
     {
         var avxOperation = assignment.Kind() switch
         {
@@ -55,19 +55,19 @@ public static partial class Vectorizer
         if (left is null) {
             return false;
         }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append($"{left}_{i} = Avx.{avxOperation}({left}_{i}, ");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append($"{left}_{i} = Avx.{avxOperation}({left}_{i}, ");
         }
-        if (!Compute(computeLanes, query, assignment.Right)) {
+        if (!Compute(lanes, query, assignment.Right)) {
             return false;
         }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append(");");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append(");");
         }
         return true;
     }
 
-    private static bool Compute_Binary(StringBuilder[] computeLanes, Query query, BinaryExpressionSyntax binary)
+    private static bool Compute_Binary(StringBuilder[] lanes, Query query, BinaryExpressionSyntax binary)
     {
         var avxOperation = binary.Kind() switch
         {
@@ -80,20 +80,20 @@ public static partial class Vectorizer
         if (avxOperation is null) {
             return false;
         }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append($"Avx.{avxOperation}(");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append($"Avx.{avxOperation}(");
         }
-        if (!Compute(computeLanes, query, binary.Left)) {
+        if (!Compute(lanes, query, binary.Left)) {
             return false;
         }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append(", ");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append(", ");
         }
-        if (!Compute(computeLanes, query, binary.Right)) {
+        if (!Compute(lanes, query, binary.Right)) {
             return false;
         }
-        for (int i = 0; i < 3; i++) {
-            computeLanes[i].Append(")");
+        for (int i = 0; i < lanes.Length; i++) {
+            lanes[i].Append(")");
         }
         return true;
     }
