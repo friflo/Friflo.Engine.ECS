@@ -97,6 +97,7 @@ public static partial class Vectorizer
             // 
             switch (parameter.Type.SpecialType) {
                 case  SpecialType.System_Single:
+                    query.paramTypes.Add(parameter.Name, ParamType.Scalar);
                     passedParams.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
                     break;
             }
@@ -177,6 +178,15 @@ public static partial class Vectorizer
     {
         if (syntax is AssignmentExpressionSyntax assignment) {
             return Compute_Assignment(computeLanes, query, assignment);
+        }
+        if (syntax is BinaryExpressionSyntax binary) {
+            return Compute_Binary(computeLanes, query, binary);
+        }
+        if (syntax is MemberAccessExpressionSyntax memberAccess) {
+            return Compute_MemberAccess(computeLanes, query, memberAccess);
+        }
+        if (syntax is IdentifierNameSyntax identifier) {
+            return Compute_IdentifierName(computeLanes, query, identifier);
         }
         return false;
     }

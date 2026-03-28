@@ -34,4 +34,11 @@ public class Query
     public  string                          hash;
     public  bool                            vectorize;
     public  string                          avxMethod = "";
+    public  Dictionary<string, ParamType>   paramTypes = new ();
+}
+
+public enum ParamType
+{
+    None = 0,
+    Scalar,
 }
