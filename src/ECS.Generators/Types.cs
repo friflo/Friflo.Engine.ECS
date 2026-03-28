@@ -25,16 +25,16 @@ public struct EcsTypes
 
 public class Query
 {
-    public  IMethodSymbol                   methodSymbol;
-    public  ImmutableArray<AttributeData>   attributes;
-    public  ImmutableArray<IParameterSymbol>parameters;
-    public  List<IParameterSymbol>          components;
-    public  EcsTypes                        ecsTypes;
+    public          IMethodSymbol                   methodSymbol;
+    public          ImmutableArray<AttributeData>   attributes;
+    public          ImmutableArray<IParameterSymbol>parameters;
+    public          List<IParameterSymbol>          components;
+    public          EcsTypes                        ecsTypes;
     // --- generated output
-    public  string                          hash;
-    public  bool                            vectorize;
-    public  string                          avxMethod = "";
-    public  Dictionary<string, ParamType>   paramTypes = new ();
+    public          string                          hash;
+    public          bool                            vectorize;
+    public          string                          avxMethod = "";
+    public readonly Dictionary<string, ParamType>   paramTypes = new ();
 }
 
 public enum ParamType
