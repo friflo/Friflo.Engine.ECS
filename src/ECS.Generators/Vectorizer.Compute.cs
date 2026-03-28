@@ -57,6 +57,27 @@ public static partial class Vectorizer
         if (left is null) {
             return false;
         }
+        // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
+        if (kind == SyntaxKind.AddAssignmentExpression && 
+            assignment.Right is BinaryExpressionSyntax assignBinary && assignBinary.Kind() is SyntaxKind.MultiplyExpression)
+        {
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append($"{left}_{i} = Fma.MultiplyAdd(");
+            }
+            if (!Compute(lanes, query, assignBinary.Left)) {
+                return false;
+            }
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append($", ");
+            }
+            if (!Compute(lanes, query, assignBinary.Right)) {
+                return false;
+            }
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append($", {left}_{i});");
+            }
+            return true;
+        }
         for (int i = 0; i < lanes.Length; i++) {
             if (kind == SyntaxKind.SimpleAssignmentExpression) {
                 lanes[i].Append($"{left}_{i} = ");
