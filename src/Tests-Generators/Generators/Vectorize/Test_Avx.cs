@@ -79,7 +79,7 @@ public static partial class Test_Avx
         position.value *= velocity.value * deltaTime;
     }
     
-    [Test][Ignore("add parameter support for [Vectorize]")]
+    [Test]
     public static void Test_Avx_Multiply_deltaTime()
     {
         var store = CreateTestStore();
