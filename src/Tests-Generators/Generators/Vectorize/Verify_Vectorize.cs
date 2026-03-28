@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using VerifyNUnit;
 
-
+// ReSharper disable InconsistentNaming
 namespace Tests.Generators.Vectorize;
 
 public static class Verify_Vectorize
@@ -38,7 +38,6 @@ public partial class MyExample
         var runResult = driver.RunGenerators(compilation);
 
         // 4. Verify (NUnit adapter)
-        // This creates: MyGeneratorTests.Generator_Snapshot_Test.verified.txt
         await Verifier.Verify(runResult);
     }
     
@@ -58,7 +57,7 @@ public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
                 void MoveExample(ref Position position, in Velocity velocity, float deltaTime) {
-                    position.value *= velocity.value;
+                    position.value *= velocity.value * deltaTime;
                 }
             }
             """;
@@ -71,7 +70,6 @@ public partial class MyExample
         var runResult = driver.RunGenerators(compilation);
 
         // 4. Verify (NUnit adapter)
-        // This creates: MyGeneratorTests.Generator_Snapshot_Test.verified.txt
         await Verifier.Verify(runResult);
     }
 }

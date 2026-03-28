@@ -49,17 +49,9 @@ public static class Utils
         }
     }
     
-    public static  IdentifierNameSyntax GetLeft(AssignmentExpressionSyntax assignmentExpressionSyntax)
+    public static  IdentifierNameSyntax GetMemberName(ExpressionSyntax expressionSyntax)
     {
-        if (assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax leftExpressionSyntax) {
-            return leftExpressionSyntax.Expression as IdentifierNameSyntax;
-        }
-        return null;
-    }
-    
-    public static  IdentifierNameSyntax GetRight(AssignmentExpressionSyntax assignmentExpressionSyntax)
-    {
-        if (assignmentExpressionSyntax.Right is MemberAccessExpressionSyntax leftExpressionSyntax) {
+        if (expressionSyntax is MemberAccessExpressionSyntax leftExpressionSyntax) {
             return leftExpressionSyntax.Expression as IdentifierNameSyntax;
         }
         return null;

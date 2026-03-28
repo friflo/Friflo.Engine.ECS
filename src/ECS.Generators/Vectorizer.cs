@@ -158,7 +158,7 @@ public static class Vectorizer
             source.AppendLine("                    // found no assignment");
             return source;
         }
-        var left = Utils.GetLeft(assignmentExpressionSyntax)?.Identifier.Text;
+        var left = Utils.GetMemberName(assignmentExpressionSyntax.Left)?.Identifier.Text;
         for (int n = 0; n < 3; n++) {
             source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
         }
@@ -182,8 +182,8 @@ public static class Vectorizer
         if (avxOperation is null) {
             return false;
         }
-        var left    = Utils.GetLeft(assignmentExpressionSyntax)?.Identifier.Text;
-        var right   = Utils.GetRight(assignmentExpressionSyntax)?.Identifier.Text;
+        var left    = Utils.GetMemberName(assignmentExpressionSyntax.Left)?.Identifier.Text;
+        var right   = Utils.GetMemberName(assignmentExpressionSyntax.Right)?.Identifier.Text;
         if (left is null || right is null) {
             return false;
         }
