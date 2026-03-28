@@ -41,4 +41,5 @@ public enum ParamType
 {
     None = 0,
     Scalar,
+    Vector,
 }

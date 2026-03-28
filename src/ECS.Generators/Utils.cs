@@ -56,4 +56,11 @@ public static class Utils
         }
         return null;
     }
+    
+    public static  void InterleaveVector3(StringBuilder sb, string n)
+    {
+        sb.AppendLine($"            var {n}_0 = Vector256.Create({n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y);");
+        sb.AppendLine($"            var {n}_1 = Vector256.Create({n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X);");
+        sb.AppendLine($"            var {n}_2 = Vector256.Create({n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z);");
+    }
 }

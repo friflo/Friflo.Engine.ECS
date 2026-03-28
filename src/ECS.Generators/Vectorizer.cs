@@ -96,6 +96,10 @@ public static partial class Vectorizer
             signature.Append($"\n            {type} {parameter.Name}");
             // 
             switch (parameter.Type.SpecialType) {
+                case SpecialType.None:
+                    query.paramTypes.Add(parameter.Name, ParamType.Vector);
+                    Utils.InterleaveVector3(passedParams, parameter.Name);
+                    break;
                 case  SpecialType.System_Single:
                     query.paramTypes.Add(parameter.Name, ParamType.Scalar);
                     passedParams.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
