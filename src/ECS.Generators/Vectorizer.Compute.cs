@@ -96,7 +96,8 @@ public static partial class Vectorizer
 
     private static bool Compute_Binary(StringBuilder[] lanes, Query query, BinaryExpressionSyntax binary)
     {
-        var avxOperation = binary.Kind() switch
+        var kind = binary.Kind();
+        var avxOperation = kind switch
         {
             SyntaxKind.AddExpression      => "Add",
             SyntaxKind.SubtractExpression => "Subtract",
@@ -106,6 +107,33 @@ public static partial class Vectorizer
         };
         if (avxOperation is null) {
             return false;
+        }
+        // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
+        if (kind == SyntaxKind.AddExpression && 
+            binary.Left is BinaryExpressionSyntax multiplyBinary && multiplyBinary.Kind() is SyntaxKind.MultiplyExpression)
+        {
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append("Fma.MultiplyAdd(");
+            }
+            if (!Compute(lanes, query, multiplyBinary.Left)) {
+                return false;
+            }
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append($", ");
+            }
+            if (!Compute(lanes, query, multiplyBinary.Right)) {
+                return false;
+            }
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append($", ");
+            }
+            if (!Compute(lanes, query, binary.Right)) {
+                return false;
+            }
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append(")");
+            }
+            return true;
         }
         for (int i = 0; i < lanes.Length; i++) {
             lanes[i].Append($"Avx.{avxOperation}(");

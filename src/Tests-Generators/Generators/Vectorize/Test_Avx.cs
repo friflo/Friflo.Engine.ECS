@@ -119,8 +119,31 @@ public static partial class Test_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    public static void MultiplyAdd(ref Position position, ref Velocity velocity, float deltaTime) {
+    public static void MultiplyAddAssinment(ref Position position, ref Velocity velocity, float deltaTime) {
         position.value += velocity.value * deltaTime;
+    }
+    
+    [Test]
+    public static void Test_Avx_MultiplyAddAssinment()
+    {
+        var store = CreateTestStore();
+        MultiplyAddAssinmentQuery(store, 0.1f, false);
+
+        var storeVectorized = CreateTestStore();
+        MultiplyAddAssinmentQuery(storeVectorized, 0.1f);
+
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    public static void MultiplyAdd(ref Position position, ref Velocity velocity, float deltaTime) {
+        position.value = velocity.value * deltaTime + position.value;
     }
     
     [Test]
