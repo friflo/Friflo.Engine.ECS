@@ -94,4 +94,27 @@ public static partial class Test_Avx
             Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    /*
+    [Vectorize][Query]  [OmitHash]
+    public static void MultiplyVector(ref Position position, in Velocity velocity, Vector3 vector3) {
+        position.value *= velocity.value * vector3;
+    }
+    
+    [Test]
+    public static void Test_Avx_MultiplyVector()
+    {
+        var store = CreateTestStore();
+        MultiplyVectorQuery(store, new Vector3(1,2,3), false);
+
+        var storeVectorized = CreateTestStore();
+        MultiplyVectorQuery(storeVectorized, new Vector3(1,2,3));
+
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    } */
 }

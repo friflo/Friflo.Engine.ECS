@@ -40,12 +40,14 @@ public static partial class Vectorizer
     
     private static bool Compute_Assignment(StringBuilder[] lanes, Query query, AssignmentExpressionSyntax assignment)
     {
-        var avxOperation = assignment.Kind() switch
+        var kind = assignment.Kind();
+        var avxOperation = kind switch
         {
-            SyntaxKind.AddAssignmentExpression      => "Add",
-            SyntaxKind.SubtractAssignmentExpression => "Subtract",
-            SyntaxKind.MultiplyAssignmentExpression => "Multiply",
-            SyntaxKind.DivideAssignmentExpression   => "Divide",
+            SyntaxKind.SimpleAssignmentExpression   => "",
+            SyntaxKind.AddAssignmentExpression      => "Avx.Add",
+            SyntaxKind.SubtractAssignmentExpression => "Avx.Subtract",
+            SyntaxKind.MultiplyAssignmentExpression => "Avx.Multiply",
+            SyntaxKind.DivideAssignmentExpression   => "Avx.Divide",
             _                                       => null
         };
         if (avxOperation is null) {
@@ -56,13 +58,17 @@ public static partial class Vectorizer
             return false;
         }
         for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append($"{left}_{i} = Avx.{avxOperation}({left}_{i}, ");
+            if (kind == SyntaxKind.SimpleAssignmentExpression) {
+                lanes[i].Append($"{left}_{i} = ");
+            } else {
+                lanes[i].Append($"{left}_{i} = {avxOperation}({left}_{i}, ");
+            }
         }
         if (!Compute(lanes, query, assignment.Right)) {
             return false;
         }
         for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append(");");
+            lanes[i].Append(kind == SyntaxKind.SimpleAssignmentExpression ? ";" : ");");
         }
         return true;
     }
