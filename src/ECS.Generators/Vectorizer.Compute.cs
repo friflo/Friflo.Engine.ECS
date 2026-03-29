@@ -25,7 +25,7 @@ public static partial class Vectorizer
     {
         var name = identifierName.Identifier.Text;
         if (query.paramTypes.TryGetValue(name, out var paramType)) {
-            if (paramType.dimension == 1) {
+            if (paramType == ParamType.Scalar) {
                 for (int i = 0; i < lanes.Length; i++) {
                     lanes[i].Append($"{name}_scalar");
                 }

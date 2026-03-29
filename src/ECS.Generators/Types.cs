@@ -38,10 +38,11 @@ public class Query
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
 }
 
-public struct ParamType
+public enum ParamType
 {
-    public SpecialType  specialType;
-    public int          dimension;
+    None,
+    Scalar,
+    Vector
 }
 
 public struct VectorType
@@ -50,5 +51,7 @@ public struct VectorType
     public string           fullQualifiedName;
     public bool             isComponent;
     public ITypeSymbol      valueType;
+    public SpecialType      valueSpecialType;
     public ParamType        paramType;
+    public int              dimension;
 }

@@ -76,14 +76,17 @@ public static partial class Vectorizer
     private static VectorType CreateVectorType(IParameterSymbol parameter, string fullQualifiedName, bool isComponent, ITypeSymbol valueType)
     {
         var specialType = valueType.SpecialType;
+        var paramType   = ParamType.None;
         int dimension = 0;
         switch (valueType.SpecialType) {
             case SpecialType.None:
                 specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
                 dimension = 3;
+                paramType = ParamType.Vector;
                 break;
             case SpecialType.System_Single:
                 dimension = 1;
+                paramType = ParamType.Scalar;
                 break;
         }
         return new VectorType {
@@ -91,7 +94,9 @@ public static partial class Vectorizer
             fullQualifiedName   = fullQualifiedName,
             isComponent         = isComponent,
             valueType           = valueType,
-            paramType           = new ParamType { specialType = specialType, dimension = dimension }     
+            valueSpecialType    = specialType, 
+            paramType           = paramType,
+            dimension           = dimension, 
         };
     }
     
@@ -145,7 +150,7 @@ public static partial class Vectorizer
                 signature.Append(",");
             }
             if (vectorType.isComponent) {
-                if (vectorType.paramType.dimension == 1) {
+                if (vectorType.paramType == ParamType.Scalar) {
                     Utils.ScalarMask(locals, parameter.Name);
                 }
                 signature.Append($"\n            Span<{vectorType.fullQualifiedName}> {parameter.Name}");
@@ -154,7 +159,7 @@ public static partial class Vectorizer
             Utils.AppendRefKind(signature, parameter.RefKind);
             signature.Append($"\n            {vectorType.fullQualifiedName} {parameter.Name}");
             // 
-            if (vectorType.paramType.dimension == 1) {
+            if (vectorType.paramType == ParamType.Scalar) {
                 locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
             } else {
                 Utils.InterleaveVector3(locals, parameter.Name);
@@ -201,7 +206,7 @@ public static partial class Vectorizer
         foreach (var vectorType in query.vectorTypes) {
             if (!vectorType.isComponent) continue;
             var name = vectorType.parameter.Name;
-            if (vectorType.paramType.dimension == 1) {
+            if (vectorType.paramType == ParamType.Scalar) {
                 source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
                 for (int n = 0; n < 3; n++) {
                     source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
