@@ -20,7 +20,7 @@ public static partial class Test_Vector4_Avx
         position.value *= velocity.value;
     } 
         
-    [Test]  [Ignore("requires Vector4 support")]
+    [Test]
     public static void Test_Avx_Multiply()
     {
         var store = CreateTestStore();
@@ -86,7 +86,7 @@ public static partial class Test_Vector4_Avx
         position.value *= velocity.value * deltaTime;
     }
     
-    [Test]  [Ignore("requires Vector4 support")]
+    [Test]
     public static void Test_Avx_Multiply_deltaTime()
     {
         var store = CreateTestStore();
@@ -132,7 +132,7 @@ public static partial class Test_Vector4_Avx
         position.value += velocity.value * deltaTime;
     }
     
-    [Test]  [Ignore("requires Vector4 support")]
+    [Test]
     public static void Test_Avx_MultiplyAddAssinment()
     {
         var store = CreateTestStore();
@@ -156,7 +156,7 @@ public static partial class Test_Vector4_Avx
         position.value = velocity.value * deltaTime + position.value;
     }
     
-    [Test]  [Ignore("requires Vector4 support")]
+    [Test]
     public static void Test_Avx_MultiplyAdd()
     {
         var store = CreateTestStore();

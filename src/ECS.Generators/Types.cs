@@ -31,7 +31,8 @@ public class Query
     public          List<IParameterSymbol>          components;
     public          EcsTypes                        ecsTypes;
     // --- generated output
-    public          int                             vectorDimension;
+    public          int                             vectorDimension;    // [3, 4]
+    public          int                             laneCount;          // [3, 2]
     public          VectorType[]                    vectorTypes;
     public          string                          hash;
     public          bool                            vectorize;

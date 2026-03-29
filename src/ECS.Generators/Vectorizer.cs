@@ -24,6 +24,11 @@ public static partial class Vectorizer
         }
         query.vectorTypes = GetVectorTypes(query);
         query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
+        query.laneCount = query.vectorDimension switch {
+            3 => 3,
+            4 => 2,
+            _ => -1
+        };
         query.vectorize = true;
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
             SyntaxNode node = syntaxReference.GetSyntax();
@@ -194,6 +199,11 @@ public static partial class Vectorizer
             pointer.AppendLine();
             pointer.Append($"                    float* {component.Name}_ptr = (float*)({component.Name}_first + i);");
         }
+        var elementStep = query.vectorDimension switch {
+            4 => 4,
+            3 => 8,
+            _ => -1,
+        };
         int step = 8;
         var vectorizeBlock = VectorizeBlock(query, expressionSyntax.Expression, step);
         var source = $@"
@@ -201,13 +211,13 @@ public static partial class Vectorizer
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
             int i = 0;
-            var end = {query.components[0].Name}.Length - {step};
+            var end = {query.components[0].Name}.Length - {elementStep};
             if (i > end) {{
                 return 0;
             }}
 {locals}{@fixed}
             {{
-                for (; i <= end; i += {step})
+                for (; i <= end; i += {elementStep})
                 {{{pointer}
 {vectorizeBlock}
                 }}
@@ -221,6 +231,7 @@ public static partial class Vectorizer
     private static StringBuilder VectorizeBlock(Query query, ExpressionSyntax expressionSyntax, int step)
     {
         var source = new StringBuilder();
+        var laneCount = query.laneCount;
         source.AppendLine();
         source.AppendLine("                    // 1. Load");
         foreach (var vectorType in query.vectorTypes) {
@@ -228,18 +239,18 @@ public static partial class Vectorizer
             var name = vectorType.parameter.Name;
             if (vectorType.paramType == ParamType.Scalar) {
                 source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
-                for (int n = 0; n < 3; n++) {
+                for (int n = 0; n < laneCount; n++) {
                     source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
                 }
             } else {
-                for (int n = 0; n < 3; n++) {
+                for (int n = 0; n < laneCount; n++) {
                     source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
                 }
             }
             source.AppendLine();
         }
         source.AppendLine("                    // 2. Compute");
-        var lanes = new StringBuilder[3];
+        var lanes = new StringBuilder[laneCount];
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n] = new StringBuilder();
         }
@@ -258,7 +269,7 @@ public static partial class Vectorizer
             return source;
         }
         var left = Utils.GetMemberName(assignmentExpressionSyntax.Left)?.Identifier.Text;
-        for (int n = 0; n < 3; n++) {
+        for (int n = 0; n < laneCount; n++) {
             source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
         }
         source.AppendLine();
