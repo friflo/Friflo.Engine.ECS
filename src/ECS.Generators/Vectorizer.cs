@@ -154,13 +154,10 @@ public static partial class Vectorizer
             Utils.AppendRefKind(signature, parameter.RefKind);
             signature.Append($"\n            {vectorType.fullQualifiedName} {parameter.Name}");
             // 
-            switch (type.SpecialType) {
-                case SpecialType.None:
-                    Utils.InterleaveVector3(locals, parameter.Name);
-                    break;
-                case  SpecialType.System_Single:
-                    locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
-                    break;
+            if (vectorType.paramType.dimension == 1) {
+                locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
+            } else {
+                Utils.InterleaveVector3(locals, parameter.Name);
             }
         }
         
