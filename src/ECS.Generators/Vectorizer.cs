@@ -145,6 +145,9 @@ public static partial class Vectorizer
                 signature.Append(",");
             }
             if (vectorType.isComponent) {
+                if (vectorType.paramType.dimension == 1) {
+                    Utils.ScalarMask(locals, parameter.Name);
+                }
                 signature.Append($"\n            Span<{vectorType.fullQualifiedName}> {parameter.Name}");
                 continue;
             }

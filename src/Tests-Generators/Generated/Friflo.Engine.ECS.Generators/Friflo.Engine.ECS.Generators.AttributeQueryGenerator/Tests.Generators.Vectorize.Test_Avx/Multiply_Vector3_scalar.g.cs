@@ -55,6 +55,9 @@ namespace Tests.Generators.Vectorize
             Span<global::Friflo.Engine.ECS.Position> position,
             Span<global::Tests.ECS.FloatComponent> factor)
         {
+            Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 1, 1, 1, 2, 2);
+            Vector256<int> factor_mask_1 = Vector256.Create(2, 3, 3, 3, 4, 4, 4, 5);
+            Vector256<int> factor_mask_2 = Vector256.Create(5, 5, 6, 6, 6, 7, 7, 7);
             int i = 0;
             var end = position.Length - 8;
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
