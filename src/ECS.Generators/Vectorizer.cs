@@ -1,6 +1,7 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -51,6 +52,16 @@ public static partial class Vectorizer
             var name = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             bool isComponent = query.ecsTypes.IsComponent(type);
             if (isComponent) {
+                IFieldSymbol valueField = null;
+                foreach (var field in type.GetMembers().OfType<IFieldSymbol>()) {
+                    if (field.Name == "value" || field.Name == "Value") {
+                        valueField = field;
+                        break;
+                    }
+                }
+                if (valueField == null) {
+                    throw new InvalidOperationException($"missing value field in {name}");
+                }
                 result.Add(new VectorType { parameter = parameter, fullQualifiedName = name, isComponent = true });
                 continue;
             }
