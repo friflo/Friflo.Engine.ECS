@@ -87,12 +87,12 @@ public static partial class Vectorizer
             case SpecialType.None:
                 var fullTypeName = valueType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 if (fullTypeName == "global::System.Numerics.Vector3") {
-                    specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
+                    specialType = SpecialType.System_Single; 
                     dimension = 3;
                     paramType = ParamType.Vector;
                 }
                 else if (fullTypeName == "global::System.Numerics.Vector4") {
-                    specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
+                    specialType = SpecialType.System_Single; 
                     dimension = 4;
                     paramType = ParamType.Vector;
                 }
