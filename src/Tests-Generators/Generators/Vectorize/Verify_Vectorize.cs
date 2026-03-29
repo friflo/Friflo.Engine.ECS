@@ -133,4 +133,26 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_scalar_component()
+    {
+        var code =
+            """
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct FloatComponent : IComponent { public float value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void AssignVector(ref Position position, in FloatComponent factor) {
+                    position.value = position.value * factor.value;
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

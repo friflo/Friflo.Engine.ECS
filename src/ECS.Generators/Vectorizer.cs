@@ -74,7 +74,7 @@ public static partial class Vectorizer
             var left  = assignmentExpressionSyntax.Left;
             var right = assignmentExpressionSyntax.Right;
         }
-        var passedParams = new StringBuilder();
+        var locals = new StringBuilder();
         // --- method signature
         var signature = new StringBuilder();
         foreach (var parameter in query.parameters) {
@@ -98,11 +98,11 @@ public static partial class Vectorizer
             switch (parameter.Type.SpecialType) {
                 case SpecialType.None:
                     query.paramTypes.Add(parameter.Name, ParamType.Vector);
-                    Utils.InterleaveVector3(passedParams, parameter.Name);
+                    Utils.InterleaveVector3(locals, parameter.Name);
                     break;
                 case  SpecialType.System_Single:
                     query.paramTypes.Add(parameter.Name, ParamType.Scalar);
-                    passedParams.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
+                    locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
                     break;
             }
         }
@@ -125,7 +125,7 @@ public static partial class Vectorizer
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
-{passedParams}            int i = 0;
+{locals}            int i = 0;
             var end = {query.components[0].Name}.Length - {step};{@fixed}
             {{
                 for (; i <= end; i += {step})
