@@ -62,9 +62,8 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-            Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 1, 1, 1, 2, 2);
-            Vector256<int> factor_mask_1 = Vector256.Create(2, 3, 3, 3, 4, 4, 4, 5);
-            Vector256<int> factor_mask_2 = Vector256.Create(5, 5, 6, 6, 6, 7, 7, 7);
+            Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 0, 1, 1, 1, 1);
+            Vector256<int> factor_mask_1 = Vector256.Create(2, 2, 2, 2, 3, 3, 3, 3);
 
             fixed (global::Tests.ECS.Position4* position_first = position)
             fixed (global::Tests.ECS.FloatComponent* factor_first = factor)

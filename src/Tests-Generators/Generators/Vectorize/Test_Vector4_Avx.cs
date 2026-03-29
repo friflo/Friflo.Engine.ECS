@@ -179,7 +179,7 @@ public static partial class Test_Vector4_Avx
         position.value = position.value * factor.value;
     }
     
-    [Test]  [Ignore("requires Vector4 support")]
+    [Test]
     public static void Test_Avx_Multiply_Vector3_scalar()
     {
         var store = CreateTestStore();
