@@ -23,6 +23,7 @@ public static partial class Vectorizer
             return null;
         }
         query.vectorTypes = GetVectorTypes(query);
+        AnalyzeVectorTypes(query.vectorTypes);
         query.vectorize = true;
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
             SyntaxNode node = syntaxReference.GetSyntax();
@@ -62,7 +63,7 @@ public static partial class Vectorizer
                 if (valueField == null) {
                     throw new InvalidOperationException($"missing value field in {name}");
                 }
-                result.Add(new VectorType { parameter = parameter, fullQualifiedName = name, isComponent = true });
+                result.Add(CreateVectorType(parameter, name, true, valueField.Type));
                 continue;
             }
             var paramType = type.SpecialType switch {
@@ -70,9 +71,20 @@ public static partial class Vectorizer
                 SpecialType.System_Single => ParamType.Scalar
             };
             query.paramTypes.Add(parameter.Name, paramType);
-            result.Add(new VectorType { parameter = parameter, fullQualifiedName = name });
+            result.Add(CreateVectorType(parameter, name, false, parameter.Type));
         }
         return result.ToArray();
+    }
+    
+    private static VectorType CreateVectorType(IParameterSymbol parameter, string fullQualifiedName, bool isComponent, ITypeSymbol valueType)
+    {
+        return new VectorType{ parameter = parameter, fullQualifiedName = fullQualifiedName, isComponent = isComponent, valueType = valueType };
+    }
+    
+    private static void AnalyzeVectorTypes(VectorType[] vectorTypes)
+    {
+        foreach (var vectorType in vectorTypes) {
+        }
     }
     
     public static string EmitVectorizeBlock(Query query)

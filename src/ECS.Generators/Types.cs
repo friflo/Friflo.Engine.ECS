@@ -50,4 +50,5 @@ public struct VectorType
     public IParameterSymbol parameter;
     public string           fullQualifiedName;
     public bool             isComponent;
+    public ITypeSymbol      valueType;
 }
