@@ -19,12 +19,12 @@ public static class Test_Vectorize_Lab
 {
     // [Query]
     [Vectorize]
-    public static void MoveVectorized(ref Position position, in Velocity velocity, float deltaTime) {
+    private static void MoveVectorized(ref Position position, in Velocity velocity, float deltaTime) {
         position.value += velocity.value * deltaTime;
     }
     
 #region template for code generation
-    public static ArchetypeQuery MoveVectorizedQuery(EntityStore store, float deltaTime)
+    private static ArchetypeQuery MoveVectorizedQuery(EntityStore store, float deltaTime)
     {
         var query = MoveVectorized_GetQuery(store);
         foreach (var chunk in query.Chunks)
@@ -82,7 +82,7 @@ public static class Test_Vectorize_Lab
     
     // Prompt:  Transpose: Vector3[8]  ->  tuple of three Vector256<float> using shuffle in C# with maximum performance
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe (Vector256<float> X, Vector256<float> Y, Vector256<float> Z) Transpose8Vector3(float* inputPtr)
+    private static unsafe (Vector256<float> X, Vector256<float> Y, Vector256<float> Z) Transpose8Vector3(float* inputPtr)
     {
         // 1. Load 3 contiguous 256-bit blocks
         Vector256<float> r0 = Avx.LoadVector256(inputPtr);      // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
@@ -127,7 +127,7 @@ public static class Test_Vectorize_Lab
     
     // Prompt:   Complete method to transpose 3 Vector256<float> V to a Vector3[8] array with a float* parameter using Unpacks and Blends in C# with maximum performance
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe void StoreSoAtoAoS (Vector256<float> x, Vector256<float> y, Vector256<float> z, float* ptr)
+    private static unsafe void StoreSoAtoAoS (Vector256<float> x, Vector256<float> y, Vector256<float> z, float* ptr)
     {
         float* f = ptr;
     

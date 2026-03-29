@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using VerifyNUnit;
 
-
+// ReSharper disable InconsistentNaming
 namespace Tests.Generators.Query;
 
 public static class Verify_Query

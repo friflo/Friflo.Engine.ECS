@@ -17,7 +17,7 @@ namespace Tests.Generators.Vectorize;
 public static partial class Test_Avx
 {
     [Vectorize][Query]  [OmitHash]
-    public static void Multiply(ref Position position, in Velocity velocity) {
+    private static void Multiply(ref Position position, in Velocity velocity) {
         position.value *= velocity.value;
     } 
         
@@ -75,7 +75,7 @@ public static partial class Test_Avx
         var store = CreateTestStore();
         var query = store.Query<Position, Velocity>();
         for (int i = 0; i < RepeatCount; i++) {
-            query.ForEachEntity(static (ref Position position, ref Velocity velocity, Entity entity) => {
+            query.ForEachEntity(static (ref Position position, ref Velocity velocity, Entity _) => {
                 position.value *= velocity.value;
             });
         }
@@ -83,7 +83,7 @@ public static partial class Test_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    public static void MultiplyDeltaTime(ref Position position, in Velocity velocity, float deltaTime) {
+    private static void MultiplyDeltaTime(ref Position position, in Velocity velocity, float deltaTime) {
         position.value *= velocity.value * deltaTime;
     }
     
@@ -106,7 +106,7 @@ public static partial class Test_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    public static void MultiplyVector(ref Position position, in Velocity velocity, Vector3 vector3) {
+    private static void MultiplyVector(ref Position position, in Velocity velocity, Vector3 vector3) {
         position.value *= velocity.value * vector3;
     }
     
@@ -129,7 +129,7 @@ public static partial class Test_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    public static void MultiplyAddAssinment(ref Position position, ref Velocity velocity, float deltaTime) {
+    private static void MultiplyAddAssinment(ref Position position, ref Velocity velocity, float deltaTime) {
         position.value += velocity.value * deltaTime;
     }
     
@@ -153,7 +153,7 @@ public static partial class Test_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    public static void MultiplyAdd(ref Position position, ref Velocity velocity, float deltaTime) {
+    private static void MultiplyAdd(ref Position position, ref Velocity velocity, float deltaTime) {
         position.value = velocity.value * deltaTime + position.value;
     }
     
@@ -176,7 +176,7 @@ public static partial class Test_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    public static void Multiply_Vector3_scalar(ref Position position, ref FloatComponent factor) {
+    private static void Multiply_Vector3_scalar(ref Position position, ref FloatComponent factor) {
         position.value = position.value * factor.value;
     }
     
