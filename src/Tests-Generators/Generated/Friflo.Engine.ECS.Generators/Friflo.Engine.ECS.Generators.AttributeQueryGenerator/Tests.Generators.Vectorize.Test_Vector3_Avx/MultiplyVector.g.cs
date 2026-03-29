@@ -8,13 +8,13 @@ using Friflo.Engine.ECS;
 
 namespace Tests.Generators.Vectorize
 {
-    public partial class Test_Avx
+    public partial class Test_Vector3_Avx
     {
-        /// <summary>Query method generated for: <see cref="MultiplyAdd"/>.</summary>
+        /// <summary>Query method generated for: <see cref="MultiplyVector"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MultiplyAddQuery(EntityStore _store, float deltaTime, bool vectorized = true)
+        public static ArchetypeQuery MultiplyVectorQuery(EntityStore _store, global::System.Numerics.Vector3 vector3, bool vectorized = true)
         {
-            var _query = _MultiplyAdd_GetQuery(_store);
+            var _query = _MultiplyVector_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -23,11 +23,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _MultiplyAdd_Avx(positionSpan, velocitySpan, deltaTime);
+                    n = _MultiplyVector_Avx(positionSpan, velocitySpan, vector3);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    MultiplyAdd(ref positionSpan[n], ref velocitySpan[n], deltaTime);
+                    MultiplyVector(ref positionSpan[n], in velocitySpan[n], vector3);
                 }
             }
             return _query;
@@ -35,35 +35,37 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MultiplyAdd_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _MultiplyVector_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>
-            _MultiplyAdd_GetQuery(EntityStore _store)
+            _MultiplyVector_GetQuery(EntityStore _store)
         {
             var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>)
-                EntityStore.UserDataGet(_store, _MultiplyAdd_Slot);
+                EntityStore.UserDataGet(_store, _MultiplyVector_Slot);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>();
 
-            EntityStore.UserDataSet(_store, _MultiplyAdd_Slot, _query);
+            EntityStore.UserDataSet(_store, _MultiplyVector_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _MultiplyAdd_Avx(
+        private static unsafe int _MultiplyVector_Avx(
             Span<global::Friflo.Engine.ECS.Position> position,
             Span<global::Tests.Examples.Velocity> velocity,
-            float deltaTime)
+            global::System.Numerics.Vector3 vector3)
         {
             int i = 0;
             var end = position.Length - 8;
             if (i > end) {
                 return 0;
             }
-            var deltaTime_scalar = Vector256.Create(deltaTime);
+            var vector3_0 = Vector256.Create(vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y);
+            var vector3_1 = Vector256.Create(vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X);
+            var vector3_2 = Vector256.Create(vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z);
 
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::Tests.Examples.Velocity* velocity_first = velocity)
@@ -83,9 +85,9 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
 
                     // 2. Compute
-                    position_0 = Fma.MultiplyAdd(velocity_0, deltaTime_scalar, position_0);
-                    position_1 = Fma.MultiplyAdd(velocity_1, deltaTime_scalar, position_1);
-                    position_2 = Fma.MultiplyAdd(velocity_2, deltaTime_scalar, position_2);
+                    position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, vector3_0));
+                    position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, vector3_1));
+                    position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, vector3_2));
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);

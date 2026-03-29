@@ -8,13 +8,13 @@ using Friflo.Engine.ECS;
 
 namespace Tests.Generators.Vectorize
 {
-    public partial class Test_Avx
+    public partial class Test_Vector3_Avx
     {
-        /// <summary>Query method generated for: <see cref="MultiplyDeltaTime"/>.</summary>
+        /// <summary>Query method generated for: <see cref="MultiplyAddAssinment"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MultiplyDeltaTimeQuery(EntityStore _store, float deltaTime, bool vectorized = true)
+        public static ArchetypeQuery MultiplyAddAssinmentQuery(EntityStore _store, float deltaTime, bool vectorized = true)
         {
-            var _query = _MultiplyDeltaTime_GetQuery(_store);
+            var _query = _MultiplyAddAssinment_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -23,11 +23,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _MultiplyDeltaTime_Avx(positionSpan, velocitySpan, deltaTime);
+                    n = _MultiplyAddAssinment_Avx(positionSpan, velocitySpan, deltaTime);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    MultiplyDeltaTime(ref positionSpan[n], in velocitySpan[n], deltaTime);
+                    MultiplyAddAssinment(ref positionSpan[n], ref velocitySpan[n], deltaTime);
                 }
             }
             return _query;
@@ -35,25 +35,25 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MultiplyDeltaTime_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _MultiplyAddAssinment_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>
-            _MultiplyDeltaTime_GetQuery(EntityStore _store)
+            _MultiplyAddAssinment_GetQuery(EntityStore _store)
         {
             var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>)
-                EntityStore.UserDataGet(_store, _MultiplyDeltaTime_Slot);
+                EntityStore.UserDataGet(_store, _MultiplyAddAssinment_Slot);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Friflo.Engine.ECS.Position, global::Tests.Examples.Velocity>();
 
-            EntityStore.UserDataSet(_store, _MultiplyDeltaTime_Slot, _query);
+            EntityStore.UserDataSet(_store, _MultiplyAddAssinment_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _MultiplyDeltaTime_Avx(
+        private static unsafe int _MultiplyAddAssinment_Avx(
             Span<global::Friflo.Engine.ECS.Position> position,
             Span<global::Tests.Examples.Velocity> velocity,
             float deltaTime)
@@ -83,9 +83,9 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
 
                     // 2. Compute
-                    position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, deltaTime_scalar));
-                    position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, deltaTime_scalar));
-                    position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, deltaTime_scalar));
+                    position_0 = Fma.MultiplyAdd(velocity_0, deltaTime_scalar, position_0);
+                    position_1 = Fma.MultiplyAdd(velocity_1, deltaTime_scalar, position_1);
+                    position_2 = Fma.MultiplyAdd(velocity_2, deltaTime_scalar, position_2);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);

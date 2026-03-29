@@ -14,7 +14,7 @@ namespace Tests.Generators.Vectorize;
 
 
 
-public static partial class Test_Avx
+public static partial class Test_Vector3_Avx
 {
     [Vectorize][Query]  [OmitHash]
     private static void Multiply(ref Position position, in Velocity velocity) {

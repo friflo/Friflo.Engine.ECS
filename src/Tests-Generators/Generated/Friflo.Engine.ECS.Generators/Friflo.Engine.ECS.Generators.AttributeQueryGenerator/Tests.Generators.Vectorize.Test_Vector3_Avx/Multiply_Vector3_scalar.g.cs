@@ -8,7 +8,7 @@ using Friflo.Engine.ECS;
 
 namespace Tests.Generators.Vectorize
 {
-    public partial class Test_Avx
+    public partial class Test_Vector3_Avx
     {
         /// <summary>Query method generated for: <see cref="Multiply_Vector3_scalar"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
