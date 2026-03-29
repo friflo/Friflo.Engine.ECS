@@ -199,12 +199,20 @@ public static partial class Vectorizer
     private static StringBuilder VectorizeBlock(Query query, ExpressionSyntax expressionSyntax, int step)
     {
         var source = new StringBuilder();
-        var components = query.components;
         source.AppendLine();
         source.AppendLine("                    // 1. Load");
-        foreach (var component in components) {
-            for (int n = 0; n < 3; n++) {
-                source.AppendLine($"                    Vector256<float> {component.Name}_{n} = Avx.LoadVector256({component.Name}_ptr + {n*step});");
+        foreach (var vectorType in query.vectorTypes) {
+            if (!vectorType.isComponent) continue;
+            var name = vectorType.parameter.Name;
+            if (vectorType.paramType.dimension == 1) {
+                source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
+                for (int n = 0; n < 3; n++) {
+                    source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
+                }
+            } else {
+                for (int n = 0; n < 3; n++) {
+                    source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
+                }
             }
             source.AppendLine();
         }
