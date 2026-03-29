@@ -48,6 +48,8 @@ public static class Test_Lab_Matrix
         }
     }
     
+    // Note!
+    // Apply loop unrolling to improve performance by processing 4 or 8 vectors per iteration (instead of 2)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static unsafe void TransformVector4Array_Avx(Vector4[] src, Matrix4x4 matrix, Vector4[] dst)
     {
