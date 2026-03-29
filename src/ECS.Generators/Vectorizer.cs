@@ -78,12 +78,13 @@ public static partial class Vectorizer
         // --- method signature
         var signature = new StringBuilder();
         foreach (var parameter in query.parameters) {
+            var type = parameter.Type;
             if (signature.Length > 0) {
                 signature.Append(",");
             }
-            bool isComponent = query.ecsTypes.IsComponent(parameter.Type);
+            bool isComponent = query.ecsTypes.IsComponent(type);
             if (isComponent) {
-                var componentType = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                var componentType = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 signature.Append($"\n            Span<{componentType}> {parameter.Name}");
                 continue;
             }
@@ -92,10 +93,10 @@ public static partial class Vectorizer
                 continue;
             }
             Utils.AppendRefKind(signature, parameter.RefKind);
-            string type = parameter.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            signature.Append($"\n            {type} {parameter.Name}");
+            string typeName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            signature.Append($"\n            {typeName} {parameter.Name}");
             // 
-            switch (parameter.Type.SpecialType) {
+            switch (type.SpecialType) {
                 case SpecialType.None:
                     query.paramTypes.Add(parameter.Name, ParamType.Vector);
                     Utils.InterleaveVector3(locals, parameter.Name);
