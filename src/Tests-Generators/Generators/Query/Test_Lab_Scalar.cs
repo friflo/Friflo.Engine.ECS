@@ -46,8 +46,7 @@ public static class Test_Lab_Scalar
                 Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);  // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
                 Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
                 
-                Vector256<float> value_scalar = Avx.LoadVector256(scalar_ptr);
-                
+                Vector256<float> value_scalar = Avx.LoadVector256(scalar_ptr);                
                 Vector256<float> value_0 = Avx2.PermuteVar8x32(value_scalar, value_mask_0);
                 Vector256<float> value_1 = Avx2.PermuteVar8x32(value_scalar, value_mask_1);
                 Vector256<float> value_2 = Avx2.PermuteVar8x32(value_scalar, value_mask_2);
