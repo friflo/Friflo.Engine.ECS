@@ -23,7 +23,7 @@ public static partial class Vectorizer
             return null;
         }
         query.vectorTypes = GetVectorTypes(query);
-        AnalyzeVectorTypes(query.vectorTypes);
+        query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
         query.vectorize = true;
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
             SyntaxNode node = syntaxReference.GetSyntax();
@@ -80,9 +80,17 @@ public static partial class Vectorizer
         int dimension = 0;
         switch (valueType.SpecialType) {
             case SpecialType.None:
-                specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
-                dimension = 3;
-                paramType = ParamType.Vector;
+                var fullTypeName = valueType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                if (fullTypeName == "global::System.Numerics.Vector3") {
+                    specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
+                    dimension = 3;
+                    paramType = ParamType.Vector;
+                }
+                else if (fullTypeName == "global::System.Numerics.Vector4") {
+                    specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
+                    dimension = 4;
+                    paramType = ParamType.Vector;
+                }
                 break;
             case SpecialType.System_Single:
                 dimension = 1;
@@ -100,10 +108,22 @@ public static partial class Vectorizer
         };
     }
     
-    private static void AnalyzeVectorTypes(VectorType[] vectorTypes)
+    private static int GetVectorTypeDimension(VectorType[] vectorTypes)
     {
+        var dimension = 0;
         foreach (var vectorType in vectorTypes) {
+            if (vectorType.dimension == 1) {
+                continue;
+            }
+            if (dimension == 0) {
+                dimension = vectorType.dimension;
+                continue;
+            }
+            if (dimension != vectorType.dimension) {
+                throw new InvalidOperationException($"Inconsistent parameter dimensions {vectorType.dimension} is not equal to dimension {dimension}");
+            }
         }
+        return dimension;
     }
     
     public static string EmitVectorizeBlock(Query query)

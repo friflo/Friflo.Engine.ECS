@@ -31,6 +31,7 @@ public static class Verify_Vectorize
     {
         var code =
 """
+using System.Numerics;
 using Friflo.Engine.ECS;
 
 namespace VerifyVectorize;
@@ -53,6 +54,7 @@ public partial class MyExample
     {
         var code =
             """
+            using System.Numerics;
             using Friflo.Engine.ECS;
 
             namespace VerifyVectorize;
@@ -75,6 +77,7 @@ public partial class MyExample
     {
         var code =
             """
+            using System.Numerics;
             using Friflo.Engine.ECS;
 
             namespace VerifyVectorize;
@@ -98,6 +101,7 @@ public partial class MyExample
 
         var code =
             """
+            using System.Numerics;
             using Friflo.Engine.ECS;
 
             namespace VerifyVectorize;
@@ -120,6 +124,7 @@ public partial class MyExample
     {
         var code =
             """
+            using System.Numerics;
             using Friflo.Engine.ECS;
 
             namespace VerifyVectorize;
@@ -142,6 +147,7 @@ public partial class MyExample
     {
         var code =
             """
+            using System.Numerics;
             using Friflo.Engine.ECS;
 
             namespace VerifyVectorize;

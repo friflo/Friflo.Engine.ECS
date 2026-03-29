@@ -13,7 +13,7 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="AssignVector"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery AssignVectorQuery(EntityStore _store, Vector3 vector, bool vectorized = true)
+        public ArchetypeQuery AssignVectorQuery(EntityStore _store, global::System.Numerics.Vector3 vector, bool vectorized = true)
         {
             var _query = _AssignVector_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
@@ -55,7 +55,7 @@ namespace VerifyVectorize
         [SkipLocalsInit]
         private static unsafe int _AssignVector_Avx(
             Span<global::Friflo.Engine.ECS.Position> position,
-            Vector3 vector)
+            global::System.Numerics.Vector3 vector)
         {
             int i = 0;
             var end = position.Length - 8;
