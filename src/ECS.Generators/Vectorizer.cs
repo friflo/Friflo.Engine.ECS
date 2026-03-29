@@ -1,6 +1,7 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -20,6 +21,7 @@ public static partial class Vectorizer
         if (!found) {
             return null;
         }
+        query.vectorTypes = GetVectorTypes(query);
         query.vectorize = true;
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
             SyntaxNode node = syntaxReference.GetSyntax();
@@ -36,24 +38,46 @@ public static partial class Vectorizer
         return null;
     }
     
+    private static VectorType[] GetVectorTypes(Query query)
+    {
+        var result = new List<VectorType>();
+        foreach (var parameter in query.parameters)
+        {
+            bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
+            if (isEntity) {
+                continue;
+            }
+            var type = parameter.Type;
+            var name = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            bool isComponent = query.ecsTypes.IsComponent(type);
+            if (isComponent) {
+                result.Add(new VectorType { parameter = parameter, fullQualifiedName = name, isComponent = true });
+                continue;
+            }
+            var paramType = type.SpecialType switch {
+                SpecialType.None => ParamType.Vector,
+                SpecialType.System_Single => ParamType.Scalar
+            };
+            query.paramTypes.Add(parameter.Name, paramType);
+            result.Add(new VectorType { parameter = parameter, fullQualifiedName = name });
+        }
+        return result.ToArray();
+    }
+    
     public static string EmitVectorizeBlock(Query query)
     {
         if (!query.vectorize) {
             return "";
         }
         var sb = new StringBuilder();
-        foreach (var parameter in query.parameters) {
+        foreach (var vectorType in query.vectorTypes) {
             if (sb.Length > 0) {
                 sb.Append(", ");
             }
-            bool isComponent = query.ecsTypes.IsComponent(parameter.Type);
-            if (isComponent) {
+            var parameter = vectorType.parameter;
+            if (vectorType.isComponent) {
                 sb.Append(parameter.Name);
                 sb.Append("Span");
-                continue;
-            }
-            bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
-            if (isEntity) {
                 continue;
             }
             Utils.AppendRefKind(sb, parameter.RefKind);
@@ -77,32 +101,24 @@ public static partial class Vectorizer
         var locals = new StringBuilder();
         // --- method signature
         var signature = new StringBuilder();
-        foreach (var parameter in query.parameters) {
+        foreach (var vectorType in query.vectorTypes) {
+            var parameter = vectorType.parameter;
             var type = parameter.Type;
             if (signature.Length > 0) {
                 signature.Append(",");
             }
-            bool isComponent = query.ecsTypes.IsComponent(type);
-            if (isComponent) {
-                var componentType = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                signature.Append($"\n            Span<{componentType}> {parameter.Name}");
-                continue;
-            }
-            bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
-            if (isEntity) {
+            if (vectorType.isComponent) {
+                signature.Append($"\n            Span<{vectorType.fullQualifiedName}> {parameter.Name}");
                 continue;
             }
             Utils.AppendRefKind(signature, parameter.RefKind);
-            string typeName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            signature.Append($"\n            {typeName} {parameter.Name}");
+            signature.Append($"\n            {vectorType.fullQualifiedName} {parameter.Name}");
             // 
             switch (type.SpecialType) {
                 case SpecialType.None:
-                    query.paramTypes.Add(parameter.Name, ParamType.Vector);
                     Utils.InterleaveVector3(locals, parameter.Name);
                     break;
                 case  SpecialType.System_Single:
-                    query.paramTypes.Add(parameter.Name, ParamType.Scalar);
                     locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
                     break;
             }

@@ -31,6 +31,7 @@ public class Query
     public          List<IParameterSymbol>          components;
     public          EcsTypes                        ecsTypes;
     // --- generated output
+    public          VectorType[]                    vectorTypes;
     public          string                          hash;
     public          bool                            vectorize;
     public          string                          avxMethod = "";
@@ -42,4 +43,11 @@ public enum ParamType
     None = 0,
     Scalar,
     Vector,
+}
+
+public struct VectorType
+{
+    public IParameterSymbol parameter;
+    public string           fullQualifiedName;
+    public bool             isComponent;
 }
