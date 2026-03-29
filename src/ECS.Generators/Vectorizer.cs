@@ -177,6 +177,7 @@ public static partial class Vectorizer
         int step = 8;
         var vectorizeBlock = VectorizeBlock(query, expressionSyntax.Expression, step);
         var source = $@"
+        [SkipLocalsInit]
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
             int i = 0;

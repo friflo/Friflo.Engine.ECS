@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Friflo.Engine.ECS;
@@ -65,6 +66,7 @@ partial class TestClass
         return query;
     }
     
+    [SkipLocalsInit]
     private static unsafe int _MovePosition_Avx(Span<Position> position, float deltaTime)
     {
         var deltaTime_scalar = Vector256.Create(deltaTime);
