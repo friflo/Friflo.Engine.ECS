@@ -54,13 +54,13 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 85  scripts: 10  entity tags: 25", schema.ToString());
-        AreEqual(86,    components.Length);
+        AreEqual("components: 88  scripts: 10  entity tags: 25", schema.ToString());
+        AreEqual(89,    components.Length);
         AreEqual(11,    scripts.Length);
         
-        AreEqual(91,    schema.SchemaTypeByKey.Count);
-        AreEqual(85,    schema.ComponentTypeByType.Count);
-        AreEqual(78,    schema.ComponentTypes.Count);
+        AreEqual(94,    schema.SchemaTypeByKey.Count);
+        AreEqual(88,    schema.ComponentTypeByType.Count);
+        AreEqual(81,    schema.ComponentTypes.Count);
         AreEqual( 7,    schema.RelationTypes.Count);
         AreEqual(10,    schema.ScriptTypeByType.Count);
         
@@ -224,7 +224,7 @@ public static class Test_ComponentSchema
         var components = schema.ComponentTypeByType.Values.ToArray();
         Array.Sort(components);
         IsTrue(components[0].Type   == typeof(AaaFirstComponent));
-        IsTrue(components[^1].Type  == typeof(Velocity));
+        IsTrue(components[^1].Type  == typeof(ZzzLastComponent));
     }
     
     [Test]

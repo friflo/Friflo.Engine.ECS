@@ -7,6 +7,7 @@ using Friflo.Engine.ECS.Index;
 namespace Tests.ECS.Index {
     
 public struct AaaFirstComponent : IComponent { }
+public struct ZzzLastComponent : IComponent { }
     
 [ComponentKey("single-attack")]
 public struct AttackComponent : ILinkComponent {
