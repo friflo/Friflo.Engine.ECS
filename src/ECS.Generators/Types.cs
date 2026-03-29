@@ -54,4 +54,8 @@ public struct VectorType
     public SpecialType      valueSpecialType;
     public ParamType        paramType;
     public int              dimension;
+
+    public override string ToString() {
+        return $"{parameter} : {valueType.Name} ({(paramType == ParamType.Vector ? "vector" : "scalar")})";
+    }
 }
