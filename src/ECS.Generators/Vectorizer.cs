@@ -182,7 +182,7 @@ public static partial class Vectorizer
             if (vectorType.paramType == ParamType.Scalar) {
                 locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
             } else {
-                Utils.InterleaveVector3(locals, parameter.Name);
+                Utils.InterleaveVector3(locals, parameter.Name, query.vectorDimension);
             }
         }
         

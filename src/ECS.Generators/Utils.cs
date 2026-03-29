@@ -57,11 +57,20 @@ public static class Utils
         return null;
     }
     
-    public static  void InterleaveVector3(StringBuilder sb, string n)
+    public static  void InterleaveVector3(StringBuilder sb, string nm, int vectorDimension)
     {
-        sb.AppendLine($"            var {n}_0 = Vector256.Create({n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y);");
-        sb.AppendLine($"            var {n}_1 = Vector256.Create({n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X);");
-        sb.AppendLine($"            var {n}_2 = Vector256.Create({n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z, {n}.X, {n}.Y, {n}.Z);");
+        switch (vectorDimension) {
+            case 3:
+                sb.AppendLine($"            var {nm}_0 = Vector256.Create({nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y);");
+                sb.AppendLine($"            var {nm}_1 = Vector256.Create({nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X);");
+                sb.AppendLine($"            var {nm}_2 = Vector256.Create({nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z);");
+                break;
+            case 4:
+                sb.AppendLine($"            Vector128<float> {nm}_half = Vector128.Create({nm}.X, {nm}.Y, {nm}.Z, {nm}.W);");
+                sb.AppendLine($"            var {nm}_0 = Avx.InsertVector128({nm}_half.ToVector256(), {nm}_half, 1);");
+                sb.AppendLine($"            var {nm}_1 = {nm}_0;");
+                break;
+        }
     }
     
     public static  void ScalarMask(StringBuilder sb, string name)

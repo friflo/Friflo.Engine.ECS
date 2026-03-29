@@ -69,13 +69,29 @@ public static class Test_Lab_Scalar
     }
     
     // ------------------------------- scalar parameter -------------------------------
-    public static void Test_InterleavedVector()
+    public static void Test_InterleavedVector3()
     {
         var vec = new Vector3(1.0f, 2.0f, 3.0f);
         var vec_0 = Vector256.Create(vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y);
         var vec_1 = Vector256.Create(vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X);
         var vec_2 = Vector256.Create(vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z);
     }
+    
+    [Test]
+    public static void Test_InterleavedVector4()
+    {
+        var input = new Vector4(1, 2, 3, 4);
+        
+        // 1. Create a 128-bit SIMD vector from the struct
+        Vector128<float> vector_half = Vector128.Create(input.X, input.Y, input.Z, input.W);
+
+        // 2. Broadcast the 128-bit chunk to both halves of the 256-bit register
+        // This uses the 'vinsertf128' instruction
+        var vector_0 = Avx.InsertVector128(vector_half.ToVector256(), vector_half, 1);
+        var vector_1 = vector_0;
+    }
+    
+    
 }
 
 }

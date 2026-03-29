@@ -63,9 +63,9 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-            var vector4_0 = Vector256.Create(vector4.X, vector4.Y, vector4.Z, vector4.X, vector4.Y, vector4.Z, vector4.X, vector4.Y);
-            var vector4_1 = Vector256.Create(vector4.Z, vector4.X, vector4.Y, vector4.Z, vector4.X, vector4.Y, vector4.Z, vector4.X);
-            var vector4_2 = Vector256.Create(vector4.Y, vector4.Z, vector4.X, vector4.Y, vector4.Z, vector4.X, vector4.Y, vector4.Z);
+            Vector128<float> vector4_half = Vector128.Create(vector4.X, vector4.Y, vector4.Z, vector4.W);
+            var vector4_0 = Avx.InsertVector128(vector4_half.ToVector256(), vector4_half, 1);
+            var vector4_1 = vector4_0;
 
             fixed (global::Tests.ECS.Position4* position_first = position)
             fixed (global::Tests.ECS.Velocity4* velocity_first = velocity)
