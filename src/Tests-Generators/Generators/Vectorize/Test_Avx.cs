@@ -2,12 +2,15 @@
 using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS;
 using Tests.Examples;
 
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 namespace Tests.Generators.Vectorize;
+
+
 
 public static partial class Test_Avx
 {
@@ -36,7 +39,7 @@ public static partial class Test_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < 1000; n++) {
-            store.CreateEntity(new Position(n,n,n), new Velocity { value = new Vector3(1,2,3)});
+            store.CreateEntity(new Position(n,n,n), new Velocity { value = new Vector3(1,2,3)}, new FloatComponent { value = n });
         }
         return store;
     }
@@ -154,6 +157,28 @@ public static partial class Test_Avx
 
         var storeVectorized = CreateTestStore();
         MultiplyAddQuery(storeVectorized, 0.1f);
+
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    public static void Multiply_Vector3_scalar(ref Position position, ref FloatComponent factor) {
+        position.value = position.value * factor.value;
+    }
+    
+    [Test]   [Ignore("requires support for scalar components")]
+    public static void Test_Avx_Multiply_Vector3_scalar()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector3_scalarQuery(store, false);
+
+        var storeVectorized = CreateTestStore();
+        Multiply_Vector3_scalarQuery(storeVectorized);
 
         foreach (var entity in store.Entities)
         {

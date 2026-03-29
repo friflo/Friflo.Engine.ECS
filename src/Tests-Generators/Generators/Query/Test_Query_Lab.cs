@@ -142,14 +142,6 @@ public static class Test_Query_Lab
         }
         Console.WriteLine($"Test_SrcGen_perf - duration: {sw.ElapsedMilliseconds} ms");
     }
-    
-    public static void Test_InterleavedVector()
-    {
-        var vec = new Vector3(1.0f, 2.0f, 3.0f);
-        var vec_0 = Vector256.Create(vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y);
-        var vec_1 = Vector256.Create(vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X);
-        var vec_2 = Vector256.Create(vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z);
-    }
 }
 
 }

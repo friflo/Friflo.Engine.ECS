@@ -48,6 +48,8 @@ public struct MyComponent6 : IComponent { public int b; }
 [ComponentKey("my7")]
 public struct MyComponent7 : IComponent { public int b; }
 
+public struct FloatComponent : IComponent { public float value; }
+
 public struct MyPropertyComponent : IComponent
 {
     public int value { private get;  set; } // ensure access to private getter

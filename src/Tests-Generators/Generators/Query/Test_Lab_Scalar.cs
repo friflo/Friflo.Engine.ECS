@@ -9,13 +9,11 @@ using Tests.ECS;
 using Tests.Utils;
 
 // ReSharper disable InconsistentNaming
-
-
-// ReSharper disable InconsistentNaming
 namespace Tests.Generators.Query {
 
 public static class Test_Lab_Scalar
 {
+    // ------------------------------- scalar component -------------------------------
     [Test]
     public static void Test_Lab_Scalar_Call() {
         var position = new Position[16];
@@ -66,6 +64,15 @@ public static class Test_Lab_Scalar
             }
         }
         return i;
+    }
+    
+    // ------------------------------- scalar parameter -------------------------------
+    public static void Test_InterleavedVector()
+    {
+        var vec = new Vector3(1.0f, 2.0f, 3.0f);
+        var vec_0 = Vector256.Create(vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y);
+        var vec_1 = Vector256.Create(vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X);
+        var vec_2 = Vector256.Create(vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z);
     }
 }
 
