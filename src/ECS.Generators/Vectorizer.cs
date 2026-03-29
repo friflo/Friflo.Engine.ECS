@@ -64,21 +64,35 @@ public static partial class Vectorizer
                     throw new InvalidOperationException($"missing value field in {name}");
                 }
                 result.Add(CreateVectorType(parameter, name, true, valueField.Type));
-                continue;
+            } else { 
+                var vectorType = CreateVectorType(parameter, name, false, parameter.Type);
+                query.paramTypes.Add(parameter.Name, vectorType.paramType);
+                result.Add(vectorType);
             }
-            var paramType = type.SpecialType switch {
-                SpecialType.None => ParamType.Vector,
-                SpecialType.System_Single => ParamType.Scalar
-            };
-            query.paramTypes.Add(parameter.Name, paramType);
-            result.Add(CreateVectorType(parameter, name, false, parameter.Type));
         }
         return result.ToArray();
     }
     
     private static VectorType CreateVectorType(IParameterSymbol parameter, string fullQualifiedName, bool isComponent, ITypeSymbol valueType)
     {
-        return new VectorType{ parameter = parameter, fullQualifiedName = fullQualifiedName, isComponent = isComponent, valueType = valueType };
+        var specialType = valueType.SpecialType;
+        int dimension = 0;
+        switch (valueType.SpecialType) {
+            case SpecialType.None:
+                specialType = SpecialType.System_Single; // TODO assumes Vector3. retrieve correct component type 
+                dimension = 3;
+                break;
+            case SpecialType.System_Single:
+                dimension = 1;
+                break;
+        }
+        return new VectorType {
+            parameter           = parameter,
+            fullQualifiedName   = fullQualifiedName,
+            isComponent         = isComponent,
+            valueType           = valueType,
+            paramType           = new ParamType { specialType = specialType, dimension = dimension }     
+        };
     }
     
     private static void AnalyzeVectorTypes(VectorType[] vectorTypes)
