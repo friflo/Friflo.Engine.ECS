@@ -55,11 +55,15 @@ namespace VerifyVectorize
             Span<global::Friflo.Engine.ECS.Position> position,
             Vector3 vector)
         {
+            int i = 0;
+            var end = position.Length - 8;
+            if (i > end) {
+                return 0;
+            }
             var vector_0 = Vector256.Create(vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z, vector.X, vector.Y);
             var vector_1 = Vector256.Create(vector.Z, vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z, vector.X);
             var vector_2 = Vector256.Create(vector.Y, vector.Z, vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z);
-            int i = 0;
-            var end = position.Length - 8;
+
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             {
                 for (; i <= end; i += 8)

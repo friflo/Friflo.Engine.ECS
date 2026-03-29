@@ -57,9 +57,13 @@ namespace VerifyVectorize
             Span<global::VerifyVectorize.Velocity> velocity,
             float deltaTime)
         {
-            var deltaTime_scalar = Vector256.Create(deltaTime);
             int i = 0;
             var end = position.Length - 8;
+            if (i > end) {
+                return 0;
+            }
+            var deltaTime_scalar = Vector256.Create(deltaTime);
+
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::VerifyVectorize.Velocity* velocity_first = velocity)
             {

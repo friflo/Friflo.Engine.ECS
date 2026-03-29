@@ -57,6 +57,10 @@ namespace Tests.Generators.Vectorize
         {
             int i = 0;
             var end = position.Length - 8;
+            if (i > end) {
+                return 0;
+            }
+
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::Tests.Examples.Velocity* velocity_first = velocity)
             {

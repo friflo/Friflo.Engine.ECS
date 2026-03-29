@@ -58,6 +58,10 @@ namespace VerifyVectorize
         {
             int i = 0;
             var end = position.Length - 8;
+            if (i > end) {
+                return 0;
+            }
+
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::VerifyVectorize.Velocity* velocity_first = velocity)
             {

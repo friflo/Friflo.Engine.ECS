@@ -136,16 +136,11 @@ public static partial class Vectorizer
     
     private static void TraverseStatement(Query query, ExpressionStatementSyntax expressionSyntax)
     {
-        if (expressionSyntax.Expression is AssignmentExpressionSyntax assignmentExpressionSyntax) {
-            var left  = assignmentExpressionSyntax.Left;
-            var right = assignmentExpressionSyntax.Right;
-        }
         var locals = new StringBuilder();
         // --- method signature
         var signature = new StringBuilder();
         foreach (var vectorType in query.vectorTypes) {
             var parameter = vectorType.parameter;
-            var type = parameter.Type;
             if (signature.Length > 0) {
                 signature.Append(",");
             }
@@ -184,8 +179,12 @@ public static partial class Vectorizer
         var source = $@"
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
         {{
-{locals}            int i = 0;
-            var end = {query.components[0].Name}.Length - {step};{@fixed}
+            int i = 0;
+            var end = {query.components[0].Name}.Length - {step};
+            if (i > end) {{
+                return 0;
+            }}
+{locals}{@fixed}
             {{
                 for (; i <= end; i += {step})
                 {{{pointer}

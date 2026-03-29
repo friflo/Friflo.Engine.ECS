@@ -56,11 +56,15 @@ namespace Tests.Generators.Vectorize
             Span<global::Tests.Examples.Velocity> velocity,
             global::System.Numerics.Vector3 vector3)
         {
+            int i = 0;
+            var end = position.Length - 8;
+            if (i > end) {
+                return 0;
+            }
             var vector3_0 = Vector256.Create(vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y);
             var vector3_1 = Vector256.Create(vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X);
             var vector3_2 = Vector256.Create(vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z, vector3.X, vector3.Y, vector3.Z);
-            int i = 0;
-            var end = position.Length - 8;
+
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::Tests.Examples.Velocity* velocity_first = velocity)
             {
