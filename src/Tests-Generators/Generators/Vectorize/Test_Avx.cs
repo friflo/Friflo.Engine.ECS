@@ -171,7 +171,7 @@ public static partial class Test_Avx
         position.value = position.value * factor.value;
     }
     
-    [Test]   [Ignore("requires support for scalar components")]
+    [Test]
     public static void Test_Avx_Multiply_Vector3_scalar()
     {
         var store = CreateTestStore();
