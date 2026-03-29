@@ -28,8 +28,9 @@ public static partial class Test_Avx
         MultiplyQuery(store, false);
 
         var storeVectorized = CreateTestStore();
-        MultiplyQuery(storeVectorized);
-
+        var query = MultiplyQuery(storeVectorized);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
@@ -37,10 +38,12 @@ public static partial class Test_Avx
         }
     }
     
+    private const int EntityCount = 1000;
+    
     private static EntityStore CreateTestStore()
     {
         var store = new EntityStore();
-        for (int n = 0; n < 1000; n++) {
+        for (int n = 0; n < EntityCount; n++) {
             store.CreateEntity(new Position(n,n,n), new Velocity { value = new Vector3(1,2,3)}, new FloatComponent { value = n });
         }
         return store;
@@ -91,8 +94,9 @@ public static partial class Test_Avx
         MultiplyDeltaTimeQuery(store, 2, false);
 
         var storeVectorized = CreateTestStore();
-        MultiplyDeltaTimeQuery(storeVectorized, 2);
-
+        var query = MultiplyDeltaTimeQuery(storeVectorized, 2);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
@@ -113,8 +117,9 @@ public static partial class Test_Avx
         MultiplyVectorQuery(store, new Vector3(1,2,3), false);
 
         var storeVectorized = CreateTestStore();
-        MultiplyVectorQuery(storeVectorized, new Vector3(1,2,3));
+        var query = MultiplyVectorQuery(storeVectorized, new Vector3(1,2,3));
 
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
@@ -135,8 +140,9 @@ public static partial class Test_Avx
         MultiplyAddAssinmentQuery(store, 0.1f, false);
 
         var storeVectorized = CreateTestStore();
-        MultiplyAddAssinmentQuery(storeVectorized, 0.1f);
+        var query = MultiplyAddAssinmentQuery(storeVectorized, 0.1f);
 
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
@@ -158,8 +164,9 @@ public static partial class Test_Avx
         MultiplyAddQuery(store, 0.1f, false);
 
         var storeVectorized = CreateTestStore();
-        MultiplyAddQuery(storeVectorized, 0.1f);
+        var query = MultiplyAddQuery(storeVectorized, 0.1f);
 
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
@@ -180,8 +187,9 @@ public static partial class Test_Avx
         Multiply_Vector3_scalarQuery(store, false);
 
         var storeVectorized = CreateTestStore();
-        Multiply_Vector3_scalarQuery(storeVectorized);
-
+        var query = Multiply_Vector3_scalarQuery(storeVectorized);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
