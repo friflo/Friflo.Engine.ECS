@@ -206,7 +206,7 @@ public static partial class Vectorizer
             pointer.Append($"                    float* {component.Name}_ptr = (float*)({component.Name}_first + i);");
         }
         var elementStep = query.vectorDimension switch {
-            2 => 8,
+            2 => 16,
             3 => 8,
             4 => 8,
             _ => -1,

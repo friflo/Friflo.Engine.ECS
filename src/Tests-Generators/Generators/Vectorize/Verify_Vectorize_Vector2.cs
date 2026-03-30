@@ -60,12 +60,13 @@ public partial class MyExample
 
             namespace VerifyVectorize;
 
-            public struct Velocity : IComponent { public Vector3 value; }
+            public struct Position2 : IComponent { public Vector2 value; }
+            public struct Velocity2 : IComponent { public Vector2 value; }
 
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void MoveExample(ref Position position, in Velocity velocity, float deltaTime) {
+                void MoveExample(ref Position2 position, in Velocity2 velocity, float deltaTime) {
                     position.value *= velocity.value * deltaTime;
                 }
             }
@@ -83,12 +84,13 @@ public partial class MyExample
 
             namespace VerifyVectorize;
 
-            public struct Velocity : IComponent { public Vector3 value; }
+            public struct Position2 : IComponent { public Vector2 value; }
+            public struct Velocity2 : IComponent { public Vector2 value; }
 
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void AssignVector(ref Position position, Vector3 vector) {
+                void AssignVector(ref Position2 position, Vector2 vector) {
                     position.value = vector;
                 }
             }
@@ -107,12 +109,12 @@ public partial class MyExample
 
             namespace VerifyVectorize;
 
-            public struct Velocity : IComponent { public Vector3 value; }
+            public struct Velocity2 : IComponent { public Vector2 value; }
 
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void AssignVector(ref Position position, in Velocity velocity, float deltaTime) {
+                void AssignVector(ref Position2 position, in Velocity2 velocity, float deltaTime) {
                     position.value += velocity.value * deltaTime;
                 }
             }
@@ -130,12 +132,13 @@ public partial class MyExample
 
             namespace VerifyVectorize;
 
-            public struct Velocity : IComponent { public Vector3 value; }
+            public struct Position2 : IComponent { public Vector2 value; }
+            public struct Velocity2 : IComponent { public Vector2 value; }
 
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void AssignVector(ref Position position, in Velocity velocity, float deltaTime) {
+                void AssignVector(ref Position2 position, in Velocity2 velocity, float deltaTime) {
                     position.value = velocity.value * deltaTime + position.value;
                 }
             }
@@ -153,12 +156,13 @@ public partial class MyExample
 
             namespace VerifyVectorize;
 
+            public struct Position2 : IComponent { public Vector2 value; }
             public struct FloatComponent : IComponent { public float value; }
 
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void AssignVector(ref Position position, in FloatComponent factor) {
+                void AssignVector(ref Position2 position, in FloatComponent factor) {
                     position.value = position.value * factor.value;
                 }
             }

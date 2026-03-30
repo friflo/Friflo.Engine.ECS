@@ -59,7 +59,7 @@ namespace VerifyVectorize
             Span<global::VerifyVectorize.Velocity2> velocity)
         {
             int i = 0;
-            var end = position.Length - 8;
+            var end = position.Length - 16;
             if (i > end) {
                 return 0;
             }
@@ -67,7 +67,7 @@ namespace VerifyVectorize
             fixed (global::VerifyVectorize.Position2* position_first = position)
             fixed (global::VerifyVectorize.Velocity2* velocity_first = velocity)
             {
-                for (; i <= end; i += 8)
+                for (; i <= end; i += 16)
                 {
                     float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
