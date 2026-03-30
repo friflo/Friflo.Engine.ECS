@@ -25,6 +25,7 @@ public static partial class Vectorizer
         query.vectorTypes = GetVectorTypes(query);
         query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
         query.laneCount = query.vectorDimension switch {
+            1 => 1,
             2 => 2,
             3 => 3,
             4 => 4,
@@ -123,14 +124,14 @@ public static partial class Vectorizer
     {
         var dimension = 0;
         foreach (var vectorType in vectorTypes) {
-            if (vectorType.dimension == 1) {
+            if (!vectorType.isComponent && vectorType.dimension == 1) {
                 continue;
             }
             if (dimension == 0) {
                 dimension = vectorType.dimension;
                 continue;
             }
-            if (dimension != vectorType.dimension) {
+            if (vectorType.dimension > 1 && vectorType.dimension != dimension) {
                 throw new InvalidOperationException($"Inconsistent parameter dimensions {vectorType.dimension} is not equal to dimension {dimension}");
             }
         }
@@ -206,7 +207,8 @@ public static partial class Vectorizer
             pointer.Append($"                    float* {component.Name}_ptr = (float*)({component.Name}_first + i);");
         }
         var elementStep = query.vectorDimension switch {
-            2 => 8,  // TODO  Should be 16 for Loop-Unroll: 4 - execution may speedup by 30% 
+            1 => 8,     // TODO  Should be 32 for Loop-Unroll: 4 (current: 1) - execution may speedup by > 100% 
+            2 => 8,     // TODO  Should be 16 for Loop-Unroll: 4 (current: 2) - execution may speedup by 30% 
             3 => 8,
             4 => 8,
             _ => -1,

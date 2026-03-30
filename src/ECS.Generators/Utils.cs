@@ -60,6 +60,9 @@ public static class Utils
     public static  void InterleaveVector3(StringBuilder sb, string nm, int vectorDimension)
     {
         switch (vectorDimension) {
+            case 1:
+                sb.AppendLine($"            Vector128<float> {nm}_0 = Vector128.Create({nm});");
+                break;
             case 2:
                 sb.AppendLine($"            Vector128<float> {nm}_half = Vector128.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
                 sb.AppendLine($"            var {nm}_0 = Avx.InsertVector128({nm}_half.ToVector256(), {nm}_half, 1);");
@@ -85,6 +88,9 @@ public static class Utils
     public static  void ScalarMask(StringBuilder sb, string name, int vectorDimension)
     {
         switch (vectorDimension) {
+            case 1:
+                sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create( 0, 1, 2, 3, 4, 5, 6, 7);");
+                break;
             case 2:
                 sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_1 = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);");
