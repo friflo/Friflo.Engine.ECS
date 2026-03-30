@@ -7,6 +7,7 @@ using Tests.Examples;
 using Tests.Generators.Benchmark;
 
 
+[BenchmarkCategory("float")]
 [MemoryDiagnoser] // Tracks GC allocations
 // [Config(typeof(Config))]
 public partial class Bench_Float

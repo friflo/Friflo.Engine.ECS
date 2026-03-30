@@ -7,6 +7,7 @@ using Tests.Examples;
 using Tests.Generators.Benchmark;
 
 
+[BenchmarkCategory("Vector3")]
 [MemoryDiagnoser] // Tracks GC allocations
 // [Config(typeof(Config))]
 public partial class Bench_Vector3

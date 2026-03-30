@@ -10,7 +10,7 @@ using BenchmarkDotNet.Running;
 ManualConfig customConfig = DefaultConfig.Instance
     .WithOption(ConfigOptions.JoinSummary, true)
 //  .WithArtifactsPath(@"../Artifacts")
-    .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest))
+//  .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest))
     .AddLogicalGroupRules(BenchmarkLogicalGroupRule.ByCategory)
 //  .WithSummaryStyle(SummaryStyle.Default.WithTimeUnit(TimeUnit.Microsecond))
     .AddDiagnoser(MemoryDiagnoser.Default);                     // adds column: Allocated
@@ -26,6 +26,7 @@ BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args, custom
 
 // CLI examples
 //      dotnet run -c Release
-//      dotnet run -c Release --job Short
+//      dotnet run -c Release --filter *    --job Short
+//      dotnet run -c Release --filter *    --job Dry
 //      dotnet run -c Release --filter *Vector3*
 //      dotnet run -c Release --filter *Vector3_MultiplyAdd*
