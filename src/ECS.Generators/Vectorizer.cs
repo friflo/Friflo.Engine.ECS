@@ -25,6 +25,7 @@ public static partial class Vectorizer
         query.vectorTypes = GetVectorTypes(query);
         query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
         query.laneCount = query.vectorDimension switch {
+            2 => 4,
             3 => 3,
             4 => 4,
             _ => -1
@@ -86,7 +87,12 @@ public static partial class Vectorizer
         switch (valueType.SpecialType) {
             case SpecialType.None:
                 var fullTypeName = valueType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                if (fullTypeName == "global::System.Numerics.Vector3") {
+                if (fullTypeName == "global::System.Numerics.Vector2") {
+                    specialType = SpecialType.System_Single; 
+                    dimension = 2;
+                    paramType = ParamType.Vector;
+                }
+                else if (fullTypeName == "global::System.Numerics.Vector3") {
                     specialType = SpecialType.System_Single; 
                     dimension = 3;
                     paramType = ParamType.Vector;
@@ -200,8 +206,9 @@ public static partial class Vectorizer
             pointer.Append($"                    float* {component.Name}_ptr = (float*)({component.Name}_first + i);");
         }
         var elementStep = query.vectorDimension switch {
-            4 => 8,
+            2 => 8,
             3 => 8,
+            4 => 8,
             _ => -1,
         };
         int step = 8;

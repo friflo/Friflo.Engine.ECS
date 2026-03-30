@@ -5,6 +5,7 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
+using Tests.Examples;
 
 
 // ReSharper disable InconsistentNaming
@@ -12,11 +13,11 @@ using Tests.ECS;
 namespace Tests.Generators.Vectorize;
 
 
-
-public static partial class Test_Vector4_Avx
+/*
+public static partial class Test_Vector2_Avx
 {
     [Vectorize][Query]  [OmitHash]
-    private static void Multiply(ref Position4 position, in Velocity4 velocity) {
+    private static void Multiply(ref Position2 position, in Velocity2 velocity) {
         position.value *= velocity.value;
     } 
         
@@ -33,7 +34,7 @@ public static partial class Test_Vector4_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }
     
@@ -43,7 +44,7 @@ public static partial class Test_Vector4_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position4 { value = new Vector4(n,n,n,n)}, new Velocity4 { value = new Vector4(1,2,3,4)}, new FloatComponent { value = n });
+            store.CreateEntity(new Position2(n,n,n), new Velocity2 { value = new Vector3(1,2,3)}, new FloatComponent { value = n });
         }
         return store;
     }
@@ -72,9 +73,9 @@ public static partial class Test_Vector4_Avx
     public static void Test_Avx_Multiply_perf_ForEachEntity()
     {
         var store = CreateTestStore();
-        var query = store.Query<Position4, Velocity4>();
+        var query = store.Query<Position2, Velocity2>();
         for (int i = 0; i < RepeatCount; i++) {
-            query.ForEachEntity(static (ref Position4 position, ref Velocity4 velocity, Entity _) => {
+            query.ForEachEntity(static (ref Position2 position, ref Velocity2 velocity, Entity _) => {
                 position.value *= velocity.value;
             });
         }
@@ -82,7 +83,7 @@ public static partial class Test_Vector4_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void MultiplyDeltaTime(ref Position4 position, in Velocity4 velocity, float deltaTime) {
+    private static void MultiplyDeltaTime(ref Position2 position, in Velocity2 velocity, float deltaTime) {
         position.value *= velocity.value * deltaTime;
     }
     
@@ -99,36 +100,36 @@ public static partial class Test_Vector4_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void MultiplyVector(ref Position4 position, in Velocity4 velocity, Vector4 vector4) {
-        position.value *= velocity.value * vector4;
+    private static void MultiplyVector(ref Position2 position, in Velocity2 velocity, Vector3 vector3) {
+        position.value *= velocity.value * vector3;
     }
     
     [Test]
     public static void Test_Avx_MultiplyVector()
     {
         var store = CreateTestStore();
-        MultiplyVectorQuery(store, new Vector4(1,2,3,4), false);
+        MultiplyVectorQuery(store, new Vector3(1,2,3), false);
 
         var storeVectorized = CreateTestStore();
-        var query = MultiplyVectorQuery(storeVectorized, new Vector4(1,2,3,4));
+        var query = MultiplyVectorQuery(storeVectorized, new Vector3(1,2,3));
 
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void MultiplyAddAssinment(ref Position4 position, ref Velocity4 velocity, float deltaTime) {
+    private static void MultiplyAddAssinment(ref Position2 position, ref Velocity2 velocity, float deltaTime) {
         position.value += velocity.value * deltaTime;
     }
     
@@ -145,14 +146,14 @@ public static partial class Test_Vector4_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }
     
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void MultiplyAdd(ref Position4 position, ref Velocity4 velocity, float deltaTime) {
+    private static void MultiplyAdd(ref Position2 position, ref Velocity2 velocity, float deltaTime) {
         position.value = velocity.value * deltaTime + position.value;
     }
     
@@ -169,30 +170,31 @@ public static partial class Test_Vector4_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void Multiply_Vector4_scalar(ref Position4 position, ref FloatComponent factor) {
+    private static void Multiply_Vector2_scalar(ref Position2 position, ref FloatComponent factor) {
         position.value = position.value * factor.value;
     }
     
     [Test]
-    public static void Test_Avx_Multiply_Vector4_scalar()
+    public static void Test_Avx_Multiply_Vector2_scalar()
     {
         var store = CreateTestStore();
-        Multiply_Vector4_scalarQuery(store, false);
+        Multiply_Vector2_scalar(store, false);
 
         var storeVectorized = CreateTestStore();
-        var query = Multiply_Vector4_scalarQuery(storeVectorized);
+        var query = Multiply_Vector2_scalar(storeVectorized);
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2Position2>()));
         }
     }
 }
+*/

@@ -52,6 +52,9 @@ public struct FloatComponent : IComponent { public float value; }
 public struct Position4 : IComponent { public Vector4 value; }
 public struct Velocity4 : IComponent { public Vector4 value; }
 
+public struct Position2 : IComponent { public Vector2 value; }
+public struct Velocity2 : IComponent { public Vector2 value; }
+
 public struct MyPropertyComponent : IComponent
 {
     public int value { private get;  set; } // ensure access to private getter

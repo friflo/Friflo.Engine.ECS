@@ -60,6 +60,12 @@ public static class Utils
     public static  void InterleaveVector3(StringBuilder sb, string nm, int vectorDimension)
     {
         switch (vectorDimension) {
+            case 2:
+                sb.AppendLine($"            var {nm}_0 = Vector256.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
+                sb.AppendLine($"            var {nm}_1 = Vector256.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
+                sb.AppendLine($"            var {nm}_2 = Vector256.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
+                sb.AppendLine($"            var {nm}_3 = Vector256.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
+                break;
             case 3:
                 sb.AppendLine($"            var {nm}_0 = Vector256.Create({nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y);");
                 sb.AppendLine($"            var {nm}_1 = Vector256.Create({nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X);");
@@ -78,6 +84,12 @@ public static class Utils
     public static  void ScalarMask(StringBuilder sb, string name, int vectorDimension)
     {
         switch (vectorDimension) {
+            case 2:
+                sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);");
+                sb.AppendLine($"            Vector256<int> {name}_mask_1 = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);");
+                sb.AppendLine($"            Vector256<int> {name}_mask_2 = Vector256.Create( 8, 8, 9, 9,10,10,11,11);");
+                sb.AppendLine($"            Vector256<int> {name}_mask_3 = Vector256.Create(12,12,13,13,14,14,15,15);");
+                break;
             case 3:
                 sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create(0, 0, 0, 1, 1, 1, 2, 2);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_1 = Vector256.Create(2, 3, 3, 3, 4, 4, 4, 5);");

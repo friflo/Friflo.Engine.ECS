@@ -44,6 +44,36 @@
           <ParentFile>Verify_Query</ParentFile>
           <DependentUpon>Verify_Vectorize.cs</DependentUpon>
         </None>
+        <None Update="Generators\Vectorize\Verify_Vectorize_Vector2.Verify_Query_MovePosition#MoveExample.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Vectorize_Vector4</ParentFile>
+          <DependentUpon>Verify_Vectorize_Vector2.cs</DependentUpon>
+        </None>
+        <None Update="Generators\Vectorize\Verify_Vectorize_Vector2.Verify_Query_MovePosition_deltaTime#MoveExample.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Vectorize_Vector4</ParentFile>
+          <DependentUpon>Verify_Vectorize_Vector2.cs</DependentUpon>
+        </None>
+        <None Update="Generators\Vectorize\Verify_Vectorize_Vector2.Verify_Query_AssignVector#AssignVector.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Vectorize_Vector4</ParentFile>
+          <DependentUpon>Verify_Vectorize_Vector2.cs</DependentUpon>
+        </None>
+        <None Update="Generators\Vectorize\Verify_Vectorize_Vector2.Verify_Query_MultiplyAdd#AssignVector.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Vectorize_Vector4</ParentFile>
+          <DependentUpon>Verify_Vectorize_Vector2.cs</DependentUpon>
+        </None>
+        <None Update="Generators\Vectorize\Verify_Vectorize_Vector2.Verify_Query_MultiplyAdd_Assignment#AssignVector.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Vectorize_Vector4</ParentFile>
+          <DependentUpon>Verify_Vectorize_Vector2.cs</DependentUpon>
+        </None>
+        <None Update="Generators\Vectorize\Verify_Vectorize_Vector2.Verify_Query_scalar_component#AssignVector.g.verified.cs">
+          <ParentExtension>.cs</ParentExtension>
+          <ParentFile>Verify_Vectorize_Vector4</ParentFile>
+          <DependentUpon>Verify_Vectorize_Vector2.cs</DependentUpon>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
