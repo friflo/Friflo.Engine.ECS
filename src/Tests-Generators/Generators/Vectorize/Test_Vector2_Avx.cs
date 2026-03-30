@@ -175,7 +175,7 @@ public static partial class Test_Vector2_Avx
     }
 
     // -----------------------------------------------------------------------------------------------------
-    /*
+
     [Vectorize][Query]  [OmitHash]
     private static void Multiply_Vector2_scalar(ref Position2 position, ref FloatComponent factor) {
         position.value = position.value * factor.value;
@@ -185,10 +185,10 @@ public static partial class Test_Vector2_Avx
     public static void Test_Avx_Multiply_Vector2_scalar()
     {
         var store = CreateTestStore();
-        Multiply_Vector2_scalar(store, false);
+        Multiply_Vector2_scalarQuery(store, false);
 
         var storeVectorized = CreateTestStore();
-        var query = Multiply_Vector2_scalar(storeVectorized);
+        var query = Multiply_Vector2_scalarQuery(storeVectorized);
 
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
@@ -196,5 +196,5 @@ public static partial class Test_Vector2_Avx
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
             Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
-    } */
+    }
 }

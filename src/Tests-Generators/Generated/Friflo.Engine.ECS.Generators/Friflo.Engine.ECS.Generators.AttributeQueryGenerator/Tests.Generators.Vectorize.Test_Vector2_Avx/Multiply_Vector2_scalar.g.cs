@@ -58,19 +58,17 @@ namespace Tests.Generators.Vectorize
             Span<global::Tests.ECS.FloatComponent> factor)
         {
             int i = 0;
-            var end = position.Length - 16;
+            var end = position.Length - 8;
             if (i > end) {
                 return 0;
             }
             Vector256<int> factor_mask_0 = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> factor_mask_1 = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
-            Vector256<int> factor_mask_2 = Vector256.Create( 8, 8, 9, 9,10,10,11,11);
-            Vector256<int> factor_mask_3 = Vector256.Create(12,12,13,13,14,14,15,15);
 
             fixed (global::Tests.ECS.Position2* position_first = position)
             fixed (global::Tests.ECS.FloatComponent* factor_first = factor)
             {
-                for (; i <= end; i += 16)
+                for (; i <= end; i += 8)
                 {
                     float* position_ptr = (float*)(position_first + i);
                     float* factor_ptr = (float*)(factor_first + i);
@@ -78,26 +76,18 @@ namespace Tests.Generators.Vectorize
                     // 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     Vector256<float> factor_scalar = Avx.LoadVector256(factor_ptr);
                     Vector256<float> factor_0 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_0);
                     Vector256<float> factor_1 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_1);
-                    Vector256<float> factor_2 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_2);
-                    Vector256<float> factor_3 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_3);
 
                     // 2. Compute
                     position_0 = Avx.Multiply(position_0, factor_0);
                     position_1 = Avx.Multiply(position_1, factor_1);
-                    position_2 = Avx.Multiply(position_2, factor_2);
-                    position_3 = Avx.Multiply(position_3, factor_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
-                    Avx.Store(position_ptr + 16, position_2);
-                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }

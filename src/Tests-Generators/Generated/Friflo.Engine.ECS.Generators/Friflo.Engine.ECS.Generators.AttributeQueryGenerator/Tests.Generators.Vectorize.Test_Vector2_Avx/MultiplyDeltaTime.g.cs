@@ -59,7 +59,7 @@ namespace Tests.Generators.Vectorize
             float deltaTime)
         {
             int i = 0;
-            var end = position.Length - 16;
+            var end = position.Length - 8;
             if (i > end) {
                 return 0;
             }
@@ -68,7 +68,7 @@ namespace Tests.Generators.Vectorize
             fixed (global::Tests.ECS.Position2* position_first = position)
             fixed (global::Tests.ECS.Velocity2* velocity_first = velocity)
             {
-                for (; i <= end; i += 16)
+                for (; i <= end; i += 8)
                 {
                     float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
@@ -76,25 +76,17 @@ namespace Tests.Generators.Vectorize
                     // 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
                     Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
-                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
-                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // 2. Compute
                     position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, deltaTime_scalar));
                     position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, deltaTime_scalar));
-                    position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, deltaTime_scalar));
-                    position_3 = Avx.Multiply(position_3, Avx.Multiply(velocity_3, deltaTime_scalar));
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
-                    Avx.Store(position_ptr + 16, position_2);
-                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }
