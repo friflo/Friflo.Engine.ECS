@@ -10,7 +10,7 @@ using VerifyNUnit;
 // ReSharper disable InconsistentNaming
 namespace Tests.Generators.Vectorize;
 
-public static class Verify_Vectorize
+public static class Verify_Vectorize_Vector3
 {
     private static async Task Verify(string code)
     {
