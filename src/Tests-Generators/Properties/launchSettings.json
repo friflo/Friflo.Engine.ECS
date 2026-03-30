@@ -1,0 +1,8 @@
+{
+    "profiles": {
+        "Tests-Generators": {
+            "commandName": "Project",
+            "dotnetRunMessages": true
+        }
+    }
+}
