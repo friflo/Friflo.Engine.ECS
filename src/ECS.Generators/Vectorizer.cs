@@ -26,7 +26,7 @@ public static partial class Vectorizer
         query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
         query.laneCount = query.vectorDimension switch {
             3 => 3,
-            4 => 2,
+            4 => 4,
             _ => -1
         };
         query.vectorize = true;
@@ -200,7 +200,7 @@ public static partial class Vectorizer
             pointer.Append($"                    float* {component.Name}_ptr = (float*)({component.Name}_first + i);");
         }
         var elementStep = query.vectorDimension switch {
-            4 => 4,
+            4 => 8,
             3 => 8,
             _ => -1,
         };

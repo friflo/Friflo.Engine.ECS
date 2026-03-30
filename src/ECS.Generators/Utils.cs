@@ -69,6 +69,8 @@ public static class Utils
                 sb.AppendLine($"            Vector128<float> {nm}_half = Vector128.Create({nm}.X, {nm}.Y, {nm}.Z, {nm}.W);");
                 sb.AppendLine($"            var {nm}_0 = Avx.InsertVector128({nm}_half.ToVector256(), {nm}_half, 1);");
                 sb.AppendLine($"            var {nm}_1 = {nm}_0;");
+                sb.AppendLine($"            var {nm}_2 = {nm}_0;");
+                sb.AppendLine($"            var {nm}_3 = {nm}_0;");
                 break;
         }
     }
@@ -84,6 +86,8 @@ public static class Utils
             case 4:
                 sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create(0, 0, 0, 0, 1, 1, 1, 1);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_1 = Vector256.Create(2, 2, 2, 2, 3, 3, 3, 3);");
+                sb.AppendLine($"            Vector256<int> {name}_mask_2 = Vector256.Create(4, 4, 4, 4, 5, 5, 5, 5);");
+                sb.AppendLine($"            Vector256<int> {name}_mask_3 = Vector256.Create(6, 6, 6, 6, 7, 7, 7, 7);");
                 break;
         }
     }
