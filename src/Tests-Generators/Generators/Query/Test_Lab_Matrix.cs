@@ -29,14 +29,42 @@ public static class Test_Lab_Matrix
         for (int n = 0; n < 1024; n++) {
             position[n] = new Vector4(n, 2 * n, n + 10, 0);
         }
-        var result = new Vector4[1024];
-        TransformVector4Array_Avx(position, matrix, result);
+        var result2 = new Vector4[1024];
+        TransformVector4Array_Unroll2_Avx(position, matrix, result2);
+        
+        var result4 = new Vector4[1024];
+        TransformVector4Array_Unroll4_Avx(position, matrix, result4);
         
         var result_naive = new Vector4[1024];
         TransformVector4Array_naive(position, matrix, result_naive);
         
         for (int n =  0; n < position.Length; n++) {
-            Assert.That(result[n], Is.EqualTo(result_naive[n]));
+            Assert.That(result2[n], Is.EqualTo(result_naive[n]));
+            // Assert.That(result4[n], Is.EqualTo(result_naive[n]));
+        }
+    }
+    
+    [Test]
+    public static void Test_Lab_Matrix_perf()
+    {
+        Matrix4x4 rot = Matrix4x4.CreateFromYawPitchRoll(
+            10f * (MathF.PI / 180.0f), // Yaw
+            20f * (MathF.PI / 180.0f), // Pitch
+            30f * (MathF.PI / 180.0f)  // Roll
+        );
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(new Vector3(1f, 2f, 3f));
+        var matrix = Matrix4x4.Multiply(rot, trans);
+        
+        var position = new Vector4[1024];
+        for (int n = 0; n < 1024; n++) {
+            position[n] = new Vector4(n, 2 * n, n + 10, 0);
+        }
+        var result = new Vector4[1024];
+        var repeat = 10; // 10_000_000;
+        for (int n = 0; n < repeat; n++) {
+            TransformVector4Array_Unroll2_Avx(position, matrix, result);
+            // TransformVector4Array_Unroll4_Avx(position, matrix, result);
+            // TransformVector4Array_naive(position, matrix, result);
         }
     }
     
@@ -51,7 +79,7 @@ public static class Test_Lab_Matrix
     // Note!
     // Apply loop unrolling to improve performance by processing 4 or 8 vectors per iteration (instead of 2)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static unsafe void TransformVector4Array_Avx(Vector4[] src, Matrix4x4 matrix, Vector4[] dst)
+    private static unsafe void TransformVector4Array_Unroll2_Avx(Vector4[] src, Matrix4x4 matrix, Vector4[] dst)
     {
         int i = 0;
         var end = src.Length - 2;
@@ -95,6 +123,67 @@ public static class Test_Lab_Matrix
                 Avx.Store((float*)(dstPtr + i), result);
             }
         }
+    }
+    
+    // prompt: Show avx implementation for Vector4.Transform() operating on Vector4 array and a Matrix4x4 with Loop Unroll 4
+    private static unsafe void TransformVector4Array_Unroll4_Avx(Vector4[] src, Matrix4x4 matrix, Vector4[] dst)
+    {
+        int count = src.Length;
+        fixed (Vector4* pSrc = src, pDst = dst)
+        {
+            float* s = (float*)pSrc;
+            float* d = (float*)pDst;
+
+            // Load Matrix Columns into 256-bit registers (4 floats each)
+            // We only use the lower 128 bits of each Vector256 or use Vector128
+            // For AVX2, we often load them into Vector128 to save register space
+            Vector128<float> col1 = Vector128.Create(matrix.M11, matrix.M12, matrix.M13, matrix.M14);
+            Vector128<float> col2 = Vector128.Create(matrix.M21, matrix.M22, matrix.M23, matrix.M24);
+            Vector128<float> col3 = Vector128.Create(matrix.M31, matrix.M32, matrix.M33, matrix.M34);
+            Vector128<float> col4 = Vector128.Create(matrix.M41, matrix.M42, matrix.M43, matrix.M44);
+
+            int i = 0;
+            // Loop Unroll 4: Process 4 Vector4s per iteration
+            for (; i <= count - 4; i += 4)
+            {
+                // Pointers for the 4 vectors in this batch
+                float* s0 = s + (i * 4);
+                float* s1 = s + ((i + 1) * 4);
+                float* s2 = s + ((i + 2) * 4);
+                float* s3 = s + ((i + 3) * 4);
+
+                // Transform each of the 4 vectors using FMA
+                TransformSingle(s0, d + (i * 4), col1, col2, col3, col4);
+                TransformSingle(s1, d + ((i + 1) * 4), col1, col2, col3, col4);
+                TransformSingle(s2, d + ((i + 2) * 4), col1, col2, col3, col4);
+                TransformSingle(s3, d + ((i + 3) * 4), col1, col2, col3, col4);
+            }
+
+            // Cleanup loop for remaining vectors
+            for (; i < count; i++)
+            {
+                TransformSingle(s + (i * 4), d + (i * 4), col1, col2, col3, col4);
+            }
+        }
+    }
+    
+    private static unsafe void TransformSingle(float* src, float* dst, 
+        Vector128<float> c1, Vector128<float> c2, Vector128<float> c3, Vector128<float> c4)
+    {
+        // Broadcast X, Y, Z, W of the source vector
+        Vector128<float> x = Vector128.Create(src[0]);
+        Vector128<float> y = Vector128.Create(src[1]);
+        Vector128<float> z = Vector128.Create(src[2]);
+        Vector128<float> w = Vector128.Create(src[3]);
+
+        // Result = x*col1 + y*col2 + z*col3 + w*col4
+        // Using Fused Multiply-Add (Fma.MultiplyAdd)
+        Vector128<float> res = Fma.MultiplyAdd(x, c1, 
+            Fma.MultiplyAdd(y, c2, 
+                Fma.MultiplyAdd(z, c3, 
+                    Vector128.Multiply(w, c4))));
+
+        Sse.Store(dst, res);
     }
 }
 
