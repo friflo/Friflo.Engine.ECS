@@ -41,21 +41,21 @@ public partial class Bench_Vector3
 
     [Benchmark]
     [Comment("pos.value = vel.value * dt + pos.value;")]
-    public void AddMultiply_Query()
+    public void Vector3_MultiplyAdd_Query()
     {
         MultiplyAddQuery(store, 0.1f, false);
     }
 
     [Benchmark]
     [Comment("pos.value = vel.value * dt + pos.value;")]
-    public void AddMultiply_Vectorize()
+    public void Vector3_MultiplyAdd_Vectorize()
     {
         MultiplyAddQuery(store, 0.1f);
     }
     
     [Benchmark]
     [Comment("pos.value = vel.value * dt + pos.value;")]
-    public void AddMultiply_ForEachEntity()
+    public void Vector3_MultiplyAdd_ForEachEntity()
     {
         var deltaTime = 0.1f;
         query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
