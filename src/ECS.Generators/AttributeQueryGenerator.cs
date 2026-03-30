@@ -58,7 +58,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
                 hash            = hash,
                 ecsTypes        = types
             };
-            var vectorizeCode       = Vectorizer.Emit(query);
+            Vectorizer.Emit(query);
             var componentArgs       = EmitComponentArgs(components);
             var chunkVariables      = EmitChunkVariables(components);
             var lambdaParameters    = EmitLambdaParameters(parameters, types);
@@ -113,8 +113,8 @@ public class AttributeQueryGenerator : IIncrementalGenerator
 {(isGlobalNamespace ? "" : "}")}
 ";
             var fileName =
-                methodSymbol!.ContainingType.ToDisplayString().Replace('<', '{').Replace('>', '}') + "/" +
-                methodSymbol!.ToDisplayString(FullNameFormat).Replace('<', '{').Replace('>', '}');
+                methodSymbol.ContainingType.ToDisplayString().Replace('<', '{').Replace('>', '}') + "/" +
+                methodSymbol.ToDisplayString(FullNameFormat).Replace('<', '{').Replace('>', '}');
             // using hash instead of method signature for file name. Signature would lead to long file names not supported by the OS
             spc.AddSource($"{fileName}{hash}.g.cs", SourceText.From(source, Encoding.UTF8));
         });
@@ -238,7 +238,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         if (found) {
             return "";
         }
-        var methodSignature = methodSymbol!.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat);
+        var methodSignature = methodSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat);
         return "_" + Utils.GetMd5Hash(methodSignature).Substring(0, 4); // 8 chars is usually enough
     }
 
@@ -246,12 +246,12 @@ public class AttributeQueryGenerator : IIncrementalGenerator
     {
         var sb = new StringBuilder();
         foreach (var attribute in attributes) {
-            INamedTypeSymbol attributeClass = attribute.AttributeClass;
+            var attributeClass = attribute?.AttributeClass;
             if (attributeClass == null) {
                 continue;
             }
-            string ns = attributeClass.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
-            if (ns == null || ns != "Friflo.Engine.ECS") {
+            string ns = attributeClass.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+            if (ns != "Friflo.Engine.ECS") {
                 continue;
             }
             switch (attributeClass.Name) {

@@ -9,7 +9,7 @@ namespace Friflo.Engine.ECS.Generators;
 
 public static partial class Vectorizer
 {
-    private static bool Compute_MemberAccess(StringBuilder[] lanes, Query query, MemberAccessExpressionSyntax memberAccess)
+    private static bool Compute_MemberAccess(StringBuilder[] lanes, Query _, MemberAccessExpressionSyntax memberAccess)
     {
         if (memberAccess.Expression is not IdentifierNameSyntax identifierNameSyntax) {
             return false;
@@ -53,10 +53,7 @@ public static partial class Vectorizer
         if (avxOperation is null) {
             return false;
         }
-        var left    = Utils.GetMemberName(assignment.Left)?.Identifier.Text;
-        if (left is null) {
-            return false;
-        }
+        var left = Utils.GetMemberName(assignment.Left).Identifier.Text;
         // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
         if (kind == SyntaxKind.AddAssignmentExpression && 
             assignment.Right is BinaryExpressionSyntax assignBinary && assignBinary.Kind() is SyntaxKind.MultiplyExpression)

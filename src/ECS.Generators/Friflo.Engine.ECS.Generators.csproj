@@ -9,7 +9,7 @@
     <NoPackageAnalysis>true</NoPackageAnalysis>
       
     <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <RootNamespace>Friflo.Engine.ECS.Generators</RootNamespace>
     <AssemblyName>Friflo.Engine.ECS.Generators</AssemblyName>
     <LangVersion>12.0</LangVersion>

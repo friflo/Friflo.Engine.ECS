@@ -11,7 +11,7 @@ namespace Friflo.Engine.ECS.Generators;
 
 public static partial class Vectorizer
 {
-    public static string Emit(Query query)
+    public static bool Emit(Query query)
     {
         var search = query.ecsTypes.vectorizeAttribute.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         bool found = false;
@@ -20,7 +20,7 @@ public static partial class Vectorizer
             if (attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) == search) found = true;
         }
         if (!found) {
-            return null;
+            return false;
         }
         query.vectorTypes = GetVectorTypes(query);
         query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
@@ -42,7 +42,7 @@ public static partial class Vectorizer
                 }
             }
         }
-        return null;
+        return true;
     }
     
     private static VectorType[] GetVectorTypes(Query query)
@@ -58,7 +58,7 @@ public static partial class Vectorizer
             var name = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             bool isComponent = query.ecsTypes.IsComponent(type);
             if (isComponent) {
-                IFieldSymbol valueField = null;
+                IFieldSymbol? valueField = null;
                 foreach (var field in type.GetMembers().OfType<IFieldSymbol>()) {
                     if (field.Name == "value" || field.Name == "Value") {
                         valueField = field;
@@ -268,7 +268,7 @@ public static partial class Vectorizer
             source.AppendLine("                    // found no assignment");
             return source;
         }
-        var left = Utils.GetMemberName(assignmentExpressionSyntax.Left)?.Identifier.Text;
+        var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
         for (int n = 0; n < laneCount; n++) {
             source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
         }
@@ -276,19 +276,19 @@ public static partial class Vectorizer
         return source;
     }
     
-    private static bool Compute(StringBuilder[] computeLanes, Query query, ExpressionSyntax syntax)
+    private static bool Compute(StringBuilder[] lanes, Query query, ExpressionSyntax syntax)
     {
         if (syntax is AssignmentExpressionSyntax assignment) {
-            return Compute_Assignment(computeLanes, query, assignment);
+            return Compute_Assignment(lanes, query, assignment);
         }
         if (syntax is BinaryExpressionSyntax binary) {
-            return Compute_Binary(computeLanes, query, binary);
+            return Compute_Binary(lanes, query, binary);
         }
         if (syntax is MemberAccessExpressionSyntax memberAccess) {
-            return Compute_MemberAccess(computeLanes, query, memberAccess);
+            return Compute_MemberAccess(lanes, query, memberAccess);
         }
         if (syntax is IdentifierNameSyntax identifier) {
-            return Compute_IdentifierName(computeLanes, query, identifier);
+            return Compute_IdentifierName(lanes, query, identifier);
         }
         return false;
     }
