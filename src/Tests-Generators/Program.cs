@@ -2,7 +2,9 @@ using System.Reflection;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Order;
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using Perfolizer.Horology;
 
 // BenchmarkRunner.Run<Bench_Vector3>();
 
@@ -12,7 +14,7 @@ ManualConfig customConfig = DefaultConfig.Instance
 //  .WithArtifactsPath(@"../Artifacts")
 //  .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest))
     .AddLogicalGroupRules(BenchmarkLogicalGroupRule.ByCategory)
-//  .WithSummaryStyle(SummaryStyle.Default.WithTimeUnit(TimeUnit.Microsecond))
+    .WithSummaryStyle(SummaryStyle.Default.WithTimeUnit(TimeUnit.Nanosecond))
     .AddDiagnoser(MemoryDiagnoser.Default);                     // adds column: Allocated
 /*  .HideColumns(
         "Method", "Error", "StdDev", "Median",                  // removed to reduce noise

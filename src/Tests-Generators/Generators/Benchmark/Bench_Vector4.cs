@@ -23,7 +23,7 @@ public partial class Bench_Vector4
     private EntityStore store;
     private ArchetypeQuery<Position4,Velocity4> query;
 
-    const int EntityCount = 1000;
+    const int EntityCount = Constants.EntityCount;
     
     [Vectorize][Query]  [OmitHash]
     private static void MultiplyAdd(ref Position4 position, ref Velocity4 velocity, float deltaTime) {
