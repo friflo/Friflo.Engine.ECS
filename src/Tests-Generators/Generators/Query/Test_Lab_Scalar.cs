@@ -69,12 +69,50 @@ public static class Test_Lab_Scalar
     }
     
     // ------------------------------- scalar parameter -------------------------------
-    public static void Test_InterleavedVector3()
+    private const long InterleavedVector_Count = 10; // 10_000_000_000;
+    
+    [Test]
+    public static void Test_InterleavedVector3_perf_naive() {
+        var vec = new Vector3(1,2,3);
+        for (long n = 0; n < InterleavedVector_Count; n++) {
+            InterleavedVector3_naive(vec);    
+        }
+    }
+    
+    /// <summary> Same performance as <see cref="Test_InterleavedVector3_perf_naive"/> </summary>
+    [Test]
+    public static void Test_InterleavedVector3_perf_permutate() {
+        var vec = new Vector3(1,2,3);
+        for (long n = 0; n < InterleavedVector_Count; n++) {
+            InterleavedVector3_permutate(vec);    
+        }
+    }
+    
+    private static void InterleavedVector3_naive(Vector3 vec)
     {
-        var vec = new Vector3(1.0f, 2.0f, 3.0f);
         var vec_0 = Vector256.Create(vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y);
         var vec_1 = Vector256.Create(vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X);
         var vec_2 = Vector256.Create(vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z);
+    }
+    
+    private static void InterleavedVector3_permutate(Vector3 vec)
+    {
+        // 1. Create the base: (X, Y, Z, 0, X, Y, Z, 0)
+        // We load the Vector3 into a 128-bit register and broadcast it to both lanes
+        Vector128<float> v128 = Vector128.Create(vec.X, vec.Y, vec.Z, 0.0f);
+        Vector256<float> baseVec = Vector256.Create(v128, v128);
+
+        // 2. Define the Indices for your specific patterns
+        // These tell the CPU exactly which index (0-7) goes into which slot
+        var indices0 = Vector256.Create(0, 1, 2, 0, 1, 2, 0, 1); // For vec_0
+        var indices1 = Vector256.Create(2, 0, 1, 2, 0, 1, 2, 0); // For vec_1
+        var indices2 = Vector256.Create(1, 2, 0, 1, 2, 0, 1, 2); // For vec_2
+
+        // 3. Permute across the whole 256-bit register
+        // This is the "Gold Standard" for complex reordering
+        var vec_0 = Avx2.PermuteVar8x32(baseVec, indices0);
+        var vec_1 = Avx2.PermuteVar8x32(baseVec, indices1);
+        var vec_2 = Avx2.PermuteVar8x32(baseVec, indices2);
     }
     
     [Test]
