@@ -41,7 +41,20 @@ public static class Test_Lab_Matrix
         for (int n =  0; n < position.Length; n++) {
             Assert.That(result2[n], Is.EqualTo(result_naive[n]));
             // Assert.That(result4[n], Is.EqualTo(result_naive[n]));
+            // Avx implementation has precision errors
+            var areEqual = AreEqual(result4[n], result_naive[n]);
+            if (!areEqual) {
+                Assert.Fail($"expect: {result_naive[n]}\nwas:    {result4[n]}");
+            }
         }
+    }
+    
+    public static bool AreEqual(Vector4 a, Vector4 b, float epsilon = 1e-3f)
+    {
+        return Math.Abs(a.X - b.X) < epsilon &&
+               Math.Abs(a.Y - b.Y) < epsilon &&
+               Math.Abs(a.Z - b.Z) < epsilon &&
+               Math.Abs(a.W - b.W) < epsilon;
     }
     
     [Test]
