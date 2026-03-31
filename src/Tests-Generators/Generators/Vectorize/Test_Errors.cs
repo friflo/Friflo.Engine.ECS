@@ -13,6 +13,7 @@ namespace Tests.Generators.Vectorize;
 
 public static partial class Test_Errors
 {
+    // --- Expect:  CSGEN001: Vectorization failed - Expect component type 'MyComponent1' having a field named value at parameter 'comp'
     [Vectorize][Query]  [OmitHash]
     private static void InvalidComponentError(ref MyComponent1 comp, int value) {
         comp.a = value;
@@ -23,7 +24,8 @@ public static partial class Test_Errors
         InvalidComponentErrorQuery(new EntityStore(), 1);
     }
     
-    // -----------------------------------------------------------------------------------
+    
+    // --- Expect:  ECSGEN002: Vectorization failed - operation not supported: MathF.Sin(value)
     [Vectorize][Query]  [OmitHash]
     private static void OperationUnsupportedError(ref Position1 comp, float value) {
         comp.value = MathF.Sin(value);
@@ -34,8 +36,7 @@ public static partial class Test_Errors
         OperationUnsupportedErrorQuery(new EntityStore(), 1);
     }
     
-    // -----------------------------------------------------------------------------------
-
+    // --- Expect:    ECSGEN003: Vectorization failed - Incompatible parameter types: 'Position2' and 'Position'
     [Vectorize][Query][OmitHash]
     private static void IncompatibleParameterTypesError(ref Position2 pos1, ref Position pos3) {
     }
