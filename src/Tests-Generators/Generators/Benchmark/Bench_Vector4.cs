@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
@@ -22,6 +23,7 @@ public partial class Bench_Vector4
     
     private EntityStore store;
     private ArchetypeQuery<Position4,Velocity4> query;
+    private Matrix4x4 matrix;
 
     const int EntityCount = Constants.EntityCount;
     
@@ -37,6 +39,13 @@ public partial class Bench_Vector4
             store.CreateEntity(new Position4 { value = new Vector4(n,n,n,n)}, new Velocity4 { value = new Vector4(1,2,3,4)}, new FloatComponent { value = n });
         }
         query = store.Query<Position4, Velocity4>();
+        Matrix4x4 rot = Matrix4x4.CreateFromYawPitchRoll(
+            10f * (MathF.PI / 180.0f), // Yaw
+            20f * (MathF.PI / 180.0f), // Pitch
+            30f * (MathF.PI / 180.0f)  // Roll
+        );
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(new Vector3(1f, 2f, 3f));
+        matrix = Matrix4x4.Multiply(rot, trans);
     }
 
     [Benchmark]
@@ -61,5 +70,22 @@ public partial class Bench_Vector4
         query.ForEachEntity((ref Position4 position, ref Velocity4 velocity, Entity entity) => {
             position.value = velocity.value * deltaTime + position.value;
         });
+    }
+
+    [Vectorize][Query]  [OmitHash]
+    private static void TransformMatrix4x4(ref Position4 position, Matrix4x4 matrix) {
+        position.value = Vector4.Transform(position.value, matrix);
+    }
+    
+    [Benchmark]
+    public void Vector4_Transform_Matrix4x4_Query()
+    {
+        TransformMatrix4x4Query(store, matrix, false);
+    }
+    
+    [Benchmark]
+    public void Vector4_Transform_Matrix4x4_Vectorized()
+    {
+        TransformMatrix4x4Query(store, matrix);
     }
 }
