@@ -44,7 +44,7 @@ public static partial class Test_Vector4_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position4 { value = new Vector4(n,n,n,n)}, new Velocity4 { value = new Vector4(1,2,3,4)}, new FloatComponent { value = n });
+            store.CreateEntity(new Position4 { value = new Vector4(n,n+1,n+2,n+3)}, new Velocity4 { value = new Vector4(1,2,3,4)}, new FloatComponent { value = n });
         }
         return store;
     }

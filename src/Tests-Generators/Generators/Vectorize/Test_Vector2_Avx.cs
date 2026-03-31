@@ -44,7 +44,7 @@ public static partial class Test_Vector2_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position2 { value = new Vector2(n, n)}, new Velocity2 { value = new Vector2(1,2)}, new FloatComponent { value = n });
+            store.CreateEntity(new Position2 { value = new Vector2(n, n+1)}, new Velocity2 { value = new Vector2(1,2)}, new FloatComponent { value = n });
         }
         return store;
     }
