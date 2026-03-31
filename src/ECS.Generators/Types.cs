@@ -42,9 +42,9 @@ public class Query
     public          string                          avxMethod = "";
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
 
-    public void ReportDiagnostic(DiagnosticDescriptor descriptor, ISymbol locationSymbol, params object?[]? messageArgs)
+    public void ReportDiagnosticSymbol(DiagnosticDescriptor descriptor, ISymbol? locationSymbol, params object?[]? messageArgs)
     {
-        var location = locationSymbol.Locations.FirstOrDefault();
+        var location = locationSymbol?.Locations.FirstOrDefault();
         if (location == null) {
             location = methodSymbol.Locations.FirstOrDefault();
         }
@@ -52,7 +52,7 @@ public class Query
         spc.ReportDiagnostic(diagnostic);
     }
     
-    public void ReportDiagnostic(DiagnosticDescriptor descriptor, CSharpSyntaxNode syntaxNode, params object?[]? messageArgs)
+    public void ReportDiagnosticSyntax(DiagnosticDescriptor descriptor, CSharpSyntaxNode syntaxNode, params object?[]? messageArgs)
     {
         var location = syntaxNode.GetLocation();
         var diagnostic = Diagnostic.Create(descriptor, location, messageArgs);

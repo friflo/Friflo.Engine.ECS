@@ -23,6 +23,7 @@ public static partial class Test_Errors
         InvalidComponentErrorQuery(new EntityStore(), 1);
     }
     
+    // -----------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void OperationUnsupportedError(ref Position1 comp, float value) {
         comp.value = MathF.Sin(value);
@@ -32,4 +33,16 @@ public static partial class Test_Errors
     public static void OperationUnsupportedError_Call() {
         OperationUnsupportedErrorQuery(new EntityStore(), 1);
     }
+    
+    // -----------------------------------------------------------------------------------
+
+    [Vectorize][Query][OmitHash]
+    private static void IncompatibleParameterTypesError(ref Position2 pos1, ref Position pos3) {
+    }
+    
+    [Test]
+    public static void IncompatibleParameterTypes_Call() {
+        IncompatibleParameterTypesErrorQuery(new EntityStore());
+    }
+
 }

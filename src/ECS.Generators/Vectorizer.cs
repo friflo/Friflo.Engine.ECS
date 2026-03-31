@@ -26,8 +26,12 @@ public static partial class Vectorizer
         if (vectorTypes == null) {
             return false;
         }
+        var vectorTypeDimension = GetVectorTypeDimension(query, vectorTypes);
+        if (vectorTypeDimension == 0) {
+            return false;
+        }
         query.vectorTypes = vectorTypes;
-        query.vectorDimension = GetVectorTypeDimension(vectorTypes);
+        query.vectorDimension = vectorTypeDimension;
         query.laneCount = query.vectorDimension switch {
             1 => 1,
             2 => 2,
@@ -74,7 +78,7 @@ public static partial class Vectorizer
                     }
                 }
                 if (valueField == null) {
-                    query.ReportDiagnostic(Errors.InvalidComponentType, parameter, type.Name, parameter.Name);
+                    query.ReportDiagnosticSymbol(Errors.InvalidComponentType, parameter, type.Name, parameter.Name);
                     return null;
                 }
                 result.Add(CreateVectorType(parameter, name, true, valueField.Type));
@@ -127,19 +131,22 @@ public static partial class Vectorizer
         };
     }
     
-    private static int GetVectorTypeDimension(VectorType[] vectorTypes)
+    private static int GetVectorTypeDimension(Query query, VectorType[] vectorTypes)
     {
         var dimension = 0;
+        IParameterSymbol? currentParameter = null;
         foreach (var vectorType in vectorTypes) {
             if (!vectorType.isComponent && vectorType.dimension == 1) {
                 continue;
             }
             if (dimension == 0) {
                 dimension = vectorType.dimension;
+                currentParameter = vectorType.parameter;
                 continue;
             }
             if (vectorType.dimension > 1 && vectorType.dimension != dimension) {
-                throw new InvalidOperationException($"Inconsistent parameter dimensions {vectorType.dimension} is not equal to dimension {dimension}");
+                query.ReportDiagnosticSymbol(Errors.IncompatibleParameterTypes, null, currentParameter?.Type.Name, vectorType.parameter.Type.Name);
+                return 0;
             }
         }
         return dimension;
@@ -309,7 +316,7 @@ public static partial class Vectorizer
         if (syntax is IdentifierNameSyntax identifier) {
             return Compute_IdentifierName(lanes, query, identifier);
         }
-        query.ReportDiagnostic(Errors.OperationUnsupported, syntax, syntax.ToFullString());
+        query.ReportDiagnosticSyntax(Errors.OperationUnsupported, syntax, syntax.ToFullString());
         return false;
     }
 }

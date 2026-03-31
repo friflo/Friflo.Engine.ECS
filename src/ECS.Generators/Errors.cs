@@ -22,5 +22,14 @@ public static class Errors
         defaultSeverity: DiagnosticSeverity.Warning, 
         isEnabledByDefault: true
     );
+    
+    public static readonly DiagnosticDescriptor IncompatibleParameterTypes = new (
+        id: "ECSGEN003",
+        title: "Incompatible parameter types",
+        messageFormat: "Vectorization failed - Incompatible parameter types: '{0}' and '{1}'",
+        category: "Performance",
+        defaultSeverity: DiagnosticSeverity.Warning, 
+        isEnabledByDefault: true
+    );
 
 }
