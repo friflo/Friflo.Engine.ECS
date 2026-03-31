@@ -235,10 +235,10 @@ public static class Test_Lab_Matrix
                 Vector256<float> input_3 = Avx.LoadVector256(input_ptr + 24);
                 
                 // Process 4 pairs of vectors
-                var res_0 = ProcessPair(input_0, col0, col1, col2, col3);    // fOut + (i + 0) * 4, 
-                var res_1 = ProcessPair(input_1, col0, col1, col2, col3);    // fOut + (i + 2) * 4, 
-                var res_2 = ProcessPair(input_2, col0, col1, col2, col3);    // fOut + (i + 4) * 4, 
-                var res_3 = ProcessPair(input_3, col0, col1, col2, col3);    // fOut + (i + 6) * 4, 
+                var res_0 = TransformVector4PairAVX(input_0, col0, col1, col2, col3);    // fOut + (i + 0) * 4, 
+                var res_1 = TransformVector4PairAVX(input_1, col0, col1, col2, col3);    // fOut + (i + 2) * 4, 
+                var res_2 = TransformVector4PairAVX(input_2, col0, col1, col2, col3);    // fOut + (i + 4) * 4, 
+                var res_3 = TransformVector4PairAVX(input_3, col0, col1, col2, col3);    // fOut + (i + 6) * 4, 
                 
                 Avx.Store(result_ptr + 0, res_0);
                 Avx.Store(result_ptr + 8, res_1);
@@ -254,7 +254,7 @@ public static class Test_Lab_Matrix
         }
     }
 
-    private static unsafe Vector256<float> ProcessPair(Vector256<float> v, // float* inputPtr, float* outputPtr, 
+    private static Vector256<float> TransformVector4PairAVX(Vector256<float> v, // float* inputPtr, float* outputPtr, 
         Vector256<float> c0, Vector256<float> c1, Vector256<float> c2, Vector256<float> c3)
     {
         // Load two Vector4s into one Vector256
