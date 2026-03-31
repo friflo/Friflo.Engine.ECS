@@ -182,11 +182,13 @@ public static partial class Vectorizer
                 if (!Compute(lanes, query, args[0].Expression)) {
                     return false;
                 }
-                var matrixName = "matrix";                  // TODO get name from arg[1]
-                for (int n = 0; n < lanes.Length; n++) {
-                    lanes[n].Append($", {matrixName}_0, {matrixName}_1, {matrixName}_2, {matrixName}_3)");
+                if (args[1].Expression is IdentifierNameSyntax identifierNameSyntax) {
+                    var matrixName = identifierNameSyntax.Identifier.Text;
+                    for (int n = 0; n < lanes.Length; n++) {
+                        lanes[n].Append($", {matrixName}_0, {matrixName}_1, {matrixName}_2, {matrixName}_3)");
+                    }
+                    return true;
                 }
-                return true;
             }
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());

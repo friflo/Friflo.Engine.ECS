@@ -14,7 +14,7 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="Multiply_Matrix4x4"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery Multiply_Matrix4x4Query(EntityStore _store, in global::System.Numerics.Matrix4x4 matrix, bool vectorized = true)
+        public ArchetypeQuery Multiply_Matrix4x4Query(EntityStore _store, in global::System.Numerics.Matrix4x4 transform, bool vectorized = true)
         {
             var _query = _Multiply_Matrix4x4_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
@@ -24,11 +24,11 @@ namespace VerifyVectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Multiply_Matrix4x4_Avx(positionSpan, in matrix);
+                    n = _Multiply_Matrix4x4_Avx(positionSpan, in transform);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    Multiply_Matrix4x4(ref positionSpan[n], in matrix);
+                    Multiply_Matrix4x4(ref positionSpan[n], in transform);
                 }
             }
             return _query;
@@ -56,7 +56,7 @@ namespace VerifyVectorize
         [SkipLocalsInit]
         private static unsafe int _Multiply_Matrix4x4_Avx(
             Span<global::VerifyVectorize.Position4> position,in 
-            global::System.Numerics.Matrix4x4 matrix)
+            global::System.Numerics.Matrix4x4 transform)
         {
             int i = 0;
             var end = position.Length - 8;
@@ -65,10 +65,10 @@ namespace VerifyVectorize
             }
             // Load Matrix columns into 256-bit registers (each column duplicated)
             // [Col0.x, Col0.y, Col0.z, Col0.w, Col0.x, Col0.y, Col0.z, Col0.w]
-            Vector256<float> matrix_0 = Vector256.Create(matrix.M11, matrix.M12, matrix.M13, matrix.M14, matrix.M11, matrix.M12, matrix.M13, matrix.M14);
-            Vector256<float> matrix_1 = Vector256.Create(matrix.M21, matrix.M22, matrix.M23, matrix.M24, matrix.M21, matrix.M22, matrix.M23, matrix.M24);
-            Vector256<float> matrix_2 = Vector256.Create(matrix.M31, matrix.M32, matrix.M33, matrix.M34, matrix.M31, matrix.M32, matrix.M33, matrix.M34);
-            Vector256<float> matrix_3 = Vector256.Create(matrix.M41, matrix.M42, matrix.M43, matrix.M44, matrix.M41, matrix.M42, matrix.M43, matrix.M44);
+            Vector256<float> transform_0 = Vector256.Create(transform.M11, transform.M12, transform.M13, transform.M14, transform.M11, transform.M12, transform.M13, transform.M14);
+            Vector256<float> transform_1 = Vector256.Create(transform.M21, transform.M22, transform.M23, transform.M24, transform.M21, transform.M22, transform.M23, transform.M24);
+            Vector256<float> transform_2 = Vector256.Create(transform.M31, transform.M32, transform.M33, transform.M34, transform.M31, transform.M32, transform.M33, transform.M34);
+            Vector256<float> transform_3 = Vector256.Create(transform.M41, transform.M42, transform.M43, transform.M44, transform.M41, transform.M42, transform.M43, transform.M44);
 
             fixed (global::VerifyVectorize.Position4* position_first = position)
             {
@@ -83,10 +83,10 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // 2. Compute
-                    position_0 = AvxUtils.TransformVector4PairAVX2(position_0, matrix_0, matrix_1, matrix_2, matrix_3);
-                    position_1 = AvxUtils.TransformVector4PairAVX2(position_1, matrix_0, matrix_1, matrix_2, matrix_3);
-                    position_2 = AvxUtils.TransformVector4PairAVX2(position_2, matrix_0, matrix_1, matrix_2, matrix_3);
-                    position_3 = AvxUtils.TransformVector4PairAVX2(position_3, matrix_0, matrix_1, matrix_2, matrix_3);
+                    position_0 = AvxUtils.TransformVector4PairAVX2(position_0, transform_0, transform_1, transform_2, transform_3);
+                    position_1 = AvxUtils.TransformVector4PairAVX2(position_1, transform_0, transform_1, transform_2, transform_3);
+                    position_2 = AvxUtils.TransformVector4PairAVX2(position_2, transform_0, transform_1, transform_2, transform_3);
+                    position_3 = AvxUtils.TransformVector4PairAVX2(position_3, transform_0, transform_1, transform_2, transform_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
