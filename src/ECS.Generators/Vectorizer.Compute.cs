@@ -51,6 +51,7 @@ public static partial class Vectorizer
             _                                       => null
         };
         if (avxOperation is null) {
+            query.ReportDiagnosticSyntax(Errors.OperationUnsupported, assignment);
             return false;
         }
         var left = Utils.GetMemberName(assignment.Left).Identifier.Text;
@@ -103,6 +104,7 @@ public static partial class Vectorizer
             _                             => null
         };
         if (avxOperation is null) {
+            query.ReportDiagnosticSyntax(Errors.OperationUnsupported, binary);
             return false;
         }
         // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
