@@ -1,0 +1,24 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: /*
+    void Multiply_Matrix4x4(ref Position4 position, in Matrix4x4 matrix) {
+        position.value = Vector4.Transform(position.value, matrix);
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+*/
+ : (11,25)-(11,66),
+      Message: Vectorization failed - operation not supported: Vector4.Transform(position.value, matrix),
+      Severity: Warning,
+      WarningLevel: 1,
+      Descriptor: {
+        Id: ECSGEN002,
+        Title: Operation unsupported,
+        MessageFormat: Vectorization failed - operation not supported: {0},
+        Category: Performance,
+        DefaultSeverity: Warning,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

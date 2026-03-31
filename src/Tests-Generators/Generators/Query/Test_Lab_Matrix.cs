@@ -73,7 +73,7 @@ public static class Test_Lab_Matrix
             position[n] = new Vector4(n, 2 * n, n + 10, 0);
         }
         var result = new Vector4[1024];
-        var repeat = 10_000_000; // 10_000_000;
+        var repeat = 10; // 10_000_000;
         for (int n = 0; n < repeat; n++) {
             // TransformVector4Array_Unroll2_Avx(position, matrix, result);
             // TransformVector4Array_Unroll4_Avx(position, matrix, result);

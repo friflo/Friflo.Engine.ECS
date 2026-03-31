@@ -170,4 +170,27 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Multiply_Matrix4x4()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct Position4 : IComponent { public Vector4 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void Multiply_Matrix4x4(ref Position4 position, in Matrix4x4 matrix) {
+                    position.value = Vector4.Transform(position.value, matrix);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

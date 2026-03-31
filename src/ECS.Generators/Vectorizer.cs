@@ -99,20 +99,28 @@ public static partial class Vectorizer
         switch (valueType.SpecialType) {
             case SpecialType.None:
                 var fullTypeName = valueType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                if (fullTypeName == "global::System.Numerics.Vector2") {
-                    specialType = SpecialType.System_Single; 
-                    dimension = 2;
-                    paramType = ParamType.Vector;
-                }
-                else if (fullTypeName == "global::System.Numerics.Vector3") {
-                    specialType = SpecialType.System_Single; 
-                    dimension = 3;
-                    paramType = ParamType.Vector;
-                }
-                else if (fullTypeName == "global::System.Numerics.Vector4") {
-                    specialType = SpecialType.System_Single; 
-                    dimension = 4;
-                    paramType = ParamType.Vector;
+                switch (fullTypeName)
+                {
+                    case "global::System.Numerics.Vector2":
+                        specialType = SpecialType.System_Single; 
+                        dimension = 2;
+                        paramType = ParamType.Vector;
+                        break;
+                    case "global::System.Numerics.Vector3":
+                        specialType = SpecialType.System_Single; 
+                        dimension = 3;
+                        paramType = ParamType.Vector;
+                        break;
+                    case "global::System.Numerics.Vector4":
+                        specialType = SpecialType.System_Single; 
+                        dimension = 4;
+                        paramType = ParamType.Vector;
+                        break;
+                    case "global::System.Numerics.Matrix4x4":
+                        specialType = SpecialType.System_Single; 
+                        dimension = 4;
+                        paramType = ParamType.Matrix4x4;
+                        break;
                 }
                 break;
             case SpecialType.System_Single:
@@ -321,6 +329,9 @@ public static partial class Vectorizer
         }
         if (syntax is IdentifierNameSyntax identifier) {
             return Compute_IdentifierName(lanes, query, identifier);
+        }
+        if (syntax is InvocationExpressionSyntax invocation) {
+            return Compute_Invocation(lanes, query, invocation);
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, syntax, syntax.ToFullString());
         return false;

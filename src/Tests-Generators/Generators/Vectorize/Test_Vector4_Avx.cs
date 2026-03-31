@@ -1,6 +1,7 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -187,6 +188,38 @@ public static partial class Test_Vector4_Avx
 
         var storeVectorized = CreateTestStore();
         var query = Multiply_Vector4_scalarQuery(storeVectorized);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+        }
+    }
+    
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector4_Matrix4x4(ref Position4 position, in Matrix4x4 matrix) {
+        position.value = Vector4.Transform(position.value, matrix);
+    }
+    
+    [Test]
+    public static void Test_Avx_Multiply_Vector4_Matrix4x4()
+    {
+        Matrix4x4 rot = Matrix4x4.CreateFromYawPitchRoll(
+            10f * (MathF.PI / 180.0f), // Yaw
+            20f * (MathF.PI / 180.0f), // Pitch
+            30f * (MathF.PI / 180.0f)  // Roll
+        );
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(new Vector3(1f, 2f, 3f));
+        var matrix = Matrix4x4.Multiply(rot, trans);
+        
+        var store = CreateTestStore();
+        Multiply_Vector4_Matrix4x4Query(store, matrix); // , false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector4_Matrix4x4Query(storeVectorized, matrix);
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)

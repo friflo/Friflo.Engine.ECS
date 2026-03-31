@@ -152,4 +152,10 @@ public static partial class Vectorizer
         return true;
     }
 
+    private static bool Compute_Invocation(StringBuilder[] lanes, Query query, InvocationExpressionSyntax invocation)
+    {
+        query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
+        return false;
+    }
+
 }

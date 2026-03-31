@@ -64,7 +64,8 @@ public enum ParamType
 {
     None,
     Scalar,
-    Vector
+    Vector,
+    Matrix4x4
 }
 
 public struct VectorType
