@@ -83,10 +83,10 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // 2. Compute
-                    position_0 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
-                    position_1 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
-                    position_2 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
-                    position_3 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
+                    position_0 = AvxUtils.TransformVector4PairAVX2(position_0, matrix_0, matrix_1, matrix_2, matrix_3);
+                    position_1 = AvxUtils.TransformVector4PairAVX2(position_1, matrix_0, matrix_1, matrix_2, matrix_3);
+                    position_2 = AvxUtils.TransformVector4PairAVX2(position_2, matrix_0, matrix_1, matrix_2, matrix_3);
+                    position_3 = AvxUtils.TransformVector4PairAVX2(position_3, matrix_0, matrix_1, matrix_2, matrix_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);

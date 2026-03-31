@@ -204,7 +204,7 @@ public static partial class Test_Vector4_Avx
         position.value = Vector4.Transform(position.value, matrix);
     }
     
-    [Test][Ignore("implement Matrix4x4 support")]
+    [Test]
     public static void Test_Avx_Multiply_Vector4_Matrix4x4()
     {
         Matrix4x4 rot = Matrix4x4.CreateFromYawPitchRoll(

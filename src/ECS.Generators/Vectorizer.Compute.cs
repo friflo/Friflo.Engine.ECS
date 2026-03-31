@@ -171,11 +171,20 @@ public static partial class Vectorizer
         if (methodName == "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)") {
             if (query.vectorDimension == 4)
             {
-                for (int n = 0; n < lanes.Length; n++)
-                {
+                /* for (int n = 0; n < lanes.Length; n++) {
                     lanes[n].Append($"AvxUtils.TransformVector4PairAVX2(default, default, default, default, default)");
-                    
-                    // lanes[n].Append($"default");
+                }                
+                return true; */
+                var args = invocation.ArgumentList.Arguments;
+                for (int n = 0; n < lanes.Length; n++) {
+                    lanes[n].Append("AvxUtils.TransformVector4PairAVX2(");
+                }
+                if (!Compute(lanes, query, args[0].Expression)) {
+                    return false;
+                }
+                var matrixName = "matrix";                  // TODO get name from arg[1]
+                for (int n = 0; n < lanes.Length; n++) {
+                    lanes[n].Append($", {matrixName}_0, {matrixName}_1, {matrixName}_2, {matrixName}_3)");
                 }
                 return true;
             }
