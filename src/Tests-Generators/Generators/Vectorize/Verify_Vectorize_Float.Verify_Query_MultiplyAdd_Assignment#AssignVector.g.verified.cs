@@ -59,29 +59,36 @@ namespace VerifyVectorize
             float deltaTime)
         {
             int i = 0;
-            var end = velocity.Length - 8;
+            var end = velocity.Length - 32;
             if (i > end) {
                 return 0;
             }
             Vector128<float> position_0 = Vector128.Create(position);
-            Vector256<int> velocity_mask_0 = Vector256.Create( 0, 1, 2, 3, 4, 5, 6, 7);
             var deltaTime_scalar = Vector256.Create(deltaTime);
 
             fixed (global::VerifyVectorize.Velocity1* velocity_first = velocity)
             {
-                for (; i <= end; i += 8)
+                for (; i <= end; i += 32)
                 {
                     float* velocity_ptr = (float*)(velocity_first + i);
 
                     // 1. Load
-                    Vector256<float> velocity_scalar = Avx.LoadVector256(velocity_ptr);
-                    Vector256<float> velocity_0 = Avx2.PermuteVar8x32(velocity_scalar, velocity_mask_0);
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
+                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // 2. Compute
                     position_0 = Fma.MultiplyAdd(velocity_0, deltaTime_scalar, position_0);
+                    position_1 = Fma.MultiplyAdd(velocity_1, deltaTime_scalar, position_1);
+                    position_2 = Fma.MultiplyAdd(velocity_2, deltaTime_scalar, position_2);
+                    position_3 = Fma.MultiplyAdd(velocity_3, deltaTime_scalar, position_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
+                    Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr + 16, position_2);
+                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }

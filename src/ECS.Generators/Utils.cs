@@ -89,7 +89,7 @@ public static class Utils
     {
         switch (vectorDimension) {
             case 1:
-                sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create( 0, 1, 2, 3, 4, 5, 6, 7);");
+                // sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create( 0, 1, 2, 3, 4, 5, 6, 7);");
                 break;
             case 2:
                 sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);");

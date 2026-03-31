@@ -58,28 +58,35 @@ namespace VerifyVectorize
             float vector)
         {
             int i = 0;
-            var end = position.Length - 8;
+            var end = position.Length - 32;
             if (i > end) {
                 return 0;
             }
-            Vector256<int> position_mask_0 = Vector256.Create( 0, 1, 2, 3, 4, 5, 6, 7);
             var vector_scalar = Vector256.Create(vector);
 
             fixed (global::VerifyVectorize.Position1* position_first = position)
             {
-                for (; i <= end; i += 8)
+                for (; i <= end; i += 32)
                 {
                     float* position_ptr = (float*)(position_first + i);
 
                     // 1. Load
-                    Vector256<float> position_scalar = Avx.LoadVector256(position_ptr);
-                    Vector256<float> position_0 = Avx2.PermuteVar8x32(position_scalar, position_mask_0);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // 2. Compute
                     position_0 = vector_scalar;
+                    position_1 = vector_scalar;
+                    position_2 = vector_scalar;
+                    position_3 = vector_scalar;
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
+                    Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr + 16, position_2);
+                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }
