@@ -33,14 +33,14 @@ public static class Test_Lab_Matrix
         TransformVector4Array_Unroll2_Avx(position, matrix, result2);
         
         var result4 = new Vector4[1024];
-        TransformVector4Array_Unroll4_Avx(position, matrix, result4);
+        MultiplyUnrolled4(position, matrix, result4);
         
         var result_naive = new Vector4[1024];
         TransformVector4Array_naive(position, matrix, result_naive);
         
         for (int n =  0; n < position.Length; n++) {
             Assert.That(result2[n], Is.EqualTo(result_naive[n]));
-            // Assert.That(result4[n], Is.EqualTo(result_naive[n]));
+            Assert.That(result4[n], Is.EqualTo(result_naive[n]));
             // Avx implementation has precision errors
             var areEqual = AreEqual(result4[n], result_naive[n]);
             if (!areEqual) {
@@ -49,7 +49,7 @@ public static class Test_Lab_Matrix
         }
     }
     
-    public static bool AreEqual(Vector4 a, Vector4 b, float epsilon = 1e-3f)
+    private static bool AreEqual(Vector4 a, Vector4 b, float epsilon = 1e-5f)
     {
         return Math.Abs(a.X - b.X) < epsilon &&
                Math.Abs(a.Y - b.Y) < epsilon &&
@@ -73,11 +73,12 @@ public static class Test_Lab_Matrix
             position[n] = new Vector4(n, 2 * n, n + 10, 0);
         }
         var result = new Vector4[1024];
-        var repeat = 10; // 10_000_000;
+        var repeat = 10_000_000; // 10_000_000;
         for (int n = 0; n < repeat; n++) {
-            TransformVector4Array_Unroll2_Avx(position, matrix, result);
+            // TransformVector4Array_Unroll2_Avx(position, matrix, result);
             // TransformVector4Array_Unroll4_Avx(position, matrix, result);
             // TransformVector4Array_naive(position, matrix, result);
+            MultiplyUnrolled4(position, matrix, result);
         }
     }
     
@@ -197,6 +198,91 @@ public static class Test_Lab_Matrix
                     Vector128.Multiply(w, c4))));
 
         Sse.Store(dst, res);
+    }
+    
+    
+    // -------------------------------------- alternative
+    // prompt:   how to implement a multiplication vector4[] arrays and a Matrix4x4 using loop unroll: 4 in C# using avx
+    public static unsafe void MultiplyUnrolled4(Vector4[] inputs, Matrix4x4 matrix, Vector4[] results)
+    {
+        if (inputs.Length != results.Length) throw new ArgumentException("Array lengths must match.");
+        
+        fixed (Vector4* pInput = inputs)
+        fixed (Vector4* pResult = results)
+        {
+            float* fIn = (float*)pInput;
+            float* fOut = (float*)pResult;
+
+            // Load Matrix columns into 256-bit registers (each column duplicated)
+            // [Col0.x, Col0.y, Col0.z, Col0.w, Col0.x, Col0.y, Col0.z, Col0.w]
+            Vector256<float> col0 = Vector256.Create(matrix.M11, matrix.M12, matrix.M13, matrix.M14, matrix.M11, matrix.M12, matrix.M13, matrix.M14);
+            Vector256<float> col1 = Vector256.Create(matrix.M21, matrix.M22, matrix.M23, matrix.M24, matrix.M21, matrix.M22, matrix.M23, matrix.M24);
+            Vector256<float> col2 = Vector256.Create(matrix.M31, matrix.M32, matrix.M33, matrix.M34, matrix.M31, matrix.M32, matrix.M33, matrix.M34);
+            Vector256<float> col3 = Vector256.Create(matrix.M41, matrix.M42, matrix.M43, matrix.M44, matrix.M41, matrix.M42, matrix.M43, matrix.M44);
+
+            int i = 0;
+            int count = inputs.Length;
+
+            // Loop Unroll: 4 (Processing 2 vectors per YMM, so 4 * 2 = 8 vectors per loop)
+            for (; i <= count - 8; i += 8)
+            {
+                float* input_ptr = (float*)(pInput + i);
+                float* result_ptr = (float*)(pResult + i);
+                
+                Vector256<float> input_0 = Avx.LoadVector256(input_ptr + 0);
+                Vector256<float> input_1 = Avx.LoadVector256(input_ptr + 8);
+                Vector256<float> input_2 = Avx.LoadVector256(input_ptr + 16);
+                Vector256<float> input_3 = Avx.LoadVector256(input_ptr + 24);
+                
+                // Process 4 pairs of vectors
+                var res_0 = ProcessPair(input_0, col0, col1, col2, col3);    // fOut + (i + 0) * 4, 
+                var res_1 = ProcessPair(input_1, col0, col1, col2, col3);    // fOut + (i + 2) * 4, 
+                var res_2 = ProcessPair(input_2, col0, col1, col2, col3);    // fOut + (i + 4) * 4, 
+                var res_3 = ProcessPair(input_3, col0, col1, col2, col3);    // fOut + (i + 6) * 4, 
+                
+                Avx.Store(result_ptr + 0, res_0);
+                Avx.Store(result_ptr + 8, res_1);
+                Avx.Store(result_ptr + 16, res_2);
+                Avx.Store(result_ptr + 24, res_3);
+            }
+
+            // Remainder loop for vectors not covered by unroll
+            for (; i < count; i++)
+            {
+                results[i] = Vector4.Transform(inputs[i], matrix);
+            }
+        }
+    }
+
+    private static unsafe Vector256<float> ProcessPair(Vector256<float> v, // float* inputPtr, float* outputPtr, 
+        Vector256<float> c0, Vector256<float> c1, Vector256<float> c2, Vector256<float> c3)
+    {
+        // Load two Vector4s into one Vector256
+        // Vector256<float> v = Avx.LoadVector256(inputPtr);
+
+        // Shuffle/Broadcast components
+        // We use Avx.Shuffle to pick x,y,z,w and broadcast them across the 4 lanes for each vector
+        Vector256<float> xxxx = Avx.Shuffle(v, v, 0b00_00_00_00); 
+        Vector256<float> yyyy = Avx.Shuffle(v, v, 0b01_01_01_01);
+        Vector256<float> zzzz = Avx.Shuffle(v, v, 0b10_10_10_10);
+        Vector256<float> wwww = Avx.Shuffle(v, v, 0b11_11_11_11);
+
+        // Standard Dot Product math: (x * col0) + (y * col1) + (z * col2) + (w * col3)
+        // Vector256<float> res = Avx.Multiply(xxxx, c0);
+        // res = Avx.Add(res, Avx.Multiply(yyyy, c1));
+        // res = Avx.Add(res, Avx.Multiply(zzzz, c2));
+        // res = Avx.Add(res, Avx.Multiply(wwww, c3));
+        
+        // Vector256<float> res = Avx.Multiply(xxxx, c0);
+        // res = Fma.MultiplyAdd(yyyy, c1, res);
+        // res = Fma.MultiplyAdd(zzzz, c2, res);
+        // res = Fma.MultiplyAdd(wwww, c3, res);
+        
+        Vector256<float> res = Fma.MultiplyAdd(wwww, c3, Fma.MultiplyAdd(zzzz, c2, Fma.MultiplyAdd(yyyy, c1, Avx.Multiply(xxxx, c0))));
+
+        return res;
+        // Store the two resulting Vector4s
+        // Avx.Store(outputPtr, res);
     }
 }
 
