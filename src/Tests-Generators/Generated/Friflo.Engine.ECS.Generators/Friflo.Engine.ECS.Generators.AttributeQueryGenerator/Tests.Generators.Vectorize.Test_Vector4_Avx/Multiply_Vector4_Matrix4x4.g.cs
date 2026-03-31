@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using Friflo.Engine.ECS.Intrinsics;
 using Friflo.Engine.ECS;
 
 namespace Tests.Generators.Vectorize
@@ -81,10 +82,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // 2. Compute
-                    position_0 = default;
-                    position_1 = default;
-                    position_2 = default;
-                    position_3 = default;
+                    position_0 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
+                    position_1 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
+                    position_2 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
+                    position_3 = AvxUtils.TransformVector4PairAVX2(default, default, default, default, default);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);

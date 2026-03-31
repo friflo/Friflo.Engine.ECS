@@ -38,7 +38,7 @@ namespace Friflo.Engine.ECS.Intrinsics
 {
     internal static class AvxUtils
     {
-        private static Vector256<float> TransformVector4PairAVX2(
+        internal static Vector256<float> TransformVector4PairAVX2(
             Vector256<float> v, Vector256<float> c0, Vector256<float> c1, Vector256<float> c2, Vector256<float> c3)
         {
             // Shuffle/Broadcast components
@@ -311,7 +311,8 @@ namespace Friflo.Engine.ECS.Intrinsics
             intrinsics =@"
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;";
+using System.Runtime.Intrinsics.X86;
+using Friflo.Engine.ECS.Intrinsics;";
         }
         var source =
 $@"using System;

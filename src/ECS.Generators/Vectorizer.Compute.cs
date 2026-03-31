@@ -173,7 +173,9 @@ public static partial class Vectorizer
             {
                 for (int n = 0; n < lanes.Length; n++)
                 {
-                    lanes[n].Append($"default");
+                    lanes[n].Append($"AvxUtils.TransformVector4PairAVX2(default, default, default, default, default)");
+                    
+                    // lanes[n].Append($"default");
                 }
                 return true;
             }
