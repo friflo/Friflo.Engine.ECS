@@ -1,0 +1,24 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: /*
+    [Vectorize][Query][OmitHash]
+    void InvalidComponent(ref MyComponent1 component, float value) {
+                                           ^^^^^^^^^
+        component.a = value;
+*/
+ : (10,43)-(10,52),
+      Message: Vectorization failed - Expect component type 'MyComponent1' having a field named value at parameter 'component',
+      Severity: Warning,
+      WarningLevel: 1,
+      Descriptor: {
+        Id: ECSGEN001,
+        Title: Invalid component type,
+        MessageFormat: Vectorization failed - Expect component type '{0}' having a field named value at parameter '{1}',
+        Category: Naming,
+        DefaultSeverity: Warning,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

@@ -56,7 +56,8 @@ public class AttributeQueryGenerator : IIncrementalGenerator
                 parameters      = parameters, 
                 components      = components,
                 hash            = hash,
-                ecsTypes        = types
+                ecsTypes        = types,
+                spc             = spc
             };
             Vectorizer.Emit(query);
             var componentArgs       = EmitComponentArgs(components);

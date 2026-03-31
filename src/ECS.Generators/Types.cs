@@ -30,6 +30,7 @@ public class Query
     public          ImmutableArray<IParameterSymbol>parameters;
     public          List<IParameterSymbol>          components;
     public          EcsTypes                        ecsTypes;
+    public          SourceProductionContext         spc;
     // --- generated output
     public          int                             vectorDimension;    // [3, 4]
     public          int                             laneCount;          // [3, 2]

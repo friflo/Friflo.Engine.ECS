@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,8 +23,12 @@ public static partial class Vectorizer
         if (!found) {
             return false;
         }
-        query.vectorTypes = GetVectorTypes(query);
-        query.vectorDimension = GetVectorTypeDimension(query.vectorTypes);
+        var vectorTypes = GetVectorTypes(query);
+        if (vectorTypes == null) {
+            return false;
+        }
+        query.vectorTypes = vectorTypes;
+        query.vectorDimension = GetVectorTypeDimension(vectorTypes);
         query.laneCount = query.vectorDimension switch {
             1 => 1,
             2 => 2,
@@ -31,7 +36,6 @@ public static partial class Vectorizer
             4 => 4,
             _ => -1
         };
-        query.vectorize = true;
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
             SyntaxNode node = syntaxReference.GetSyntax();
             if (node is MethodDeclarationSyntax methodDeclarationSyntax) {
@@ -44,10 +48,11 @@ public static partial class Vectorizer
                 }
             }
         }
+        query.vectorize = true;
         return true;
     }
     
-    private static VectorType[] GetVectorTypes(Query query)
+    private static VectorType[]? GetVectorTypes(Query query)
     {
         var result = new List<VectorType>();
         foreach (var parameter in query.parameters)
@@ -67,8 +72,11 @@ public static partial class Vectorizer
                         break;
                     }
                 }
-                if (valueField == null) {
-                    throw new InvalidOperationException($"missing value field in {name}");
+                if (valueField == null)
+                {
+                    var location = parameter.Locations.FirstOrDefault();
+                    query.spc.ReportDiagnostic(Diagnostic.Create(Errors.InvalidComponentType, location, type.Name, parameter.Name));
+                    return null;
                 }
                 result.Add(CreateVectorType(parameter, name, true, valueField.Type));
             } else { 
