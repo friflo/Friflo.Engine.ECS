@@ -39,15 +39,15 @@ namespace VerifyVectorize
         private static readonly int _AssignVector_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.FloatComponent>
+        private static ArchetypeQuery<global::VerifyVectorize.Position4, global::VerifyVectorize.FloatComponent>
             _AssignVector_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.FloatComponent>)
+            var _query = (ArchetypeQuery<global::VerifyVectorize.Position4, global::VerifyVectorize.FloatComponent>)
                 EntityStore.UserDataGet(_store, _AssignVector_Slot);
             if (_query != null) {
                 return _query;
             }
-            _query = _store.Query<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.FloatComponent>();
+            _query = _store.Query<global::VerifyVectorize.Position4, global::VerifyVectorize.FloatComponent>();
 
             EntityStore.UserDataSet(_store, _AssignVector_Slot, _query);
             return _query;
@@ -55,7 +55,7 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _AssignVector_Avx(
-            Span<global::Friflo.Engine.ECS.Position> position,
+            Span<global::VerifyVectorize.Position4> position,
             Span<global::VerifyVectorize.FloatComponent> factor)
         {
             int i = 0;
@@ -63,11 +63,12 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-            Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 1, 1, 1, 2, 2);
-            Vector256<int> factor_mask_1 = Vector256.Create(2, 3, 3, 3, 4, 4, 4, 5);
-            Vector256<int> factor_mask_2 = Vector256.Create(5, 5, 6, 6, 6, 7, 7, 7);
+            Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 0, 1, 1, 1, 1);
+            Vector256<int> factor_mask_1 = Vector256.Create(2, 2, 2, 2, 3, 3, 3, 3);
+            Vector256<int> factor_mask_2 = Vector256.Create(4, 4, 4, 4, 5, 5, 5, 5);
+            Vector256<int> factor_mask_3 = Vector256.Create(6, 6, 6, 6, 7, 7, 7, 7);
 
-            fixed (global::Friflo.Engine.ECS.Position* position_first = position)
+            fixed (global::VerifyVectorize.Position4* position_first = position)
             fixed (global::VerifyVectorize.FloatComponent* factor_first = factor)
             {
                 for (; i <= end; i += 8)
@@ -79,21 +80,25 @@ namespace VerifyVectorize
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     Vector256<float> factor_scalar = Avx.LoadVector256(factor_ptr);
                     Vector256<float> factor_0 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_0);
                     Vector256<float> factor_1 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_1);
                     Vector256<float> factor_2 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_2);
+                    Vector256<float> factor_3 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_3);
 
                     // 2. Compute
                     position_0 = Avx.Multiply(position_0, factor_0);
                     position_1 = Avx.Multiply(position_1, factor_1);
                     position_2 = Avx.Multiply(position_2, factor_2);
+                    position_3 = Avx.Multiply(position_3, factor_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
+                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }

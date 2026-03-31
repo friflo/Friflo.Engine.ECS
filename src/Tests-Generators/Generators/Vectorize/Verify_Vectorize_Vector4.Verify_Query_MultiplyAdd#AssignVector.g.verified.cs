@@ -39,15 +39,15 @@ namespace VerifyVectorize
         private static readonly int _AssignVector_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity>
+        private static ArchetypeQuery<global::VerifyVectorize.Position4, global::VerifyVectorize.Velocity4>
             _AssignVector_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity>)
+            var _query = (ArchetypeQuery<global::VerifyVectorize.Position4, global::VerifyVectorize.Velocity4>)
                 EntityStore.UserDataGet(_store, _AssignVector_Slot);
             if (_query != null) {
                 return _query;
             }
-            _query = _store.Query<global::Friflo.Engine.ECS.Position, global::VerifyVectorize.Velocity>();
+            _query = _store.Query<global::VerifyVectorize.Position4, global::VerifyVectorize.Velocity4>();
 
             EntityStore.UserDataSet(_store, _AssignVector_Slot, _query);
             return _query;
@@ -55,8 +55,8 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _AssignVector_Avx(
-            Span<global::Friflo.Engine.ECS.Position> position,
-            Span<global::VerifyVectorize.Velocity> velocity,
+            Span<global::VerifyVectorize.Position4> position,
+            Span<global::VerifyVectorize.Velocity4> velocity,
             float deltaTime)
         {
             int i = 0;
@@ -66,8 +66,8 @@ namespace VerifyVectorize
             }
             var deltaTime_scalar = Vector256.Create(deltaTime);
 
-            fixed (global::Friflo.Engine.ECS.Position* position_first = position)
-            fixed (global::VerifyVectorize.Velocity* velocity_first = velocity)
+            fixed (global::VerifyVectorize.Position4* position_first = position)
+            fixed (global::VerifyVectorize.Velocity4* velocity_first = velocity)
             {
                 for (; i <= end; i += 8)
                 {
@@ -78,20 +78,24 @@ namespace VerifyVectorize
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
                     Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
+                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // 2. Compute
                     position_0 = Fma.MultiplyAdd(velocity_0, deltaTime_scalar, position_0);
                     position_1 = Fma.MultiplyAdd(velocity_1, deltaTime_scalar, position_1);
                     position_2 = Fma.MultiplyAdd(velocity_2, deltaTime_scalar, position_2);
+                    position_3 = Fma.MultiplyAdd(velocity_3, deltaTime_scalar, position_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
+                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }

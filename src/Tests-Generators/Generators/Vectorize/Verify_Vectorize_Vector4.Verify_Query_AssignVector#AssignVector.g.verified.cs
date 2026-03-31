@@ -13,21 +13,22 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="AssignVector"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery AssignVectorQuery(EntityStore _store, global::System.Numerics.Vector3 vector, bool vectorized = true)
+        public ArchetypeQuery AssignVectorQuery(EntityStore _store, bool vectorized = true)
         {
             var _query = _AssignVector_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
+                var vectorSpan = chunk.Chunk2.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _AssignVector_Avx(positionSpan, vector);
+                    n = _AssignVector_Avx(positionSpan, vectorSpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    AssignVector(ref positionSpan[n], vector);
+                    AssignVector(ref positionSpan[n], vectorSpan[n]);
                 }
             }
             return _query;
@@ -38,15 +39,15 @@ namespace VerifyVectorize
         private static readonly int _AssignVector_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Friflo.Engine.ECS.Position>
+        private static ArchetypeQuery<global::VerifyVectorize.Position4, global::VerifyVectorize.Velocity4>
             _AssignVector_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Friflo.Engine.ECS.Position>)
+            var _query = (ArchetypeQuery<global::VerifyVectorize.Position4, global::VerifyVectorize.Velocity4>)
                 EntityStore.UserDataGet(_store, _AssignVector_Slot);
             if (_query != null) {
                 return _query;
             }
-            _query = _store.Query<global::Friflo.Engine.ECS.Position>();
+            _query = _store.Query<global::VerifyVectorize.Position4, global::VerifyVectorize.Velocity4>();
 
             EntityStore.UserDataSet(_store, _AssignVector_Slot, _query);
             return _query;
@@ -54,38 +55,45 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _AssignVector_Avx(
-            Span<global::Friflo.Engine.ECS.Position> position,
-            global::System.Numerics.Vector3 vector)
+            Span<global::VerifyVectorize.Position4> position,
+            Span<global::VerifyVectorize.Velocity4> vector)
         {
             int i = 0;
             var end = position.Length - 8;
             if (i > end) {
                 return 0;
             }
-            var vector_0 = Vector256.Create(vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z, vector.X, vector.Y);
-            var vector_1 = Vector256.Create(vector.Z, vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z, vector.X);
-            var vector_2 = Vector256.Create(vector.Y, vector.Z, vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z);
 
-            fixed (global::Friflo.Engine.ECS.Position* position_first = position)
+            fixed (global::VerifyVectorize.Position4* position_first = position)
+            fixed (global::VerifyVectorize.Velocity4* vector_first = vector)
             {
                 for (; i <= end; i += 8)
                 {
                     float* position_ptr = (float*)(position_first + i);
+                    float* vector_ptr = (float*)(vector_first + i);
 
                     // 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+
+                    Vector256<float> vector_0 = Avx.LoadVector256(vector_ptr + 0);
+                    Vector256<float> vector_1 = Avx.LoadVector256(vector_ptr + 8);
+                    Vector256<float> vector_2 = Avx.LoadVector256(vector_ptr + 16);
+                    Vector256<float> vector_3 = Avx.LoadVector256(vector_ptr + 24);
 
                     // 2. Compute
                     position_0 = vector_0;
                     position_1 = vector_1;
                     position_2 = vector_2;
+                    position_3 = vector_3;
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
+                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }
