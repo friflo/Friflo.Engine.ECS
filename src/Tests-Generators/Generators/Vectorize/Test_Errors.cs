@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using Friflo.Engine.ECS;
+using NUnit.Framework;
 using Tests.ECS;
 
 // ReSharper disable InconsistentNaming
@@ -15,7 +16,9 @@ public static partial class Test_Errors
     private static void InvalidComponentError(ref MyComponent1 comp, int value) {
         comp.a = value;
     }
-    private static void InvalidComponentCall() => InvalidComponentErrorQuery(null, 1);
     
-    
+    [Test]
+    public static void InvalidComponentCall() {
+        InvalidComponentErrorQuery(new EntityStore(), 1);
+    }
 }
