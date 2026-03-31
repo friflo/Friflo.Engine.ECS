@@ -42,7 +42,9 @@ public static partial class Vectorizer
                 if (body == null) continue;
                 foreach (var statement in body.Statements) {
                     if (statement is ExpressionStatementSyntax expressionStatement) {
-                        TraverseStatement(query, expressionStatement);
+                        if (!TraverseStatement(query, expressionStatement)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -171,7 +173,7 @@ public static partial class Vectorizer
         return source;
     }
     
-    private static void TraverseStatement(Query query, ExpressionStatementSyntax expressionSyntax)
+    private static bool TraverseStatement(Query query, ExpressionStatementSyntax expressionSyntax)
     {
         var locals = new StringBuilder();
         // --- method signature
@@ -220,6 +222,9 @@ public static partial class Vectorizer
         };
         int step = 8;
         var vectorizeBlock = VectorizeBlock(query, expressionSyntax.Expression, step);
+        if (vectorizeBlock == null) {
+            return false;
+        }
         var source = $@"
         [SkipLocalsInit]
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})
@@ -240,9 +245,10 @@ public static partial class Vectorizer
         }}
 ";
         query.avxMethod = source;
+        return true;
     }
     
-    private static StringBuilder VectorizeBlock(Query query, ExpressionSyntax expressionSyntax, int step)
+    private static StringBuilder? VectorizeBlock(Query query, ExpressionSyntax expressionSyntax, int step)
     {
         var source = new StringBuilder();
         var laneCount = query.laneCount;
@@ -268,12 +274,11 @@ public static partial class Vectorizer
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n] = new StringBuilder();
         }
-        if (Compute(lanes, query, expressionSyntax)) {
-            for (int n = 0; n < lanes.Length; n++) {
-                source.AppendLine($"                    {lanes[n]}");
-            }
-        } else {
-            source.AppendLine("                    // not supported");
+        if (!Compute(lanes, query, expressionSyntax)) {
+            return null;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            source.AppendLine($"                    {lanes[n]}");
         }
         source.AppendLine();
         
@@ -304,6 +309,7 @@ public static partial class Vectorizer
         if (syntax is IdentifierNameSyntax identifier) {
             return Compute_IdentifierName(lanes, query, identifier);
         }
+        query.ReportDiagnostic(Errors.OperationUnsupported, syntax, syntax.ToFullString());
         return false;
     }
 }

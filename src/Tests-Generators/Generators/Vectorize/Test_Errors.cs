@@ -1,6 +1,7 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -18,7 +19,17 @@ public static partial class Test_Errors
     }
     
     [Test]
-    public static void InvalidComponentCall() {
+    public static void InvalidComponent_Call() {
         InvalidComponentErrorQuery(new EntityStore(), 1);
+    }
+    
+    [Vectorize][Query]  [OmitHash]
+    private static void OperationUnsupportedError(ref Position1 comp, float value) {
+        comp.value = MathF.Sin(value);
+    }
+    
+    [Test]
+    public static void OperationUnsupportedError_Call() {
+        OperationUnsupportedErrorQuery(new EntityStore(), 1);
     }
 }

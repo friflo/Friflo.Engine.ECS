@@ -1,0 +1,24 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: /*
+    private static void OperationUnsupportedError(ref Position1 comp, float value) {
+        comp.value = MathF.Sin(value);
+                     ^^^^^^^^^^^^^^^^
+    }
+*/
+ : (11,21)-(11,37),
+      Message: Vectorization failed - operation not supported: MathF.Sin(value),
+      Severity: Warning,
+      WarningLevel: 1,
+      Descriptor: {
+        Id: ECSGEN002,
+        Title: Operation unsupported,
+        MessageFormat: Vectorization failed - operation not supported: {0},
+        Category: Performance,
+        DefaultSeverity: Warning,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

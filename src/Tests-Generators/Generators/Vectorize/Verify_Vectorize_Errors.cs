@@ -48,5 +48,28 @@ public partial class MyExample
 """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_OperationUnsupported()
+    {
+        var code =
+        """
+        using System.Numerics;
+        using Friflo.Engine.ECS;
+
+        namespace VerifyVectorize;
+
+        public struct Position1 : IComponent { public float value; }
+
+        public partial class MyExample
+        {
+            [Vectorize][Query][OmitHash]
+            private static void OperationUnsupportedError(ref Position1 comp, float value) {
+                comp.value = MathF.Sin(value);
+            }
+        }
+        """;
+        await Verify(code);
+    }
 
 }

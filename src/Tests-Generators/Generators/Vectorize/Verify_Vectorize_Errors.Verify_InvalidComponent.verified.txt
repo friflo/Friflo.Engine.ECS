@@ -15,7 +15,7 @@
         Id: ECSGEN001,
         Title: Invalid component type,
         MessageFormat: Vectorization failed - Expect component type '{0}' having a field named value at parameter '{1}',
-        Category: Naming,
+        Category: Performance,
         DefaultSeverity: Warning,
         IsEnabledByDefault: true
       }

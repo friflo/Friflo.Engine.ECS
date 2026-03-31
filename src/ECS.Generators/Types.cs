@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Friflo.Engine.ECS.Generators;
 
@@ -47,6 +48,13 @@ public class Query
         if (location == null) {
             location = methodSymbol.Locations.FirstOrDefault();
         }
+        var diagnostic = Diagnostic.Create(descriptor, location, messageArgs);
+        spc.ReportDiagnostic(diagnostic);
+    }
+    
+    public void ReportDiagnostic(DiagnosticDescriptor descriptor, CSharpSyntaxNode syntaxNode, params object?[]? messageArgs)
+    {
+        var location = syntaxNode.GetLocation();
         var diagnostic = Diagnostic.Create(descriptor, location, messageArgs);
         spc.ReportDiagnostic(diagnostic);
     }
