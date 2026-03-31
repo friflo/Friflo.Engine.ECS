@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace Friflo.Engine.ECS.Generators;
@@ -39,6 +40,16 @@ public class Query
     public          bool                            vectorize;
     public          string                          avxMethod = "";
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
+
+    public void ReportDiagnostic(DiagnosticDescriptor descriptor, ISymbol locationSymbol, params object?[]? messageArgs)
+    {
+        var location = locationSymbol.Locations.FirstOrDefault();
+        if (location == null) {
+            location = methodSymbol.Locations.FirstOrDefault();
+        }
+        var diagnostic = Diagnostic.Create(descriptor, location, messageArgs);
+        spc.ReportDiagnostic(diagnostic);
+    }
 }
 
 public enum ParamType

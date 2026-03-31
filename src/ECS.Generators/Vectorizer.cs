@@ -72,10 +72,8 @@ public static partial class Vectorizer
                         break;
                     }
                 }
-                if (valueField == null)
-                {
-                    var location = parameter.Locations.FirstOrDefault();
-                    query.spc.ReportDiagnostic(Diagnostic.Create(Errors.InvalidComponentType, location, type.Name, parameter.Name));
+                if (valueField == null) {
+                    query.ReportDiagnostic(Errors.InvalidComponentType, parameter, type.Name, parameter.Name);
                     return null;
                 }
                 result.Add(CreateVectorType(parameter, name, true, valueField.Type));
