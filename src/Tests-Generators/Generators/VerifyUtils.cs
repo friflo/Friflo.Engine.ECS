@@ -4,6 +4,7 @@ using Friflo.Engine.ECS.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using VerifyNUnit;
+using VerifyTests;
 
 namespace Tests.Generators;
 
@@ -21,7 +22,7 @@ public static class VerifyUtils
 
         // 3. Verify (NUnit adapter)
         // This creates: MyGeneratorTests.Generator_Snapshot_Test.verified.txt
-        await Verifier.Verify(runResult);
+        await Verifier.Verify(runResult).IgnoreGeneratedResult(VerifyUtils.IgnoreStaticSource);
     }
  
     
@@ -35,4 +36,12 @@ public static class VerifyUtils
             },
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
     }
+
+    public static bool IgnoreStaticSource(GeneratedSourceResult result)
+    {
+        if (result.HintName.Equals("Friflo.Engine.ECS.Intrinsics/AvxUtils.g.cs")) {
+            return true;
+        }
+        return false;
+    } 
 }

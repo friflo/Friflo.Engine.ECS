@@ -6,6 +6,7 @@ using Friflo.Engine.ECS.Generators;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using VerifyNUnit;
+using VerifyTests;
 
 // ReSharper disable InconsistentNaming
 namespace Tests.Generators.Query;
@@ -40,6 +41,6 @@ public partial class MyExample
 
         // 4. Verify (NUnit adapter)
         // This creates: MyGeneratorTests.Generator_Snapshot_Test.verified.txt
-        await Verifier.Verify(runResult);
+        await Verifier.Verify(runResult).IgnoreGeneratedResult(VerifyUtils.IgnoreStaticSource);
     }
 }

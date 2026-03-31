@@ -6,6 +6,7 @@ using Friflo.Engine.ECS.Generators;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using VerifyNUnit;
+using VerifyTests;
 
 // ReSharper disable InconsistentNaming
 namespace Tests.Generators.Vectorize;
@@ -23,7 +24,7 @@ public static class Verify_Vectorize_Vector4
         var runResult = driver.RunGenerators(compilation);
 
         // 3. Verify (NUnit adapter)
-        await Verifier.Verify(runResult);
+        await Verifier.Verify(runResult).IgnoreGeneratedResult(VerifyUtils.IgnoreStaticSource);
     }
     
     [Test]
