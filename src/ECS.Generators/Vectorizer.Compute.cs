@@ -169,7 +169,10 @@ public static partial class Vectorizer
     {
         var methodName = GetMethodName(query, invocation);
         if (methodName == "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)") {
-            int i = 1;
+            if (query.vectorDimension == 4)
+            {
+                int i = 1;
+            }
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
         return false;

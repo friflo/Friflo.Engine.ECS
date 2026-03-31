@@ -207,11 +207,18 @@ public static partial class Vectorizer
             }
             Utils.AppendRefKind(signature, parameter.RefKind);
             signature.Append($"\n            {vectorType.fullQualifiedName} {parameter.Name}");
-            // 
-            if (vectorType.paramType == ParamType.Scalar) {
-                locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
-            } else {
-                Utils.InterleaveVector3(locals, parameter.Name, query.vectorDimension);
+            //
+            switch (vectorType.paramType) {
+                case ParamType.Scalar:
+                    locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
+                    break;
+                default:                // TODO  type should be clear here 
+                case ParamType.Vector:
+                    Utils.InterleaveVector3(locals, parameter.Name, query.vectorDimension);
+                    break;
+                case ParamType.Matrix4x4:
+                    Utils.LoadMatrix(locals, parameter.Name);
+                    break;
             }
         }
         
