@@ -278,9 +278,7 @@ public static class Test_Lab_Matrix
         // res = Fma.MultiplyAdd(zzzz, c2, res);
         // res = Fma.MultiplyAdd(wwww, c3, res);
         
-        Vector256<float> res = Fma.MultiplyAdd(wwww, c3, Fma.MultiplyAdd(zzzz, c2, Fma.MultiplyAdd(yyyy, c1, Avx.Multiply(xxxx, c0))));
-
-        return res;
+        return Fma.MultiplyAdd(wwww, c3, Fma.MultiplyAdd(zzzz, c2, Fma.MultiplyAdd(yyyy, c1, Avx.Multiply(xxxx, c0))));;
         // Store the two resulting Vector4s
         // Avx.Store(outputPtr, res);
     }

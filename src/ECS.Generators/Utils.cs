@@ -110,4 +110,21 @@ public static class Utils
                 break;
         }
     }
+
+    public static void LoadMatrix(StringBuilder sb, string nm)
+    {
+        sb.AppendLine($"            // Load Matrix columns into 256-bit registers (each column duplicated)");
+        sb.AppendLine($"            // [Col0.x, Col0.y, Col0.z, Col0.w, Col0.x, Col0.y, Col0.z, Col0.w]");
+        sb.AppendLine($"            Vector256<float> {nm}_0 = Vector256.Create({nm}.M11, {nm}.M12, {nm}.M13, {nm}.M14, {nm}.M11, {nm}.M12, {nm}.M13, {nm}.M14);");
+        sb.AppendLine($"            Vector256<float> {nm}_1 = Vector256.Create({nm}.M21, {nm}.M22, {nm}.M23, {nm}.M24, {nm}.M21, {nm}.M22, {nm}.M23, {nm}.M24);");
+        sb.AppendLine($"            Vector256<float> {nm}_2 = Vector256.Create({nm}.M31, {nm}.M32, {nm}.M33, {nm}.M34, {nm}.M31, {nm}.M32, {nm}.M33, {nm}.M34);");
+        sb.AppendLine($"            Vector256<float> {nm}_3 = Vector256.Create({nm}.M41, {nm}.M42, {nm}.M43, {nm}.M44, {nm}.M41, {nm}.M42, {nm}.M43, {nm}.M44);");
+/*
+    Vector256<float> col0 = Vector256.Create(matrix.M11, matrix.M12, matrix.M13, matrix.M14, matrix.M11, matrix.M12, matrix.M13, matrix.M14);
+    Vector256<float> col1 = Vector256.Create(matrix.M21, matrix.M22, matrix.M23, matrix.M24, matrix.M21, matrix.M22, matrix.M23, matrix.M24);
+    Vector256<float> col2 = Vector256.Create(matrix.M31, matrix.M32, matrix.M33, matrix.M34, matrix.M31, matrix.M32, matrix.M33, matrix.M34);
+    Vector256<float> col3 = Vector256.Create(matrix.M41, matrix.M42, matrix.M43, matrix.M44, matrix.M41, matrix.M42, matrix.M43, matrix.M44);
+ */
+    }
+    
 }

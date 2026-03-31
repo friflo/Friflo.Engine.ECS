@@ -33,6 +33,7 @@ public class Query
     public          List<IParameterSymbol>          components;
     public          EcsTypes                        ecsTypes;
     public          SourceProductionContext         spc;
+    public          SemanticModel                   semanticModel;
     // --- generated output
     public          int                             vectorDimension;    // [3, 4]
     public          int                             laneCount;          // [3, 2]

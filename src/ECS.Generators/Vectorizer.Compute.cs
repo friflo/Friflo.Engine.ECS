@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -152,8 +153,24 @@ public static partial class Vectorizer
         return true;
     }
 
+    private static string? GetMethodName(Query query, InvocationExpressionSyntax invocation)
+    {
+        if (invocation.Expression is MemberAccessExpressionSyntax memberAccess)
+        {
+            var symbolInfo = query.semanticModel.GetSymbolInfo(memberAccess);
+            if (symbolInfo.Symbol is IMethodSymbol methodSymbol) {
+                return methodSymbol.ToDisplayString();
+            }
+        }
+        return null;
+    }
+
     private static bool Compute_Invocation(StringBuilder[] lanes, Query query, InvocationExpressionSyntax invocation)
     {
+        var methodName = GetMethodName(query, invocation);
+        if (methodName == "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)") {
+            int i = 1;
+        }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
         return false;
     }
