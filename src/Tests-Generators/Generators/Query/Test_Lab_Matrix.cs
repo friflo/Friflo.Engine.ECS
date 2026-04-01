@@ -283,6 +283,8 @@ public static class Test_Lab_Matrix
         // Avx.Store(outputPtr, res);
     }
     
+    [SkipLocalsInit]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector256<float> TransformVector4PairAVX2(
         Vector256<float> v, Vector256<float> c0, Vector256<float> c1, Vector256<float> c2, Vector256<float> c3)
     {

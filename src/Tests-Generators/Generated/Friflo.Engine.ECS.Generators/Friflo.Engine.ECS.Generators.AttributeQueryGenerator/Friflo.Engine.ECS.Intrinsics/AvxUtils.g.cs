@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -6,7 +7,9 @@ namespace Friflo.Engine.ECS.Intrinsics
 {
     internal static class AvxUtils
     {
-        internal static Vector256<float> TransformVector4PairAVX2(
+        [SkipLocalsInit]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static Vector256<float> TransformVector4PairAVX(
             Vector256<float> v, Vector256<float> c0, Vector256<float> c1, Vector256<float> c2, Vector256<float> c3)
         {
             // Shuffle/Broadcast components

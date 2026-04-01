@@ -177,7 +177,7 @@ public static partial class Vectorizer
                 return true; */
                 var args = invocation.ArgumentList.Arguments;
                 for (int n = 0; n < lanes.Length; n++) {
-                    lanes[n].Append("AvxUtils.TransformVector4PairAVX2(");
+                    lanes[n].Append("AvxUtils.TransformVector4PairAVX(");
                 }
                 if (!Compute(lanes, query, args[0].Expression)) {
                     return false;
