@@ -193,4 +193,27 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Clamp()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct Position2 : IComponent { public Vector2 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void AssignVector(ref Position2 position, Vector2 min, Vector2 max) {
+                    position.value = Vector2.Clamp(position.value, min, max);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

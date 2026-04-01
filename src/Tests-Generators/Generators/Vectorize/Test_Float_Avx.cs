@@ -232,7 +232,7 @@ public static partial class Test_Float_Avx
     public static void Test_Multiply_Float_Clamp()
     {
         var store = CreateTestStore();
-        Multiply_Float_ClampQuery(store, 100, 200);
+        Multiply_Float_ClampQuery(store, 100, 200, false);
 
         var storeVectorized = CreateTestStore();
         var query = Multiply_Float_ClampQuery(storeVectorized, 100, 200);

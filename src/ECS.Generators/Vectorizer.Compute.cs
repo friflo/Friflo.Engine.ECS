@@ -175,13 +175,19 @@ public static partial class Vectorizer
             case "System.Numerics.Vector3.Min(System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Min(System.Numerics.Vector4, System.Numerics.Vector4)":
                 return Method_MinMax(lanes, query, "Min", invocation.ArgumentList);
+            
             case "System.MathF.Max(float, float)":
             case "System.Numerics.Vector2.Max(System.Numerics.Vector2, System.Numerics.Vector2)":
             case "System.Numerics.Vector3.Max(System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Max(System.Numerics.Vector4, System.Numerics.Vector4)":
                 return Method_MinMax(lanes, query, "Max", invocation.ArgumentList);
+            
             case "System.Math.Clamp(float, float, float)":
+            case "System.Numerics.Vector2.Clamp(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2)":
+            case "System.Numerics.Vector3.Clamp(System.Numerics.Vector3, System.Numerics.Vector3, System.Numerics.Vector3)":
+            case "System.Numerics.Vector4.Clamp(System.Numerics.Vector4, System.Numerics.Vector4, System.Numerics.Vector4)":
                 return Method_Clamp(lanes, query, invocation.ArgumentList);
+            
             case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, invocation.ArgumentList);
         }

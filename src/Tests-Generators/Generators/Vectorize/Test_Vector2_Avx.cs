@@ -220,4 +220,28 @@ public static partial class Test_Vector2_Avx
             Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector2_Clamp(ref Position2 position, Vector2 min, Vector2 max)
+    {
+        position.value = Vector2.Clamp(position.value, min, max);
+    }
+
+    [Test]
+    public static void Test_Multiply_Float_Clamp()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector2_ClampQuery(store, new Vector2(100, 100), new Vector2(200, 200), false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector2_ClampQuery(storeVectorized, new Vector2(100, 100), new Vector2(200, 200));
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
+        }
+    }
 }
