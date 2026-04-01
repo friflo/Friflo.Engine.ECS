@@ -197,6 +197,29 @@ public static partial class Test_Vector4_Avx
         }
     }
     
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector4_Max(ref Position4 position, Vector4 min)
+    {
+        position.value = Vector4.Min(position.value, min);
+    }
+
+    [Test]
+    public static void Test_Multiply_Vector4_Max()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector4_MaxQuery(store, new Vector4(10,20,30,40), false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector4_MaxQuery(storeVectorized, new Vector4(10,20,30,40));
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position4>(), Is.EqualTo(entityVectorized.GetComponent<Position4>()));
+        }
+    }
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]

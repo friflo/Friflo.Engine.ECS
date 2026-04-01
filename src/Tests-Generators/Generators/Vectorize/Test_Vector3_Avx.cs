@@ -196,4 +196,28 @@ public static partial class Test_Vector3_Avx
             Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector3_Min(ref Position position, Vector3 min)
+    {
+        position.value = Vector3.Min(position.value, min);
+    }
+
+    [Test]
+    public static void Test_Multiply_Vector3_Min()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector3_MinQuery(store, new Vector3(10,20,30), false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector3_MinQuery(storeVectorized, new Vector3(10,20,30));
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
 }
