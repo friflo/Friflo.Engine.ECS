@@ -39,18 +39,22 @@ public static partial class Vectorizer
             4 => 4,
             _ => -1
         };
-        foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences) {
+        foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
+        {
             SyntaxNode node = syntaxReference.GetSyntax();
             if (node is MethodDeclarationSyntax methodDeclarationSyntax) {
                 var body = methodDeclarationSyntax.Body;
                 if (body == null) continue;
+                var compute = new StringBuilder();
                 foreach (var statement in body.Statements) {
                     if (statement is ExpressionStatementSyntax expressionStatement) {
-                        if (!TraverseStatement(query, expressionStatement)) {
+                        var expressionSyntax = expressionStatement.Expression;
+                        if (!EmitCompute(query, compute, expressionSyntax)) {
                             return false;
                         }
                     }
                 }
+                EmitVectorizedMethod(query, compute, body);
             }
         }
         query.vectorize = true;
@@ -190,7 +194,22 @@ public static partial class Vectorizer
         return source;
     }
     
-    private static bool TraverseStatement(Query query, ExpressionStatementSyntax expressionSyntax)
+    private static bool EmitCompute(Query query, StringBuilder compute, ExpressionSyntax expressionSyntax)
+    {
+        var lanes = new StringBuilder[query.laneCount];
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n] = new StringBuilder();
+        }
+        if (!Compute(lanes, query, expressionSyntax)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            compute.AppendLine($"                    {lanes[n]}");
+        }
+        return true;
+    }
+    
+    private static bool EmitVectorizedMethod(Query query, StringBuilder compute, BlockSyntax? body)
     {
         var locals = new StringBuilder();
         // --- method signature
@@ -245,7 +264,7 @@ public static partial class Vectorizer
             _ => -1,
         };
         int step = 8;
-        var vectorizeBlock = VectorizeBlock(query, expressionSyntax.Expression, step);
+        var vectorizeBlock = EmitLoopBody(query, compute, body, step);
         if (vectorizeBlock == null) {
             return false;
         }
@@ -272,7 +291,7 @@ public static partial class Vectorizer
         return true;
     }
     
-    private static StringBuilder? VectorizeBlock(Query query, ExpressionSyntax expressionSyntax, int step)
+    private static StringBuilder? EmitLoopBody(Query query, StringBuilder compute, BlockSyntax? body, int step)
     {
         var source = new StringBuilder();
         var laneCount = query.laneCount;
@@ -315,28 +334,27 @@ $"""
             source.AppendLine();
         }
         source.AppendLine("                    // 2. Compute");
-        var lanes = new StringBuilder[laneCount];
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n] = new StringBuilder();
-        }
-        if (!Compute(lanes, query, expressionSyntax)) {
-            return null;
-        }
-        for (int n = 0; n < lanes.Length; n++) {
-            source.AppendLine($"                    {lanes[n]}");
-        }
+        source.Append(compute);
         source.AppendLine();
         
         source.AppendLine("                    // 3. Store");
-        if (expressionSyntax is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
-            source.AppendLine("                    // found no assignment");
+        if (body == null) {
             return source;
         }
-        var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
-        for (int n = 0; n < laneCount; n++) {
-            source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
+        foreach (var statement in body.Statements)
+        {
+            if (statement is ExpressionStatementSyntax expressionStatement) {
+                if (expressionStatement.Expression is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
+                    source.AppendLine("                    // found no assignment");
+                    continue;
+                }
+                var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
+                for (int n = 0; n < laneCount; n++) {
+                    source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
+                }
+                source.AppendLine();
+            }
         }
-        source.AppendLine();
         return source;
     }
     
