@@ -1,6 +1,7 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -187,6 +188,30 @@ public static partial class Test_Float_Avx
 
         var storeVectorized = CreateTestStore();
         var query = Multiply_Float_scalarQuery(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Float_Max(ref Position1 position, float min)
+    {
+        position.value = MathF.Min(position.value, min);
+    }
+
+    [Test]
+    public static void Test_Multiply_Vector4_Max()
+    {
+        var store = CreateTestStore();
+        Multiply_Float_MaxQuery(store, 100);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Float_MaxQuery(storeVectorized, 100);
 
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)

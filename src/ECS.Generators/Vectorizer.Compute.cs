@@ -170,16 +170,18 @@ public static partial class Vectorizer
         var methodName = GetMethodName(query, invocation);
         switch (methodName)
         {
-        case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
-        case "System.Numerics.Vector3.Min(System.Numerics.Vector3, System.Numerics.Vector3)":
-        case "System.Numerics.Vector4.Min(System.Numerics.Vector4, System.Numerics.Vector4)":
-            return Method_MinMax(lanes, query, "Min", invocation.ArgumentList);
-        case "System.Numerics.Vector2.Max(System.Numerics.Vector2, System.Numerics.Vector2)":
-        case "System.Numerics.Vector3.Max(System.Numerics.Vector3, System.Numerics.Vector3)":
-        case "System.Numerics.Vector4.Max(System.Numerics.Vector4, System.Numerics.Vector4)":
-            return Method_MinMax(lanes, query, "Max", invocation.ArgumentList);
-        case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
-            return Method_Vector4_Transform(lanes, query, invocation.ArgumentList);
+            case "System.MathF.Min(float, float)":
+            case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
+            case "System.Numerics.Vector3.Min(System.Numerics.Vector3, System.Numerics.Vector3)":
+            case "System.Numerics.Vector4.Min(System.Numerics.Vector4, System.Numerics.Vector4)":
+                return Method_MinMax(lanes, query, "Min", invocation.ArgumentList);
+            case "System.MathF.Max(float, float)":
+            case "System.Numerics.Vector2.Max(System.Numerics.Vector2, System.Numerics.Vector2)":
+            case "System.Numerics.Vector3.Max(System.Numerics.Vector3, System.Numerics.Vector3)":
+            case "System.Numerics.Vector4.Max(System.Numerics.Vector4, System.Numerics.Vector4)":
+                return Method_MinMax(lanes, query, "Max", invocation.ArgumentList);
+            case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
+                return Method_Vector4_Transform(lanes, query, invocation.ArgumentList);
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
         return false;
