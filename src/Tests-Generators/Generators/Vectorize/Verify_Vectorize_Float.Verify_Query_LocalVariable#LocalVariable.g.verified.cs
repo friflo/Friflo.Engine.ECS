@@ -64,6 +64,10 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            Vector256<float> localVar_0;
+            Vector256<float> localVar_1;
+            Vector256<float> localVar_2;
+            Vector256<float> localVar_3;
 
             fixed (global::VerifyVectorize.Position1* position_first = position)
             fixed (global::VerifyVectorize.Velocity1* value_first = value)

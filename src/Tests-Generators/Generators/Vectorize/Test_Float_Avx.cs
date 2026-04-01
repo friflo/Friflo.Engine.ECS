@@ -33,9 +33,9 @@ public static partial class Test_Float_Avx
     }
     
     // -----------------------------------------------------------------------------------------------------
-    /* [Vectorize][Query]  [OmitHash]
+    [Vectorize][Query]  [OmitHash]
     private static void LocalVar(ref Position1 position, in Velocity1 velocity) {
-        var vel = velocity.value;
+        var vel = position.value + velocity.value;
         position.value = vel;
     } 
         
@@ -46,10 +46,15 @@ public static partial class Test_Float_Avx
         LocalVarQuery(store, false);
 
         var storeVectorized = CreateTestStore();
-        var query = EmptyBodyQuery(storeVectorized);
+        var query = LocalVarQuery(storeVectorized);
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
-    } */
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
+        }
+    }
 
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
