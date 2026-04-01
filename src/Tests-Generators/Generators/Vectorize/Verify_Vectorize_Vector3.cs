@@ -165,4 +165,27 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Lerp()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct Position3 : IComponent { public Vector3 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void Lerp(ref Position3 src, Vector3 dst, Vector3 amount) {
+                    position.value = Vector3.Lerp(src.value, dst, amount);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

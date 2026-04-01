@@ -1,6 +1,7 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -243,5 +244,41 @@ public static partial class Test_Vector3_Avx
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
             Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
         }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector3_Lerp(ref Position src, Vector3 dst, Vector3 amount)
+    {
+        src.value = Vector3.Lerp(src.value, dst, amount);
+    }
+
+    [Test]
+    public static void Test_Multiply_Vector2_Lerp()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector3_LerpQuery(store, new Vector3(100, 100, 100), new Vector3(0.2f, 0.3f, 0.4f), false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector3_LerpQuery(storeVectorized, new Vector3(100, 100, 100), new Vector3(0.2f, 0.3f, 0.4f));
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            var val1 = entity.GetComponent<Position>().value;
+            var val2 = entityVectorized.GetComponent<Position>().value;
+            if (!AreEqual(val1, val2)) {
+                Assert.Fail($"not equal - expect: {val1}    was: {val2}");
+            }
+            // Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
+    private static bool AreEqual(Vector3 a, Vector3 b, float epsilon = 1e-4f)
+    {
+        return Math.Abs(a.X - b.X) < epsilon &&
+               Math.Abs(a.Y - b.Y) < epsilon &&
+               Math.Abs(a.Z - b.Z) < epsilon;
     }
 }

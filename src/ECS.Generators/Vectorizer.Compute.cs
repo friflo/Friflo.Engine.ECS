@@ -190,6 +190,11 @@ public static partial class Vectorizer
                 return Method_Clamp(lanes, query, invocation.ArgumentList);
             
             case "System.Numerics.Vector2.Lerp(System.Numerics.Vector2, System.Numerics.Vector2, float)":
+            case "System.Numerics.Vector3.Lerp(System.Numerics.Vector3, System.Numerics.Vector3, float)":
+            case "System.Numerics.Vector4.Lerp(System.Numerics.Vector4, System.Numerics.Vector4, float)":
+            case "System.Numerics.Vector2.Lerp(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2)":
+            case "System.Numerics.Vector3.Lerp(System.Numerics.Vector3, System.Numerics.Vector3, System.Numerics.Vector3)":
+            case "System.Numerics.Vector4.Lerp(System.Numerics.Vector4, System.Numerics.Vector4, System.Numerics.Vector4)":
                 return Method_Lerp(lanes, query, invocation.ArgumentList);
             
             case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
