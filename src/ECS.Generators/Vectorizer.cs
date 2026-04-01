@@ -33,8 +33,9 @@ public static partial class Vectorizer
         query.vectorTypes = vectorTypes;
         query.vectorDimension = vectorTypeDimension;
         query.laneCount = query.vectorDimension switch {
+            // Aiming for loop unroll factor 4 which is typically the Sweet Spot
             1 => 4,
-            2 => 2,
+            2 => 4,
             3 => 3,
             4 => 4,
             _ => -1
@@ -237,7 +238,7 @@ public static partial class Vectorizer
         }
         var elementStep = query.vectorDimension switch {
             1 => 32,
-            2 => 8,     // TODO  Should be 16 for Loop-Unroll: 4 (current: 2) - execution may speedup by 30% 
+            2 => 16,
             3 => 8,
             4 => 8,
             _ => -1,
@@ -280,15 +281,30 @@ public static partial class Vectorizer
             if (!vectorType.isComponent) continue;
             var name = vectorType.parameter.Name;
             if (vectorType.paramType == ParamType.Scalar) {
-                if (query.vectorDimension == 1) {
-                    for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
-                    }
-                } else {
-                    source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
-                    for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
-                    }
+                switch (query.vectorDimension)
+                {
+                    case 1:
+                        for (int n = 0; n < laneCount; n++) {
+                            source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
+                        }
+                        break;
+                    case 2:
+                        source.AppendLine(
+$"""
+                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256(factor_ptr);
+                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256(factor_ptr + 8);
+                    Vector256<float> {name}_0 = Avx2.PermuteVar8x32({name}_scalar_01, factor_mask_lo);
+                    Vector256<float> {name}_1 = Avx2.PermuteVar8x32({name}_scalar_01, factor_mask_hi);
+                    Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, factor_mask_lo);
+                    Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, factor_mask_hi);
+""");
+                        break;
+                    default:
+                        source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
+                        for (int n = 0; n < laneCount; n++) {
+                            source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
+                        }
+                        break;
                 }
             } else {
                 for (int n = 0; n < laneCount; n++) {

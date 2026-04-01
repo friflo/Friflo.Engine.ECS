@@ -59,31 +59,39 @@ namespace VerifyVectorize
             global::System.Numerics.Vector2 vector)
         {
             int i = 0;
-            var end = position.Length - 8;
+            var end = position.Length - 16;
             if (i > end) {
                 return 0;
             }
             Vector128<float> vector_half = Vector128.Create(vector.X, vector.Y, vector.X, vector.Y);
             var vector_0 = Avx.InsertVector128(vector_half.ToVector256(), vector_half, 1);
             var vector_1 = vector_0;
+            var vector_2 = vector_0;
+            var vector_3 = vector_0;
 
             fixed (global::VerifyVectorize.Position2* position_first = position)
             {
-                for (; i <= end; i += 8)
+                for (; i <= end; i += 16)
                 {
                     float* position_ptr = (float*)(position_first + i);
 
                     // 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // 2. Compute
                     position_0 = vector_0;
                     position_1 = vector_1;
+                    position_2 = vector_2;
+                    position_3 = vector_3;
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr + 16, position_2);
+                    Avx.Store(position_ptr + 24, position_3);
 
 
                 }
