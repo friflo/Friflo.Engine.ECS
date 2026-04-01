@@ -110,6 +110,7 @@ public partial class MyExample
 
             namespace VerifyVectorize;
 
+            public struct Position2 : IComponent { public Vector2 value; }
             public struct Velocity2 : IComponent { public Vector2 value; }
 
             public partial class MyExample

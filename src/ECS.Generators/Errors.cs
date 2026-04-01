@@ -31,5 +31,14 @@ public static class Errors
         defaultSeverity: DiagnosticSeverity.Warning, 
         isEnabledByDefault: true
     );
+    
+    public static readonly DiagnosticDescriptor InvalidParameterType = new (
+        id: "ECSGEN004",
+        title: "Invalid parameter type",
+        messageFormat: "Vectorization failed - Invalid parameter type: '{0}'",
+        category: "Performance",
+        defaultSeverity: DiagnosticSeverity.Warning, 
+        isEnabledByDefault: true
+    );
 
 }

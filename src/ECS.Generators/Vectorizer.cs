@@ -62,10 +62,6 @@ public static partial class Vectorizer
         var result = new List<VectorType>();
         foreach (var parameter in query.parameters)
         {
-            bool isEntity = query.ecsTypes.IsEntityParameter(parameter); 
-            if (isEntity) {
-                continue;
-            }
             var type = parameter.Type;
             var name = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             bool isComponent = query.ecsTypes.IsComponent(type);
@@ -142,8 +138,13 @@ public static partial class Vectorizer
     private static int GetVectorTypeDimension(Query query, VectorType[] vectorTypes)
     {
         var dimension = 0;
+        var success = true;
         IParameterSymbol? currentParameter = null;
         foreach (var vectorType in vectorTypes) {
+            if (vectorType.paramType == ParamType.None) {
+                success = false;
+                query.ReportDiagnosticSymbol(Errors.InvalidParameterType, vectorType.parameter, vectorType.parameter.Type.Name);
+            }
             if (!vectorType.isComponent && vectorType.dimension == 1) {
                 continue;
             }
@@ -154,10 +155,11 @@ public static partial class Vectorizer
             }
             if (vectorType.dimension > 1 && vectorType.dimension != dimension) {
                 query.ReportDiagnosticSymbol(Errors.IncompatibleParameterTypes, null, currentParameter?.Type.Name, vectorType.parameter.Type.Name);
-                return 0;
+                success = false;
+                continue;
             }
         }
-        return dimension;
+        return success ? dimension : 0;
     }
     
     public static string EmitVectorizeBlock(Query query)

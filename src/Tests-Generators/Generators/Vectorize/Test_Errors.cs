@@ -45,5 +45,15 @@ public static partial class Test_Errors
     public static void IncompatibleParameterTypes_Call() {
         IncompatibleParameterTypesErrorQuery(new EntityStore());
     }
+    
+    // --- Expect:    
+    [Vectorize][Query][OmitHash]
+    private static void InvalidParameterTypeError(ref Position2 pos1, Entity entity) {
+    }
+    
+    [Test]
+    public static void InvalidParameterTypeError_Call() {
+        InvalidParameterTypeErrorQuery(new EntityStore());
+    }
 
 }

@@ -14,21 +14,22 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="AssignVector"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery AssignVectorQuery(EntityStore _store, ref Position1 position, float deltaTime, bool vectorized = true)
+        public ArchetypeQuery AssignVectorQuery(EntityStore _store, float deltaTime, bool vectorized = true)
         {
             var _query = _AssignVector_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
-                var velocitySpan = chunk.Chunk1.Span;
+                var positionSpan = chunk.Chunk1.Span;
+                var velocitySpan = chunk.Chunk2.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _AssignVector_Avx(ref position, velocitySpan, deltaTime);
+                    n = _AssignVector_Avx(positionSpan, velocitySpan, deltaTime);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    AssignVector(ref position, in velocitySpan[n], deltaTime);
+                    AssignVector(ref positionSpan[n], in velocitySpan[n], deltaTime);
                 }
             }
             return _query;
@@ -39,41 +40,47 @@ namespace VerifyVectorize
         private static readonly int _AssignVector_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::VerifyVectorize.Velocity1>
+        private static ArchetypeQuery<global::VerifyVectorize.Position1, global::VerifyVectorize.Velocity1>
             _AssignVector_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::VerifyVectorize.Velocity1>)
+            var _query = (ArchetypeQuery<global::VerifyVectorize.Position1, global::VerifyVectorize.Velocity1>)
                 EntityStore.UserDataGet(_store, _AssignVector_Slot);
             if (_query != null) {
                 return _query;
             }
-            _query = _store.Query<global::VerifyVectorize.Velocity1>();
+            _query = _store.Query<global::VerifyVectorize.Position1, global::VerifyVectorize.Velocity1>();
 
             EntityStore.UserDataSet(_store, _AssignVector_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _AssignVector_Avx(ref 
-            Position1 position,
+        private static unsafe int _AssignVector_Avx(
+            Span<global::VerifyVectorize.Position1> position,
             Span<global::VerifyVectorize.Velocity1> velocity,
             float deltaTime)
         {
             int i = 0;
-            var end = velocity.Length - 32;
+            var end = position.Length - 32;
             if (i > end) {
                 return 0;
             }
-            Vector128<float> position_0 = Vector128.Create(position);
             var deltaTime_scalar = Vector256.Create(deltaTime);
 
+            fixed (global::VerifyVectorize.Position1* position_first = position)
             fixed (global::VerifyVectorize.Velocity1* velocity_first = velocity)
             {
                 for (; i <= end; i += 32)
                 {
+                    float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
 
                     // 1. Load
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+
                     Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
                     Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);

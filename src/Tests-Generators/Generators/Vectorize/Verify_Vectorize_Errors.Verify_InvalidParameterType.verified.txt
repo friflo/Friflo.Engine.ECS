@@ -1,0 +1,24 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: /*
+    [Vectorize][Query][OmitHash]
+    private static void IncompatibleParameterTypesError(ref Position2 pos1, Entity entity) {
+                                                                                   ^^^^^^
+    }
+*/
+ : (10,83)-(10,89),
+      Message: Vectorization failed - Invalid parameter type: 'Entity',
+      Severity: Warning,
+      WarningLevel: 1,
+      Descriptor: {
+        Id: ECSGEN004,
+        Title: Invalid parameter type,
+        MessageFormat: Vectorization failed - Invalid parameter type: '{0}',
+        Category: Performance,
+        DefaultSeverity: Warning,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}
