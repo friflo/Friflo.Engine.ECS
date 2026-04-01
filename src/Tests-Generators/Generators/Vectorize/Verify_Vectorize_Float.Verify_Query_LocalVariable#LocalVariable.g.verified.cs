@@ -85,6 +85,10 @@ namespace VerifyVectorize
                     Vector256<float> value_3 = Avx.LoadVector256(value_ptr + 24);
 
                     // 2. Compute
+                    localVar_0 = value_0;
+                    localVar_1 = value_1;
+                    localVar_2 = value_2;
+                    localVar_3 = value_3;
                     position_0 = localVar_0;
                     position_1 = localVar_1;
                     position_2 = localVar_2;

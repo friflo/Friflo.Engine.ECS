@@ -47,11 +47,8 @@ public static partial class Vectorizer
                 if (body == null) continue;
                 var compute = new StringBuilder();
                 foreach (var statement in body.Statements) {
-                    if (statement is ExpressionStatementSyntax expressionStatement) {
-                        var expressionSyntax = expressionStatement.Expression;
-                        if (!EmitCompute(query, compute, expressionSyntax)) {
-                            return false;
-                        }
+                    if (!EmitCompute(query, compute, statement)) {
+                        return false;
                     }
                 }
                 EmitVectorizedMethod(query, compute, body);
@@ -194,14 +191,34 @@ public static partial class Vectorizer
         return source;
     }
     
-    private static bool EmitCompute(Query query, StringBuilder compute, ExpressionSyntax expressionSyntax)
+    private static bool EmitCompute(Query query, StringBuilder compute, StatementSyntax statement)
     {
         var lanes = new StringBuilder[query.laneCount];
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n] = new StringBuilder();
         }
-        if (!Compute(lanes, query, expressionSyntax)) {
-            return false;
+        if (statement is LocalDeclarationStatementSyntax localDecl) {
+            foreach (var variable in localDecl.Declaration.Variables) {
+                var initializerExpression = variable.Initializer?.Value;
+                if (initializerExpression != null) {
+                    var variableName = variable.Identifier.Text;
+                    for (int n = 0; n < lanes.Length; n++) {
+                        lanes[n].Append($"{variableName}_{n} = ");
+                    }
+                    if (!Compute(lanes, query, initializerExpression)) {
+                        return false;
+                    }
+                    for (int n = 0; n < lanes.Length; n++) {
+                        lanes[n].Append(";");
+                    }
+                }
+            }
+        }
+        if (statement is ExpressionStatementSyntax expressionStatement) {
+            var expressionSyntax = expressionStatement.Expression;
+            if (!Compute(lanes, query, expressionSyntax)) {
+                return false;
+            }
         }
         for (int n = 0; n < lanes.Length; n++) {
             compute.AppendLine($"                    {lanes[n]}");
