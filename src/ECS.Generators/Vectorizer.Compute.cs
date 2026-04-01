@@ -180,6 +180,8 @@ public static partial class Vectorizer
             case "System.Numerics.Vector3.Max(System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Max(System.Numerics.Vector4, System.Numerics.Vector4)":
                 return Method_MinMax(lanes, query, "Max", invocation.ArgumentList);
+            case "System.Math.Clamp(float, float, float)":
+                return Method_Clamp(lanes, query, invocation.ArgumentList);
             case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, invocation.ArgumentList);
         }
@@ -229,6 +231,33 @@ public static partial class Vectorizer
         }
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append(")");
+        }
+        return true;
+    }
+    
+    private static bool Method_Clamp(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        var args = argumentSyntax.Arguments;
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append($"Avx.Min(");
+        }
+        if (!Compute(lanes, query, args[2].Expression)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append(", Avx.Max(");
+        }
+        if (!Compute(lanes, query, args[1].Expression)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append(", ");
+        }
+        if (!Compute(lanes, query, args[0].Expression)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append("))");
         }
         return true;
     }
