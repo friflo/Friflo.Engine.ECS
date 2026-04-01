@@ -46,7 +46,7 @@ public static partial class Test_Errors
         IncompatibleParameterTypesErrorQuery(new EntityStore());
     }
     
-    // --- Expect:    
+    // --- Expect:    ECSGEN004: Vectorization failed - Invalid parameter type: 'Entity'
     [Vectorize][Query][OmitHash]
     private static void InvalidParameterTypeError(ref Position2 pos1, Entity entity) {
     }
