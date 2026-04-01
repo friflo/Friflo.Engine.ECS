@@ -1,12 +1,9 @@
 // Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
-using Tests.Examples;
-
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace

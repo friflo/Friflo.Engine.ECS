@@ -5,8 +5,6 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
-using Tests.Examples;
-
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -189,6 +187,31 @@ public static partial class Test_Vector2_Avx
 
         var storeVectorized = CreateTestStore();
         var query = Multiply_Vector2_scalarQuery(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector2_Min(ref Position2 position, Vector2 min)
+    {
+        position.value = Vector2.Min(position.value, min);
+    }
+
+    [Test]
+    public static void Test_Multiply_Vector2_Min()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector2_MinQuery(store, new Vector2(10,20), false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector2_MinQuery(storeVectorized, new Vector2(10,20));
 
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)

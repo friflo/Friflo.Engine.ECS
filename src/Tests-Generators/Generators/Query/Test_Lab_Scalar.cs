@@ -58,7 +58,7 @@ public static class Test_Lab_Scalar
                 position_0 = Avx.Add(position_0, value_0);
                 position_1 = Avx.Add(position_1, value_1);
                 position_2 = Avx.Add(position_2, value_2);
-
+                
                 // 3. STORE: 3 fast block writes
                 Avx.Store(position_ptr, position_0);
                 Avx.Store(position_ptr + 8, position_1);
