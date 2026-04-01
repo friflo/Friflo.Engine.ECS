@@ -14,7 +14,24 @@ namespace Tests.Generators.Vectorize;
 
 public static partial class Test_Float_Avx
 {
+    [Vectorize][Query]  [OmitHash]
+    private static void EmptyBody(ref Position1 position, in Velocity1 velocity) {
+        // empty by intention
+    } 
+        
+    [Test]
+    public static void Test_EmptyBody()
+    {
+        var store = CreateTestStore();
+        EmptyBodyQuery(store, false);
 
+        var storeVectorized = CreateTestStore();
+        var query = EmptyBodyQuery(storeVectorized);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+    }
+
+    // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Multiply(ref Position1 position, in Velocity1 velocity) {
         position.value *= velocity.value;
