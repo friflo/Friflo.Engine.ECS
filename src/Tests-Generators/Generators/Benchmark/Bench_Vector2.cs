@@ -63,4 +63,22 @@ public partial class Bench_Vector2
             position.value = velocity.value * deltaTime + position.value;
         });
     }
+    
+    // ------------------------------------- Lerp -------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Vector2Lerp(ref Position2 position, ref Velocity2 velocity, float amount) {
+        position.value = Vector2.Lerp(position.value, velocity.value, amount);
+    }
+    
+    [Benchmark]
+    public void Vector2_Lerp_Query()
+    {
+        Vector2LerpQuery(store, 0.1f, false);
+    }
+    
+    [Benchmark]
+    public void Vector2_Lerp_Vectorize()
+    {
+        Vector2LerpQuery(store, 0.1f);
+    }
 }

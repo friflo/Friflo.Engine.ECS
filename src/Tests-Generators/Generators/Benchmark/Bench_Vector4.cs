@@ -88,4 +88,22 @@ public partial class Bench_Vector4
     {
         TransformMatrix4x4Query(store, matrix);
     }
+    
+    // ------------------------------------- Lerp -------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Vector4Lerp(ref Position4 position, ref Velocity4 velocity, float amount) {
+        position.value = Vector4.Lerp(position.value, velocity.value, amount);
+    }
+    
+    [Benchmark]
+    public void Vector4_Lerp_Query()
+    {
+        Vector4LerpQuery(store, 0.1f, false);
+    }
+    
+    [Benchmark]
+    public void Vector3_Lerp_Vectorize()
+    {
+        Vector4LerpQuery(store, 0.1f);
+    }
 }
