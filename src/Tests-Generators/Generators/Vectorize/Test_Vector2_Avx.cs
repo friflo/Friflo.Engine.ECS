@@ -307,7 +307,7 @@ public static partial class Test_Vector2_Avx
     }
 
     [Test]
-    public static void Test_Multiply_Vector3_static()
+    public static void Test_Multiply_Vector2_static()
     {
         var store = CreateTestStore();
         Multiply_Vector2_staticQuery(store, false);
