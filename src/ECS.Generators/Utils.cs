@@ -130,5 +130,14 @@ public static class Utils
     Vector256<float> col3 = Vector256.Create(matrix.M41, matrix.M42, matrix.M43, matrix.M44, matrix.M41, matrix.M42, matrix.M43, matrix.M44);
  */
     }
-    
+
+    public static void TrimEnd(StringBuilder stringBuilder)
+    {
+        var len = stringBuilder.Length - 1;
+        while (stringBuilder[len] == '\n' ||
+               stringBuilder[len] == '\r')
+        {
+            stringBuilder.Length = len--;
+        }
+    }
 }

@@ -92,8 +92,6 @@ namespace Tests.Generators.Vectorize
                     Avx.Store(src_ptr + 0, src_0);
                     Avx.Store(src_ptr + 8, src_1);
                     Avx.Store(src_ptr + 16, src_2);
-
-
                 }
             }
             return i;

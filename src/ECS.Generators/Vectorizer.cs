@@ -329,6 +329,8 @@ public static partial class Vectorizer
         if (vectorizeBlock == null) {
             return false;
         }
+        Utils.TrimEnd(vectorizeBlock);
+
         var source = $@"
         [SkipLocalsInit]
         private static unsafe int _{query.methodSymbol.Name}_Avx{query.hash}({signature})

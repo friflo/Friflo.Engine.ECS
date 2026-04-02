@@ -77,7 +77,6 @@ namespace VerifyVectorize
                     // --- 2. Compute
 
                     // --- 3. Store
-
                 }
             }
             return i;

@@ -85,7 +85,6 @@ namespace Tests.Generators.Vectorize
                     // --- 2. Compute
 
                     // --- 3. Store
-
                 }
             }
             return i;

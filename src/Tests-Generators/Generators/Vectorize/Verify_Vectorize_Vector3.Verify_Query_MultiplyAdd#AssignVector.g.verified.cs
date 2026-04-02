@@ -94,8 +94,6 @@ namespace VerifyVectorize
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
-
-
                 }
             }
             return i;
