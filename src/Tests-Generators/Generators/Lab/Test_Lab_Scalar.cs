@@ -2,17 +2,14 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-using Tests.ECS;
-using Tests.Utils;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.Generators.Query {
+namespace Tests.Generators.Lab {
 
 public static class Test_Lab_Scalar
 {

@@ -9,7 +9,7 @@ using System.Runtime.Intrinsics.X86;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.Generators.Query;
+namespace Tests.Generators.Lab;
 
 public static class Test_Lab_Matrix
 {
