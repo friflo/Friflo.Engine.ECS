@@ -64,11 +64,14 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             var factor_scalar = Vector256.Create(factor);
+
             var offset_scalar = Vector256.Create(offset);
+
             Vector256<float> vel1_0;
             Vector256<float> vel1_1;
             Vector256<float> vel1_2;
             Vector256<float> vel1_3;
+
             Vector256<float> vel2_0;
             Vector256<float> vel2_1;
             Vector256<float> vel2_2;

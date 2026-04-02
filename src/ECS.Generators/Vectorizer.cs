@@ -250,13 +250,16 @@ public static partial class Vectorizer
             switch (vectorType.paramType) {
                 case ParamType.Scalar:
                     locals.AppendLine($"            var {parameter.Name}_scalar = Vector256.Create({parameter.Name});");
+                    locals.AppendLine();
                     break;
                 default:                // TODO  type should be clear here 
                 case ParamType.Vector:
                     Utils.InterleaveVector3(locals, parameter.Name, query.vectorDimension);
+                    locals.AppendLine();
                     break;
                 case ParamType.Matrix4x4:
                     Utils.LoadMatrix(locals, parameter.Name);
+                    locals.AppendLine();
                     break;
             }
         }
@@ -267,8 +270,9 @@ public static partial class Vectorizer
                     foreach (var variable in localDecl.Declaration.Variables) {
                         var variableName = variable.Identifier.Text;
                         for (int n = 0; n < query.laneCount; n++) {
-                            locals.AppendLine($"            Vector256<float> {variableName}_{n};");    
+                            locals.AppendLine($"            Vector256<float> {variableName}_{n};");
                         }
+                        locals.AppendLine();
                     }
                 }
             }
@@ -278,8 +282,8 @@ public static partial class Vectorizer
         var @fixed = new StringBuilder();
         foreach (var component in query.components) {
             var type = component.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            @fixed.AppendLine();
             @fixed.Append($"            fixed ({type}* {component.Name}_first = {component.Name})");
+            @fixed.AppendLine();
         }
         // --- pointer block
         var pointer = new StringBuilder();
@@ -308,8 +312,7 @@ public static partial class Vectorizer
             if (i > end) {{
                 return 0;
             }}
-{locals}{@fixed}
-            {{
+{locals}{@fixed}            {{
                 for (; i <= end; i += {elementStep})
                 {{{pointer}
 {vectorizeBlock}

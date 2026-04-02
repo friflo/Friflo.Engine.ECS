@@ -66,6 +66,7 @@ namespace Tests.Generators.Vectorize
             var dst_0 = Vector256.Create(dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y);
             var dst_1 = Vector256.Create(dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X);
             var dst_2 = Vector256.Create(dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z);
+
             var amount_0 = Vector256.Create(amount.X, amount.Y, amount.Z, amount.X, amount.Y, amount.Z, amount.X, amount.Y);
             var amount_1 = Vector256.Create(amount.Z, amount.X, amount.Y, amount.Z, amount.X, amount.Y, amount.Z, amount.X);
             var amount_2 = Vector256.Create(amount.Y, amount.Z, amount.X, amount.Y, amount.Z, amount.X, amount.Y, amount.Z);

@@ -97,17 +97,20 @@ public static class Utils
             case 2:
                 sb.AppendLine($"            Vector256<int> {name}_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);");
+                sb.AppendLine();
                 break;
             case 3:
                 sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create(0, 0, 0, 1, 1, 1, 2, 2);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_1 = Vector256.Create(2, 3, 3, 3, 4, 4, 4, 5);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_2 = Vector256.Create(5, 5, 6, 6, 6, 7, 7, 7);");
+                sb.AppendLine();
                 break;
             case 4:
                 sb.AppendLine($"            Vector256<int> {name}_mask_0 = Vector256.Create(0, 0, 0, 0, 1, 1, 1, 1);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_1 = Vector256.Create(2, 2, 2, 2, 3, 3, 3, 3);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_2 = Vector256.Create(4, 4, 4, 4, 5, 5, 5, 5);");
                 sb.AppendLine($"            Vector256<int> {name}_mask_3 = Vector256.Create(6, 6, 6, 6, 7, 7, 7, 7);");
+                sb.AppendLine();
                 break;
         }
     }

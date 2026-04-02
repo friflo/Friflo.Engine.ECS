@@ -66,6 +66,7 @@ namespace Tests.Generators.Vectorize
             var min_0 = Vector256.Create(min.X, min.Y, min.Z, min.X, min.Y, min.Z, min.X, min.Y);
             var min_1 = Vector256.Create(min.Z, min.X, min.Y, min.Z, min.X, min.Y, min.Z, min.X);
             var min_2 = Vector256.Create(min.Y, min.Z, min.X, min.Y, min.Z, min.X, min.Y, min.Z);
+
             var max_0 = Vector256.Create(max.X, max.Y, max.Z, max.X, max.Y, max.Z, max.X, max.Y);
             var max_1 = Vector256.Create(max.Z, max.X, max.Y, max.Z, max.X, max.Y, max.Z, max.X);
             var max_2 = Vector256.Create(max.Y, max.Z, max.X, max.Y, max.Z, max.X, max.Y, max.Z);

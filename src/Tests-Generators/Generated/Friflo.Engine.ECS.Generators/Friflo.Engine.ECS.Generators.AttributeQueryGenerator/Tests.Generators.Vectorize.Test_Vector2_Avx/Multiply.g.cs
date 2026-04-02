@@ -63,7 +63,6 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-
             fixed (global::Tests.ECS.Position2* position_first = position)
             fixed (global::Tests.ECS.Velocity2* velocity_first = velocity)
             {

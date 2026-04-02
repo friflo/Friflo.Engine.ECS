@@ -64,6 +64,7 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             var min_scalar = Vector256.Create(min);
+
             var max_scalar = Vector256.Create(max);
 
             fixed (global::Tests.ECS.Position1* position_first = position)

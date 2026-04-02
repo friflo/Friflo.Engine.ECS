@@ -69,6 +69,7 @@ namespace VerifyVectorize
             var dst_1 = dst_0;
             var dst_2 = dst_0;
             var dst_3 = dst_0;
+
             var amount_scalar = Vector256.Create(amount);
 
             fixed (global::VerifyVectorize.Position2* src_first = src)

@@ -63,7 +63,6 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-
             fixed (global::Tests.ECS.Position1* position_first = position)
             fixed (global::Tests.ECS.FloatComponent* factor_first = factor)
             {

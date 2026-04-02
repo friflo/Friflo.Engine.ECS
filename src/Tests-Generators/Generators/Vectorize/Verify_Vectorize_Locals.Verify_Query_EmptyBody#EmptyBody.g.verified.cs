@@ -62,7 +62,6 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-
             fixed (global::VerifyVectorize.Position1* position_first = position)
             {
                 for (; i <= end; i += 32)

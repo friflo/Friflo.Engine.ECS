@@ -69,6 +69,7 @@ namespace VerifyVectorize
             var min_1 = min_0;
             var min_2 = min_0;
             var min_3 = min_0;
+
             Vector128<float> max_half = Vector128.Create(max.X, max.Y, max.X, max.Y);
             var max_0 = Avx.InsertVector128(max_half.ToVector256(), max_half, 1);
             var max_1 = max_0;

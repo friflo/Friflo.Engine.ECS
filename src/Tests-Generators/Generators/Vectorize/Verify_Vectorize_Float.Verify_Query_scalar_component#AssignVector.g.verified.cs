@@ -64,7 +64,6 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-
             fixed (global::VerifyVectorize.Position1* position_first = position)
             fixed (global::VerifyVectorize.FloatComponent* factor_first = factor)
             {
