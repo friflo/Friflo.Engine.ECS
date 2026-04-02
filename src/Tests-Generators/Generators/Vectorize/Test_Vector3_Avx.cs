@@ -275,6 +275,7 @@ public static partial class Test_Vector3_Avx
         }
     }
     
+    // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Multiply_Vector3_Const(ref Position position, ref Velocity velocity)
     {
