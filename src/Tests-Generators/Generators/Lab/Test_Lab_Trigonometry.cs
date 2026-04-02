@@ -124,13 +124,13 @@ public static class Test_Lab_Trigonometry
         return Vector256.Create(Ceiling(x[0]), Ceiling(x[1]), Ceiling(x[2]), Ceiling(x[3]), Ceiling(x[4]), Ceiling(x[5]), Ceiling(x[6]), Ceiling(x[7]));
     }
     
-    [SkipLocalsInit]
+    [SkipLocalsInit]                // TODO Vectorize in AvxUtils
     internal static Vector256<float> ExpMathF(Vector256<float> x)
     {
         return Vector256.Create(Exp(x[0]), Exp(x[1]), Exp(x[2]), Exp(x[3]), Exp(x[4]), Exp(x[5]), Exp(x[6]), Exp(x[7]));
     }
     
-    [SkipLocalsInit]
+    [SkipLocalsInit]                // TODO Vectorize in AvxUtils
     internal static Vector256<float> LogMathF(Vector256<float> x)
     {
         return Vector256.Create(Log(x[0]), Log(x[1]), Log(x[2]), Log(x[3]), Log(x[4]), Log(x[5]), Log(x[6]), Log(x[7]));
@@ -142,7 +142,7 @@ public static class Test_Lab_Trigonometry
         return Vector256.Create(Log10(x[0]), Log10(x[1]), Log10(x[2]), Log10(x[3]), Log10(x[4]), Log10(x[5]), Log10(x[6]), Log10(x[7]));
     }
     
-    [SkipLocalsInit]
+    [SkipLocalsInit]                // TODO Vectorize in AvxUtils
     internal static Vector256<float> Log2MathF(Vector256<float> x)
     {
         return Vector256.Create(Log2(x[0]), Log2(x[1]), Log2(x[2]), Log2(x[3]), Log2(x[4]), Log2(x[5]), Log2(x[6]), Log2(x[7]));
