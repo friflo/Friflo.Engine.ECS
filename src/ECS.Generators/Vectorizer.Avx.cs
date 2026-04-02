@@ -169,33 +169,34 @@ public static partial class Vectorizer
     private static bool Compute_Invocation(StringBuilder[] lanes, Query query, InvocationExpressionSyntax invocation)
     {
         var methodName = GetMethodName(query, invocation);
+        var argList = invocation.ArgumentList;
         switch (methodName)
         {
-            case "System.MathF.Sin(float)":         return Method_Scalar(lanes, query, "AvxUtils.SinMathF",   invocation.ArgumentList);
-            case "System.MathF.Cos(float)":         return Method_Scalar(lanes, query, "AvxUtils.CosMathF",   invocation.ArgumentList);
-            case "System.MathF.Tan(float)":         return Method_Scalar(lanes, query, "AvxUtils.TanMathF",   invocation.ArgumentList);
-            case "System.MathF.Asin(float)":        return Method_Scalar(lanes, query, "AvxUtils.AsinMathF",  invocation.ArgumentList);
-            case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "AvxUtils.AcosMathF",  invocation.ArgumentList);
-            case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "AvxUtils.AtanMathF",  invocation.ArgumentList);
-            case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "AvxUtils.Atan2MathF", invocation.ArgumentList);
+            case "System.MathF.Sin(float)":         return Method_Scalar(lanes, query, "AvxUtils.SinMathF",   argList);
+            case "System.MathF.Cos(float)":         return Method_Scalar(lanes, query, "AvxUtils.CosMathF",   argList);
+            case "System.MathF.Tan(float)":         return Method_Scalar(lanes, query, "AvxUtils.TanMathF",   argList);
+            case "System.MathF.Asin(float)":        return Method_Scalar(lanes, query, "AvxUtils.AsinMathF",  argList);
+            case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "AvxUtils.AcosMathF",  argList);
+            case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "AvxUtils.AtanMathF",  argList);
+            case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "AvxUtils.Atan2MathF", argList);
             
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
             case "System.Numerics.Vector3.Min(System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Min(System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_MinMax(lanes, query, "Min", invocation.ArgumentList);
+                return Method_MinMax(lanes, query, "Min", argList);
             
             case "System.MathF.Max(float, float)":
             case "System.Numerics.Vector2.Max(System.Numerics.Vector2, System.Numerics.Vector2)":
             case "System.Numerics.Vector3.Max(System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Max(System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_MinMax(lanes, query, "Max", invocation.ArgumentList);
+                return Method_MinMax(lanes, query, "Max", argList);
             
             case "System.Math.Clamp(float, float, float)":
             case "System.Numerics.Vector2.Clamp(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2)":
             case "System.Numerics.Vector3.Clamp(System.Numerics.Vector3, System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Clamp(System.Numerics.Vector4, System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_Clamp(lanes, query, invocation.ArgumentList);
+                return Method_Clamp(lanes, query, argList);
             
             case "System.Numerics.Vector2.Lerp(System.Numerics.Vector2, System.Numerics.Vector2, float)":
             case "System.Numerics.Vector3.Lerp(System.Numerics.Vector3, System.Numerics.Vector3, float)":
@@ -203,10 +204,10 @@ public static partial class Vectorizer
             case "System.Numerics.Vector2.Lerp(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2)":
             case "System.Numerics.Vector3.Lerp(System.Numerics.Vector3, System.Numerics.Vector3, System.Numerics.Vector3)":
             case "System.Numerics.Vector4.Lerp(System.Numerics.Vector4, System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_Lerp(lanes, query, invocation.ArgumentList);
+                return Method_Lerp(lanes, query, argList);
             
             case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
-                return Method_Vector4_Transform(lanes, query, invocation.ArgumentList);
+                return Method_Vector4_Transform(lanes, query, argList);
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
         return false;
