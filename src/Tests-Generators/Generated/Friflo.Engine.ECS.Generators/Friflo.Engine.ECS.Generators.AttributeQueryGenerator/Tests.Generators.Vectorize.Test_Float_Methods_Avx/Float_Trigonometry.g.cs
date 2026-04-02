@@ -67,6 +67,11 @@ namespace Tests.Generators.Vectorize
             // --- Locals
             var value_scalar = Vector256.Create(value);
 
+            Vector256<float> fraction_0;
+            Vector256<float> fraction_1;
+            Vector256<float> fraction_2;
+            Vector256<float> fraction_3;
+
             Vector256<float> sin_0;
             Vector256<float> sin_1;
             Vector256<float> sin_2;
@@ -122,6 +127,11 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // --- 2. Compute
+                    fraction_0 = Avx.Subtract(velocity_0, AvxUtils.TruncateMathF(velocity_0));
+                    fraction_1 = Avx.Subtract(velocity_1, AvxUtils.TruncateMathF(velocity_1));
+                    fraction_2 = Avx.Subtract(velocity_2, AvxUtils.TruncateMathF(velocity_2));
+                    fraction_3 = Avx.Subtract(velocity_3, AvxUtils.TruncateMathF(velocity_3));
+
                     sin_0 = AvxUtils.SinMathF(velocity_0);
                     sin_1 = AvxUtils.SinMathF(velocity_1);
                     sin_2 = AvxUtils.SinMathF(velocity_2);
@@ -137,15 +147,15 @@ namespace Tests.Generators.Vectorize
                     tan_2 = AvxUtils.TanMathF(velocity_2);
                     tan_3 = AvxUtils.TanMathF(velocity_3);
 
-                    asin_0 = AvxUtils.AsinMathF(velocity_0);
-                    asin_1 = AvxUtils.AsinMathF(velocity_1);
-                    asin_2 = AvxUtils.AsinMathF(velocity_2);
-                    asin_3 = AvxUtils.AsinMathF(velocity_3);
+                    asin_0 = AvxUtils.AsinMathF(fraction_0);
+                    asin_1 = AvxUtils.AsinMathF(fraction_1);
+                    asin_2 = AvxUtils.AsinMathF(fraction_2);
+                    asin_3 = AvxUtils.AsinMathF(fraction_3);
 
-                    acos_0 = AvxUtils.AcosMathF(velocity_0);
-                    acos_1 = AvxUtils.AcosMathF(velocity_1);
-                    acos_2 = AvxUtils.AcosMathF(velocity_2);
-                    acos_3 = AvxUtils.AcosMathF(velocity_3);
+                    acos_0 = AvxUtils.AcosMathF(fraction_0);
+                    acos_1 = AvxUtils.AcosMathF(fraction_1);
+                    acos_2 = AvxUtils.AcosMathF(fraction_2);
+                    acos_3 = AvxUtils.AcosMathF(fraction_3);
 
                     atan_0 = AvxUtils.AtanMathF(velocity_0);
                     atan_1 = AvxUtils.AtanMathF(velocity_1);

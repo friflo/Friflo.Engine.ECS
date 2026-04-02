@@ -63,5 +63,11 @@ namespace Friflo.Engine.ECS.Intrinsics
         {
             return Vector256.Create(Atan2(y[0],x[0]), Atan2(y[1],x[1]), Atan2(y[2],x[2]), Atan2(y[3],x[3]), Atan2(y[4],x[4]), Atan2(y[5],x[5]), Atan2(y[6],x[6]), Atan2(y[7],x[7]));
         }
+
+        [SkipLocalsInit]
+        internal static Vector256<float> TruncateMathF(Vector256<float> x)
+        {
+            return Vector256.Create(Truncate(x[0]), Truncate(x[1]), Truncate(x[2]), Truncate(x[3]), Truncate(x[4]), Truncate(x[5]), Truncate(x[6]), Truncate(x[7]));
+        }
     }
 }

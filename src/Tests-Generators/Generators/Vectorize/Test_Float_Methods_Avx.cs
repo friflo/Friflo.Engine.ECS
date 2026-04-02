@@ -43,7 +43,7 @@ public static partial class Test_Float_Methods_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position1 { value = n }, new Velocity1 { value = 2 }, new FloatComponent { value = n });
+            store.CreateEntity(new Position1 { value = n }, new Velocity1 { value = n * 0.1f }, new FloatComponent { value = n });
         }
         return store;
     }
@@ -51,11 +51,12 @@ public static partial class Test_Float_Methods_Avx
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Float_Trigonometry(ref Position1 position, in Velocity1 velocity, float value) {
+        var fraction= velocity.value - MathF.Truncate(velocity.value);
         var sin     = MathF.Sin(velocity.value);
         var cos     = MathF.Cos(velocity.value);
         var tan     = MathF.Tan(velocity.value);
-        var asin    = MathF.Asin(velocity.value);
-        var acos    = MathF.Acos(velocity.value);
+        var asin    = MathF.Asin(fraction);
+        var acos    = MathF.Acos(fraction);
         var atan    = MathF.Atan(velocity.value);
         var atan2   = MathF.Atan2(velocity.value, value);
         position.value += sin + cos + tan + asin + acos + atan + atan2;
@@ -74,7 +75,12 @@ public static partial class Test_Float_Methods_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
+            var expect = entity.GetComponent<Position1>();
+            if (float.IsNaN(expect.value)) {
+                Assert.Fail("expected is NaN");
+            }
+            var value  = entityVectorized.GetComponent<Position1>();
+            Assert.That(value, Is.EqualTo(expect));
         }
     }
 
