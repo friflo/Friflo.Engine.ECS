@@ -171,8 +171,13 @@ public static partial class Vectorizer
         var methodName = GetMethodName(query, invocation);
         switch (methodName)
         {
-            case "System.MathF.Sin(float)":
-                return Method_Scalar(lanes, query, "AvxUtils.SinMathF", invocation.ArgumentList);
+            case "System.MathF.Sin(float)":         return Method_Scalar(lanes, query, "AvxUtils.SinMathF",   invocation.ArgumentList);
+            case "System.MathF.Cos(float)":         return Method_Scalar(lanes, query, "AvxUtils.CosMathF",   invocation.ArgumentList);
+            case "System.MathF.Tan(float)":         return Method_Scalar(lanes, query, "AvxUtils.TanMathF",   invocation.ArgumentList);
+            case "System.MathF.Asin(float)":        return Method_Scalar(lanes, query, "AvxUtils.AsinMathF",  invocation.ArgumentList);
+            case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "AvxUtils.AcosMathF",  invocation.ArgumentList);
+            case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "AvxUtils.AtanMathF",  invocation.ArgumentList);
+            case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "AvxUtils.Atan2MathF", invocation.ArgumentList);
             
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
@@ -319,8 +324,16 @@ public static partial class Vectorizer
             lanes[n].Append($"{method}(");
         }
         var args = argumentSyntax.Arguments;
-        if (!Compute(lanes, query, args[0].Expression)) {
-            return false;
+        for (int i = 0; i < args.Count; i++)
+        {
+            if (i > 0) {
+                for (int n = 0; n < lanes.Length; n++) {
+                    lanes[n].Append(", ");
+                }
+            }
+            if (!Compute(lanes, query, args[0].Expression)) {
+                return false;
+            }
         }
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append(")");

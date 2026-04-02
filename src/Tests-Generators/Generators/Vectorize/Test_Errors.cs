@@ -25,10 +25,10 @@ public static partial class Test_Errors
     }
     
     
-    // --- Expect:  ECSGEN002: Vectorization failed - operation not supported: MathF.Cos(value)
+    // --- Expect:  ECSGEN002: Vectorization failed - operation not supported: Console.WriteLine()
     [Vectorize][Query]  [OmitHash]
     private static void OperationUnsupportedError(ref Position1 comp, float value) {
-        comp.value = MathF.Cos(value);
+        Console.WriteLine();
     }
     
     [Test]
