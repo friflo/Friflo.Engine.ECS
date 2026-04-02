@@ -244,4 +244,28 @@ public static partial class Test_Float_Avx
             Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Float_Const(ref Position1 position)
+    {
+        position.value += 1f;
+    }
+
+    [Test]
+    public static void Test_Multiply_Float_Const()
+    {
+        var store = CreateTestStore();
+        Multiply_Float_ConstQuery(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Float_ConstQuery(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
+        }
+    }
 }

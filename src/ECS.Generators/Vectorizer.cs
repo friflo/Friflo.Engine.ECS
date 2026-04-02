@@ -280,6 +280,16 @@ public static partial class Vectorizer
                 }
             }
         }
+        // const locals
+        foreach (var constLocal in query.constLocals) {
+            switch (constLocal.paramType)
+            {
+                case ParamType.Scalar:
+                    locals.AppendLine($"            var {constLocal.name} = Vector256.Create({constLocal.value.Text});");
+                    locals.AppendLine();
+                    break;
+            }
+        }
         var localBlock = "";
         if (locals.Length > 0) {
             localBlock = $"            // --- Locals\n{locals}";
@@ -415,6 +425,9 @@ $"""
         }
         if (syntax is InvocationExpressionSyntax invocation) {
             return Compute_Invocation(lanes, query, invocation);
+        }
+        if (syntax is LiteralExpressionSyntax literal) {
+            return Compute_Literal(lanes, query, literal);
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, syntax, syntax.ToFullString());
         return false;

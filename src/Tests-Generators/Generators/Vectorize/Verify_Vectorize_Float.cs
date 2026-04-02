@@ -219,4 +219,28 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Const()
+    {
+        var code =
+            """
+            using System;
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct Position1 : IComponent { public float value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void AssignConst(ref Position1 position) {
+                    position.value = 1;
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

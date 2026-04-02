@@ -42,6 +42,7 @@ public class Query
     public          bool                            vectorize;
     public          string                          avxMethod = "";
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
+    public readonly List<ConstValue>                constLocals = new ();
 
     public void ReportDiagnosticSymbol(DiagnosticDescriptor descriptor, ISymbol? locationSymbol, params object?[]? messageArgs)
     {
@@ -82,4 +83,11 @@ public struct VectorType
     public override string ToString() {
         return $"{parameter} : {valueType.Name} ({(paramType == ParamType.Vector ? "vector" : "scalar")})";
     }
+}
+
+public struct ConstValue
+{
+    public string       name;
+    public SyntaxToken  value;
+    public ParamType    paramType;
 }

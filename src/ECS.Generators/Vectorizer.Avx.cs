@@ -166,6 +166,16 @@ public static partial class Vectorizer
         return null;
     }
 
+    private static bool Compute_Literal(StringBuilder[] lanes, Query query, LiteralExpressionSyntax literal)
+    {
+        var name = $"const{query.constLocals.Count}_scalar";
+        query.constLocals.Add(new ConstValue { name = name, value = literal.Token, paramType = ParamType.Scalar });
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append($"{name}");
+        }
+        return true;
+    }
+
     private static bool Compute_Invocation(StringBuilder[] lanes, Query query, InvocationExpressionSyntax invocation)
     {
         var methodName = GetMethodName(query, invocation);
