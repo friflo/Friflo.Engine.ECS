@@ -9,13 +9,13 @@ using Friflo.Engine.ECS;
 
 namespace Tests.Generators.Vectorize
 {
-    public partial class Test_Vector4_Avx
+    public partial class Test_Vector2_Avx
     {
-        /// <summary>Query method generated for: <see cref="MultiplyAddAssinment"/>.</summary>
+        /// <summary>Query method generated for: <see cref="MultiplyAddAssignment"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery MultiplyAddAssinmentQuery(EntityStore _store, float deltaTime, bool vectorized = true)
+        public static ArchetypeQuery MultiplyAddAssignmentQuery(EntityStore _store, float deltaTime, bool vectorized = true)
         {
-            var _query = _MultiplyAddAssinment_GetQuery(_store);
+            var _query = _MultiplyAddAssignment_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -24,11 +24,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _MultiplyAddAssinment_Avx(positionSpan, velocitySpan, deltaTime);
+                    n = _MultiplyAddAssignment_Avx(positionSpan, velocitySpan, deltaTime);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    MultiplyAddAssinment(ref positionSpan[n], ref velocitySpan[n], deltaTime);
+                    MultiplyAddAssignment(ref positionSpan[n], ref velocitySpan[n], deltaTime);
                 }
             }
             return _query;
@@ -36,41 +36,41 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _MultiplyAddAssinment_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _MultiplyAddAssignment_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Tests.ECS.Position4, global::Tests.ECS.Velocity4>
-            _MultiplyAddAssinment_GetQuery(EntityStore _store)
+        private static ArchetypeQuery<global::Tests.ECS.Position2, global::Tests.ECS.Velocity2>
+            _MultiplyAddAssignment_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Tests.ECS.Position4, global::Tests.ECS.Velocity4>)
-                EntityStore.UserDataGet(_store, _MultiplyAddAssinment_Slot);
+            var _query = (ArchetypeQuery<global::Tests.ECS.Position2, global::Tests.ECS.Velocity2>)
+                EntityStore.UserDataGet(_store, _MultiplyAddAssignment_Slot);
             if (_query != null) {
                 return _query;
             }
-            _query = _store.Query<global::Tests.ECS.Position4, global::Tests.ECS.Velocity4>();
+            _query = _store.Query<global::Tests.ECS.Position2, global::Tests.ECS.Velocity2>();
 
-            EntityStore.UserDataSet(_store, _MultiplyAddAssinment_Slot, _query);
+            EntityStore.UserDataSet(_store, _MultiplyAddAssignment_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _MultiplyAddAssinment_Avx(
-            Span<global::Tests.ECS.Position4> position,
-            Span<global::Tests.ECS.Velocity4> velocity,
+        private static unsafe int _MultiplyAddAssignment_Avx(
+            Span<global::Tests.ECS.Position2> position,
+            Span<global::Tests.ECS.Velocity2> velocity,
             float deltaTime)
         {
             int i = 0;
-            var end = position.Length - 8;
+            var end = position.Length - 16;
             if (i > end) {
                 return 0;
             }
             // --- Locals
             var deltaTime_scalar = Vector256.Create(deltaTime);
 
-            fixed (global::Tests.ECS.Position4* position_first = position)
-            fixed (global::Tests.ECS.Velocity4* velocity_first = velocity)
+            fixed (global::Tests.ECS.Position2* position_first = position)
+            fixed (global::Tests.ECS.Velocity2* velocity_first = velocity)
             {
-                for (; i <= end; i += 8)
+                for (; i <= end; i += 16)
                 {
                     float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
