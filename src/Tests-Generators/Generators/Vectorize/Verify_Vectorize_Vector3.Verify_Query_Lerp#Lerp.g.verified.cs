@@ -64,6 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             var dst_0 = Vector256.Create(dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y);
             var dst_1 = Vector256.Create(dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X);
             var dst_2 = Vector256.Create(dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z);
@@ -78,17 +79,17 @@ namespace VerifyVectorize
                 {
                     float* src_ptr = (float*)(src_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> src_0 = Avx.LoadVector256(src_ptr + 0);
                     Vector256<float> src_1 = Avx.LoadVector256(src_ptr + 8);
                     Vector256<float> src_2 = Avx.LoadVector256(src_ptr + 16);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     position_0 = Fma.MultiplyAdd(amount_0, Avx.Subtract(dst_0, src_0), src_0);
                     position_1 = Fma.MultiplyAdd(amount_1, Avx.Subtract(dst_1, src_1), src_1);
                     position_2 = Fma.MultiplyAdd(amount_2, Avx.Subtract(dst_2, src_2), src_2);
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

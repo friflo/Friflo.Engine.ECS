@@ -64,6 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             Vector256<float> localVar_0;
             Vector256<float> localVar_1;
             Vector256<float> localVar_2;
@@ -77,7 +78,7 @@ namespace VerifyVectorize
                     float* position_ptr = (float*)(position_first + i);
                     float* value_ptr = (float*)(value_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
@@ -88,7 +89,7 @@ namespace VerifyVectorize
                     Vector256<float> value_2 = Avx.LoadVector256(value_ptr + 16);
                     Vector256<float> value_3 = Avx.LoadVector256(value_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     localVar_0 = value_0;
                     localVar_1 = value_1;
                     localVar_2 = value_2;
@@ -104,7 +105,7 @@ namespace VerifyVectorize
                     position_2 = localVar_2;
                     position_3 = localVar_3;
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(localVar_ptr + 0, localVar_0);
                     Avx.Store(localVar_ptr + 8, localVar_1);
                     Avx.Store(localVar_ptr + 16, localVar_2);

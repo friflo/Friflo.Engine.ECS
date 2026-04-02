@@ -68,15 +68,15 @@ namespace VerifyVectorize
                 {
                     float* position_ptr = (float*)(position_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
 
-                    // 3. Store
+                    // --- 3. Store
 
                 }
             }

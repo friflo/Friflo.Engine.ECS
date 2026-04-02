@@ -64,6 +64,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             var deltaTime_scalar = Vector256.Create(deltaTime);
 
             fixed (global::Tests.ECS.Position4* position_first = position)
@@ -74,7 +75,7 @@ namespace Tests.Generators.Vectorize
                     float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
@@ -85,13 +86,13 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, deltaTime_scalar));
                     position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, deltaTime_scalar));
                     position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, deltaTime_scalar));
                     position_3 = Avx.Multiply(position_3, Avx.Multiply(velocity_3, deltaTime_scalar));
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             Vector128<float> min_half = Vector128.Create(min.X, min.Y, min.X, min.Y);
             var min_0 = Avx.InsertVector128(min_half.ToVector256(), min_half, 1);
             var min_1 = min_0;
@@ -81,19 +82,19 @@ namespace Tests.Generators.Vectorize
                 {
                     float* position_ptr = (float*)(position_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     position_0 = Avx.Min(max_0, Avx.Max(min_0, position_0));
                     position_1 = Avx.Min(max_1, Avx.Max(min_1, position_1));
                     position_2 = Avx.Min(max_2, Avx.Max(min_2, position_2));
                     position_3 = Avx.Min(max_3, Avx.Max(min_3, position_3));
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

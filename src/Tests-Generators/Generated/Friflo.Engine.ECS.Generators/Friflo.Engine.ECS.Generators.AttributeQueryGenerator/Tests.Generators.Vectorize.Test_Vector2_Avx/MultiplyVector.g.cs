@@ -64,6 +64,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             Vector128<float> vector3_half = Vector128.Create(vector3.X, vector3.Y, vector3.X, vector3.Y);
             var vector3_0 = Avx.InsertVector128(vector3_half.ToVector256(), vector3_half, 1);
             var vector3_1 = vector3_0;
@@ -78,7 +79,7 @@ namespace Tests.Generators.Vectorize
                     float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
@@ -89,13 +90,13 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, vector3_0));
                     position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, vector3_1));
                     position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, vector3_2));
                     position_3 = Avx.Multiply(position_3, Avx.Multiply(velocity_3, vector3_3));
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

@@ -277,6 +277,10 @@ public static partial class Vectorizer
                 }
             }
         }
+        var localBlock = "";
+        if (locals.Length > 0) {
+            localBlock = $"            // --- Locals\n{locals}";
+        }
         
         // --- fixed block
         var @fixed = new StringBuilder();
@@ -312,7 +316,7 @@ public static partial class Vectorizer
             if (i > end) {{
                 return 0;
             }}
-{locals}{@fixed}            {{
+{localBlock}{@fixed}            {{
                 for (; i <= end; i += {elementStep})
                 {{{pointer}
 {vectorizeBlock}
@@ -330,7 +334,7 @@ public static partial class Vectorizer
         var source = new StringBuilder();
         var laneCount = query.laneCount;
         source.AppendLine();
-        source.AppendLine("                    // 1. Load");
+        source.AppendLine("                    // --- 1. Load");
         foreach (var vectorType in query.vectorTypes) {
             if (!vectorType.isComponent) continue;
             var name = vectorType.parameter.Name;
@@ -367,11 +371,11 @@ $"""
             }
             source.AppendLine();
         }
-        source.AppendLine("                    // 2. Compute");
+        source.AppendLine("                    // --- 2. Compute");
         source.Append(compute);
         if (compute.Length == 0) source.AppendLine();
         
-        source.AppendLine("                    // 3. Store");
+        source.AppendLine("                    // --- 3. Store");
         if (body == null) {
             return source;
         }

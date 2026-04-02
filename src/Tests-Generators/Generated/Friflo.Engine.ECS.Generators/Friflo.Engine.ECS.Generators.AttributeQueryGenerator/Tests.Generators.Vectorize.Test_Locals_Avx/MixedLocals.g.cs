@@ -65,6 +65,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             Vector256<int> scalarComp_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> scalarComp_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
 
@@ -94,7 +95,7 @@ namespace Tests.Generators.Vectorize
                     float* position_ptr = (float*)(position_first + i);
                     float* scalarComp_ptr = (float*)(scalarComp_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
@@ -107,7 +108,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> scalarComp_2 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_lo);
                     Vector256<float> scalarComp_3 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_hi);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     vec2_0 = Avx.Multiply(position_0, scalar_scalar);
                     vec2_1 = Avx.Multiply(position_1, scalar_scalar);
                     vec2_2 = Avx.Multiply(position_2, scalar_scalar);
@@ -123,7 +124,7 @@ namespace Tests.Generators.Vectorize
                     position_2 = Avx.Multiply(Avx.Multiply(vec_2, vec2_2), scalar2_2);
                     position_3 = Avx.Multiply(Avx.Multiply(vec_3, vec2_3), scalar2_3);
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

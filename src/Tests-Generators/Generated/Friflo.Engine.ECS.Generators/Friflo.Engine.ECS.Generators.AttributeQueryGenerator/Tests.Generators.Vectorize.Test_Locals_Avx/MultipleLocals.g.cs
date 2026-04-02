@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             var factor_scalar = Vector256.Create(factor);
 
             var offset_scalar = Vector256.Create(offset);
@@ -83,13 +84,13 @@ namespace Tests.Generators.Vectorize
                 {
                     float* position_ptr = (float*)(position_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     vel1_0 = Avx.Multiply(position_0, factor_scalar);
                     vel1_1 = Avx.Multiply(position_1, factor_scalar);
                     vel1_2 = Avx.Multiply(position_2, factor_scalar);
@@ -105,7 +106,7 @@ namespace Tests.Generators.Vectorize
                     position_2 = Avx.Multiply(vel1_2, vel2_2);
                     position_3 = Avx.Multiply(vel1_3, vel2_3);
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

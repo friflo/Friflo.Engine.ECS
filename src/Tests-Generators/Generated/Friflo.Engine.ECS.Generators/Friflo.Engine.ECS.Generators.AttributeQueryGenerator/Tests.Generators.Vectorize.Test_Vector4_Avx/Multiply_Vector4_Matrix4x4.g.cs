@@ -62,6 +62,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             // Load Matrix columns into 256-bit registers (each column duplicated)
             // [Col0.x, Col0.y, Col0.z, Col0.w, Col0.x, Col0.y, Col0.z, Col0.w]
             Vector256<float> matrix_0 = Vector256.Create(matrix.M11, matrix.M12, matrix.M13, matrix.M14, matrix.M11, matrix.M12, matrix.M13, matrix.M14);
@@ -75,19 +76,19 @@ namespace Tests.Generators.Vectorize
                 {
                     float* position_ptr = (float*)(position_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     position_0 = AvxUtils.TransformVector4PairAVX(position_0, matrix_0, matrix_1, matrix_2, matrix_3);
                     position_1 = AvxUtils.TransformVector4PairAVX(position_1, matrix_0, matrix_1, matrix_2, matrix_3);
                     position_2 = AvxUtils.TransformVector4PairAVX(position_2, matrix_0, matrix_1, matrix_2, matrix_3);
                     position_3 = AvxUtils.TransformVector4PairAVX(position_3, matrix_0, matrix_1, matrix_2, matrix_3);
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // --- Locals
             Vector256<float> vel_0;
             Vector256<float> vel_1;
             Vector256<float> vel_2;
@@ -76,7 +77,7 @@ namespace Tests.Generators.Vectorize
                     float* position_ptr = (float*)(position_first + i);
                     float* velocity_ptr = (float*)(velocity_first + i);
 
-                    // 1. Load
+                    // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
@@ -87,7 +88,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
-                    // 2. Compute
+                    // --- 2. Compute
                     vel_0 = Avx.Add(position_0, velocity_0);
                     vel_1 = Avx.Add(position_1, velocity_1);
                     vel_2 = Avx.Add(position_2, velocity_2);
@@ -98,7 +99,7 @@ namespace Tests.Generators.Vectorize
                     position_2 = vel_2;
                     position_3 = vel_3;
 
-                    // 3. Store
+                    // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
