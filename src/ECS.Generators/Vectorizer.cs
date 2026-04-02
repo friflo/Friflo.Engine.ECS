@@ -345,12 +345,12 @@ public static partial class Vectorizer
                     case 2:
                         source.AppendLine(
 $"""
-                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256(factor_ptr);
-                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256(factor_ptr + 8);
-                    Vector256<float> {name}_0 = Avx2.PermuteVar8x32({name}_scalar_01, factor_mask_lo);
-                    Vector256<float> {name}_1 = Avx2.PermuteVar8x32({name}_scalar_01, factor_mask_hi);
-                    Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, factor_mask_lo);
-                    Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, factor_mask_hi);
+                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);
+                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256({name}_ptr + 8);
+                    Vector256<float> {name}_0 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_lo);
+                    Vector256<float> {name}_1 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_hi);
+                    Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_lo);
+                    Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_hi);
 """);
                         break;
                     default:

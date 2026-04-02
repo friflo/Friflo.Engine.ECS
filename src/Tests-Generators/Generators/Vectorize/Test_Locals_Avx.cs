@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -87,8 +88,39 @@ public static partial class Test_Locals_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position1 { value = n }, new Velocity1 { value = 2 }, new FloatComponent { value = n });
+            store.CreateEntity(
+                new Position1 { value = n },
+                new Velocity1 { value = 2 },
+                new FloatComponent { value = n },
+                new Position2 { value = new Vector2(n,n+1) },
+                new Velocity2 { value = new Vector2(n, n*2) });
         }
         return store;
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void MixedLocals(ref Position2 position, in FloatComponent scalarComp, Vector2 vec, float scalar) {
+        // Vector2 vel1 = position.value * scalar;
+        float vel2 = scalarComp.value * scalar;
+        // position.value = vel1 * vel2;
+        position.value = vec * vel2;
+    } 
+        
+    [Test]
+    public static void Test_MixedLocals()
+    {
+        var store = CreateTestStore();
+        MixedLocalsQuery(store, new Vector2(1,2), 3, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = MixedLocalsQuery(storeVectorized, new Vector2(1,2), 3);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
+        }
     }
 }
