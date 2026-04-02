@@ -102,7 +102,7 @@ public static partial class Test_Float_Methods_Avx
         position.value = floor + exp + log + log10 + log2 + pow + round + sqrt;
     } 
         
-    // [Test]
+    [Test]
     public static void Test_Float_Misc()
     {
         var store = CreateTestStore();

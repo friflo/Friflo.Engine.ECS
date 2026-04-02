@@ -145,7 +145,7 @@ public static class Test_Lab_Trigonometry
     [SkipLocalsInit]
     internal static Vector256<float> PowMathF(Vector256<float> x, Vector256<float> y)
     {
-        return Vector256.Create(Pow(x[0],y[0]), Atan2(x[1],y[1]), Atan2(x[2],y[2]), Atan2(x[3],y[3]), Atan2(x[4],y[4]), Atan2(x[5],y[5]), Atan2(x[6],y[6]), Atan2(x[7],y[7]));
+        return Vector256.Create(Pow(x[0],y[0]), Pow(x[1],y[1]), Pow(x[2],y[2]), Pow(x[3],y[3]), Pow(x[4],y[4]), Pow(x[5],y[5]), Pow(x[6],y[6]), Pow(x[7],y[7]));
     }
     
     [SkipLocalsInit]
