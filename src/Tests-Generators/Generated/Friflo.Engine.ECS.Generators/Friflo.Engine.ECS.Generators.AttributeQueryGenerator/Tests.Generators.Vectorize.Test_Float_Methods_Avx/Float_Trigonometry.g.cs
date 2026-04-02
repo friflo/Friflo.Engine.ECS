@@ -152,10 +152,10 @@ namespace Tests.Generators.Vectorize
                     atan_2 = AvxUtils.AtanMathF(velocity_2);
                     atan_3 = AvxUtils.AtanMathF(velocity_3);
 
-                    atan2_0 = AvxUtils.Atan2MathF(velocity_0, velocity_0);
-                    atan2_1 = AvxUtils.Atan2MathF(velocity_1, velocity_1);
-                    atan2_2 = AvxUtils.Atan2MathF(velocity_2, velocity_2);
-                    atan2_3 = AvxUtils.Atan2MathF(velocity_3, velocity_3);
+                    atan2_0 = AvxUtils.Atan2MathF(velocity_0, value_scalar);
+                    atan2_1 = AvxUtils.Atan2MathF(velocity_1, value_scalar);
+                    atan2_2 = AvxUtils.Atan2MathF(velocity_2, value_scalar);
+                    atan2_3 = AvxUtils.Atan2MathF(velocity_3, value_scalar);
 
                     position_0 = Avx.Add(position_0, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_0, cos_0), tan_0), asin_0), acos_0), atan_0), atan2_0));
                     position_1 = Avx.Add(position_1, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_1, cos_1), tan_1), asin_1), acos_1), atan_1), atan2_1));

@@ -331,7 +331,7 @@ public static partial class Vectorizer
                     lanes[n].Append(", ");
                 }
             }
-            if (!Compute(lanes, query, args[0].Expression)) {
+            if (!Compute(lanes, query, args[i].Expression)) {
                 return false;
             }
         }
