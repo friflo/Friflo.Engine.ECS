@@ -197,6 +197,7 @@ public static partial class Vectorizer
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n] = new StringBuilder();
         }
+        // Is local declaration - e.g.     var local = value;
         if (statement is LocalDeclarationStatementSyntax localDecl) {
             foreach (var variable in localDecl.Declaration.Variables) {
                 var initializerExpression = variable.Initializer?.Value;
@@ -214,6 +215,7 @@ public static partial class Vectorizer
                 }
             }
         }
+        // Assignment - e.g.     position.value = value;
         if (statement is ExpressionStatementSyntax expressionStatement) {
             var expressionSyntax = expressionStatement.Expression;
             if (!Compute(lanes, query, expressionSyntax)) {
@@ -266,6 +268,7 @@ public static partial class Vectorizer
         // local variables
         if (body != null) {
             foreach (var statement in body.Statements) {
+                // Is local declaration - e.g.     var local = value;
                 if (statement is LocalDeclarationStatementSyntax localDecl) {
                     foreach (var variable in localDecl.Declaration.Variables) {
                         var variableName = variable.Identifier.Text;
