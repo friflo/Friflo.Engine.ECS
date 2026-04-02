@@ -76,10 +76,15 @@ namespace Tests.Generators.Vectorize
 
             var scalar_scalar = Vector256.Create(scalar);
 
-            Vector256<float> vel2_0;
-            Vector256<float> vel2_1;
-            Vector256<float> vel2_2;
-            Vector256<float> vel2_3;
+            Vector256<float> vec2_0;
+            Vector256<float> vec2_1;
+            Vector256<float> vec2_2;
+            Vector256<float> vec2_3;
+
+            Vector256<float> scalar2_0;
+            Vector256<float> scalar2_1;
+            Vector256<float> scalar2_2;
+            Vector256<float> scalar2_3;
 
             fixed (global::Tests.ECS.Position2* position_first = position)
             fixed (global::Tests.ECS.FloatComponent* scalarComp_first = scalarComp)
@@ -103,15 +108,20 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> scalarComp_3 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_hi);
 
                     // 2. Compute
-                    vel2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
-                    vel2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
-                    vel2_2 = Avx.Multiply(scalarComp_2, scalar_scalar);
-                    vel2_3 = Avx.Multiply(scalarComp_3, scalar_scalar);
+                    vec2_0 = Avx.Multiply(position_0, scalar_scalar);
+                    vec2_1 = Avx.Multiply(position_1, scalar_scalar);
+                    vec2_2 = Avx.Multiply(position_2, scalar_scalar);
+                    vec2_3 = Avx.Multiply(position_3, scalar_scalar);
 
-                    position_0 = Avx.Multiply(vec_0, vel2_0);
-                    position_1 = Avx.Multiply(vec_1, vel2_1);
-                    position_2 = Avx.Multiply(vec_2, vel2_2);
-                    position_3 = Avx.Multiply(vec_3, vel2_3);
+                    scalar2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
+                    scalar2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
+                    scalar2_2 = Avx.Multiply(scalarComp_2, scalar_scalar);
+                    scalar2_3 = Avx.Multiply(scalarComp_3, scalar_scalar);
+
+                    position_0 = Avx.Multiply(Avx.Multiply(vec_0, vec2_0), scalar2_0);
+                    position_1 = Avx.Multiply(Avx.Multiply(vec_1, vec2_1), scalar2_1);
+                    position_2 = Avx.Multiply(Avx.Multiply(vec_2, vec2_2), scalar2_2);
+                    position_3 = Avx.Multiply(Avx.Multiply(vec_3, vec2_3), scalar2_3);
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);

@@ -101,10 +101,9 @@ public static partial class Test_Locals_Avx
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void MixedLocals(ref Position2 position, in FloatComponent scalarComp, Vector2 vec, float scalar) {
-        // Vector2 vel1 = position.value * scalar;
-        float vel2 = scalarComp.value * scalar;
-        // position.value = vel1 * vel2;
-        position.value = vec * vel2;
+        Vector2 vec2 = position.value * scalar;
+        float scalar2 = scalarComp.value * scalar;
+        position.value = vec * vec2 * scalar2;
     } 
         
     [Test]
