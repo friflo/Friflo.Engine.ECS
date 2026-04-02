@@ -188,4 +188,27 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_static()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct Position3 : IComponent { public Vector3 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void Access_static(ref Position3 src) {
+                    position.value = Vector3.Pi;
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

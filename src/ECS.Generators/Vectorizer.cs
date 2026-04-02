@@ -284,11 +284,12 @@ public static partial class Vectorizer
         foreach (var constLocal in query.constLocals) {
             switch (constLocal.paramType) {
                 case ParamType.Scalar:
-                    locals.AppendLine($"            var {constLocal.name}_scalar = Vector256.Create<float>({constLocal.value.Text});");
+                    locals.AppendLine($"            var {constLocal.name}_scalar = Vector256.Create<float>({constLocal.value});");
                     locals.AppendLine();
                     break;
                 default:                // TODO  type should be clear here 
                 case ParamType.Vector:
+                    locals.AppendLine($"            var {constLocal.name} = {constLocal.value};");
                     Utils.InterleaveVector3(locals, constLocal.name, query.vectorDimension);
                     locals.AppendLine();
                     break;

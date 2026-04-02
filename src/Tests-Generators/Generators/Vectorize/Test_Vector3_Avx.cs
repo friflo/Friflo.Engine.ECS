@@ -299,6 +299,30 @@ public static partial class Test_Vector3_Avx
         }
     }
     
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Multiply_Vector3_static(ref Position position, ref Velocity velocity)
+    {
+        position.value = velocity.value * Vector3.Pi;
+    }
+
+    [Test]
+    public static void Test_Multiply_Vector3_static()
+    {
+        var store = CreateTestStore();
+        Multiply_Vector3_staticQuery(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Multiply_Vector3_staticQuery(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
     private static bool AreEqual(Vector3 a, Vector3 b, float epsilon = 1e-4f)
     {
         return Math.Abs(a.X - b.X) < epsilon &&

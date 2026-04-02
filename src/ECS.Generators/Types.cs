@@ -88,6 +88,6 @@ public struct VectorType
 public struct ConstValue
 {
     public string       name;
-    public SyntaxToken  value;
+    public string       value;
     public ParamType    paramType;
 }

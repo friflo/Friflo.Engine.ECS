@@ -11,14 +11,28 @@ namespace Friflo.Engine.ECS.Generators;
 
 public static partial class Vectorizer
 {
-    private static bool Compute_MemberAccess(StringBuilder[] lanes, Query _, MemberAccessExpressionSyntax memberAccess)
+    private static bool Compute_MemberAccess(StringBuilder[] lanes, Query query, MemberAccessExpressionSyntax memberAccess)
     {
         if (memberAccess.Expression is not IdentifierNameSyntax identifierNameSyntax) {
             return false;
         }
-        var name = identifierNameSyntax.Identifier.Text;
-        for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append($"{name}_{i}");
+        var symbolInfo = query.semanticModel.GetSymbolInfo(memberAccess);
+        var symbol = symbolInfo.Symbol;
+        var isStatic = symbol != null && symbol.IsStatic;
+        if (isStatic)
+        {
+            var name = $"const{query.constLocals.Count}";
+            // var value = symbol!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            var value = $"{symbol.ContainingType.ToDisplayString()}.{symbol.Name}"; 
+            query.constLocals.Add(new ConstValue { name = name, value = value, paramType = ParamType.Vector });
+            for (int n = 0; n < lanes.Length; n++) {
+                lanes[n].Append($"{name}_{n}");
+            }
+        } else {
+            var name = identifierNameSyntax.Identifier.Text;
+            for (int i = 0; i < lanes.Length; i++) {
+                lanes[i].Append($"{name}_{i}");
+            }
         }
         return true;
     }
@@ -169,7 +183,7 @@ public static partial class Vectorizer
     private static bool Compute_Literal(StringBuilder[] lanes, Query query, LiteralExpressionSyntax literal)
     {
         var name = $"const{query.constLocals.Count}";
-        query.constLocals.Add(new ConstValue { name = name, value = literal.Token, paramType = ParamType.Scalar });
+        query.constLocals.Add(new ConstValue { name = name, value = literal.Token.Text, paramType = ParamType.Scalar });
         
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append($"{name}_scalar");
