@@ -172,14 +172,14 @@ public static partial class Vectorizer
         var argList = invocation.ArgumentList;
         switch (methodName)
         {
-            case "System.MathF.Sin(float)":         return Method_Scalar(lanes, query, "AvxUtils.SinMathF",     argList);
-            case "System.MathF.Cos(float)":         return Method_Scalar(lanes, query, "AvxUtils.CosMathF",     argList);
-            case "System.MathF.Tan(float)":         return Method_Scalar(lanes, query, "AvxUtils.TanMathF",     argList);
-            case "System.MathF.Asin(float)":        return Method_Scalar(lanes, query, "AvxUtils.AsinMathF",    argList);
-            case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "AvxUtils.AcosMathF",    argList);
-            case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "AvxUtils.AtanMathF",    argList);
-            case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "AvxUtils.Atan2MathF",   argList);
-            case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "AvxUtils.TruncateMathF",argList);
+            case "System.MathF.Sin(float)":         return Method_Scalar(lanes, query, "MathUtils.SinMathF",     argList);
+            case "System.MathF.Cos(float)":         return Method_Scalar(lanes, query, "MathUtils.CosMathF",     argList);
+            case "System.MathF.Tan(float)":         return Method_Scalar(lanes, query, "MathUtils.TanMathF",     argList);
+            case "System.MathF.Asin(float)":        return Method_Scalar(lanes, query, "MathUtils.AsinMathF",    argList);
+            case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "MathUtils.AcosMathF",    argList);
+            case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "MathUtils.AtanMathF",    argList);
+            case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "MathUtils.Atan2MathF",   argList);
+            case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "MathUtils.TruncateMathF",argList);
             
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":

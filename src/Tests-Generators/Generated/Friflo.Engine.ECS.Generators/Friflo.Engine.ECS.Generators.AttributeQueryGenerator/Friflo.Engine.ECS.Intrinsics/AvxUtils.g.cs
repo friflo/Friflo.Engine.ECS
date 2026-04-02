@@ -21,7 +21,10 @@ namespace Friflo.Engine.ECS.Intrinsics
             Vector256<float> wwww = Avx.Shuffle(v, v, 0b11_11_11_11);
             return Fma.MultiplyAdd(wwww, c3, Fma.MultiplyAdd(zzzz, c2, Fma.MultiplyAdd(yyyy, c1, Avx.Multiply(xxxx, c0))));
         }
+    }
 
+    internal static class MathUtils
+    {
         [SkipLocalsInit]
         internal static Vector256<float> SinMathF(Vector256<float> x)
         {
