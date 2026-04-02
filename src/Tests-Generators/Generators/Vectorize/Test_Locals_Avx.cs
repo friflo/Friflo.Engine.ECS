@@ -58,20 +58,20 @@ public static partial class Test_Locals_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void LocalVar2(ref Position1 position, float factor, float offset) {
+    private static void MultipleLocals(ref Position1 position, float factor, float offset) {
         var vel1 = position.value * factor;
         var vel2 = offset * factor;
         position.value = vel1 * vel2;
     } 
         
     [Test]
-    public static void Test_LocalVar2()
+    public static void Test_MultipleLocals()
     {
         var store = CreateTestStore();
-        LocalVar2Query(store, 2, 3, false);
+        MultipleLocalsQuery(store, 2, 3, false);
 
         var storeVectorized = CreateTestStore();
-        var query = LocalVar2Query(storeVectorized, 2, 3);
+        var query = MultipleLocalsQuery(storeVectorized, 2, 3);
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)

@@ -11,11 +11,11 @@ namespace Tests.Generators.Vectorize
 {
     public partial class Test_Locals_Avx
     {
-        /// <summary>Query method generated for: <see cref="LocalVar2"/>.</summary>
+        /// <summary>Query method generated for: <see cref="MultipleLocals"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery LocalVar2Query(EntityStore _store, float factor, float offset, bool vectorized = true)
+        public static ArchetypeQuery MultipleLocalsQuery(EntityStore _store, float factor, float offset, bool vectorized = true)
         {
-            var _query = _LocalVar2_GetQuery(_store);
+            var _query = _MultipleLocals_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -23,11 +23,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _LocalVar2_Avx(positionSpan, factor, offset);
+                    n = _MultipleLocals_Avx(positionSpan, factor, offset);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    LocalVar2(ref positionSpan[n], factor, offset);
+                    MultipleLocals(ref positionSpan[n], factor, offset);
                 }
             }
             return _query;
@@ -35,25 +35,25 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _LocalVar2_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _MultipleLocals_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Tests.ECS.Position1>
-            _LocalVar2_GetQuery(EntityStore _store)
+            _MultipleLocals_GetQuery(EntityStore _store)
         {
             var _query = (ArchetypeQuery<global::Tests.ECS.Position1>)
-                EntityStore.UserDataGet(_store, _LocalVar2_Slot);
+                EntityStore.UserDataGet(_store, _MultipleLocals_Slot);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Tests.ECS.Position1>();
 
-            EntityStore.UserDataSet(_store, _LocalVar2_Slot, _query);
+            EntityStore.UserDataSet(_store, _MultipleLocals_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _LocalVar2_Avx(
+        private static unsafe int _MultipleLocals_Avx(
             Span<global::Tests.ECS.Position1> position,
             float factor,
             float offset)
