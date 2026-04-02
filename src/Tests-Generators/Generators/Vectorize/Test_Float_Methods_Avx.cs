@@ -92,6 +92,7 @@ public static partial class Test_Float_Methods_Avx
     [Vectorize][Query]  [OmitHash]
     private static void Float_Misc(ref Position1 position, in Velocity1 velocity, float value) {
         var floor   = MathF.Floor(velocity.value);
+        var ceiling = MathF.Ceiling(velocity.value);
         var exp     = MathF.Exp(velocity.value);
         var log     = MathF.Log(velocity.value);
         var log10   = MathF.Log10(velocity.value);
@@ -99,7 +100,7 @@ public static partial class Test_Float_Methods_Avx
         var pow     = MathF.Pow(velocity.value, velocity.value);
         var round   = MathF.Round(velocity.value);
         var sqrt    = MathF.Sqrt(velocity.value);
-        position.value = floor + exp + log + log10 + log2 + pow + round + sqrt;
+        position.value = floor + ceiling + exp + log + log10 + log2 + pow + round + sqrt;
     } 
         
     [Test]

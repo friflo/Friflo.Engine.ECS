@@ -185,6 +185,7 @@ public static partial class Vectorizer
             
             case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "MathUtils.TruncateMathF",argList);
             case "System.MathF.Floor(float)":       return Method_Scalar(lanes, query, "MathUtils.FloorMathF",   argList);
+            case "System.MathF.Ceiling(float)":     return Method_Scalar(lanes, query, "MathUtils.CeilingMathF", argList);
             case "System.MathF.Exp(float)":         return Method_Scalar(lanes, query, "MathUtils.ExpMathF",     argList);
             case "System.MathF.Log(float)":         return Method_Scalar(lanes, query, "MathUtils.LogMathF",     argList);
             case "System.MathF.Log10(float)":       return Method_Scalar(lanes, query, "MathUtils.Log10MathF",   argList);

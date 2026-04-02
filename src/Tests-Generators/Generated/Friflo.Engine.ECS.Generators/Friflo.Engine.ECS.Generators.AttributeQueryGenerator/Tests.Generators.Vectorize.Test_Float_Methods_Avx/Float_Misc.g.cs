@@ -72,6 +72,11 @@ namespace Tests.Generators.Vectorize
             Vector256<float> floor_2;
             Vector256<float> floor_3;
 
+            Vector256<float> ceiling_0;
+            Vector256<float> ceiling_1;
+            Vector256<float> ceiling_2;
+            Vector256<float> ceiling_3;
+
             Vector256<float> exp_0;
             Vector256<float> exp_1;
             Vector256<float> exp_2;
@@ -132,6 +137,11 @@ namespace Tests.Generators.Vectorize
                     floor_2 = MathUtils.FloorMathF(velocity_2);
                     floor_3 = MathUtils.FloorMathF(velocity_3);
 
+                    ceiling_0 = MathUtils.CeilingMathF(velocity_0);
+                    ceiling_1 = MathUtils.CeilingMathF(velocity_1);
+                    ceiling_2 = MathUtils.CeilingMathF(velocity_2);
+                    ceiling_3 = MathUtils.CeilingMathF(velocity_3);
+
                     exp_0 = MathUtils.ExpMathF(velocity_0);
                     exp_1 = MathUtils.ExpMathF(velocity_1);
                     exp_2 = MathUtils.ExpMathF(velocity_2);
@@ -167,10 +177,10 @@ namespace Tests.Generators.Vectorize
                     sqrt_2 = MathUtils.SqrtMathF(velocity_2);
                     sqrt_3 = MathUtils.SqrtMathF(velocity_3);
 
-                    position_0 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_0, exp_0), log_0), log10_0), log2_0), pow_0), round_0), sqrt_0);
-                    position_1 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_1, exp_1), log_1), log10_1), log2_1), pow_1), round_1), sqrt_1);
-                    position_2 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_2, exp_2), log_2), log10_2), log2_2), pow_2), round_2), sqrt_2);
-                    position_3 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_3, exp_3), log_3), log10_3), log2_3), pow_3), round_3), sqrt_3);
+                    position_0 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_0, ceiling_0), exp_0), log_0), log10_0), log2_0), pow_0), round_0), sqrt_0);
+                    position_1 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_1, ceiling_1), exp_1), log_1), log10_1), log2_1), pow_1), round_1), sqrt_1);
+                    position_2 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_2, ceiling_2), exp_2), log_2), log10_2), log2_2), pow_2), round_2), sqrt_2);
+                    position_3 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(floor_3, ceiling_3), exp_3), log_3), log10_3), log2_3), pow_3), round_3), sqrt_3);
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

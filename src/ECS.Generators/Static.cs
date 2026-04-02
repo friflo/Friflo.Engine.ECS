@@ -97,10 +97,16 @@ namespace Friflo.Engine.ECS.Intrinsics
             return Vector256.Create(Truncate(x[0]), Truncate(x[1]), Truncate(x[2]), Truncate(x[3]), Truncate(x[4]), Truncate(x[5]), Truncate(x[6]), Truncate(x[7]));
         }
         
-        [SkipLocalsInit]
+        [SkipLocalsInit]                // TODO Vectorize in AvxUtils
         internal static Vector256<float> FloorMathF(Vector256<float> x)
         {
             return Vector256.Create(Floor(x[0]), Floor(x[1]), Floor(x[2]), Floor(x[3]), Floor(x[4]), Floor(x[5]), Floor(x[6]), Floor(x[7]));
+        }
+        
+        [SkipLocalsInit]                // TODO Vectorize in AvxUtils
+        internal static Vector256<float> CeilingMathF(Vector256<float> x)
+        {
+            return Vector256.Create(Ceiling(x[0]), Ceiling(x[1]), Ceiling(x[2]), Ceiling(x[3]), Ceiling(x[4]), Ceiling(x[5]), Ceiling(x[6]), Ceiling(x[7]));
         }
         
         [SkipLocalsInit]
@@ -133,13 +139,13 @@ namespace Friflo.Engine.ECS.Intrinsics
             return Vector256.Create(Pow(x[0],y[0]), Pow(x[1],y[1]), Pow(x[2],y[2]), Pow(x[3],y[3]), Pow(x[4],y[4]), Pow(x[5],y[5]), Pow(x[6],y[6]), Pow(x[7],y[7]));
         }
         
-        [SkipLocalsInit]
+        [SkipLocalsInit]                // TODO Vectorize in AvxUtils
         internal static Vector256<float> RoundMathF(Vector256<float> x)
         {
             return Vector256.Create(Round(x[0]), Round(x[1]), Round(x[2]), Round(x[3]), Round(x[4]), Round(x[5]), Round(x[6]), Round(x[7]));
         }
         
-        [SkipLocalsInit]
+        [SkipLocalsInit]                // TODO Vectorize in AvxUtils
         internal static Vector256<float> SqrtMathF(Vector256<float> x)
         {
             return Vector256.Create(Sqrt(x[0]), Sqrt(x[1]), Sqrt(x[2]), Sqrt(x[3]), Sqrt(x[4]), Sqrt(x[5]), Sqrt(x[6]), Sqrt(x[7]));
