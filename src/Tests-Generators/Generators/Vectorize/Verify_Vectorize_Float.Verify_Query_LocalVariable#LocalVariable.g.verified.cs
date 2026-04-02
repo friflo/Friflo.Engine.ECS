@@ -93,6 +93,7 @@ namespace VerifyVectorize
                     localVar_1 = value_1;
                     localVar_2 = value_2;
                     localVar_3 = value_3;
+
                     position_0 = localVar_0;
                     position_1 = localVar_1;
                     position_2 = localVar_2;

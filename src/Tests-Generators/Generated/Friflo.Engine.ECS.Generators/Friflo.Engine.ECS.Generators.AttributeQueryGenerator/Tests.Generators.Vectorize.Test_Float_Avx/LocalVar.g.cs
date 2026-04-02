@@ -92,6 +92,7 @@ namespace Tests.Generators.Vectorize
                     vel_1 = Avx.Add(position_1, velocity_1);
                     vel_2 = Avx.Add(position_2, velocity_2);
                     vel_3 = Avx.Add(position_3, velocity_3);
+
                     position_0 = vel_0;
                     position_1 = vel_1;
                     position_2 = vel_2;

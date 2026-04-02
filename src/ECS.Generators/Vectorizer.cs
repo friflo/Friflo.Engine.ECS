@@ -223,6 +223,7 @@ public static partial class Vectorizer
         for (int n = 0; n < lanes.Length; n++) {
             compute.AppendLine($"                    {lanes[n]}");
         }
+        compute.AppendLine();
         return true;
     }
     
@@ -365,7 +366,7 @@ $"""
         }
         source.AppendLine("                    // 2. Compute");
         source.Append(compute);
-        source.AppendLine();
+        if (compute.Length == 0) source.AppendLine();
         
         source.AppendLine("                    // 3. Store");
         if (body == null) {
