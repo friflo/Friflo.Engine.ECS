@@ -55,6 +55,31 @@ public static partial class Test_Float_Avx
             Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void LocalVar2(ref Position1 position, float factor, float offset) {
+        var vel1 = position.value * factor;
+        var vel2 = offset * factor;
+        position.value = vel1 * vel2;
+    } 
+        
+    [Test]
+    public static void Test_LocalVar2()
+    {
+        var store = CreateTestStore();
+        LocalVar2Query(store, 2, 3, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = LocalVar2Query(storeVectorized, 2, 3);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position1>(), Is.EqualTo(entityVectorized.GetComponent<Position1>()));
+        }
+    }
 
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
