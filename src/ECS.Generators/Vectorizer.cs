@@ -282,10 +282,18 @@ public static partial class Vectorizer
         }
         // const locals
         foreach (var constLocal in query.constLocals) {
-            switch (constLocal.paramType)
-            {
+            switch (constLocal.paramType) {
                 case ParamType.Scalar:
-                    locals.AppendLine($"            var {constLocal.name} = Vector256.Create({constLocal.value.Text});");
+                    locals.AppendLine($"            var {constLocal.name}_scalar = Vector256.Create<float>({constLocal.value.Text});");
+                    locals.AppendLine();
+                    break;
+                default:                // TODO  type should be clear here 
+                case ParamType.Vector:
+                    Utils.InterleaveVector3(locals, constLocal.name, query.vectorDimension);
+                    locals.AppendLine();
+                    break;
+                case ParamType.Matrix4x4:
+                    Utils.LoadMatrix(locals, constLocal.name);
                     locals.AppendLine();
                     break;
             }

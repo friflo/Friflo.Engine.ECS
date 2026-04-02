@@ -168,10 +168,11 @@ public static partial class Vectorizer
 
     private static bool Compute_Literal(StringBuilder[] lanes, Query query, LiteralExpressionSyntax literal)
     {
-        var name = $"const{query.constLocals.Count}_scalar";
+        var name = $"const{query.constLocals.Count}";
         query.constLocals.Add(new ConstValue { name = name, value = literal.Token, paramType = ParamType.Scalar });
+        
         for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append($"{name}");
+            lanes[n].Append($"{name}_scalar");
         }
         return true;
     }

@@ -63,7 +63,7 @@ namespace VerifyVectorize
                 return 0;
             }
             // --- Locals
-            var const0_scalar = Vector256.Create(1);
+            var const0_scalar = Vector256.Create<float>(1);
 
             fixed (global::VerifyVectorize.Position1* position_first = position)
             {
