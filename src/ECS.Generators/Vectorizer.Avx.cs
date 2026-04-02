@@ -179,7 +179,19 @@ public static partial class Vectorizer
             case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "MathUtils.AcosMathF",    argList);
             case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "MathUtils.AtanMathF",    argList);
             case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "MathUtils.Atan2MathF",   argList);
+            case "System.MathF.Asinh(float)":       return Method_Scalar(lanes, query, "MathUtils.AsinhMathF",   argList);
+            case "System.MathF.Acosh(float)":       return Method_Scalar(lanes, query, "MathUtils.AcoshMathF",   argList);
+            case "System.MathF.Atanh(float)":       return Method_Scalar(lanes, query, "MathUtils.AtanhMathF",   argList);
+            
             case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "MathUtils.TruncateMathF",argList);
+            case "System.MathF.Floor(float)":       return Method_Scalar(lanes, query, "MathUtils.Floor MathF",  argList);
+            case "System.MathF.Exp(float)":         return Method_Scalar(lanes, query, "MathUtils.ExpMathF",     argList);
+            case "System.MathF.Log(float)":         return Method_Scalar(lanes, query, "MathUtils.LogMathF",     argList);
+            case "System.MathF.Log10(float)":       return Method_Scalar(lanes, query, "MathUtils.Log10MathF",   argList);
+            case "System.MathF.Log2(float)":        return Method_Scalar(lanes, query, "MathUtils.Log2MathF",    argList);
+            case "System.MathF.Pow(float, float)":  return Method_Scalar(lanes, query, "MathUtils.PowMathF",     argList);
+            case "System.MathF.Round(float)":       return Method_Scalar(lanes, query, "MathUtils.RoundMathF",   argList);
+            case "System.MathF.Sqrt(float)":        return Method_Scalar(lanes, query, "MathUtils.SqrtMathF",    argList);
             
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
