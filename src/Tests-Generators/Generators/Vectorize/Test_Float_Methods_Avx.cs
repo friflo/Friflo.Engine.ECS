@@ -52,6 +52,7 @@ public static partial class Test_Float_Methods_Avx
     [Vectorize][Query]  [OmitHash]
     private static void Float_Trigonometry(ref Position1 position, in Velocity1 velocity, float value) {
         var fraction= velocity.value - MathF.Truncate(velocity.value);
+        var gtOne   = value + velocity.value;
         var sin     = MathF.Sin(velocity.value);
         var cos     = MathF.Cos(velocity.value);
         var tan     = MathF.Tan(velocity.value);
@@ -59,17 +60,56 @@ public static partial class Test_Float_Methods_Avx
         var acos    = MathF.Acos(fraction);
         var atan    = MathF.Atan(velocity.value);
         var atan2   = MathF.Atan2(velocity.value, value);
-        position.value += sin + cos + tan + asin + acos + atan + atan2;
+        var asinh   = MathF.Asinh(velocity.value);
+        var acosh   = MathF.Acosh(gtOne);
+        var atanh   = MathF.Atanh(fraction);
+        position.value += sin + cos + tan + asin + acos + atan + atan2 + asinh + acosh + atanh;
     } 
         
     [Test]
     public static void Test_Float_Trigonometry()
     {
         var store = CreateTestStore();
-        Float_TrigonometryQuery(store, 0.1f, false);
+        Float_TrigonometryQuery(store, 1.1f, false);
 
         var storeVectorized = CreateTestStore();
-        var query = Float_TrigonometryQuery(storeVectorized, 0.1f);
+        var query = Float_TrigonometryQuery(storeVectorized, 1.1f);
+        
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            var expect = entity.GetComponent<Position1>();
+            if (float.IsNaN(expect.value)) {
+                Assert.Fail("expected is NaN");
+            }
+            var value  = entityVectorized.GetComponent<Position1>();
+            Assert.That(value, Is.EqualTo(expect));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Float_Misc(ref Position1 position, in Velocity1 velocity, float value) {
+        var floor   = MathF.Floor(velocity.value);
+        var exp     = MathF.Exp(velocity.value);
+        var log     = MathF.Log(velocity.value);
+        var log10   = MathF.Log10(velocity.value);
+        var log2    = MathF.Log2(velocity.value);
+        var pow     = MathF.Pow(velocity.value, velocity.value);
+        var round   = MathF.Round(velocity.value);
+        var sqrt    = MathF.Sqrt(velocity.value);
+        position.value = floor + exp + log + log10 + log2 + pow + round + sqrt;
+    } 
+        
+    // [Test]
+    public static void Test_Float_Misc()
+    {
+        var store = CreateTestStore();
+        Float_MiscQuery(store, 1.1f, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Float_MiscQuery(storeVectorized, 1.1f);
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)

@@ -72,6 +72,11 @@ namespace Tests.Generators.Vectorize
             Vector256<float> fraction_2;
             Vector256<float> fraction_3;
 
+            Vector256<float> gtOne_0;
+            Vector256<float> gtOne_1;
+            Vector256<float> gtOne_2;
+            Vector256<float> gtOne_3;
+
             Vector256<float> sin_0;
             Vector256<float> sin_1;
             Vector256<float> sin_2;
@@ -107,6 +112,21 @@ namespace Tests.Generators.Vectorize
             Vector256<float> atan2_2;
             Vector256<float> atan2_3;
 
+            Vector256<float> asinh_0;
+            Vector256<float> asinh_1;
+            Vector256<float> asinh_2;
+            Vector256<float> asinh_3;
+
+            Vector256<float> acosh_0;
+            Vector256<float> acosh_1;
+            Vector256<float> acosh_2;
+            Vector256<float> acosh_3;
+
+            Vector256<float> atanh_0;
+            Vector256<float> atanh_1;
+            Vector256<float> atanh_2;
+            Vector256<float> atanh_3;
+
             fixed (global::Tests.ECS.Position1* position_first = position)
             fixed (global::Tests.ECS.Velocity1* velocity_first = velocity)
             {
@@ -131,6 +151,11 @@ namespace Tests.Generators.Vectorize
                     fraction_1 = Avx.Subtract(velocity_1, MathUtils.TruncateMathF(velocity_1));
                     fraction_2 = Avx.Subtract(velocity_2, MathUtils.TruncateMathF(velocity_2));
                     fraction_3 = Avx.Subtract(velocity_3, MathUtils.TruncateMathF(velocity_3));
+
+                    gtOne_0 = Avx.Add(value_scalar, velocity_0);
+                    gtOne_1 = Avx.Add(value_scalar, velocity_1);
+                    gtOne_2 = Avx.Add(value_scalar, velocity_2);
+                    gtOne_3 = Avx.Add(value_scalar, velocity_3);
 
                     sin_0 = MathUtils.SinMathF(velocity_0);
                     sin_1 = MathUtils.SinMathF(velocity_1);
@@ -167,10 +192,25 @@ namespace Tests.Generators.Vectorize
                     atan2_2 = MathUtils.Atan2MathF(velocity_2, value_scalar);
                     atan2_3 = MathUtils.Atan2MathF(velocity_3, value_scalar);
 
-                    position_0 = Avx.Add(position_0, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_0, cos_0), tan_0), asin_0), acos_0), atan_0), atan2_0));
-                    position_1 = Avx.Add(position_1, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_1, cos_1), tan_1), asin_1), acos_1), atan_1), atan2_1));
-                    position_2 = Avx.Add(position_2, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_2, cos_2), tan_2), asin_2), acos_2), atan_2), atan2_2));
-                    position_3 = Avx.Add(position_3, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_3, cos_3), tan_3), asin_3), acos_3), atan_3), atan2_3));
+                    asinh_0 = MathUtils.AsinhMathF(velocity_0);
+                    asinh_1 = MathUtils.AsinhMathF(velocity_1);
+                    asinh_2 = MathUtils.AsinhMathF(velocity_2);
+                    asinh_3 = MathUtils.AsinhMathF(velocity_3);
+
+                    acosh_0 = MathUtils.AcoshMathF(gtOne_0);
+                    acosh_1 = MathUtils.AcoshMathF(gtOne_1);
+                    acosh_2 = MathUtils.AcoshMathF(gtOne_2);
+                    acosh_3 = MathUtils.AcoshMathF(gtOne_3);
+
+                    atanh_0 = MathUtils.AtanhMathF(fraction_0);
+                    atanh_1 = MathUtils.AtanhMathF(fraction_1);
+                    atanh_2 = MathUtils.AtanhMathF(fraction_2);
+                    atanh_3 = MathUtils.AtanhMathF(fraction_3);
+
+                    position_0 = Avx.Add(position_0, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_0, cos_0), tan_0), asin_0), acos_0), atan_0), atan2_0), asinh_0), acosh_0), atanh_0));
+                    position_1 = Avx.Add(position_1, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_1, cos_1), tan_1), asin_1), acos_1), atan_1), atan2_1), asinh_1), acosh_1), atanh_1));
+                    position_2 = Avx.Add(position_2, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_2, cos_2), tan_2), asin_2), acos_2), atan_2), atan2_2), asinh_2), acosh_2), atanh_2));
+                    position_3 = Avx.Add(position_3, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_3, cos_3), tan_3), asin_3), acos_3), atan_3), atan2_3), asinh_3), acosh_3), atanh_3));
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
