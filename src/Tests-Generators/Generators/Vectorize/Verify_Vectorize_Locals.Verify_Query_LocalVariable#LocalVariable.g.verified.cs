@@ -94,12 +94,22 @@ namespace VerifyVectorize
                     localVar_2 = value_2;
                     localVar_3 = value_3;
 
+                    localVar_0 = value_0;
+                    localVar_1 = value_1;
+                    localVar_2 = value_2;
+                    localVar_3 = value_3;
+
                     position_0 = localVar_0;
                     position_1 = localVar_1;
                     position_2 = localVar_2;
                     position_3 = localVar_3;
 
                     // 3. Store
+                    Avx.Store(localVar_ptr + 0, localVar_0);
+                    Avx.Store(localVar_ptr + 8, localVar_1);
+                    Avx.Store(localVar_ptr + 16, localVar_2);
+                    Avx.Store(localVar_ptr + 24, localVar_3);
+
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

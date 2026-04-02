@@ -54,6 +54,9 @@ public static class Utils
         if (expressionSyntax is MemberAccessExpressionSyntax leftExpressionSyntax) {
             return leftExpressionSyntax.Expression as IdentifierNameSyntax;
         }
+        if (expressionSyntax is IdentifierNameSyntax identifierNameSyntax) {
+            return identifierNameSyntax;
+        }
         return null;
     }
     

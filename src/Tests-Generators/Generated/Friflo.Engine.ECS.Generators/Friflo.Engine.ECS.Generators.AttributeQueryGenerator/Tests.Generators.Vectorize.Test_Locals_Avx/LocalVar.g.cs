@@ -9,25 +9,26 @@ using Friflo.Engine.ECS;
 
 namespace Tests.Generators.Vectorize
 {
-    public partial class Test_Float_Avx
+    public partial class Test_Locals_Avx
     {
-        /// <summary>Query method generated for: <see cref="LocalVar2"/>.</summary>
+        /// <summary>Query method generated for: <see cref="LocalVar"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery LocalVar2Query(EntityStore _store, float factor, float offset, bool vectorized = true)
+        public static ArchetypeQuery LocalVarQuery(EntityStore _store, bool vectorized = true)
         {
-            var _query = _LocalVar2_GetQuery(_store);
+            var _query = _LocalVar_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
+                var velocitySpan = chunk.Chunk2.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _LocalVar2_Avx(positionSpan, factor, offset);
+                    n = _LocalVar_Avx(positionSpan, velocitySpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    LocalVar2(ref positionSpan[n], factor, offset);
+                    LocalVar(ref positionSpan[n], in velocitySpan[n]);
                 }
             }
             return _query;
@@ -35,50 +36,45 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _LocalVar2_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _LocalVar_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static ArchetypeQuery<global::Tests.ECS.Position1>
-            _LocalVar2_GetQuery(EntityStore _store)
+        private static ArchetypeQuery<global::Tests.ECS.Position1, global::Tests.ECS.Velocity1>
+            _LocalVar_GetQuery(EntityStore _store)
         {
-            var _query = (ArchetypeQuery<global::Tests.ECS.Position1>)
-                EntityStore.UserDataGet(_store, _LocalVar2_Slot);
+            var _query = (ArchetypeQuery<global::Tests.ECS.Position1, global::Tests.ECS.Velocity1>)
+                EntityStore.UserDataGet(_store, _LocalVar_Slot);
             if (_query != null) {
                 return _query;
             }
-            _query = _store.Query<global::Tests.ECS.Position1>();
+            _query = _store.Query<global::Tests.ECS.Position1, global::Tests.ECS.Velocity1>();
 
-            EntityStore.UserDataSet(_store, _LocalVar2_Slot, _query);
+            EntityStore.UserDataSet(_store, _LocalVar_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _LocalVar2_Avx(
+        private static unsafe int _LocalVar_Avx(
             Span<global::Tests.ECS.Position1> position,
-            float factor,
-            float offset)
+            Span<global::Tests.ECS.Velocity1> velocity)
         {
             int i = 0;
             var end = position.Length - 32;
             if (i > end) {
                 return 0;
             }
-            var factor_scalar = Vector256.Create(factor);
-            var offset_scalar = Vector256.Create(offset);
-            Vector256<float> vel1_0;
-            Vector256<float> vel1_1;
-            Vector256<float> vel1_2;
-            Vector256<float> vel1_3;
-            Vector256<float> vel2_0;
-            Vector256<float> vel2_1;
-            Vector256<float> vel2_2;
-            Vector256<float> vel2_3;
+            Vector256<float> vel_0;
+            Vector256<float> vel_1;
+            Vector256<float> vel_2;
+            Vector256<float> vel_3;
 
             fixed (global::Tests.ECS.Position1* position_first = position)
+            fixed (global::Tests.ECS.Velocity1* velocity_first = velocity)
             {
                 for (; i <= end; i += 32)
                 {
                     float* position_ptr = (float*)(position_first + i);
+                    float* velocity_ptr = (float*)(velocity_first + i);
 
                     // 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
@@ -86,21 +82,21 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
+                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
+
                     // 2. Compute
-                    vel1_0 = Avx.Multiply(position_0, factor_scalar);
-                    vel1_1 = Avx.Multiply(position_1, factor_scalar);
-                    vel1_2 = Avx.Multiply(position_2, factor_scalar);
-                    vel1_3 = Avx.Multiply(position_3, factor_scalar);
+                    vel_0 = Avx.Add(position_0, velocity_0);
+                    vel_1 = Avx.Add(position_1, velocity_1);
+                    vel_2 = Avx.Add(position_2, velocity_2);
+                    vel_3 = Avx.Add(position_3, velocity_3);
 
-                    vel2_0 = Avx.Multiply(offset_scalar, factor_scalar);
-                    vel2_1 = Avx.Multiply(offset_scalar, factor_scalar);
-                    vel2_2 = Avx.Multiply(offset_scalar, factor_scalar);
-                    vel2_3 = Avx.Multiply(offset_scalar, factor_scalar);
-
-                    position_0 = Avx.Multiply(vel1_0, vel2_0);
-                    position_1 = Avx.Multiply(vel1_1, vel2_1);
-                    position_2 = Avx.Multiply(vel1_2, vel2_2);
-                    position_3 = Avx.Multiply(vel1_3, vel2_3);
+                    position_0 = vel_0;
+                    position_1 = vel_1;
+                    position_2 = vel_2;
+                    position_3 = vel_3;
 
                     // 3. Store
                     Avx.Store(position_ptr + 0, position_0);

@@ -28,52 +28,6 @@ public static class Verify_Vectorize_Float
     }
     
     [Test]
-    public static async Task  Verify_Query_EmptyBody()
-    {
-        var code =
-            """
-            using System.Numerics;
-            using Friflo.Engine.ECS;
-
-            namespace VerifyVectorize;
-
-            public struct Position1 : IComponent { public float value; }
-
-            public partial class MyExample
-            {
-                [Vectorize][Query][OmitHash]
-                void EmptyBody(ref Position1 position) { }
-            }
-            """;
-        await Verify(code);
-    }
-    
-    [Test]
-    public static async Task  Verify_Query_LocalVariable()
-    {
-        var code =
-            """
-            using System.Numerics;
-            using Friflo.Engine.ECS;
-
-            namespace VerifyVectorize;
-
-            public struct Position1 : IComponent { public float value; }
-            public struct Velocity1 : IComponent { public float value; }
-
-            public partial class MyExample
-            {
-                [Vectorize][Query][OmitHash]
-                void LocalVariable(ref Position1 position, Velocity1 value) {
-                    var localVar = value;
-                    position.value = localVar;
-                }
-            }
-            """;
-        await Verify(code);
-    }
-    
-    [Test]
     public static async Task  Verify_Query_MovePosition()
     {
         var code =
