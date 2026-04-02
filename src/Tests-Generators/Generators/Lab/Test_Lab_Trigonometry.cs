@@ -19,7 +19,7 @@ public static class Test_Lab_Trigonometry
     public static void Test_Lab_Trigonometry_Sin()
     {
         var input = Vector256.Create(0, 0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f);
-        var result_sin = Sin(input);
+        var result_sin = SinMathF(input);
         var result_minimax = Sin11(input);
 
         for (int n = 0; n < 8; n++) {
@@ -34,7 +34,7 @@ public static class Test_Lab_Trigonometry
     {
         var input = Vector256.Create(0, 0.5f, 1, 1.5f, 2, 2.5f, 3, 3.5f);
         for (long n = 0; n < 10_000_000_000; n++) {
-            Sin(input);
+            SinMathF(input);
         }
     }
 
@@ -43,7 +43,8 @@ public static class Test_Lab_Trigonometry
         return Math.Abs(a - b) < epsilon;
     }
 
-    internal static Vector256<float> Sin(Vector256<float> x)
+    [SkipLocalsInit]
+    internal static Vector256<float> SinMathF(Vector256<float> x)
     {
         return Vector256.Create(
             MathF.Sin(x[0]),

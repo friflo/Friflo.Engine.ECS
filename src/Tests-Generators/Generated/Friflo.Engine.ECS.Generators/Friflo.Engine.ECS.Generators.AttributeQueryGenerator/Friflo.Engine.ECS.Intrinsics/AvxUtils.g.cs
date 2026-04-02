@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -19,6 +20,20 @@ namespace Friflo.Engine.ECS.Intrinsics
             Vector256<float> zzzz = Avx.Shuffle(v, v, 0b10_10_10_10);
             Vector256<float> wwww = Avx.Shuffle(v, v, 0b11_11_11_11);
             return Fma.MultiplyAdd(wwww, c3, Fma.MultiplyAdd(zzzz, c2, Fma.MultiplyAdd(yyyy, c1, Avx.Multiply(xxxx, c0))));
+        }
+
+        [SkipLocalsInit]
+        internal static Vector256<float> SinMathF(Vector256<float> x)
+        {
+            return Vector256.Create(
+                MathF.Sin(x[0]),
+                MathF.Sin(x[1]),
+                MathF.Sin(x[2]),
+                MathF.Sin(x[3]),
+                MathF.Sin(x[4]),
+                MathF.Sin(x[5]),
+                MathF.Sin(x[6]),
+                MathF.Sin(x[7]));
         }
     }
 }

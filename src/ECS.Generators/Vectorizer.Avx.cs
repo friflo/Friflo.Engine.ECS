@@ -171,6 +171,9 @@ public static partial class Vectorizer
         var methodName = GetMethodName(query, invocation);
         switch (methodName)
         {
+            case "System.MathF.Sin(float)":
+                return Method_Scalar(lanes, query, "AvxUtils.SinMathF", invocation.ArgumentList);
+            
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
             case "System.Numerics.Vector3.Min(System.Numerics.Vector3, System.Numerics.Vector3)":
@@ -301,6 +304,21 @@ public static partial class Vectorizer
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append("), ");
         }
+        if (!Compute(lanes, query, args[0].Expression)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append(")");
+        }
+        return true;
+    }
+    
+    private static bool Method_Scalar(StringBuilder[] lanes, Query query, string method, ArgumentListSyntax argumentSyntax)
+    {
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append($"{method}(");
+        }
+        var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
