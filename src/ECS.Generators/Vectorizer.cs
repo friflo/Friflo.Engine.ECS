@@ -209,9 +209,7 @@ public static partial class Vectorizer
                     if (!Compute(lanes, query, initializerExpression)) {
                         return false;
                     }
-                    for (int n = 0; n < lanes.Length; n++) {
-                        lanes[n].Append(";");
-                    }
+                    lanes.Append(";");
                 }
             }
         }

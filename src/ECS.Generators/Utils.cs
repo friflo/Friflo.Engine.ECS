@@ -140,4 +140,11 @@ public static class Utils
             stringBuilder.Length = len--;
         }
     }
+    
+    public  static void Append(this StringBuilder[] sb, string text)
+    {
+        for (int n = 0; n < sb.Length; n++) {
+            sb[n].Append(text);
+        }
+    }
 }

@@ -105,9 +105,7 @@ public static partial class Vectorizer
         if (!Compute(lanes, query, assignment.Right)) {
             return false;
         }
-        for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append(kind == SyntaxKind.SimpleAssignmentExpression ? ";" : ");");
-        }
+        lanes.Append(kind == SyntaxKind.SimpleAssignmentExpression ? ";" : ");");
         return true;
     }
 
@@ -130,21 +128,15 @@ public static partial class Vectorizer
         if (kind == SyntaxKind.AddExpression && 
             binary.Left is BinaryExpressionSyntax multiplyBinary && multiplyBinary.Kind() is SyntaxKind.MultiplyExpression)
         {
-            for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append("Fma.MultiplyAdd(");
-            }
+            lanes.Append("Fma.MultiplyAdd(");
             if (!Compute(lanes, query, multiplyBinary.Left)) {
                 return false;
             }
-            for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append($", ");
-            }
+            lanes.Append(", ");
             if (!Compute(lanes, query, multiplyBinary.Right)) {
                 return false;
             }
-            for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append($", ");
-            }
+            lanes.Append(", ");
             if (!Compute(lanes, query, binary.Right)) {
                 return false;
             }
@@ -159,15 +151,11 @@ public static partial class Vectorizer
         if (!Compute(lanes, query, binary.Left)) {
             return false;
         }
-        for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append(", ");
-        }
+        lanes.Append(", ");
         if (!Compute(lanes, query, binary.Right)) {
             return false;
         }
-        for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
 
@@ -267,9 +255,7 @@ public static partial class Vectorizer
         }
         return true; */
         var args = argumentSyntax.Arguments;
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("AvxUtils.TransformVector4PairAVX(");
-        }
+        lanes.Append("AvxUtils.TransformVector4PairAVX(");
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
@@ -291,75 +277,53 @@ public static partial class Vectorizer
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(", ");
-        }
+        lanes.Append(", ");
         if (!Compute(lanes, query, args[1].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
     
     private static bool Method_Clamp(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
         var args = argumentSyntax.Arguments;
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append($"Avx.Min(");
-        }
+        lanes.Append("Avx.Min(");
         if (!Compute(lanes, query, args[2].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(", Avx.Max(");
-        }
+        lanes.Append(", Avx.Max(");
         if (!Compute(lanes, query, args[1].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(", ");
-        }
+        lanes.Append(", ");
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("))");
-        }
+        lanes.Append("))");
         return true;
     }
     
     private static bool Method_Lerp(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
         var args = argumentSyntax.Arguments;
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append($"Fma.MultiplyAdd(");
-        }
+        lanes.Append("Fma.MultiplyAdd(");
         if (!Compute(lanes, query, args[2].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(", Avx.Subtract(");
-        }
+        lanes.Append(", Avx.Subtract(");
         if (!Compute(lanes, query, args[1].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(", ");
-        }
+        lanes.Append(", ");
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("), ");
-        }
+        lanes.Append("), ");
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
 
@@ -383,65 +347,45 @@ public static partial class Vectorizer
     
     private static bool Method_Truncate(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("Vector256.Truncate(");
-            // alternative: Avx.RoundToNearestInteger(v, 0x03 | 0x08);
-        }
+        lanes.Append("Vector256.Truncate(");    // alternative: Avx.RoundToNearestInteger(v, 0x03 | 0x08);
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
     
     private static bool Method_Floor(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("Vector256.Floor(");
-            // alternative: Avx.RoundToNearestInteger(value, 0x01 | 0x08);
-        }
+        lanes.Append("Vector256.Floor(");       // alternative: Avx.RoundToNearestInteger(value, 0x01 | 0x08);
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
     
     private static bool Method_Ceiling(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("Vector256.Ceiling(");
-            // alternative:  Avx.RoundToNearestInteger(value, 0x02 | 0x08);
-        }
+        lanes.Append("Vector256.Ceiling(");     // alternative:  Avx.RoundToNearestInteger(value, 0x02 | 0x08);
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
     
     private static bool Method_Round(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("Vector256.Round(");
-            // alternative:  Avx.RoundToNearestInteger(value, 0x00 | 0x08);
-        }
+        lanes.Append("Vector256.Round(");       // alternative:  Avx.RoundToNearestInteger(value, 0x00 | 0x08);
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
 
@@ -454,17 +398,13 @@ public static partial class Vectorizer
         for (int i = 0; i < args.Count; i++)
         {
             if (i > 0) {
-                for (int n = 0; n < lanes.Length; n++) {
-                    lanes[n].Append(", ");
-                }
+                lanes.Append(", ");
             }
             if (!Compute(lanes, query, args[i].Expression)) {
                 return false;
             }
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append(")");
-        }
+        lanes.Append(")");
         return true;
     }
 
