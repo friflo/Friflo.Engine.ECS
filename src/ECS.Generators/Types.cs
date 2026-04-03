@@ -44,6 +44,13 @@ public class Query
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
     public readonly List<ConstValue>                constLocals = new ();
 
+    public string AddConst(string value, ParamType paramType)
+    {
+        var name = $"const{constLocals.Count}";
+        constLocals.Add(new ConstValue { name = name, value = value, paramType = paramType });
+        return name;
+    }
+
     public void ReportDiagnosticSymbol(DiagnosticDescriptor descriptor, ISymbol? locationSymbol, params object?[]? messageArgs)
     {
         var location = locationSymbol?.Locations.FirstOrDefault();

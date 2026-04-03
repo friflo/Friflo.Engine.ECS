@@ -21,10 +21,9 @@ public static partial class Vectorizer
         var isStatic = symbol != null && symbol.IsStatic;
         if (isStatic)
         {
-            var name = $"const{query.constLocals.Count}";
             // var value = symbol!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             var value = $"{symbol.ContainingType.ToDisplayString()}.{symbol.Name}"; 
-            query.constLocals.Add(new ConstValue { name = name, value = value, paramType = ParamType.Vector });
+            var name = query.AddConst(value, ParamType.Vector);
             for (int n = 0; n < lanes.Length; n++) {
                 lanes[n].Append($"{name}_{n}");
             }
@@ -182,9 +181,7 @@ public static partial class Vectorizer
 
     private static bool Compute_Literal(StringBuilder[] lanes, Query query, LiteralExpressionSyntax literal)
     {
-        var name = $"const{query.constLocals.Count}";
-        query.constLocals.Add(new ConstValue { name = name, value = literal.Token.Text, paramType = ParamType.Scalar });
-        
+        var name = query.AddConst(literal.Token.Text, ParamType.Scalar);
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append($"{name}_scalar");
         }
@@ -358,7 +355,12 @@ public static partial class Vectorizer
         }
         return true;
     }
-    
+
+    private static bool Method_Abs(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        return false;
+    }
+
     private static bool Method_Scalar(StringBuilder[] lanes, Query query, string method, ArgumentListSyntax argumentSyntax)
     {
         for (int n = 0; n < lanes.Length; n++) {
