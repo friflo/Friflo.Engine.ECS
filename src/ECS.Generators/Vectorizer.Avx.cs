@@ -211,7 +211,7 @@ public static partial class Vectorizer
             case "System.MathF.Acosh(float)":       return Method_Scalar(lanes, query, "MathUtils.AcoshMathF",   argList);
             case "System.MathF.Atanh(float)":       return Method_Scalar(lanes, query, "MathUtils.AtanhMathF",   argList);
             
-            case "System.MathF.Abs(float)":         return Method_Scalar(lanes, query, "MathUtils.AbsMathF",     argList);
+            case "System.MathF.Abs(float)":         return Method_Abs   (lanes, query,                           argList);
             case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "MathUtils.TruncateMathF",argList);
             case "System.MathF.Floor(float)":       return Method_Scalar(lanes, query, "MathUtils.FloorMathF",   argList);
             case "System.MathF.Ceiling(float)":     return Method_Scalar(lanes, query, "MathUtils.CeilingMathF", argList);
@@ -364,13 +364,13 @@ public static partial class Vectorizer
 
     private static bool Method_Abs(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        var args = argumentSyntax.Arguments;
         var name = query.AddConst();
         query.locals.AppendLine($"            var {name} = Vector256.Create(0x7FFFFFFF).AsSingle();");
         query.locals.AppendLine();
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append($"Avx.And(");
         }
+        var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
         }

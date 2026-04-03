@@ -43,7 +43,7 @@ public static partial class Test_Float_Methods_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position1 { value = n }, new Velocity1 { value = n * 0.1f }, new FloatComponent { value = n });
+            store.CreateEntity(new Position1 { value = 50 - n * 0.1f }, new Velocity1 { value = -50 + n * 0.1f }, new FloatComponent { value = -50 + n * 0.1f });
         }
         return store;
     }
@@ -51,9 +51,8 @@ public static partial class Test_Float_Methods_Avx
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Float_Trigonometry(ref Position1 position, in Velocity1 velocity, float value) {
-        var abs     = MathF.Abs(velocity.value);
         var fraction= velocity.value - MathF.Truncate(velocity.value);
-        var gtOne   = value + velocity.value;
+        var gtOne   = value + MathF.Abs(velocity.value);
         var sin     = MathF.Sin(velocity.value);
         var cos     = MathF.Cos(velocity.value);
         var tan     = MathF.Tan(velocity.value);
@@ -64,7 +63,7 @@ public static partial class Test_Float_Methods_Avx
         var asinh   = MathF.Asinh(velocity.value);
         var acosh   = MathF.Acosh(gtOne);
         var atanh   = MathF.Atanh(fraction);
-        position.value += abs + sin + cos + tan + asin + acos + atan + atan2 + asinh + acosh + atanh;
+        position.value += sin + cos + tan + asin + acos + atan + atan2 + asinh + acosh + atanh;
     } 
         
     [Test]
@@ -92,16 +91,17 @@ public static partial class Test_Float_Methods_Avx
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Float_Misc(ref Position1 position, in Velocity1 velocity, float value) {
+        var abs     = MathF.Abs(velocity.value);
         var floor   = MathF.Floor(velocity.value);
         var ceiling = MathF.Ceiling(velocity.value);
         var exp     = MathF.Exp(velocity.value);
-        var log     = MathF.Log(velocity.value);
-        var log10   = MathF.Log10(velocity.value);
-        var log2    = MathF.Log2(velocity.value);
-        var pow     = MathF.Pow(velocity.value, velocity.value);
+        var log     = MathF.Log(abs);
+        var log10   = MathF.Log10(abs);
+        var log2    = MathF.Log2(abs);
+        var pow     = MathF.Pow(abs, velocity.value);
         var round   = MathF.Round(velocity.value);
-        var sqrt    = MathF.Sqrt(velocity.value);
-        position.value = floor + ceiling + exp + log + log10 + log2 + pow + round + sqrt;
+        var sqrt    = MathF.Sqrt(abs);
+        position.value = abs + floor + ceiling + exp + log + log10 + log2 + pow + round + sqrt;
     } 
         
     [Test]
