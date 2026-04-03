@@ -51,6 +51,7 @@ public static partial class Test_Float_Methods_Avx
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Float_Trigonometry(ref Position1 position, in Velocity1 velocity, float value) {
+        var abs     = MathF.Abs(velocity.value);
         var fraction= velocity.value - MathF.Truncate(velocity.value);
         var gtOne   = value + velocity.value;
         var sin     = MathF.Sin(velocity.value);
@@ -63,7 +64,7 @@ public static partial class Test_Float_Methods_Avx
         var asinh   = MathF.Asinh(velocity.value);
         var acosh   = MathF.Acosh(gtOne);
         var atanh   = MathF.Atanh(fraction);
-        position.value += sin + cos + tan + asin + acos + atan + atan2 + asinh + acosh + atanh;
+        position.value += abs + sin + cos + tan + asin + acos + atan + atan2 + asinh + acosh + atanh;
     } 
         
     [Test]

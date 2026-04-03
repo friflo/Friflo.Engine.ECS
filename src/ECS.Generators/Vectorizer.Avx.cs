@@ -208,6 +208,7 @@ public static partial class Vectorizer
             case "System.MathF.Acosh(float)":       return Method_Scalar(lanes, query, "MathUtils.AcoshMathF",   argList);
             case "System.MathF.Atanh(float)":       return Method_Scalar(lanes, query, "MathUtils.AtanhMathF",   argList);
             
+            case "System.MathF.Abs(float)":         return Method_Scalar(lanes, query, "MathUtils.AbsMathF",     argList);
             case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "MathUtils.TruncateMathF",argList);
             case "System.MathF.Floor(float)":       return Method_Scalar(lanes, query, "MathUtils.FloorMathF",   argList);
             case "System.MathF.Ceiling(float)":     return Method_Scalar(lanes, query, "MathUtils.CeilingMathF", argList);
