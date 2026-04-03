@@ -5,14 +5,10 @@ using NUnit.Framework;
 
 namespace Tests.Generators.Lab;
 
-
-[AttributeUsage(AttributeTargets.Method)]
-public sealed class TensorizeAttribute : Attribute { }
-
 [AttributeUsage(AttributeTargets.Parameter)]
 public sealed class SpanAttribute : Attribute { }
 
-public static class Test_Lab_Tensorize
+public static class Test_Lab_Tensor
 {
     // Friflo.Vectorize.Generators
     [Vectorize]
