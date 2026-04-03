@@ -99,7 +99,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\Generators\Friflo.Vectorize.Generators.csproj" OutputItemType="Analyzer" />
+        <ProjectReference Include="..\Vectorize.Generators\Friflo.Vectorize.Generators.csproj" OutputItemType="Analyzer" />
     </ItemGroup>
     
     <PropertyGroup>

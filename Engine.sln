@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen", "src\CodeGen\Code
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-Generators", "src\Tests-Generators\Tests-Generators.csproj", "{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Vectorize.Generators", "src\Generators\Friflo.Vectorize.Generators.csproj", "{B7B1DBD6-EBB8-4625-8037-C818C186B7F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Vectorize.Generators", "src\Vectorize.Generators\Friflo.Vectorize.Generators.csproj", "{ED9FF7D6-17E8-40EA-AAC7-4ED2C65B999A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,9 +86,9 @@ Global
 		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7B1DBD6-EBB8-4625-8037-C818C186B7F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7B1DBD6-EBB8-4625-8037-C818C186B7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7B1DBD6-EBB8-4625-8037-C818C186B7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7B1DBD6-EBB8-4625-8037-C818C186B7F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED9FF7D6-17E8-40EA-AAC7-4ED2C65B999A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED9FF7D6-17E8-40EA-AAC7-4ED2C65B999A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED9FF7D6-17E8-40EA-AAC7-4ED2C65B999A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED9FF7D6-17E8-40EA-AAC7-4ED2C65B999A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
