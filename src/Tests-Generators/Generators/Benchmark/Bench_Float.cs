@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
@@ -41,26 +42,40 @@ public partial class Bench_Float
     }
 
     [Benchmark]
-    [Comment("pos.value = vel.value * dt + pos.value;")]
     public void Float_MultiplyAdd_Query()
     {
         MultiplyAddQuery(store, 0.1f, false);
     }
 
     [Benchmark]
-    [Comment("pos.value = vel.value * dt + pos.value;")]
     public void Float_MultiplyAdd_Vectorize()
     {
         MultiplyAddQuery(store, 0.1f);
     }
     
     [Benchmark]
-    [Comment("pos.value = vel.value * dt + pos.value;")]
     public void Float_MultiplyAdd_ForEachEntity()
     {
         var deltaTime = 0.1f;
         query.ForEachEntity((ref Position1 position, ref Velocity1 velocity, Entity entity) => {
             position.value = velocity.value * deltaTime + position.value;
         });
+    }
+    
+    [Vectorize][Query]  [OmitHash]
+    private static void ReciprocalSquareRoot(ref Position1 position, ref Velocity1 velocity, float factor) {
+        position.value = factor / MathF.Sqrt(velocity.value);
+    }
+    
+    [Benchmark]
+    public void Float_ReciprocalSquareRoot_Vectorize()
+    {
+        ReciprocalSquareRootQuery(store, 0.1f);
+    }
+    
+    [Benchmark]
+    public void Float_ReciprocalSquareRoot_Query()
+    {
+        ReciprocalSquareRootQuery(store, 0.1f, false);
     }
 }
