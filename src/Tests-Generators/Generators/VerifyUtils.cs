@@ -33,7 +33,7 @@ public static class VerifyUtils
             new[] { CSharpSyntaxTree.ParseText(source) },
             new[] {
                 MetadataReference.CreateFromFile(typeof(VectorizeAttribute).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(QueryAttribute).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(IComponent).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(System.Numerics.Vector3).Assembly.Location)
             },
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
