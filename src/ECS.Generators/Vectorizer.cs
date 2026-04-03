@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Friflo.Engine.ECS.Generators;
+namespace Friflo.Vectorize.Generators;
 
 public static partial class Vectorizer
 {

@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 // ReSharper disable ForCanBeConvertedToForeach
-namespace Friflo.Engine.ECS.Generators;
+namespace Friflo.Vectorize.Generators;
 
 public static partial class Vectorizer
 {

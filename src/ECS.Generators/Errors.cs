@@ -3,7 +3,7 @@
 
 using Microsoft.CodeAnalysis;
 
-namespace Friflo.Engine.ECS.Generators;
+namespace Friflo.Vectorize.Generators;
 
 public static class Errors
 {

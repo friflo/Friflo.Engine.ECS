@@ -7,7 +7,7 @@ Instead using:
 using System.Text;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
-using Friflo.Engine.ECS.Generators;
+using Friflo.Vectorize.Generators;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;

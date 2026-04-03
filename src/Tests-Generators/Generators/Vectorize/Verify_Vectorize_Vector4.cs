@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Threading.Tasks;
-using Friflo.Engine.ECS.Generators;
+using Friflo.Vectorize.Generators;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using VerifyNUnit;

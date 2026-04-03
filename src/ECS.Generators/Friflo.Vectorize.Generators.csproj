@@ -10,8 +10,8 @@
       
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Friflo.Engine.ECS.Generators</RootNamespace>
-    <AssemblyName>Friflo.Engine.ECS.Generators</AssemblyName>
+    <RootNamespace>Friflo.Vectorize.Generators</RootNamespace>
+	<AssemblyName>Friflo.Vectorize.Generators</AssemblyName>
     <LangVersion>12.0</LangVersion>
       
     <!-- packaging -->
@@ -35,6 +35,7 @@
     <!-- <IncludeSymbols>true</IncludeSymbols> -->
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedAllSources>true</EmbedAllSources>
+    <PackageId>Friflo.Vectorize.Generators</PackageId>
     <!-- packaging: end -->
   </PropertyGroup>
 
