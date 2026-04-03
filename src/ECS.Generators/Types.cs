@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -42,13 +43,11 @@ public class Query
     public          bool                            vectorize;
     public          string                          avxMethod = "";
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
-    public readonly List<ConstValue>                constLocals = new ();
+    public readonly StringBuilder                   locals = new ();
+    public          int                             constLocalsCount;
 
-    public string AddConst(string value, ParamType paramType)
-    {
-        var name = $"const{constLocals.Count}";
-        constLocals.Add(new ConstValue { name = name, value = value, paramType = paramType });
-        return name;
+    public string AddConst() {
+        return $"const{constLocalsCount++}";
     }
 
     public void ReportDiagnosticSymbol(DiagnosticDescriptor descriptor, ISymbol? locationSymbol, params object?[]? messageArgs)
