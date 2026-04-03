@@ -200,28 +200,28 @@ public static partial class Vectorizer
         var argList = invocation.ArgumentList;
         switch (methodName)
         {
-            case "System.MathF.Sin(float)":         return Method_Scalar(lanes, query, "MathUtils.SinMathF",     argList);
-            case "System.MathF.Cos(float)":         return Method_Scalar(lanes, query, "MathUtils.CosMathF",     argList);
-            case "System.MathF.Tan(float)":         return Method_Scalar(lanes, query, "MathUtils.TanMathF",     argList);
-            case "System.MathF.Asin(float)":        return Method_Scalar(lanes, query, "MathUtils.AsinMathF",    argList);
-            case "System.MathF.Acos(float)":        return Method_Scalar(lanes, query, "MathUtils.AcosMathF",    argList);
-            case "System.MathF.Atan(float)":        return Method_Scalar(lanes, query, "MathUtils.AtanMathF",    argList);
-            case "System.MathF.Atan2(float, float)":return Method_Scalar(lanes, query, "MathUtils.Atan2MathF",   argList);
-            case "System.MathF.Asinh(float)":       return Method_Scalar(lanes, query, "MathUtils.AsinhMathF",   argList);
-            case "System.MathF.Acosh(float)":       return Method_Scalar(lanes, query, "MathUtils.AcoshMathF",   argList);
-            case "System.MathF.Atanh(float)":       return Method_Scalar(lanes, query, "MathUtils.AtanhMathF",   argList);
+            case "System.MathF.Sin(float)":         return Method_Scalar    (lanes, query, "MathUtils.SinMathF",     argList);
+            case "System.MathF.Cos(float)":         return Method_Scalar    (lanes, query, "MathUtils.CosMathF",     argList);
+            case "System.MathF.Tan(float)":         return Method_Scalar    (lanes, query, "MathUtils.TanMathF",     argList);
+            case "System.MathF.Asin(float)":        return Method_Scalar    (lanes, query, "MathUtils.AsinMathF",    argList);
+            case "System.MathF.Acos(float)":        return Method_Scalar    (lanes, query, "MathUtils.AcosMathF",    argList);
+            case "System.MathF.Atan(float)":        return Method_Scalar    (lanes, query, "MathUtils.AtanMathF",    argList);
+            case "System.MathF.Atan2(float, float)":return Method_Scalar    (lanes, query, "MathUtils.Atan2MathF",   argList);
+            case "System.MathF.Asinh(float)":       return Method_Scalar    (lanes, query, "MathUtils.AsinhMathF",   argList);
+            case "System.MathF.Acosh(float)":       return Method_Scalar    (lanes, query, "MathUtils.AcoshMathF",   argList);
+            case "System.MathF.Atanh(float)":       return Method_Scalar    (lanes, query, "MathUtils.AtanhMathF",   argList);
             
-            case "System.MathF.Abs(float)":         return Method_Abs   (lanes, query,                           argList);
-            case "System.MathF.Truncate(float)":    return Method_Scalar(lanes, query, "MathUtils.TruncateMathF",argList);
-            case "System.MathF.Floor(float)":       return Method_Scalar(lanes, query, "MathUtils.FloorMathF",   argList);
-            case "System.MathF.Ceiling(float)":     return Method_Scalar(lanes, query, "MathUtils.CeilingMathF", argList);
-            case "System.MathF.Exp(float)":         return Method_Scalar(lanes, query, "MathUtils.ExpMathF",     argList);
-            case "System.MathF.Log(float)":         return Method_Scalar(lanes, query, "MathUtils.LogMathF",     argList);
-            case "System.MathF.Log10(float)":       return Method_Scalar(lanes, query, "MathUtils.Log10MathF",   argList);
-            case "System.MathF.Log2(float)":        return Method_Scalar(lanes, query, "MathUtils.Log2MathF",    argList);
-            case "System.MathF.Pow(float, float)":  return Method_Scalar(lanes, query, "MathUtils.PowMathF",     argList);
-            case "System.MathF.Round(float)":       return Method_Scalar(lanes, query, "MathUtils.RoundMathF",   argList);
-            case "System.MathF.Sqrt(float)":        return Method_Scalar(lanes, query, "MathUtils.SqrtMathF",    argList);
+            case "System.MathF.Abs(float)":         return Method_Abs       (lanes, query,                           argList);
+            case "System.MathF.Truncate(float)":    return Method_Truncate  (lanes, query,                           argList);
+            case "System.MathF.Floor(float)":       return Method_Scalar    (lanes, query, "MathUtils.FloorMathF",   argList);
+            case "System.MathF.Ceiling(float)":     return Method_Scalar    (lanes, query, "MathUtils.CeilingMathF", argList);
+            case "System.MathF.Exp(float)":         return Method_Scalar    (lanes, query, "MathUtils.ExpMathF",     argList);
+            case "System.MathF.Log(float)":         return Method_Scalar    (lanes, query, "MathUtils.LogMathF",     argList);
+            case "System.MathF.Log10(float)":       return Method_Scalar    (lanes, query, "MathUtils.Log10MathF",   argList);
+            case "System.MathF.Log2(float)":        return Method_Scalar    (lanes, query, "MathUtils.Log2MathF",    argList);
+            case "System.MathF.Pow(float, float)":  return Method_Scalar    (lanes, query, "MathUtils.PowMathF",     argList);
+            case "System.MathF.Round(float)":       return Method_Scalar    (lanes, query, "MathUtils.RoundMathF",   argList);
+            case "System.MathF.Sqrt(float)":        return Method_Scalar    (lanes, query, "MathUtils.SqrtMathF",    argList);
             
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
@@ -368,7 +368,7 @@ public static partial class Vectorizer
         query.locals.AppendLine($"            var {name} = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()");
         query.locals.AppendLine();
         for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append($"Avx.And(");
+            lanes[n].Append("Avx.And(");
         }
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
@@ -376,6 +376,22 @@ public static partial class Vectorizer
         }
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append($", {name})");
+        }
+        return true;
+    }
+    
+    private static bool Method_Truncate(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append("Vector256.Truncate(");
+            // alternative: Avx.RoundToNearestInteger(v, 0x03 | 0x08);
+        }
+        var args = argumentSyntax.Arguments;
+        if (!Compute(lanes, query, args[0].Expression)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append(")");
         }
         return true;
     }

@@ -149,10 +149,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // --- 2. Compute
-                    fraction_0 = Avx.Subtract(velocity_0, MathUtils.TruncateMathF(velocity_0));
-                    fraction_1 = Avx.Subtract(velocity_1, MathUtils.TruncateMathF(velocity_1));
-                    fraction_2 = Avx.Subtract(velocity_2, MathUtils.TruncateMathF(velocity_2));
-                    fraction_3 = Avx.Subtract(velocity_3, MathUtils.TruncateMathF(velocity_3));
+                    fraction_0 = Avx.Subtract(velocity_0, Vector256.Truncate(velocity_0));
+                    fraction_1 = Avx.Subtract(velocity_1, Vector256.Truncate(velocity_1));
+                    fraction_2 = Avx.Subtract(velocity_2, Vector256.Truncate(velocity_2));
+                    fraction_3 = Avx.Subtract(velocity_3, Vector256.Truncate(velocity_3));
 
                     gtOne_0 = Avx.Add(value_scalar, Avx.And(velocity_0, const0));
                     gtOne_1 = Avx.Add(value_scalar, Avx.And(velocity_1, const0));
