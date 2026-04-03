@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Intrinsics.X86;
 using NUnit.Framework;
 
 namespace Tests.Generators.Lab;
@@ -17,9 +18,18 @@ public static class Test_Lab_Tensorize
         a = (a * b) + c;
     }
     
-    public static void MultiplyAddVector(Span<float> a, ReadOnlySpan<float> b, float c)
+    public static void MultiplyAddVector(Span<float> a, ReadOnlySpan<float> b, float c, bool vectorized = true)
     {
-        
+        int n = 0;
+        if (vectorized) {
+            if (Avx.IsSupported) {
+                // n = MultiplyAddVector_Avx(a, b, c);
+            }
+        }
+        int len = a.Length;
+        for (int i = 0; i < len; i++) {
+            MultiplyAdd(ref a[i], b[i], c);      
+        }
     }
     
     [Test]
@@ -27,6 +37,10 @@ public static class Test_Lab_Tensorize
     {
         var a = new float[1000];
         var b = new float[1000];
+        for (int n = 0; n < 1000; n++) {
+            a[n] = n;
+            b[n] = 2 * n;
+        }
         MultiplyAddVector(a, b, 5);
     }
     
