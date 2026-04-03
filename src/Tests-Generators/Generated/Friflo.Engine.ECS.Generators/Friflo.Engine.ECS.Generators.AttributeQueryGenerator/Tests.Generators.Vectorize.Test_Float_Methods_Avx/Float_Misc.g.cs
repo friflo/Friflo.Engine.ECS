@@ -154,10 +154,10 @@ namespace Tests.Generators.Vectorize
                     round_2 = Vector256.Round(velocity_2);
                     round_3 = Vector256.Round(velocity_3);
 
-                    sqrt_0 = MathUtils.SqrtMathF(abs_0);
-                    sqrt_1 = MathUtils.SqrtMathF(abs_1);
-                    sqrt_2 = MathUtils.SqrtMathF(abs_2);
-                    sqrt_3 = MathUtils.SqrtMathF(abs_3);
+                    sqrt_0 = Avx.Sqrt(abs_0);
+                    sqrt_1 = Avx.Sqrt(abs_1);
+                    sqrt_2 = Avx.Sqrt(abs_2);
+                    sqrt_3 = Avx.Sqrt(abs_3);
 
                     position_0 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_0, floor_0), ceiling_0), log10_0), pow_0), round_0), sqrt_0);
                     position_1 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_1, floor_1), ceiling_1), log10_1), pow_1), round_1), sqrt_1);

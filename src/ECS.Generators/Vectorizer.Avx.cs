@@ -206,7 +206,7 @@ public static partial class Vectorizer
             case "System.MathF.Log10(float)":       return Method_Scalar    (lanes, query, "MathUtils.Log10MathF",  argList);
             case "System.MathF.Log2(float)":        return Method_Scalar    (lanes, query, "Vector256.Log2",        argList);
             case "System.MathF.Pow(float, float)":  return Method_Scalar    (lanes, query, "MathUtils.PowMathF",    argList);
-            case "System.MathF.Sqrt(float)":        return Method_Scalar    (lanes, query, "MathUtils.SqrtMathF",   argList);
+            case "System.MathF.Sqrt(float)":        return Method_Scalar    (lanes, query, "Avx.Sqrt",              argList);
             
             case "System.MathF.Min(float, float)":
             case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
