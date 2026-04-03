@@ -227,7 +227,7 @@ public static partial class Vectorizer
         return false;
     }
     
-    private static bool EmitVectorizedMethod(Query query, StringBuilder compute, BlockSyntax? body)
+    private static void EmitVectorizedMethod(Query query, StringBuilder compute, BlockSyntax? body)
     {
         var locals = new StringBuilder();
         // --- method signature
@@ -308,9 +308,7 @@ public static partial class Vectorizer
         };
         int step = 8;
         var vectorizeBlock = EmitLoopBody(query, compute, body, step);
-        if (vectorizeBlock == null) {
-            return false;
-        }
+
         Utils.TrimEnd(vectorizeBlock);
 
         var source = $@"
@@ -332,10 +330,9 @@ public static partial class Vectorizer
         }}
 ";
         query.avxMethod = source;
-        return true;
     }
     
-    private static StringBuilder? EmitLoopBody(Query query, StringBuilder compute, BlockSyntax? body, int step)
+    private static StringBuilder EmitLoopBody(Query query, StringBuilder compute, BlockSyntax? body, int step)
     {
         var source = new StringBuilder();
         var laneCount = query.laneCount;
