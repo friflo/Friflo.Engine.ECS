@@ -10,8 +10,8 @@
       
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Friflo.Vectorize.Generators</RootNamespace>
-	<AssemblyName>Friflo.Vectorize.Generators</AssemblyName>
+    <RootNamespace>Friflo.Vectorization.Generators</RootNamespace>
+	<AssemblyName>Friflo.Vectorization.Generators</AssemblyName>
     <LangVersion>12.0</LangVersion>
       
     <!-- packaging -->
@@ -35,7 +35,7 @@
     <!-- <IncludeSymbols>true</IncludeSymbols> -->
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedAllSources>true</EmbedAllSources>
-    <PackageId>Friflo.Vectorize.Generators</PackageId>
+    <PackageId>Friflo.Vectorization.Generators</PackageId>
     <!-- packaging: end -->
   </PropertyGroup>
 

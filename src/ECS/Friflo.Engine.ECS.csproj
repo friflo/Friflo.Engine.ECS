@@ -76,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vectorize.Attributes\Friflo.Vectorize.Attributes.csproj" />
+    <ProjectReference Include="..\Vectorization.Attributes\Friflo.Vectorization.Attributes.csproj" />
   </ItemGroup>
 
 </Project>
