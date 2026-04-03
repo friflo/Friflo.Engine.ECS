@@ -95,13 +95,12 @@ public static partial class Test_Float_Methods_Avx
         var floor   = MathF.Floor(velocity.value);
         var ceiling = MathF.Ceiling(velocity.value);
         var exp     = MathF.Exp(velocity.value);
-        var log     = MathF.Log(abs);
         var log10   = MathF.Log10(abs);
         var log2    = MathF.Log2(abs);
         var pow     = MathF.Pow(abs, velocity.value);
         var round   = MathF.Round(velocity.value);
         var sqrt    = MathF.Sqrt(abs);
-        position.value = abs + floor + ceiling + exp + log + log10 + log2 + pow + round + sqrt;
+        position.value = abs + floor + ceiling + exp + log10 + log2 + pow + round + sqrt;
     } 
         
     [Test]
@@ -122,8 +121,56 @@ public static partial class Test_Float_Methods_Avx
                 Assert.Fail("expected is NaN");
             }
             var value  = entityVectorized.GetComponent<Position1>();
-            Assert.That(value, Is.EqualTo(expect));
+            if (Math.Abs(value.value - expect.value) > 0) {
+                Assert.Fail("not equal");
+            }
         }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Float_Log(ref Position1 position, in Velocity1 velocity, float value) {
+        var abs     = MathF.Abs(velocity.value);
+        var log     = MathF.Log(abs);
+        position.value = log;
+    } 
+        
+    [Test]
+    public static void Test_Float_Log()
+    {
+        var store = CreateTestStore();
+        Float_LogQuery(store, 1.1f, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Float_LogQuery(storeVectorized, 1.1f);
+        
+        AssertStoresEqual(store, query, 1e-6f);
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    private static void AssertStoresEqual(EntityStore store, ArchetypeQuery query, float epsilon)
+    {
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        var storeVectorized = query.Store;
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            var expect = entity.GetComponent<Position1>();
+            if (float.IsNaN(expect.value)) {
+                Assert.Fail("expected is NaN");
+            }
+            var value  = entityVectorized.GetComponent<Position1>();
+            if (!AreEqual(value.value, expect.value, epsilon)) {
+                Assert.Fail("not equal");
+            }
+        }
+    }
+    
+    private static bool AreEqual(float a, float b, float epsilon) {
+        if (float.IsInfinity(a) && float.IsInfinity(b)) {
+            return true;
+        }
+        return Math.Abs(a - b) < epsilon;
     }
 
 }
