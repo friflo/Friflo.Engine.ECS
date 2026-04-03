@@ -118,7 +118,7 @@ public partial class MyExample
         await Verify(code);
     }
     
-    // [Test]
+    [Test]
     public static async Task  Verify_InvalidStatement()
     {
         var code =

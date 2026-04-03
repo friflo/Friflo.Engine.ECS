@@ -237,7 +237,7 @@ public static partial class Vectorizer
             case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
         }
-        query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
+        query.ReportDiagnosticSyntax(Errors.StatementUnsupported, invocation, invocation.ToFullString());
         return false;
     }
 

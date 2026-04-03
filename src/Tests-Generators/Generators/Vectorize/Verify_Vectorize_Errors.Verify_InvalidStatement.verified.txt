@@ -1,0 +1,29 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: /*
+    private static void InvalidStatementError(ref FloatComponent position) {
+        if (position.value > 1f) {
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        }
+^^^^^^^^^
+    }
+*/
+ : (11,8)-(12,9),
+      Message:
+Vectorization failed - operation not supported:         if (position.value > 1f) {
+        }
+,
+      Severity: Warning,
+      WarningLevel: 1,
+      Descriptor: {
+        Id: ECSGEN003,
+        Title: Operation unsupported,
+        MessageFormat: Vectorization failed - operation not supported: {0},
+        Category: Performance,
+        DefaultSeverity: Warning,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

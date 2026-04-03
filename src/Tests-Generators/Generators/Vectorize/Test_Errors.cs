@@ -36,7 +36,7 @@ public static partial class Test_Errors
         OperationUnsupportedErrorQuery(new EntityStore(), 1);
     }
     
-    // --- Expect:    ECSGEN003: Vectorization failed - Incompatible parameter types: 'Position2' and 'Position'
+    // --- Expect:    ECSGEN004: Vectorization failed - Incompatible parameter types: 'Position2' and 'Position'
     [Vectorize][Query][OmitHash]
     private static void IncompatibleParameterTypesError(ref Position2 pos1, ref Position pos3) {
     }
@@ -46,7 +46,7 @@ public static partial class Test_Errors
         IncompatibleParameterTypesErrorQuery(new EntityStore());
     }
     
-    // --- Expect:    ECSGEN004: Vectorization failed - Invalid parameter type: 'Entity'
+    // --- Expect:    ECSGEN005: Vectorization failed - Invalid parameter type: 'Entity'
     [Vectorize][Query][OmitHash]
     private static void InvalidParameterTypeError(ref Position2 pos1, Entity entity) {
     }
@@ -56,7 +56,7 @@ public static partial class Test_Errors
         InvalidParameterTypeErrorQuery(new EntityStore());
     }
     
-    // --- Expect:    ECSGEN004: Vectorization failed - Invalid parameter type: 'Entity'
+    // --- Expect:    ECSGEN003: Vectorization failed - operation not supported: if (position.value > 1f) {
     [Vectorize][Query][OmitHash]
     private static void InvalidStatementError(ref FloatComponent position) {
         if (position.value > 1f) {

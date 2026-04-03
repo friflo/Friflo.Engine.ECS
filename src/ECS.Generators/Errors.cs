@@ -17,8 +17,17 @@ public static class Errors
         // description: "Detailed description of why this is an error." // Optional
     );
     
-    public static readonly DiagnosticDescriptor OperationUnsupported = new (
+    public static readonly DiagnosticDescriptor StatementUnsupported = new (
         id: "ECSGEN002",
+        title: "Statement unsupported",
+        messageFormat: "Vectorization failed - statement not supported: {0}",
+        category: "Performance",
+        defaultSeverity: DiagnosticSeverity.Warning, 
+        isEnabledByDefault: true
+    );
+    
+    public static readonly DiagnosticDescriptor OperationUnsupported = new (
+        id: "ECSGEN003",
         title: "Operation unsupported",
         messageFormat: "Vectorization failed - operation not supported: {0}",
         category: "Performance",
@@ -27,7 +36,7 @@ public static class Errors
     );
     
     public static readonly DiagnosticDescriptor IncompatibleParameterTypes = new (
-        id: "ECSGEN003",
+        id: "ECSGEN004",
         title: "Incompatible parameter types",
         messageFormat: "Vectorization failed - Incompatible parameter types: '{0}' and '{1}'",
         category: "Performance",
@@ -36,7 +45,7 @@ public static class Errors
     );
     
     public static readonly DiagnosticDescriptor InvalidParameterType = new (
-        id: "ECSGEN004",
+        id: "ECSGEN005",
         title: "Invalid parameter type",
         messageFormat: "Vectorization failed - Invalid parameter type: '{0}'",
         category: "Performance",

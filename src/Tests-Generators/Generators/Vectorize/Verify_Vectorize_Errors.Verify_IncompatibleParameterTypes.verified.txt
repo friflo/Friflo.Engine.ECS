@@ -12,7 +12,7 @@
       Severity: Warning,
       WarningLevel: 1,
       Descriptor: {
-        Id: ECSGEN003,
+        Id: ECSGEN004,
         Title: Incompatible parameter types,
         MessageFormat: Vectorization failed - Incompatible parameter types: '{0}' and '{1}',
         Category: Performance,
