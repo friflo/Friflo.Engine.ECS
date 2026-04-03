@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Intrinsics.X86;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 
 namespace Tests.Generators.Lab;
@@ -13,7 +14,8 @@ public sealed class SpanAttribute : Attribute { }
 
 public static class Test_Lab_Tensorize
 {
-    [Tensorize]
+    // Friflo.Vectorize.Generators
+    [Vectorize]
     private static void MultiplyAdd([Span] ref float a, [Span] float b, float c) {
         a = (a * b) + c;
     }
