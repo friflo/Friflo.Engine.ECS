@@ -17,7 +17,7 @@ public static class Test_Lab_Tensorize
         
     }
     
-    public static void MultiplyAddExecute(Span<float> a, ReadOnlySpan<float> b, float c)
+    public static void MultiplyAddVector(Span<float> a, ReadOnlySpan<float> b, float c)
     {
         
     }
