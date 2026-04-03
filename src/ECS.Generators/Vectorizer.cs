@@ -223,7 +223,7 @@ public static partial class Vectorizer
             var expressionSyntax = expressionStatement.Expression;
             return Compute(lanes, query, expressionSyntax);
         }
-        query.ReportDiagnosticSyntax(Errors.OperationUnsupported, statement, statement.ToFullString());
+        query.ReportDiagnosticSyntax(Errors.StatementUnsupported, statement, statement.ToFullString());
         return false;
     }
     

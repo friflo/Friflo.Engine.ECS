@@ -11,15 +11,15 @@
 */
  : (11,8)-(12,9),
       Message:
-Vectorization failed - operation not supported:         if (position.value > 1f) {
+Vectorization failed - statement not supported:         if (position.value > 1f) {
         }
 ,
       Severity: Warning,
       WarningLevel: 1,
       Descriptor: {
-        Id: ECSGEN003,
-        Title: Operation unsupported,
-        MessageFormat: Vectorization failed - operation not supported: {0},
+        Id: ECSGEN002,
+        Title: Statement unsupported,
+        MessageFormat: Vectorization failed - statement not supported: {0},
         Category: Performance,
         DefaultSeverity: Warning,
         IsEnabledByDefault: true

@@ -56,7 +56,7 @@ public static partial class Test_Errors
         InvalidParameterTypeErrorQuery(new EntityStore());
     }
     
-    // --- Expect:    ECSGEN003: Vectorization failed - operation not supported: if (position.value > 1f) {
+    // --- Expect:    ECSGEN002: Vectorization failed - statement not supported: if (position.value > 1f) {
     [Vectorize][Query][OmitHash]
     private static void InvalidStatementError(ref FloatComponent position) {
         if (position.value > 1f) {
