@@ -1,10 +1,8 @@
 using System;
-using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using Friflo.Engine.ECS;
 using Tests.ECS;
-using Tests.Examples;
 using Tests.Generators.Benchmark;
 
 
@@ -27,6 +25,7 @@ public partial class Bench_Float
 
     const int EntityCount = Constants.EntityCount;
     
+    // ---------------------------------------- (a * b) + c
     [Vectorize][Query]  [OmitHash]
     private static void MultiplyAdd(ref Position1 position, ref Velocity1 velocity, float deltaTime) {
         position.value = velocity.value * deltaTime + position.value;
@@ -62,6 +61,7 @@ public partial class Bench_Float
         });
     }
     
+    // ---------------------------------------- 1 / MathF.Sqrt()
     [Vectorize][Query]  [OmitHash]
     private static void ReciprocalSquareRoot(ref Position1 position, ref Velocity1 velocity, float factor) {
         position.value = factor / MathF.Sqrt(velocity.value);
@@ -79,6 +79,7 @@ public partial class Bench_Float
         ReciprocalSquareRootQuery(store, 0.1f, false);
     }
     
+    // ---------------------------------------- MathF.Sqrt()
     [Vectorize][Query]  [OmitHash]
     private static void SquareRoot(ref Position1 position, ref Velocity1 velocity) {
         position.value = MathF.Sqrt(velocity.value);
@@ -94,5 +95,59 @@ public partial class Bench_Float
     public void Float_SquareRoot_Query()
     {
         SquareRootQuery(store, false);
+    }
+    
+    // ---------------------------------------- MathF.Log()
+    [Vectorize][Query]  [OmitHash]
+    private static void Log(ref Position1 position, ref Velocity1 velocity) {
+        position.value = MathF.Log(velocity.value);
+    }
+    
+    [Benchmark]
+    public void Float_Log_Vectorize()
+    {
+        LogQuery(store);
+    }
+    
+    [Benchmark]
+    public void Float_Log_Query()
+    {
+        LogQuery(store, false);
+    }
+    
+    // ---------------------------------------- MathF.Log2()
+    [Vectorize][Query]  [OmitHash]
+    private static void Log2(ref Position1 position, ref Velocity1 velocity) {
+        position.value = MathF.Log2(velocity.value);
+    }
+    
+    [Benchmark]
+    public void Float_Log2_Vectorize()
+    {
+        Log2Query(store);
+    }
+    
+    [Benchmark]
+    public void Float_Log2_Query()
+    {
+        Log2Query(store, false);
+    }
+    
+    // ---------------------------------------- MathF.Exp()
+    [Vectorize][Query]  [OmitHash]
+    private static void Exp(ref Position1 position, ref Velocity1 velocity) {
+        position.value = MathF.Exp(velocity.value);
+    }
+    
+    [Benchmark]
+    public void Float_Exp_Vectorize()
+    {
+        ExpQuery(store);
+    }
+    
+    [Benchmark]
+    public void Float_Exp_Query()
+    {
+        ExpQuery(store, false);
     }
 }
