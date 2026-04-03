@@ -22,6 +22,10 @@ public partial class Bench_Float
     
     private EntityStore store;
     private ArchetypeQuery<Position1,Velocity1> query;
+    
+    private Position1[] positions = new  Position1[EntityCount];
+    private Velocity1[] velocities = new  Velocity1[EntityCount];
+    private float       factor = 0.1f;
 
     const int EntityCount = Constants.EntityCount;
     
@@ -34,7 +38,10 @@ public partial class Bench_Float
     [GlobalSetup]
     public void Setup() {
         store = new EntityStore();
-        for (int n = 0; n < EntityCount; n++) {
+        for (int n = 0; n < EntityCount; n++)
+        {
+            positions[n] = new Position1 { value = n };
+            velocities[n] = new Velocity1 { value = 2 };
             store.CreateEntity(new Position1 { value = n }, new Velocity1 { value = 2 }, new FloatComponent { value = n });
         }
         query = store.Query<Position1, Velocity1>();
@@ -63,20 +70,27 @@ public partial class Bench_Float
     
     // ---------------------------------------- 1 / MathF.Sqrt()
     [Vectorize][Query]  [OmitHash]
-    private static void ReciprocalSquareRoot(ref Position1 position, ref Velocity1 velocity, float factor) {
+    private static void ReciprocalSqrt(ref Position1 position, ref Velocity1 velocity, float factor) {
         position.value = factor / MathF.Sqrt(velocity.value);
     }
     
     [Benchmark]
-    public void Float_ReciprocalSquareRoot_Vectorize()
+    public void Float_ReciprocalSqrt_Vectorize()
     {
-        ReciprocalSquareRootQuery(store, 0.1f);
+        ReciprocalSqrtQuery(store, 0.1f);
     }
     
     [Benchmark]
-    public void Float_ReciprocalSquareRoot_Query()
+    public void Float_ReciprocalSqrt_Query()
     {
-        ReciprocalSquareRootQuery(store, 0.1f, false);
+        ReciprocalSqrtQuery(store, 0.1f, false);
+    }
+    
+    [Benchmark]
+    public void Float_ReciprocalSqrt_MathF() {
+        for (int n = 0; n < positions.Length; n++) {
+            positions[n].value = factor * MathF.ReciprocalSqrtEstimate(velocities[n].value);
+        }
     }
     
     // ---------------------------------------- MathF.Sqrt()
