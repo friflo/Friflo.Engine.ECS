@@ -24,7 +24,7 @@ public static partial class Vectorizer
             // var value = symbol!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             var value = $"{symbol.ContainingType.ToDisplayString()}.{symbol.Name}"; 
             var name = query.AddConst();
-            query.locals.AppendLine($"            var {name} = {value};");
+            query.locals.AppendLine($"            var {name} = {value}; // static");
             Utils.InterleaveVector3(query.locals, name, query.vectorDimension);
             query.locals.AppendLine();
             
@@ -186,7 +186,7 @@ public static partial class Vectorizer
     private static bool Compute_Literal(StringBuilder[] lanes, Query query, LiteralExpressionSyntax literal)
     {
         var name = query.AddConst();
-        query.locals.AppendLine($"            var {name}_scalar = Vector256.Create<float>({literal.Token.Text});");
+        query.locals.AppendLine($"            var {name}_scalar = Vector256.Create<float>({literal.Token.Text}); // literal");
         query.locals.AppendLine();
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append($"{name}_scalar");
@@ -365,7 +365,7 @@ public static partial class Vectorizer
     private static bool Method_Abs(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
         var name = query.AddConst();
-        query.locals.AppendLine($"            var {name} = Vector256.Create(0x7FFFFFFF).AsSingle();");
+        query.locals.AppendLine($"            var {name} = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()");
         query.locals.AppendLine();
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append($"Avx.And(");

@@ -64,7 +64,7 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             // --- Locals
-            var const0_scalar = Vector256.Create<float>(2);
+            var const0_scalar = Vector256.Create<float>(2); // literal
 
             fixed (global::Tests.ECS.Position4* position_first = position)
             fixed (global::Tests.ECS.Velocity4* velocity_first = velocity)

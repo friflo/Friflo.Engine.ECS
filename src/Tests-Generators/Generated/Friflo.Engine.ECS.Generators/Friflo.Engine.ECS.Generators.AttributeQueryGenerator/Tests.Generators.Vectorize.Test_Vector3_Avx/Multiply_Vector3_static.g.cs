@@ -64,7 +64,7 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             // --- Locals
-            var const0 = System.Numerics.Vector3.Pi;
+            var const0 = System.Numerics.Vector3.Pi; // static
             var const0_0 = Vector256.Create(const0.X, const0.Y, const0.Z, const0.X, const0.Y, const0.Z, const0.X, const0.Y);
             var const0_1 = Vector256.Create(const0.Z, const0.X, const0.Y, const0.Z, const0.X, const0.Y, const0.Z, const0.X);
             var const0_2 = Vector256.Create(const0.Y, const0.Z, const0.X, const0.Y, const0.Z, const0.X, const0.Y, const0.Z);

@@ -64,7 +64,7 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             // --- Locals
-            var const0_scalar = Vector256.Create<float>(2);
+            var const0_scalar = Vector256.Create<float>(2); // literal
 
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::Tests.Examples.Velocity* velocity_first = velocity)

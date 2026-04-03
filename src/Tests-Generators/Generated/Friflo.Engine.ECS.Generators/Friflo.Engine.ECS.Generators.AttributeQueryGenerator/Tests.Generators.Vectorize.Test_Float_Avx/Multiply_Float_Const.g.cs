@@ -62,7 +62,7 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             // --- Locals
-            var const0_scalar = Vector256.Create<float>(1f);
+            var const0_scalar = Vector256.Create<float>(1f); // literal
 
             fixed (global::Tests.ECS.Position1* position_first = position)
             {

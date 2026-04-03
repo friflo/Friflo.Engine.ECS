@@ -117,7 +117,7 @@ namespace Tests.Generators.Vectorize
             Vector256<float> sqrt_2;
             Vector256<float> sqrt_3;
 
-            var const0 = Vector256.Create(0x7FFFFFFF).AsSingle();
+            var const0 = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()
 
             fixed (global::Tests.ECS.Position1* position_first = position)
             fixed (global::Tests.ECS.Velocity1* velocity_first = velocity)
