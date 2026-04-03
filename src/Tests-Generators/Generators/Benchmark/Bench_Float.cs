@@ -78,4 +78,21 @@ public partial class Bench_Float
     {
         ReciprocalSquareRootQuery(store, 0.1f, false);
     }
+    
+    [Vectorize][Query]  [OmitHash]
+    private static void SquareRoot(ref Position1 position, ref Velocity1 velocity) {
+        position.value = MathF.Sqrt(velocity.value);
+    }
+    
+    [Benchmark]
+    public void Float_SquareRoot_Vectorize()
+    {
+        SquareRootQuery(store);
+    }
+    
+    [Benchmark]
+    public void Float_SquareRoot_Query()
+    {
+        SquareRootQuery(store, false);
+    }
 }
