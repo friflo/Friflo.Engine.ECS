@@ -179,10 +179,10 @@ namespace Tests.Generators.Vectorize
                     pow_2 = MathUtils.PowMathF(abs_2, velocity_2);
                     pow_3 = MathUtils.PowMathF(abs_3, velocity_3);
 
-                    round_0 = MathUtils.RoundMathF(velocity_0);
-                    round_1 = MathUtils.RoundMathF(velocity_1);
-                    round_2 = MathUtils.RoundMathF(velocity_2);
-                    round_3 = MathUtils.RoundMathF(velocity_3);
+                    round_0 = Vector256.Round(velocity_0);
+                    round_1 = Vector256.Round(velocity_1);
+                    round_2 = Vector256.Round(velocity_2);
+                    round_3 = Vector256.Round(velocity_3);
 
                     sqrt_0 = MathUtils.SqrtMathF(abs_0);
                     sqrt_1 = MathUtils.SqrtMathF(abs_1);

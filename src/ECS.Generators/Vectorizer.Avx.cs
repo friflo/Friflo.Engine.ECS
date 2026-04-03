@@ -215,12 +215,13 @@ public static partial class Vectorizer
             case "System.MathF.Truncate(float)":    return Method_Truncate  (lanes, query,                          argList);
             case "System.MathF.Floor(float)":       return Method_Floor     (lanes, query,                          argList);
             case "System.MathF.Ceiling(float)":     return Method_Ceiling   (lanes, query,                          argList);
+            case "System.MathF.Round(float)":       return Method_Round     (lanes, query,                          argList);
+            
             case "System.MathF.Exp(float)":         return Method_Scalar    (lanes, query, "MathUtils.ExpMathF",    argList);
             case "System.MathF.Log(float)":         return Method_Scalar    (lanes, query, "MathUtils.LogMathF",    argList);
             case "System.MathF.Log10(float)":       return Method_Scalar    (lanes, query, "MathUtils.Log10MathF",  argList);
             case "System.MathF.Log2(float)":        return Method_Scalar    (lanes, query, "MathUtils.Log2MathF",   argList);
             case "System.MathF.Pow(float, float)":  return Method_Scalar    (lanes, query, "MathUtils.PowMathF",    argList);
-            case "System.MathF.Round(float)":       return Method_Scalar    (lanes, query, "MathUtils.RoundMathF",  argList);
             case "System.MathF.Sqrt(float)":        return Method_Scalar    (lanes, query, "MathUtils.SqrtMathF",   argList);
             
             case "System.MathF.Min(float, float)":
@@ -417,6 +418,22 @@ public static partial class Vectorizer
         for (int n = 0; n < lanes.Length; n++) {
             lanes[n].Append("Vector256.Ceiling(");
             // alternative:  Avx.RoundToNearestInteger(value, 0x02 | 0x08);
+        }
+        var args = argumentSyntax.Arguments;
+        if (!Compute(lanes, query, args[0].Expression)) {
+            return false;
+        }
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append(")");
+        }
+        return true;
+    }
+    
+    private static bool Method_Round(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        for (int n = 0; n < lanes.Length; n++) {
+            lanes[n].Append("Vector256.Round(");
+            // alternative:  Avx.RoundToNearestInteger(value, 0x00 | 0x08);
         }
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
