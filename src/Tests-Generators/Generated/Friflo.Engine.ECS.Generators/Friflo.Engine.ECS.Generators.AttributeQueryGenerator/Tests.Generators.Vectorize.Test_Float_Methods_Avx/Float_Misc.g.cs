@@ -144,15 +144,15 @@ namespace Tests.Generators.Vectorize
                     abs_2 = Avx.And(velocity_2, const0);
                     abs_3 = Avx.And(velocity_3, const0);
 
-                    floor_0 = MathUtils.FloorMathF(velocity_0);
-                    floor_1 = MathUtils.FloorMathF(velocity_1);
-                    floor_2 = MathUtils.FloorMathF(velocity_2);
-                    floor_3 = MathUtils.FloorMathF(velocity_3);
+                    floor_0 = Vector256.Floor(velocity_0);
+                    floor_1 = Vector256.Floor(velocity_1);
+                    floor_2 = Vector256.Floor(velocity_2);
+                    floor_3 = Vector256.Floor(velocity_3);
 
-                    ceiling_0 = MathUtils.CeilingMathF(velocity_0);
-                    ceiling_1 = MathUtils.CeilingMathF(velocity_1);
-                    ceiling_2 = MathUtils.CeilingMathF(velocity_2);
-                    ceiling_3 = MathUtils.CeilingMathF(velocity_3);
+                    ceiling_0 = Vector256.Ceiling(velocity_0);
+                    ceiling_1 = Vector256.Ceiling(velocity_1);
+                    ceiling_2 = Vector256.Ceiling(velocity_2);
+                    ceiling_3 = Vector256.Ceiling(velocity_3);
 
                     exp_0 = MathUtils.ExpMathF(velocity_0);
                     exp_1 = MathUtils.ExpMathF(velocity_1);
