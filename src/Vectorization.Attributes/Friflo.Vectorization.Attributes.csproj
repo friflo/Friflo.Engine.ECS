@@ -5,8 +5,8 @@
     <TargetFrameworks>net10.0;net8.0;net7.0;net6.0;netstandard2.1</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <RootNamespace>Friflo.Engine.ECS</RootNamespace>
-    <AssemblyName>Friflo.Engine.ECS</AssemblyName>
+    <RootNamespace>Friflo.Vectorization.Attributes</RootNamespace>
+    <AssemblyName>Friflo.Vectorization.Attributes</AssemblyName>
     <LangVersion>14.0</LangVersion>
       
     <IsTrimmable>true</IsTrimmable>
@@ -17,13 +17,13 @@
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
 
-    <Title>Friflo Engine ECS</Title>
+    <Title>friflo vectorization attributes</Title>
     <Authors>Ullrich Praetz</Authors>
-    <Description>Entity Component System - ECS - optimized for performance and cache locality</Description>
+    <Description>attributes used to vectorize methods using Friflo.Vectorization.Generators</Description>
     <Copyright>Ullrich Praetz</Copyright>
     <PackageProjectUrl>https://github.com/friflo/Friflo.Engine.ECS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/friflo/Friflo.Engine.ECS</RepositoryUrl>
-    <PackageTags>ecs, entity-component-system, gamedev, game-engine, unity, godot, monogame, fna, stride, flax, dots, entt, flecs</PackageTags>
+    <PackageTags>ecs, entity-component-system, gamedev, game-engine, unity, godot, monogame, fna, stride, flax, dots</PackageTags>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
     <RepositoryType>git</RepositoryType>
@@ -64,19 +64,5 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Friflo.Json.Fliox" Version="1.0.4" />
-      
-    <!-- System.Runtime is required by System.Runtime.CompilerServices.RuntimeFeature for NativeAOT
-    <PackageReference Include="System.Runtime" Version="4.3.1" />  -->
-      
-    <!-- System.Runtime.CompilerServices.Unsafe is required by Unity -->
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Vectorize.Attributes\Friflo.Vectorize.Attributes.csproj" />
-  </ItemGroup>
 
 </Project>
