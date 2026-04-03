@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Friflo.Vectorize.Generators;
+namespace Friflo.Vectorization.Generators;
 
 public static class Utils
 {

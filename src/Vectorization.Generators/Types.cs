@@ -8,7 +8,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace Friflo.Vectorize.Generators;
+namespace Friflo.Vectorization.Generators;
 
 public struct EcsTypes
 {

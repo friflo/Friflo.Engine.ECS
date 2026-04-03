@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
-using Friflo.Vectorize.Generators;
+using Friflo.Vectorization.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using VerifyNUnit;

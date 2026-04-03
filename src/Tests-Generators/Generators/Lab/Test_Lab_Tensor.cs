@@ -10,7 +10,7 @@ public sealed class SpanAttribute : Attribute { }
 
 public static class Test_Lab_Tensor
 {
-    // Friflo.Vectorize.Generators
+    // Friflo.Vectorization.Generators
     [Vectorize]
     private static void MultiplyAdd([Span] ref float a, [Span] float b, float c) {
         a = (a * b) + c;
