@@ -11,11 +11,11 @@ namespace Tests.Generators.Vectorize
 {
     public partial class Test_Float_Methods_Avx
     {
-        /// <summary>Query method generated for: <see cref="Float_Misc"/>.</summary>
+        /// <summary>Query method generated for: <see cref="Float_Log2"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery Float_MiscQuery(EntityStore _store, float value, bool vectorized = true)
+        public static ArchetypeQuery Float_Log2Query(EntityStore _store, float value, bool vectorized = true)
         {
-            var _query = _Float_Misc_GetQuery(_store);
+            var _query = _Float_Log2_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -24,11 +24,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Float_Misc_Avx(positionSpan, velocitySpan, value);
+                    n = _Float_Log2_Avx(positionSpan, velocitySpan, value);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    Float_Misc(ref positionSpan[n], in velocitySpan[n], value);
+                    Float_Log2(ref positionSpan[n], in velocitySpan[n], value);
                 }
             }
             return _query;
@@ -36,25 +36,25 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _Float_Misc_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _Float_Log2_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Tests.ECS.Position1, global::Tests.ECS.Velocity1>
-            _Float_Misc_GetQuery(EntityStore _store)
+            _Float_Log2_GetQuery(EntityStore _store)
         {
             var _query = (ArchetypeQuery<global::Tests.ECS.Position1, global::Tests.ECS.Velocity1>)
-                EntityStore.UserDataGet(_store, _Float_Misc_Slot);
+                EntityStore.UserDataGet(_store, _Float_Log2_Slot);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Tests.ECS.Position1, global::Tests.ECS.Velocity1>();
 
-            EntityStore.UserDataSet(_store, _Float_Misc_Slot, _query);
+            EntityStore.UserDataSet(_store, _Float_Log2_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _Float_Misc_Avx(
+        private static unsafe int _Float_Log2_Avx(
             Span<global::Tests.ECS.Position1> position,
             Span<global::Tests.ECS.Velocity1> velocity,
             float value)
@@ -72,35 +72,10 @@ namespace Tests.Generators.Vectorize
             Vector256<float> abs_2;
             Vector256<float> abs_3;
 
-            Vector256<float> floor_0;
-            Vector256<float> floor_1;
-            Vector256<float> floor_2;
-            Vector256<float> floor_3;
-
-            Vector256<float> ceiling_0;
-            Vector256<float> ceiling_1;
-            Vector256<float> ceiling_2;
-            Vector256<float> ceiling_3;
-
-            Vector256<float> log10_0;
-            Vector256<float> log10_1;
-            Vector256<float> log10_2;
-            Vector256<float> log10_3;
-
-            Vector256<float> pow_0;
-            Vector256<float> pow_1;
-            Vector256<float> pow_2;
-            Vector256<float> pow_3;
-
-            Vector256<float> round_0;
-            Vector256<float> round_1;
-            Vector256<float> round_2;
-            Vector256<float> round_3;
-
-            Vector256<float> sqrt_0;
-            Vector256<float> sqrt_1;
-            Vector256<float> sqrt_2;
-            Vector256<float> sqrt_3;
+            Vector256<float> log_0;
+            Vector256<float> log_1;
+            Vector256<float> log_2;
+            Vector256<float> log_3;
 
             var const0 = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()
 
@@ -129,40 +104,15 @@ namespace Tests.Generators.Vectorize
                     abs_2 = Avx.And(velocity_2, const0);
                     abs_3 = Avx.And(velocity_3, const0);
 
-                    floor_0 = Vector256.Floor(velocity_0);
-                    floor_1 = Vector256.Floor(velocity_1);
-                    floor_2 = Vector256.Floor(velocity_2);
-                    floor_3 = Vector256.Floor(velocity_3);
+                    log_0 = Vector256.Log2(abs_0);
+                    log_1 = Vector256.Log2(abs_1);
+                    log_2 = Vector256.Log2(abs_2);
+                    log_3 = Vector256.Log2(abs_3);
 
-                    ceiling_0 = Vector256.Ceiling(velocity_0);
-                    ceiling_1 = Vector256.Ceiling(velocity_1);
-                    ceiling_2 = Vector256.Ceiling(velocity_2);
-                    ceiling_3 = Vector256.Ceiling(velocity_3);
-
-                    log10_0 = MathUtils.Log10MathF(abs_0);
-                    log10_1 = MathUtils.Log10MathF(abs_1);
-                    log10_2 = MathUtils.Log10MathF(abs_2);
-                    log10_3 = MathUtils.Log10MathF(abs_3);
-
-                    pow_0 = MathUtils.PowMathF(abs_0, velocity_0);
-                    pow_1 = MathUtils.PowMathF(abs_1, velocity_1);
-                    pow_2 = MathUtils.PowMathF(abs_2, velocity_2);
-                    pow_3 = MathUtils.PowMathF(abs_3, velocity_3);
-
-                    round_0 = Vector256.Round(velocity_0);
-                    round_1 = Vector256.Round(velocity_1);
-                    round_2 = Vector256.Round(velocity_2);
-                    round_3 = Vector256.Round(velocity_3);
-
-                    sqrt_0 = MathUtils.SqrtMathF(abs_0);
-                    sqrt_1 = MathUtils.SqrtMathF(abs_1);
-                    sqrt_2 = MathUtils.SqrtMathF(abs_2);
-                    sqrt_3 = MathUtils.SqrtMathF(abs_3);
-
-                    position_0 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_0, floor_0), ceiling_0), log10_0), pow_0), round_0), sqrt_0);
-                    position_1 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_1, floor_1), ceiling_1), log10_1), pow_1), round_1), sqrt_1);
-                    position_2 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_2, floor_2), ceiling_2), log10_2), pow_2), round_2), sqrt_2);
-                    position_3 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_3, floor_3), ceiling_3), log10_3), pow_3), round_3), sqrt_3);
+                    position_0 = log_0;
+                    position_1 = log_1;
+                    position_2 = log_2;
+                    position_3 = log_3;
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

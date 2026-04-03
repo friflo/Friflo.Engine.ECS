@@ -94,13 +94,11 @@ public static partial class Test_Float_Methods_Avx
         var abs     = MathF.Abs(velocity.value);
         var floor   = MathF.Floor(velocity.value);
         var ceiling = MathF.Ceiling(velocity.value);
-        var exp     = MathF.Exp(velocity.value);
         var log10   = MathF.Log10(abs);
-        var log2    = MathF.Log2(abs);
         var pow     = MathF.Pow(abs, velocity.value);
         var round   = MathF.Round(velocity.value);
         var sqrt    = MathF.Sqrt(abs);
-        position.value = abs + floor + ceiling + exp + log10 + log2 + pow + round + sqrt;
+        position.value = abs + floor + ceiling + log10 + pow + round + sqrt;
     } 
         
     [Test]
@@ -171,6 +169,46 @@ public static partial class Test_Float_Methods_Avx
             return true;
         }
         return Math.Abs(a - b) < epsilon;
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Float_Log2(ref Position1 position, in Velocity1 velocity, float value) {
+        var abs     = MathF.Abs(velocity.value);
+        var log     = MathF.Log2(abs);
+        position.value = log;
+    } 
+        
+    [Test]
+    public static void Test_Float_Log2()
+    {
+        var store = CreateTestStore();
+        Float_Log2Query(store, 1.1f, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Float_Log2Query(storeVectorized, 1.1f);
+        
+        AssertStoresEqual(store, query, 1e-6f);
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Float_Exp(ref Position1 position, in Velocity1 velocity, float value) {
+        var abs     = MathF.Abs(velocity.value);
+        var log     = MathF.Log2(abs);
+        position.value = log;
+    } 
+        
+    [Test]
+    public static void Test_Float_Exp()
+    {
+        var store = CreateTestStore();
+        Float_ExpQuery(store, 1.1f, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Float_ExpQuery(storeVectorized, 1.1f);
+        
+        AssertStoresEqual(store, query, 1e-6f);
     }
 
 }

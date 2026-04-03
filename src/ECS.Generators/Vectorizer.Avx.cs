@@ -201,10 +201,10 @@ public static partial class Vectorizer
             case "System.MathF.Ceiling(float)":     return Method_Ceiling   (lanes, query,                          argList);
             case "System.MathF.Round(float)":       return Method_Round     (lanes, query,                          argList);
             
-            case "System.MathF.Exp(float)":         return Method_Scalar    (lanes, query, "MathUtils.ExpMathF",    argList);
-            case "System.MathF.Log(float)":         return Method_Log       (lanes, query,                          argList);
+            case "System.MathF.Exp(float)":         return Method_Scalar    (lanes, query, "Vector256.Exp",         argList);
+            case "System.MathF.Log(float)":         return Method_Scalar    (lanes, query, "Vector256.Log",         argList);
             case "System.MathF.Log10(float)":       return Method_Scalar    (lanes, query, "MathUtils.Log10MathF",  argList);
-            case "System.MathF.Log2(float)":        return Method_Scalar    (lanes, query, "MathUtils.Log2MathF",   argList);
+            case "System.MathF.Log2(float)":        return Method_Scalar    (lanes, query, "Vector256.Log2",        argList);
             case "System.MathF.Pow(float, float)":  return Method_Scalar    (lanes, query, "MathUtils.PowMathF",    argList);
             case "System.MathF.Sqrt(float)":        return Method_Scalar    (lanes, query, "MathUtils.SqrtMathF",   argList);
             
@@ -377,17 +377,6 @@ public static partial class Vectorizer
     private static bool Method_Round(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
         lanes.Append("Vector256.Round(");       // alternative:  Avx.RoundToNearestInteger(value, 0x00 | 0x08);
-        var args = argumentSyntax.Arguments;
-        if (!Compute(lanes, query, args[0].Expression)) {
-            return false;
-        }
-        lanes.Append(")");
-        return true;
-    }
-    
-    private static bool Method_Log(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
-    {
-        lanes.Append("Vector256.Log(");
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
