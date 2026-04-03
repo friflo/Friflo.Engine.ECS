@@ -84,9 +84,7 @@ public static partial class Vectorizer
             if (!Compute(lanes, query, assignBinary.Left)) {
                 return false;
             }
-            for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append($", ");
-            }
+            lanes.Append(", ");
             if (!Compute(lanes, query, assignBinary.Right)) {
                 return false;
             }
@@ -140,9 +138,7 @@ public static partial class Vectorizer
             if (!Compute(lanes, query, binary.Right)) {
                 return false;
             }
-            for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append(")");
-            }
+            lanes.Append(")");
             return true;
         }
         for (int i = 0; i < lanes.Length; i++) {
