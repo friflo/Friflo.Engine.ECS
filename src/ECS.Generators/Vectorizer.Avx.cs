@@ -122,6 +122,24 @@ public static partial class Vectorizer
             query.ReportDiagnosticSyntax(Errors.OperationUnsupported, binary);
             return false;
         }
+
+        // is reciprocal square root:     left / Sqrt(right) 
+        if (kind == SyntaxKind.DivideExpression) {
+            if (binary.Right is InvocationExpressionSyntax rightInvocation &&
+                GetMethodName(query, rightInvocation) == "System.MathF.Sqrt(float)")
+            {
+                lanes.Append("Avx.Multiply(Avx.ReciprocalSqrt(");
+                if (!Compute(lanes, query, rightInvocation.ArgumentList.Arguments[0].Expression)) {
+                    return false;
+                }
+                lanes.Append("), ");
+                if (!Compute(lanes, query, binary.Left)) {
+                    return false;
+                }
+                lanes.Append(")");
+                return true;
+            }
+        }
         // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
         if (kind == SyntaxKind.AddExpression && 
             binary.Left is BinaryExpressionSyntax multiplyBinary && multiplyBinary.Kind() is SyntaxKind.MultiplyExpression)

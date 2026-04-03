@@ -210,5 +210,25 @@ public static partial class Test_Float_Methods_Avx
         
         AssertStoresEqual(store, query, 1e-6f);
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Float_ReciprocalSqrt(ref Position1 position, in Velocity1 velocity, float value) {
+        var abs = MathF.Abs(velocity.value);
+        position.value = value / MathF.Sqrt(abs);
+    } 
+        
+    [Test]
+    public static void Test_Float_ReciprocalSqrt()
+    {
+        var store = CreateTestStore();
+        Float_ReciprocalSqrtQuery(store, 2, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Float_ReciprocalSqrtQuery(storeVectorized, 2);
+        
+        AssertStoresEqual(store, query, 1e-3f);
+    }
+    
 
 }

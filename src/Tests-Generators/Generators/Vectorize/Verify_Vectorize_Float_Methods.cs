@@ -51,5 +51,31 @@ public partial class MyExample
 """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_ReciprocalSqrt()
+    {
+        var code =
+            """
+            using System;
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+
+            namespace VerifyVectorize;
+
+            public struct Position1 : IComponent { public float value; }
+            public struct Velocity1 : IComponent { public float value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query][OmitHash]
+                void MethodReciprocalSqrt(ref Position1 position, in Velocity1 velocity, float value) {
+                    var abs = MathF.Abs(velocity.value);
+                    position.value = value / MathF.Sqrt(abs);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 
 }
