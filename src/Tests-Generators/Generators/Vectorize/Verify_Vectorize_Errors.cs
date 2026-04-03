@@ -117,5 +117,28 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    // [Test]
+    public static async Task  Verify_InvalidStatement()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
 
+            namespace VerifyVectorize;
+
+            public struct FloatComponent : IComponent { public float value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query][OmitHash]
+                private static void InvalidStatementError(ref FloatComponent position) {
+                    if (position.value > 1f) {
+                    }
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

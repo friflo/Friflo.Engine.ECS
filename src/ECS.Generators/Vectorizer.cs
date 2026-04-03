@@ -47,9 +47,17 @@ public static partial class Vectorizer
                 if (body == null) continue;
                 var compute = new StringBuilder();
                 foreach (var statement in body.Statements) {
-                    if (!EmitCompute(query, compute, statement)) {
+                    var lanes = new StringBuilder[query.laneCount];
+                    for (int n = 0; n < lanes.Length; n++) {
+                        lanes[n] = new StringBuilder();
+                    }
+                    if (!EmitCompute(query, lanes, compute, statement)) {
                         return false;
                     }
+                    for (int n = 0; n < lanes.Length; n++) {
+                        compute.AppendLine($"                    {lanes[n]}");
+                    }
+                    compute.AppendLine();
                 }
                 EmitVectorizedMethod(query, compute, body);
             }
@@ -191,12 +199,8 @@ public static partial class Vectorizer
         return source;
     }
     
-    private static bool EmitCompute(Query query, StringBuilder compute, StatementSyntax statement)
+    private static bool EmitCompute(Query query, StringBuilder[] lanes, StringBuilder compute, StatementSyntax statement)
     {
-        var lanes = new StringBuilder[query.laneCount];
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n] = new StringBuilder();
-        }
         // Is local declaration - e.g.     var local = value;
         if (statement is LocalDeclarationStatementSyntax localDecl) {
             foreach (var variable in localDecl.Declaration.Variables) {
@@ -212,19 +216,14 @@ public static partial class Vectorizer
                     lanes.Append(";");
                 }
             }
+            return true;
         }
         // Assignment - e.g.     position.value = value;
         if (statement is ExpressionStatementSyntax expressionStatement) {
             var expressionSyntax = expressionStatement.Expression;
-            if (!Compute(lanes, query, expressionSyntax)) {
-                return false;
-            }
+            return Compute(lanes, query, expressionSyntax);
         }
-        for (int n = 0; n < lanes.Length; n++) {
-            compute.AppendLine($"                    {lanes[n]}");
-        }
-        compute.AppendLine();
-        return true;
+        return false;
     }
     
     private static bool EmitVectorizedMethod(Query query, StringBuilder compute, BlockSyntax? body)

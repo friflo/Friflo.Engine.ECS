@@ -55,5 +55,17 @@ public static partial class Test_Errors
     public static void InvalidParameterTypeError_Call() {
         InvalidParameterTypeErrorQuery(new EntityStore());
     }
+    
+    // --- Expect:    ECSGEN004: Vectorization failed - Invalid parameter type: 'Entity'
+    [Vectorize][Query][OmitHash]
+    private static void InvalidStatementError(ref FloatComponent position) {
+        if (position.value > 1f) {
+        }
+    }
+    
+    [Test]
+    public static void InvalidStatementError_Call() {
+        InvalidStatementErrorQuery(new EntityStore());
+    }
 
 }
