@@ -2,6 +2,7 @@ using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 using Tests.ECS;
 using Tests.Examples;
 using Tests.Generators.Benchmark;

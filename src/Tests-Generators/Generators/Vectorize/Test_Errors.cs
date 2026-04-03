@@ -3,6 +3,7 @@
 
 using System;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 using NUnit.Framework;
 using Tests.ECS;
 

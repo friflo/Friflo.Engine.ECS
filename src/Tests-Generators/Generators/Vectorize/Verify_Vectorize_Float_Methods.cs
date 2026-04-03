@@ -35,6 +35,7 @@ public static class Verify_Vectorize_Float_Methods
 using System;
 using System.Numerics;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 
 namespace VerifyVectorize;
 
@@ -60,7 +61,8 @@ public partial class MyExample
             using System;
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position1 : IComponent { public float value; }

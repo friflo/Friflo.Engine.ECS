@@ -34,6 +34,7 @@ public static class Verify_Vectorize_Errors
 """
 using System.Numerics;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 
 namespace VerifyVectorize;
 
@@ -57,6 +58,7 @@ public partial class MyExample
         """
         using System.Numerics;
         using Friflo.Engine.ECS;
+        using Friflo.Vectorization;
 
         namespace VerifyVectorize;
 
@@ -80,7 +82,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position2 : IComponent { public Vector2 value; }
@@ -103,7 +106,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position2 : IComponent { public Vector2 value; }
@@ -125,7 +129,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct FloatComponent : IComponent { public float value; }

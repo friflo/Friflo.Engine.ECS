@@ -20,6 +20,7 @@ public static class Verify_Query
         var code =
 """
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 
 namespace VerifyQuery;
 

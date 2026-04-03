@@ -40,8 +40,8 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             var types = new EcsTypes {
                 componentInterface  = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.IComponent"),
                 entityStruct        = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.Entity"),
-                vectorizeAttribute  = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.VectorizeAttribute"),
-                omitHashAttribute   = compilation.GetTypeByMetadataName("Friflo.Engine.ECS.OmitHashAttribute"),
+                vectorizeAttribute  = compilation.GetTypeByMetadataName("Friflo.Vectorization.VectorizeAttribute"),
+                omitHashAttribute   = compilation.GetTypeByMetadataName("Friflo.Vectorization.OmitHashAttribute"),
             };
             var methodSymbol        = (IMethodSymbol)ctx.TargetSymbol;
             var className           = methodSymbol.ContainingType.ToDisplayString(ClassNameFormat);

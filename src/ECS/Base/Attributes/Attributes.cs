@@ -112,14 +112,7 @@ public sealed class BlittableTypeAttribute : Attribute
 public sealed class QueryAttribute : Attribute { }
 
 
-/// <summary>
-/// <b>Experimental attribute</b> - Applies vectorization to a method generated with <c>[Query]</c>.
-/// </summary>
-[AttributeUsage(AttributeTargets.Method)]
-public sealed class VectorizeAttribute : Attribute { }
 
-[AttributeUsage(AttributeTargets.Method)]
-public sealed class OmitHashAttribute : Attribute { }
 
 #region Friflo ImGui attributes 
 

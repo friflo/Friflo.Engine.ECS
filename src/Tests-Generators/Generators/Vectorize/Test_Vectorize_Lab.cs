@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 using NUnit.Framework;
 using Tests.Examples;
 

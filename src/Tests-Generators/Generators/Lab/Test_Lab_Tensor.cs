@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Intrinsics.X86;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 using NUnit.Framework;
 
 namespace Tests.Generators.Lab;

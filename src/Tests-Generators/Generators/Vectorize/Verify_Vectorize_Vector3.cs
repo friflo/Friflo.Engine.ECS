@@ -34,6 +34,7 @@ public static class Verify_Vectorize_Vector3
 """
 using System.Numerics;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 
 namespace VerifyVectorize;
 
@@ -57,7 +58,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Velocity : IComponent { public Vector3 value; }
@@ -80,7 +82,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Velocity : IComponent { public Vector3 value; }
@@ -104,7 +107,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Velocity : IComponent { public Vector3 value; }
@@ -127,7 +131,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Velocity : IComponent { public Vector3 value; }
@@ -150,7 +155,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct FloatComponent : IComponent { public float value; }
@@ -173,7 +179,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position3 : IComponent { public Vector3 value; }
@@ -196,7 +203,8 @@ public partial class MyExample
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position3 : IComponent { public Vector3 value; }

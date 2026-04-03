@@ -34,7 +34,8 @@ public static class Verify_Vectorize_Locals
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position1 : IComponent { public float value; }
@@ -55,7 +56,8 @@ public static class Verify_Vectorize_Locals
             """
             using System.Numerics;
             using Friflo.Engine.ECS;
-
+            using Friflo.Vectorization;
+            
             namespace VerifyVectorize;
 
             public struct Position1 : IComponent { public float value; }

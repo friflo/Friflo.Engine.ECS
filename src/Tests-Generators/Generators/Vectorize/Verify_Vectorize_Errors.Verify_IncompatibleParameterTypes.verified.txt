@@ -7,7 +7,7 @@
                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 */
- : (11,24)-(11,55),
+ : (12,24)-(12,55),
       Message: Vectorization failed - Incompatible parameter types: 'Position2' and 'Position3',
       Severity: Warning,
       WarningLevel: 1,

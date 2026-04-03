@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
+using Friflo.Vectorization;
 using Friflo.Vectorization.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -31,6 +32,7 @@ public static class VerifyUtils
         return CSharpCompilation.Create("TestProj",
             new[] { CSharpSyntaxTree.ParseText(source) },
             new[] {
+                MetadataReference.CreateFromFile(typeof(VectorizeAttribute).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(QueryAttribute).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(System.Numerics.Vector3).Assembly.Location)
             },

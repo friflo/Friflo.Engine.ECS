@@ -7,7 +7,7 @@
                                            ^^^^^^^^^
         component.a = value;
 */
- : (10,43)-(10,52),
+ : (11,43)-(11,52),
       Message: Vectorization failed - Expect component type 'MyComponent1' having a field named value at parameter 'component',
       Severity: Warning,
       WarningLevel: 1,
