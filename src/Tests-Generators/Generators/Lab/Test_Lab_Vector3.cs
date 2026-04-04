@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 using NUnit.Framework;
@@ -53,7 +54,8 @@ public static class Test_Lab_Vector3
 
 public static class Approach1
 {
-    public static (Vector256<float> X, Vector256<float> Y, Vector256<float> Z)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static   (Vector256<float>  X, Vector256<float>  Y, Vector256<float>  Z)
         Deinterleave(Vector256<float> v0, Vector256<float> v1, Vector256<float> v2)
     {
         // --- STEP 1: Lane-Level Alignment ---

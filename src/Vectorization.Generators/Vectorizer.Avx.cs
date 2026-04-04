@@ -199,8 +199,14 @@ public static partial class Vectorizer
     private static bool Compute_Invocation(StringBuilder[] lanes, Query query, InvocationExpressionSyntax invocation)
     {
         var methodName = GetMethodName(query, invocation);
+        var methodReduced = methodName?.Replace("System.Numerics.Vector2", "Vector")
+                                       .Replace("System.Numerics.Vector3", "Vector")
+                                       .Replace("System.Numerics.Vector4", "Vector");
         var argList = invocation.ArgumentList;
         switch (methodName)
+        {
+        }
+        switch (methodReduced)
         {
             case "System.MathF.Sin(float)":         return Method_Scalar    (lanes, query, "MathUtils.SinMathF",    argList);
             case "System.MathF.Cos(float)":         return Method_Scalar    (lanes, query, "MathUtils.CosMathF",    argList);
@@ -227,32 +233,18 @@ public static partial class Vectorizer
             case "System.MathF.Sqrt(float)":        return Method_Scalar    (lanes, query, "Avx.Sqrt",              argList);
             
             case "System.MathF.Min(float, float)":
-            case "System.Numerics.Vector2.Min(System.Numerics.Vector2, System.Numerics.Vector2)":
-            case "System.Numerics.Vector3.Min(System.Numerics.Vector3, System.Numerics.Vector3)":
-            case "System.Numerics.Vector4.Min(System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_MinMax(lanes, query, "Min", argList);
+            case "Vector.Min(Vector, Vector)":              return Method_MinMax(lanes, query, "Min", argList);
             
             case "System.MathF.Max(float, float)":
-            case "System.Numerics.Vector2.Max(System.Numerics.Vector2, System.Numerics.Vector2)":
-            case "System.Numerics.Vector3.Max(System.Numerics.Vector3, System.Numerics.Vector3)":
-            case "System.Numerics.Vector4.Max(System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_MinMax(lanes, query, "Max", argList);
+            case "Vector.Max(Vector, Vector)":              return Method_MinMax(lanes, query, "Max", argList);
             
             case "System.Math.Clamp(float, float, float)":
-            case "System.Numerics.Vector2.Clamp(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2)":
-            case "System.Numerics.Vector3.Clamp(System.Numerics.Vector3, System.Numerics.Vector3, System.Numerics.Vector3)":
-            case "System.Numerics.Vector4.Clamp(System.Numerics.Vector4, System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_Clamp(lanes, query, argList);
+            case "Vector.Clamp(Vector, Vector, Vector)":    return Method_Clamp(lanes, query, argList);
             
-            case "System.Numerics.Vector2.Lerp(System.Numerics.Vector2, System.Numerics.Vector2, float)":
-            case "System.Numerics.Vector3.Lerp(System.Numerics.Vector3, System.Numerics.Vector3, float)":
-            case "System.Numerics.Vector4.Lerp(System.Numerics.Vector4, System.Numerics.Vector4, float)":
-            case "System.Numerics.Vector2.Lerp(System.Numerics.Vector2, System.Numerics.Vector2, System.Numerics.Vector2)":
-            case "System.Numerics.Vector3.Lerp(System.Numerics.Vector3, System.Numerics.Vector3, System.Numerics.Vector3)":
-            case "System.Numerics.Vector4.Lerp(System.Numerics.Vector4, System.Numerics.Vector4, System.Numerics.Vector4)":
-                return Method_Lerp(lanes, query, argList);
+            case "Vector.Lerp(Vector, Vector, float)":
+            case "Vector.Lerp(Vector, Vector, Vector)":     return Method_Lerp(lanes, query, argList);
             
-            case "System.Numerics.Vector4.Transform(System.Numerics.Vector4, System.Numerics.Matrix4x4)":
+            case "Vector.Transform(Vector, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
         }
         query.ReportDiagnosticSyntax(Errors.OperationUnsupported, invocation, invocation.ToFullString());
