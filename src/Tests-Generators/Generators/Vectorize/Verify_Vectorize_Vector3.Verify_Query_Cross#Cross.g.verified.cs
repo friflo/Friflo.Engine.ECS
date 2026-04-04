@@ -99,6 +99,7 @@ namespace VerifyVectorize
                     position_2 = Fma.MultiplySubtract(temp0_0, temp1_1, Avx.Multiply(temp0_1, temp1_0));
 
                     // --- 3. Store
+                    (position_0, position_1, position_2) = AvxVector3.Interleave(position_0, position_1, position_2);
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
