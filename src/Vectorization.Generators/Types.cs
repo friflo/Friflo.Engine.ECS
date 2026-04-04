@@ -47,6 +47,7 @@ public class Query
     public readonly StringBuilder                   computeTemp = new ();
     public          int                             computeTempCount;
     public          int                             constLocalsCount;
+    public          bool                            requireDeinterleave;
 
     public string AddConst() {
         return $"const{constLocalsCount++}";

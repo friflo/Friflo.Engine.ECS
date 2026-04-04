@@ -3,7 +3,7 @@
 
 namespace Friflo.Vectorization.Generators;
 
-public class Static
+public partial class Static
 {
     internal static string Code = @"
 using static System.MathF;

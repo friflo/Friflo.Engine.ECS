@@ -373,6 +373,13 @@ $"""
                 for (int n = 0; n < laneCount; n++) {
                     source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
                 }
+                if (query.requireDeinterleave) {
+                    switch (query.vectorDimension) {
+                        case 3:
+                            source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
+                            break;
+                    }
+                }
             }
             source.AppendLine();
         }
@@ -392,6 +399,13 @@ $"""
                     continue;
                 }
                 var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
+                if (query.requireDeinterleave) {
+                    switch (query.vectorDimension) {
+                        case 3:
+                            source.AppendLine($"                    ({left}_0, {left}_1, {left}_2) = AvxVector3.Interleave({left}_0, {left}_1, {left}_2);");
+                            break;
+                    }
+                }
                 for (int n = 0; n < laneCount; n++) {
                     source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
                 }

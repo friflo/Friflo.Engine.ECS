@@ -417,6 +417,7 @@ public static partial class Vectorizer
     
     private static bool Method_Cross(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
+        query.requireDeinterleave = true;
         var args = argumentSyntax.Arguments;
         if (!Compute_AddTemp(query, args[0].Expression, "Cross arg[0]", out var a)) {
             return false;
