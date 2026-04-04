@@ -44,4 +44,32 @@ public static class AvxVector4
 
         return (resX, resY, resZ, resW);
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2, Vector256<float> V3) Interleave(
+        Vector256<float> vx, Vector256<float> vy, Vector256<float> vz, Vector256<float> vw)
+    {
+        // Step 1: Pre-shuffle the lanes so that Unpacks work correctly across the 256-bit register.
+        // We need indices: 0, 2, 4, 6, 1, 3, 5, 7
+        var mask = Vector256.Create(0, 2, 4, 6, 1, 3, 5, 7).AsInt32();
+        
+        var x = Avx2.PermuteVar8x32(vx, mask);
+        var y = Avx2.PermuteVar8x32(vy, mask);
+        var z = Avx2.PermuteVar8x32(vz, mask);
+        var w = Avx2.PermuteVar8x32(vw, mask);
+
+        // Step 2: Standard Unpacks (Now they result in the correct order)
+        var t0 = Avx.UnpackLow(x, y);  // [X0, Y0, X1, Y1 | X4, Y4, X5, Y5]
+        var t1 = Avx.UnpackHigh(x, y); // [X2, Y2, X3, Y3 | X6, Y6, X7, Y7]
+        var t2 = Avx.UnpackLow(z, w);  // [Z0, W0, Z1, W1 | Z4, W4, Z5, W5]
+        var t3 = Avx.UnpackHigh(z, w); // [Z2, W2, Z3, W3 | Z6, W6, Z7, W7]
+
+        // Step 3: Final assembly into Vector4 pairs
+        var v0 = Vector256.AsSingle(Avx.UnpackLow(Vector256.AsDouble(t0), Vector256.AsDouble(t2)));
+        var v1 = Vector256.AsSingle(Avx.UnpackHigh(Vector256.AsDouble(t0), Vector256.AsDouble(t2)));
+        var v2 = Vector256.AsSingle(Avx.UnpackLow(Vector256.AsDouble(t1), Vector256.AsDouble(t3)));
+        var v3 = Vector256.AsSingle(Avx.UnpackHigh(Vector256.AsDouble(t1), Vector256.AsDouble(t3)));
+
+        return (v0, v1, v2, v3);
+    }
 }

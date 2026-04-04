@@ -48,13 +48,12 @@ public static class Test_Lab_Vector4
             Assert.That(z, Is.EqualTo(expectZ));
             Assert.That(w, Is.EqualTo(expectW));
             
-            /* var (res0, res1) = AvxVector2.Interleave(x1,y1);
+            var (res0, res1, res2, res3) = AvxVector4.Interleave(x, y, z, w);
+            
             Assert.That(res0, Is.EqualTo(v0));
             Assert.That(res1, Is.EqualTo(v1));
-            
-            var (res2, res3) = AvxVector2.Interleave(x2,y2);
             Assert.That(res2, Is.EqualTo(v2));
-            Assert.That(res3, Is.EqualTo(v3)); */
+            Assert.That(res3, Is.EqualTo(v3));
         }
     }
 }
