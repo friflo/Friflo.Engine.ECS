@@ -244,6 +244,9 @@ public static partial class Vectorizer
             case "Vector.Lerp(Vector, Vector, float)":
             case "Vector.Lerp(Vector, Vector, Vector)":     return Method_Lerp(lanes, query, argList);
             
+            // --- methods require Deinterleave
+            case "Vector.Cross(Vector, Vector)":            return Method_Cross(lanes, query, argList);
+            
             case "Vector.Transform(Vector, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
         }
@@ -338,9 +341,7 @@ public static partial class Vectorizer
         var name = query.AddConst();
         query.locals.AppendLine($"            var {name} = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()");
         query.locals.AppendLine();
-        for (int n = 0; n < lanes.Length; n++) {
-            lanes[n].Append("Avx.And(");
-        }
+        lanes.Append("Avx.And(");
         var args = argumentSyntax.Arguments;
         if (!Compute(lanes, query, args[0].Expression)) {
             return false;
@@ -412,6 +413,11 @@ public static partial class Vectorizer
         }
         lanes.Append(")");
         return true;
+    }
+    
+    private static bool Method_Cross(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        return false;
     }
 
 }
