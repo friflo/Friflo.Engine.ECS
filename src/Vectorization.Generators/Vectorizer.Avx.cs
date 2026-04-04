@@ -418,12 +418,10 @@ public static partial class Vectorizer
     private static bool Method_Cross(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
         var args = argumentSyntax.Arguments;
-        var a = query.AddTemp();
-        var b = query.AddTemp();
-        if (!Compute_Temp(query, a, args[0].Expression, "Cross arg[0]")) {
+        if (!Compute_AddTemp(query, args[0].Expression, "Cross arg[0]", out var a)) {
             return false;
         }
-        if (!Compute_Temp(query, b, args[1].Expression, "Cross arg[1]")) {
+        if (!Compute_AddTemp(query, args[1].Expression, "Cross arg[1]", out var b)) {
             return false;
         }
         lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
@@ -432,8 +430,9 @@ public static partial class Vectorizer
         return true;
     }
     
-    private static bool Compute_Temp(Query query, string temp, ExpressionSyntax expressionSyntax, string comment)
+    private static bool Compute_AddTemp(Query query, ExpressionSyntax expressionSyntax, string comment, out string temp)
     {
+        temp = query.AddTemp();
         var tempLanes = new StringBuilder[query.laneCount];
         query.computeTemp.AppendLine($"                    // {comment}");
         for (int n = 0; n < tempLanes.Length; n++) {
