@@ -5,8 +5,6 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using Microsoft.Diagnostics.Tracing.Parsers.IIS_Trace;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
@@ -51,7 +49,7 @@ public static class Test_Lab_Vector3
             Assert.That(y1, Is.EqualTo(expect2));
             Assert.That(z1, Is.EqualTo(expect3));
             
-            var (res1, res2, res3) = Approach4.Interleave(x1,y1,z1);
+            var (res1, res2, res3) = Approach4.Interleave2(x1,y1,z1);
             Assert.That(res1, Is.EqualTo(v0));
             Assert.That(res2, Is.EqualTo(v1));
             Assert.That(res3, Is.EqualTo(v2));
@@ -323,7 +321,42 @@ public static class Approach4
         res2 = Avx2.BlendVariable(res2, z_for_v2, Vector256.Create(0,-1, 0, 0,-1, 0, 0,-1).AsInt32().AsSingle());
 
         return (res0, res1, res2);
-        }
+    }
+    
+    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave2(
+        Vector256<float> vx, Vector256<float> vy, Vector256<float> vz)
+    {
+        // 1. Initial Unpacks (Very fast, Port 5)
+        var lowXY  = Avx.UnpackLow(vx, vy);   
+        var highXY = Avx.UnpackHigh(vx, vy); 
+        
+        // 2. Fix Lanes (Required for 3-way stride)
+        var xy_0123 = Avx.Permute2x128(lowXY, highXY, 0x20);
+        var xy_4567 = Avx.Permute2x128(lowXY, highXY, 0x31);
+
+        // 3. V0: Use immediate Blend instead of BlendVariable
+        // Mask 0b00100100 (hex 0x24) targets indices 2 and 5
+        var res0 = Avx2.PermuteVar8x32(xy_0123, Vector256.Create(0, 1, 0, 2, 3, 0, 4, 5));
+        var z_v0 = Avx2.PermuteVar8x32(vz,      Vector256.Create(0, 0, 0, 0, 0, 1, 0, 0).AsInt32()); // Z0, Z1
+        var v0 = Avx.Blend(res0, z_v0, 0x24); 
+
+        // 4. V1: Optimized Bridge
+        var v1_xyL = Avx2.PermuteVar8x32(xy_0123, Vector256.Create(0, 6, 7, 0, 0, 0, 0, 0));
+        var v1_xyH = Avx2.PermuteVar8x32(xy_4567, Vector256.Create(0, 0, 0, 0, 0, 1, 0, 2));
+        var v1_z   = Avx2.PermuteVar8x32(vz,      Vector256.Create(2, 0, 0, 3, 0, 0, 4, 0));
+        
+        // Combine XY parts with an immediate blend (Port 0/5)
+        var v1_tmp = Avx.Blend(v1_xyL, v1_xyH, 0xB0); // 0b10110000
+        // Final Z merge
+        var v1 = Avx.Blend(v1_tmp, v1_z, 0x49); // 0b01001001 (Indices 0, 3, 6)
+
+        // 5. V2: Optimized Tail
+        var res2 = Avx2.PermuteVar8x32(xy_4567, Vector256.Create(3, 0, 4, 5, 0, 6, 7, 0));
+        var z_v2 = Avx2.PermuteVar8x32(vz,      Vector256.Create(0, 5, 0, 0, 6, 0, 0, 7));
+        var v2 = Avx.Blend(res2, z_v2, 0x92); // 0b10010010 (Indices 1, 4, 7)
+
+        return (v0, v1, v2);
+    }
 }
 
 
