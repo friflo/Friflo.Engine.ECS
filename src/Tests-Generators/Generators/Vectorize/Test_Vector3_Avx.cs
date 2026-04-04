@@ -410,7 +410,7 @@ public static partial class Test_Vector3_Avx
         position.value = Vector3.Cross(position.value, velocity.value);
     }
 
-    [Test][Ignore("Implement Deinterleave")]
+    [Test]
     public static void Test_Cross_Vector3()
     {
         var store = CreateTestStore();
