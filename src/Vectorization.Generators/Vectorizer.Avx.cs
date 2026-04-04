@@ -203,9 +203,6 @@ public static partial class Vectorizer
                                        .Replace("System.Numerics.Vector3", "Vector")
                                        .Replace("System.Numerics.Vector4", "Vector");
         var argList = invocation.ArgumentList;
-        switch (methodName)
-        {
-        }
         switch (methodReduced)
         {
             case "System.MathF.Sin(float)":         return Method_Scalar    (lanes, query, "MathUtils.SinMathF",    argList);
@@ -219,11 +216,14 @@ public static partial class Vectorizer
             case "System.MathF.Acosh(float)":       return Method_Scalar    (lanes, query, "MathUtils.AcoshMathF",  argList);
             case "System.MathF.Atanh(float)":       return Method_Scalar    (lanes, query, "MathUtils.AtanhMathF",  argList);
             
+            case "Vector.Abs(Vector)":
             case "System.MathF.Abs(float)":         return Method_Abs       (lanes, query,                          argList);
+            case "Vector.Truncate(Vector)":
             case "System.MathF.Truncate(float)":    return Method_Truncate  (lanes, query,                          argList);
+            case "Vector.Round(Vector)":
+            case "System.MathF.Round(float)":       return Method_Round     (lanes, query,                          argList);
             case "System.MathF.Floor(float)":       return Method_Floor     (lanes, query,                          argList);
             case "System.MathF.Ceiling(float)":     return Method_Ceiling   (lanes, query,                          argList);
-            case "System.MathF.Round(float)":       return Method_Round     (lanes, query,                          argList);
             
             case "System.MathF.Exp(float)":         return Method_Scalar    (lanes, query, "Vector256.Exp",         argList);
             case "System.MathF.Log(float)":         return Method_Scalar    (lanes, query, "Vector256.Log",         argList);

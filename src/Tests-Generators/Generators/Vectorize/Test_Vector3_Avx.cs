@@ -330,4 +330,76 @@ public static partial class Test_Vector3_Avx
                Math.Abs(a.Y - b.Y) < epsilon &&
                Math.Abs(a.Z - b.Z) < epsilon;
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Truncate_Vector3(ref Position position)
+    {
+        position.value = Vector3.Truncate(position.value);
+    }
+
+    [Test]
+    public static void Test_Truncate_Vector3()
+    {
+        var store = CreateTestStore();
+        Truncate_Vector3Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Truncate_Vector3Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Round_Vector3(ref Position position)
+    {
+        position.value = Vector3.Round(position.value);
+    }
+
+    [Test]
+    public static void Test_Round_Vector3()
+    {
+        var store = CreateTestStore();
+        Round_Vector3Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Round_Vector3Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Abs_Vector3(ref Position position)
+    {
+        position.value = Vector3.Abs(position.value);
+    }
+
+    [Test]
+    public static void Test_Abs_Vector3()
+    {
+        var store = CreateTestStore();
+        Abs_Vector3Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Abs_Vector3Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
 }

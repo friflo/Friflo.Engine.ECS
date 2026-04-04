@@ -219,4 +219,28 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Truncate()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position3 : IComponent { public Vector3 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void Access_static(ref Position3 position) {
+                    position.value = Vector3.Truncate(position.value);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }
