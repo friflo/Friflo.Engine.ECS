@@ -49,7 +49,7 @@ public static class Test_Lab_Vector3
             Assert.That(y1, Is.EqualTo(expect2));
             Assert.That(z1, Is.EqualTo(expect3));
             
-            var (res1, res2, res3) = Approach4.Interleave2(x1,y1,z1);
+            var (res1, res2, res3) = Approach4.Interleave(x1,y1,z1);
             Assert.That(res1, Is.EqualTo(v0));
             Assert.That(res2, Is.EqualTo(v1));
             Assert.That(res3, Is.EqualTo(v2));
@@ -268,7 +268,7 @@ public static class Approach4
         return (x, y, z);
     }
     
-    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave(
+    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave_2(
             Vector256<float> vx, 
             Vector256<float> vy, 
             Vector256<float> vz)
@@ -323,7 +323,8 @@ public static class Approach4
         return (res0, res1, res2);
     }
     
-    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave2(
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave(
         Vector256<float> vx, Vector256<float> vy, Vector256<float> vz)
     {
         // 1. Initial Unpacks (Very fast, Port 5)
