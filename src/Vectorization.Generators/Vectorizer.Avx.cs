@@ -417,7 +417,12 @@ public static partial class Vectorizer
     
     private static bool Method_Cross(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        return false;
+        string a = "a";
+        string b = "b";
+        lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
+        lanes[1].Append($"Fma.MultiplySubtract({a}_2, {b}_0, Avx.Multiply({a}_0, {b}_2))");
+        lanes[2].Append($"Fma.MultiplySubtract({a}_0, {b}_1, Avx.Multiply({a}_1, {b}_0))");
+        return true;
     }
 
 }
