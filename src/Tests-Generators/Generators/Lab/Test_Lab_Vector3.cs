@@ -5,6 +5,8 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using Microsoft.Diagnostics.Tracing.Parsers.IIS_Trace;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
@@ -48,6 +50,11 @@ public static class Test_Lab_Vector3
             Assert.That(x1, Is.EqualTo(expect1));
             Assert.That(y1, Is.EqualTo(expect2));
             Assert.That(z1, Is.EqualTo(expect3));
+            
+            var (res1, res2, res3) = Approach4.Interleave(x1,y1,z1);
+            Assert.That(res1, Is.EqualTo(v0));
+            Assert.That(res2, Is.EqualTo(v1));
+            Assert.That(res3, Is.EqualTo(v2));
         }
     }
 }
@@ -262,6 +269,61 @@ public static class Approach4
 
         return (x, y, z);
     }
+    
+    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave(
+            Vector256<float> vx, 
+            Vector256<float> vy, 
+            Vector256<float> vz)
+        {
+// 1. Combine X and Y into two registers that are "lane-fixed"
+        // xy_0123: [X0, Y0, X1, Y1, X2, Y2, X3, Y3]
+        // xy_4567: [X4, Y4, X5, Y5, X6, Y6, X7, Y7]
+        var lowXY  = Avx.UnpackLow(vx, vy);   // [X0, Y0, X1, Y1, X4, Y4, X5, Y5]
+        var highXY = Avx.UnpackHigh(vx, vy);  // [X2, Y2, X3, Y3, X6, Y6, X7, Y7]
+        
+        var xy_0123 = Avx.Permute2x128(lowXY, highXY, 0x20);
+        var xy_4567 = Avx.Permute2x128(lowXY, highXY, 0x31);
+
+        // ---------------------------------------------------------
+        // OUTPUT 0: [X0, Y0, Z0, X1, Y1, Z1, X2, Y2]
+        // ---------------------------------------------------------
+        // Source indices from xy_0123: 0, 1, (z), 2, 3, (z), 4, 5
+        var res0 = Avx2.PermuteVar8x32(xy_0123,   Vector256.Create(0, 1, 0, 2, 3, 0, 4, 5).AsInt32());
+        // Blend in Z0 at index 2, Z1 at index 5
+        var z_for_v0 = Avx2.PermuteVar8x32(vz,    Vector256.Create(0, 0, 0, 0, 0, 1, 0, 0).AsInt32());
+        res0 = Avx2.BlendVariable(res0, z_for_v0, Vector256.Create(0, 0,-1, 0, 0,-1, 0, 0).AsInt32().AsSingle());
+
+        // ---------------------------------------------------------
+        // OUTPUT 1: [Z2, X3, Y3, Z3, X4, Y4, Z4, X5]
+        // ---------------------------------------------------------
+        // This is the bridge register.
+        // Needs: X3, Y3 (xy_0123[6,7]) 
+        //        X4, Y4, X5 (xy_4567[0,1,2])
+        //        Z2, Z3, Z4 (vz[2,3,4])
+        
+        // Grab X and Y components first
+        var v1_xy0123 = Avx2.PermuteVar8x32(xy_0123, Vector256.Create(0, 6, 7, 0, 0, 0, 0, 0).AsInt32());
+        var v1_xy4567 = Avx2.PermuteVar8x32(xy_4567, Vector256.Create(0, 0, 0, 0, 0, 1, 0, 2).AsInt32());
+        var res1 = Avx.Blend(v1_xy0123, v1_xy4567, 0b10110000); // Merge XY parts
+        
+        // Blend in Z2 at index 0, Z3 at index 3, Z4 at index 6
+        var z_for_v1 = Avx2.PermuteVar8x32(vz,    Vector256.Create( 2, 0, 0, 3, 0, 0, 4, 0).AsInt32());
+        res1 = Avx2.BlendVariable(res1, z_for_v1, Vector256.Create(-1, 0, 0,-1, 0, 0,-1, 0).AsInt32().AsSingle());
+
+        // ---------------------------------------------------------
+        // OUTPUT 2: [Y5, Z5, X6, Y6, Z6, X7, Y7, Z7]
+        // ---------------------------------------------------------
+        // Needs: Y5 (xy_4567[3])
+        //        X6, Y6, X7, Y7 (xy_4567[4,5,6,7])
+        //        Z5, Z6, Z7 (vz[5,6,7])
+        
+        var res2 = Avx2.PermuteVar8x32(xy_4567,   Vector256.Create(3, 0, 4, 5, 0, 6, 7, 0).AsInt32());
+        // Blend in Z5 at index 1, Z6 at index 4, Z7 at index 7
+        var z_for_v2 = Avx2.PermuteVar8x32(vz,    Vector256.Create(0, 5, 0, 0, 6, 0, 0, 7).AsInt32());
+        res2 = Avx2.BlendVariable(res2, z_for_v2, Vector256.Create(0,-1, 0, 0,-1, 0, 0,-1).AsInt32().AsSingle());
+
+        return (res0, res1, res2);
+        }
 }
 
 
