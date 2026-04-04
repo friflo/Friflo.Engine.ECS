@@ -417,8 +417,42 @@ public static partial class Vectorizer
     
     private static bool Method_Cross(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        string a = "a";
-        string b = "b";
+        var args = argumentSyntax.Arguments;
+        var tempLanes = new StringBuilder[query.laneCount];
+        // --- a
+        query.computeTemp.AppendLine("                    // Cross arg[0]");
+        var a = query.AddTemp();
+        for (int n = 0; n < tempLanes.Length; n++) {
+            tempLanes[n] = new StringBuilder();
+            tempLanes[n].Append($"                    Vector256<float> {a}_{n} = ");
+        }
+        if (!Compute(tempLanes, query, args[0].Expression)) {
+            return false;
+        }
+        tempLanes.Append(";");
+        for (int n = 0; n < lanes.Length; n++) {
+            query.computeTemp.Append(tempLanes[n]);
+            query.computeTemp.AppendLine();
+            tempLanes[n].Clear();
+        }
+        
+        // --- b
+        query.computeTemp.AppendLine("                    // Cross arg[1]");
+        var b = query.AddTemp();
+        for (int n = 0; n < tempLanes.Length; n++) {
+            tempLanes[n] = new StringBuilder();
+            tempLanes[n].Append($"                    Vector256<float> {b}_{n} = ");
+        }
+        if (!Compute(tempLanes, query, args[1].Expression)) {
+            return false;
+        }
+        tempLanes.Append(";");
+        for (int n = 0; n < lanes.Length; n++) {
+            query.computeTemp.Append(tempLanes[n]);
+            query.computeTemp.AppendLine();
+        }
+        query.computeTemp.AppendLine();
+        
         lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
         lanes[1].Append($"Fma.MultiplySubtract({a}_2, {b}_0, Avx.Multiply({a}_0, {b}_2))");
         lanes[2].Append($"Fma.MultiplySubtract({a}_0, {b}_1, Avx.Multiply({a}_1, {b}_0))");

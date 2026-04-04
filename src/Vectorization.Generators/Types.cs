@@ -44,10 +44,15 @@ public class Query
     public          string                          avxMethod = "";
     public readonly Dictionary<string, ParamType>   paramTypes = new ();
     public readonly StringBuilder                   locals = new ();
+    public readonly StringBuilder                   computeTemp = new ();
+    public          int                             computeTempCount;
     public          int                             constLocalsCount;
 
     public string AddConst() {
         return $"const{constLocalsCount++}";
+    }
+    public string AddTemp() {
+        return $"temp{computeTempCount++}";
     }
 
     public void ReportDiagnosticSymbol(DiagnosticDescriptor descriptor, ISymbol? locationSymbol, params object?[]? messageArgs)

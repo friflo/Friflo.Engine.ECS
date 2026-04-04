@@ -54,6 +54,8 @@ public static partial class Vectorizer
                     if (!EmitCompute(query, lanes, compute, statement)) {
                         return false;
                     }
+                    compute.Append(query.computeTemp);
+                    query.computeTemp.Clear();
                     for (int n = 0; n < lanes.Length; n++) {
                         compute.AppendLine($"                    {lanes[n]}");
                     }
