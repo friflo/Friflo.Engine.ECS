@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 // ReSharper disable InconsistentNaming
+// ReSharper disable InvokeAsExtensionMember
 
 namespace Tests.Generators.Lab;
 
@@ -47,6 +48,38 @@ public static class AvxVector4
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2, Vector256<float> V3) Interleave(
+        Vector256<float> vx, Vector256<float> vy, Vector256<float> vz, Vector256<float> vw)
+    {
+        // STEP 1: Interleave 32-bit floats (In-Lane)
+        // Uses Port 0 and Port 5 simultaneously
+        var xyLo = Avx.UnpackLow(vx, vy);  // [X0, Y0, X1, Y1 | X4, Y4, X5, Y5]
+        var xyHi = Avx.UnpackHigh(vx, vy); // [X2, Y2, X3, Y3 | X6, Y6, X7, Y7]
+        var zwLo = Avx.UnpackLow(vz, vw);  // [Z0, W0, Z1, W1 | Z4, W4, Z5, W5]
+        var zwHi = Avx.UnpackHigh(vz, vw); // [Z2, W2, Z3, W3 | Z6, W6, Z7, W7]
+
+        // STEP 2: Interleave 64-bit blocks (In-Lane)
+        // q04: [X0, Y0, Z0, W0 | X4, Y4, Z4, W4]
+        var q04 = Vector256.AsSingle(Avx.UnpackLow(Vector256.AsDouble(xyLo), Vector256.AsDouble(zwLo)));
+        // q15: [X1, Y1, Z1, W1 | X5, Y5, Z5, W5]
+        var q15 = Vector256.AsSingle(Avx.UnpackHigh(Vector256.AsDouble(xyLo), Vector256.AsDouble(zwLo)));
+        // q26: [X2, Y2, Z2, W2 | X6, Y6, Z6, W6]
+        var q26 = Vector256.AsSingle(Avx.UnpackLow(Vector256.AsDouble(xyHi), Vector256.AsDouble(zwHi)));
+        // q37: [X3, Y3, Z3, W3 | X7, Y7, Z7, W7]
+        var q37 = Vector256.AsSingle(Avx.UnpackHigh(Vector256.AsDouble(xyHi), Vector256.AsDouble(zwHi)));
+
+        // STEP 3: The 128-bit Lane Bridge
+        // Permute2x128 moves 128-bit blocks between registers.
+        // This is 2x faster than using PermuteVar8x32 for the same result.
+        var v0 = Avx.Permute2x128(q04, q15, 0x20); // V0: [X0, Y0, Z0, W0, X1, Y1, Z1, W1]
+        var v1 = Avx.Permute2x128(q26, q37, 0x20); // V1: [X2, Y2, Z2, W2, X3, Y3, Z3, W3]
+        var v2 = Avx.Permute2x128(q04, q15, 0x31); // V2: [X4, Y4, Z4, W4, X5, Y5, Z5, W5]
+        var v3 = Avx.Permute2x128(q26, q37, 0x31); // V3: [X6, Y6, Z6, W6, X7, Y7, Z7, W7]
+        return (v0, v1, v2, v3);
+    }
+    
+    // ------------------------ alternative implementations 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2, Vector256<float> V3) Interleave_alternative(
         Vector256<float> vx, Vector256<float> vy, Vector256<float> vz, Vector256<float> vw)
     {
         // Step 1: Pre-shuffle the lanes so that Unpacks work correctly across the 256-bit register.
