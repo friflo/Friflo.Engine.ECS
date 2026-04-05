@@ -20,15 +20,15 @@ namespace VerifyVectorize
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
-                var srcSpan = chunk.Chunk1.Span;
+                var positionSpan = chunk.Chunk1.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Access_static_Avx(srcSpan);
+                    n = _Access_static_Avx(positionSpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    Access_static(ref srcSpan[n]);
+                    Access_static(ref positionSpan[n]);
                 }
             }
             return _query;
@@ -55,10 +55,10 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _Access_static_Avx(
-            Span<global::VerifyVectorize.Position3> src)
+            Span<global::VerifyVectorize.Position3> position)
         {
             int i = 0;
-            var end = src.Length - 8;
+            var end = position.Length - 8;
             if (i > end) {
                 return 0;
             }
@@ -68,16 +68,16 @@ namespace VerifyVectorize
             var const0_1 = Vector256.Create(const0.Z, const0.X, const0.Y, const0.Z, const0.X, const0.Y, const0.Z, const0.X);
             var const0_2 = Vector256.Create(const0.Y, const0.Z, const0.X, const0.Y, const0.Z, const0.X, const0.Y, const0.Z);
 
-            fixed (global::VerifyVectorize.Position3* src_first = src)
+            fixed (global::VerifyVectorize.Position3* position_first = position)
             {
                 for (; i <= end; i += 8)
                 {
-                    float* src_ptr = (float*)(src_first + i);
+                    float* position_ptr = (float*)(position_first + i);
 
                     // --- 1. Load
-                    Vector256<float> src_0 = Avx.LoadVector256(src_ptr + 0);
-                    Vector256<float> src_1 = Avx.LoadVector256(src_ptr + 8);
-                    Vector256<float> src_2 = Avx.LoadVector256(src_ptr + 16);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
 
                     // --- 2. Compute
                     position_0 = const0_0;

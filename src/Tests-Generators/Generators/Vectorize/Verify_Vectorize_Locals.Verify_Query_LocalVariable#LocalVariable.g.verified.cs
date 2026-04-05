@@ -21,15 +21,15 @@ namespace VerifyVectorize
             {
                 var _entities = chunk.Entities;
                 var positionSpan = chunk.Chunk1.Span;
-                var valueSpan = chunk.Chunk2.Span;
+                var velocitySpan = chunk.Chunk2.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _LocalVariable_Avx(positionSpan, valueSpan);
+                    n = _LocalVariable_Avx(positionSpan, velocitySpan);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    LocalVariable(ref positionSpan[n], valueSpan[n]);
+                    LocalVariable(ref positionSpan[n], velocitySpan[n]);
                 }
             }
             return _query;
@@ -57,7 +57,7 @@ namespace VerifyVectorize
         [SkipLocalsInit]
         private static unsafe int _LocalVariable_Avx(
             Span<global::VerifyVectorize.Position1> position,
-            Span<global::VerifyVectorize.Velocity1> value)
+            Span<global::VerifyVectorize.Velocity1> velocity)
         {
             int i = 0;
             var end = position.Length - 32;
@@ -71,12 +71,12 @@ namespace VerifyVectorize
             Vector256<float> localVar_3;
 
             fixed (global::VerifyVectorize.Position1* position_first = position)
-            fixed (global::VerifyVectorize.Velocity1* value_first = value)
+            fixed (global::VerifyVectorize.Velocity1* velocity_first = velocity)
             {
                 for (; i <= end; i += 32)
                 {
                     float* position_ptr = (float*)(position_first + i);
-                    float* value_ptr = (float*)(value_first + i);
+                    float* velocity_ptr = (float*)(velocity_first + i);
 
                     // --- 1. Load
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
@@ -84,21 +84,21 @@ namespace VerifyVectorize
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
-                    Vector256<float> value_0 = Avx.LoadVector256(value_ptr + 0);
-                    Vector256<float> value_1 = Avx.LoadVector256(value_ptr + 8);
-                    Vector256<float> value_2 = Avx.LoadVector256(value_ptr + 16);
-                    Vector256<float> value_3 = Avx.LoadVector256(value_ptr + 24);
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
+                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // --- 2. Compute
-                    localVar_0 = value_0;
-                    localVar_1 = value_1;
-                    localVar_2 = value_2;
-                    localVar_3 = value_3;
+                    localVar_0 = position_0;
+                    localVar_1 = position_1;
+                    localVar_2 = position_2;
+                    localVar_3 = position_3;
 
-                    localVar_0 = value_0;
-                    localVar_1 = value_1;
-                    localVar_2 = value_2;
-                    localVar_3 = value_3;
+                    localVar_0 = velocity_0;
+                    localVar_1 = velocity_1;
+                    localVar_2 = velocity_2;
+                    localVar_3 = velocity_3;
 
                     position_0 = localVar_0;
                     position_1 = localVar_1;
@@ -106,11 +106,6 @@ namespace VerifyVectorize
                     position_3 = localVar_3;
 
                     // --- 3. Store
-                    Avx.Store(localVar_ptr + 0, localVar_0);
-                    Avx.Store(localVar_ptr + 8, localVar_1);
-                    Avx.Store(localVar_ptr + 16, localVar_2);
-                    Avx.Store(localVar_ptr + 24, localVar_3);
-
                     Avx.Store(position_ptr + 0, position_0);
                     Avx.Store(position_ptr + 8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

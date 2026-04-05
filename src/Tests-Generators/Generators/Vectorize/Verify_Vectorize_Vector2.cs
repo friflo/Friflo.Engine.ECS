@@ -272,8 +272,8 @@ public partial class MyExample
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void AssignVector(ref Position2 src, Vector2 dst, float amount) {
-                    position.value = Vector2.Lerp(src.value, dst, amount);
+                void AssignVector(ref Position2 position, Vector2 vec, float amount) {
+                    position.value = Vector2.Lerp(position.value, vec, amount);
                 }
             }
             """;

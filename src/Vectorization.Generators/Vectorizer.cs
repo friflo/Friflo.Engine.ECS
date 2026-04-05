@@ -350,8 +350,22 @@ public static partial class Vectorizer
         if (body == null) {
             return source;
         }
+        var assignmentVariables = new List<string>();
         foreach (var statement in body.Statements) {
-            EmitStoreStatement(source, query, statement, step);
+            if (statement is ExpressionStatementSyntax expressionStatement) {
+                if (expressionStatement.Expression is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
+                    // source.AppendLine("                    // found no assignment");
+                    continue;
+                }
+                var name = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
+                assignmentVariables.Add(name);
+            }
+        }
+        foreach (var vectorType in query.vectorTypes) {
+            if (!assignmentVariables.Contains(vectorType.parameter.Name)) {
+                continue;
+            }
+            EmitStoreVector(source, query, vectorType, step);
         }
         return source;
     }
@@ -412,33 +426,27 @@ $"""
         source.AppendLine();
     }
     
-    private static void EmitStoreStatement(StringBuilder source, Query query, StatementSyntax statement, int step)
+    private static void EmitStoreVector(StringBuilder source, Query query, VectorType vectorType, int step)
     {
-        if (statement is ExpressionStatementSyntax expressionStatement) {
-            if (expressionStatement.Expression is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
-                source.AppendLine("                    // found no assignment");
-                return;
+        var name = vectorType.parameter.Name;
+        if (query.requireDeinterleave) {
+            switch (query.vectorDimension) {
+                case 2:
+                    source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Interleave({name}_0, {name}_1);");
+                    source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Interleave({name}_2, {name}_3);");
+                    break;
+                case 3:
+                    source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Interleave({name}_0, {name}_1, {name}_2);");
+                    break;
+                case 4:
+                    source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Interleave({name}_0, {name}_1, {name}_2, {name}_3);");
+                    break;
             }
-            var name = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
-            if (query.requireDeinterleave) {
-                switch (query.vectorDimension) {
-                    case 2:
-                        source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Interleave({name}_0, {name}_1);");
-                        source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Interleave({name}_2, {name}_3);");
-                        break;
-                    case 3:
-                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Interleave({name}_0, {name}_1, {name}_2);");
-                        break;
-                    case 4:
-                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Interleave({name}_0, {name}_1, {name}_2, {name}_3);");
-                        break;
-                }
-            }
-            for (int n = 0; n < query.laneCount; n++) {
-                source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
-            }
-            source.AppendLine();
         }
+        for (int n = 0; n < query.laneCount; n++) {
+            source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
+        }
+        source.AppendLine();
     }
     
     private static bool Compute(StringBuilder[] lanes, Query query, ExpressionSyntax syntax)

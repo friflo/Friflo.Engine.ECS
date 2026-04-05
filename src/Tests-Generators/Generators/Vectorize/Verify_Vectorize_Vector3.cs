@@ -188,8 +188,8 @@ public partial class MyExample
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void Lerp(ref Position3 src, Vector3 dst, Vector3 amount) {
-                    position.value = Vector3.Lerp(src.value, dst, amount);
+                void Lerp(ref Position3 position, Vector3 vec, Vector3 amount) {
+                    position.value = Vector3.Lerp(position.value, vec, amount);
                 }
             }
             """;
@@ -212,7 +212,7 @@ public partial class MyExample
             public partial class MyExample
             {
                 [Vectorize][Query]  [OmitHash]
-                void Access_static(ref Position3 src) {
+                void Access_static(ref Position3 position) {
                     position.value = Vector3.Pi;
                 }
             }

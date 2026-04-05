@@ -14,21 +14,21 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="AssignVector"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery AssignVectorQuery(EntityStore _store, global::System.Numerics.Vector2 dst, float amount, bool vectorized = true)
+        public ArchetypeQuery AssignVectorQuery(EntityStore _store, global::System.Numerics.Vector2 vec, float amount, bool vectorized = true)
         {
             var _query = _AssignVector_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
-                var srcSpan = chunk.Chunk1.Span;
+                var positionSpan = chunk.Chunk1.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _AssignVector_Avx(srcSpan, dst, amount);
+                    n = _AssignVector_Avx(positionSpan, vec, amount);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    AssignVector(ref srcSpan[n], dst, amount);
+                    AssignVector(ref positionSpan[n], vec, amount);
                 }
             }
             return _query;
@@ -55,41 +55,41 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _AssignVector_Avx(
-            Span<global::VerifyVectorize.Position2> src,
-            global::System.Numerics.Vector2 dst,
+            Span<global::VerifyVectorize.Position2> position,
+            global::System.Numerics.Vector2 vec,
             float amount)
         {
             int i = 0;
-            var end = src.Length - 16;
+            var end = position.Length - 16;
             if (i > end) {
                 return 0;
             }
             // --- Locals
-            Vector128<float> dst_half = Vector128.Create(dst.X, dst.Y, dst.X, dst.Y);
-            var dst_0 = Avx.InsertVector128(dst_half.ToVector256(), dst_half, 1);
-            var dst_1 = dst_0;
-            var dst_2 = dst_0;
-            var dst_3 = dst_0;
+            Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
+            var vec_0 = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
+            var vec_1 = vec_0;
+            var vec_2 = vec_0;
+            var vec_3 = vec_0;
 
             var amount_scalar = Vector256.Create(amount);
 
-            fixed (global::VerifyVectorize.Position2* src_first = src)
+            fixed (global::VerifyVectorize.Position2* position_first = position)
             {
                 for (; i <= end; i += 16)
                 {
-                    float* src_ptr = (float*)(src_first + i);
+                    float* position_ptr = (float*)(position_first + i);
 
                     // --- 1. Load
-                    Vector256<float> src_0 = Avx.LoadVector256(src_ptr + 0);
-                    Vector256<float> src_1 = Avx.LoadVector256(src_ptr + 8);
-                    Vector256<float> src_2 = Avx.LoadVector256(src_ptr + 16);
-                    Vector256<float> src_3 = Avx.LoadVector256(src_ptr + 24);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // --- 2. Compute
-                    position_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_0, src_0), src_0);
-                    position_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_1, src_1), src_1);
-                    position_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_2, src_2), src_2);
-                    position_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_3, src_3), src_3);
+                    position_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_0, position_0), position_0);
+                    position_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_1, position_1), position_1);
+                    position_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_2, position_2), position_2);
+                    position_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_3, position_3), position_3);
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

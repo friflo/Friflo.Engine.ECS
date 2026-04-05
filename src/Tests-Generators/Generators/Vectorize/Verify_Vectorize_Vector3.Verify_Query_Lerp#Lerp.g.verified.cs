@@ -14,21 +14,21 @@ namespace VerifyVectorize
     {
         /// <summary>Query method generated for: <see cref="Lerp"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public ArchetypeQuery LerpQuery(EntityStore _store, global::System.Numerics.Vector3 dst, global::System.Numerics.Vector3 amount, bool vectorized = true)
+        public ArchetypeQuery LerpQuery(EntityStore _store, global::System.Numerics.Vector3 vec, global::System.Numerics.Vector3 amount, bool vectorized = true)
         {
             var _query = _Lerp_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
-                var srcSpan = chunk.Chunk1.Span;
+                var positionSpan = chunk.Chunk1.Span;
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Lerp_Avx(srcSpan, dst, amount);
+                    n = _Lerp_Avx(positionSpan, vec, amount);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    Lerp(ref srcSpan[n], dst, amount);
+                    Lerp(ref positionSpan[n], vec, amount);
                 }
             }
             return _query;
@@ -55,39 +55,39 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _Lerp_Avx(
-            Span<global::VerifyVectorize.Position3> src,
-            global::System.Numerics.Vector3 dst,
+            Span<global::VerifyVectorize.Position3> position,
+            global::System.Numerics.Vector3 vec,
             global::System.Numerics.Vector3 amount)
         {
             int i = 0;
-            var end = src.Length - 8;
+            var end = position.Length - 8;
             if (i > end) {
                 return 0;
             }
             // --- Locals
-            var dst_0 = Vector256.Create(dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y);
-            var dst_1 = Vector256.Create(dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X);
-            var dst_2 = Vector256.Create(dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z);
+            var vec_0 = Vector256.Create(vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y);
+            var vec_1 = Vector256.Create(vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X);
+            var vec_2 = Vector256.Create(vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z);
 
             var amount_0 = Vector256.Create(amount.X, amount.Y, amount.Z, amount.X, amount.Y, amount.Z, amount.X, amount.Y);
             var amount_1 = Vector256.Create(amount.Z, amount.X, amount.Y, amount.Z, amount.X, amount.Y, amount.Z, amount.X);
             var amount_2 = Vector256.Create(amount.Y, amount.Z, amount.X, amount.Y, amount.Z, amount.X, amount.Y, amount.Z);
 
-            fixed (global::VerifyVectorize.Position3* src_first = src)
+            fixed (global::VerifyVectorize.Position3* position_first = position)
             {
                 for (; i <= end; i += 8)
                 {
-                    float* src_ptr = (float*)(src_first + i);
+                    float* position_ptr = (float*)(position_first + i);
 
                     // --- 1. Load
-                    Vector256<float> src_0 = Avx.LoadVector256(src_ptr + 0);
-                    Vector256<float> src_1 = Avx.LoadVector256(src_ptr + 8);
-                    Vector256<float> src_2 = Avx.LoadVector256(src_ptr + 16);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
 
                     // --- 2. Compute
-                    position_0 = Fma.MultiplyAdd(amount_0, Avx.Subtract(dst_0, src_0), src_0);
-                    position_1 = Fma.MultiplyAdd(amount_1, Avx.Subtract(dst_1, src_1), src_1);
-                    position_2 = Fma.MultiplyAdd(amount_2, Avx.Subtract(dst_2, src_2), src_2);
+                    position_0 = Fma.MultiplyAdd(amount_0, Avx.Subtract(vec_0, position_0), position_0);
+                    position_1 = Fma.MultiplyAdd(amount_1, Avx.Subtract(vec_1, position_1), position_1);
+                    position_2 = Fma.MultiplyAdd(amount_2, Avx.Subtract(vec_2, position_2), position_2);
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

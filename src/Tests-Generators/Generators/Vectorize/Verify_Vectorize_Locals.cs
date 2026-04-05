@@ -66,9 +66,9 @@ public static class Verify_Vectorize_Locals
             public partial class MyExample
             {
                 [Vectorize][Query][OmitHash]
-                void LocalVariable(ref Position1 position, Velocity1 value) {
-                    var localVar = value;
-                    localVar = value;
+                void LocalVariable(ref Position1 position, Velocity1 velocity) {
+                    var localVar = position.value;
+                    localVar     = velocity.value;
                     position.value = localVar;
                 }
             }
