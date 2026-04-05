@@ -211,6 +211,7 @@ public static partial class Test_Vector2_Avx
         }
     }
     
+    // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
     private static void Set_scalar(Position2 position, ref FloatComponent flt, FloatComponent2 flt2) {
         flt.value = flt2.value;
