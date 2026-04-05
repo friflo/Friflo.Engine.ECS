@@ -234,6 +234,26 @@ public static partial class Test_Vector2_Avx
         }
     }
     
+    [Query]  [OmitHash]
+    private static void Set_vector(Position2 position, ref Vector2 vec) {
+        vec += position.value;
+    }
+
+    [Test]
+    public static void Test_Set_vector()
+    {
+        var store = CreateTestStore();
+        var sum1 = new Vector2();
+        Set_vectorQuery(store, ref sum1);                               // TODO, false
+
+        var storeVectorized = CreateTestStore();
+        var sum2 = new Vector2();
+        var query = Set_vectorQuery(storeVectorized, ref sum2);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        Assert.That(sum2, Is.EqualTo(sum1));
+    }
+    
     // -----------------------------------------------------------------------------------------------------
 
     [Vectorize][Query]  [OmitHash]

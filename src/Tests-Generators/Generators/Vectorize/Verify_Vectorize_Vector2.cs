@@ -204,9 +204,29 @@ public partial class MyExample
         await Verify(code);
     }
     
-    
-    
-    
+    [Test]
+    public static async Task  Verify_Query_Set_vector()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position2 : IComponent { public Vector2 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void AssignVector(Position2 position, ref Vector2 sum) {
+                    sum += position.value;
+                }
+            }
+            """;
+        await Verify(code);
+    }
     
     [Test]
     public static async Task  Verify_Query_Min()
