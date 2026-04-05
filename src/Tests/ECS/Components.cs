@@ -49,6 +49,7 @@ public struct MyComponent6 : IComponent { public int b; }
 public struct MyComponent7 : IComponent { public int b; }
 
 public struct FloatComponent : IComponent { public float value; }
+public struct FloatComponent2 : IComponent { public float value; }
 public struct Position4 : IComponent { public Vector4 value; }
 public struct Velocity4 : IComponent { public Vector4 value; }
 

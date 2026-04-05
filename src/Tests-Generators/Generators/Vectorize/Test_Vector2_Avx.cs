@@ -44,7 +44,12 @@ public static partial class Test_Vector2_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position2 { value = new Vector2(n, n+100)}, new Velocity2 { value = new Vector2(n+200,n+300)}, new FloatComponent { value = n });
+            store.CreateEntity(
+                new Position2 { value = new Vector2(n, n + 100)},
+                new Velocity2 { value = new Vector2(n + 200, n + 300)},
+                new FloatComponent  { value = n },
+                new FloatComponent2 { value = 2 * n }
+                );
         }
         return store;
     }
@@ -203,6 +208,28 @@ public static partial class Test_Vector2_Avx
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
             Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
+        }
+    }
+    
+    [Vectorize][Query]  [OmitHash]
+    private static void Set_scalar(Position2 position, ref FloatComponent flt, FloatComponent2 flt2) {
+        flt.value = flt2.value;
+    }
+
+    [Test][Ignore("Fix storing scalar")]
+    public static void Test_Set_scalar()
+    {
+        var store = CreateTestStore();
+        Set_scalarQuery(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Set_scalarQuery(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
         }
     }
     
