@@ -5,7 +5,7 @@ namespace Friflo.Vectorization.Generators;
 
 public partial class Static
 {
-    internal static string AvxVector3 = @"
+    internal static readonly string AvxVector3 = @"
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;

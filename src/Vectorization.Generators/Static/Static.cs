@@ -5,7 +5,7 @@ namespace Friflo.Vectorization.Generators;
 
 public partial class Static
 {
-    internal static string Code = @"
+    internal static readonly string Code = @"
 using static System.MathF;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;

@@ -31,6 +31,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
         context.RegisterPostInitializationOutput(ctx => {
             ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxUtils.g.cs",     Static.Code);
             ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxVector3.g.cs",   Static.AvxVector3);
+            ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxVector4.g.cs",   Static.AvxVector4);
         });
 
         // Generate the source

@@ -41,8 +41,9 @@ public static class VerifyUtils
 
     public static bool IgnoreStaticSource(GeneratedSourceResult result)
     {
-        if (result.HintName.Equals("Friflo.Engine.ECS.Intrinsics/AvxUtils.g.cs") ||
-            result.HintName.Equals("Friflo.Engine.ECS.Intrinsics/AvxVector3.g.cs"))
+        if (result.HintName.Equals("Friflo.Engine.ECS.Intrinsics/AvxUtils.g.cs")    ||
+            result.HintName.Equals("Friflo.Engine.ECS.Intrinsics/AvxVector3.g.cs")  ||
+            result.HintName.Equals("Friflo.Engine.ECS.Intrinsics/AvxVector4.g.cs"))
         {
             return true;
         }

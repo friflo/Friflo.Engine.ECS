@@ -428,6 +428,9 @@ public static partial class Vectorizer
         lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
         lanes[1].Append($"Fma.MultiplySubtract({a}_2, {b}_0, Avx.Multiply({a}_0, {b}_2))");
         lanes[2].Append($"Fma.MultiplySubtract({a}_0, {b}_1, Avx.Multiply({a}_1, {b}_0))");
+        if (query.vectorDimension == 4) {
+            lanes[3].Append($"Avx.Multiply({a}_3, {b}_3)");
+        }
         return true;
     }
     
