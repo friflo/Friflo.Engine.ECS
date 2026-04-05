@@ -65,10 +65,7 @@ namespace Tests.Generators.Vectorize
             }
             // --- Locals
             Vector128<float> dst_half = Vector128.Create(dst.X, dst.Y, dst.X, dst.Y);
-            var dst_0 = Avx.InsertVector128(dst_half.ToVector256(), dst_half, 1);
-            var dst_1 = dst_0;
-            var dst_2 = dst_0;
-            var dst_3 = dst_0;
+            var dst_scalar = Avx.InsertVector128(dst_half.ToVector256(), dst_half, 1);
 
             var amount_scalar = Vector256.Create(amount);
 
@@ -85,10 +82,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> src_3 = Avx.LoadVector256(src_ptr + 24);
 
                     // --- 2. Compute
-                    src_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_0, src_0), src_0);
-                    src_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_1, src_1), src_1);
-                    src_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_2, src_2), src_2);
-                    src_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_3, src_3), src_3);
+                    src_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_0), src_0);
+                    src_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_1), src_1);
+                    src_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_2), src_2);
+                    src_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_3), src_3);
 
                     // --- 3. Store
                     Avx.Store(src_ptr + 0, src_0);

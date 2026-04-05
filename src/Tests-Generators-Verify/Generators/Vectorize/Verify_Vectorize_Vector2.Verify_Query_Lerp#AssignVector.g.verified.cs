@@ -66,10 +66,7 @@ namespace VerifyVectorize
             }
             // --- Locals
             Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
-            var vec_0 = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
-            var vec_1 = vec_0;
-            var vec_2 = vec_0;
-            var vec_3 = vec_0;
+            var vec_scalar = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
 
             var amount_scalar = Vector256.Create(amount);
 
@@ -86,10 +83,10 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // --- 2. Compute
-                    position_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_0, position_0), position_0);
-                    position_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_1, position_1), position_1);
-                    position_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_2, position_2), position_2);
-                    position_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_3, position_3), position_3);
+                    position_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_0), position_0);
+                    position_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_1), position_1);
+                    position_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_2), position_2);
+                    position_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_3), position_3);
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

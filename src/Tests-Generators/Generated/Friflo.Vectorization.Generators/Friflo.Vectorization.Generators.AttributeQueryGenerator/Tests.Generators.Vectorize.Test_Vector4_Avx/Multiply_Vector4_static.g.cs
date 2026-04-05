@@ -66,10 +66,7 @@ namespace Tests.Generators.Vectorize
             // --- Locals
             var const0 = System.Numerics.Vector4.Pi; // static
             Vector128<float> const0_half = Vector128.Create(const0.X, const0.Y, const0.Z, const0.W);
-            var const0_0 = Avx.InsertVector128(const0_half.ToVector256(), const0_half, 1);
-            var const0_1 = const0_0;
-            var const0_2 = const0_0;
-            var const0_3 = const0_0;
+            var const0_scalar = Avx.InsertVector128(const0_half.ToVector256(), const0_half, 1);
 
             fixed (global::Tests.ECS.Position4* position_first = position)
             fixed (global::Tests.ECS.Velocity4* velocity_first = velocity)
@@ -91,10 +88,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // --- 2. Compute
-                    position_0 = Avx.Multiply(velocity_0, const0_0);
-                    position_1 = Avx.Multiply(velocity_1, const0_1);
-                    position_2 = Avx.Multiply(velocity_2, const0_2);
-                    position_3 = Avx.Multiply(velocity_3, const0_3);
+                    position_0 = Avx.Multiply(velocity_0, const0_scalar);
+                    position_1 = Avx.Multiply(velocity_1, const0_scalar);
+                    position_2 = Avx.Multiply(velocity_2, const0_scalar);
+                    position_3 = Avx.Multiply(velocity_3, const0_scalar);
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

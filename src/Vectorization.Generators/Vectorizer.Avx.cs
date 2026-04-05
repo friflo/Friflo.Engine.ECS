@@ -24,17 +24,24 @@ public static partial class Vectorizer
             // var value = symbol!.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             var value = $"{symbol.ContainingType.ToDisplayString()}.{symbol.Name}"; 
             var name = query.AddConst();
+            /* if (symbol is IPropertySymbol typeSymbol) {
+                var paramType = typeSymbol.Type.SpecialType == SpecialType.System_Single ? ParamType.Scalar : ParamType.Vector;
+                query.paramTypes.Add(name, paramType);
+            } */ 
             query.locals.AppendLine($"            var {name} = {value}; // static");
-            Utils.InterleaveVector3(query.locals, name, query.vectorDimension);
+            var paramType = Utils.InterleaveVector3(query.locals, name, query.vectorDimension);
+            query.paramTypes.Add(name, paramType);
             query.locals.AppendLine();
             
             for (int n = 0; n < lanes.Length; n++) {
-                lanes[n].Append($"{name}_{n}");
+                var vectorName = query.GetVectorName(name, n);
+                lanes[n].Append(vectorName);
             }
         } else {
             var name = identifierNameSyntax.Identifier.Text;
             for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append($"{name}_{i}");
+                var vectorName = query.GetVectorName(name, i);
+                lanes[i].Append(vectorName);
             }
         }
         return true;
@@ -72,7 +79,8 @@ public static partial class Vectorizer
             assignment.Right is BinaryExpressionSyntax assignBinary && assignBinary.Kind() is SyntaxKind.MultiplyExpression)
         {
             for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append($"{left}_{i} = Fma.MultiplyAdd(");
+                var vectorName = query.GetVectorName(left, i);
+                lanes[i].Append($"{vectorName} = Fma.MultiplyAdd(");
             }
             if (!Compute(lanes, query, assignBinary.Left)) {
                 return false;
@@ -82,15 +90,17 @@ public static partial class Vectorizer
                 return false;
             }
             for (int i = 0; i < lanes.Length; i++) {
-                lanes[i].Append($", {left}_{i});");
+                var vectorName = query.GetVectorName(left, i);
+                lanes[i].Append($", {vectorName});");
             }
             return true;
         }
         for (int i = 0; i < lanes.Length; i++) {
+            var vectorName = query.GetVectorName(left, i);
             if (kind == SyntaxKind.SimpleAssignmentExpression) {
-                lanes[i].Append($"{left}_{i} = ");
+                lanes[i].Append($"{vectorName} = ");
             } else {
-                lanes[i].Append($"{left}_{i} = {avxOperation}({left}_{i}, ");
+                lanes[i].Append($"{vectorName} = {avxOperation}({vectorName}, ");
             }
         }
         if (!Compute(lanes, query, assignment.Right)) {

@@ -65,10 +65,7 @@ namespace VerifyVectorize
             }
             // --- Locals
             Vector128<float> vector_half = Vector128.Create(vector.X, vector.Y, vector.X, vector.Y);
-            var vector_0 = Avx.InsertVector128(vector_half.ToVector256(), vector_half, 1);
-            var vector_1 = vector_0;
-            var vector_2 = vector_0;
-            var vector_3 = vector_0;
+            var vector_scalar = Avx.InsertVector128(vector_half.ToVector256(), vector_half, 1);
 
             fixed (global::VerifyVectorize.Position2* position_first = position)
             {
@@ -83,10 +80,10 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // --- 2. Compute
-                    position_0 = vector_0;
-                    position_1 = vector_1;
-                    position_2 = vector_2;
-                    position_3 = vector_3;
+                    position_0 = vector_scalar;
+                    position_1 = vector_scalar;
+                    position_2 = vector_scalar;
+                    position_3 = vector_scalar;
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

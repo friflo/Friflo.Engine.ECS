@@ -39,6 +39,12 @@ public static partial class Vectorizer
             4 => 4,
             _ => -1
         };
+        foreach (var type in query.vectorTypes) {
+            if (!type.isComponent) {
+                var paramType = vectorTypeDimension == 3 ? type.paramType : ParamType.Scalar;
+                query.paramTypes.Add(type.parameter.Name, paramType);
+            }
+        }
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
         {
             SyntaxNode node = syntaxReference.GetSyntax();
@@ -91,7 +97,6 @@ public static partial class Vectorizer
                 result.Add(CreateVectorType(parameter, name, true, valueField.Type));
             } else { 
                 var vectorType = CreateVectorType(parameter, name, false, parameter.Type);
-                query.paramTypes.Add(parameter.Name, vectorType.paramType);
                 result.Add(vectorType);
             }
         }

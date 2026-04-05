@@ -65,10 +65,7 @@ namespace VerifyVectorize
             }
             // --- Locals
             Vector128<float> sum_half = Vector128.Create(sum.X, sum.Y, sum.X, sum.Y);
-            var sum_0 = Avx.InsertVector128(sum_half.ToVector256(), sum_half, 1);
-            var sum_1 = sum_0;
-            var sum_2 = sum_0;
-            var sum_3 = sum_0;
+            var sum_scalar = Avx.InsertVector128(sum_half.ToVector256(), sum_half, 1);
 
             fixed (global::VerifyVectorize.Position2* position_first = position)
             {
@@ -83,10 +80,10 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // --- 2. Compute
-                    sum_0 = Avx.Add(sum_0, position_0);
-                    sum_1 = Avx.Add(sum_1, position_1);
-                    sum_2 = Avx.Add(sum_2, position_2);
-                    sum_3 = Avx.Add(sum_3, position_3);
+                    sum_scalar = Avx.Add(sum_scalar, position_0);
+                    sum_scalar = Avx.Add(sum_scalar, position_1);
+                    sum_scalar = Avx.Add(sum_scalar, position_2);
+                    sum_scalar = Avx.Add(sum_scalar, position_3);
 
                     // --- 3. Store
                 }

@@ -70,10 +70,7 @@ namespace Tests.Generators.Vectorize
             Vector256<int> scalarComp_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
 
             Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
-            var vec_0 = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
-            var vec_1 = vec_0;
-            var vec_2 = vec_0;
-            var vec_3 = vec_0;
+            var vec_scalar = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
 
             var scalar_scalar = Vector256.Create(scalar);
 
@@ -119,10 +116,10 @@ namespace Tests.Generators.Vectorize
                     scalar2_2 = Avx.Multiply(scalarComp_2, scalar_scalar);
                     scalar2_3 = Avx.Multiply(scalarComp_3, scalar_scalar);
 
-                    position_0 = Avx.Multiply(Avx.Multiply(vec_0, vec2_0), scalar2_0);
-                    position_1 = Avx.Multiply(Avx.Multiply(vec_1, vec2_1), scalar2_1);
-                    position_2 = Avx.Multiply(Avx.Multiply(vec_2, vec2_2), scalar2_2);
-                    position_3 = Avx.Multiply(Avx.Multiply(vec_3, vec2_3), scalar2_3);
+                    position_0 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_0), scalar2_0);
+                    position_1 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_1), scalar2_1);
+                    position_2 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_2), scalar2_2);
+                    position_3 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_3), scalar2_3);
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);

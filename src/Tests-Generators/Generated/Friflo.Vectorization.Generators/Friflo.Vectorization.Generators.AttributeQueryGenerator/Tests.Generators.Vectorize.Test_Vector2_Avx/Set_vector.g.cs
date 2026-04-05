@@ -64,10 +64,7 @@ namespace Tests.Generators.Vectorize
             }
             // --- Locals
             Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
-            var vec_0 = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
-            var vec_1 = vec_0;
-            var vec_2 = vec_0;
-            var vec_3 = vec_0;
+            var vec_scalar = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
 
             fixed (global::Tests.ECS.Position2* position_first = position)
             {
@@ -82,10 +79,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // --- 2. Compute
-                    vec_0 = Avx.Add(vec_0, position_0);
-                    vec_1 = Avx.Add(vec_1, position_1);
-                    vec_2 = Avx.Add(vec_2, position_2);
-                    vec_3 = Avx.Add(vec_3, position_3);
+                    vec_scalar = Avx.Add(vec_scalar, position_0);
+                    vec_scalar = Avx.Add(vec_scalar, position_1);
+                    vec_scalar = Avx.Add(vec_scalar, position_2);
+                    vec_scalar = Avx.Add(vec_scalar, position_3);
 
                     // --- 3. Store
                 }

@@ -66,10 +66,7 @@ namespace Tests.Generators.Vectorize
             }
             // --- Locals
             Vector128<float> vector3_half = Vector128.Create(vector3.X, vector3.Y, vector3.X, vector3.Y);
-            var vector3_0 = Avx.InsertVector128(vector3_half.ToVector256(), vector3_half, 1);
-            var vector3_1 = vector3_0;
-            var vector3_2 = vector3_0;
-            var vector3_3 = vector3_0;
+            var vector3_scalar = Avx.InsertVector128(vector3_half.ToVector256(), vector3_half, 1);
 
             fixed (global::Tests.ECS.Position2* position_first = position)
             fixed (global::Tests.ECS.Velocity2* velocity_first = velocity)
@@ -91,10 +88,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
 
                     // --- 2. Compute
-                    position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, vector3_0));
-                    position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, vector3_1));
-                    position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, vector3_2));
-                    position_3 = Avx.Multiply(position_3, Avx.Multiply(velocity_3, vector3_3));
+                    position_0 = Avx.Multiply(position_0, Avx.Multiply(velocity_0, vector3_scalar));
+                    position_1 = Avx.Multiply(position_1, Avx.Multiply(velocity_1, vector3_scalar));
+                    position_2 = Avx.Multiply(position_2, Avx.Multiply(velocity_2, vector3_scalar));
+                    position_3 = Avx.Multiply(position_3, Avx.Multiply(velocity_3, vector3_scalar));
 
                     // --- 3. Store
                     Avx.Store(position_ptr + 0, position_0);
