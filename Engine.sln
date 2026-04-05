@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Engine.ECS.Boost", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen", "src\CodeGen\CodeGen.csproj", "{F1DF8513-7BE0-4449-9E0C-9E14409997B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-Generators", "src\Tests-Generators\Tests-Generators.csproj", "{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-Generators-Verify", "src\Tests-Generators-Verify\Tests-Generators-Verify.csproj", "{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Vectorization.Attributes", "src\Vectorization.Attributes\Friflo.Vectorization.Attributes.csproj", "{6861A7EF-DCA5-4E2A-89F1-231A356EF460}"
 EndProject
