@@ -64,7 +64,7 @@ public static class Utils
     {
         switch (vectorDimension) {
             case 1:
-                sb.AppendLine($"            Vector128<float> {nm}_0 = Vector128.Create({nm});");
+                sb.AppendLine($"  XXX       var {nm}_scalar = Vector256.Create({nm});");
                 return ParamType.Scalar;
             case 2:
                 sb.AppendLine($"            Vector128<float> {nm}_half = Vector128.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
