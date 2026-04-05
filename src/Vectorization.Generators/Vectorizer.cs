@@ -398,39 +398,38 @@ $"""
         if (body == null) {
             return source;
         }
-        EmitStore(source, query, body, step);
+        foreach (var statement in body.Statements) {
+            EmitStoreStatement(source, query, statement, step);
+        }
         return source;
     }
     
-    private static void EmitStore(StringBuilder source, Query query, BlockSyntax body, int step)
+    private static void EmitStoreStatement(StringBuilder source, Query query, StatementSyntax statement, int step)
     {
-        foreach (var statement in body.Statements)
-        {
-            if (statement is ExpressionStatementSyntax expressionStatement) {
-                if (expressionStatement.Expression is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
-                    source.AppendLine("                    // found no assignment");
-                    continue;
-                }
-                var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
-                if (query.requireDeinterleave) {
-                    switch (query.vectorDimension) {
-                        case 2:
-                            source.AppendLine($"                    ({left}_0, {left}_1) = AvxVector2.Interleave({left}_0, {left}_1);");
-                            source.AppendLine($"                    ({left}_2, {left}_3) = AvxVector2.Interleave({left}_2, {left}_3);");
-                            break;
-                        case 3:
-                            source.AppendLine($"                    ({left}_0, {left}_1, {left}_2) = AvxVector3.Interleave({left}_0, {left}_1, {left}_2);");
-                            break;
-                        case 4:
-                            source.AppendLine($"                    ({left}_0, {left}_1, {left}_2, {left}_3) = AvxVector4.Interleave({left}_0, {left}_1, {left}_2, {left}_3);");
-                            break;
-                    }
-                }
-                for (int n = 0; n < query.laneCount; n++) {
-                    source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
-                }
-                source.AppendLine();
+        if (statement is ExpressionStatementSyntax expressionStatement) {
+            if (expressionStatement.Expression is not AssignmentExpressionSyntax assignmentExpressionSyntax) {
+                source.AppendLine("                    // found no assignment");
+                return;
             }
+            var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
+            if (query.requireDeinterleave) {
+                switch (query.vectorDimension) {
+                    case 2:
+                        source.AppendLine($"                    ({left}_0, {left}_1) = AvxVector2.Interleave({left}_0, {left}_1);");
+                        source.AppendLine($"                    ({left}_2, {left}_3) = AvxVector2.Interleave({left}_2, {left}_3);");
+                        break;
+                    case 3:
+                        source.AppendLine($"                    ({left}_0, {left}_1, {left}_2) = AvxVector3.Interleave({left}_0, {left}_1, {left}_2);");
+                        break;
+                    case 4:
+                        source.AppendLine($"                    ({left}_0, {left}_1, {left}_2, {left}_3) = AvxVector4.Interleave({left}_0, {left}_1, {left}_2, {left}_3);");
+                        break;
+                }
+            }
+            for (int n = 0; n < query.laneCount; n++) {
+                source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
+            }
+            source.AppendLine();
         }
     }
     
