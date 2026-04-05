@@ -340,7 +340,7 @@ public static partial class Vectorizer
         source.AppendLine();
         source.AppendLine("                    // --- 1. Load");
         foreach (var vectorType in query.vectorTypes) {
-            EmitLoadVector(source, query, vectorType, step);
+            EmitLoadComponentVector(source, query, vectorType, step);
         }
         source.AppendLine("                    // --- 2. Compute");
         source.Append(compute);
@@ -365,12 +365,12 @@ public static partial class Vectorizer
             if (!assignmentVariables.Contains(vectorType.parameter.Name)) {
                 continue;
             }
-            EmitStoreVector(source, query, vectorType, step);
+            EmitStoreComponentVector(source, query, vectorType, step);
         }
         return source;
     }
     
-    private static void EmitLoadVector(StringBuilder source, Query query, VectorType vectorType, int step)
+    private static void EmitLoadComponentVector(StringBuilder source, Query query, VectorType vectorType, int step)
     {
         if (!vectorType.isComponent) {
             return;
@@ -426,8 +426,11 @@ $"""
         source.AppendLine();
     }
     
-    private static void EmitStoreVector(StringBuilder source, Query query, VectorType vectorType, int step)
+    private static void EmitStoreComponentVector(StringBuilder source, Query query, VectorType vectorType, int step)
     {
+        if (!vectorType.isComponent) {
+            return;
+        }
         var name = vectorType.parameter.Name;
         var laneCount = query.laneCount;
         if (query.requireDeinterleave) {

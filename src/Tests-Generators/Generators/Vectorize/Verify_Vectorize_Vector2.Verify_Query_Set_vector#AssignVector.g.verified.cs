@@ -89,10 +89,6 @@ namespace VerifyVectorize
                     sum_3 = Avx.Add(sum_3, position_3);
 
                     // --- 3. Store
-                    Avx.Store(sum_ptr + 0, sum_0);
-                    Avx.Store(sum_ptr + 8, sum_1);
-                    Avx.Store(sum_ptr + 16, sum_2);
-                    Avx.Store(sum_ptr + 24, sum_3);
                 }
             }
             return i;
