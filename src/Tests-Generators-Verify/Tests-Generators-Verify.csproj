@@ -102,6 +102,7 @@
         <ProjectReference Include="..\Vectorization.Generators\Friflo.Vectorization.Generators.csproj" OutputItemType="Analyzer" />
     </ItemGroup>
     
+    <!--
     <PropertyGroup>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
@@ -109,5 +110,6 @@
     <ItemGroup>
         <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.g.cs" />
     </ItemGroup>
+    -->
 
 </Project>
