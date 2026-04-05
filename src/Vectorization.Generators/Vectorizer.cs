@@ -375,6 +375,9 @@ $"""
                 }
                 if (query.requireDeinterleave) {
                     switch (query.vectorDimension) {
+                        case 2:
+                            source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
+                            break;
                         case 3:
                             source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
                             break;
@@ -404,6 +407,9 @@ $"""
                 var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
                 if (query.requireDeinterleave) {
                     switch (query.vectorDimension) {
+                        case 2:
+                            source.AppendLine($"                    ({left}_0, {left}_1) = AvxVector2.Interleave({left}_0, {left}_1);");
+                            break;
                         case 3:
                             source.AppendLine($"                    ({left}_0, {left}_1, {left}_2) = AvxVector3.Interleave({left}_0, {left}_1, {left}_2);");
                             break;
