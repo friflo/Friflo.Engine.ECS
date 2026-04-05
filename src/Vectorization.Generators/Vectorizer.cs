@@ -337,58 +337,10 @@ public static partial class Vectorizer
     private static StringBuilder EmitLoopBody(Query query, StringBuilder compute, BlockSyntax? body, int step)
     {
         var source = new StringBuilder();
-        var laneCount = query.laneCount;
         source.AppendLine();
         source.AppendLine("                    // --- 1. Load");
         foreach (var vectorType in query.vectorTypes) {
-            if (!vectorType.isComponent) continue;
-            var name = vectorType.parameter.Name;
-            if (vectorType.paramType == ParamType.Scalar) {
-                switch (query.vectorDimension)
-                {
-                    case 1:
-                        for (int n = 0; n < laneCount; n++) {
-                            source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
-                        }
-                        break;
-                    case 2:
-                        source.AppendLine(
-$"""
-                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);
-                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256({name}_ptr + 8);
-                    Vector256<float> {name}_0 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_lo);
-                    Vector256<float> {name}_1 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_hi);
-                    Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_lo);
-                    Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_hi);
-""");
-                        break;
-                    default:
-                        source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
-                        for (int n = 0; n < laneCount; n++) {
-                            source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
-                        }
-                        break;
-                }
-            } else {
-                for (int n = 0; n < laneCount; n++) {
-                    source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
-                }
-            }
-            if (query.requireDeinterleave) {
-                switch (query.vectorDimension) {
-                    case 2:
-                        source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
-                        source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Deinterleave({name}_2, {name}_3);");
-                        break;
-                    case 3:
-                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
-                        break;
-                    case 4:
-                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Deinterleave({name}_0, {name}_1, {name}_2, {name}_3);");
-                        break;
-                }
-            }
-            source.AppendLine();
+            EmitLoadVector(source, query, vectorType, step);
         }
         source.AppendLine("                    // --- 2. Compute");
         source.Append(compute);
@@ -404,6 +356,62 @@ $"""
         return source;
     }
     
+    private static void EmitLoadVector(StringBuilder source, Query query, VectorType vectorType, int step)
+    {
+        if (!vectorType.isComponent) {
+            return;
+        }
+        var laneCount = query.laneCount;
+        var name = vectorType.parameter.Name;
+        if (vectorType.paramType == ParamType.Scalar)
+        {
+            switch (query.vectorDimension)
+            {
+                case 1:
+                    for (int n = 0; n < laneCount; n++) {
+                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
+                    }
+                    break;
+                case 2:
+                    source.AppendLine(
+$"""
+                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);
+                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256({name}_ptr + 8);
+                    Vector256<float> {name}_0 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_lo);
+                    Vector256<float> {name}_1 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_hi);
+                    Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_lo);
+                    Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_hi);
+""");
+                    break;
+                default:
+                    source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
+                    for (int n = 0; n < laneCount; n++) {
+                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
+                    }
+                    break;
+            }
+        } else {
+            for (int n = 0; n < laneCount; n++) {
+                source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
+            }
+        }
+        if (query.requireDeinterleave) {
+            switch (query.vectorDimension) {
+                case 2:
+                    source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
+                    source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Deinterleave({name}_2, {name}_3);");
+                    break;
+                case 3:
+                    source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
+                    break;
+                case 4:
+                    source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Deinterleave({name}_0, {name}_1, {name}_2, {name}_3);");
+                    break;
+            }
+        }
+        source.AppendLine();
+    }
+    
     private static void EmitStoreStatement(StringBuilder source, Query query, StatementSyntax statement, int step)
     {
         if (statement is ExpressionStatementSyntax expressionStatement) {
@@ -411,23 +419,23 @@ $"""
                 source.AppendLine("                    // found no assignment");
                 return;
             }
-            var left = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
+            var name = Utils.GetMemberName(assignmentExpressionSyntax.Left).Identifier.Text;
             if (query.requireDeinterleave) {
                 switch (query.vectorDimension) {
                     case 2:
-                        source.AppendLine($"                    ({left}_0, {left}_1) = AvxVector2.Interleave({left}_0, {left}_1);");
-                        source.AppendLine($"                    ({left}_2, {left}_3) = AvxVector2.Interleave({left}_2, {left}_3);");
+                        source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Interleave({name}_0, {name}_1);");
+                        source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Interleave({name}_2, {name}_3);");
                         break;
                     case 3:
-                        source.AppendLine($"                    ({left}_0, {left}_1, {left}_2) = AvxVector3.Interleave({left}_0, {left}_1, {left}_2);");
+                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Interleave({name}_0, {name}_1, {name}_2);");
                         break;
                     case 4:
-                        source.AppendLine($"                    ({left}_0, {left}_1, {left}_2, {left}_3) = AvxVector4.Interleave({left}_0, {left}_1, {left}_2, {left}_3);");
+                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Interleave({name}_0, {name}_1, {name}_2, {name}_3);");
                         break;
                 }
             }
             for (int n = 0; n < query.laneCount; n++) {
-                source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
+                source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
             }
             source.AppendLine();
         }
