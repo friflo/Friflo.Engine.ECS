@@ -377,6 +377,7 @@ $"""
                     switch (query.vectorDimension) {
                         case 2:
                             source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
+                            source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Deinterleave({name}_2, {name}_3);");
                             break;
                         case 3:
                             source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
@@ -409,6 +410,7 @@ $"""
                     switch (query.vectorDimension) {
                         case 2:
                             source.AppendLine($"                    ({left}_0, {left}_1) = AvxVector2.Interleave({left}_0, {left}_1);");
+                            source.AppendLine($"                    ({left}_2, {left}_3) = AvxVector2.Interleave({left}_2, {left}_3);");
                             break;
                         case 3:
                             source.AppendLine($"                    ({left}_0, {left}_1, {left}_2) = AvxVector3.Interleave({left}_0, {left}_1, {left}_2);");

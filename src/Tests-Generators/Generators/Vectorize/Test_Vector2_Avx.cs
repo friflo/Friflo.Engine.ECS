@@ -329,4 +329,28 @@ public static partial class Test_Vector2_Avx
         return Math.Abs(a.X - b.X) < epsilon &&
                Math.Abs(a.Y - b.Y) < epsilon;
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Cross_Vector2(ref Position2 position, Velocity2 velocity, ref FloatComponent scalar)
+    {
+        scalar.value = Vector2.Cross(position.value, velocity.value);
+    }
+
+    [Test][Ignore("Implement Vector2.Cross()")]
+    public static void Test_Cross_Vector2()
+    {
+        var store = CreateTestStore();
+        Cross_Vector2Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Cross_Vector2Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
+        }
+    }
 }

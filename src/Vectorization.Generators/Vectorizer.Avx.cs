@@ -425,11 +425,19 @@ public static partial class Vectorizer
         if (!Compute_AddTemp(query, args[1].Expression, "Cross arg[1]", out var b)) {
             return false;
         }
-        lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
-        lanes[1].Append($"Fma.MultiplySubtract({a}_2, {b}_0, Avx.Multiply({a}_0, {b}_2))");
-        lanes[2].Append($"Fma.MultiplySubtract({a}_0, {b}_1, Avx.Multiply({a}_1, {b}_0))");
-        if (query.vectorDimension == 4) {
-            lanes[3].Append($"Avx.Multiply({a}_3, {b}_3)");
+        if (query.vectorDimension == 2) {
+            lanes[0].Append($"default");
+            lanes[1].Append($"default");
+            lanes[2].Append($"default");
+            lanes[3].Append($"default");
+        }
+        if (query.vectorDimension == 3 || query.vectorDimension == 4) {
+            lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
+            lanes[1].Append($"Fma.MultiplySubtract({a}_2, {b}_0, Avx.Multiply({a}_0, {b}_2))");
+            lanes[2].Append($"Fma.MultiplySubtract({a}_0, {b}_1, Avx.Multiply({a}_1, {b}_0))");
+            if (query.vectorDimension == 4) {
+                lanes[3].Append($"Avx.Multiply({a}_3, {b}_3)");
+            }
         }
         return true;
     }
