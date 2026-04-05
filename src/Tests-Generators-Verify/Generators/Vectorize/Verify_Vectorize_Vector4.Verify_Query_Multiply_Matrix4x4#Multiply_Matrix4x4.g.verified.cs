@@ -55,8 +55,8 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _Multiply_Matrix4x4_Avx(
-            Span<global::VerifyVectorize.Position4> position,in 
-            global::System.Numerics.Matrix4x4 transform)
+            Span<global::VerifyVectorize.Position4> position,
+            in global::System.Numerics.Matrix4x4 transform)
         {
             int i = 0;
             var end = position.Length - 8;

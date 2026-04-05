@@ -55,8 +55,8 @@ namespace VerifyVectorize
 
         [SkipLocalsInit]
         private static unsafe int _AssignVector_Avx(
-            Span<global::VerifyVectorize.Position2> position,ref 
-            global::System.Numerics.Vector2 sum)
+            Span<global::VerifyVectorize.Position2> position,
+            ref global::System.Numerics.Vector2 sum)
         {
             int i = 0;
             var end = position.Length - 16;

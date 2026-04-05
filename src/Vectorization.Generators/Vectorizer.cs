@@ -251,8 +251,9 @@ public static partial class Vectorizer
                 signature.Append($"\n            Span<{vectorType.fullQualifiedName}> {parameter.Name}");
                 continue;
             }
+            signature.Append("\n            ");
             Utils.AppendRefKind(signature, parameter.RefKind);
-            signature.Append($"\n            {vectorType.fullQualifiedName} {parameter.Name}");
+            signature.Append($"{vectorType.fullQualifiedName} {parameter.Name}");
             //
             switch (vectorType.paramType) {
                 case ParamType.Scalar:

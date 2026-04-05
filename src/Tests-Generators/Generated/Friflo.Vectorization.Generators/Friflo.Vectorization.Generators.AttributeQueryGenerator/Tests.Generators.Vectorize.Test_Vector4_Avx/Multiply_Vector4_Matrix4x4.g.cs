@@ -54,8 +54,8 @@ namespace Tests.Generators.Vectorize
 
         [SkipLocalsInit]
         private static unsafe int _Multiply_Vector4_Matrix4x4_Avx(
-            Span<global::Tests.ECS.Position4> position,in 
-            global::System.Numerics.Matrix4x4 matrix)
+            Span<global::Tests.ECS.Position4> position,
+            in global::System.Numerics.Matrix4x4 matrix)
         {
             int i = 0;
             var end = position.Length - 8;

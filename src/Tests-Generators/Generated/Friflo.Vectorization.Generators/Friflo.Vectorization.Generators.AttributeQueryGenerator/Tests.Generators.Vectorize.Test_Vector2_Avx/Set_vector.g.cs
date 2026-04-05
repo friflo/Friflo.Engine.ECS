@@ -54,8 +54,8 @@ namespace Tests.Generators.Vectorize
 
         [SkipLocalsInit]
         private static unsafe int _Set_vector_Avx(
-            Span<global::Tests.ECS.Position2> position,ref 
-            global::System.Numerics.Vector2 sum)
+            Span<global::Tests.ECS.Position2> position,
+            ref global::System.Numerics.Vector2 sum)
         {
             int i = 0;
             var end = position.Length - 16;
