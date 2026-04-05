@@ -43,16 +43,9 @@ public static partial class Vectorizer
     private static bool Compute_IdentifierName(StringBuilder[] lanes, Query query, IdentifierNameSyntax identifierName)
     {
         var name = identifierName.Identifier.Text;
-        if (query.paramTypes.TryGetValue(name, out var paramType)) {
-            if (paramType == ParamType.Scalar) {
-                for (int i = 0; i < lanes.Length; i++) {
-                    lanes[i].Append($"{name}_scalar");
-                }
-                return true;
-            }
-        }
         for (int i = 0; i < lanes.Length; i++) {
-            lanes[i].Append($"{name}_{i}");
+            var vectorName = query.GetVectorName(name, i);
+            lanes[i].Append(vectorName);
         }
         return true;
     }

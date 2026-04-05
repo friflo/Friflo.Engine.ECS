@@ -72,6 +72,16 @@ public class Query
         var diagnostic = Diagnostic.Create(descriptor, location, messageArgs);
         spc.ReportDiagnostic(diagnostic);
     }
+    
+    public string GetVectorName(string name, int i)
+    {
+        if (paramTypes.TryGetValue(name, out var paramType)) {
+            if (paramType == ParamType.Scalar) {
+                return $"{name}_scalar";
+            }
+        }
+        return $"{name}_{i}";
+    }
 }
 
 public enum ParamType
