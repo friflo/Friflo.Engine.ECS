@@ -373,19 +373,19 @@ $"""
                 for (int n = 0; n < laneCount; n++) {
                     source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
                 }
-                if (query.requireDeinterleave) {
-                    switch (query.vectorDimension) {
-                        case 2:
-                            source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
-                            source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Deinterleave({name}_2, {name}_3);");
-                            break;
-                        case 3:
-                            source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
-                            break;
-                        case 4:
-                            source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Deinterleave({name}_0, {name}_1, {name}_2, {name}_3);");
-                            break;
-                    }
+            }
+            if (query.requireDeinterleave) {
+                switch (query.vectorDimension) {
+                    case 2:
+                        source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
+                        source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Deinterleave({name}_2, {name}_3);");
+                        break;
+                    case 3:
+                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Deinterleave({name}_0, {name}_1, {name}_2);");
+                        break;
+                    case 4:
+                        source.AppendLine($"                    ({name}_0, {name}_1, {name}_2, {name}_3) = AvxVector4.Deinterleave({name}_0, {name}_1, {name}_2, {name}_3);");
+                        break;
                 }
             }
             source.AppendLine();

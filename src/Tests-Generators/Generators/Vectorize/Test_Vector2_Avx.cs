@@ -44,7 +44,7 @@ public static partial class Test_Vector2_Avx
     {
         var store = new EntityStore();
         for (int n = 0; n < EntityCount; n++) {
-            store.CreateEntity(new Position2 { value = new Vector2(n, n+1)}, new Velocity2 { value = new Vector2(1,2)}, new FloatComponent { value = n });
+            store.CreateEntity(new Position2 { value = new Vector2(n, n+100)}, new Velocity2 { value = new Vector2(n+200,n+300)}, new FloatComponent { value = n });
         }
         return store;
     }
@@ -146,7 +146,11 @@ public static partial class Test_Vector2_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
+            var value1 = entity.GetComponent<Position2>().value;
+            var value2 = entityVectorized.GetComponent<Position2>().value;
+            if (!AreEqual(value1, value2, 1e-5f)) {
+                Assert.Fail("not equal");
+            }
         }
     }
 
@@ -170,7 +174,11 @@ public static partial class Test_Vector2_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
+            var value1 = entity.GetComponent<Position2>().value;
+            var value2 = entityVectorized.GetComponent<Position2>().value;
+            if (!AreEqual(value1, value2, 1e-5f)) {
+                Assert.Fail("not equal");
+            }
         }
     }
 

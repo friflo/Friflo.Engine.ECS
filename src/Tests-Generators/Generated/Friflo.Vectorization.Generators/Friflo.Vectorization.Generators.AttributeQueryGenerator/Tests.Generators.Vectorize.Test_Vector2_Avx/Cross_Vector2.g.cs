@@ -100,6 +100,8 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> scalar_1 = Avx2.PermuteVar8x32(scalar_scalar_01, scalar_mask_hi);
                     Vector256<float> scalar_2 = Avx2.PermuteVar8x32(scalar_scalar_23, scalar_mask_lo);
                     Vector256<float> scalar_3 = Avx2.PermuteVar8x32(scalar_scalar_23, scalar_mask_hi);
+                    (scalar_0, scalar_1) = AvxVector2.Deinterleave(scalar_0, scalar_1);
+                    (scalar_2, scalar_3) = AvxVector2.Deinterleave(scalar_2, scalar_3);
 
                     // --- 2. Compute
                     // Cross arg[0]
