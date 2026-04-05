@@ -398,6 +398,12 @@ $"""
         if (body == null) {
             return source;
         }
+        EmitStore(source, query, body, step);
+        return source;
+    }
+    
+    private static void EmitStore(StringBuilder source, Query query, BlockSyntax body, int step)
+    {
         foreach (var statement in body.Statements)
         {
             if (statement is ExpressionStatementSyntax expressionStatement) {
@@ -420,13 +426,12 @@ $"""
                             break;
                     }
                 }
-                for (int n = 0; n < laneCount; n++) {
+                for (int n = 0; n < query.laneCount; n++) {
                     source.AppendLine($"                    Avx.Store({left}_ptr + {n*step}, {left}_{n});");
                 }
                 source.AppendLine();
             }
         }
-        return source;
     }
     
     private static bool Compute(StringBuilder[] lanes, Query query, ExpressionSyntax syntax)
