@@ -13,7 +13,7 @@ namespace Tests.Generators.Vectorize
     {
         /// <summary>Query method generated for: <see cref="Set_vector"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery Set_vectorQuery(EntityStore _store, ref global::System.Numerics.Vector2 vec, bool vectorized = true)
+        public static ArchetypeQuery Set_vectorQuery(EntityStore _store, ref global::System.Numerics.Vector2 sum, bool vectorized = true)
         {
             var _query = _Set_vector_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
@@ -23,11 +23,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Set_vector_Avx(positionSpan, ref vec);
+                    n = _Set_vector_Avx(positionSpan, ref sum);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    Set_vector(positionSpan[n], ref vec);
+                    Set_vector(positionSpan[n], ref sum);
                 }
             }
             return _query;
@@ -55,7 +55,7 @@ namespace Tests.Generators.Vectorize
         [SkipLocalsInit]
         private static unsafe int _Set_vector_Avx(
             Span<global::Tests.ECS.Position2> position,ref 
-            global::System.Numerics.Vector2 vec)
+            global::System.Numerics.Vector2 sum)
         {
             int i = 0;
             var end = position.Length - 16;
@@ -63,8 +63,8 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             // --- Locals
-            Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
-            var vec_scalar = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
+            Vector128<float> sum_half = Vector128.Create(sum.X, sum.Y, sum.X, sum.Y);
+            var sum_scalar = Avx.InsertVector128(sum_half.ToVector256(), sum_half, 1);
 
             fixed (global::Tests.ECS.Position2* position_first = position)
             {
@@ -79,10 +79,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
 
                     // --- 2. Compute
-                    vec_scalar = Avx.Add(vec_scalar, position_0);
-                    vec_scalar = Avx.Add(vec_scalar, position_1);
-                    vec_scalar = Avx.Add(vec_scalar, position_2);
-                    vec_scalar = Avx.Add(vec_scalar, position_3);
+                    sum_scalar = Avx.Add(sum_scalar, position_0);
+                    sum_scalar = Avx.Add(sum_scalar, position_1);
+                    sum_scalar = Avx.Add(sum_scalar, position_2);
+                    sum_scalar = Avx.Add(sum_scalar, position_3);
 
                     // --- 3. Store
                 }

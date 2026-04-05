@@ -236,8 +236,8 @@ public static partial class Test_Vector2_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void Set_vector(Position2 position, ref Vector2 vec) {
-        vec += position.value;
+    private static void Set_vector(Position2 position, ref Vector2 sum) {
+        sum += position.value;
     }
 
     [Test][Ignore("Fix storing local vector")]
