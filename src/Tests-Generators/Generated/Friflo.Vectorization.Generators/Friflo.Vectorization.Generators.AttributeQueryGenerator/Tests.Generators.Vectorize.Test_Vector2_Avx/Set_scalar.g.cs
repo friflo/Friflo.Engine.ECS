@@ -105,8 +105,6 @@ namespace Tests.Generators.Vectorize
                     // --- 2. Compute
                     flt_0 = flt2_0;
                     flt_1 = flt2_1;
-                    flt_2 = flt2_2;
-                    flt_3 = flt2_3;
 
                     // --- 3. Store
                     Avx.Store(flt_ptr + 0, flt_0);

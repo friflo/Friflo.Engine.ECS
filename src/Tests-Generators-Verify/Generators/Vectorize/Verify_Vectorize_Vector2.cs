@@ -299,4 +299,32 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Cross()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position2      : IComponent { public Vector2 value; }
+            public struct Velocity2      : IComponent { public Vector2 value; }
+            public struct FloatComponent : IComponent { public float   value; }
+
+            public partial class MyExample
+            {
+            [Vectorize][Query]  [OmitHash]
+            private static void Cross_Vector2(ref Position2 position, Velocity2 velocity, ref FloatComponent scalar)
+            {
+                scalar.value = Vector2.Cross(position.value, velocity.value);
+            }
+            """;
+        await Verify(code);
+    }
+    
+
 }

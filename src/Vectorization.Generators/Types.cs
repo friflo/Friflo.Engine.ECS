@@ -38,6 +38,7 @@ public class Query
     // --- generated output
     public          int                             vectorDimension;    // [3, 4]
     public          int                             laneCount;          // [3, 2]
+    public          StringBuilder[]                 lanes;
     public          VectorType[]                    vectorTypes;
     public          string                          hash;
     public          bool                            vectorize;
@@ -94,7 +95,8 @@ public enum ParamType
 
 public struct Param
 {
-    public bool         isScalar;
+    public bool isScalar;
+    public int  dimension;
 }
 
 public struct VectorType

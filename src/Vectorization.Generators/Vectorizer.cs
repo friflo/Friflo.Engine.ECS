@@ -40,7 +40,7 @@ public static partial class Vectorizer
             _ => -1
         };
         foreach (var type in query.vectorTypes) {
-            var param = new Param { isScalar = type.isScalar };
+            var param = new Param { isScalar = type.isScalar, dimension = type.dimension };
             query.paramTypes.Add(type.parameter.Name, param);
         }
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
@@ -51,15 +51,12 @@ public static partial class Vectorizer
                 if (body == null) continue;
                 var compute = new StringBuilder();
                 foreach (var statement in body.Statements) {
-                    var lanes = new StringBuilder[query.laneCount];
-                    for (int n = 0; n < lanes.Length; n++) {
-                        lanes[n] = new StringBuilder();
-                    }
-                    if (!EmitCompute(query, lanes, compute, statement)) {
+                    if (!EmitCompute(query, null!, compute, statement)) {
                         return false;
                     }
                     compute.Append(query.computeTemp);
                     query.computeTemp.Clear();
+                    var lanes = query.lanes;
                     for (int n = 0; n < lanes.Length; n++) {
                         compute.AppendLine($"                    {lanes[n]}");
                     }
@@ -216,6 +213,7 @@ public static partial class Vectorizer
                 var initializerExpression = variable.Initializer?.Value;
                 if (initializerExpression != null) {
                     var variableName = variable.Identifier.Text;
+                    lanes = CreateLanes(query, variableName);
                     for (int n = 0; n < lanes.Length; n++) {
                         lanes[n].Append($"{variableName}_{n} = ");
                     }

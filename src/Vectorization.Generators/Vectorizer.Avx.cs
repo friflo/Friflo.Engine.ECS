@@ -57,6 +57,21 @@ public static partial class Vectorizer
         return true;
     }
     
+    private static StringBuilder[] CreateLanes(Query query, string parameterName)
+    {
+        var laneCount = query.laneCount;
+        if (query.paramTypes.TryGetValue(parameterName, out var paramType)) {
+            if (query.vectorDimension == 2 && paramType.dimension == 1) {
+                laneCount = 2; // TODO  assign lane count for Vector3 & Vector4
+            }
+        }
+        var lanes = query.lanes = new StringBuilder[laneCount];
+        for (int n = 0; n < laneCount; n++) {
+            lanes[n] = new StringBuilder();
+        }
+        return lanes;
+    }
+    
     private static bool Compute_Assignment(StringBuilder[] lanes, Query query, AssignmentExpressionSyntax assignment)
     {
         var kind = assignment.Kind();
@@ -74,6 +89,7 @@ public static partial class Vectorizer
             return false;
         }
         var left = Utils.GetMemberName(assignment.Left).Identifier.Text;
+        lanes = CreateLanes(query, left);
         // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
         if (kind == SyntaxKind.AddAssignmentExpression && 
             assignment.Right is BinaryExpressionSyntax assignBinary && assignBinary.Kind() is SyntaxKind.MultiplyExpression)
@@ -429,10 +445,8 @@ public static partial class Vectorizer
             return false;
         }
         if (query.vectorDimension == 2) {
-            lanes[0].Append($"default");
-            lanes[1].Append($"default");
-            lanes[2].Append($"default");
-            lanes[3].Append($"default");
+            lanes[0].Append($"Fma.MultiplySubtract({a}_0, {b}_1, Avx.Multiply({a}_1, {b}_0))");
+            lanes[1].Append($"Fma.MultiplySubtract({a}_2, {b}_3, Avx.Multiply({a}_3, {b}_2))");
         }
         if (query.vectorDimension == 3 || query.vectorDimension == 4) {
             lanes[0].Append($"Fma.MultiplySubtract({a}_1, {b}_2, Avx.Multiply({a}_2, {b}_1))");
