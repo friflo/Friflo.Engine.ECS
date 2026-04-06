@@ -86,8 +86,8 @@ namespace Tests.Generators.Vectorize
                     position_2 = Avx.Multiply(position_2, velocity_2);
 
                     // --- 3. Store
-                    Avx.Store(position_ptr + 0, position_0);
-                    Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr +  0, position_0);
+                    Avx.Store(position_ptr +  8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
                 }
             }

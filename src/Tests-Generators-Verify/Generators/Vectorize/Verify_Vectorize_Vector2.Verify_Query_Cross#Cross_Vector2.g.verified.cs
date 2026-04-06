@@ -121,8 +121,8 @@ namespace VerifyVectorize
                     scalar_1 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
 
                     // --- 3. Store
-                    Avx.Store(scalar_ptr + 0, scalar_0);
-                    Avx.Store(scalar_ptr + 8, scalar_1);
+                    Avx.Store(scalar_ptr +  0, scalar_0);
+                    Avx.Store(scalar_ptr +  8, scalar_1);
                 }
             }
             return i;

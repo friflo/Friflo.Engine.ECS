@@ -475,12 +475,12 @@ $"""
             {
                 case 1:
                     for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
+                        source.AppendLine($"                    Avx.Store({name}_ptr + {n*step,2}, {name}_{n});");
                     }
                     break;
                 case 2:
                     for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
+                        source.AppendLine($"                    Avx.Store({name}_ptr + {n*step,2}, {name}_{n});");
                     } /*
                     source.AppendLine(
 $"""
@@ -494,7 +494,7 @@ $"""
                     break;
                 default:
                     for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
+                        source.AppendLine($"                    Avx.Store({name}_ptr + {n*step,2}, {name}_{n});");
                     }
                     /* source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
                     for (int n = 0; n < laneCount; n++) {
@@ -504,7 +504,7 @@ $"""
             }
         } else {
             for (int n = 0; n < laneCount; n++) {
-                source.AppendLine($"                    Avx.Store({name}_ptr + {n*step}, {name}_{n});");
+                source.AppendLine($"                    Avx.Store({name}_ptr + {n*step,2}, {name}_{n});");
             }
         }
         source.AppendLine();

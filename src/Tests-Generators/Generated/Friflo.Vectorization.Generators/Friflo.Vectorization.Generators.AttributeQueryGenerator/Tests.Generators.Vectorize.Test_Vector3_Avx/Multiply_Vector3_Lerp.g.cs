@@ -89,8 +89,8 @@ namespace Tests.Generators.Vectorize
                     src_2 = Fma.MultiplyAdd(amount_2, Avx.Subtract(dst_2, src_2), src_2);
 
                     // --- 3. Store
-                    Avx.Store(src_ptr + 0, src_0);
-                    Avx.Store(src_ptr + 8, src_1);
+                    Avx.Store(src_ptr +  0, src_0);
+                    Avx.Store(src_ptr +  8, src_1);
                     Avx.Store(src_ptr + 16, src_2);
                 }
             }

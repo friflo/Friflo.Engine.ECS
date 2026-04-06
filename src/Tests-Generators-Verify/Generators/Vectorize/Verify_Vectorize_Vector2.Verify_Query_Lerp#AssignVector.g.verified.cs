@@ -89,8 +89,8 @@ namespace VerifyVectorize
                     position_3 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_3), position_3);
 
                     // --- 3. Store
-                    Avx.Store(position_ptr + 0, position_0);
-                    Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr +  0, position_0);
+                    Avx.Store(position_ptr +  8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
                     Avx.Store(position_ptr + 24, position_3);
                 }

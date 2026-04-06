@@ -165,8 +165,8 @@ namespace Tests.Generators.Vectorize
                     position_3 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_3, floor_3), ceiling_3), log10_3), pow_3), round_3), sqrt_3);
 
                     // --- 3. Store
-                    Avx.Store(position_ptr + 0, position_0);
-                    Avx.Store(position_ptr + 8, position_1);
+                    Avx.Store(position_ptr +  0, position_0);
+                    Avx.Store(position_ptr +  8, position_1);
                     Avx.Store(position_ptr + 16, position_2);
                     Avx.Store(position_ptr + 24, position_3);
                 }
