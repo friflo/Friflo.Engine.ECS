@@ -77,8 +77,8 @@ namespace Tests.Generators.Vectorize
                     float* factor_ptr = (float*)(factor_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr +  0);   // Position
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position
 
                     Vector256<float> factor_scalar = Avx.LoadVector256(factor_ptr);  // FloatComponent

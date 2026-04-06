@@ -73,13 +73,13 @@ namespace VerifyVectorize
                     float* vector_ptr = (float*)(vector_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position4
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position4
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr +  0);   // Position4
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position4
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position4
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position4
 
-                    Vector256<float> vector_0 = Avx.LoadVector256(vector_ptr + 0);   // Velocity4
-                    Vector256<float> vector_1 = Avx.LoadVector256(vector_ptr + 8);   // Velocity4
+                    Vector256<float> vector_0 = Avx.LoadVector256(vector_ptr +  0);   // Velocity4
+                    Vector256<float> vector_1 = Avx.LoadVector256(vector_ptr +  8);   // Velocity4
                     Vector256<float> vector_2 = Avx.LoadVector256(vector_ptr + 16);   // Velocity4
                     Vector256<float> vector_3 = Avx.LoadVector256(vector_ptr + 24);   // Velocity4
 

@@ -392,7 +392,7 @@ public static partial class Vectorizer
             {
                 case 1:
                     for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});  // {typeName}");
+                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step,2});  // {typeName}");
                     }
                     break;
                 case 2:
@@ -423,7 +423,7 @@ $"""
             }
         } else {
             for (int n = 0; n < laneCount; n++) {
-                source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});   // {typeName}");
+                source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step,2});   // {typeName}");
             }
         }
         if (query.requireDeinterleave) {
