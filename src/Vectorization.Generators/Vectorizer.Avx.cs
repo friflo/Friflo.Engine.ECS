@@ -29,8 +29,8 @@ public static partial class Vectorizer
                 query.paramTypes.Add(name, paramType);
             } */ 
             query.locals.AppendLine($"            var {name} = {value}; // static");
-            var paramType = Utils.InterleaveVector3(query.locals, name, query.vectorDimension);
-            query.paramTypes.Add(name, paramType);
+            var isScalar = Utils.InterleaveVector3(query.locals, name, query.vectorDimension);
+            query.paramTypes.Add(name, new Param { isScalar = isScalar });
             query.locals.AppendLine();
             
             for (int n = 0; n < lanes.Length; n++) {

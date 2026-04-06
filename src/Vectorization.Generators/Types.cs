@@ -42,7 +42,7 @@ public class Query
     public          string                          hash;
     public          bool                            vectorize;
     public          string                          avxMethod = "";
-    public readonly Dictionary<string, ParamType>   paramTypes = new ();
+    public readonly Dictionary<string, Param>       paramTypes = new ();
     public readonly StringBuilder                   locals = new ();
     public readonly StringBuilder                   computeTemp = new ();
     public          int                             computeTempCount;
@@ -75,8 +75,8 @@ public class Query
     
     public string GetVectorName(string name, int i)
     {
-        if (paramTypes.TryGetValue(name, out var paramType)) {
-            if (paramType == ParamType.Scalar) {
+        if (paramTypes.TryGetValue(name, out var param)) {
+            if (param.isScalar) {
                 return $"{name}_scalar";
             }
         }
@@ -92,11 +92,17 @@ public enum ParamType
     Matrix4x4
 }
 
+public struct Param
+{
+    public bool         isScalar;
+}
+
 public struct VectorType
 {
     public IParameterSymbol parameter;
     public string           fullQualifiedName;
     public bool             isComponent;
+    public bool             isScalar;
     public ITypeSymbol      valueType;
     public SpecialType      valueSpecialType;
     public ParamType        paramType;

@@ -40,10 +40,8 @@ public static partial class Vectorizer
             _ => -1
         };
         foreach (var type in query.vectorTypes) {
-            if (!type.isComponent) {
-                var paramType = vectorTypeDimension == 3 ? type.paramType : ParamType.Scalar;
-                query.paramTypes.Add(type.parameter.Name, paramType);
-            }
+            var param = new Param { isScalar = type.isScalar };
+            query.paramTypes.Add(type.parameter.Name, param);
         }
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
         {
@@ -80,7 +78,7 @@ public static partial class Vectorizer
         foreach (var parameter in query.parameters)
         {
             var type = parameter.Type;
-            var name = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            var typeName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             bool isComponent = query.ecsTypes.IsComponent(type);
             if (isComponent) {
                 IFieldSymbol? valueField = null;
@@ -94,9 +92,10 @@ public static partial class Vectorizer
                     query.ReportDiagnosticSymbol(Errors.InvalidComponentType, parameter, type.Name, parameter.Name);
                     return null;
                 }
-                result.Add(CreateVectorType(parameter, name, true, valueField.Type));
+                var vectorType = CreateVectorType(parameter, typeName, true, valueField.Type);
+                result.Add(vectorType);
             } else { 
-                var vectorType = CreateVectorType(parameter, name, false, parameter.Type);
+                var vectorType = CreateVectorType(parameter, typeName, false, parameter.Type);
                 result.Add(vectorType);
             }
         }
@@ -107,7 +106,8 @@ public static partial class Vectorizer
     {
         var specialType = valueType.SpecialType;
         var paramType   = ParamType.None;
-        int dimension = 0;
+        int dimension   = 0;
+        bool isScalar   = !isComponent;
         switch (valueType.SpecialType) {
             case SpecialType.None:
                 var fullTypeName = valueType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -115,35 +115,37 @@ public static partial class Vectorizer
                 {
                     case "global::System.Numerics.Vector2":
                         specialType = SpecialType.System_Single; 
-                        dimension = 2;
-                        paramType = ParamType.Vector;
+                        dimension   = 2;
+                        paramType   =  ParamType.Vector;
                         break;
                     case "global::System.Numerics.Vector3":
                         specialType = SpecialType.System_Single; 
-                        dimension = 3;
-                        paramType = ParamType.Vector;
+                        dimension   = 3;
+                        paramType   = ParamType.Vector;
+                        isScalar    = false;
                         break;
                     case "global::System.Numerics.Vector4":
                         specialType = SpecialType.System_Single; 
-                        dimension = 4;
-                        paramType = ParamType.Vector;
+                        dimension   = 4;
+                        paramType   =  ParamType.Vector;
                         break;
                     case "global::System.Numerics.Matrix4x4":
                         specialType = SpecialType.System_Single; 
-                        dimension = 4;
-                        paramType = ParamType.Matrix4x4;
+                        dimension   = 4;
+                        paramType   = ParamType.Matrix4x4;
                         break;
                 }
                 break;
             case SpecialType.System_Single:
-                dimension = 1;
-                paramType = ParamType.Scalar;
+                dimension   = 1;
+                paramType   = ParamType.Scalar;
                 break;
         }
         return new VectorType {
             parameter           = parameter,
             fullQualifiedName   = fullQualifiedName,
             isComponent         = isComponent,
+            isScalar            = isScalar,  
             valueType           = valueType,
             valueSpecialType    = specialType, 
             paramType           = paramType,
