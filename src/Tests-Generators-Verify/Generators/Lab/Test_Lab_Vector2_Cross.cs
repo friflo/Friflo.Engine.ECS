@@ -67,8 +67,8 @@ public static class Test_Lab_Vector2_Cross
                 (vec2_0, vec2_1) = AvxVector2.Deinterleave(vec2_0, vec2_1);
                 (vec2_2, vec2_3) = AvxVector2.Deinterleave(vec2_2, vec2_3);
                 
-                Vector256<float> result_0 = Avx.LoadVector256(result_ptr);
-                Vector256<float> result_1 = Avx.LoadVector256(result_ptr + 8);
+                Vector256<float> result_0 = Avx.LoadVector256(result_ptr);      // 8 floats
+                Vector256<float> result_1 = Avx.LoadVector256(result_ptr + 8);  // 8 floats
 
                 // --- 2. Compute
                 result_0 = Fma.MultiplySubtract(vec1_0, vec2_1, Avx.Multiply(vec1_1, vec2_0));
