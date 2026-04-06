@@ -393,7 +393,14 @@ public static partial class Vectorizer
                     }
                     break;
                 case 2:
-                    source.AppendLine(
+//                    if (vectorType.paramType == ParamType.Scalar) {
+//                        source.AppendLine(
+//$"""
+//                    Vector256<float> {name}_0 = Avx.LoadVector256({name}_ptr);
+//                    Vector256<float> {name}_1 = Avx.LoadVector256({name}_ptr + 8);
+//""");
+//                    } else {
+                        source.AppendLine(
 $"""
                     Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);
                     Vector256<float> {name}_scalar_23 = Avx.LoadVector256({name}_ptr + 8);
@@ -402,6 +409,7 @@ $"""
                     Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_lo);
                     Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_hi);
 """);
+//}
                     break;
                 default:
                     source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
@@ -443,7 +451,9 @@ $"""
             switch (query.vectorDimension) {
                 case 2:
                     source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Interleave({name}_0, {name}_1);");
-                    source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Interleave({name}_2, {name}_3);");
+//                    if (vectorType.paramType == ParamType.Vector) {
+                        source.AppendLine($"                    ({name}_2, {name}_3) = AvxVector2.Interleave({name}_2, {name}_3);");
+//                    }
                     break;
                 case 3:
                     source.AppendLine($"                    ({name}_0, {name}_1, {name}_2) = AvxVector3.Interleave({name}_0, {name}_1, {name}_2);");
