@@ -120,12 +120,8 @@ namespace Tests.Generators.Vectorize
                     scalar_1 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
 
                     // --- 3. Store
-                    (scalar_0, scalar_1) = AvxVector2.Interleave(scalar_0, scalar_1);
-                    (scalar_2, scalar_3) = AvxVector2.Interleave(scalar_2, scalar_3);
                     Avx.Store(scalar_ptr + 0, scalar_0);
                     Avx.Store(scalar_ptr + 8, scalar_1);
-                    Avx.Store(scalar_ptr + 16, scalar_2);
-                    Avx.Store(scalar_ptr + 24, scalar_3);
                 }
             }
             return i;

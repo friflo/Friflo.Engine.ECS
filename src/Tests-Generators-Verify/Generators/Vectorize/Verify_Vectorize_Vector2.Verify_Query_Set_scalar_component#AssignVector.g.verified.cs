@@ -110,8 +110,6 @@ namespace VerifyVectorize
                     // --- 3. Store
                     Avx.Store(factor_ptr + 0, factor_0);
                     Avx.Store(factor_ptr + 8, factor_1);
-                    Avx.Store(factor_ptr + 16, factor_2);
-                    Avx.Store(factor_ptr + 24, factor_3);
                 }
             }
             return i;

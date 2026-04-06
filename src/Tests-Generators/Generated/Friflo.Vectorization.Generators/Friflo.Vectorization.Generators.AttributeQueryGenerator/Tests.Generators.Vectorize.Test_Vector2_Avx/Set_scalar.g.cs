@@ -109,8 +109,6 @@ namespace Tests.Generators.Vectorize
                     // --- 3. Store
                     Avx.Store(flt_ptr + 0, flt_0);
                     Avx.Store(flt_ptr + 8, flt_1);
-                    Avx.Store(flt_ptr + 16, flt_2);
-                    Avx.Store(flt_ptr + 24, flt_3);
                 }
             }
             return i;

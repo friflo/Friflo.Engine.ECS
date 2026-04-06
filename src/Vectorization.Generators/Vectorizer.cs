@@ -447,9 +447,10 @@ $"""
             return;
         }
         var name = vectorType.parameter.Name;
-        var laneCount = query.laneCount;
         if (query.requireDeinterleave) {
-            switch (query.vectorDimension) {
+            switch (vectorType.dimension) {
+                case 1:
+                    break;
                 case 2:
                     source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Interleave({name}_0, {name}_1);");
 //                    if (vectorType.paramType == ParamType.Vector) {
@@ -464,9 +465,13 @@ $"""
                     break;
             }
         }
+        var laneCount = query.laneCount;
+        if (query.vectorDimension == 2 && vectorType.dimension == 1) {
+            laneCount = 2; //       TODO vech support for Vector3 & Vector4
+        }
         if (vectorType.paramType == ParamType.Scalar)
         {
-            switch (query.vectorDimension)
+            switch (vectorType.dimension)
             {
                 case 1:
                     for (int n = 0; n < laneCount; n++) {
