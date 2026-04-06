@@ -73,15 +73,15 @@ namespace VerifyVectorize
                     float* factor_ptr = (float*)(factor_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);  // Position1
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);  // Position1
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);  // Position1
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);  // Position1
 
-                    Vector256<float> factor_0 = Avx.LoadVector256(factor_ptr + 0);
-                    Vector256<float> factor_1 = Avx.LoadVector256(factor_ptr + 8);
-                    Vector256<float> factor_2 = Avx.LoadVector256(factor_ptr + 16);
-                    Vector256<float> factor_3 = Avx.LoadVector256(factor_ptr + 24);
+                    Vector256<float> factor_0 = Avx.LoadVector256(factor_ptr + 0);  // FloatComponent
+                    Vector256<float> factor_1 = Avx.LoadVector256(factor_ptr + 8);  // FloatComponent
+                    Vector256<float> factor_2 = Avx.LoadVector256(factor_ptr + 16);  // FloatComponent
+                    Vector256<float> factor_3 = Avx.LoadVector256(factor_ptr + 24);  // FloatComponent
 
                     // --- 2. Compute
                     position_0 = Avx.Multiply(position_0, factor_0);

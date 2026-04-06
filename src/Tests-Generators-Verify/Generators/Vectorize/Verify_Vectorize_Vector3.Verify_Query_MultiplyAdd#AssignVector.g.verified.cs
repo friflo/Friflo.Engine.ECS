@@ -77,13 +77,13 @@ namespace VerifyVectorize
                     float* velocity_ptr = (float*)(velocity_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position
 
-                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
-                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
-                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);   // Velocity
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);   // Velocity
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);   // Velocity
 
                     // --- 2. Compute
                     position_0 = Fma.MultiplyAdd(velocity_0, deltaTime_scalar, position_0);

@@ -385,13 +385,14 @@ public static partial class Vectorizer
         }
         var laneCount = query.laneCount;
         var name = vectorType.parameter.Name;
+        var typeName = vectorType.parameter.Type.Name;
         if (vectorType.paramType == ParamType.Scalar)
         {
             switch (query.vectorDimension)
             {
                 case 1:
                     for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
+                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});  // {typeName}");
                     }
                     break;
                 case 2:
@@ -404,8 +405,8 @@ public static partial class Vectorizer
 //                    } else {
                         source.AppendLine(
 $"""
-                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);
-                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256({name}_ptr + 8);
+                    Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);      // {typeName}
+                    Vector256<float> {name}_scalar_23 = Avx.LoadVector256({name}_ptr + 8);  // {typeName}
                     Vector256<float> {name}_0 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_lo);
                     Vector256<float> {name}_1 = Avx2.PermuteVar8x32({name}_scalar_01, {name}_mask_hi);
                     Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_lo);
@@ -414,7 +415,7 @@ $"""
 //}
                     break;
                 default:
-                    source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);");
+                    source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);  // {typeName}");
                     for (int n = 0; n < laneCount; n++) {
                         source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
                     }
@@ -422,7 +423,7 @@ $"""
             }
         } else {
             for (int n = 0; n < laneCount; n++) {
-                source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});");
+                source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step});   // {typeName}");
             }
         }
         if (query.requireDeinterleave) {

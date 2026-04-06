@@ -78,12 +78,12 @@ namespace Tests.Generators.Vectorize
                     float* factor_ptr = (float*)(factor_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position4
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position4
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position4
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position4
 
-                    Vector256<float> factor_scalar = Avx.LoadVector256(factor_ptr);
+                    Vector256<float> factor_scalar = Avx.LoadVector256(factor_ptr);  // FloatComponent
                     Vector256<float> factor_0 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_0);
                     Vector256<float> factor_1 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_1);
                     Vector256<float> factor_2 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_2);

@@ -93,13 +93,13 @@ namespace Tests.Generators.Vectorize
                     float* scalarComp_ptr = (float*)(scalarComp_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position2
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position2
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
 
-                    Vector256<float> scalarComp_scalar_01 = Avx.LoadVector256(scalarComp_ptr);
-                    Vector256<float> scalarComp_scalar_23 = Avx.LoadVector256(scalarComp_ptr + 8);
+                    Vector256<float> scalarComp_scalar_01 = Avx.LoadVector256(scalarComp_ptr);      // FloatComponent
+                    Vector256<float> scalarComp_scalar_23 = Avx.LoadVector256(scalarComp_ptr + 8);  // FloatComponent
                     Vector256<float> scalarComp_0 = Avx2.PermuteVar8x32(scalarComp_scalar_01, scalarComp_mask_lo);
                     Vector256<float> scalarComp_1 = Avx2.PermuteVar8x32(scalarComp_scalar_01, scalarComp_mask_hi);
                     Vector256<float> scalarComp_2 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_lo);

@@ -77,15 +77,15 @@ namespace Tests.Generators.Vectorize
                     float* velocity_ptr = (float*)(velocity_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position2
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position2
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
 
-                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
-                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
-                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
-                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);   // Velocity2
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);   // Velocity2
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);   // Velocity2
+                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);   // Velocity2
 
                     // --- 2. Compute
                     position_0 = Avx.Multiply(velocity_0, const0_scalar);

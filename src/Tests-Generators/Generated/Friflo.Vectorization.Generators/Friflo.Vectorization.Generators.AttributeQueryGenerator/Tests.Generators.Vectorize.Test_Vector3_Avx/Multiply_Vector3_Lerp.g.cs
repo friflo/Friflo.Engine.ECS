@@ -79,9 +79,9 @@ namespace Tests.Generators.Vectorize
                     float* src_ptr = (float*)(src_first + i);
 
                     // --- 1. Load
-                    Vector256<float> src_0 = Avx.LoadVector256(src_ptr + 0);
-                    Vector256<float> src_1 = Avx.LoadVector256(src_ptr + 8);
-                    Vector256<float> src_2 = Avx.LoadVector256(src_ptr + 16);
+                    Vector256<float> src_0 = Avx.LoadVector256(src_ptr + 0);   // Position
+                    Vector256<float> src_1 = Avx.LoadVector256(src_ptr + 8);   // Position
+                    Vector256<float> src_2 = Avx.LoadVector256(src_ptr + 16);   // Position
 
                     // --- 2. Compute
                     src_0 = Fma.MultiplyAdd(amount_0, Avx.Subtract(dst_0, src_0), src_0);

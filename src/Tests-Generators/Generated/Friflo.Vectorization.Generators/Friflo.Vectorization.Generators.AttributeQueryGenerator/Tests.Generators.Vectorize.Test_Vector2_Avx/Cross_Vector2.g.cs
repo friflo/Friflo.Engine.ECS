@@ -80,22 +80,22 @@ namespace Tests.Generators.Vectorize
                     float* scalar_ptr = (float*)(scalar_first + i);
 
                     // --- 1. Load
-                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);
-                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);
-                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);
-                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);
+                    Vector256<float> position_0 = Avx.LoadVector256(position_ptr + 0);   // Position2
+                    Vector256<float> position_1 = Avx.LoadVector256(position_ptr + 8);   // Position2
+                    Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
+                    Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
                     (position_0, position_1) = AvxVector2.Deinterleave(position_0, position_1);
                     (position_2, position_3) = AvxVector2.Deinterleave(position_2, position_3);
 
-                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);
-                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);
-                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);
-                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);
+                    Vector256<float> velocity_0 = Avx.LoadVector256(velocity_ptr + 0);   // Velocity2
+                    Vector256<float> velocity_1 = Avx.LoadVector256(velocity_ptr + 8);   // Velocity2
+                    Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);   // Velocity2
+                    Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);   // Velocity2
                     (velocity_0, velocity_1) = AvxVector2.Deinterleave(velocity_0, velocity_1);
                     (velocity_2, velocity_3) = AvxVector2.Deinterleave(velocity_2, velocity_3);
 
-                    Vector256<float> scalar_scalar_01 = Avx.LoadVector256(scalar_ptr);
-                    Vector256<float> scalar_scalar_23 = Avx.LoadVector256(scalar_ptr + 8);
+                    Vector256<float> scalar_scalar_01 = Avx.LoadVector256(scalar_ptr);      // FloatComponent
+                    Vector256<float> scalar_scalar_23 = Avx.LoadVector256(scalar_ptr + 8);  // FloatComponent
                     Vector256<float> scalar_0 = Avx2.PermuteVar8x32(scalar_scalar_01, scalar_mask_lo);
                     Vector256<float> scalar_1 = Avx2.PermuteVar8x32(scalar_scalar_01, scalar_mask_hi);
                     Vector256<float> scalar_2 = Avx2.PermuteVar8x32(scalar_scalar_23, scalar_mask_lo);
