@@ -31,6 +31,17 @@ public static class Test_Lab_Vector2_Sum
         Assert.That(sum1 == sum2);
     }
     
+    [Test]
+    public static void Test_Lab_Vector2_Sum_perf()
+    {
+        var positions = new Position2[1024];
+        var sum = new Vector2(1,2);
+        for (int n = 0; n < 20; n++) { // 20_000_000
+            Test_Sum_Avx(positions, ref sum);
+            // for (int i = 0; i < 1024; i++) { sum += positions[i].value; }
+        }
+    }
+    
     [SkipLocalsInit]
     private static unsafe int Test_Sum_Avx(Span<Position2> position, ref Vector2 sum)
     {
