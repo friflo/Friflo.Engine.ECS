@@ -39,18 +39,25 @@ public static partial class Vectorizer
             4 => 4,
             _ => -1
         };
-        foreach (var type in query.vectorTypes) {
-            var param = new Param { isScalar = type.isScalar, dimension = type.dimension };
-            query.paramTypes.Add(type.parameter.Name, param);
-        }
+
+        // 1. Phase: generate AoS
         if (!TraverseBody(query)) {
             return false;
         }
-        if (query.requireDeinterleave)
-        {
-            // if (!TraverseBody(query)) {
-            //    return false;
-            // }
+        if (query.requireDeinterleave) {
+            // Reset query state. Generated code require Deinterleave() / Interleave()
+            query.avxMethod = "";
+            query.lanes = null;
+            query.paramTypes.Clear();
+            query.locals.Clear();
+            query.computeTemp.Clear();
+            query.computeTempCount = 0;
+            query.constLocalsCount = 0;
+            
+            // 2. Phase: generate SoA
+            if (!TraverseBody(query)) {
+                return false;
+            }
         }
         query.vectorize = true;
         return true;
@@ -58,6 +65,10 @@ public static partial class Vectorizer
     
     private static bool TraverseBody(Query query)
     {
+        foreach (var type in query.vectorTypes) {
+            var param = new Param { isScalar = type.isScalar, dimension = type.dimension };
+            query.paramTypes.Add(type.parameter.Name, param);
+        }
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
         {
             SyntaxNode node = syntaxReference.GetSyntax();
