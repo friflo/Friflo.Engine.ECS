@@ -83,6 +83,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> src_3 = Avx.LoadVector256(src_ptr + 24);   // Position2
 
                     // --- 2. Compute
+                    // src.value = Vector2.Lerp(src.value, dst, amount);
                     src_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_0), src_0);
                     src_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_1), src_1);
                     src_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(dst_scalar, src_2), src_2);

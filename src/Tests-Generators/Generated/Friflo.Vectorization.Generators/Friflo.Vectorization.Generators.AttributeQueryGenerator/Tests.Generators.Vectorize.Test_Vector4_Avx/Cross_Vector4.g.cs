@@ -98,6 +98,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> temp1_2 = velocity_2;
                     Vector256<float> temp1_3 = velocity_3;
 
+                    // position.value = Vector4.Cross(position.value, velocity.value);
                     position_0 = Fma.MultiplySubtract(temp0_1, temp1_2, Avx.Multiply(temp0_2, temp1_1));
                     position_1 = Fma.MultiplySubtract(temp0_2, temp1_0, Avx.Multiply(temp0_0, temp1_2));
                     position_2 = Fma.MultiplySubtract(temp0_0, temp1_1, Avx.Multiply(temp0_1, temp1_0));

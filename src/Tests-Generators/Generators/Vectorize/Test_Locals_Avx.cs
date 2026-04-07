@@ -111,15 +111,18 @@ public static partial class Test_Locals_Avx
     public static void Test_MixedLocals()
     {
         var store = CreateTestStore();
-        MixedLocalsQuery(store, new Vector2(1,2), 3, false);
+        var vec = new Vector2(1,2);
+        MixedLocalsQuery(store, vec, 3, false);
 
         var storeVectorized = CreateTestStore();
-        var query = MixedLocalsQuery(storeVectorized, new Vector2(1,2), 3); // VEC
+        var query = MixedLocalsQuery(storeVectorized, vec, 3); // VEC
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            var val1 = entity.GetComponent<Position2>().value;
+            var val2 = entityVectorized.GetComponent<Position2>().value;
             Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
         }
     }

@@ -80,6 +80,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
 
                     // --- 2. Compute
+                    // sum += position.value;
                     sum_scalar = Avx.Add(sum_scalar, position_0);
                     sum_scalar = Avx.Add(sum_scalar, position_1);
                     sum_scalar = Avx.Add(sum_scalar, position_2);

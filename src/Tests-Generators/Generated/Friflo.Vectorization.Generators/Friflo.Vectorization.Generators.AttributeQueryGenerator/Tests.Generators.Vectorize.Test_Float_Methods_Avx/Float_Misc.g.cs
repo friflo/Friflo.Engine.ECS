@@ -125,41 +125,49 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);  // Velocity1
 
                     // --- 2. Compute
+                    // var abs = MathF.Abs(velocity.value);
                     abs_0 = Avx.And(velocity_0, const0);
                     abs_1 = Avx.And(velocity_1, const0);
                     abs_2 = Avx.And(velocity_2, const0);
                     abs_3 = Avx.And(velocity_3, const0);
 
+                    // var floor = MathF.Floor(velocity.value);
                     floor_0 = Vector256.Floor(velocity_0);
                     floor_1 = Vector256.Floor(velocity_1);
                     floor_2 = Vector256.Floor(velocity_2);
                     floor_3 = Vector256.Floor(velocity_3);
 
+                    // var ceiling = MathF.Ceiling(velocity.value);
                     ceiling_0 = Vector256.Ceiling(velocity_0);
                     ceiling_1 = Vector256.Ceiling(velocity_1);
                     ceiling_2 = Vector256.Ceiling(velocity_2);
                     ceiling_3 = Vector256.Ceiling(velocity_3);
 
+                    // var log10 = MathF.Log10(abs);
                     log10_0 = MathUtils.Log10MathF(abs_0);
                     log10_1 = MathUtils.Log10MathF(abs_1);
                     log10_2 = MathUtils.Log10MathF(abs_2);
                     log10_3 = MathUtils.Log10MathF(abs_3);
 
+                    // var pow = MathF.Pow(abs, velocity.value);
                     pow_0 = MathUtils.PowMathF(abs_0, velocity_0);
                     pow_1 = MathUtils.PowMathF(abs_1, velocity_1);
                     pow_2 = MathUtils.PowMathF(abs_2, velocity_2);
                     pow_3 = MathUtils.PowMathF(abs_3, velocity_3);
 
+                    // var round = MathF.Round(velocity.value);
                     round_0 = Vector256.Round(velocity_0);
                     round_1 = Vector256.Round(velocity_1);
                     round_2 = Vector256.Round(velocity_2);
                     round_3 = Vector256.Round(velocity_3);
 
+                    // var sqrt = MathF.Sqrt(abs);
                     sqrt_0 = Avx.Sqrt(abs_0);
                     sqrt_1 = Avx.Sqrt(abs_1);
                     sqrt_2 = Avx.Sqrt(abs_2);
                     sqrt_3 = Avx.Sqrt(abs_3);
 
+                    // position.value = abs + floor + ceiling + log10 + pow + round + sqrt;
                     position_0 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_0, floor_0), ceiling_0), log10_0), pow_0), round_0), sqrt_0);
                     position_1 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_1, floor_1), ceiling_1), log10_1), pow_1), round_1), sqrt_1);
                     position_2 = Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(abs_2, floor_2), ceiling_2), log10_2), pow_2), round_2), sqrt_2);

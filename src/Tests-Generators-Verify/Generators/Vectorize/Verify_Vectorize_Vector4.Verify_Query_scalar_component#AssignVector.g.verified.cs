@@ -92,6 +92,7 @@ namespace VerifyVectorize
                     Vector256<float> factor_3 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_3);
 
                     // --- 2. Compute
+                    // position.value = position.value * factor.value;
                     position_0 = Avx.Multiply(position_0, factor_0);
                     position_1 = Avx.Multiply(position_1, factor_1);
                     position_2 = Avx.Multiply(position_2, factor_2);

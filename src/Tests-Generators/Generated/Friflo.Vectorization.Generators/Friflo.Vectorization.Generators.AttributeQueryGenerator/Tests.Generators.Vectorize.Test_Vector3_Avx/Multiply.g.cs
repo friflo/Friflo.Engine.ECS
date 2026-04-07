@@ -82,6 +82,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_2 = Avx.LoadVector256(velocity_ptr + 16);   // Velocity
 
                     // --- 2. Compute
+                    // position.value *= velocity.value;
                     position_0 = Avx.Multiply(position_0, velocity_0);
                     position_1 = Avx.Multiply(position_1, velocity_1);
                     position_2 = Avx.Multiply(position_2, velocity_2);

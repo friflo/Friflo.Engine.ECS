@@ -150,66 +150,79 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);  // Velocity1
 
                     // --- 2. Compute
+                    // var fraction= velocity.value - MathF.Truncate(velocity.value);
                     fraction_0 = Avx.Subtract(velocity_0, Vector256.Truncate(velocity_0));
                     fraction_1 = Avx.Subtract(velocity_1, Vector256.Truncate(velocity_1));
                     fraction_2 = Avx.Subtract(velocity_2, Vector256.Truncate(velocity_2));
                     fraction_3 = Avx.Subtract(velocity_3, Vector256.Truncate(velocity_3));
 
+                    // var gtOne = value + MathF.Abs(velocity.value);
                     gtOne_0 = Avx.Add(value_scalar, Avx.And(velocity_0, const0));
                     gtOne_1 = Avx.Add(value_scalar, Avx.And(velocity_1, const0));
                     gtOne_2 = Avx.Add(value_scalar, Avx.And(velocity_2, const0));
                     gtOne_3 = Avx.Add(value_scalar, Avx.And(velocity_3, const0));
 
+                    // var sin = MathF.Sin(velocity.value);
                     sin_0 = MathUtils.SinMathF(velocity_0);
                     sin_1 = MathUtils.SinMathF(velocity_1);
                     sin_2 = MathUtils.SinMathF(velocity_2);
                     sin_3 = MathUtils.SinMathF(velocity_3);
 
+                    // var cos = MathF.Cos(velocity.value);
                     cos_0 = MathUtils.CosMathF(velocity_0);
                     cos_1 = MathUtils.CosMathF(velocity_1);
                     cos_2 = MathUtils.CosMathF(velocity_2);
                     cos_3 = MathUtils.CosMathF(velocity_3);
 
+                    // var tan = MathF.Tan(velocity.value);
                     tan_0 = MathUtils.TanMathF(velocity_0);
                     tan_1 = MathUtils.TanMathF(velocity_1);
                     tan_2 = MathUtils.TanMathF(velocity_2);
                     tan_3 = MathUtils.TanMathF(velocity_3);
 
+                    // var asin = MathF.Asin(fraction);
                     asin_0 = MathUtils.AsinMathF(fraction_0);
                     asin_1 = MathUtils.AsinMathF(fraction_1);
                     asin_2 = MathUtils.AsinMathF(fraction_2);
                     asin_3 = MathUtils.AsinMathF(fraction_3);
 
+                    // var acos = MathF.Acos(fraction);
                     acos_0 = MathUtils.AcosMathF(fraction_0);
                     acos_1 = MathUtils.AcosMathF(fraction_1);
                     acos_2 = MathUtils.AcosMathF(fraction_2);
                     acos_3 = MathUtils.AcosMathF(fraction_3);
 
+                    // var atan = MathF.Atan(velocity.value);
                     atan_0 = MathUtils.AtanMathF(velocity_0);
                     atan_1 = MathUtils.AtanMathF(velocity_1);
                     atan_2 = MathUtils.AtanMathF(velocity_2);
                     atan_3 = MathUtils.AtanMathF(velocity_3);
 
+                    // var atan2 = MathF.Atan2(velocity.value, value);
                     atan2_0 = MathUtils.Atan2MathF(velocity_0, value_scalar);
                     atan2_1 = MathUtils.Atan2MathF(velocity_1, value_scalar);
                     atan2_2 = MathUtils.Atan2MathF(velocity_2, value_scalar);
                     atan2_3 = MathUtils.Atan2MathF(velocity_3, value_scalar);
 
+                    // var asinh = MathF.Asinh(velocity.value);
                     asinh_0 = MathUtils.AsinhMathF(velocity_0);
                     asinh_1 = MathUtils.AsinhMathF(velocity_1);
                     asinh_2 = MathUtils.AsinhMathF(velocity_2);
                     asinh_3 = MathUtils.AsinhMathF(velocity_3);
 
+                    // var acosh = MathF.Acosh(gtOne);
                     acosh_0 = MathUtils.AcoshMathF(gtOne_0);
                     acosh_1 = MathUtils.AcoshMathF(gtOne_1);
                     acosh_2 = MathUtils.AcoshMathF(gtOne_2);
                     acosh_3 = MathUtils.AcoshMathF(gtOne_3);
 
+                    // var atanh = MathF.Atanh(fraction);
                     atanh_0 = MathUtils.AtanhMathF(fraction_0);
                     atanh_1 = MathUtils.AtanhMathF(fraction_1);
                     atanh_2 = MathUtils.AtanhMathF(fraction_2);
                     atanh_3 = MathUtils.AtanhMathF(fraction_3);
 
+                    // position.value += sin + cos + tan + asin + acos + atan + atan2 + asinh + acosh + atanh;
                     position_0 = Avx.Add(position_0, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_0, cos_0), tan_0), asin_0), acos_0), atan_0), atan2_0), asinh_0), acosh_0), atanh_0));
                     position_1 = Avx.Add(position_1, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_1, cos_1), tan_1), asin_1), acos_1), atan_1), atan2_1), asinh_1), acosh_1), atanh_1));
                     position_2 = Avx.Add(position_2, Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(Avx.Add(sin_2, cos_2), tan_2), asin_2), acos_2), atan_2), atan2_2), asinh_2), acosh_2), atanh_2));

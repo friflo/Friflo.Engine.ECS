@@ -80,6 +80,7 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);  // Position1
 
                     // --- 2. Compute
+                    // position.value = MathF.Min(position.value, max);
                     position_0 = Avx.Min(position_0, max_scalar);
                     position_1 = Avx.Min(position_1, max_scalar);
                     position_2 = Avx.Min(position_2, max_scalar);

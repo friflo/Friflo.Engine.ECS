@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -82,6 +83,8 @@ public static partial class Vectorizer
                     }
                     compute.Append(query.computeTemp);
                     query.computeTemp.Clear();
+                    var statementText = Regex.Replace(statement.ToString(), @"\s+", " ").Trim();;
+                    compute.AppendLine($"                    // {statementText}");
                     var lanes = query.lanes;
                     for (int n = 0; n < lanes.Length; n++) {
                         compute.AppendLine($"                    {lanes[n]}");

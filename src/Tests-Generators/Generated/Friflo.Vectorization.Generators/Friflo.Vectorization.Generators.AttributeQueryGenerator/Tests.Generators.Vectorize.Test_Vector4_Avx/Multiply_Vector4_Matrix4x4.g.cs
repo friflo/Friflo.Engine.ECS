@@ -84,6 +84,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position4
 
                     // --- 2. Compute
+                    // position.value = Vector4.Transform(position.value, matrix);
                     position_0 = AvxUtils.TransformVector4PairAVX(position_0, matrix_0, matrix_1, matrix_2, matrix_3);
                     position_1 = AvxUtils.TransformVector4PairAVX(position_1, matrix_0, matrix_1, matrix_2, matrix_3);
                     position_2 = AvxUtils.TransformVector4PairAVX(position_2, matrix_0, matrix_1, matrix_2, matrix_3);

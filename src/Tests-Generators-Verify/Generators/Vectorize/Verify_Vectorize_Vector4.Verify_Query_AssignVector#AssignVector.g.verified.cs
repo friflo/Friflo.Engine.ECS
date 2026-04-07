@@ -85,6 +85,7 @@ namespace VerifyVectorize
                     Vector256<float> vector_3 = Avx.LoadVector256(vector_ptr + 24);   // Velocity4
 
                     // --- 2. Compute
+                    // position.value = vector;
                     position_0 = vector_0;
                     position_1 = vector_1;
                     position_2 = vector_2;

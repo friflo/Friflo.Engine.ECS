@@ -89,6 +89,7 @@ namespace VerifyVectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);   // Velocity4
 
                     // --- 2. Compute
+                    // position.value = velocity.value * deltaTime + position.value;
                     position_0 = Fma.MultiplyAdd(velocity_0, deltaTime_scalar, position_0);
                     position_1 = Fma.MultiplyAdd(velocity_1, deltaTime_scalar, position_1);
                     position_2 = Fma.MultiplyAdd(velocity_2, deltaTime_scalar, position_2);

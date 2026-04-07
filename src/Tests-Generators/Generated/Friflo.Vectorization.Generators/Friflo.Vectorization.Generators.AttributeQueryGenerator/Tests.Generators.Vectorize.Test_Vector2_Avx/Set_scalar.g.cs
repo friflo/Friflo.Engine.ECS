@@ -104,6 +104,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> flt2_3 = Avx2.PermuteVar8x32(flt2_scalar_23, flt2_mask_hi);
 
                     // --- 2. Compute
+                    // flt.value = flt2.value;
                     flt_0 = flt2_0;
                     flt_1 = flt2_1;
 

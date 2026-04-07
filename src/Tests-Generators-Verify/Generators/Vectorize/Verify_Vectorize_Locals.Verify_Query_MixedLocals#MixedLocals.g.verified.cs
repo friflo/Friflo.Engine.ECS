@@ -108,16 +108,19 @@ namespace VerifyVectorize
                     Vector256<float> scalarComp_3 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_hi);
 
                     // --- 2. Compute
+                    // Vector2 vec2 = position.value * scalar;
                     vec2_0 = Avx.Multiply(position_0, scalar_scalar);
                     vec2_1 = Avx.Multiply(position_1, scalar_scalar);
                     vec2_2 = Avx.Multiply(position_2, scalar_scalar);
                     vec2_3 = Avx.Multiply(position_3, scalar_scalar);
 
+                    // float scalar2 = scalarComp.value * scalar;
                     scalar2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
                     scalar2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
                     scalar2_2 = Avx.Multiply(scalarComp_2, scalar_scalar);
                     scalar2_3 = Avx.Multiply(scalarComp_3, scalar_scalar);
 
+                    // position.value = vec * vec2 * scalar2;
                     position_0 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_0), scalar2_0);
                     position_1 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_1), scalar2_1);
                     position_2 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_2), scalar2_2);

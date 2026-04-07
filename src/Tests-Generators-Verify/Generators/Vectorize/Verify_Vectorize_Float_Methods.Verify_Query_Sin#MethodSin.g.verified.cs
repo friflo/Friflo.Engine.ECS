@@ -85,6 +85,7 @@ namespace VerifyVectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);  // Velocity1
 
                     // --- 2. Compute
+                    // position.value = MathF.Sin(velocity.value);
                     position_0 = MathUtils.SinMathF(velocity_0);
                     position_1 = MathUtils.SinMathF(velocity_1);
                     position_2 = MathUtils.SinMathF(velocity_2);

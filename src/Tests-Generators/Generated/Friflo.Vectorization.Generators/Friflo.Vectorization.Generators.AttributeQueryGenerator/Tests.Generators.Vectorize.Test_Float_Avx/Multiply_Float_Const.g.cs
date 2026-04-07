@@ -78,6 +78,7 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);  // Position1
 
                     // --- 2. Compute
+                    // position.value += 1f;
                     position_0 = Avx.Add(position_0, const0_scalar);
                     position_1 = Avx.Add(position_1, const0_scalar);
                     position_2 = Avx.Add(position_2, const0_scalar);

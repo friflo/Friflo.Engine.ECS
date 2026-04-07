@@ -85,6 +85,7 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position4
 
                     // --- 2. Compute
+                    // position.value = Vector4.Transform(position.value, transform);
                     position_0 = AvxUtils.TransformVector4PairAVX(position_0, transform_0, transform_1, transform_2, transform_3);
                     position_1 = AvxUtils.TransformVector4PairAVX(position_1, transform_0, transform_1, transform_2, transform_3);
                     position_2 = AvxUtils.TransformVector4PairAVX(position_2, transform_0, transform_1, transform_2, transform_3);

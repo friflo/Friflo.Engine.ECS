@@ -100,16 +100,19 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);  // Velocity1
 
                     // --- 2. Compute
+                    // var abs = MathF.Abs(velocity.value);
                     abs_0 = Avx.And(velocity_0, const0);
                     abs_1 = Avx.And(velocity_1, const0);
                     abs_2 = Avx.And(velocity_2, const0);
                     abs_3 = Avx.And(velocity_3, const0);
 
+                    // var log = MathF.Log2(abs);
                     log_0 = Vector256.Log2(abs_0);
                     log_1 = Vector256.Log2(abs_1);
                     log_2 = Vector256.Log2(abs_2);
                     log_3 = Vector256.Log2(abs_3);
 
+                    // position.value = log;
                     position_0 = log_0;
                     position_1 = log_1;
                     position_2 = log_2;

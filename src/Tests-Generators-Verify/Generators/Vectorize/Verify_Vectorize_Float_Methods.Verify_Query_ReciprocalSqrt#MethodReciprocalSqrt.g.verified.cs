@@ -96,11 +96,13 @@ namespace VerifyVectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);  // Velocity1
 
                     // --- 2. Compute
+                    // var abs = MathF.Abs(velocity.value);
                     abs_0 = Avx.And(velocity_0, const0);
                     abs_1 = Avx.And(velocity_1, const0);
                     abs_2 = Avx.And(velocity_2, const0);
                     abs_3 = Avx.And(velocity_3, const0);
 
+                    // position.value = value / MathF.Sqrt(abs);
                     position_0 = Avx.Multiply(Avx.ReciprocalSqrt(abs_0), value_scalar);
                     position_1 = Avx.Multiply(Avx.ReciprocalSqrt(abs_1), value_scalar);
                     position_2 = Avx.Multiply(Avx.ReciprocalSqrt(abs_2), value_scalar);

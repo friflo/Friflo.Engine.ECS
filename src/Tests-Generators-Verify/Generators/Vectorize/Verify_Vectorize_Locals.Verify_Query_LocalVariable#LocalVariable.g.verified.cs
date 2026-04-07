@@ -91,16 +91,19 @@ namespace VerifyVectorize
                     Vector256<float> velocity_3 = Avx.LoadVector256(velocity_ptr + 24);  // Velocity1
 
                     // --- 2. Compute
+                    // var localVar = position.value;
                     localVar_0 = position_0;
                     localVar_1 = position_1;
                     localVar_2 = position_2;
                     localVar_3 = position_3;
 
+                    // localVar = velocity.value;
                     localVar_0 = velocity_0;
                     localVar_1 = velocity_1;
                     localVar_2 = velocity_2;
                     localVar_3 = velocity_3;
 
+                    // position.value = localVar;
                     position_0 = localVar_0;
                     position_1 = localVar_1;
                     position_2 = localVar_2;

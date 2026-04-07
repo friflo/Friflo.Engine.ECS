@@ -81,6 +81,7 @@ namespace VerifyVectorize
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position3
 
                     // --- 2. Compute
+                    // position.value = Vector3.Pi;
                     position_0 = const0_0;
                     position_1 = const0_1;
                     position_2 = const0_2;

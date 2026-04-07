@@ -105,6 +105,7 @@ namespace VerifyVectorize
                     Vector256<float> factor2_3 = Avx2.PermuteVar8x32(factor2_scalar_23, factor2_mask_hi);
 
                     // --- 2. Compute
+                    // factor.value = factor2.value;
                     factor_0 = factor2_0;
                     factor_1 = factor2_1;
 

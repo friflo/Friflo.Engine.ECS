@@ -75,6 +75,7 @@ namespace VerifyVectorize
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position3
 
                     // --- 2. Compute
+                    // position.value = Vector3.Truncate(position.value);
                     position_0 = Vector256.Truncate(position_0);
                     position_1 = Vector256.Truncate(position_1);
                     position_2 = Vector256.Truncate(position_2);

@@ -84,6 +84,7 @@ namespace VerifyVectorize
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
 
                     // --- 2. Compute
+                    // position.value = Vector2.Lerp(position.value, vec, amount);
                     position_0 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_0), position_0);
                     position_1 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_1), position_1);
                     position_2 = Fma.MultiplyAdd(amount_scalar, Avx.Subtract(vec_scalar, position_2), position_2);
