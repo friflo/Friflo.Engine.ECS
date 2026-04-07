@@ -124,44 +124,32 @@ public static partial class Vectorizer
         return result.ToArray();
     }
     
-    private static VectorType CreateVectorType(IParameterSymbol parameter, string fullQualifiedName, bool isComponent, ITypeSymbol valueType)
+    private static (SpecialType, int dimensiom, ParamType) CreateTypeDim(ITypeSymbol valueType)
     {
         var specialType = valueType.SpecialType;
-        var paramType   = ParamType.None;
-        int dimension   = 0;
-        bool isScalar   = !isComponent;
-        switch (valueType.SpecialType) {
+        switch (specialType) {
             case SpecialType.None:
                 var fullTypeName = valueType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 switch (fullTypeName)
                 {
-                    case "global::System.Numerics.Vector2":
-                        specialType = SpecialType.System_Single; 
-                        dimension   = 2;
-                        paramType   =  ParamType.Vector;
-                        break;
-                    case "global::System.Numerics.Vector3":
-                        specialType = SpecialType.System_Single; 
-                        dimension   = 3;
-                        paramType   = ParamType.Vector;
-                        isScalar    = false;
-                        break;
-                    case "global::System.Numerics.Vector4":
-                        specialType = SpecialType.System_Single; 
-                        dimension   = 4;
-                        paramType   =  ParamType.Vector;
-                        break;
-                    case "global::System.Numerics.Matrix4x4":
-                        specialType = SpecialType.System_Single; 
-                        dimension   = 4;
-                        paramType   = ParamType.Matrix4x4;
-                        break;
+                    case "global::System.Numerics.Vector2":     return (SpecialType.System_Single, 2,  ParamType.Vector);
+                    case "global::System.Numerics.Vector3":     return (SpecialType.System_Single, 3,  ParamType.Vector);
+                    case "global::System.Numerics.Vector4":     return (SpecialType.System_Single, 4,  ParamType.Vector);
+                    case "global::System.Numerics.Matrix4x4":   return (SpecialType.System_Single, 4,  ParamType.Matrix4x4);
                 }
                 break;
             case SpecialType.System_Single:
-                dimension   = 1;
-                paramType   = ParamType.Scalar;
-                break;
+                return (SpecialType.None, 1,  ParamType.Scalar);
+        }
+        return (specialType, 0,  ParamType.None);
+    }
+    
+    private static VectorType CreateVectorType(IParameterSymbol parameter, string fullQualifiedName, bool isComponent, ITypeSymbol valueType)
+    {
+        bool isScalar   = !isComponent;
+        var (specialType, dimension, paramType) = CreateTypeDim(valueType);
+        if (dimension == 3) {
+            isScalar    = false;
         }
         return new VectorType {
             parameter           = parameter,
