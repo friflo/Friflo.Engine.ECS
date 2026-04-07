@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             Vector256<float> vel_0;
             Vector256<float> vel_1;

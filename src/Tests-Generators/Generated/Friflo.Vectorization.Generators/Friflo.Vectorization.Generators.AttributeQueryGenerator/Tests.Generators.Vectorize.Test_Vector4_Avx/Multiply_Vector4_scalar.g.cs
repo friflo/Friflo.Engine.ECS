@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 0, 1, 1, 1, 1);
             Vector256<int> factor_mask_1 = Vector256.Create(2, 2, 2, 2, 3, 3, 3, 3);

@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             var factor_scalar = Vector256.Create(factor);
 

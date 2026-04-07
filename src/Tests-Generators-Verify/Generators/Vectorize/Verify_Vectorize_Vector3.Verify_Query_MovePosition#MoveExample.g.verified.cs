@@ -64,6 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::VerifyVectorize.Velocity* velocity_first = velocity)
             {

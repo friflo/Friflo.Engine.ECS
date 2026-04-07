@@ -64,6 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             var vec_0 = Vector256.Create(vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y);
             var vec_1 = Vector256.Create(vec.Z, vec.X, vec.Y, vec.Z, vec.X, vec.Y, vec.Z, vec.X);

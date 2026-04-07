@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             var dst_0 = Vector256.Create(dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y);
             var dst_1 = Vector256.Create(dst.Z, dst.X, dst.Y, dst.Z, dst.X, dst.Y, dst.Z, dst.X);

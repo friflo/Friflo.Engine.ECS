@@ -64,6 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             var min_scalar = Vector256.Create(min);
 

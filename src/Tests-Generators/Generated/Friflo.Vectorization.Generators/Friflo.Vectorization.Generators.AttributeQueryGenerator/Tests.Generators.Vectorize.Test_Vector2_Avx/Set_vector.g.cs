@@ -62,6 +62,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             Vector128<float> sum_half = Vector128.Create(sum.X, sum.Y, sum.X, sum.Y);
             var sum_scalar = Avx.InsertVector128(sum_half.ToVector256(), sum_half, 1);

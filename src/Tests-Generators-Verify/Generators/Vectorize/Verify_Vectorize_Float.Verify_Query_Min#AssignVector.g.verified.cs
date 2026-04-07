@@ -63,6 +63,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             var max_scalar = Vector256.Create(max);
 

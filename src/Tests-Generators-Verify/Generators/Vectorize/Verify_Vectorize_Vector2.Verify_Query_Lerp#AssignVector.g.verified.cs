@@ -64,6 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
             var vec_scalar = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);

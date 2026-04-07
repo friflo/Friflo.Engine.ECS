@@ -62,6 +62,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             fixed (global::VerifyVectorize.Position3* position_first = position)
             {
                 for (; i <= end; i += 8)

@@ -342,6 +342,7 @@ public static partial class Vectorizer
             if (i > end) {{
                 return 0;
             }}
+            // Vector layout: AoS
 {localBlock}{@fixed}            {{
                 for (; i <= end; i += {elementStep})
                 {{{pointer}

@@ -64,6 +64,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             Vector128<float> vector3_half = Vector128.Create(vector3.X, vector3.Y, vector3.X, vector3.Y);
             var vector3_scalar = Avx.InsertVector128(vector3_half.ToVector256(), vector3_half, 1);

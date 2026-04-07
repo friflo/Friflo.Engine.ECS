@@ -63,6 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
+            // Vector layout: AoS
             // --- Locals
             var const0 = System.Numerics.Vector3.Pi; // static
             var const0_0 = Vector256.Create(const0.X, const0.Y, const0.Z, const0.X, const0.Y, const0.Z, const0.X, const0.Y);
