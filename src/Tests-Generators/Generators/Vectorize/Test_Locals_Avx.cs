@@ -93,8 +93,8 @@ public static partial class Test_Locals_Avx
                 new Position1 { value = n },
                 new Velocity1 { value = 2 },
                 new FloatComponent { value = n },
-                new Position2 { value = new Vector2(n,n+1) },
-                new Velocity2 { value = new Vector2(n, n*2) });
+                new Position2 { value = new Vector2(n,       n + 100) },
+                new Velocity2 { value = new Vector2(n + 200, n + 300) });
         }
         return store;
     }
