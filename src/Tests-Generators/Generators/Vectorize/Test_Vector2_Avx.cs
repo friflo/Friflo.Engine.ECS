@@ -198,7 +198,7 @@ public static partial class Test_Vector2_Avx
     public static void Test_Avx_Multiply_Vector2_scalar()
     {
         var store = CreateTestStore();
-        Multiply_Vector2_scalarQuery(store, false);
+        Multiply_Vector2_scalarQuery(store, false); // VEC
 
         var storeVectorized = CreateTestStore();
         var query = Multiply_Vector2_scalarQuery(storeVectorized);

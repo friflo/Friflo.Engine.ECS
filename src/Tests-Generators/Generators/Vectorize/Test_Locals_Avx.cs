@@ -114,7 +114,7 @@ public static partial class Test_Locals_Avx
         MixedLocalsQuery(store, new Vector2(1,2), 3, false);
 
         var storeVectorized = CreateTestStore();
-        var query = MixedLocalsQuery(storeVectorized, new Vector2(1,2), 3);
+        var query = MixedLocalsQuery(storeVectorized, new Vector2(1,2), 3); // VEC
         
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         foreach (var entity in store.Entities)

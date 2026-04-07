@@ -43,6 +43,21 @@ public static partial class Vectorizer
             var param = new Param { isScalar = type.isScalar, dimension = type.dimension };
             query.paramTypes.Add(type.parameter.Name, param);
         }
+        if (!TraverseBody(query)) {
+            return false;
+        }
+        if (query.requireDeinterleave)
+        {
+            // if (!TraverseBody(query)) {
+            //    return false;
+            // }
+        }
+        query.vectorize = true;
+        return true;
+    }
+    
+    private static bool TraverseBody(Query query)
+    {
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
         {
             SyntaxNode node = syntaxReference.GetSyntax();
@@ -65,7 +80,6 @@ public static partial class Vectorizer
                 EmitVectorizedMethod(query, compute, body);
             }
         }
-        query.vectorize = true;
         return true;
     }
     
