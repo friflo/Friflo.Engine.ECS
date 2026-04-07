@@ -44,8 +44,8 @@ public static partial class Vectorizer
         if (!TraverseBody(query)) {
             return false;
         }
-        if (query.requireDeinterleave) {
-            // Reset query state. Generated code require Deinterleave() / Interleave()
+        if (false) { // query.UseSoA) {  // SOA
+            // Reset query state created by previous traversal. Generated code require Deinterleave() / Interleave()
             query.avxMethod = "";
             query.lanes = null;
             query.paramTypes.Clear();
@@ -238,7 +238,8 @@ public static partial class Vectorizer
                 var initializerExpression = variable.Initializer?.Value;
                 if (initializerExpression != null) {
                     var variableName = variable.Identifier.Text;
-                    lanes = CreateLanes(query, variableName);
+                    var symbol = query.semanticModel.GetDeclaredSymbol(variable);
+                    lanes = CreateLanes(query, symbol, variableName);
                     for (int n = 0; n < lanes.Length; n++) {
                         lanes[n].Append($"{variableName}_{n} = ");
                     }
@@ -419,13 +420,13 @@ public static partial class Vectorizer
                     }
                     break;
                 case 2:
-//                    if (vectorType.paramType == ParamType.Scalar) {
-//                        source.AppendLine(
-//$"""
-//                    Vector256<float> {name}_0 = Avx.LoadVector256({name}_ptr);
-//                    Vector256<float> {name}_1 = Avx.LoadVector256({name}_ptr + 8);
-//""");
-//                    } else {
+                    if (false) {  //vectorType.dimension == 1) {  // SOA
+                        source.AppendLine(
+$"""
+                    Vector256<float> {name}_0 = Avx.LoadVector256({name}_ptr);      // {typeName}
+                    Vector256<float> {name}_1 = Avx.LoadVector256({name}_ptr + 8);  // {typeName}
+""");
+                    } else {
                         source.AppendLine(
 $"""
                     Vector256<float> {name}_scalar_01 = Avx.LoadVector256({name}_ptr);      // {typeName}
@@ -435,7 +436,7 @@ $"""
                     Vector256<float> {name}_2 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_lo);
                     Vector256<float> {name}_3 = Avx2.PermuteVar8x32({name}_scalar_23, {name}_mask_hi);
 """);
-//}
+                    }
                     break;
                 default:
                     source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);  // {typeName}");
@@ -449,7 +450,7 @@ $"""
                 source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step,2});   // {typeName}");
             }
         }
-        if (query.requireDeinterleave) {
+        if (query.UseSoA) { // && vectorType.dimension > 1) {  // SOA
             switch (query.vectorDimension) {
                 case 2:
                     source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
@@ -472,7 +473,7 @@ $"""
             return;
         }
         var name = vectorType.parameter.Name;
-        if (query.requireDeinterleave) {
+        if (query.UseSoA) {
             switch (vectorType.dimension) {
                 case 1:
                     break;

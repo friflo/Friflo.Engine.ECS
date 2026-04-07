@@ -75,4 +75,32 @@ public static class Verify_Vectorize_Locals
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_MixedLocals()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position2      : IComponent { public Vector2 value; }
+            public struct FloatComponent : IComponent { public float   value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                private static void MixedLocals(ref Position2 position, in FloatComponent scalarComp, Vector2 vec, float scalar) {
+                    Vector2 vec2 = position.value * scalar;
+                    float scalar2 = scalarComp.value * scalar;
+                    position.value = vec * vec2 * scalar2;
+                } 
+            }
+            """;
+        await Verify(code);
+    }
+
 }

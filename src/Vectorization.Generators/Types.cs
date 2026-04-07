@@ -48,7 +48,8 @@ public class Query
     public readonly StringBuilder                   computeTemp = new ();
     public          int                             computeTempCount;
     public          int                             constLocalsCount;
-    public          bool                            requireDeinterleave;
+    public          bool                            requireSoA;
+    public          bool                            UseSoA => requireSoA;
 
     public string AddConst() {
         return $"const{constLocalsCount++}";

@@ -39,6 +39,11 @@ public static partial class Vectorizer
             }
         } else {
             var name = identifierNameSyntax.Identifier.Text;
+            /* if (query.paramTypes.TryGetValue(name, out var paramType)) { // SOA
+                if (paramType.dimension == 1 && query.vectorDimension > 1) {
+                    query.requireSoA = true;
+                }
+            } */
             for (int i = 0; i < lanes.Length; i++) {
                 var vectorName = query.GetVectorName(name, i);
                 lanes[i].Append(vectorName);
@@ -57,8 +62,15 @@ public static partial class Vectorizer
         return true;
     }
     
-    private static StringBuilder[] CreateLanes(Query query, string parameterName)
+    private static StringBuilder[] CreateLanes(Query query, ISymbol? symbol, string parameterName)
     {
+        ITypeSymbol? typeSymbol = null;
+        if (symbol is ILocalSymbol localSymbol) {
+            typeSymbol = localSymbol.Type;
+        }
+        if (symbol is IFieldSymbol fieldSymbol) {
+            typeSymbol = fieldSymbol.Type;
+        }
         var laneCount = query.laneCount;
         if (query.paramTypes.TryGetValue(parameterName, out var paramType)) {
             if (query.vectorDimension == 2 && paramType.dimension == 1) {
@@ -88,8 +100,10 @@ public static partial class Vectorizer
             query.ReportDiagnosticSyntax(Errors.OperationUnsupported, assignment);
             return false;
         }
-        var left = Utils.GetMemberName(assignment.Left).Identifier.Text;
-        lanes = CreateLanes(query, left);
+        var leftIdentifier = Utils.GetMemberName(assignment.Left).Identifier;
+        var left = leftIdentifier.Text;
+        var leftSymbol = query.semanticModel.GetSymbolInfo(assignment.Left).Symbol;
+        lanes = CreateLanes(query, leftSymbol, left);
         // FMA is a "Cheat Code" for:    (vel * dt) + pos    ->    Fma.MultiplyAdd(vel, dt, pos);
         if (kind == SyntaxKind.AddAssignmentExpression && 
             assignment.Right is BinaryExpressionSyntax assignBinary && assignBinary.Kind() is SyntaxKind.MultiplyExpression)
@@ -436,7 +450,7 @@ public static partial class Vectorizer
     
     private static bool Method_Cross(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
     {
-        query.requireDeinterleave = true;
+        query.requireSoA = true;
         var args = argumentSyntax.Arguments;
         if (!Compute_AddTemp(query, args[0].Expression, "Cross arg[0]", out var a)) {
             return false;
