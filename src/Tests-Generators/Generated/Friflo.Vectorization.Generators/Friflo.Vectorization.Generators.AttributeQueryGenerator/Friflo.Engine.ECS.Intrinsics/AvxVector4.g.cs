@@ -105,4 +105,38 @@ public static class AvxVector4
 
         return (v0, v1, v2, v3);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float> x, Vector256<float> y, Vector256<float> z, Vector256<float> w) 
+        Normalize(Vector256<float> vx, Vector256<float> vy, Vector256<float> vz, Vector256<float> vw)
+    {
+        // 1. Calculate squared magnitude: (x^2 + y^2 + z^2 + w^2)
+        // This is done vertically across all 8 lanes at once.
+        Vector256<float> x2 = Avx.Multiply(vx, vx);
+        Vector256<float> y2 = Avx.Multiply(vy, vy);
+        Vector256<float> z2 = Avx.Multiply(vz, vz);
+        Vector256<float> w2 = Avx.Multiply(vw, vw);
+
+        Vector256<float> lengthSq = Avx.Add(x2, Avx.Add(y2, Avx.Add(z2, w2)));
+
+        // 2. Calculate 1 / sqrt(lengthSq)
+        // RSQRTPS is an approximation (12-bit precision).
+        Vector256<float> rsqrt = Avx.ReciprocalSqrt(lengthSq);
+
+        // 3. Optional: Newton-Raphson refinement for 24-bit precision
+        // r = r * (1.5 - 0.5 * lengthSq * r * r)
+        Vector256<float> half = Vector256.Create(0.5f);
+        Vector256<float> onePointFive = Vector256.Create(1.5f);
+        Vector256<float> r2 = Avx.Multiply(rsqrt, rsqrt);
+        Vector256<float> inner = Avx.Subtract(onePointFive, Avx.Multiply(half, Avx.Multiply(lengthSq, r2)));
+        rsqrt = Avx.Multiply(rsqrt, inner);
+
+        // 4. Multiply original components by the reciprocal length
+        return (
+            Avx.Multiply(vx, rsqrt),
+            Avx.Multiply(vy, rsqrt),
+            Avx.Multiply(vz, rsqrt),
+            Avx.Multiply(vw, rsqrt)
+        );
+    }
 }

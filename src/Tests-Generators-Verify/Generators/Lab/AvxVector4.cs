@@ -106,7 +106,8 @@ public static class AvxVector4
         return (v0, v1, v2, v3);
     }
     
-public static (Vector256<float> x, Vector256<float> y, Vector256<float> z, Vector256<float> w) 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float> x, Vector256<float> y, Vector256<float> z, Vector256<float> w) 
         Normalize(Vector256<float> vx, Vector256<float> vy, Vector256<float> vz, Vector256<float> vw)
     {
         // 1. Calculate squared magnitude: (x^2 + y^2 + z^2 + w^2)

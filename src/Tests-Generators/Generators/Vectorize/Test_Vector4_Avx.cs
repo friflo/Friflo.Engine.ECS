@@ -320,6 +320,42 @@ public static partial class Test_Vector4_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
+    private static void Normalize_Vector4(ref Position4 position, Velocity4 velocity)
+    {
+        position.value = Vector4.Normalize(velocity.value);
+    }
+
+    [Test]
+    public static void Test_Normalize_Vector3()
+    {
+        var store = CreateTestStore();
+        Normalize_Vector4Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Normalize_Vector4Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            var val1 =  entity.GetComponent<Position4>().value;
+            var val2 =  entityVectorized.GetComponent<Position4>().value;
+            if (!AreEqual(val1, val2, 1e-7f )) {
+                Assert.Fail("not equal");
+            }
+        }
+    }
+
+    private static bool AreEqual(Vector4 a, Vector4 b, float epsilon)
+    {
+        return MathF.Abs(a.X - b.X) < epsilon &&
+               MathF.Abs(a.Y - b.Y) < epsilon &&
+               MathF.Abs(a.Z - b.Z) < epsilon &&
+               MathF.Abs(a.W - b.W) < epsilon;
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
     private static void Multiply_Vector4_Matrix4x4(ref Position4 position, in Matrix4x4 matrix) {
         position.value = Vector4.Transform(position.value, matrix);
     }
