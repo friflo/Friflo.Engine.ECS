@@ -491,14 +491,12 @@ public static partial class Vectorizer
             if (!Compute_AddTemp(query, args[0].Expression, "Normalize arg[0]", out var arg0)) {
                 return false;
             }
-            var result0 = query.AddTemp();
-            var result1 = query.AddTemp();
-            var result2 = query.AddTemp();
-            query.computeTemp.AppendLine($"                    var ({result0}, {result1}, {result2}) = AvxVector3.Normalize({arg0}_0, {arg0}_1, {arg0}_2);");
+            var result = query.AddTemp();
+            query.computeTemp.AppendLine($"                    var ({result}_0, {result}_1, {result}_2) = AvxVector3.Normalize({arg0}_0, {arg0}_1, {arg0}_2);");
 
-            lanes[0].Append(result0);
-            lanes[1].Append(result1);
-            lanes[2].Append(result2);
+            lanes[0].Append($"{result}_0");
+            lanes[1].Append($"{result}_1");
+            lanes[2].Append($"{result}_2");
             return true;
         }
         return false;

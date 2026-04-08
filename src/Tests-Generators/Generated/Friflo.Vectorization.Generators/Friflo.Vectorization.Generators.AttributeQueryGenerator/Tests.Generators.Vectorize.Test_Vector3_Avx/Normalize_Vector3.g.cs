@@ -90,10 +90,10 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> temp0_1 = velocity_1;
                     Vector256<float> temp0_2 = velocity_2;
 
-                    var (temp1, temp2, temp3) = AvxVector3.Normalize(temp0_0, temp0_1, temp0_2);
-                    position_0 = temp1;
-                    position_1 = temp2;
-                    position_2 = temp3;
+                    var (temp1_0, temp1_1, temp1_2) = AvxVector3.Normalize(temp0_0, temp0_1, temp0_2);
+                    position_0 = temp1_0;
+                    position_1 = temp1_1;
+                    position_2 = temp1_2;
 
                     // --- 3. Store
                     (position_0, position_1, position_2) = AvxVector3.Interleave(position_0, position_1, position_2);
