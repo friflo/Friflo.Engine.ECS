@@ -98,4 +98,18 @@ public static class AvxVector2
         );
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> Length(Vector256<float> vx, Vector256<float> vy)
+    {
+        // 1. Calculate lengthSq = x^2 + y^2
+        // Start with x * x
+        Vector256<float> lengthSq = Avx.Multiply(vx, vx);
+        
+        // Use FMA for the final component: lengthSq = (vy * vy) + lengthSq
+        lengthSq = Fma.MultiplyAdd(vy, vy, lengthSq);
+
+        // 2. Return the square root
+        return Avx.Sqrt(lengthSq);
+    }
+
 }

@@ -108,6 +108,33 @@ public static class Test_Lab_Vector2
         return MathF.Abs(a.X - b.X) < epsilon &&
                MathF.Abs(a.Y - b.Y) < epsilon;
     }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector2_Length()
+    {
+        var vectors    = new Vector2[8];
+        var lengths    = new float[8];
+        for (int n = 0; n < 8; n++) {
+            vectors[n] = new Vector2(n, n + 100);
+        };
+        fixed (Vector2* vectors_ptr    = vectors)
+        fixed (float*   lengths_ptr = lengths)
+        {
+            var ptr      = (float*)vectors_ptr;
+            
+            Vector256<float> v0 = Avx.LoadVector256(ptr);
+            Vector256<float> v1 = Avx.LoadVector256(ptr + 8);
+            (v0, v1) = AvxVector2.Deinterleave(v0, v1);
+
+            var length = AvxVector2.Length(v0,v1);
+            
+            Avx.Store(lengths_ptr,       length);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  vectors[n].Length();
+            Assert.That(expect, Is.EqualTo(lengths[n]));
+        }
+    }
 }
 
 

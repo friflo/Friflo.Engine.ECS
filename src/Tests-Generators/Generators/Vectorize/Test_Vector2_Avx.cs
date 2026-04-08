@@ -438,5 +438,30 @@ public static partial class Test_Vector2_Avx
             }
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Length_Vector2(Position2 position, ref FloatComponent2 length)
+    {
+        length.value = position.value.Length();
+    }
+
+    /*
+    [Test]
+    public static void Test_Length_Vector2()
+    {
+        var store = CreateTestStore();
+        Length_Vector2Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Length_Vector2Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
+        }
+    } */
 
 }
