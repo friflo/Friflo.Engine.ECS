@@ -49,7 +49,7 @@ public class Query
     public          int                             computeTempCount;
     public          int                             constLocalsCount;
     public          bool                            requireSoA;
-    public          bool                            useSoA;
+    public          bool                            useSoA; // true: SoA   false: AoS
 
     public string AddConst() {
         return $"const{constLocalsCount++}";

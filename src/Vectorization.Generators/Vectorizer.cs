@@ -46,6 +46,7 @@ public static partial class Vectorizer
             return false;
         }
         if (query.requireSoA) {
+            // 2. Phase: generate SoA
             if (!TraverseBodySoA(query)) {
                 return false;
             }
