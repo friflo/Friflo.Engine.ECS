@@ -217,7 +217,7 @@ public static partial class Test_Vector2_Avx
         flt.value = flt2.value;
     }
 
-    [Test][Ignore("Fix storing scalar")]
+    [Test]
     public static void Test_Set_scalar()
     {
         var store = CreateTestStore();
@@ -394,7 +394,7 @@ public static partial class Test_Vector2_Avx
         scalar.value = Vector2.Cross(position.value, velocity.value);
     }
 
-    [Test][Ignore("Implement Vector2.Cross()")]
+    [Test]
     public static void Test_Cross_Vector2()
     {
         var store = CreateTestStore();

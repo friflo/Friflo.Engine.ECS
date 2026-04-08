@@ -88,13 +88,13 @@ public class Query
         if (useSoA) {
             if (paramTypes.TryGetValue(name, out var param)) {
                 if (param.isComponent) {
-                    if (param.dimension == 1) {
-                        if (vectorDimension == 2) {
-                            return $"{name}_{i / 2}";
-                        }
-                        return $"{name}_0";
+                    if (param.dimension > 1) {
+                        return $"{name}_{i}";
                     }
-                    return $"{name}_{i}";
+                    if (vectorDimension == 2) {
+                        return $"{name}_{i / (lanes.Length / 2)}";
+                    }
+                    return $"{name}_0";
                 } else {
                     if (param.dimension == 1 && param.isScalar && param.isParam) {
                         return $"{name}_scalar";

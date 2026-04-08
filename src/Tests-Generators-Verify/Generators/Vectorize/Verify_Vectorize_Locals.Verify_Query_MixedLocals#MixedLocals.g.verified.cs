@@ -114,7 +114,7 @@ namespace VerifyVectorize
 
                     // float scalar2 = scalarComp.value * scalar;
                     scalar2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
-                    scalar2_1 = Avx.Multiply(scalarComp_0, scalar_scalar);
+                    scalar2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
 
                     // position.value = vec * vec2 * scalar2;
                     position_0 = Avx.Multiply(Avx.Multiply(vec_0, vec2_0), scalar2_0);

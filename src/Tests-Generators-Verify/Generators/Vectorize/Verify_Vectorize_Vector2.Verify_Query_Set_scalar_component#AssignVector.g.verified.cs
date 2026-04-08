@@ -101,7 +101,7 @@ namespace VerifyVectorize
                     // --- 2. Compute
                     // factor.value = factor2.value;
                     factor_0 = factor2_0;
-                    factor_0 = factor2_0;
+                    factor_1 = factor2_1;
 
                     // --- 3. Store
                     Avx.Store(factor_ptr +  0, factor_0);

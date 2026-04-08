@@ -114,7 +114,7 @@ namespace VerifyVectorize
 
                     // scalar.value = Vector2.Cross(position.value, velocity.value);
                     scalar_0 = Fma.MultiplySubtract(temp0_0, temp1_1, Avx.Multiply(temp0_1, temp1_0));
-                    scalar_0 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
+                    scalar_1 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
 
                     // --- 3. Store
                     Avx.Store(scalar_ptr +  0, scalar_0);
