@@ -426,4 +426,28 @@ public static partial class Test_Vector3_Avx
             Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Normalize_Vector3(ref Position position, Velocity velocity)
+    {
+        position.value = Vector3.Normalize(velocity.value);
+    }
+
+    [Test]
+    public static void Test_Normalize_Vector3()
+    {
+        var store = CreateTestStore();
+        Normalize_Vector3Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Normalize_Vector3Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
 }

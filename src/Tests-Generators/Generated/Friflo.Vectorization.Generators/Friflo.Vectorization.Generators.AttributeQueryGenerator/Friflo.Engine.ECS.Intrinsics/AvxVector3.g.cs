@@ -93,4 +93,40 @@ public static class AvxVector3
 
         return (v0, v1, v2);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float>, Vector256<float>, Vector256<float>) Normalize(
+        Vector256<float> vX,
+        Vector256<float> vY, 
+        Vector256<float> vZ)
+    {
+
+       // 1. Calculate dot product (x^2 + y^2 + z^2)
+        Vector256<float> x2 = Avx.Multiply(vX, vX);
+        Vector256<float> y2 = Avx.Multiply(vY, vY);
+        Vector256<float> z2 = Avx.Multiply(vZ, vZ);
+        
+        Vector256<float> dot = Avx.Add(x2, Avx.Add(y2, z2));
+
+        // 2. Calculate 1 / sqrt(dot)
+        // Reciprocal Square Root is much faster than Div(Sqrt())
+        Vector256<float> rsqrt = Avx.ReciprocalSqrt(dot);
+
+        // 3. Optional: Newton-Raphson Iteration for higher precision
+        // nr = rsqrt * (1.5 - 0.5 * dot * rsqrt * rsqrt)
+        Vector256<float> half = Vector256.Create(0.5f);
+        Vector256<float> onePointFive = Vector256.Create(1.5f);
+        Vector256<float> rsqrtSquared = Avx.Multiply(rsqrt, rsqrt);
+        Vector256<float> step1 = Avx.Multiply(dot, rsqrtSquared);
+        Vector256<float> step2 = Avx.Multiply(half, step1);
+        Vector256<float> step3 = Avx.Subtract(onePointFive, step2);
+        rsqrt = Avx.Multiply(rsqrt, step3);
+
+        // 4. Multiply original components by the reciprocal
+        var normX = Avx.Multiply(vX, rsqrt);
+        var normY = Avx.Multiply(vY, rsqrt);
+        var normZ = Avx.Multiply(vZ, rsqrt);
+        
+        return (normX, normY,  normZ);
+    }
 }

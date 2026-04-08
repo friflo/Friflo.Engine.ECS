@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -53,6 +54,50 @@ public static class Test_Lab_Vector3
             Assert.That(res2, Is.EqualTo(v1));
             Assert.That(res3, Is.EqualTo(v2));
         }
+    }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector3_Normalize()
+    {
+        var vectors    = new Vector3[8];
+        var normalized = new Vector3[8];
+        for (int n = 0; n < 8; n++) {
+            vectors[n] = new Vector3(n, n + 100, n+ 200);
+        };
+        fixed (Vector3* vectors_ptr    = vectors)
+        fixed (Vector3* normalized_ptr = normalized)
+        {
+            var ptr      = (float*)vectors_ptr;
+            var norm_ptr = (float*)normalized_ptr;
+            // 1. Load 24 floats into three 256-bit registers
+            Vector256<float> v0 = Avx.LoadVector256(ptr); // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
+            Vector256<float> v1 = Avx.LoadVector256(ptr + 8); // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
+            Vector256<float> v2 = Avx.LoadVector256(ptr + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
+            (v0, v1, v2) = AvxVector3.Deinterleave(v0, v1, v2);
+
+            var (n0, n1, n2) = AvxVector3.Normalize(v0,v1,v2);
+            v0 = n0;
+            v1 = n1;
+            v2 = n2;
+            
+            (v0, v1, v2) = AvxVector3.Interleave(v0, v1, v2);
+            Avx.Store(norm_ptr,       v0);
+            Avx.Store(norm_ptr +  8,  v1);
+            Avx.Store(norm_ptr + 16,  v2);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  Vector3.Normalize(vectors[n]);
+            if (!AreEqual(expect, normalized[n], 1e-7f)) {
+                Assert.Fail("not equal");
+            }
+        }
+    }
+    
+    private static bool AreEqual(Vector3 a, Vector3 b, float epsilon)
+    {
+        return MathF.Abs(a.X - b.X) < epsilon &&
+               MathF.Abs(a.Y - b.Y) < epsilon &&
+               MathF.Abs(a.Z - b.Z) < epsilon;
     }
 }
 

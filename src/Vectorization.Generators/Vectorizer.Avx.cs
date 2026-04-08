@@ -280,13 +280,15 @@ public static partial class Vectorizer
             case "Vector.Max(Vector, Vector)":              return Method_MinMax(lanes, query, "Max", argList);
             
             case "System.Math.Clamp(float, float, float)":
-            case "Vector.Clamp(Vector, Vector, Vector)":    return Method_Clamp(lanes, query, argList);
+            case "Vector.Clamp(Vector, Vector, Vector)":    return Method_Clamp     (lanes, query, argList);
             
             case "Vector.Lerp(Vector, Vector, float)":
-            case "Vector.Lerp(Vector, Vector, Vector)":     return Method_Lerp(lanes, query, argList);
+            case "Vector.Lerp(Vector, Vector, Vector)":     return Method_Lerp      (lanes, query, argList);
             
             // --- methods require Deinterleave
-            case "Vector.Cross(Vector, Vector)":            return Method_Cross(lanes, query, argList);
+            case "Vector.Cross(Vector, Vector)":            return Method_Cross     (lanes, query, argList);
+            
+            case "Vector.Normalize(Vector)":                return Method_Normalize (lanes, query, argList);
             
             case "Vector.Transform(Vector, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
@@ -479,6 +481,27 @@ public static partial class Vectorizer
             }
         }
         return true;
+    }
+    
+    private static bool Method_Normalize(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        query.requireSoA = true;
+        var args = argumentSyntax.Arguments;
+        if (query.vectorDimension == 3) {
+            if (!Compute_AddTemp(query, args[0].Expression, "Normalize arg[0]", out var arg0)) {
+                return false;
+            }
+            var result0 = query.AddTemp();
+            var result1 = query.AddTemp();
+            var result2 = query.AddTemp();
+            query.computeTemp.AppendLine($"                    var ({result0}, {result1}, {result2}) = AvxVector3.Normalize({arg0}_0, {arg0}_1, {arg0}_2);");
+
+            lanes[0].Append(result0);
+            lanes[1].Append(result1);
+            lanes[2].Append(result2);
+            return true;
+        }
+        return false;
     }
     
     private static bool Compute_AddTemp(Query query, ExpressionSyntax expressionSyntax, string comment, out string temp)

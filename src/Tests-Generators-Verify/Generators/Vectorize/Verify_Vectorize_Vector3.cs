@@ -268,4 +268,29 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Normalize()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position3 : IComponent { public Vector3 value; }
+            public struct Velocity3 : IComponent { public Vector3 value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                void Normalize(ref Position3 position, Velocity3 velocity) {
+                    position.value = Vector3.Normalize(velocity.value);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }
