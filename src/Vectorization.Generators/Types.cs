@@ -82,43 +82,35 @@ public class Query
     
     public string GetVectorName(string name, int i)
     {
-        if (i == 0) {
-            int n = 1;
-        }
-        if (useSoA) {
-            if (paramTypes.TryGetValue(name, out var param)) {
-                if (param.isComponent) {
-                    if (param.dimension > 1) {
-                        return $"{name}_{i}";
-                    }
-                    if (vectorDimension == 2) {
-                        return $"{name}_{i / (lanes.Length / 2)}";
-                    }
-                    return $"{name}_0";
-                } else {
-                    if (param.dimension == 1 && param.isScalar && param.isParam) {
-                        return $"{name}_scalar";
-                    }
-                    if (param.dimension == 2 && param.isScalar && param.isParam) { // && param.dimension == 1) {
-                        return $"{name}_{i % 2}";
-                    }
-                    if (param.dimension == 1 && param.isScalar && !param.isParam) { // && param.dimension == 1) {
-                        return $"{name}_{i % 2}";
-                    }
-                    // if (param.isScalar) {
-                    //     return $"{name}_scalar";
-                    // }
-                }
-            }
-            return $"{name}_{i}";
-        } else {
-            if (paramTypes.TryGetValue(name, out var param)) {
-                if (param.isScalar) {
+        if (!useSoA) {
+            if (paramTypes.TryGetValue(name, out var paramSoa)) {
+                if (paramSoa.isScalar) {
                     return $"{name}_scalar";
                 }
             }
             return $"{name}_{i}";
         }
+        if (paramTypes.TryGetValue(name, out var param)) {
+            if (param.isComponent) {
+                if (param.dimension > 1) {
+                    return $"{name}_{i}";
+                }
+                if (vectorDimension == 2) {
+                    return $"{name}_{i / (lanes.Length / 2)}";
+                }
+                return $"{name}_0";
+            }
+            if (param.dimension == 1 && param.isScalar && param.isParam) {
+                return $"{name}_scalar";
+            }
+            if (param.dimension == 2 && param.isScalar && param.isParam) { // && param.dimension == 1) {
+                return $"{name}_{i % 2}";
+            }
+            if (param.dimension == 1 && param.isScalar && !param.isParam) { // && param.dimension == 1) {
+                return $"{name}_{i % 2}";
+            }
+        }
+        return $"{name}_{i}";
     }
 }
 
