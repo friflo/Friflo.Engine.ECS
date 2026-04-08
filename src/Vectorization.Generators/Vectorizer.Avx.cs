@@ -485,7 +485,7 @@ public static partial class Vectorizer
     {
         temp = query.AddTemp();
         var tempLanes = new StringBuilder[query.laneCount];
-        query.computeTemp.AppendLine($"                    // {comment}");
+        query.computeTemp.AppendLine($"                    //   {comment}");
         for (int n = 0; n < tempLanes.Length; n++) {
             tempLanes[n] = new StringBuilder();
             tempLanes[n].Append($"                    Vector256<float> {temp}_{n} = ");

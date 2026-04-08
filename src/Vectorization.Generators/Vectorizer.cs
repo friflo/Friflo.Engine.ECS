@@ -87,10 +87,10 @@ public static partial class Vectorizer
                     if (!EmitCompute(query, null!, compute, statement)) {
                         return false;
                     }
-                    compute.Append(query.computeTemp);
-                    query.computeTemp.Clear();
                     var statementText = Regex.Replace(statement.ToString(), @"\s+", " ").Trim();;
                     compute.AppendLine($"                    // {statementText}");
+                    compute.Append(query.computeTemp);
+                    query.computeTemp.Clear();
                     var lanes = query.lanes;
                     for (int n = 0; n < lanes.Length; n++) {
                         compute.AppendLine($"                    {lanes[n]}");

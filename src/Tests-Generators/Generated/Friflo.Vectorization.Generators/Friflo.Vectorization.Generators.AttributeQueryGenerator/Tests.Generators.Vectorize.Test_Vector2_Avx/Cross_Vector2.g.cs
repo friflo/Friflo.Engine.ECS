@@ -99,19 +99,19 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> scalar_1 = Avx.LoadVector256(scalar_ptr + 8);  // FloatComponent
 
                     // --- 2. Compute
-                    // Cross arg[0]
+                    // scalar.value = Vector2.Cross(position.value, velocity.value);
+                    //   Cross arg[0]
                     Vector256<float> temp0_0 = position_0;
                     Vector256<float> temp0_1 = position_1;
                     Vector256<float> temp0_2 = position_2;
                     Vector256<float> temp0_3 = position_3;
 
-                    // Cross arg[1]
+                    //   Cross arg[1]
                     Vector256<float> temp1_0 = velocity_0;
                     Vector256<float> temp1_1 = velocity_1;
                     Vector256<float> temp1_2 = velocity_2;
                     Vector256<float> temp1_3 = velocity_3;
 
-                    // scalar.value = Vector2.Cross(position.value, velocity.value);
                     scalar_0 = Fma.MultiplySubtract(temp0_0, temp1_1, Avx.Multiply(temp0_1, temp1_0));
                     scalar_1 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
 
