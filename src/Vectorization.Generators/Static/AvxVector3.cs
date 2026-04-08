@@ -16,6 +16,7 @@ namespace Friflo.Engine.ECS.Intrinsics;
 public static class AvxVector3
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static   (Vector256<float>  X, Vector256<float>  Y, Vector256<float>  Z)
         Deinterleave(Vector256<float> v0, Vector256<float> v1, Vector256<float> v2)
     {
@@ -66,6 +67,7 @@ public static class AvxVector3
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static (Vector256<float> V0, Vector256<float> V1, Vector256<float> V2) Interleave(
         Vector256<float> vx, Vector256<float> vy, Vector256<float> vz)
     {
@@ -102,6 +104,7 @@ public static class AvxVector3
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static (Vector256<float>, Vector256<float>, Vector256<float>) Normalize(
         Vector256<float> vX,
         Vector256<float> vY, 
@@ -138,6 +141,7 @@ public static class AvxVector3
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static Vector256<float> Length(Vector256<float> vx, Vector256<float> vy, Vector256<float> vz)
     {
         // 1. Calculate squared magnitude: x^2 + y^2 + z^2
@@ -156,6 +160,7 @@ public static class AvxVector3
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static Vector256<float> Distance(
         Vector256<float> ax, Vector256<float> ay, Vector256<float> az,
         Vector256<float> bx, Vector256<float> by, Vector256<float> bz)
@@ -180,6 +185,7 @@ public static class AvxVector3
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static Vector256<float> DistanceSquared(
         Vector256<float> ax, Vector256<float> ay, Vector256<float> az,
         Vector256<float> bx, Vector256<float> by, Vector256<float> bz)

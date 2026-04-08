@@ -16,6 +16,7 @@ namespace Friflo.Engine.ECS.Intrinsics;
 public static class AvxVector2
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static (Vector256<float> X, Vector256<float> Y) Deinterleave(
         Vector256<float> lower, 
         Vector256<float> upper)
@@ -51,6 +52,7 @@ public static class AvxVector2
     
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static (Vector256<float> V0, Vector256<float> V1) Interleave(Vector256<float> x, Vector256<float> y)
     {
         // 1. Interleave 32-bit floats
@@ -74,6 +76,7 @@ public static class AvxVector2
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static (Vector256<float> x, Vector256<float> y) 
         Normalize(Vector256<float> vx, Vector256<float> vy)
     {
@@ -106,6 +109,7 @@ public static class AvxVector2
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static Vector256<float> Length(Vector256<float> vx, Vector256<float> vy)
     {
         // 1. Calculate lengthSq = x^2 + y^2
@@ -120,6 +124,7 @@ public static class AvxVector2
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static Vector256<float> Distance(
         Vector256<float> ax, Vector256<float> ay,
         Vector256<float> bx, Vector256<float> by)
@@ -141,6 +146,7 @@ public static class AvxVector2
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SkipLocalsInit]
     public static Vector256<float> DistanceSquared(
         Vector256<float> ax, Vector256<float> ay,
         Vector256<float> bx, Vector256<float> by)
