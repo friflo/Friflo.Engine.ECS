@@ -29,10 +29,10 @@ public class AttributeQueryGenerator : IIncrementalGenerator
             transform: (ctx, _) => ctx
         );
         context.RegisterPostInitializationOutput(ctx => {
-            ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxUtils.g.cs",     Static.Code);
-            ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxVector2.g.cs",   Static.AvxVector2);
-            ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxVector3.g.cs",   Static.AvxVector3);
-            ctx.AddSource("Friflo.Engine.ECS.Intrinsics/AvxVector4.g.cs",   Static.AvxVector4);
+            ctx.AddSource("Friflo.Vectorization.Intrinsics/AvxUtils.g.cs",     Static.Code);
+            ctx.AddSource("Friflo.Vectorization.Intrinsics/AvxVector2.g.cs",   Static.AvxVector2);
+            ctx.AddSource("Friflo.Vectorization.Intrinsics/AvxVector3.g.cs",   Static.AvxVector3);
+            ctx.AddSource("Friflo.Vectorization.Intrinsics/AvxVector4.g.cs",   Static.AvxVector4);
         });
 
         // Generate the source
@@ -292,7 +292,7 @@ public class AttributeQueryGenerator : IIncrementalGenerator
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
-using Friflo.Engine.ECS.Intrinsics;";
+using Friflo.Vectorization.Intrinsics;";
         }
         var source =
 $@"using System;

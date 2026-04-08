@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
-namespace Friflo.Engine.ECS.Intrinsics
+namespace Friflo.Vectorization.Intrinsics
 {
     internal static class AvxUtils
     {

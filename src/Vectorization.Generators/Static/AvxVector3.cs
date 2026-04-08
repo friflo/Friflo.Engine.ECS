@@ -11,7 +11,7 @@ using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 // ReSharper disable InconsistentNaming
 
-namespace Friflo.Engine.ECS.Intrinsics;
+namespace Friflo.Vectorization.Intrinsics;
 
 public static class AvxVector3
 {
