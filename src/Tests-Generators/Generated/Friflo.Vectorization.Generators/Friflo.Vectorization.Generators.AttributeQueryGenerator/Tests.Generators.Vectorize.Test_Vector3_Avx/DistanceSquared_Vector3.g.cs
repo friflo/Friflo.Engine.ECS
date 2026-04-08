@@ -96,12 +96,12 @@ namespace Tests.Generators.Vectorize
 
                     // --- 2. Compute
                     // length.value = Vector3.DistanceSquared(position.value, velocity.value);
-                    //   Distance arg[0]
+                    //   DistanceSquared arg[0]
                     Vector256<float> temp0_0 = position_0;
                     Vector256<float> temp0_1 = position_1;
                     Vector256<float> temp0_2 = position_2;
 
-                    //   Distance arg[1]
+                    //   DistanceSquared arg[1]
                     Vector256<float> temp1_0 = velocity_0;
                     Vector256<float> temp1_1 = velocity_1;
                     Vector256<float> temp1_2 = velocity_2;

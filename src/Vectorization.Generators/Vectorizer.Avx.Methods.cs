@@ -342,10 +342,10 @@ public static partial class Vectorizer
     {
         query.requireSoA = true;
         var args = argumentSyntax.Arguments;
-        if (!Compute_AddTemp(query, args[0].Expression, "Distance arg[0]", out var arg0)) {
+        if (!Compute_AddTemp(query, args[0].Expression, $"{method} arg[0]", out var arg0)) {
             return false;
         }
-        if (!Compute_AddTemp(query, args[1].Expression, "Distance arg[1]", out var arg1)) {
+        if (!Compute_AddTemp(query, args[1].Expression, $"{method} arg[1]", out var arg1)) {
             return false;
         }
         switch (query.vectorDimension)
