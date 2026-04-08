@@ -164,4 +164,53 @@ public static class AvxVector4
         // 2. Compute the square root for the final lengths
         return Avx.Sqrt(lengthSq);
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> Distance(
+        Vector256<float> ax, Vector256<float> ay, Vector256<float> az, Vector256<float> aw,
+        Vector256<float> bx, Vector256<float> by, Vector256<float> bz, Vector256<float> bw)
+    {
+        // 1. Calculate Deltas for all 4 dimensions
+        Vector256<float> dx = Avx.Subtract(ax, bx);
+        Vector256<float> dy = Avx.Subtract(ay, by);
+        Vector256<float> dz = Avx.Subtract(az, bz);
+        Vector256<float> dw = Avx.Subtract(aw, bw);
+
+        // 2. Accumulate squared differences: (dx^2 + dy^2 + dz^2 + dw^2)
+        // Initialize with dx * dx
+        Vector256<float> distSq = Avx.Multiply(dx, dx);
+        
+        // Accumulate remaining components using FMA
+        distSq = Fma.MultiplyAdd(dy, dy, distSq);
+        distSq = Fma.MultiplyAdd(dz, dz, distSq);
+        distSq = Fma.MultiplyAdd(dw, dw, distSq);
+
+        // 3. Final distance is the square root
+        return Avx.Sqrt(distSq);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> DistanceSquared(
+        Vector256<float> ax, Vector256<float> ay, Vector256<float> az, Vector256<float> aw,
+        Vector256<float> bx, Vector256<float> by, Vector256<float> bz, Vector256<float> bw)
+    {
+        // 1. Calculate Deltas (8 subtractions per instruction)
+        Vector256<float> dx = Avx.Subtract(ax, bx);
+        Vector256<float> dy = Avx.Subtract(ay, by);
+        Vector256<float> dz = Avx.Subtract(az, bz);
+        Vector256<float> dw = Avx.Subtract(aw, bw);
+
+        // 2. Accumulate squared differences vertically
+        // Initialize with dx * dx
+        Vector256<float> distSq = Avx.Multiply(dx, dx);
+        
+        // Use FMA for the rest to reduce instruction count and maintain precision
+        distSq = Fma.MultiplyAdd(dy, dy, distSq);
+        distSq = Fma.MultiplyAdd(dz, dz, distSq);
+        distSq = Fma.MultiplyAdd(dw, dw, distSq);
+
+        return distSq;
+    }
+    
+    
 }

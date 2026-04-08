@@ -134,6 +134,86 @@ public static class Test_Lab_Vector4
             Assert.That(expect, Is.EqualTo(lengths[n]));
         }
     }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector4_Distance()
+    {
+        var vector1  = new Vector4[8];
+        var vector2  = new Vector4[8];
+        var distance = new float[8];
+        
+        for (int n = 0; n < 8; n++) {
+            vector1[n] = new Vector4(    n,     n + 100,     n + 200,     n + 300);
+            vector2[n] = new Vector4(2 * n, 2 * n + 100, 2 * n + 200, 2 * n + 300);
+        };
+        fixed (Vector4* vector1_first = vector1)
+        fixed (Vector4* vector2_first = vector2)
+        fixed (float*   distance_first = distance)
+        {
+            var vector1_ptr      = (float*)vector1_first;
+            var vector2_ptr = (float*)vector2_first;
+            
+            Vector256<float> v1_0 = Avx.LoadVector256(vector1_ptr);
+            Vector256<float> v1_1 = Avx.LoadVector256(vector1_ptr + 8);
+            Vector256<float> v1_2 = Avx.LoadVector256(vector1_ptr + 16);
+            Vector256<float> v1_3 = Avx.LoadVector256(vector1_ptr + 24);
+            (v1_0, v1_1, v1_2, v1_3) = AvxVector4.Deinterleave(v1_0, v1_1, v1_2,  v1_3);
+            
+            Vector256<float> v2_0 = Avx.LoadVector256(vector2_ptr);
+            Vector256<float> v2_1 = Avx.LoadVector256(vector2_ptr + 8);
+            Vector256<float> v2_2 = Avx.LoadVector256(vector2_ptr + 16);
+            Vector256<float> v2_3 = Avx.LoadVector256(vector2_ptr + 24);
+            (v2_0, v2_1, v2_2, v2_3) = AvxVector4.Deinterleave(v2_0, v2_1, v2_2,  v2_3);
+
+            var dist = AvxVector4.Distance(v1_0,v1_1,v1_2,v1_3,  v2_0,v2_1,v2_2, v2_3);
+            
+            Avx.Store(distance_first,       dist);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  Vector4.Distance(vector1[n], vector2[n]);
+            Assert.That(distance[n], Is.EqualTo(expect));
+        }
+    }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector4_DistanceSquared()
+    {
+        var vector1  = new Vector4[8];
+        var vector2  = new Vector4[8];
+        var distance = new float[8];
+        
+        for (int n = 0; n < 8; n++) {
+            vector1[n] = new Vector4(    n,     n + 100,     n + 200,     n + 300);
+            vector2[n] = new Vector4(2 * n, 2 * n + 100, 2 * n + 200, 2 * n + 300);
+        };
+        fixed (Vector4* vector1_first = vector1)
+        fixed (Vector4* vector2_first = vector2)
+        fixed (float*   distance_first = distance)
+        {
+            var vector1_ptr      = (float*)vector1_first;
+            var vector2_ptr = (float*)vector2_first;
+            
+            Vector256<float> v1_0 = Avx.LoadVector256(vector1_ptr);
+            Vector256<float> v1_1 = Avx.LoadVector256(vector1_ptr + 8);
+            Vector256<float> v1_2 = Avx.LoadVector256(vector1_ptr + 16);
+            Vector256<float> v1_3 = Avx.LoadVector256(vector1_ptr + 24);
+            (v1_0, v1_1, v1_2, v1_3) = AvxVector4.Deinterleave(v1_0, v1_1, v1_2,  v1_3);
+            
+            Vector256<float> v2_0 = Avx.LoadVector256(vector2_ptr);
+            Vector256<float> v2_1 = Avx.LoadVector256(vector2_ptr + 8);
+            Vector256<float> v2_2 = Avx.LoadVector256(vector2_ptr + 16);
+            Vector256<float> v2_3 = Avx.LoadVector256(vector2_ptr + 24);
+            (v2_0, v2_1, v2_2, v2_3) = AvxVector4.Deinterleave(v2_0, v2_1, v2_2,  v2_3);
+
+            var dist = AvxVector4.DistanceSquared(v1_0,v1_1,v1_2,v1_3,  v2_0,v2_1,v2_2, v2_3);
+            
+            Avx.Store(distance_first,       dist);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  Vector4.DistanceSquared(vector1[n], vector2[n]);
+            Assert.That(distance[n], Is.EqualTo(expect));
+        }
+    }
 
 }
 
