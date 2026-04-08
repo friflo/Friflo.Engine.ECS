@@ -139,4 +139,29 @@ public static class AvxVector4
             Avx.Multiply(vw, rsqrt)
         );
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> Length(
+        Vector256<float> vx, 
+        Vector256<float> vy, 
+        Vector256<float> vz, 
+        Vector256<float> vw)
+    {
+        // 1. Calculate squared magnitude: x^2 + y^2 + z^2 + w^2
+        // We start with x*x to initialize the accumulator
+        Vector256<float> lengthSq = Avx.Multiply(vx, vx);
+        
+        // Accumulate using FMA (Fused Multiply-Add)
+        // lengthSq = (vy * vy) + lengthSq
+        lengthSq = Fma.MultiplyAdd(vy, vy, lengthSq);
+        
+        // lengthSq = (vz * vz) + lengthSq
+        lengthSq = Fma.MultiplyAdd(vz, vz, lengthSq);
+        
+        // lengthSq = (vw * vw) + lengthSq
+        lengthSq = Fma.MultiplyAdd(vw, vw, lengthSq);
+
+        // 2. Compute the square root for the final lengths
+        return Avx.Sqrt(lengthSq);
+    }
 }

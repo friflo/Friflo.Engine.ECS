@@ -306,7 +306,8 @@ public static partial class Vectorizer
                 lanes[0].Append($"AvxVector3.Length({arg0}_0, {arg0}_1, {arg0}_2)");
                 return true;
             case 4:
-                return false;
+                lanes[0].Append($"AvxVector4.Length({arg0}_0, {arg0}_1, {arg0}_2, {arg0}_3)");
+                return true;
         }
         return false;
     }

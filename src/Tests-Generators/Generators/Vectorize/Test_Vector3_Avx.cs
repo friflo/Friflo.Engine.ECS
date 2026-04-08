@@ -462,7 +462,7 @@ public static partial class Test_Vector3_Avx
     public static void Test_Length_Vector3()
     {
         var store = CreateTestStore();
-        Length_Vector3Query(store); // TODO , false);
+        Length_Vector3Query(store, false);
 
         var storeVectorized = CreateTestStore();
         var query = Length_Vector3Query(storeVectorized);
@@ -471,7 +471,7 @@ public static partial class Test_Vector3_Avx
         foreach (var entity in store.Entities)
         {
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
-            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
         }
     }
 }

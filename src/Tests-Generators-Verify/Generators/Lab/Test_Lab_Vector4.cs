@@ -105,6 +105,36 @@ public static class Test_Lab_Vector4
                MathF.Abs(a.Z - b.Z) < epsilon &&
                MathF.Abs(a.W - b.W) < epsilon;
     }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector4_Length()
+    {
+        var vectors    = new Vector4[8];
+        var lengths    = new float[8];
+        for (int n = 0; n < 8; n++) {
+            vectors[n] = new Vector4(n, n + 100, n+ 200, n + 400);
+        };
+        fixed (Vector4* vectors_ptr    = vectors)
+        fixed (float*   lengths_ptr = lengths)
+        {
+            var ptr      = (float*)vectors_ptr;
+            // 1. Load 24 floats into three 256-bit registers
+            Vector256<float> v0 = Avx.LoadVector256(ptr);
+            Vector256<float> v1 = Avx.LoadVector256(ptr + 8);
+            Vector256<float> v2 = Avx.LoadVector256(ptr + 16);
+            Vector256<float> v3 = Avx.LoadVector256(ptr + 24);
+            (v0, v1, v2, v3) = AvxVector4.Deinterleave(v0, v1, v2, v3);
+
+            var length = AvxVector4.Length(v0,v1,v2,v3);
+            
+            Avx.Store(lengths_ptr,       length);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  vectors[n].Length();
+            Assert.That(expect, Is.EqualTo(lengths[n]));
+        }
+    }
+
 }
 
 
