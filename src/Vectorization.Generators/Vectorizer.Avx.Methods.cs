@@ -64,6 +64,8 @@ public static partial class Vectorizer
             
             case "Vector.Length()":                         return Method_Length    (lanes, query, invocation);
             
+            case "Vector.Distance(Vector, Vector)":         return Method_Distance  (lanes, query, argList);
+            
             case "Vector.Transform(Vector, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
         }
@@ -335,4 +337,29 @@ public static partial class Vectorizer
         return true;
     } 
 
+    private static bool Method_Distance(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    {
+        query.requireSoA = true;
+        var args = argumentSyntax.Arguments;
+        if (!Compute_AddTemp(query, args[0].Expression, "Distance arg[0]", out var arg0)) {
+            return false;
+        }
+        if (!Compute_AddTemp(query, args[1].Expression, "Distance arg[1]", out var arg1)) {
+            return false;
+        }
+        switch (query.vectorDimension)
+        {
+            case 2:
+                lanes[0].Append($"AvxVector2.Distance({arg0}_0,{arg0}_1, {arg1}_0,{arg1}_1)");
+                lanes[1].Append($"AvxVector2.Distance({arg0}_2,{arg0}_3, {arg1}_2,{arg1}_3)");
+                return true;
+            case 3:
+                lanes[0].Append($"AvxVector3.Distance({arg0}_0,{arg0}_1,{arg0}_2, {arg1}_0,{arg1}_1,{arg1}_2)");
+                return true;
+            case 4:
+                lanes[0].Append($"AvxVector4.Distance({arg0}_0,{arg0}_1,{arg0}_2,{arg0}_3, {arg1}_0,{arg1}_1,{arg1}_2,{arg1}_3)");
+                return true;
+        }
+        return false;
+    }
 }

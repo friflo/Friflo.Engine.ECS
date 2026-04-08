@@ -112,4 +112,43 @@ public static class AvxVector2
         return Avx.Sqrt(lengthSq);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> Distance(
+        Vector256<float> ax, Vector256<float> ay,
+        Vector256<float> bx, Vector256<float> by)
+    {
+        // 1. Calculate Deltas (Difference between A and B)
+        Vector256<float> dx = Avx.Subtract(ax, bx);
+        Vector256<float> dy = Avx.Subtract(ay, by);
+
+        // 2. Calculate squared magnitude: (dx^2 + dy^2)
+        // Start with dx * dx
+        Vector256<float> distSq = Avx.Multiply(dx, dx);
+        
+        // Use FMA to add (dy * dy) into the result
+        // distSq = (dy * dy) + distSq
+        distSq = Fma.MultiplyAdd(dy, dy, distSq);
+
+        // 3. Final distance is the square root
+        return Avx.Sqrt(distSq);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> DistanceSquared(
+        Vector256<float> ax, Vector256<float> ay,
+        Vector256<float> bx, Vector256<float> by)
+    {
+        // 1. Calculate Deltas (8 subtractions per instruction)
+        Vector256<float> dx = Avx.Subtract(ax, bx);
+        Vector256<float> dy = Avx.Subtract(ay, by);
+
+        // 2. Accumulate squared differences
+        // Start with dx * dx
+        Vector256<float> distSq = Avx.Multiply(dx, dx);
+        
+        // Final step: distSq = (dy * dy) + distSq
+        // FMA combines the multiply and add into one high-speed instruction
+        return Fma.MultiplyAdd(dy, dy, distSq);
+    }
+
 }

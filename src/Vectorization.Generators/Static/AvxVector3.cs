@@ -155,6 +155,53 @@ public static class AvxVector3
         return Avx.Sqrt(lengthSq);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> Distance(
+        Vector256<float> ax, Vector256<float> ay, Vector256<float> az,
+        Vector256<float> bx, Vector256<float> by, Vector256<float> bz)
+    {
+        // 1. Calculate differences (Delta)
+        Vector256<float> dx = Avx.Subtract(ax, bx);
+        Vector256<float> dy = Avx.Subtract(ay, by);
+        Vector256<float> dz = Avx.Subtract(az, bz);
+
+        // 2. Calculate squared magnitude: (dx^2 + dy^2 + dz^2)
+        // Start with dx * dx
+        Vector256<float> distSq = Avx.Multiply(dx, dx);
+        
+        // Accumulate using FMA: distSq = (dy * dy) + distSq
+        distSq = Fma.MultiplyAdd(dy, dy, distSq);
+        
+        // Accumulate using FMA: distSq = (dz * dz) + distSq
+        distSq = Fma.MultiplyAdd(dz, dz, distSq);
+
+        // 3. Final distance is the square root
+        return Avx.Sqrt(distSq);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> DistanceSquared(
+        Vector256<float> ax, Vector256<float> ay, Vector256<float> az,
+        Vector256<float> bx, Vector256<float> by, Vector256<float> bz)
+    {
+        // 1. Calculate Deltas
+        Vector256<float> dx = Avx.Subtract(ax, bx);
+        Vector256<float> dy = Avx.Subtract(ay, by);
+        Vector256<float> dz = Avx.Subtract(az, bz);
+
+        // 2. Accumulate squared differences
+        // distSq = dx * dx
+        Vector256<float> distSq = Avx.Multiply(dx, dx);
+        
+        // distSq = (dy * dy) + distSq
+        distSq = Fma.MultiplyAdd(dy, dy, distSq);
+        
+        // distSq = (dz * dz) + distSq
+        distSq = Fma.MultiplyAdd(dz, dz, distSq);
+
+        return distSq;
+    }
+
 }
 ";
 }

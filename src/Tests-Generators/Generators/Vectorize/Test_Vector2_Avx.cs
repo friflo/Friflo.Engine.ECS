@@ -462,5 +462,29 @@ public static partial class Test_Vector2_Avx
             Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Distance_Vector2(Position2 position, Velocity2 velocity, ref FloatComponent length)
+    {
+        length.value = Vector2.Distance(position.value, velocity.value);
+    }
+
+    [Test]
+    public static void Test_Distance_Vector2()
+    {
+        var store = CreateTestStore();
+        Distance_Vector2Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Distance_Vector2Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
+        }
+    }
 
 }

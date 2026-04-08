@@ -319,4 +319,31 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Distance()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position3 : IComponent { public Vector3 value; }
+            public struct Velocity3 : IComponent { public Vector3 value; }
+            public struct Distance  : IComponent { public float   value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                private static void Distance_Vector3(Position3 position, Position3 velocity, Distance ref Distance distance)
+                {
+                    distance.value = Vector3.Distance(position.value, velocity.value);
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }

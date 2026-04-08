@@ -380,6 +380,30 @@ public static partial class Test_Vector4_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
+    private static void Distance_Vector4(Position4 position, Velocity4 velocity, ref FloatComponent length)
+    {
+        length.value = Vector4.Distance(position.value, velocity.value);
+    }
+
+    [Test]
+    public static void Test_Distance_Vector4()
+    {
+        var store = CreateTestStore();
+        Distance_Vector4Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Distance_Vector4Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
+        }
+    }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
     private static void Multiply_Vector4_Matrix4x4(ref Position4 position, in Matrix4x4 matrix) {
         position.value = Vector4.Transform(position.value, matrix);
     }
