@@ -49,7 +49,7 @@ public class Query
     public          int                             computeTempCount;
     public          int                             constLocalsCount;
     public          bool                            requireSoA;
-    public          bool                            UseSoA => requireSoA;
+    public          bool                            useSoA;
 
     public string AddConst() {
         return $"const{constLocalsCount++}";
@@ -75,14 +75,50 @@ public class Query
         spc.ReportDiagnostic(diagnostic);
     }
     
+    public void AddParam(string name, bool isComponent, bool isScalar, bool isParam, int dimension)
+    {
+        paramTypes.Add(name, new Param  { isComponent = isComponent, isScalar = isScalar, isParam = isParam, dimension = dimension });
+    }
+    
     public string GetVectorName(string name, int i)
     {
-        if (paramTypes.TryGetValue(name, out var param)) {
-            if (param.isScalar) {
-                return $"{name}_scalar";
-            }
+        if (i == 0) {
+            int n = 1;
         }
-        return $"{name}_{i}";
+        if (useSoA) {
+            if (paramTypes.TryGetValue(name, out var param)) {
+                if (param.isComponent) {
+                    if (param.dimension == 1) {
+                        if (vectorDimension == 2) {
+                            return $"{name}_{i / 2}";
+                        }
+                        return $"{name}_0";
+                    }
+                    return $"{name}_{i}";
+                } else {
+                    if (param.dimension == 1 && param.isScalar && param.isParam) {
+                        return $"{name}_scalar";
+                    }
+                    if (param.dimension == 2 && param.isScalar && param.isParam) { // && param.dimension == 1) {
+                        return $"{name}_{i % 2}";
+                    }
+                    if (param.dimension == 1 && param.isScalar && !param.isParam) { // && param.dimension == 1) {
+                        return $"{name}_{i % 2}";
+                    }
+                    // if (param.isScalar) {
+                    //     return $"{name}_scalar";
+                    // }
+                }
+            }
+            return $"{name}_{i}";
+        } else {
+            if (paramTypes.TryGetValue(name, out var param)) {
+                if (param.isScalar) {
+                    return $"{name}_scalar";
+                }
+            }
+            return $"{name}_{i}";
+        }
     }
 }
 
@@ -96,7 +132,9 @@ public enum ParamType
 
 public struct Param
 {
+    public bool isComponent;
     public bool isScalar;
+    public bool isParam;
     public int  dimension;
 }
 

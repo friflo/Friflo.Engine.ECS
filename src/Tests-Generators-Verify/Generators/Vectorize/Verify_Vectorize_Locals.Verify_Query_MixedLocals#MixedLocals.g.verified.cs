@@ -66,13 +66,13 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             // --- Locals
             Vector256<int> scalarComp_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> scalarComp_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
 
-            Vector128<float> vec_half = Vector128.Create(vec.X, vec.Y, vec.X, vec.Y);
-            var vec_scalar = Avx.InsertVector128(vec_half.ToVector256(), vec_half, 1);
+            var vec_0 = Vector256.Create(vec.X);
+            var vec_1 = Vector256.Create(vec.Y);
 
             var scalar_scalar = Vector256.Create(scalar);
 
@@ -99,13 +99,11 @@ namespace VerifyVectorize
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position2
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
+                    (position_0, position_1) = AvxVector2.Deinterleave(position_0, position_1);
+                    (position_2, position_3) = AvxVector2.Deinterleave(position_2, position_3);
 
-                    Vector256<float> scalarComp_scalar_01 = Avx.LoadVector256(scalarComp_ptr);      // FloatComponent
-                    Vector256<float> scalarComp_scalar_23 = Avx.LoadVector256(scalarComp_ptr + 8);  // FloatComponent
-                    Vector256<float> scalarComp_0 = Avx2.PermuteVar8x32(scalarComp_scalar_01, scalarComp_mask_lo);
-                    Vector256<float> scalarComp_1 = Avx2.PermuteVar8x32(scalarComp_scalar_01, scalarComp_mask_hi);
-                    Vector256<float> scalarComp_2 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_lo);
-                    Vector256<float> scalarComp_3 = Avx2.PermuteVar8x32(scalarComp_scalar_23, scalarComp_mask_hi);
+                    Vector256<float> scalarComp_0 = Avx.LoadVector256(scalarComp_ptr);      // FloatComponent
+                    Vector256<float> scalarComp_1 = Avx.LoadVector256(scalarComp_ptr + 8);  // FloatComponent
 
                     // --- 2. Compute
                     // Vector2 vec2 = position.value * scalar;
@@ -116,17 +114,17 @@ namespace VerifyVectorize
 
                     // float scalar2 = scalarComp.value * scalar;
                     scalar2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
-                    scalar2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
-                    scalar2_2 = Avx.Multiply(scalarComp_2, scalar_scalar);
-                    scalar2_3 = Avx.Multiply(scalarComp_3, scalar_scalar);
+                    scalar2_1 = Avx.Multiply(scalarComp_0, scalar_scalar);
 
                     // position.value = vec * vec2 * scalar2;
-                    position_0 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_0), scalar2_0);
-                    position_1 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_1), scalar2_1);
-                    position_2 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_2), scalar2_2);
-                    position_3 = Avx.Multiply(Avx.Multiply(vec_scalar, vec2_3), scalar2_3);
+                    position_0 = Avx.Multiply(Avx.Multiply(vec_0, vec2_0), scalar2_0);
+                    position_1 = Avx.Multiply(Avx.Multiply(vec_1, vec2_1), scalar2_1);
+                    position_2 = Avx.Multiply(Avx.Multiply(vec_0, vec2_2), scalar2_0);
+                    position_3 = Avx.Multiply(Avx.Multiply(vec_1, vec2_3), scalar2_1);
 
                     // --- 3. Store
+                    (position_0, position_1) = AvxVector2.Interleave(position_0, position_1);
+                    (position_2, position_3) = AvxVector2.Interleave(position_2, position_3);
                     Avx.Store(position_ptr +  0, position_0);
                     Avx.Store(position_ptr +  8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

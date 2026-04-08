@@ -63,7 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             fixed (global::Friflo.Engine.ECS.Position* position_first = position)
             fixed (global::Tests.Examples.Velocity* velocity_first = velocity)
             {

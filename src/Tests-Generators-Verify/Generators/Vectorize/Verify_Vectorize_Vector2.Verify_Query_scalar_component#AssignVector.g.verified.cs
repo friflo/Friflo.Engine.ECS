@@ -64,7 +64,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             // --- Locals
             Vector256<int> factor_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> factor_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
@@ -82,22 +82,22 @@ namespace VerifyVectorize
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position2
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
+                    (position_0, position_1) = AvxVector2.Deinterleave(position_0, position_1);
+                    (position_2, position_3) = AvxVector2.Deinterleave(position_2, position_3);
 
-                    Vector256<float> factor_scalar_01 = Avx.LoadVector256(factor_ptr);      // FloatComponent
-                    Vector256<float> factor_scalar_23 = Avx.LoadVector256(factor_ptr + 8);  // FloatComponent
-                    Vector256<float> factor_0 = Avx2.PermuteVar8x32(factor_scalar_01, factor_mask_lo);
-                    Vector256<float> factor_1 = Avx2.PermuteVar8x32(factor_scalar_01, factor_mask_hi);
-                    Vector256<float> factor_2 = Avx2.PermuteVar8x32(factor_scalar_23, factor_mask_lo);
-                    Vector256<float> factor_3 = Avx2.PermuteVar8x32(factor_scalar_23, factor_mask_hi);
+                    Vector256<float> factor_0 = Avx.LoadVector256(factor_ptr);      // FloatComponent
+                    Vector256<float> factor_1 = Avx.LoadVector256(factor_ptr + 8);  // FloatComponent
 
                     // --- 2. Compute
                     // position.value = position.value * factor.value;
                     position_0 = Avx.Multiply(position_0, factor_0);
-                    position_1 = Avx.Multiply(position_1, factor_1);
-                    position_2 = Avx.Multiply(position_2, factor_2);
-                    position_3 = Avx.Multiply(position_3, factor_3);
+                    position_1 = Avx.Multiply(position_1, factor_0);
+                    position_2 = Avx.Multiply(position_2, factor_1);
+                    position_3 = Avx.Multiply(position_3, factor_1);
 
                     // --- 3. Store
+                    (position_0, position_1) = AvxVector2.Interleave(position_0, position_1);
+                    (position_2, position_3) = AvxVector2.Interleave(position_2, position_3);
                     Avx.Store(position_ptr +  0, position_0);
                     Avx.Store(position_ptr +  8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

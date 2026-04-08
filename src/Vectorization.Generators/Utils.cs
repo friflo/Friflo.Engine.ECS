@@ -60,18 +60,20 @@ public static class Utils
         return null;
     }
     
-    public static  bool InterleaveVector3(StringBuilder sb, string nm, int vectorDimension)
+    public static  bool InterleaveVector3(StringBuilder sb, string nm, Query query)
     {
-        switch (vectorDimension) {
+        switch (query.vectorDimension) {
             case 1:
                 sb.AppendLine($"  XXX       var {nm}_scalar = Vector256.Create({nm});");
                 return true;
             case 2:
-                sb.AppendLine($"            Vector128<float> {nm}_half = Vector128.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
-                sb.AppendLine($"            var {nm}_scalar = Avx.InsertVector128({nm}_half.ToVector256(), {nm}_half, 1);");
-                // sb.AppendLine($"            var {nm}_1 = {nm}_0;");
-                // sb.AppendLine($"            var {nm}_2 = {nm}_0;");
-                // sb.AppendLine($"            var {nm}_3 = {nm}_0;");
+                if (query.useSoA) {
+                    sb.AppendLine($"            var {nm}_0 = Vector256.Create({nm}.X);");
+                    sb.AppendLine($"            var {nm}_1 = Vector256.Create({nm}.Y);");
+                } else {
+                    sb.AppendLine($"            Vector128<float> {nm}_half = Vector128.Create({nm}.X, {nm}.Y, {nm}.X, {nm}.Y);");
+                    sb.AppendLine($"            var {nm}_scalar = Avx.InsertVector128({nm}_half.ToVector256(), {nm}_half, 1);");
+                }
                 return true;
             case 3:
                 sb.AppendLine($"            var {nm}_0 = Vector256.Create({nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y, {nm}.Z, {nm}.X, {nm}.Y);");

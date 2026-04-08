@@ -66,7 +66,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             // --- Locals
             Vector256<int> scalar_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> scalar_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
@@ -96,14 +96,8 @@ namespace VerifyVectorize
                     (velocity_0, velocity_1) = AvxVector2.Deinterleave(velocity_0, velocity_1);
                     (velocity_2, velocity_3) = AvxVector2.Deinterleave(velocity_2, velocity_3);
 
-                    Vector256<float> scalar_scalar_01 = Avx.LoadVector256(scalar_ptr);      // FloatComponent
-                    Vector256<float> scalar_scalar_23 = Avx.LoadVector256(scalar_ptr + 8);  // FloatComponent
-                    Vector256<float> scalar_0 = Avx2.PermuteVar8x32(scalar_scalar_01, scalar_mask_lo);
-                    Vector256<float> scalar_1 = Avx2.PermuteVar8x32(scalar_scalar_01, scalar_mask_hi);
-                    Vector256<float> scalar_2 = Avx2.PermuteVar8x32(scalar_scalar_23, scalar_mask_lo);
-                    Vector256<float> scalar_3 = Avx2.PermuteVar8x32(scalar_scalar_23, scalar_mask_hi);
-                    (scalar_0, scalar_1) = AvxVector2.Deinterleave(scalar_0, scalar_1);
-                    (scalar_2, scalar_3) = AvxVector2.Deinterleave(scalar_2, scalar_3);
+                    Vector256<float> scalar_0 = Avx.LoadVector256(scalar_ptr);      // FloatComponent
+                    Vector256<float> scalar_1 = Avx.LoadVector256(scalar_ptr + 8);  // FloatComponent
 
                     // --- 2. Compute
                     // Cross arg[0]
@@ -120,7 +114,7 @@ namespace VerifyVectorize
 
                     // scalar.value = Vector2.Cross(position.value, velocity.value);
                     scalar_0 = Fma.MultiplySubtract(temp0_0, temp1_1, Avx.Multiply(temp0_1, temp1_0));
-                    scalar_1 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
+                    scalar_0 = Fma.MultiplySubtract(temp0_2, temp1_3, Avx.Multiply(temp0_3, temp1_2));
 
                     // --- 3. Store
                     Avx.Store(scalar_ptr +  0, scalar_0);

@@ -63,7 +63,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             // --- Locals
             Vector256<int> factor_mask_0 = Vector256.Create(0, 0, 0, 1, 1, 1, 2, 2);
             Vector256<int> factor_mask_1 = Vector256.Create(2, 3, 3, 3, 4, 4, 4, 5);
@@ -81,19 +81,18 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_0 = Avx.LoadVector256(position_ptr +  0);   // Position
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position
+                    (position_0, position_1, position_2) = AvxVector3.Deinterleave(position_0, position_1, position_2);
 
-                    Vector256<float> factor_scalar = Avx.LoadVector256(factor_ptr);  // FloatComponent
-                    Vector256<float> factor_0 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_0);
-                    Vector256<float> factor_1 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_1);
-                    Vector256<float> factor_2 = Avx2.PermuteVar8x32(factor_scalar, factor_mask_2);
+                    Vector256<float> factor_0 = Avx.LoadVector256(factor_ptr);      // FloatComponent
 
                     // --- 2. Compute
                     // position.value = position.value * factor.value;
                     position_0 = Avx.Multiply(position_0, factor_0);
-                    position_1 = Avx.Multiply(position_1, factor_1);
-                    position_2 = Avx.Multiply(position_2, factor_2);
+                    position_1 = Avx.Multiply(position_1, factor_0);
+                    position_2 = Avx.Multiply(position_2, factor_0);
 
                     // --- 3. Store
+                    (position_0, position_1, position_2) = AvxVector3.Interleave(position_0, position_1, position_2);
                     Avx.Store(position_ptr +  0, position_0);
                     Avx.Store(position_ptr +  8, position_1);
                     Avx.Store(position_ptr + 16, position_2);

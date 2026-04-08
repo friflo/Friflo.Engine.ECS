@@ -66,7 +66,7 @@ namespace VerifyVectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             // --- Locals
             Vector256<int> factor_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> factor_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
@@ -89,25 +89,19 @@ namespace VerifyVectorize
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position2
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
+                    (position_0, position_1) = AvxVector2.Deinterleave(position_0, position_1);
+                    (position_2, position_3) = AvxVector2.Deinterleave(position_2, position_3);
 
-                    Vector256<float> factor_scalar_01 = Avx.LoadVector256(factor_ptr);      // FloatComponent
-                    Vector256<float> factor_scalar_23 = Avx.LoadVector256(factor_ptr + 8);  // FloatComponent
-                    Vector256<float> factor_0 = Avx2.PermuteVar8x32(factor_scalar_01, factor_mask_lo);
-                    Vector256<float> factor_1 = Avx2.PermuteVar8x32(factor_scalar_01, factor_mask_hi);
-                    Vector256<float> factor_2 = Avx2.PermuteVar8x32(factor_scalar_23, factor_mask_lo);
-                    Vector256<float> factor_3 = Avx2.PermuteVar8x32(factor_scalar_23, factor_mask_hi);
+                    Vector256<float> factor_0 = Avx.LoadVector256(factor_ptr);      // FloatComponent
+                    Vector256<float> factor_1 = Avx.LoadVector256(factor_ptr + 8);  // FloatComponent
 
-                    Vector256<float> factor2_scalar_01 = Avx.LoadVector256(factor2_ptr);      // FloatComponent2
-                    Vector256<float> factor2_scalar_23 = Avx.LoadVector256(factor2_ptr + 8);  // FloatComponent2
-                    Vector256<float> factor2_0 = Avx2.PermuteVar8x32(factor2_scalar_01, factor2_mask_lo);
-                    Vector256<float> factor2_1 = Avx2.PermuteVar8x32(factor2_scalar_01, factor2_mask_hi);
-                    Vector256<float> factor2_2 = Avx2.PermuteVar8x32(factor2_scalar_23, factor2_mask_lo);
-                    Vector256<float> factor2_3 = Avx2.PermuteVar8x32(factor2_scalar_23, factor2_mask_hi);
+                    Vector256<float> factor2_0 = Avx.LoadVector256(factor2_ptr);      // FloatComponent2
+                    Vector256<float> factor2_1 = Avx.LoadVector256(factor2_ptr + 8);  // FloatComponent2
 
                     // --- 2. Compute
                     // factor.value = factor2.value;
                     factor_0 = factor2_0;
-                    factor_1 = factor2_1;
+                    factor_0 = factor2_0;
 
                     // --- 3. Store
                     Avx.Store(factor_ptr +  0, factor_0);

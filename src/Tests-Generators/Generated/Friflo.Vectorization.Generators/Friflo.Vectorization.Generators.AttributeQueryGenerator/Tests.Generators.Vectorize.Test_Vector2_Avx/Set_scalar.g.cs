@@ -65,7 +65,7 @@ namespace Tests.Generators.Vectorize
             if (i > end) {
                 return 0;
             }
-            // Vector layout: AoS
+            // Vector layout: SoA
             // --- Locals
             Vector256<int> flt_mask_lo = Vector256.Create( 0, 0, 1, 1, 2, 2, 3, 3);
             Vector256<int> flt_mask_hi = Vector256.Create( 4, 4, 5, 5, 6, 6, 7, 7);
@@ -88,25 +88,19 @@ namespace Tests.Generators.Vectorize
                     Vector256<float> position_1 = Avx.LoadVector256(position_ptr +  8);   // Position2
                     Vector256<float> position_2 = Avx.LoadVector256(position_ptr + 16);   // Position2
                     Vector256<float> position_3 = Avx.LoadVector256(position_ptr + 24);   // Position2
+                    (position_0, position_1) = AvxVector2.Deinterleave(position_0, position_1);
+                    (position_2, position_3) = AvxVector2.Deinterleave(position_2, position_3);
 
-                    Vector256<float> flt_scalar_01 = Avx.LoadVector256(flt_ptr);      // FloatComponent
-                    Vector256<float> flt_scalar_23 = Avx.LoadVector256(flt_ptr + 8);  // FloatComponent
-                    Vector256<float> flt_0 = Avx2.PermuteVar8x32(flt_scalar_01, flt_mask_lo);
-                    Vector256<float> flt_1 = Avx2.PermuteVar8x32(flt_scalar_01, flt_mask_hi);
-                    Vector256<float> flt_2 = Avx2.PermuteVar8x32(flt_scalar_23, flt_mask_lo);
-                    Vector256<float> flt_3 = Avx2.PermuteVar8x32(flt_scalar_23, flt_mask_hi);
+                    Vector256<float> flt_0 = Avx.LoadVector256(flt_ptr);      // FloatComponent
+                    Vector256<float> flt_1 = Avx.LoadVector256(flt_ptr + 8);  // FloatComponent
 
-                    Vector256<float> flt2_scalar_01 = Avx.LoadVector256(flt2_ptr);      // FloatComponent2
-                    Vector256<float> flt2_scalar_23 = Avx.LoadVector256(flt2_ptr + 8);  // FloatComponent2
-                    Vector256<float> flt2_0 = Avx2.PermuteVar8x32(flt2_scalar_01, flt2_mask_lo);
-                    Vector256<float> flt2_1 = Avx2.PermuteVar8x32(flt2_scalar_01, flt2_mask_hi);
-                    Vector256<float> flt2_2 = Avx2.PermuteVar8x32(flt2_scalar_23, flt2_mask_lo);
-                    Vector256<float> flt2_3 = Avx2.PermuteVar8x32(flt2_scalar_23, flt2_mask_hi);
+                    Vector256<float> flt2_0 = Avx.LoadVector256(flt2_ptr);      // FloatComponent2
+                    Vector256<float> flt2_1 = Avx.LoadVector256(flt2_ptr + 8);  // FloatComponent2
 
                     // --- 2. Compute
                     // flt.value = flt2.value;
                     flt_0 = flt2_0;
-                    flt_1 = flt2_1;
+                    flt_0 = flt2_0;
 
                     // --- 3. Store
                     Avx.Store(flt_ptr +  0, flt_0);

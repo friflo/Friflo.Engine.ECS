@@ -45,18 +45,8 @@ public static partial class Vectorizer
         if (!TraverseBody(query)) {
             return false;
         }
-        if (false) { // query.UseSoA) {  // SOA
-            // Reset query state created by previous traversal. Generated code require Deinterleave() / Interleave()
-            query.avxMethod = "";
-            query.lanes = null;
-            query.paramTypes.Clear();
-            query.locals.Clear();
-            query.computeTemp.Clear();
-            query.computeTempCount = 0;
-            query.constLocalsCount = 0;
-            
-            // 2. Phase: generate SoA
-            if (!TraverseBody(query)) {
+        if (query.requireSoA) {
+            if (!TraverseBodySoA(query)) {
                 return false;
             }
         }
@@ -64,11 +54,26 @@ public static partial class Vectorizer
         return true;
     }
     
+    private static bool TraverseBodySoA(Query query)
+    {
+        // Reset query state created by previous traversal. Generated code require Deinterleave() / Interleave()
+        query.useSoA = true;
+        query.avxMethod = "";
+        query.lanes = null;
+        query.paramTypes.Clear();
+        query.locals.Clear();
+        query.computeTemp.Clear();
+        query.computeTempCount = 0;
+        query.constLocalsCount = 0;
+        
+        // 2. Phase: generate SoA
+        return TraverseBody(query);
+    }
+    
     private static bool TraverseBody(Query query)
     {
         foreach (var type in query.vectorTypes) {
-            var param = new Param { isScalar = type.isScalar, dimension = type.dimension };
-            query.paramTypes.Add(type.parameter.Name, param);
+            query.AddParam(type.parameter.Name, type.isComponent, type.isScalar, true, type.dimension);
         }
         foreach (var syntaxReference in query.methodSymbol.DeclaringSyntaxReferences)
         {
@@ -127,8 +132,12 @@ public static partial class Vectorizer
         return result.ToArray();
     }
     
-    private static (SpecialType, int dimensiom, ParamType) CreateTypeDim(ITypeSymbol valueType)
+    private static (SpecialType specialType, int dimension, ParamType paramType)
+        GetTypeDim(ITypeSymbol? valueType)
     {
+        if (valueType == null) {
+            return (SpecialType.None, 0,  ParamType.None);
+        }
         var specialType = valueType.SpecialType;
         switch (specialType) {
             case SpecialType.None:
@@ -150,7 +159,7 @@ public static partial class Vectorizer
     private static VectorType CreateVectorType(IParameterSymbol parameter, string fullQualifiedName, bool isComponent, ITypeSymbol valueType)
     {
         bool isScalar   = !isComponent;
-        var (specialType, dimension, paramType) = CreateTypeDim(valueType);
+        var (specialType, dimension, paramType) = GetTypeDim(valueType);
         if (dimension == 3) {
             isScalar    = false;
         }
@@ -279,7 +288,7 @@ public static partial class Vectorizer
                     break;
                 default:                // TODO  type should be clear here 
                 case ParamType.Vector:
-                    Utils.InterleaveVector3(locals, parameter.Name, query.vectorDimension);
+                    Utils.InterleaveVector3(locals, parameter.Name, query);
                     locals.AppendLine();
                     break;
                 case ParamType.Matrix4x4:
@@ -345,7 +354,7 @@ public static partial class Vectorizer
             if (i > end) {{
                 return 0;
             }}
-            // Vector layout: AoS
+            // Vector layout: {(query.useSoA ? "SoA" : "AoS")}
 {localBlock}{@fixed}            {{
                 for (; i <= end; i += {elementStep})
                 {{{pointer}
@@ -412,7 +421,7 @@ public static partial class Vectorizer
                     }
                     break;
                 case 2:
-                    if (false) {  //vectorType.dimension == 1) {  // SOA
+                    if (vectorType.dimension == 1) {  // SOA
                         source.AppendLine(
 $"""
                     Vector256<float> {name}_0 = Avx.LoadVector256({name}_ptr);      // {typeName}
@@ -430,19 +439,33 @@ $"""
 """);
                     }
                     break;
-                default:
+                case 3:
+                case 4:
+                    if (vectorType.dimension == 1) {  // SOA
+                        source.AppendLine(
+$"""
+                    Vector256<float> {name}_0 = Avx.LoadVector256({name}_ptr);      // {typeName}
+""");
+                    } else {
+                        source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);  // {typeName}");
+                        for (int n = 0; n < laneCount; n++) {
+                            source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
+                        }
+                    }
+                    break;
+                /* case 4:
                     source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);  // {typeName}");
                     for (int n = 0; n < laneCount; n++) {
                         source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
                     }
-                    break;
+                    break; */
             }
         } else {
             for (int n = 0; n < laneCount; n++) {
                 source.AppendLine($"                    Vector256<float> {name}_{n} = Avx.LoadVector256({name}_ptr + {n*step,2});   // {typeName}");
             }
         }
-        if (query.UseSoA) { // && vectorType.dimension > 1) {  // SOA
+        if (query.useSoA && vectorType.dimension > 1) {  // SOA
             switch (query.vectorDimension) {
                 case 2:
                     source.AppendLine($"                    ({name}_0, {name}_1) = AvxVector2.Deinterleave({name}_0, {name}_1);");
@@ -465,7 +488,7 @@ $"""
             return;
         }
         var name = vectorType.parameter.Name;
-        if (query.UseSoA) {
+        if (query.useSoA) {
             switch (vectorType.dimension) {
                 case 1:
                     break;

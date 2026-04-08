@@ -29,8 +29,8 @@ public static partial class Vectorizer
                 query.paramTypes.Add(name, paramType);
             } */ 
             query.locals.AppendLine($"            var {name} = {value}; // static");
-            var isScalar = Utils.InterleaveVector3(query.locals, name, query.vectorDimension);
-            query.paramTypes.Add(name, new Param { isScalar = isScalar });
+            var isScalar = Utils.InterleaveVector3(query.locals, name, query);
+            query.AddParam(name, false, isScalar, false, 0);
             query.locals.AppendLine();
             
             for (int n = 0; n < lanes.Length; n++) {
@@ -39,11 +39,11 @@ public static partial class Vectorizer
             }
         } else {
             var name = identifierNameSyntax.Identifier.Text;
-            /* if (query.paramTypes.TryGetValue(name, out var paramType)) { // SOA
+            if (query.paramTypes.TryGetValue(name, out var paramType)) { // SOA
                 if (paramType.dimension == 1 && query.vectorDimension > 1) {
                     query.requireSoA = true;
                 }
-            } */
+            }
             for (int i = 0; i < lanes.Length; i++) {
                 var vectorName = query.GetVectorName(name, i);
                 lanes[i].Append(vectorName);
@@ -64,6 +64,7 @@ public static partial class Vectorizer
     
     private static StringBuilder[] CreateLanes(Query query, ISymbol? symbol, string parameterName)
     {
+        var laneCount = query.laneCount;
         ITypeSymbol? typeSymbol = null;
         if (symbol is ILocalSymbol localSymbol) {
             typeSymbol = localSymbol.Type;
@@ -71,7 +72,14 @@ public static partial class Vectorizer
         if (symbol is IFieldSymbol fieldSymbol) {
             typeSymbol = fieldSymbol.Type;
         }
-        var laneCount = query.laneCount;
+        // SOA
+        var (specialType, dimension, dimParamType) = GetTypeDim(typeSymbol);
+        if (query.useSoA && !query.paramTypes.ContainsKey(parameterName)) {
+            query.AddParam(parameterName, false, true, false, dimension);    
+        }
+        if (query.useSoA && dimension == 1) {
+            laneCount = 2;
+        }
         if (query.paramTypes.TryGetValue(parameterName, out var paramType)) {
             if (query.vectorDimension == 2 && paramType.dimension == 1) {
                 laneCount = 2; // TODO  assign lane count for Vector3 & Vector4
