@@ -64,7 +64,8 @@ public static partial class Vectorizer
             
             case "Vector.Length()":                         return Method_Length    (lanes, query, invocation);
             
-            case "Vector.Distance(Vector, Vector)":         return Method_Distance  (lanes, query, argList);
+            case "Vector.Distance(Vector, Vector)":         return Method_Distance  (lanes, query, argList, "Distance");
+            case "Vector.DistanceSquared(Vector, Vector)":  return Method_Distance  (lanes, query, argList, "DistanceSquared");
             
             case "Vector.Transform(Vector, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
@@ -337,7 +338,7 @@ public static partial class Vectorizer
         return true;
     } 
 
-    private static bool Method_Distance(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax)
+    private static bool Method_Distance(StringBuilder[] lanes, Query query, ArgumentListSyntax argumentSyntax, string method)
     {
         query.requireSoA = true;
         var args = argumentSyntax.Arguments;
@@ -350,14 +351,14 @@ public static partial class Vectorizer
         switch (query.vectorDimension)
         {
             case 2:
-                lanes[0].Append($"AvxVector2.Distance({arg0}_0,{arg0}_1, {arg1}_0,{arg1}_1)");
-                lanes[1].Append($"AvxVector2.Distance({arg0}_2,{arg0}_3, {arg1}_2,{arg1}_3)");
+                lanes[0].Append($"AvxVector2.{method}({arg0}_0,{arg0}_1, {arg1}_0,{arg1}_1)");
+                lanes[1].Append($"AvxVector2.{method}({arg0}_2,{arg0}_3, {arg1}_2,{arg1}_3)");
                 return true;
             case 3:
-                lanes[0].Append($"AvxVector3.Distance({arg0}_0,{arg0}_1,{arg0}_2, {arg1}_0,{arg1}_1,{arg1}_2)");
+                lanes[0].Append($"AvxVector3.{method}({arg0}_0,{arg0}_1,{arg0}_2, {arg1}_0,{arg1}_1,{arg1}_2)");
                 return true;
             case 4:
-                lanes[0].Append($"AvxVector4.Distance({arg0}_0,{arg0}_1,{arg0}_2,{arg0}_3, {arg1}_0,{arg1}_1,{arg1}_2,{arg1}_3)");
+                lanes[0].Append($"AvxVector4.{method}({arg0}_0,{arg0}_1,{arg0}_2,{arg0}_3, {arg1}_0,{arg1}_1,{arg1}_2,{arg1}_3)");
                 return true;
         }
         return false;

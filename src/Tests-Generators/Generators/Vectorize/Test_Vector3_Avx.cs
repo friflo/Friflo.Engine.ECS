@@ -498,4 +498,28 @@ public static partial class Test_Vector3_Avx
             Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void DistanceSquared_Vector3(Position position, Velocity velocity, ref FloatComponent length)
+    {
+        length.value = Vector3.DistanceSquared(position.value, velocity.value);
+    }
+
+    [Test]
+    public static void Test_DistanceSquared_Vector3()
+    {
+        var store = CreateTestStore();
+        DistanceSquared_Vector3Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = DistanceSquared_Vector3Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
+        }
+    }
 }
