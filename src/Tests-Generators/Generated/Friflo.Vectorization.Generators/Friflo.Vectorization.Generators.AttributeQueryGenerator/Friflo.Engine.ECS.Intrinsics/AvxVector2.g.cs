@@ -66,4 +66,36 @@ public static class AvxVector2
         return (v0, v1);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static (Vector256<float> x, Vector256<float> y) 
+        Normalize(Vector256<float> vx, Vector256<float> vy)
+    {
+        // 1. Calculate squared magnitude: (x^2 + y^2)
+        // We use FMA (vx * vx + vy * vy) for speed and precision
+        Vector256<float> x2 = Avx.Multiply(vx, vx);
+        Vector256<float> lengthSq = Fma.MultiplyAdd(vy, vy, x2);
+
+        // 2. Initial approximation of 1 / sqrt(lengthSq)
+        Vector256<float> rsqrt = Avx.ReciprocalSqrt(lengthSq);
+
+        // 3. Newton-Raphson refinement (Standard for 24-bit precision)
+        // r = r * 0.5 * (3.0 - lengthSq * r * r)
+        Vector256<float> three = Vector256.Create(3.0f);
+        Vector256<float> half = Vector256.Create(0.5f);
+        
+        Vector256<float> r2 = Avx.Multiply(rsqrt, rsqrt);
+        // Compute (3.0 - lengthSq * r2) using FMA: (-lengthSq * r2 + 3.0)
+        Vector256<float> negLengthSq = Avx.Subtract(Vector256<float>.Zero, lengthSq);
+        Vector256<float> convergence = Fma.MultiplyAdd(negLengthSq, r2, three);
+        
+        // Final scaling factor
+        rsqrt = Avx.Multiply(rsqrt, Avx.Multiply(half, convergence));
+
+        // 4. Multiply original components by the reciprocal
+        return (
+            Avx.Multiply(vx, rsqrt),
+            Avx.Multiply(vy, rsqrt)
+        );
+    }
+
 }

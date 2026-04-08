@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -66,6 +67,46 @@ public static class Test_Lab_Vector2
             Assert.That(res2, Is.EqualTo(v2));
             Assert.That(res3, Is.EqualTo(v3));
         }
+    }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector3_Normalize()
+    {
+        var vectors    = new Vector2[8];
+        var normalized = new Vector2[8];
+        for (int n = 0; n < 8; n++) {
+            vectors[n] = new Vector2(n, n + 100);
+        };
+        fixed (Vector2* vectors_ptr    = vectors)
+        fixed (Vector2* normalized_ptr = normalized)
+        {
+            var ptr      = (float*)vectors_ptr;
+            var norm_ptr = (float*)normalized_ptr;
+
+            Vector256<float> v0 = Avx.LoadVector256(ptr);
+            Vector256<float> v1 = Avx.LoadVector256(ptr + 8);
+            (v0, v1) = AvxVector2.Deinterleave(v0, v1);
+
+            var (n0, n1) = AvxVector2.Normalize(v0,v1);
+            v0 = n0;
+            v1 = n1;
+            
+            (v0, v1) = AvxVector2.Interleave(v0, v1);
+            Avx.Store(norm_ptr,       v0);
+            Avx.Store(norm_ptr +  8,  v1);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  Vector2.Normalize(vectors[n]);
+            if (!AreEqual(expect, normalized[n], 1e-7f)) {
+                Assert.Fail("not equal");
+            }
+        }
+    }
+    
+    private static bool AreEqual(Vector2 a, Vector2 b, float epsilon)
+    {
+        return MathF.Abs(a.X - b.X) < epsilon &&
+               MathF.Abs(a.Y - b.Y) < epsilon;
     }
 }
 

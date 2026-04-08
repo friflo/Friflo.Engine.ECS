@@ -326,7 +326,7 @@ public static partial class Test_Vector2_Avx
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
             var val1 = entity.GetComponent<Position2>().value;
             var val2 = entityVectorized.GetComponent<Position2>().value;
-            if (!AreEqual(val1, val2)) {
+            if (!AreEqual(val1, val2, 1e-4f)) {
                 Assert.Fail($"not equal - expect: {val1}    was: {val2}");
             }
             // Assert.That(entity.GetComponent<Position2>(), Is.EqualTo(entityVectorized.GetComponent<Position2>()));
@@ -381,7 +381,7 @@ public static partial class Test_Vector2_Avx
         }
     }
     
-    private static bool AreEqual(Vector2 a, Vector2 b, float epsilon = 1e-4f)
+    private static bool AreEqual(Vector2 a, Vector2 b, float epsilon)
     {
         return Math.Abs(a.X - b.X) < epsilon &&
                Math.Abs(a.Y - b.Y) < epsilon;
@@ -410,4 +410,33 @@ public static partial class Test_Vector2_Avx
             Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Normalize_Vector2(ref Position2 position, Velocity2 velocity)
+    {
+        position.value = Vector2.Normalize(velocity.value);
+    }
+
+    [Test]
+    public static void Test_Normalize_Vector2()
+    {
+        var store = CreateTestStore();
+        Normalize_Vector2Query(store, false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Normalize_Vector2Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            var val1 = entity.GetComponent<Position2>().value;
+            var val2 = entityVectorized.GetComponent<Position2>().value;
+            if (!AreEqual(val1, val2, 1e-6f)) {
+                Assert.Fail($"not equal - expect: {val1}    was: {val2}");
+            }
+        }
+    }
+
 }

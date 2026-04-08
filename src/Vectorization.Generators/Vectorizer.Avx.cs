@@ -493,6 +493,14 @@ public static partial class Vectorizer
         var result = query.AddTemp();
         switch (query.vectorDimension)
         {
+            case 2:
+                query.computeTemp.AppendLine($"                    var ({result}_0, {result}_1) = AvxVector2.Normalize({arg0}_0, {arg0}_1);");
+                query.computeTemp.AppendLine($"                    var ({result}_2, {result}_3) = AvxVector2.Normalize({arg0}_2, {arg0}_3);");
+                lanes[0].Append($"{result}_0");
+                lanes[1].Append($"{result}_1");
+                lanes[2].Append($"{result}_2");
+                lanes[3].Append($"{result}_3");
+                return true;
             case 3:
                 query.computeTemp.AppendLine($"                    var ({result}_0, {result}_1, {result}_2) = AvxVector3.Normalize({arg0}_0, {arg0}_1, {arg0}_2);");
                 lanes[0].Append($"{result}_0");
