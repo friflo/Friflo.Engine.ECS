@@ -301,9 +301,9 @@ public static partial class Vectorizer
         switch (query.vectorDimension)
         {
             case 2:
-                return false;
-                // lanes[0].Append($"AvxVector2.Length({arg0}_0, {arg0}_1)");
-                // return true;
+                lanes[0].Append($"AvxVector2.Length({arg0}_0, {arg0}_1)");
+                lanes[1].Append($"AvxVector2.Length({arg0}_2, {arg0}_3)");
+                return true;
             case 3:
                 lanes[0].Append($"AvxVector3.Length({arg0}_0, {arg0}_1, {arg0}_2)");
                 return true;

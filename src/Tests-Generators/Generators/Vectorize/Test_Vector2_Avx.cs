@@ -446,7 +446,6 @@ public static partial class Test_Vector2_Avx
         length.value = position.value.Length();
     }
 
-    /*
     [Test]
     public static void Test_Length_Vector2()
     {
@@ -462,6 +461,6 @@ public static partial class Test_Vector2_Avx
             var entityVectorized = storeVectorized.GetEntityById(entity.Id);
             Assert.That(entity.GetComponent<FloatComponent>(), Is.EqualTo(entityVectorized.GetComponent<FloatComponent>()));
         }
-    } */
+    }
 
 }
