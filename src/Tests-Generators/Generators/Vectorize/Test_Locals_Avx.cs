@@ -107,7 +107,7 @@ public static partial class Test_Locals_Avx
         position.value = vec * vec2 * scalar2;
     } 
         
-    [Test] [Ignore("Fix assignment of two FloatComponent's")] 
+    [Test]
     public static void Test_MixedLocals()
     {
         var store = CreateTestStore();

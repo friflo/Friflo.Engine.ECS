@@ -103,11 +103,11 @@ public class Query
             if (param.dimension == 1 && param.isScalar && param.isParam) {
                 return $"{name}_scalar";
             }
-            if (param.dimension == 2 && param.isScalar && param.isParam) { // && param.dimension == 1) {
+            if (param.dimension == 2 && param.isScalar && param.isParam) {
                 return $"{name}_{i % 2}";
             }
-            if (param.dimension == 1 && param.isScalar && !param.isParam) { // && param.dimension == 1) {
-                return $"{name}_{i % 2}";
+            if (param.dimension == 1 && param.isScalar && !param.isParam) {
+                return $"{name}_{i / (lanes.Length / 2)}";
             }
         }
         return $"{name}_{i}";

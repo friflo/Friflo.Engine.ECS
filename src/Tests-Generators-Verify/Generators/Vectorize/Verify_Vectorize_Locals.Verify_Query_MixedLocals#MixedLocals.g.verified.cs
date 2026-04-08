@@ -118,8 +118,8 @@ namespace VerifyVectorize
 
                     // position.value = vec * vec2 * scalar2;
                     position_0 = Avx.Multiply(Avx.Multiply(vec_0, vec2_0), scalar2_0);
-                    position_1 = Avx.Multiply(Avx.Multiply(vec_1, vec2_1), scalar2_1);
-                    position_2 = Avx.Multiply(Avx.Multiply(vec_0, vec2_2), scalar2_0);
+                    position_1 = Avx.Multiply(Avx.Multiply(vec_1, vec2_1), scalar2_0);
+                    position_2 = Avx.Multiply(Avx.Multiply(vec_0, vec2_2), scalar2_1);
                     position_3 = Avx.Multiply(Avx.Multiply(vec_1, vec2_3), scalar2_1);
 
                     // --- 3. Store
