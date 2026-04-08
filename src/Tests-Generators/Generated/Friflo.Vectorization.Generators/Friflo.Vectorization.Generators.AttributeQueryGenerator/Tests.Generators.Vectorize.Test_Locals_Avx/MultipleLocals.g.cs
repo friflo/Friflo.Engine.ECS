@@ -69,16 +69,6 @@ namespace Tests.Generators.Vectorize
 
             var offset_scalar = Vector256.Create(offset);
 
-            Vector256<float> vel1_0;
-            Vector256<float> vel1_1;
-            Vector256<float> vel1_2;
-            Vector256<float> vel1_3;
-
-            Vector256<float> vel2_0;
-            Vector256<float> vel2_1;
-            Vector256<float> vel2_2;
-            Vector256<float> vel2_3;
-
             fixed (global::Tests.ECS.Position1* position_first = position)
             {
                 for (; i <= end; i += 32)
@@ -93,16 +83,16 @@ namespace Tests.Generators.Vectorize
 
                     // --- 2. Compute
                     // var vel1 = position.value * factor;
-                    vel1_0 = Avx.Multiply(position_0, factor_scalar);
-                    vel1_1 = Avx.Multiply(position_1, factor_scalar);
-                    vel1_2 = Avx.Multiply(position_2, factor_scalar);
-                    vel1_3 = Avx.Multiply(position_3, factor_scalar);
+                    var vel1_0 = Avx.Multiply(position_0, factor_scalar);
+                    var vel1_1 = Avx.Multiply(position_1, factor_scalar);
+                    var vel1_2 = Avx.Multiply(position_2, factor_scalar);
+                    var vel1_3 = Avx.Multiply(position_3, factor_scalar);
 
                     // var vel2 = offset * factor;
-                    vel2_0 = Avx.Multiply(offset_scalar, factor_scalar);
-                    vel2_1 = Avx.Multiply(offset_scalar, factor_scalar);
-                    vel2_2 = Avx.Multiply(offset_scalar, factor_scalar);
-                    vel2_3 = Avx.Multiply(offset_scalar, factor_scalar);
+                    var vel2_0 = Avx.Multiply(offset_scalar, factor_scalar);
+                    var vel2_1 = Avx.Multiply(offset_scalar, factor_scalar);
+                    var vel2_2 = Avx.Multiply(offset_scalar, factor_scalar);
+                    var vel2_3 = Avx.Multiply(offset_scalar, factor_scalar);
 
                     // position.value = vel1 * vel2;
                     position_0 = Avx.Multiply(vel1_0, vel2_0);

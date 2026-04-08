@@ -64,12 +64,6 @@ namespace Tests.Generators.Vectorize
                 return 0;
             }
             // Vector layout: AoS
-            // --- Locals
-            Vector256<float> vel_0;
-            Vector256<float> vel_1;
-            Vector256<float> vel_2;
-            Vector256<float> vel_3;
-
             fixed (global::Tests.ECS.Position1* position_first = position)
             fixed (global::Tests.ECS.Velocity1* velocity_first = velocity)
             {
@@ -91,10 +85,10 @@ namespace Tests.Generators.Vectorize
 
                     // --- 2. Compute
                     // var vel = position.value + velocity.value;
-                    vel_0 = Avx.Add(position_0, velocity_0);
-                    vel_1 = Avx.Add(position_1, velocity_1);
-                    vel_2 = Avx.Add(position_2, velocity_2);
-                    vel_3 = Avx.Add(position_3, velocity_3);
+                    var vel_0 = Avx.Add(position_0, velocity_0);
+                    var vel_1 = Avx.Add(position_1, velocity_1);
+                    var vel_2 = Avx.Add(position_2, velocity_2);
+                    var vel_3 = Avx.Add(position_3, velocity_3);
 
                     // position.value = vel;
                     position_0 = vel_0;

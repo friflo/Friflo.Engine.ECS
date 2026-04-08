@@ -65,12 +65,6 @@ namespace VerifyVectorize
                 return 0;
             }
             // Vector layout: AoS
-            // --- Locals
-            Vector256<float> localVar_0;
-            Vector256<float> localVar_1;
-            Vector256<float> localVar_2;
-            Vector256<float> localVar_3;
-
             fixed (global::VerifyVectorize.Position1* position_first = position)
             fixed (global::VerifyVectorize.Velocity1* velocity_first = velocity)
             {
@@ -92,10 +86,10 @@ namespace VerifyVectorize
 
                     // --- 2. Compute
                     // var localVar = position.value;
-                    localVar_0 = position_0;
-                    localVar_1 = position_1;
-                    localVar_2 = position_2;
-                    localVar_3 = position_3;
+                    var localVar_0 = position_0;
+                    var localVar_1 = position_1;
+                    var localVar_2 = position_2;
+                    var localVar_3 = position_3;
 
                     // localVar = velocity.value;
                     localVar_0 = velocity_0;

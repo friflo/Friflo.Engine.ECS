@@ -68,16 +68,6 @@ namespace Tests.Generators.Vectorize
             // --- Locals
             var value_scalar = Vector256.Create(value);
 
-            Vector256<float> abs_0;
-            Vector256<float> abs_1;
-            Vector256<float> abs_2;
-            Vector256<float> abs_3;
-
-            Vector256<float> log_0;
-            Vector256<float> log_1;
-            Vector256<float> log_2;
-            Vector256<float> log_3;
-
             var const0 = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()
 
             fixed (global::Tests.ECS.Position1* position_first = position)
@@ -101,16 +91,16 @@ namespace Tests.Generators.Vectorize
 
                     // --- 2. Compute
                     // var abs = MathF.Abs(velocity.value);
-                    abs_0 = Avx.And(velocity_0, const0);
-                    abs_1 = Avx.And(velocity_1, const0);
-                    abs_2 = Avx.And(velocity_2, const0);
-                    abs_3 = Avx.And(velocity_3, const0);
+                    var abs_0 = Avx.And(velocity_0, const0);
+                    var abs_1 = Avx.And(velocity_1, const0);
+                    var abs_2 = Avx.And(velocity_2, const0);
+                    var abs_3 = Avx.And(velocity_3, const0);
 
                     // var log = MathF.Log(abs);
-                    log_0 = Vector256.Log(abs_0);
-                    log_1 = Vector256.Log(abs_1);
-                    log_2 = Vector256.Log(abs_2);
-                    log_3 = Vector256.Log(abs_3);
+                    var log_0 = Vector256.Log(abs_0);
+                    var log_1 = Vector256.Log(abs_1);
+                    var log_2 = Vector256.Log(abs_2);
+                    var log_3 = Vector256.Log(abs_3);
 
                     // position.value = log;
                     position_0 = log_0;

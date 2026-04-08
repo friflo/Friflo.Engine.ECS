@@ -242,7 +242,7 @@ public static partial class Vectorizer
                     var symbol = query.semanticModel.GetDeclaredSymbol(variable);
                     lanes = CreateLanes(query, symbol, variableName);
                     for (int n = 0; n < lanes.Length; n++) {
-                        lanes[n].Append($"{variableName}_{n} = ");
+                        lanes[n].Append($"var {variableName}_{n} = ");
                     }
                     if (!Compute(lanes, query, initializerExpression)) {
                         return false;
@@ -299,7 +299,7 @@ public static partial class Vectorizer
             }
         }
         // local variables
-        if (body != null) {
+        /* if (body != null) {
             foreach (var statement in body.Statements) {
                 // Is local declaration - e.g.     var local = value;
                 if (statement is LocalDeclarationStatementSyntax localDecl) {
@@ -312,7 +312,7 @@ public static partial class Vectorizer
                     }
                 }
             }
-        }
+        } */
         // const locals
         locals.Append(query.locals);
 
@@ -454,12 +454,6 @@ $"""
                         }
                     }
                     break;
-                /* case 4:
-                    source.AppendLine($"                    Vector256<float> {name}_scalar = Avx.LoadVector256({name}_ptr);  // {typeName}");
-                    for (int n = 0; n < laneCount; n++) {
-                        source.AppendLine($"                    Vector256<float> {name}_{n} = Avx2.PermuteVar8x32({name}_scalar, {name}_mask_{n});");
-                    }
-                    break; */
             }
         } else {
             for (int n = 0; n < laneCount; n++) {

@@ -76,16 +76,6 @@ namespace VerifyVectorize
 
             var scalar_scalar = Vector256.Create(scalar);
 
-            Vector256<float> vec2_0;
-            Vector256<float> vec2_1;
-            Vector256<float> vec2_2;
-            Vector256<float> vec2_3;
-
-            Vector256<float> scalar2_0;
-            Vector256<float> scalar2_1;
-            Vector256<float> scalar2_2;
-            Vector256<float> scalar2_3;
-
             fixed (global::VerifyVectorize.Position2* position_first = position)
             fixed (global::VerifyVectorize.FloatComponent* scalarComp_first = scalarComp)
             {
@@ -107,14 +97,14 @@ namespace VerifyVectorize
 
                     // --- 2. Compute
                     // Vector2 vec2 = position.value * scalar;
-                    vec2_0 = Avx.Multiply(position_0, scalar_scalar);
-                    vec2_1 = Avx.Multiply(position_1, scalar_scalar);
-                    vec2_2 = Avx.Multiply(position_2, scalar_scalar);
-                    vec2_3 = Avx.Multiply(position_3, scalar_scalar);
+                    var vec2_0 = Avx.Multiply(position_0, scalar_scalar);
+                    var vec2_1 = Avx.Multiply(position_1, scalar_scalar);
+                    var vec2_2 = Avx.Multiply(position_2, scalar_scalar);
+                    var vec2_3 = Avx.Multiply(position_3, scalar_scalar);
 
                     // float scalar2 = scalarComp.value * scalar;
-                    scalar2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
-                    scalar2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
+                    var scalar2_0 = Avx.Multiply(scalarComp_0, scalar_scalar);
+                    var scalar2_1 = Avx.Multiply(scalarComp_1, scalar_scalar);
 
                     // position.value = vec * vec2 * scalar2;
                     position_0 = Avx.Multiply(Avx.Multiply(vec_0, vec2_0), scalar2_0);

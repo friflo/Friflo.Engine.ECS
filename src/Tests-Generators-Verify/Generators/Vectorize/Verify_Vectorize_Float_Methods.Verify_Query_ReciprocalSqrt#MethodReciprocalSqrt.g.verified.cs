@@ -69,11 +69,6 @@ namespace VerifyVectorize
             // --- Locals
             var value_scalar = Vector256.Create(value);
 
-            Vector256<float> abs_0;
-            Vector256<float> abs_1;
-            Vector256<float> abs_2;
-            Vector256<float> abs_3;
-
             var const0 = Vector256.Create(0x7FFFFFFF).AsSingle(); // Abs()
 
             fixed (global::VerifyVectorize.Position1* position_first = position)
@@ -97,10 +92,10 @@ namespace VerifyVectorize
 
                     // --- 2. Compute
                     // var abs = MathF.Abs(velocity.value);
-                    abs_0 = Avx.And(velocity_0, const0);
-                    abs_1 = Avx.And(velocity_1, const0);
-                    abs_2 = Avx.And(velocity_2, const0);
-                    abs_3 = Avx.And(velocity_3, const0);
+                    var abs_0 = Avx.And(velocity_0, const0);
+                    var abs_1 = Avx.And(velocity_1, const0);
+                    var abs_2 = Avx.And(velocity_2, const0);
+                    var abs_3 = Avx.And(velocity_3, const0);
 
                     // position.value = value / MathF.Sqrt(abs);
                     position_0 = Avx.Multiply(Avx.ReciprocalSqrt(abs_0), value_scalar);
