@@ -236,20 +236,20 @@ public static partial class Test_Vector2_Avx
     
     // -----------------------------------------------------------------------------------------------------
     [Vectorize][Query]  [OmitHash]
-    private static void Set_vector(Position2 position, ref Vector2 sum) {
+    private static void Vector2_Sum(Position2 position, ref Vector2 sum) {
         sum += position.value;
     }
 
-    [Test][Ignore("Fix storing local vector")]
-    public static void Test_Set_vector()
+    [Test][Ignore("Support for ref parameters required. This enables aggregate operation. E.g. + to calculate Sum")]
+    public static void Test_Vector2_Sum()
     {
         var store = CreateTestStore();
         var sum1 = new Vector2();
-        Set_vectorQuery(store, ref sum1, false);
+        Vector2_SumQuery(store, ref sum1, false);
 
         var storeVectorized = CreateTestStore();
         var sum2 = new Vector2();
-        var query = Set_vectorQuery(storeVectorized, ref sum2);
+        var query = Vector2_SumQuery(storeVectorized, ref sum2);
 
         Assert.That(query.Count, Is.EqualTo(EntityCount));
         Assert.That(sum2, Is.EqualTo(sum1));

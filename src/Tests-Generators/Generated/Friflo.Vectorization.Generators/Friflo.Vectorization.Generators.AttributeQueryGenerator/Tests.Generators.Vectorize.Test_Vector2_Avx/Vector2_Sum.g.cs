@@ -11,11 +11,11 @@ namespace Tests.Generators.Vectorize
 {
     public partial class Test_Vector2_Avx
     {
-        /// <summary>Query method generated for: <see cref="Set_vector"/>.</summary>
+        /// <summary>Query method generated for: <see cref="Vector2_Sum"/>.</summary>
         /// <returns>The executed <see cref="ArchetypeQuery"/> for debugging purposes</returns>
-        public static ArchetypeQuery Set_vectorQuery(EntityStore _store, ref global::System.Numerics.Vector2 sum, bool vectorized = true)
+        public static ArchetypeQuery Vector2_SumQuery(EntityStore _store, ref global::System.Numerics.Vector2 sum, bool vectorized = true)
         {
-            var _query = _Set_vector_GetQuery(_store);
+            var _query = _Vector2_Sum_GetQuery(_store);
             foreach (var chunk in _query.Chunks)
             {
                 var _entities = chunk.Entities;
@@ -23,11 +23,11 @@ namespace Tests.Generators.Vectorize
                 int n = 0;
                 if (!vectorized) goto EntityLoop;
                 if (Avx.IsSupported) {
-                    n = _Set_vector_Avx(positionSpan, ref sum);
+                    n = _Vector2_Sum_Avx(positionSpan, ref sum);
                 }
             EntityLoop:
                 for (; n < _entities.Length; n++) {
-                    Set_vector(positionSpan[n], ref sum);
+                    Vector2_Sum(positionSpan[n], ref sum);
                 }
             }
             return _query;
@@ -35,25 +35,25 @@ namespace Tests.Generators.Vectorize
 
     #region private members
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static readonly int _Set_vector_Slot = EntityStore.UserDataNewSlot();
+        private static readonly int _Vector2_Sum_Slot = EntityStore.UserDataNewSlot();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static ArchetypeQuery<global::Tests.ECS.Position2>
-            _Set_vector_GetQuery(EntityStore _store)
+            _Vector2_Sum_GetQuery(EntityStore _store)
         {
             var _query = (ArchetypeQuery<global::Tests.ECS.Position2>)
-                EntityStore.UserDataGet(_store, _Set_vector_Slot);
+                EntityStore.UserDataGet(_store, _Vector2_Sum_Slot);
             if (_query != null) {
                 return _query;
             }
             _query = _store.Query<global::Tests.ECS.Position2>();
 
-            EntityStore.UserDataSet(_store, _Set_vector_Slot, _query);
+            EntityStore.UserDataSet(_store, _Vector2_Sum_Slot, _query);
             return _query;
         }
 
         [SkipLocalsInit]
-        private static unsafe int _Set_vector_Avx(
+        private static unsafe int _Vector2_Sum_Avx(
             Span<global::Tests.ECS.Position2> position,
             ref global::System.Numerics.Vector2 sum)
         {
