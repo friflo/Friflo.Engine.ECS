@@ -70,9 +70,9 @@ public static class Test_Lab_Vector3
             var ptr      = (float*)vectors_ptr;
             var norm_ptr = (float*)normalized_ptr;
             // 1. Load 24 floats into three 256-bit registers
-            Vector256<float> v0 = Avx.LoadVector256(ptr); // [X0 Y0 Z0 X1 Y1 Z1 X2 Y2]
-            Vector256<float> v1 = Avx.LoadVector256(ptr + 8); // [Z2 X3 Y3 Z3 X4 Y4 Z4 X5]
-            Vector256<float> v2 = Avx.LoadVector256(ptr + 16); // [Y5 Z5 X6 Y6 Z6 X7 Y7 Z7]
+            Vector256<float> v0 = Avx.LoadVector256(ptr);
+            Vector256<float> v1 = Avx.LoadVector256(ptr + 8);
+            Vector256<float> v2 = Avx.LoadVector256(ptr + 16);
             (v0, v1, v2) = AvxVector3.Deinterleave(v0, v1, v2);
 
             var (n0, n1, n2) = AvxVector3.Normalize(v0,v1,v2);
@@ -90,6 +90,34 @@ public static class Test_Lab_Vector3
             if (!AreEqual(expect, normalized[n], 1e-7f)) {
                 Assert.Fail("not equal");
             }
+        }
+    }
+    
+    [Test]
+    public static unsafe void Test_Lab_Vector3_Length()
+    {
+        var vectors    = new Vector3[8];
+        var lengths    = new float[8];
+        for (int n = 0; n < 8; n++) {
+            vectors[n] = new Vector3(n, n + 100, n+ 200);
+        };
+        fixed (Vector3* vectors_ptr    = vectors)
+        fixed (float*   lengths_ptr = lengths)
+        {
+            var ptr      = (float*)vectors_ptr;
+            // 1. Load 24 floats into three 256-bit registers
+            Vector256<float> v0 = Avx.LoadVector256(ptr);
+            Vector256<float> v1 = Avx.LoadVector256(ptr + 8);
+            Vector256<float> v2 = Avx.LoadVector256(ptr + 16);
+            (v0, v1, v2) = AvxVector3.Deinterleave(v0, v1, v2);
+
+            var length = AvxVector3.Length(v0,v1,v2);
+            
+            Avx.Store(lengths_ptr,       length);
+        }
+        for (int n = 0; n < 8; n++) {
+            var expect =  vectors[n].Length();
+            Assert.That(expect, Is.EqualTo(lengths[n]));
         }
     }
     

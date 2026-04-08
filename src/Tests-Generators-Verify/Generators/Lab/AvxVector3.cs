@@ -129,4 +129,22 @@ public static class AvxVector3
         
         return (normX, normY,  normZ);
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector256<float> Length(Vector256<float> vx, Vector256<float> vy, Vector256<float> vz)
+    {
+        // 1. Calculate squared magnitude: x^2 + y^2 + z^2
+        // We start with x*x
+        Vector256<float> lengthSq = Avx.Multiply(vx, vx);
+        
+        // Use FMA to add (y*y) and (z*z) into the accumulator
+        // lengthSq = (vy * vy) + lengthSq
+        lengthSq = Fma.MultiplyAdd(vy, vy, lengthSq);
+        
+        // lengthSq = (vz * vz) + lengthSq
+        lengthSq = Fma.MultiplyAdd(vz, vz, lengthSq);
+
+        // 2. Return the square root of the sum
+        return Avx.Sqrt(lengthSq);
+    }
 }

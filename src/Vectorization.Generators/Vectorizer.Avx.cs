@@ -13,7 +13,12 @@ public static partial class Vectorizer
 {
     private static bool Compute_MemberAccess(StringBuilder[] lanes, Query query, MemberAccessExpressionSyntax memberAccess)
     {
-        if (memberAccess.Expression is not IdentifierNameSyntax identifierNameSyntax) {
+        var memberExpression = memberAccess.Expression;
+        if (memberExpression is MemberAccessExpressionSyntax childMemberAccess) {
+        	// Required to for: Vector3.Length()
+            return Compute_MemberAccess(lanes, query, childMemberAccess);
+        }
+        if (memberExpression is not IdentifierNameSyntax identifierNameSyntax) {
             return false;
         }
         var symbolInfo = query.semanticModel.GetSymbolInfo(memberAccess);
@@ -81,8 +86,13 @@ public static partial class Vectorizer
             laneCount = 2;
         }
         if (query.paramTypes.TryGetValue(parameterName, out var paramType)) {
-            if (query.vectorDimension == 2 && paramType.dimension == 1) {
-                laneCount = 2; // TODO  assign lane count for Vector3 & Vector4
+            if (paramType.dimension == 1) {
+                laneCount =  query.vectorDimension switch {
+                    2 => 2,
+                    3 => 1,
+                    4 => 1,
+                    _ => laneCount
+                };
             }
         }
         var lanes = query.lanes = new StringBuilder[laneCount];

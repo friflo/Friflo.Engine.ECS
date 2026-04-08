@@ -502,8 +502,13 @@ $"""
             }
         }
         var laneCount = query.laneCount;
-        if (query.vectorDimension == 2 && vectorType.dimension == 1) {
-            laneCount = 2; //       TODO vech support for Vector3 & Vector4
+        if (vectorType.dimension == 1) {
+            laneCount = query.vectorDimension switch {
+                2 => 2,
+                3 => 1,
+                4 => 1,
+                _ => laneCount
+            };
         }
         if (vectorType.paramType == ParamType.Scalar)
         {

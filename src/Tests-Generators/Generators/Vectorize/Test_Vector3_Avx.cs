@@ -450,4 +450,28 @@ public static partial class Test_Vector3_Avx
             Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
         }
     }
+    
+    // -----------------------------------------------------------------------------------------------------
+    [Vectorize][Query]  [OmitHash]
+    private static void Length_Vector3(Position position, ref FloatComponent length)
+    {
+        length.value = position.value.Length();
+    }
+
+    [Test]
+    public static void Test_Length_Vector3()
+    {
+        var store = CreateTestStore();
+        Length_Vector3Query(store); // TODO , false);
+
+        var storeVectorized = CreateTestStore();
+        var query = Length_Vector3Query(storeVectorized);
+
+        Assert.That(query.Count, Is.EqualTo(EntityCount));
+        foreach (var entity in store.Entities)
+        {
+            var entityVectorized = storeVectorized.GetEntityById(entity.Id);
+            Assert.That(entity.GetComponent<Position>(), Is.EqualTo(entityVectorized.GetComponent<Position>()));
+        }
+    }
 }

@@ -62,6 +62,8 @@ public static partial class Vectorizer
             
             case "Vector.Normalize(Vector)":                return Method_Normalize (lanes, query, argList);
             
+            case "Vector.Length()":                         return Method_Length    (lanes, query, invocation);
+            
             case "Vector.Transform(Vector, System.Numerics.Matrix4x4)":
                 return Method_Vector4_Transform(lanes, query, argList);
         }
@@ -286,6 +288,25 @@ public static partial class Vectorizer
                 lanes[2].Append($"{result}_2");
                 lanes[3].Append($"{result}_3");
                 return true;
+        }
+        return false;
+    }
+    
+    private static bool Method_Length(StringBuilder[] lanes, Query query, InvocationExpressionSyntax invocation)
+    {
+        query.requireSoA = true;
+        if (!Compute_AddTemp(query, invocation.Expression, "Length this", out var arg0)) {
+            return false;
+        }
+        switch (query.vectorDimension)
+        {
+            case 2:
+                return false;
+            case 3:
+                lanes[0].Append($"AvxVector3.Length({arg0}_0, {arg0}_1, {arg0}_2)");
+                return true;
+            case 4:
+                return false;
         }
         return false;
     }

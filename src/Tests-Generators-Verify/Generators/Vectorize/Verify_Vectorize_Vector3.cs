@@ -293,4 +293,30 @@ public partial class MyExample
             """;
         await Verify(code);
     }
+    
+    [Test]
+    public static async Task  Verify_Query_Length()
+    {
+        var code =
+            """
+            using System.Numerics;
+            using Friflo.Engine.ECS;
+            using Friflo.Vectorization;
+            
+            namespace VerifyVectorize;
+
+            public struct Position3      : IComponent { public Vector3 value; }
+            public struct FloatComponent : IComponent { public float   value; }
+
+            public partial class MyExample
+            {
+                [Vectorize][Query]  [OmitHash]
+                private static void Length_Vector3(Position3 position, ref FloatComponent length)
+                {
+                    length.value = position.value.Length();
+                }
+            }
+            """;
+        await Verify(code);
+    }
 }
