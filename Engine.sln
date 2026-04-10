@@ -25,14 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Engine.ECS.Boost", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen", "src\CodeGen\CodeGen.csproj", "{F1DF8513-7BE0-4449-9E0C-9E14409997B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-Generators-Verify", "src\Tests-Generators-Verify\Tests-Generators-Verify.csproj", "{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Vectorization.Attributes", "src\Vectorization.Attributes\Friflo.Vectorization.Attributes.csproj", "{6861A7EF-DCA5-4E2A-89F1-231A356EF460}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Vectorization.Generators", "src\Vectorization.Generators\Friflo.Vectorization.Generators.csproj", "{CA97D6A8-D354-4908-922C-BDFADF5D3778}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-Generators-Code", "src\Tests-Generators\Tests-Generators-Code.csproj", "{68538F93-887E-4E49-B1E3-3405EF13FA34}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,21 +78,5 @@ Global
 		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1DF8513-7BE0-4449-9E0C-9E14409997B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{274CE947-4BBD-4B23-9EC5-7A4E503F22F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6861A7EF-DCA5-4E2A-89F1-231A356EF460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6861A7EF-DCA5-4E2A-89F1-231A356EF460}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6861A7EF-DCA5-4E2A-89F1-231A356EF460}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6861A7EF-DCA5-4E2A-89F1-231A356EF460}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA97D6A8-D354-4908-922C-BDFADF5D3778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA97D6A8-D354-4908-922C-BDFADF5D3778}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA97D6A8-D354-4908-922C-BDFADF5D3778}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA97D6A8-D354-4908-922C-BDFADF5D3778}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68538F93-887E-4E49-B1E3-3405EF13FA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68538F93-887E-4E49-B1E3-3405EF13FA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68538F93-887E-4E49-B1E3-3405EF13FA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68538F93-887E-4E49-B1E3-3405EF13FA34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

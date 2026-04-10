@@ -75,8 +75,4 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Vectorization.Attributes\Friflo.Vectorization.Attributes.csproj" />
-  </ItemGroup>
-
 </Project>
