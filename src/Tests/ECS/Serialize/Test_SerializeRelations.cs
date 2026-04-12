@@ -152,6 +152,110 @@ public static class Test_SerializeRelations
         AreEqual(Json, str);
     }
     #endregion
+
+
+#region round-trip relations
+    [Test]
+    public static void Test_SerializeRelations_roundtrip()
+    {
+        var store       = new EntityStore();
+        Entity entity1  = store.CreateEntity(1);
+        entity1.AddRelation(new IntRelation { value = 101 });
+
+        Entity entity2  = store.CreateEntity(2);
+        entity2.AddRelation(new IntRelation { value = 201 });
+        entity2.AddRelation(new IntRelation { value = 202 });
+
+        // --- write
+        var serializer  = new EntitySerializer();
+        using MemoryStream writeStream = new MemoryStream();
+        serializer.WriteStore(store, writeStream);
+
+        // --- read into new store
+        writeStream.Position = 0;
+        var target      = new EntityStore();
+        var result      = serializer.ReadIntoStore(target, writeStream);
+        IsNull(result.error);
+
+        // --- verify relations
+        var target1     = target.GetEntityById(1);
+        var relations1  = target1.GetRelations<IntRelation>();
+        AreEqual(1,     relations1.Length);
+        AreEqual(101,   relations1[0].value);
+
+        var target2     = target.GetEntityById(2);
+        var relations2  = target2.GetRelations<IntRelation>();
+        AreEqual(2,     relations2.Length);
+        AreEqual(201,   relations2[0].value);
+        AreEqual(202,   relations2[1].value);
+
+        // --- verify no phantom components added by deserialization
+        AreEqual(entity1.Archetype.ComponentCount, target1.Archetype.ComponentCount);
+        AreEqual(entity2.Archetype.ComponentCount, target2.Archetype.ComponentCount);
+    }
+
+    [Test]
+    public static void Test_SerializeRelations_roundtrip_with_components()
+    {
+        var store       = new EntityStore();
+        Entity entity1  = store.CreateEntity(1);
+        entity1.AddComponent(new EntityName("test"));
+        entity1.AddRelation(new IntRelation { value = 101 });
+
+        // --- write
+        var serializer  = new EntitySerializer();
+        using MemoryStream writeStream = new MemoryStream();
+        serializer.WriteStore(store, writeStream);
+
+        // --- read into new store
+        writeStream.Position = 0;
+        var target      = new EntityStore();
+        var result      = serializer.ReadIntoStore(target, writeStream);
+        IsNull(result.error);
+
+        // --- verify component and relation coexist without phantom
+        var target1     = target.GetEntityById(1);
+        AreEqual("test", target1.GetComponent<EntityName>().value);
+
+        var relations1  = target1.GetRelations<IntRelation>();
+        AreEqual(1,     relations1.Length);
+        AreEqual(101,   relations1[0].value);
+
+        AreEqual(entity1.Archetype.ComponentCount, target1.Archetype.ComponentCount);
+    }
+
+    [Test]
+    public static void Test_SerializeRelations_roundtrip_link_relation()
+    {
+        var store       = new EntityStore();
+        Entity entity1  = store.CreateEntity(1);
+        Entity entity2  = store.CreateEntity(2);
+        entity1.AddRelation(new AttackRelation { target = entity2, speed = 42 });
+
+        // --- write
+        var serializer  = new EntitySerializer();
+        using MemoryStream writeStream = new MemoryStream();
+        serializer.WriteStore(store, writeStream);
+
+        // --- read into new store
+        writeStream.Position = 0;
+        var target      = new EntityStore();
+        var result      = serializer.ReadIntoStore(target, writeStream);
+        IsNull(result.error);
+
+        // --- verify link relation preserved
+        var target1     = target.GetEntityById(1);
+        var relations1  = target1.GetRelations<AttackRelation>();
+        AreEqual(1,     relations1.Length);
+        AreEqual(2,     relations1[0].target.Id);
+        AreEqual(42,    relations1[0].speed);
+
+        var target2     = target.GetEntityById(2);
+        AreEqual(entity1.Archetype.ComponentCount, target1.Archetype.ComponentCount);
+        AreEqual(entity2.Archetype.ComponentCount, target2.Archetype.ComponentCount);
+    }
+
+    #endregion
 }
 
 }
