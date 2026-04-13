@@ -274,6 +274,10 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
+            if (component.type == RawComponentType.Array) {
+                // case: relation
+                continue;
+            }
             var schemaType      = component.rawKey.schemaType;
             if (schemaType == unresolvedType) {
                 // case: unresolved component
