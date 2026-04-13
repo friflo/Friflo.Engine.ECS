@@ -27,6 +27,7 @@ namespace Friflo.Engine.ECS;
 ///   </item>
 /// </list>
 /// </remarks>
+[Obsolete("ill be removed in future")]
 public sealed class RawEntityStore : EntityStoreBase
 {
     private         RawEntityNode[] entities;       //  8 + all raw entities
