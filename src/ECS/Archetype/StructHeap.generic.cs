@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
+internal sealed class StructHeapGen<T> : StructHeap<T>
     where T : struct
 {
     /// <summary>
@@ -27,26 +27,25 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     /// - it allows only reading struct values
     /// </summary>
     public override object  GetStashDebug() => componentStash;
-    public          ref T   GetStashRef()   => ref componentStash;
+    public override ref T   GetStashRef()   => ref componentStash;
 
-    public          T[]     Components      => components;
+    public override T[]     Components      => components;
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     private         T[]     components;     //  8
-    internal        T       componentStash; //  sizeof(T)
     
-    internal StructHeap(int structIndex)
+    internal StructHeapGen(int structIndex)
         : base (structIndex)
     {
         components          = new T[ArchetypeUtils.MinCapacity];
     }
     
-    internal ref T GetComponent(int index) { 				// SOA
+    internal override ref T GetComponent(int index) {
         return ref components[index];
     }
     
-    internal void SetComponent(int index, T component) {	// SOA
+    internal override void SetComponent(int index, T component) {
         components[index] = component;
     }
     
@@ -80,7 +79,7 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     
     internal override void CopyComponentTo(int sourcePos, StructHeap target, int targetPos)
     {
-        var targetHeap = (StructHeap<T>)target;
+        var targetHeap = (StructHeapGen<T>)target;
         targetHeap.components[targetPos] = components[sourcePos];
     }
     
@@ -91,7 +90,7 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         }
         var copyValue       = CopyValueUtils<T>.CopyValue;
         ref T source        = ref components[sourcePos];
-        var typedTargetHeap = (StructHeap<T>)targetHeap;
+        var typedTargetHeap = (StructHeapGen<T>)targetHeap;
         ref T target        = ref typedTargetHeap.components[targetPos];
         if (StructInfo<T>.HasIndex) {
             AddOrUpdateIndex(source, target, context.target, typedTargetHeap, updateIndexTypes);

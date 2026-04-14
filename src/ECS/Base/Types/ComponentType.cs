@@ -115,7 +115,7 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        return new StructHeap<T>(StructIndex);
+        return new StructHeapGen<T>(StructIndex);
     }
     
     internal override ComponentCommands CreateComponentCommands()
@@ -180,6 +180,6 @@ internal sealed class RelationType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        return new StructHeap<T>(StructIndex);
+        return new StructHeapGen<T>(StructIndex);
     }
 }
