@@ -1,4 +1,5 @@
-﻿using Friflo.Engine.ECS;
+﻿using System.Numerics;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 
@@ -47,9 +48,9 @@ public static class Test_Query
     [Test]
     public static void Test_Query_ChunkDebugView()
     {
-        var store = new EntityStore(PidType.RandomPids);
-        store.CreateEntity(1).AddComponent<Position>();
-        store.CreateEntity(2).AddComponent<Position>();
+        var store = new EntityStore();
+        store.CreateEntity(new Position { value = new Vector3(1,2,3) });
+        store.CreateEntity(new Position { value = new Vector3(4,5,6) });
         
         var query = store.Query<Position>();
         var count = 0;
@@ -57,8 +58,29 @@ public static class Test_Query
             count++;
             Assert.AreEqual("Position[2]", chunk.Chunk1.ToString());
             var debugView   = new ChunkDebugView<Position>(chunk.Chunk1);
-            var positions   = debugView.Components;
+            var positions   = (Position[])debugView.Components;
             Assert.AreEqual(2, positions.Length);
+            Assert.AreEqual(new Vector3(1,2,3), positions[0].value);
+        }
+        Assert.AreEqual(1, count);
+    }
+    
+    [Test]
+    public static void Test_Query_ChunkDebugView_SoA()
+    {
+        var store = new EntityStore();
+        store.CreateEntity(new Pos3SoA { value = new Vector3(1,2,3) });
+        store.CreateEntity(new Pos3SoA { value = new Vector3(4,5,6) });
+        
+        var query = store.Query<Pos3SoA>();
+        var count = 0;
+        foreach (var chunk in query.Chunks) {
+            count++;
+            Assert.AreEqual("Pos3SoA[2]", chunk.Chunk1.ToString());
+            var debugView   = new ChunkDebugView<Pos3SoA>(chunk.Chunk1);
+            var positions   = (Pos3SoA[])debugView.Components;
+            Assert.AreEqual(2, positions.Length);
+            Assert.AreEqual(new Vector3(1,2,3), positions[0].value);
         }
         Assert.AreEqual(1, count);
     }

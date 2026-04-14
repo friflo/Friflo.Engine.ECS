@@ -162,7 +162,19 @@ internal class ChunkDebugView<T>
     where T : struct, IComponent
 {
     [Browse(RootHidden)]
-    public              T[]         Components => chunk.Span.ToArray();
+    public              Array      Components
+        { get {
+            if (StructInfo<T>.IsSoA) {
+                var lanesSoA = chunk.GetLanesSoA();
+                int stride = lanesSoA.Length / 3;
+                var components = new T[chunk.Length];
+                for (int n = 0; n < chunk.Length; n++) {
+                    components[n] = GetComponentFromSoA(lanesSoA, n, stride);
+                }
+                return components;
+            }
+            return chunk.Span.ToArray(); 
+        } }
 
     [Browse(Never)]
     private readonly    Chunk<T>    chunk;
@@ -170,6 +182,16 @@ internal class ChunkDebugView<T>
     internal ChunkDebugView(Chunk<T> chunk)
     {
         this.chunk = chunk;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static T GetComponentFromSoA(Span<float> src, int index, int stride)
+    {
+        Span<float> component = stackalloc float[3];
+        component[0] = src[index];
+        component[1] = src[index + stride];
+        component[2] = src[index + stride * 2];
+        return Unsafe.As<float, T>(ref component[0]);  // TODO may not be supported by Unity
     }
 }
 
