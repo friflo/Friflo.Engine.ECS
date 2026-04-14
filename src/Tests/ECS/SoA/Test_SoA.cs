@@ -43,6 +43,63 @@ public static class Test_SoA
         result3 = entity3.GetSoA<Pos3SoA>();
         AreEqual(result3.value, pos3.value);
     }
+
+    /// Test <see cref="StructFloatSoA{T}.ResizeComponents"/>
+    [Test]
+    public static void Test_SoA_Check_ResizeComponents()
+    {
+        var store = new EntityStore();
+        store.ShrinkRatioThreshold = 0;
+        for (int n = 1; n <= 2000; n++)
+        {
+            {
+                var pos = new Pos3SoA { value = new Vector3(n,  n + 10_000, n + 20_000) };
+                store.CreateEntity(pos);
+            }
+            if (n % 100 == 0) {
+                for (int i = 1; i < n; i++)
+                {
+                    var entity = store.GetEntityById(i);
+                    var pos = entity.GetSoA<Pos3SoA>();
+                    var expect = new Vector3(i,  i + 10_000, i + 20_000);
+                    AreEqual(expect, pos.value);
+                }
+            }
+        }
+        var query = store.Query<Pos3SoA>();
+        for (int n = 1; n <= 2000; n++)
+        {
+            if (n % 2 == 0) {
+                var entity = store.GetEntityById(n);
+                entity.DeleteEntity();
+            }
+            if (n % 200 == 0) {
+                foreach (var entity in query.Entities)
+                {
+                    var id = entity.Id;
+                    var pos = entity.GetSoA<Pos3SoA>();
+                    var expect = new Vector3(id,  id + 10_000, id + 20_000);
+                    AreEqual(expect, pos.value);
+                }
+            }
+        }
+        var entities = query.Entities.ToEntityList();
+        int counter = 0;
+        foreach (var removeEntity in entities)
+        {
+            removeEntity.DeleteEntity();
+            if (counter++ % 200 == 0) {
+                foreach (var entity in query.Entities)
+                {
+                    var id = entity.Id;
+                    var pos = entity.GetSoA<Pos3SoA>();
+                    var expect = new Vector3(id,  id + 10_000, id + 20_000);
+                    AreEqual(expect, pos.value);
+                }
+            }
+        }
+        AreEqual(0, query.Count);
+    }
 }
 
 }
