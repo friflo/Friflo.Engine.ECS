@@ -2,12 +2,16 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Friflo.Engine.ECS.Index;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable SuggestVarOrType_BuiltInTypes
+// ReSharper disable SuggestVarOrType_Elsewhere
 // ReSharper disable UseNullPropagation
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
@@ -29,35 +33,37 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     public override object  GetStashDebug() => componentStash;
     public override ref T   GetStashRef()   => ref componentStash;
 
-    public override T[]     Components      => components;
+    public override T[]     Components      => throw new NotImplementedException();
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
-    private         T[]     components;     //  8
+    private         float[] components;     //  8
+    private         int     stride;         //  4
     
     internal StructFloatSoA(int structIndex)
         : base (structIndex)
     {
-        components          = new T[ArchetypeUtils.MinCapacity];
+        components          = new float[ArchetypeUtils.MinCapacity * 3];
     }
     
-    internal override ref T GetComponent(int index) { 				// SOA
-        return ref components[index];
+    internal override ref T GetComponent(int index) {
+        throw new NotImplementedException(); // TODO add descriptive message
+        // return ref components[index];
     }
     
-    internal override void SetComponent(int index, T component) {	// SOA
-        components[index] = component;
+    internal override void SetComponent(int index, T component) {
+        ComponentToSoA(component, components, index, stride);
     }
     
     
     // --- StructHeap
     internal override void StashComponent(int compIndex) {
-        componentStash = components[compIndex];
+        componentStash = GetComponentFromSoA(components, compIndex, stride);
     }
     
     internal override  void SetBatchComponent(BatchComponent[] batchComponents, int compIndex)
     {
-        this.components[compIndex] = ((BatchComponent<T>)batchComponents[structIndex]).value;
+        ComponentToSoA(((BatchComponent<T>)batchComponents[structIndex]).value, components, compIndex, stride);
     }
     
     // --- StructHeap
@@ -66,10 +72,11 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     internal  override  Type    StructType          => typeof(T);
     
     internal override void ResizeComponents    (int capacity, int count) {
-        var newComponents   = new T[capacity];
+        stride              = capacity;
+        var newComponents   = new float[capacity * 3];
         var curComponents   = components;
-        var source          = new ReadOnlySpan<T>(curComponents, 0, count);
-        var target          = new Span<T>(newComponents);
+        var source          = new ReadOnlySpan<float>(curComponents, 0, count * 3);
+        var target          = new Span<float>(newComponents);
         source.CopyTo(target);
         components = newComponents;
     }
@@ -87,21 +94,13 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     
     internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
     {
-        if (typeof(T) == typeof(TreeNode)) {
-            return;
-        }
-        var copyValue       = CopyValueUtils<T>.CopyValue;
-        ref T source        = ref components[sourcePos];
-        var typedTargetHeap = (StructFloatSoA<T>)targetHeap;
-        ref T target        = ref typedTargetHeap.components[targetPos];
-        if (StructInfo<T>.HasIndex) {
-            AddOrUpdateIndex(source, target, context.target, typedTargetHeap, updateIndexTypes);
-        }
-        if (copyValue == null) {
-            target = source;
-        } else {
-            copyValue(source, ref target, context);
-        }
+        var targetSoA       = (StructFloatSoA<T>)targetHeap;
+        var src             = components;
+        var dst             = targetSoA.components;
+        var targetStride    = targetSoA.stride; 
+        dst[targetPos]                      = src[sourcePos];
+        dst[targetPos + targetStride]       = src[sourcePos + stride];
+        dst[targetPos + targetStride * 2]   = src[sourcePos + stride * 2];
     }
     
     private static void AddOrUpdateIndex(in T source, in T target, in Entity targetEntity, StructFloatSoA<T> targetHeap, long updateIndexTypes)
@@ -116,13 +115,15 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
-        components[compIndex] = default;
+        ComponentToSoA(default, components, compIndex, stride);
     }
     
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
     {
-        var componentSpan = new Span<T>(components, compIndexStart, count);
-        componentSpan.Clear();
+        // TODO is this necessary?
+        new Span<float>(components, compIndexStart,              count).Clear();
+        new Span<float>(components, compIndexStart + stride,     count).Clear();
+        new Span<float>(components, compIndexStart + stride * 2, count).Clear();
     }
   
     /// <summary>
@@ -135,13 +136,14 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
         var mapper = (TypeMapper<T>)writer.TypeCache.GetTypeMapper(typeof(T));
-        ref var value = ref components[compIndex];
+        var value = GetComponentFromSoA(components, compIndex, stride);
         return writer.WriteAsBytesMapper(value, mapper);
     }
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
         var mapper = (TypeMapper<T>)reader.TypeCache.GetTypeMapper(typeof(T));
-        components[compIndex] = reader.ReadMapper(mapper, json);  // todo avoid boxing within typeMapper, T is struct
+        var value = reader.ReadMapper(mapper, json);  // todo avoid boxing within typeMapper, T is struct
+        ComponentToSoA(value, components, compIndex, stride);
     }
     
     internal override  void UpdateIndex (Entity entity) {
@@ -159,7 +161,8 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal  override  bool GetComponentMember<TField> (int compIndex, MemberPath memberPath, out TField value, out Exception exception) {
-        var getter = (MemberPathGetter<T, TField>)memberPath.getter;
+        throw new NotImplementedException();
+    /*  var getter = (MemberPathGetter<T, TField>)memberPath.getter;
         try {
             exception = null;
             value = getter(components[compIndex]);
@@ -169,12 +172,13 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
             exception = e;
             value = default;
             return false;
-        }
+        } */
     }
     
-    internal  override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
+    internal override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
     {
-        var setter          = (MemberPathSetter<T, TField>)memberPath.setter;
+        throw new NotImplementedException();
+    /*  var setter          = (MemberPathSetter<T, TField>)memberPath.setter;
         ref var component   = ref components[entity.compIndex];
         var oldValue        = component;
         try {
@@ -188,6 +192,27 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         catch (Exception e) {
             exception = e;
             return false;
-        }
+        } */
+    }
+    
+    // --- Utils
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void ComponentToSoA(T src, float[] dst, int index, int stride)
+    {
+        ref float   component   = ref Unsafe.As<T, float>(ref src);  // TODO may not be supported by Unity
+        Span<float> span        = MemoryMarshal.CreateSpan(ref component, 3);
+        dst[index]              = span[0];
+        dst[index + stride]     = span[1];
+        dst[index + stride * 2] = span[2];
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static T GetComponentFromSoA(float[] src, int index, int stride)
+    {
+        Span<float> component = stackalloc float[3];
+        component[0] = src[index];
+        component[1] = src[index + stride];
+        component[2] = src[index + stride * 2];
+        return Unsafe.As<float, T>(ref component[0]);  // TODO may not be supported by Unity
     }
 }
