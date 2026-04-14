@@ -65,4 +65,10 @@ internal static class SchemaTypeUtils
         }
         return new InvalidOperationException($"Missing attribute [GenericInstanceType(\"<key>\", {sb})] for generic {typeBase} type: {type}");
     }
+    
+    internal static bool IsSoA(Type type)
+    {
+        var componentType = EntityStoreBase.Static.EntitySchema.ComponentTypeByType[type];
+        return componentType.FieldCountSoA > 0;
+    }
 }

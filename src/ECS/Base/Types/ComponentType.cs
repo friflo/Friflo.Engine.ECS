@@ -89,6 +89,8 @@ internal static class StructInfo<T>
     
     internal static readonly    bool    HasIndex    = SchemaTypeUtils.HasIndex(typeof(T));
     
+    internal static readonly    bool    IsSoA       = SchemaTypeUtils.IsSoA(typeof(T));
+    
     // internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T)); obsolete property
 }
 

@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -27,19 +28,41 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 /// <typeparam name="T"><see cref="IComponent"/> type of a struct component.</typeparam>
 [DebuggerTypeProxy(typeof(ChunkDebugView<>))]
-public readonly struct Chunk<T>
+public struct Chunk<T>
     where T : struct
 {
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
-    public              Span<T>     Span                    => new(ArchetypeComponents, start, Length);
-    
-    public   readonly   T[]         ArchetypeComponents;    //  8
-    
+    public              Span<T>     Span {
+        get {
+            if (StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+            return new Span<T>(ArchetypeComponents, start, Length);
+        } }
+
+    public              T[]         ArchetypeComponents {
+        get {
+            if (StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+            return _components;
+        } }
+
     /// <summary> Return the number of components in a <see cref="Chunk{T}"/>. </summary>
     public   readonly   int         Length;                 //  4
     
     // ReSharper disable once NotAccessedField.Local
     private  readonly   int         start;                  //  4
+    
+    // DANGER: _components is Aliased! 
+    // For [SoA] components, this T[] actually points to a float[].
+    // Do not inspect in debugger without the 'SoA' flag check.
+    [DebuggerBrowsable(Never)]
+    private             T[]         _components;            //  8
+    
+    public              Span<float> GetLanesSoA()
+    {
+        if (!StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
+        // Reinterpret the reference
+        return Unsafe.As<T[], float[]>(ref _components).AsSpan();
+    }
+
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
@@ -112,21 +135,22 @@ public readonly struct Chunk<T>
 
 
     internal Chunk(T[] components, int length, int start) {
-        Length              = length;
-        this.start          = start;
-        ArchetypeComponents = components;
+        Length      = length;
+        this.start  = start;
+        _components = components;
     }
     
     internal Chunk(Chunk<T> chunk, int start, int length) {
-        Length              = length;
-        this.start          = start;
-        ArchetypeComponents = chunk.ArchetypeComponents;
+        Length      = length;
+        this.start  = start;
+        _components = chunk.ArchetypeComponents;
     }
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>
     public ref T this[int index] {
         get {
             if (index < Length) {
+                if (StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
                 return ref ArchetypeComponents[start + index];
             }
             throw new IndexOutOfRangeException();
@@ -162,4 +186,12 @@ public static class ChunkExtensions
     //
     public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Span <Transform> transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform);
     public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Chunk<Transform> transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform  .Span);
+    
+    internal static void ExpectCallForRegularComponent() {
+        throw new InvalidOperationException("Expect call for regular component data.");
+    }
+    
+    internal static void ExpectCallForSoAComponent() {
+        throw new InvalidOperationException("Expect call for SoA component data.");
+    }
 }
