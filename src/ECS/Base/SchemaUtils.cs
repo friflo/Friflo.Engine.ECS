@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 
 // ReSharper disable UseCollectionExpression
@@ -64,7 +65,8 @@ internal static class SchemaUtils
         } else {
             componentKey = GetComponentKey(type);
         }
-        return new ComponentType<T>(componentKey, structIndex, indexType, indexValueType);
+        var fieldCountSoA = GetFieldCountSoA(type);
+        return new ComponentType<T>(componentKey, structIndex, indexType, indexValueType, fieldCountSoA);
     }
     
     internal static ComponentType CreateRelationType<T>(int structIndex, Type relationType, Type keyType)
@@ -219,7 +221,24 @@ internal static class SchemaUtils
             return (string) arg[0].Value;
         }
         return type.Name;
-    }    
+    }
+    
+    private static int GetFieldCountSoA(Type type)
+    {
+        foreach (var attr in type.CustomAttributes) {
+            if (attr.AttributeType != typeof(SoAAttribute)) {
+                continue;
+            }
+            var fields = type.GetFields();
+            foreach (var field in fields) {
+                if (field.FieldType != typeof(Vector3) && field.Name != "value") {
+                    return 0;
+                }
+            }
+            return 3;
+        }
+        return 0;
+    }
 }
 
 internal readonly struct GenericInstanceType

@@ -30,4 +30,6 @@ internal abstract class StructHeap<T> : StructHeap, IComponentStash<T>
     internal abstract   ref T   GetComponent(int index); 				// SOA
     
     internal abstract   void    SetComponent(int index, T component); 	// SOA
+    
+    internal abstract   T       GetSoA(int index);
 }

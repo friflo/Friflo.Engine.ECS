@@ -460,7 +460,19 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     #endregion
 
 
-
+    // ------------------------------------ SoA component methods ---------------------------------
+#region SoA components
+    /// <summary>Return the SoA component of the given type as a reference.</summary>
+    /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
+    /// <remarks>Executes in O(1)</remarks>
+    public  T   GetSoA<T>()   where T : struct, IComponent {
+        ref var node = ref store.nodes[Id];
+        if (node.IsAlive(Revision)) {
+            return ((StructHeap<T>)node.archetype.heapMap[StructInfo<T>.Index]).GetSoA(node.compIndex);
+        }
+        throw EntityNullException();
+    }
+    #endregion
 
     // ------------------------------------ script methods ----------------------------------------
 #region script - methods

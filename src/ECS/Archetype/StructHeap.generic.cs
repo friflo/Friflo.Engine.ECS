@@ -49,6 +49,10 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
         components[index] = component;
     }
     
+    internal override T GetSoA(int index) {
+        throw new NotImplementedException();  // TODO add descriptive error message
+    }
+    
     // --- StructHeap
     internal override void StashComponent(int compIndex) {
         componentStash = components[compIndex];

@@ -6,6 +6,10 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
+public sealed class SoAAttribute : Attribute {
+}
+
 /// <summary>
 /// Creates an additional query method for the annotated method. New method has suffix <c>...Query()</c>.<br/>
 /// The generated query method filters all components declared as parameters + additional filters added with attributes.<br/>

@@ -43,7 +43,8 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     internal StructFloatSoA(int structIndex)
         : base (structIndex)
     {
-        components          = new float[ArchetypeUtils.MinCapacity * 3];
+        stride      = ArchetypeUtils.MinCapacity;
+        components  = new float[ArchetypeUtils.MinCapacity * 3];
     }
     
     internal override ref T GetComponent(int index) {
@@ -53,6 +54,10 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     
     internal override void SetComponent(int index, T component) {
         ComponentToSoA(component, components, index, stride);
+    }
+    
+    internal override T GetSoA(int index) {
+        return GetComponentFromSoA(components, index, stride);
     }
     
     
@@ -83,7 +88,11 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     
     internal override void MoveComponent(int from, int to)
     {
-        components[to] = components[from];
+        var localComponents = components;
+        var localStride     = stride;
+        localComponents[to]                     = localComponents[from];
+        localComponents[to + localStride]       = localComponents[from + localStride];
+        localComponents[to + localStride * 2]   = localComponents[from + localStride * 2];
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap target, int targetPos)
@@ -115,6 +124,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
+        // TODO Really necessary? 
         ComponentToSoA(default, components, compIndex, stride);
     }
     

@@ -34,6 +34,8 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     
     public   readonly   Type        RelationKeyType;//  8
     
+    public   readonly   int         FieldCountSoA;  //  8
+    
     internal            int         nameSortOrder;  //  4
     #endregion
 
@@ -50,7 +52,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     [ExcludeFromCodeCoverage] internal virtual  BatchComponent      CreateBatchComponent()                  => throw new InvalidOperationException();
     [ExcludeFromCodeCoverage] internal virtual  ComponentCommands   CreateComponentCommands()               => throw new InvalidOperationException();
     
-    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, Type indexValueType, int byteSize, Type relationType, Type keyType)
+    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, Type indexValueType, int byteSize, Type relationType, Type keyType, int fieldCountSoA)
         : base (componentKey, type, Component)
     {
         StructIndex     = structIndex;
@@ -60,6 +62,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
         IndexValueType  = indexValueType;
         RelationType    = relationType;
         RelationKeyType = keyType;
+        FieldCountSoA   = fieldCountSoA;
     }
     #endregion
 
@@ -96,8 +99,8 @@ internal sealed class ComponentType<T> : ComponentType
     public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";
     #endregion
 
-    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType)
-        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, StructPadding<T>.ByteSize, null, null)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType, int fieldCountSoA)
+        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, StructPadding<T>.ByteSize, null, null, fieldCountSoA)
     {
     }
     
@@ -115,7 +118,12 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        return new StructHeapGen<T>(StructIndex);
+        switch (FieldCountSoA)
+        {
+            case 0: return new StructHeapGen<T>(StructIndex);
+            case 3: return new StructFloatSoA<T>(StructIndex);
+        }
+        return null;        
     }
     
     internal override ComponentCommands CreateComponentCommands()
@@ -138,7 +146,7 @@ internal sealed class RelationType<T> : ComponentType
 
     
     internal RelationType(string componentKey, int structIndex, Type relationType, Type keyType)
-        : base(componentKey, structIndex, typeof(T), null, null, StructPadding<T>.ByteSize, relationType, keyType)
+        : base(componentKey, structIndex, typeof(T), null, null, StructPadding<T>.ByteSize, relationType, keyType, 0)
     {
     }
     
