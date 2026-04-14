@@ -180,11 +180,11 @@ where T5 : struct
         var chunks4     = (StructHeap<T4>)heapMap[structIndex4];
         var chunks5     = (StructHeap<T5>)heapMap[structIndex5];
 
-        var chunk1      = new Chunk<T1>(chunks1.components, count, start);
-        var chunk2      = new Chunk<T2>(chunks2.components, count, start);
-        var chunk3      = new Chunk<T3>(chunks3.components, count, start);
-        var chunk4      = new Chunk<T4>(chunks4.components, count, start);
-        var chunk5      = new Chunk<T5>(chunks5.components, count, start);
+        var chunk1      = new Chunk<T1>(chunks1.Components, count, start);
+        var chunk2      = new Chunk<T2>(chunks2.Components, count, start);
+        var chunk3      = new Chunk<T3>(chunks3.Components, count, start);
+        var chunk4      = new Chunk<T4>(chunks4.Components, count, start);
+        var chunk5      = new Chunk<T5>(chunks5.Components, count, start);
         var entities    = new ChunkEntities(archetype,      count, start);
         chunks          = new Chunks<T1,T2,T3,T4,T5>(chunk1, chunk2, chunk3, chunk4, chunk5, entities);
         return true;

@@ -105,7 +105,7 @@ public struct ComponentField<TField>
                 entry.field     = default;
                 continue;
             }
-            entry.field     = getter(((StructHeap<TComponent>)heap).components[node.compIndex]);
+            entry.field     = getter(((StructHeap<TComponent>)heap).GetComponent(node.compIndex));
             entry.hasField  = 1;
         }
 

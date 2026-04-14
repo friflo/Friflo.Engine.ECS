@@ -30,7 +30,7 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
         positionMap.TryGetValue(id, out positions);
         var positionSpan    = positions.GetSpan(idHeap, store);
         int positionCount   = positions.count;
-        var components      = heapGeneric.components;
+        var components      = heapGeneric.Components;
         for (index = 0; index < positionCount; index++) {
             int position    = positionSpan[index];
             TKey relation   = components[position].GetRelationKey(); // no boxing
@@ -47,7 +47,7 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
     {
         positionMap.TryGetValue(id, out var positions);
         var count       = positions.count;
-        var components  = heapGeneric.components;
+        var components  = heapGeneric.Components;
         var start       = positions.start;
         if (count == 1) {
             return components[start];
@@ -61,7 +61,7 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
-            return ref ((StructHeap<T>)heap).components[position];
+            return ref ((StructHeap<T>)heap).Components[position];
         }
         throw KeyNotFoundException(id, key);
     }
@@ -71,7 +71,7 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
     {
         var position = FindRelationPosition(id, key, out _, out _);
         if (position >= 0) {
-            value = ((StructHeap<T>)heap).components[position];
+            value = ((StructHeap<T>)heap).Components[position];
             return true;
         }
         value = default;
@@ -94,7 +94,7 @@ internal class GenericEntityRelations<TRelation, TKey> : AbstractEntityRelations
         }
         position = AddEntityRelation(id, positions);
     AssignComponent:
-        ((StructHeap<T>)heap).components[position] = relation;
+        ((StructHeap<T>)heap).SetComponent(position, relation);
         return added;
     }
 

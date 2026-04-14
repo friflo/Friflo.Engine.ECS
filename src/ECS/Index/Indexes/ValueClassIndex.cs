@@ -53,7 +53,7 @@ internal sealed class ValueClassIndex<TIndexedComponent,TValue> : GenericCompone
     {
         var map         = entityMap;
         var heap        = idHeap;
-        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).components;
+        var components  = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).Components;
         TValue value    = components[compIndex].GetIndexedValue();
         map.TryGetValue(value, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);

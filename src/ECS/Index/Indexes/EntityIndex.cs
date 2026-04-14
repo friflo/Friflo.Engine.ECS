@@ -80,7 +80,7 @@ internal sealed class EntityIndex<TIndexedComponent> : EntityIndex
     {
         var map             = entityMap;
         var heap            = idHeap;
-        var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).components;
+        var components      = ((StructHeap<TIndexedComponent>)archetype.heapMap[structIndex]).Components;
         int linkedEntity    = components[compIndex].GetIndexedValue().Id;
         map.TryGetValue(linkedEntity, out var idArray);
         var idSpan  = idArray.GetSpan(heap, store);

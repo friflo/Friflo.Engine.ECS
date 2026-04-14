@@ -268,7 +268,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     [Browse(Never)] public  ref EntityName      Name { get {
         var node = store.nodes[Id];
         if (node.IsAlive(Revision)) {
-            return ref node.archetype.std.name.components[node.compIndex];
+            return ref node.archetype.std.name.GetComponent(node.compIndex);
         }
         throw EntityNullException();
     } }
@@ -278,7 +278,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     [Browse(Never)] public  ref Position        Position { get {
         var node = store.nodes[Id];
         if (node.IsAlive(Revision)) {
-            return ref node.archetype.std.position.components[node.compIndex];
+            return ref node.archetype.std.position.GetComponent(node.compIndex);
         }
         throw EntityNullException();
     } }
@@ -288,7 +288,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     [Browse(Never)] public  ref Rotation        Rotation { get {
         var node = store.nodes[Id];
         if (node.IsAlive(Revision)) {
-            return ref node.archetype.std.rotation.components[node.compIndex];
+            return ref node.archetype.std.rotation.GetComponent(node.compIndex);
         }
         throw EntityNullException();
     } }
@@ -298,7 +298,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     [Browse(Never)] public  ref Scale3          Scale3 { get {
         var node = store.nodes[Id];
         if (node.IsAlive(Revision)) {
-            return ref node.archetype.std.scale3.components[node.compIndex];
+            return ref node.archetype.std.scale3.GetComponent(node.compIndex);
         }
         throw EntityNullException();
     } }
@@ -397,7 +397,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
     public  ref T   GetComponent<T>()   where T : struct, IComponent {
         ref var node = ref store.nodes[Id];
         if (node.IsAlive(Revision)) {
-            return ref ((StructHeap<T>)node.archetype.heapMap[StructInfo<T>.Index]).components[node.compIndex];
+            return ref ((StructHeap<T>)node.archetype.heapMap[StructInfo<T>.Index]).GetComponent(node.compIndex);
         }
         throw EntityNullException();
     }
@@ -412,7 +412,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
                 result = default;
                 return false;
             }
-            result = ((StructHeap<T>)heap).components[node.compIndex];
+            result = ((StructHeap<T>)heap).GetComponent(node.compIndex);
             return true;
         }
         throw EntityNullException();
@@ -644,7 +644,7 @@ public readonly partial struct Entity : IEquatable<Entity>, IComparable<Entity>
                 treeNode = default;
                 return false;
             }
-            treeNode = ((StructHeap<TreeNode>)heap).components[node.compIndex];
+            treeNode = ((StructHeap<TreeNode>)heap).GetComponent(node.compIndex);
             return true;
         }
         throw EntityNullException();

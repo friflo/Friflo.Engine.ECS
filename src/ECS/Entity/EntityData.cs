@@ -58,7 +58,7 @@ public readonly ref struct EntityData
     /// <exception cref="NullReferenceException"> if the entity is deleted or has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T       Get<T>() where T : struct, IComponent {
-        return ref ((StructHeap<T>)heapMap[StructInfo<T>.Index]).components[compIndex];
+        return ref ((StructHeap<T>)heapMap[StructInfo<T>.Index]).GetComponent(compIndex); // SOA
     }
     
     /// <summary>
@@ -70,7 +70,7 @@ public readonly ref struct EntityData
     public  bool        TryGet<T>(out T value) where T : struct, IComponent {
         var type = heapMap[StructInfo<T>.Index];
         if (type != null) {
-            value =  ((StructHeap<T>)type).components[compIndex];
+            value =  ((StructHeap<T>)type).GetComponent(compIndex); // SOA
             return true;
         }
         value = default;

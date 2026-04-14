@@ -14,7 +14,7 @@ public static class Test_StructHeap
         
         var type    = schema.GetComponentType<MyComponent1>();
         var heap    = (StructHeap<MyComponent1>)type.CreateHeap();
-        AreEqual(512, heap.components.Length);
+        AreEqual(512, heap.Components.Length);
     }
 }
 

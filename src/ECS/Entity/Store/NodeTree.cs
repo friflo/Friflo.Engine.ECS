@@ -58,7 +58,7 @@ public partial class EntityStore
             entity.AddComponent<TreeNode>(); // set entity.archetype
             heap = entity.archetype.heapMap[StructInfo<TreeNode>.Index];
         } 
-        return ref ((StructHeap<TreeNode>)heap).components[entity.compIndex];
+        return ref ((StructHeap<TreeNode>)heap).GetComponent(entity.compIndex);
     }
     
 #region get / set parent

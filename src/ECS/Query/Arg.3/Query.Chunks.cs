@@ -160,9 +160,9 @@ where T3 : struct
         var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
         var chunks3     = (StructHeap<T3>)heapMap[structIndex3];
 
-        var chunk1      = new Chunk<T1>(chunks1.components, count, start);
-        var chunk2      = new Chunk<T2>(chunks2.components, count, start);
-        var chunk3      = new Chunk<T3>(chunks3.components, count, start);
+        var chunk1      = new Chunk<T1>(chunks1.Components, count, start);
+        var chunk2      = new Chunk<T2>(chunks2.Components, count, start);
+        var chunk3      = new Chunk<T3>(chunks3.Components, count, start);
         var entities    = new ChunkEntities(archetype,      count, start);
         chunks          = new Chunks<T1,T2,T3>(chunk1, chunk2, chunk3, entities);
         return true;

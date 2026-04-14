@@ -117,7 +117,7 @@ internal abstract class AbstractEntityRelations
         var relations = GetEntityRelations(store, StructInfo<TRelation>.Index);
         relations.positionMap.TryGetValue(id, out var positions);
         int count       = positions.count;
-        var components  = ((StructHeap<TRelation>)relations.heap).components;
+        var components  = ((StructHeap<TRelation>)relations.heap).Components;
         switch (count) {
             case 0: return  new Relations<TRelation>(relations);
             case 1: return  new Relations<TRelation>(components, positions.start, relations);
@@ -150,7 +150,7 @@ internal abstract class AbstractEntityRelations
     internal void ForAllEntityRelations<TRelation>(ForEachEntity<TRelation> lambda)
         where TRelation : struct, IRelation
     {
-        var components  = ((StructHeap<TRelation>)heap).components;
+        var components  = ((StructHeap<TRelation>)heap).Components;
         int count       = archetype.Count;
         var ids         = archetype.entityIds;
         var entityStore = store;
@@ -164,7 +164,7 @@ internal abstract class AbstractEntityRelations
     {
         int count       = archetype.Count;
         var entities    = new Entities(store, archetype.entityIds, 0, count);
-        var components  = ((StructHeap<TRelation>)heap).components;
+        var components  = ((StructHeap<TRelation>)heap).Components;
         var chunk       = new Chunk<TRelation>(components, count, 0);
         return (entities, chunk);
     }

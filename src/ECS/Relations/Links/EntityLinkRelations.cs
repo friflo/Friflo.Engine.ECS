@@ -28,14 +28,14 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
     {
         Entity target   = new Entity(store, targetId);
         int position    = FindRelationPosition(id, target, out _, out _);
-        return ref ((StructHeap<T>)heap).components[position];
+        return ref ((StructHeap<T>)heap).GetComponent(position);
     }
     
     internal override void AddIncomingRelations(int target, List<EntityLink> result)
     {
         linkEntityMap.TryGetValue(target, out var sourceIds);
         var sourceIdSpan    = sourceIds.GetSpan(linkIdsHeap, store);
-        var components      = heapGeneric.components;
+        var components      = heapGeneric.Components;
         Entity targetEntity = new Entity(store, target);    
         foreach (var sourceId in sourceIdSpan) {
             var position = FindRelationPosition(sourceId, targetEntity, out var positions, out _);
@@ -59,7 +59,7 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
         position = AddEntityRelation(id, positions);
         LinkRelationUtils.AddComponentValue(id, target.Id, this);
     AssignComponent:
-        ((StructHeap<T>)heap).components[position] = relation;
+        ((StructHeap<T>)heap).SetComponent(position, relation);
         return added;
     }
 
@@ -104,7 +104,7 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
     private void RemoveIncomingLinks(IdArray positions, int id)
     {
         var positionsSpan   = positions.GetSpan(idHeap, store);
-        var components      = ((StructHeap<TRelation>)heap).components;
+        var components      = ((StructHeap<TRelation>)heap).Components;
         var linkMap         = linkEntityMap;
         foreach (var position in positionsSpan)
         {

@@ -103,7 +103,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
     private void RemoveIndexedComponent(Playback playback, in EntityNode node, int entityId)
     {
         var heap = (StructHeap<T>)node.archetype.heapMap[structIndex];
-        heap.componentStash = heap.components[node.compIndex];
+        heap.StashComponent(node.compIndex);
         heap.RemoveIndex(new Entity(playback.store, entityId, node.revision));
     }
     
@@ -111,7 +111,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
     {
         var heap = node.archetype.heapMap[structIndex];
         if (heap != null) {
-            command.oldComponent = ((StructHeap<T>)heap).components[node.compIndex];
+            command.oldComponent = ((StructHeap<T>)heap).GetComponent(node.compIndex);
         }
     }
     
@@ -138,7 +138,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
                 // case: RemoveComponent<>() was called after AddComponent<>() or SetComponent<>() on same entity
                 continue;
             }
-            ((StructHeap<T>)heap).components[node.compIndex] = command.component;
+            ((StructHeap<T>)heap).SetComponent(node.compIndex, command.component);
             if (StructInfo<T>.HasIndex) {
                 heap.AddIndex(new Entity(playback.store, command.entityId, node.revision));
             }

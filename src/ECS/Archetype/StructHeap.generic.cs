@@ -26,13 +26,15 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    public override object      GetStashDebug() => componentStash;
-    public          ref T       GetStashRef()     => ref componentStash;
-    
+    public override object  GetStashDebug() => componentStash;
+    public          ref T   GetStashRef()   => ref componentStash;
+
+    public          T[]     Components      => components;
+
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
-    internal            T[]                 components;     //  8
-    internal            T                   componentStash; //  sizeof(T)
+    private         T[]     components;     //  8
+    internal        T       componentStash; //  sizeof(T)
     
     internal StructHeap(int structIndex)
         : base (structIndex)
@@ -40,13 +42,21 @@ internal sealed class StructHeap<T> : StructHeap, IComponentStash<T>
         components          = new T[ArchetypeUtils.MinCapacity];
     }
     
+    internal ref T GetComponent(int index) { 				// SOA
+        return ref components[index];
+    }
+    
+    internal void SetComponent(int index, T component) {	// SOA
+        components[index] = component;
+    }
+    
     internal override void StashComponent(int compIndex) {
         componentStash = components[compIndex];
     }
     
-    internal override  void SetBatchComponent(BatchComponent[] components, int compIndex)
+    internal override  void SetBatchComponent(BatchComponent[] batchComponents, int compIndex)
     {
-        this.components[compIndex] = ((BatchComponent<T>)components[structIndex]).value;
+        this.components[compIndex] = ((BatchComponent<T>)batchComponents[structIndex]).value;
     }
     
     // --- StructHeap

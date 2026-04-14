@@ -19,7 +19,7 @@ public static partial class EntityExtensions
         if (heap1 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
         return true;
     }
     
@@ -38,8 +38,8 @@ public static partial class EntityExtensions
             heap2 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
         return true;
     }
     
@@ -62,9 +62,9 @@ public static partial class EntityExtensions
             heap3 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
         return true;
     }
     
@@ -91,10 +91,10 @@ public static partial class EntityExtensions
             heap4 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
         return true;
     }
     
@@ -125,11 +125,11 @@ public static partial class EntityExtensions
             heap5 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
-        ((StructHeap<T5>)heap5).components[compIndex] = component5;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
+        ((StructHeap<T5>)heap5).SetComponent(compIndex, component5);
         return true;
     }
     
@@ -164,12 +164,12 @@ public static partial class EntityExtensions
             heap6 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
-        ((StructHeap<T5>)heap5).components[compIndex] = component5;
-        ((StructHeap<T6>)heap6).components[compIndex] = component6;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
+        ((StructHeap<T5>)heap5).SetComponent(compIndex, component5);
+        ((StructHeap<T6>)heap6).SetComponent(compIndex, component6);
         return true;
     }
     
@@ -208,13 +208,13 @@ public static partial class EntityExtensions
             heap7 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
-        ((StructHeap<T5>)heap5).components[compIndex] = component5;
-        ((StructHeap<T6>)heap6).components[compIndex] = component6;
-        ((StructHeap<T7>)heap7).components[compIndex] = component7;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
+        ((StructHeap<T5>)heap5).SetComponent(compIndex, component5);
+        ((StructHeap<T6>)heap6).SetComponent(compIndex, component6);
+        ((StructHeap<T7>)heap7).SetComponent(compIndex, component7);
         return true;
     }
         
@@ -257,14 +257,14 @@ public static partial class EntityExtensions
             heap8 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
-        ((StructHeap<T5>)heap5).components[compIndex] = component5;
-        ((StructHeap<T6>)heap6).components[compIndex] = component6;
-        ((StructHeap<T7>)heap7).components[compIndex] = component7;
-        ((StructHeap<T8>)heap8).components[compIndex] = component8;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
+        ((StructHeap<T5>)heap5).SetComponent(compIndex, component5);
+        ((StructHeap<T6>)heap6).SetComponent(compIndex, component6);
+        ((StructHeap<T7>)heap7).SetComponent(compIndex, component7);
+        ((StructHeap<T8>)heap8).SetComponent(compIndex, component8);
         return true;
     }
     
@@ -311,15 +311,15 @@ public static partial class EntityExtensions
             heap9 == null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
-        ((StructHeap<T5>)heap5).components[compIndex] = component5;
-        ((StructHeap<T6>)heap6).components[compIndex] = component6;
-        ((StructHeap<T7>)heap7).components[compIndex] = component7;
-        ((StructHeap<T8>)heap8).components[compIndex] = component8;
-        ((StructHeap<T9>)heap9).components[compIndex] = component9;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
+        ((StructHeap<T5>)heap5).SetComponent(compIndex, component5);
+        ((StructHeap<T6>)heap6).SetComponent(compIndex, component6);
+        ((StructHeap<T7>)heap7).SetComponent(compIndex, component7);
+        ((StructHeap<T8>)heap8).SetComponent(compIndex, component8);
+        ((StructHeap<T9>)heap9).SetComponent(compIndex, component9);
         return true;
     }
     
@@ -370,16 +370,16 @@ public static partial class EntityExtensions
             heap10== null) {
             return false;
         }
-        ((StructHeap<T1>)heap1).components[compIndex] = component1;
-        ((StructHeap<T2>)heap2).components[compIndex] = component2;
-        ((StructHeap<T3>)heap3).components[compIndex] = component3;
-        ((StructHeap<T4>)heap4).components[compIndex] = component4;
-        ((StructHeap<T5>)heap5).components[compIndex] = component5;
-        ((StructHeap<T6>)heap6).components[compIndex] = component6;
-        ((StructHeap<T7>)heap7).components[compIndex] = component7;
-        ((StructHeap<T8>)heap8).components[compIndex] = component8;
-        ((StructHeap<T9>)heap9).components[compIndex] = component9;
-        ((StructHeap<T10>)heap10).components[compIndex] = component10;
+        ((StructHeap<T1>)heap1).SetComponent(compIndex, component1);
+        ((StructHeap<T2>)heap2).SetComponent(compIndex, component2);
+        ((StructHeap<T3>)heap3).SetComponent(compIndex, component3);
+        ((StructHeap<T4>)heap4).SetComponent(compIndex, component4);
+        ((StructHeap<T5>)heap5).SetComponent(compIndex, component5);
+        ((StructHeap<T6>)heap6).SetComponent(compIndex, component6);
+        ((StructHeap<T7>)heap7).SetComponent(compIndex, component7);
+        ((StructHeap<T8>)heap8).SetComponent(compIndex, component8);
+        ((StructHeap<T9>)heap9).SetComponent(compIndex, component9);
+        ((StructHeap<T10>)heap10).SetComponent(compIndex, component10);
         return true;
     }
 }

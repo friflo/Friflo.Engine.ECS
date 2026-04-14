@@ -54,7 +54,7 @@ public sealed class Archetype
     
     /// <summary>Return the components of the specified <typeparamref name="TComponent"/> type stored in the archetype.</summary>
                     public              Span<TComponent>    Components<TComponent>() where TComponent : struct
-                        => new (((StructHeap<TComponent>)heapMap[StructInfo<TComponent>.Index]).components, 0, entityCount);
+                        => new (((StructHeap<TComponent>)heapMap[StructInfo<TComponent>.Index]).Components, 0, entityCount);
     
     /// <summary>The <see cref="EntityStore"/> owning the archetype.</summary>
                     public              EntityStoreBase     Store           => store;

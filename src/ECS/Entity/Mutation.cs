@@ -37,7 +37,7 @@ public readonly partial struct  Entity
         StructHeap<T> newHeap;
         if (oldHeap != null) {
             // --- case: archetype contains the component type  => archetype remains unchanged
-            oldHeap.componentStash = oldHeap.components[localCompIndex];
+            oldHeap.StashComponent(localCompIndex);
             added   = false;
             action  = ComponentChangedAction.Update;
             if (StructInfo<T>.HasIndex) StoreIndex.UpdateIndex(localStore, id, component, oldHeap);
@@ -55,7 +55,7 @@ public readonly partial struct  Entity
         newHeap             = (StructHeap<T>)arch.heapMap[structIndex];
         
     AssignComponent:  // --- assign passed component value
-        newHeap.components[localCompIndex]  = component;
+        newHeap.SetComponent(localCompIndex, component);
         // Send event. See: SEND_EVENT notes
         var componentAdded = localStore.internBase.componentAdded;
         if (componentAdded == null) {
@@ -92,7 +92,7 @@ public readonly partial struct  Entity
         if (heap == null) {
             return false;
         }
-        heap.componentStash = heap.components[localCompIndex];
+        heap.StashComponent(localCompIndex);
         if (StructInfo<T>.HasIndex) StoreIndex.RemoveIndex(localStore, id, heap);
         var newArchetype = EntityStoreBase.GetArchetypeWithout(localStore, arch, structIndex);
         

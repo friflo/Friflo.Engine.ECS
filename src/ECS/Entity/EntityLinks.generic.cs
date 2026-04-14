@@ -44,7 +44,7 @@ public readonly struct EntityLink<TComponent>
             // return ref Entity.GetComponent<TComponent>();
             ref var node = ref Entity.Store.nodes[Entity.Id];
             if (node.IsAlive(Entity.Revision)) {
-                return ref ((StructHeap<TComponent>)node.archetype.heapMap[StructInfo<TComponent>.Index]).components[node.compIndex];
+                return ref ((StructHeap<TComponent>)node.archetype.heapMap[StructInfo<TComponent>.Index]).GetComponent(node.compIndex); // SOA
             }
             throw Entity.EntityNullException();
         }
