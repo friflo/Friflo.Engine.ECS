@@ -48,8 +48,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal override ref T GetComponent(int index) {
-        throw new NotImplementedException(); // TODO add descriptive message
-        // return ref components[index];
+        throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored in AoS format. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.");
     }
     
     internal override void SetComponent(int index, T component) {
@@ -210,7 +209,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void ComponentToSoA(T src, float[] dst, int index, int stride)
     {
-        ref float   component   = ref Unsafe.As<T, float>(ref src);  // TODO may not be supported by Unity
+        ref float   component   = ref Unsafe.As<T, float>(ref src);
         Span<float> span        = MemoryMarshal.CreateSpan(ref component, 3);
         dst[index]              = span[0];
         dst[index + stride]     = span[1];
@@ -224,6 +223,6 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         component[0] = src[index];
         component[1] = src[index + stride];
         component[2] = src[index + stride * 2];
-        return Unsafe.As<float, T>(ref component[0]);  // TODO may not be supported by Unity
+        return Unsafe.As<float, T>(ref component[0]);
     }
 }

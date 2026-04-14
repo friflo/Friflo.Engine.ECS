@@ -50,7 +50,7 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
     }
     
     internal override T GetSoA(int index) {
-        throw new NotImplementedException();  // TODO add descriptive error message
+        throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored in AoS format. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.");
     }
     
     // --- StructHeap

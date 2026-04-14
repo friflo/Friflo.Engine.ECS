@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -99,6 +100,25 @@ public static class Test_SoA
             }
         }
         AreEqual(0, query.Count);
+    }
+    
+    [Test]
+    public static void Test_SoA_Entity_exceptions()
+    {
+        var store = new EntityStore();
+        var entitySoA = store.CreateEntity(new Pos3SoA());
+        var entityAoS = store.CreateEntity(new Position());
+        
+        var e = Throws<InvalidOperationException>(() => {
+            entityAoS.GetSoA<Position>();
+        });
+        AreEqual("Component 'Position' is stored in AoS format. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
+            entitySoA.GetComponent<Pos3SoA>();
+        });
+        AreEqual("Component 'Pos3SoA' is stored in AoS format. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e.Message);
+
     }
 }
 
