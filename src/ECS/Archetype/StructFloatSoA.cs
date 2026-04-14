@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructFloatSoA<T> : StructHeap, IComponentStash<T>
+internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     where T : struct
 {
     /// <summary>
@@ -27,14 +27,13 @@ internal sealed class StructFloatSoA<T> : StructHeap, IComponentStash<T>
     /// - it allows only reading struct values
     /// </summary>
     public override object  GetStashDebug() => componentStash;
-    public          ref T   GetStashRef()   => ref componentStash;
+    public override ref T   GetStashRef()   => ref componentStash;
 
-    public          T[]     Components      => components;
+    public override T[]     Components      => components;
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     private         T[]     components;     //  8
-    internal        T       componentStash; //  sizeof(T)
     
     internal StructFloatSoA(int structIndex)
         : base (structIndex)
@@ -42,14 +41,16 @@ internal sealed class StructFloatSoA<T> : StructHeap, IComponentStash<T>
         components          = new T[ArchetypeUtils.MinCapacity];
     }
     
-    internal ref T GetComponent(int index) { 				// SOA
+    internal override ref T GetComponent(int index) { 				// SOA
         return ref components[index];
     }
     
-    internal void SetComponent(int index, T component) {	// SOA
+    internal override void SetComponent(int index, T component) {	// SOA
         components[index] = component;
     }
     
+    
+    // --- StructHeap
     internal override void StashComponent(int compIndex) {
         componentStash = components[compIndex];
     }

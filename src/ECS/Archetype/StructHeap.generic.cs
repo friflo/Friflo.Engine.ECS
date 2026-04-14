@@ -49,6 +49,7 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
         components[index] = component;
     }
     
+    // --- StructHeap
     internal override void StashComponent(int compIndex) {
         componentStash = components[compIndex];
     }
