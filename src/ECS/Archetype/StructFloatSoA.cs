@@ -77,13 +77,14 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     internal  override  Type    StructType          => typeof(T);
     
     internal override void ResizeComponents    (int capacity, int count) {
-        stride              = capacity;
-        var newComponents   = new float[capacity * 3];
-        var curComponents   = components;
-        var source          = new ReadOnlySpan<float>(curComponents, 0, count * 3);
-        var target          = new Span<float>(newComponents);
-        source.CopyTo(target);
-        components = newComponents;
+        int srcStride   = stride;
+        stride          = capacity;
+        var dst         = new float[capacity * 3];
+        var src         = components;
+        new ReadOnlySpan<float>(src, 0,             count).CopyTo(new Span<float>(dst, 0,            count));
+        new ReadOnlySpan<float>(src, srcStride,     count).CopyTo(new Span<float>(dst, capacity,     count));
+        new ReadOnlySpan<float>(src, srcStride * 2, count).CopyTo(new Span<float>(dst, capacity * 2, count));
+        components = dst;
     }
     
     internal override void MoveComponent(int from, int to)
