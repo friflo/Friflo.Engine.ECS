@@ -33,7 +33,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     public override object  GetStashDebug() => componentStash;
     public override ref T   GetStashRef()   => ref componentStash;
 
-    public override T[]     Components      => throw new NotImplementedException();
+    public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
