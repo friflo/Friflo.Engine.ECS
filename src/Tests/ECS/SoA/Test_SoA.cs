@@ -264,6 +264,25 @@ public static class Test_SoA
         var result = (Pos3SoA)EntityUtils.GetEntityComponent(entity, componentType);
         AreEqual(pos.value, result.value);
     }
+    
+    /// Test <see cref="StructFloatSoA{T}.SetComponentsDefault"/>
+    [Test]
+    public static void Test_SoA_Archetype_CreateEntities()
+    {
+        var store = new EntityStore();
+        var pos         = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var entity1 = store.CreateEntity(pos);
+        var entity2 = store.CreateEntity(pos);
+        var archetype = entity1.Archetype;
+        
+        entity1.DeleteEntity();
+        entity2.DeleteEntity();
+        
+        var entities = archetype.CreateEntities(2);
+        foreach (var entity in entities) {
+            AreEqual(new Vector3(), entity.GetSoA<Pos3SoA>().value);
+        }
+    }
 }
 
 }

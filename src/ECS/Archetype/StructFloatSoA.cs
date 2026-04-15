@@ -115,13 +115,11 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
-        // TODO is this necessary?
         ComponentToSoA(default, components, compIndex, stride);
     }
     
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
     {
-        // TODO is this necessary?
         new Span<float>(components, compIndexStart,              count).Clear();
         new Span<float>(components, compIndexStart + stride,     count).Clear();
         new Span<float>(components, compIndexStart + stride * 2, count).Clear();
@@ -143,7 +141,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
         var mapper = (TypeMapper<T>)reader.TypeCache.GetTypeMapper(typeof(T));
-        var value = reader.ReadMapper(mapper, json);  // todo avoid boxing within typeMapper, T is struct
+        var value = reader.ReadMapper(mapper, json);
         ComponentToSoA(value, components, compIndex, stride);
     }
     
