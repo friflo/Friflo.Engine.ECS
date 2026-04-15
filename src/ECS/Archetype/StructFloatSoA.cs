@@ -74,7 +74,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     // --- StructHeap
-    protected override  int     ComponentsLength    => components.Length;
+    protected override  int     ComponentsLength    => components.Length / 3;
 
     internal  override  Type    StructType          => typeof(T);
     

@@ -48,12 +48,21 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_StructHeap_ToString()
     {
-        var store       = new EntityStore(PidType.RandomPids);
-        var entity      = store.CreateEntity();
-        entity.AddComponent<Position>();
-        var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
-        StructHeap heap = posType.Heaps()[0];
-        AreEqual("StructHeap<Position>  Capacity: 512", heap.ToString());
+        {
+            var store       = new EntityStore();
+            var entity      = store.CreateEntity();
+            entity.AddComponent<Position>();
+            var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
+            StructHeap heap = posType.Heaps()[0];
+            AreEqual("StructHeap<Position>  Capacity: 512", heap.ToString());
+        } {
+            var store       = new EntityStore();
+            var entity      = store.CreateEntity();
+            entity.AddComponent<Pos3SoA>();
+            var posType     = store.GetArchetype(ComponentTypes.Get<Pos3SoA>());
+            StructHeap heap = posType.Heaps()[0];
+            AreEqual("StructHeap<Pos3SoA>  Capacity: 512", heap.ToString());
+        }
     }
     
     [Test]
