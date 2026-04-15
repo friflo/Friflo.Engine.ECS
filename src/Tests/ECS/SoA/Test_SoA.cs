@@ -30,13 +30,16 @@ public static class Test_SoA
         var pos3 = new Pos3SoA { value = new Vector3(31, 32, 33) };
         store.OnComponentAdded += changed => {
             switch (changed.EntityId) {
-                case 1: AreEqual(changed.Component<Pos3SoA>().value, pos1.value); break;
-                case 2: AreEqual(changed.Component<Pos3SoA>().value, pos2.value); break;
+                case 1: AreEqual(pos1.value, changed.Component<Pos3SoA>().value) ; break;
+                case 2: AreEqual(pos2.value, changed.Component<Pos3SoA>().value); break;
             }
         };
         store.OnComponentRemoved += changed => {
             switch (changed.EntityId) {
-                case 1: AreEqual(changed.OldComponent<Pos3SoA>().value, pos1.value); break;
+                case 1:
+                    AreEqual(pos1.value, changed.OldComponent<Pos3SoA>().value);
+                    AreEqual(pos1.value, ((Pos3SoA)changed.DebugOldComponent).value);
+                    break;
             }
         };
         
