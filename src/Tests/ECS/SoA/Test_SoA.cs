@@ -250,6 +250,20 @@ public static class Test_SoA
         
         AreEqual(pos.value, entity.GetSoA<Pos3SoA>().value);
     }
+    
+    /// Test <see cref="StructFloatSoA{T}.GetComponentDebug"/>
+    [Test]
+    public static void Test_SoA_GetEntityComponent()
+    {
+        var store = new EntityStore();
+        var pos         = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var entity = store.CreateEntity(pos);
+        var schema          = EntityStore.GetEntitySchema();
+        var componentType   = schema.ComponentTypeByType[typeof(Pos3SoA)];
+        
+        var result = (Pos3SoA)EntityUtils.GetEntityComponent(entity, componentType);
+        AreEqual(pos.value, result.value);
+    }
 }
 
 }
