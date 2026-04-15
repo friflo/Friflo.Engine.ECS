@@ -21,10 +21,10 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructSoAVector3<T> : StructHeap<T>
+internal sealed class StructSoAVector4<T> : StructHeap<T>
     where T : struct
 {
-    private const   int     LaneCount = 3;
+    private const   int     LaneCount = 4;
         
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
 
@@ -33,7 +33,7 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
     private         float[] components;     //  8
     private         int     stride;         //  4
     
-    internal StructSoAVector3(int structIndex)
+    internal StructSoAVector4(int structIndex)
         : base (structIndex)
     {
         stride      = ArchetypeUtils.MinCapacity;
@@ -80,6 +80,7 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
         new ReadOnlySpan<float>(src, 0,             count).CopyTo(new Span<float>(dst, 0,            count));
         new ReadOnlySpan<float>(src, srcStride,     count).CopyTo(new Span<float>(dst, capacity,     count));
         new ReadOnlySpan<float>(src, srcStride * 2, count).CopyTo(new Span<float>(dst, capacity * 2, count));
+        new ReadOnlySpan<float>(src, srcStride * 3, count).CopyTo(new Span<float>(dst, capacity * 3, count));
         components = dst;
     }
     
@@ -90,17 +91,19 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
         localComponents[to]                     = localComponents[from];
         localComponents[to + localStride]       = localComponents[from + localStride];
         localComponents[to + localStride * 2]   = localComponents[from + localStride * 2];
+        localComponents[to + localStride * 3]   = localComponents[from + localStride * 3];
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
-        var targetSoA       = (StructSoAVector3<T>)targetHeap;
+        var targetSoA       = (StructSoAVector4<T>)targetHeap;
         var src             = components;
         var dst             = targetSoA.components;
         var targetStride    = targetSoA.stride; 
         dst[targetPos]                      = src[sourcePos];
         dst[targetPos + targetStride]       = src[sourcePos + stride];
         dst[targetPos + targetStride * 2]   = src[sourcePos + stride * 2];
+        dst[targetPos + targetStride * 3]   = src[sourcePos + stride * 3];
     }
     
     internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
@@ -117,6 +120,7 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
         new Span<float>(components, compIndexStart,              count).Clear();
         new Span<float>(components, compIndexStart + stride,     count).Clear();
         new Span<float>(components, compIndexStart + stride * 2, count).Clear();
+        new Span<float>(components, compIndexStart + stride * 3, count).Clear();
     }
   
     /// <summary>
@@ -196,6 +200,7 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
         dst[index]              = span[0];
         dst[index + stride]     = span[1];
         dst[index + stride * 2] = span[2];
+        dst[index + stride * 3] = span[3];
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -205,6 +210,7 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
         component[0] = src[index];
         component[1] = src[index + stride];
         component[2] = src[index + stride * 2];
+        component[3] = src[index + stride * 3];
         return Unsafe.As<float, T>(ref component[0]);
     }
 }

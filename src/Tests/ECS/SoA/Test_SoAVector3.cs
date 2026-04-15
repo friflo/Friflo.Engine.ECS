@@ -15,7 +15,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.SoA {
 
-public static class Test_SoA
+public static class Test_SoAVector3
 {
     [Test]
     public static void Test_SoA_Add_Remove_Components()
