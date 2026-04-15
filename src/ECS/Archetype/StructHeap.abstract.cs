@@ -23,7 +23,15 @@ internal abstract class StructHeap<T> : StructHeap, IComponentStash<T>
     {
     }
     
-    public   abstract   ref T   GetStashRef();
+    public          ref T   GetStashRef()   => ref componentStash;
+    /// <summary>
+    /// Method only available for debugging. Reasons:<br/>
+    /// - it boxes struct values to return them as objects<br/>
+    /// - it allows only reading struct values
+    /// </summary>
+    public override object  GetStashDebug() => componentStash;
+    
+    // --- abstract
 
     public   abstract   T[]     Components { get; }
     

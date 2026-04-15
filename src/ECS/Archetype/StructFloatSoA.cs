@@ -24,14 +24,6 @@ namespace Friflo.Engine.ECS;
 internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     where T : struct
 {
-    /// <summary>
-    /// Method only available for debugging. Reasons:<br/>
-    /// - it boxes struct values to return them as objects<br/>
-    /// - it allows only reading struct values
-    /// </summary>
-    public override object  GetStashDebug() => componentStash;
-    public override ref T   GetStashRef()   => ref componentStash;
-
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
 
     // Note: Should not contain any other field. See class <remarks>
