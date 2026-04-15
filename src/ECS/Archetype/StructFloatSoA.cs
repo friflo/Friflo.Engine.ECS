@@ -47,7 +47,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal override ref T GetComponentRef(int index) {
-        throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored in AoS format. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.");
+        throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.");
     }
     
     internal override T GetComponentValue(int index) {

@@ -127,12 +127,12 @@ public static class Test_SoA
         var e = Throws<InvalidOperationException>(() => {
             entityAoS.GetSoA<Position>();
         });
-        AreEqual("Component 'Position' is stored in AoS format. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e.Message);
+        AreEqual("Component 'Position' is stored as AoS. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e.Message);
         
         e = Throws<InvalidOperationException>(() => {
             entitySoA.GetComponent<Pos3SoA>();
         });
-        AreEqual("Component 'Pos3SoA' is stored in AoS format. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e.Message);
+        AreEqual("Component 'Pos3SoA' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e.Message);
 
     }
 }
