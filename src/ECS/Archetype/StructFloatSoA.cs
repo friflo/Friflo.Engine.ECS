@@ -4,7 +4,6 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Friflo.Engine.ECS.Index;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -116,19 +115,8 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         dst[targetPos + targetStride * 2]   = src[sourcePos + stride * 2];
     }
     
-    private static void AddOrUpdateIndex(in T source, in T target, in Entity targetEntity, StructFloatSoA<T> targetHeap, long updateIndexTypes)
-    {
-        throw new NotImplementedException();
-    /*  if (((1 << StructInfo<T>.Index) & updateIndexTypes) == 0) {
-            StoreIndex.AddIndex(targetEntity.store, targetEntity.Id, source);
-        } else {
-            targetHeap.componentStash = target;
-            StoreIndex.UpdateIndex(targetEntity.store, targetEntity.Id, source, targetHeap);
-        } */
-    }
-    
     internal  override  void SetComponentDefault (int compIndex) {
-        // TODO Really necessary? 
+        // TODO is this necessary?
         ComponentToSoA(default, components, compIndex, stride);
     }
     
@@ -161,32 +149,32 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal override  void UpdateIndex (Entity entity) {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
         // StoreIndex.UpdateIndex(entity.store, entity.Id, components[entity.compIndex], this);
     }
     
     internal override  void AddIndex (Entity entity) {
-        StoreIndex.AddIndex(entity.store, entity.Id, components[entity.compIndex]);
+        throw new NotSupportedException();
+        // StoreIndex.AddIndex(entity.store, entity.Id, components[entity.compIndex]);
     }
     
     internal override  void RemoveIndex (Entity entity) {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
         // StoreIndex.RemoveIndex(entity.store, entity.Id, this);
     }
     
     internal  override  bool GetComponentMember<TField> (int compIndex, MemberPath memberPath, out TField value, out Exception exception) {
-        throw new NotImplementedException();
-    /*  var getter = (MemberPathGetter<T, TField>)memberPath.getter;
+        var getter = (MemberPathGetter<T, TField>)memberPath.getter;
         try {
             exception = null;
-            value = getter(components[compIndex]);
+            value = getter(GetComponentFromSoA(components, compIndex, stride));
             return true;
         }
         catch (Exception e) {
             exception = e;
             value = default;
             return false;
-        } */
+        }
     }
     
     internal override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
