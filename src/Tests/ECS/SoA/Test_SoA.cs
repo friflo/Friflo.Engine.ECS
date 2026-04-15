@@ -6,6 +6,8 @@ using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable ConvertToLocalFunction
 // ReSharper disable EqualExpressionComparison
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
@@ -128,12 +130,12 @@ public static class Test_SoA
         var e = Throws<InvalidOperationException>(() => {
             entityAoS.GetSoA<Position>();
         });
-        AreEqual("Component 'Position' is stored as AoS. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e.Message);
+        AreEqual("Component 'Position' is stored as AoS. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             entitySoA.GetComponent<Pos3SoA>();
         });
-        AreEqual("Component 'Pos3SoA' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e.Message);
+        AreEqual("Component 'Pos3SoA' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e!.Message);
     }
     
     [Test]
@@ -161,7 +163,7 @@ public static class Test_SoA
         var entity = store.CreateEntity(pos);
         var componentType   = typeof(Pos3SoA);
         var pos3Info = MemberPath.Get(componentType, nameof(Pos3SoA.value));
-        IsTrue(EntityUtils.GetEntityComponentMember<Vector3>(entity, pos3Info, out var vector3, out var exception));
+        IsTrue(EntityUtils.GetEntityComponentMember<Vector3>(entity, pos3Info, out var vector3, out _));
         
         AreEqual(new Vector3(11, 12, 13),           vector3);
         AreEqual("value",                           pos3Info.path);
@@ -194,7 +196,21 @@ public static class Test_SoA
         IsTrue(EntityUtils.SetEntityComponentMember(entity, nameInfo, newPos, handler, out _));
         var result = entity.GetSoA<Pos3SoA>();
         AreEqual(newPos, result.value);
+    }
+    
+    /// Test <see cref="StructFloatSoA{T}.CopyComponent"/>
+    [Test]
+    public static void Test_SoA_CopyEntity()
+    {
+        var store       = new EntityStore();
+        var pos         = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var srcEntity   = store.CreateEntity(pos);
         
+        var target  = new EntityStore();
+        var targetEntity = target.CreateEntity();
+        srcEntity.CopyEntity(targetEntity);
+        
+        AreEqual(pos.value, targetEntity.GetSoA<Pos3SoA>().value);
     }
 }
 
