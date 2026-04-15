@@ -21,7 +21,7 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
+internal sealed class StructFloatSoA<T> : StructHeap<T>
     where T : struct
 {
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
