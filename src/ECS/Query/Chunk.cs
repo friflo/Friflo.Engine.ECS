@@ -56,11 +56,15 @@ public struct Chunk<T>
     [DebuggerBrowsable(Never)]
     private             T[]         _components;            //  8
     
-    public              Span<float> GetLanesSoA()
+    public Span<float> GetLanesSoA()
     {
         if (!StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
         // Reinterpret the reference
         return Unsafe.As<T[], float[]>(ref _components).AsSpan();
+    }
+    
+    public int GetStrideSoA() {
+        return _components.Length / StructInfo<T>.FieldCountSoA;
     }
 
     

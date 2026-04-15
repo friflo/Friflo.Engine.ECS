@@ -71,4 +71,10 @@ internal static class SchemaTypeUtils
         var componentType = EntityStoreBase.Static.EntitySchema.ComponentTypeByType[type];
         return componentType.FieldCountSoA > 0;
     }
+    
+    internal static int GetFieldCountSoA(Type type)
+    {
+        var componentType = EntityStoreBase.Static.EntitySchema.ComponentTypeByType[type];
+        return componentType.FieldCountSoA;
+    }
 }

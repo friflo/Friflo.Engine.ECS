@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
@@ -285,6 +286,26 @@ public static class Test_SoAVector3
         foreach (var entity in entities) {
             AreEqual(new Vector3(), entity.GetSoA<Pos3SoA>().value);
         }
+    }
+    
+    /// Test <see cref="Chunk{T}.GetLanesSoA"/>
+    [Test]
+    public static void Test_SoAVector3_Query_Lanes()
+    {
+        var store = new EntityStore();
+        for (int n = 0; n < 1000; n++) {
+            store.CreateEntity(new Pos3SoA { value = new Vector3(n * 10, n * 20, n * 30) });
+        }
+        var query = store.Query<Pos3SoA>();
+        int count = 0;
+        foreach (var (pos, entities) in query.Chunks) {
+            count++;
+            var lanes = pos.GetLanesSoA();
+            var stride = pos.GetStrideSoA();
+            AreEqual(3072, lanes.Length);
+            AreEqual(1024, stride);
+        }
+        AreEqual(1, count);
     }
 }
 

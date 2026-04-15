@@ -85,11 +85,13 @@ internal static class StructInfo<T>
     // --- static internal
     // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_StructIndex()
     // readonly improves performance significant
-    internal static readonly    int     Index       = SchemaTypeUtils.GetStructIndex(typeof(T));
+    internal static readonly    int     Index           = SchemaTypeUtils.GetStructIndex(typeof(T));
     
-    internal static readonly    bool    HasIndex    = SchemaTypeUtils.HasIndex(typeof(T));
+    internal static readonly    bool    HasIndex        = SchemaTypeUtils.HasIndex(typeof(T));
     
-    internal static readonly    bool    IsSoA       = SchemaTypeUtils.IsSoA(typeof(T));
+    internal static readonly    bool    IsSoA           = SchemaTypeUtils.IsSoA(typeof(T));
+    
+    internal static readonly    int     FieldCountSoA   = SchemaTypeUtils.GetFieldCountSoA(typeof(T));
     
     // internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T)); obsolete property
 }
