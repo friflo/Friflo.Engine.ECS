@@ -123,7 +123,7 @@ internal sealed class ComponentType<T> : ComponentType
         switch (FieldCountSoA)
         {
             case 0: return new StructHeapGen<T>(StructIndex);
-            case 3: return new StructFloatSoA<T>(StructIndex);
+            case 3: return new StructSoAVector3<T>(StructIndex);
         }
         return null;        
     }

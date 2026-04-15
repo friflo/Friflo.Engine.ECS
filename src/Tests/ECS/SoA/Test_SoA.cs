@@ -67,7 +67,7 @@ public static class Test_SoA
         AreEqual(tryGet.value, pos3.value);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.CopyComponentTo"/>
+    /// Test <see cref="StructSoAVector3{T}.CopyComponentTo"/>
     [Test]
     public static void Test_SoA_Add_Tag()
     {
@@ -87,7 +87,7 @@ public static class Test_SoA
         AreEqual(pos3.value, entity3.GetSoA<Pos3SoA>().value);
     }
 
-    /// Test <see cref="StructFloatSoA{T}.ResizeComponents"/>
+    /// Test <see cref="StructSoAVector3{T}.ResizeComponents"/>
     [Test]
     public static void Test_SoA_Check_ResizeComponents()
     {
@@ -162,8 +162,8 @@ public static class Test_SoA
         AreEqual("Component 'Pos3SoA' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e!.Message);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.Write"/>
-    /// Test <see cref="StructFloatSoA{T}.Read"/>
+    /// Test <see cref="StructSoAVector3{T}.Write"/>
+    /// Test <see cref="StructSoAVector3{T}.Read"/>
     [Test]
     public static void Test_SoA_serialize()
     {
@@ -181,7 +181,7 @@ public static class Test_SoA
         IsNull(error);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.GetComponentMember"/>
+    /// Test <see cref="StructSoAVector3{T}.GetComponentMember"/>
     [Test]
     public static void Test_SoA_GetEntityComponentMember()
     {
@@ -204,7 +204,7 @@ public static class Test_SoA
         AreEqual("Pos3SoA value : Vector3",         pos3Info.ToString());
     }
     
-    /// Test <see cref="StructFloatSoA{T}.SetComponentMember"/>
+    /// Test <see cref="StructSoAVector3{T}.SetComponentMember"/>
     [Test]
     public static void Test_SoA_SetEntityComponentMember()
     {
@@ -226,7 +226,7 @@ public static class Test_SoA
         AreEqual(newPos, result.value);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.CopyComponent"/>
+    /// Test <see cref="StructSoAVector3{T}.CopyComponent"/>
     [Test]
     public static void Test_SoA_CopyEntity()
     {
@@ -241,7 +241,7 @@ public static class Test_SoA
         AreEqual(pos.value, targetEntity.GetSoA<Pos3SoA>().value);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.SetBatchComponent"/>
+    /// Test <see cref="StructSoAVector3{T}.SetBatchComponent"/>
     [Test]
     public static void Test_SoA_Batch_CreateEntity()
     {
@@ -254,7 +254,7 @@ public static class Test_SoA
         AreEqual(pos.value, entity.GetSoA<Pos3SoA>().value);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.GetComponentDebug"/>
+    /// Test <see cref="StructSoAVector3{T}.GetComponentDebug"/>
     [Test]
     public static void Test_SoA_GetEntityComponent()
     {
@@ -268,7 +268,7 @@ public static class Test_SoA
         AreEqual(pos.value, result.value);
     }
     
-    /// Test <see cref="StructFloatSoA{T}.SetComponentsDefault"/>
+    /// Test <see cref="StructSoAVector3StructSoAVector3{T}.SetComponentsDefault"/>
     [Test]
     public static void Test_SoA_Archetype_CreateEntities()
     {
