@@ -48,11 +48,15 @@ public struct MyComponent6 : IComponent { public int b; }
 [ComponentKey("my7")]
 public struct MyComponent7 : IComponent { public int b; }
 
+
 [SoA]
-public struct Pos3SoA : IComponent
-{
-    public Vector3 value;
-}
+public struct Pos2SoA : IComponent { public Vector2 value; }
+
+[SoA]
+public struct Pos3SoA : IComponent { public Vector3 value; }
+
+[SoA]
+public struct Pos4SoA : IComponent { public Vector4 value; }
 
 
 public struct MyPropertyComponent : IComponent

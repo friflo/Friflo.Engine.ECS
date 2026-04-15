@@ -230,12 +230,16 @@ internal static class SchemaUtils
                 continue;
             }
             var fields = type.GetFields();
+            var dimension = 0;
             foreach (var field in fields) {
-                if (field.FieldType != typeof(Vector3) && field.Name != "value") {
+                if (field.Name != "value") {
                     return 0;
                 }
+                if (field.FieldType == typeof(Vector2)) { dimension = 2; }
+                if (field.FieldType == typeof(Vector3)) { dimension = 3; }
+                if (field.FieldType == typeof(Vector4)) { dimension = 4; }
             }
-            return 3;
+            return dimension;
         }
         return 0;
     }
