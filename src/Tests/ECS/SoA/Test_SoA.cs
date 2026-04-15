@@ -4,6 +4,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 using Tests.ECS;
+using Tests.Examples;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
@@ -61,6 +62,26 @@ public static class Test_SoA
         
         IsTrue(entity3.TryGetComponent(out Pos3SoA tryGet));
         AreEqual(tryGet.value, pos3.value);
+    }
+    
+    /// Test <see cref="StructFloatSoA{T}.CopyComponentTo"/>
+    [Test]
+    public static void Test_SoA_Add_Tag()
+    {
+        var store = new EntityStore();
+        var pos1 = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var pos2 = new Pos3SoA { value = new Vector3(21, 22, 23) };
+        var pos3 = new Pos3SoA { value = new Vector3(31, 32, 33) };
+        var entity1 = store.CreateEntity(pos1);
+        var entity2 = store.CreateEntity(pos2);
+        var entity3 = store.CreateEntity(pos3);
+        
+        entity1.AddTag<General.MyTag1>();
+        entity2.AddTag<General.MyTag2>();
+        
+        AreEqual(pos1.value, entity1.GetSoA<Pos3SoA>().value);
+        AreEqual(pos2.value, entity2.GetSoA<Pos3SoA>().value);
+        AreEqual(pos3.value, entity3.GetSoA<Pos3SoA>().value);
     }
 
     /// Test <see cref="StructFloatSoA{T}.ResizeComponents"/>
@@ -138,6 +159,8 @@ public static class Test_SoA
         AreEqual("Component 'Pos3SoA' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e!.Message);
     }
     
+    /// Test <see cref="StructFloatSoA{T}.Write"/>
+    /// Test <see cref="StructFloatSoA{T}.Read"/>
     [Test]
     public static void Test_SoA_serialize()
     {
@@ -155,6 +178,7 @@ public static class Test_SoA
         IsNull(error);
     }
     
+    /// Test <see cref="StructFloatSoA{T}.GetComponentMember"/>
     [Test]
     public static void Test_SoA_GetEntityComponentMember()
     {
@@ -177,6 +201,7 @@ public static class Test_SoA
         AreEqual("Pos3SoA value : Vector3",         pos3Info.ToString());
     }
     
+    /// Test <see cref="StructFloatSoA{T}.SetComponentMember"/>
     [Test]
     public static void Test_SoA_SetEntityComponentMember()
     {

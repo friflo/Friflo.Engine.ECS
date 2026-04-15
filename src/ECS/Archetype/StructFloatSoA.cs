@@ -98,13 +98,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         localComponents[to + localStride * 2]   = localComponents[from + localStride * 2];
     }
     
-    internal override void CopyComponentTo(int sourcePos, StructHeap target, int targetPos)
-    {
-        var targetHeap = (StructFloatSoA<T>)target;
-        targetHeap.components[targetPos] = components[sourcePos];
-    }
-    
-    internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
+    internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
         var targetSoA       = (StructFloatSoA<T>)targetHeap;
         var src             = components;
@@ -113,6 +107,11 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         dst[targetPos]                      = src[sourcePos];
         dst[targetPos + targetStride]       = src[sourcePos + stride];
         dst[targetPos + targetStride * 2]   = src[sourcePos + stride * 2];
+    }
+    
+    internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
+    {
+        CopyComponentTo(sourcePos, targetHeap, targetPos);
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
