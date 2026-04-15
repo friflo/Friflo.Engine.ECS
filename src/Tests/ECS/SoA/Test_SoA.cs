@@ -237,6 +237,19 @@ public static class Test_SoA
         
         AreEqual(pos.value, targetEntity.GetSoA<Pos3SoA>().value);
     }
+    
+    /// Test <see cref="StructFloatSoA{T}.SetBatchComponent"/>
+    [Test]
+    public static void Test_SoA_Batch_CreateEntity()
+    {
+        var store = new EntityStore();
+        var batch = new CreateEntityBatch(store);
+        var pos = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        batch.Add(pos);
+        var entity = batch.CreateEntity();
+        
+        AreEqual(pos.value, entity.GetSoA<Pos3SoA>().value);
+    }
 }
 
 }
