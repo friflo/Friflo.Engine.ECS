@@ -152,6 +152,28 @@ public static class Test_SoA
         AreEqual(pos.value, targetEntity.GetSoA<Pos3SoA>().value);
         IsNull(error);
     }
+    
+    [Test]
+    public static void Test_SoA_MemberPath()
+    {
+        var store  = new EntityStore();
+        var pos = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var entity = store.CreateEntity(pos);
+        var componentType   = typeof(Pos3SoA);
+        var nameInfo = MemberPath.Get(componentType, nameof(Pos3SoA.value));
+        IsTrue(EntityUtils.GetEntityComponentMember<Vector3>(entity, nameInfo, out var vector3, out var exception));
+        
+        AreEqual(new Vector3(11, 12, 13),           vector3);
+        AreEqual("value",                           nameInfo.path);
+        AreEqual("value",                           nameInfo.name);
+        AreEqual(typeof(Vector3),                   nameInfo.memberType);
+        AreEqual(typeof(Pos3SoA),                   nameInfo.declaringType);
+        AreEqual(typeof(Pos3SoA),                   nameInfo.componentType.Type);
+        AreEqual("get: (Pos3SoA => value)",         nameInfo.getter.Method.Name);
+        AreEqual("set: (Pos3SoA => value)",         nameInfo.setter.Method.Name);
+        NotNull ("value",                           nameInfo.memberInfo.Name);
+        AreEqual("Pos3SoA value : Vector3",         nameInfo.ToString());
+    }
 }
 
 }
