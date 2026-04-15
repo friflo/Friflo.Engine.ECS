@@ -181,7 +181,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     internal override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
     {
         var component   = Unsafe.As<TField,T>(ref value);
-        var oldValue    = GetComponentFromSoA(components, entity.compIndex, stride);;
+        var oldValue    = GetComponentFromSoA(components, entity.compIndex, stride);
         try {
             exception = null;
             ComponentToSoA(component, components, entity.compIndex, stride);
