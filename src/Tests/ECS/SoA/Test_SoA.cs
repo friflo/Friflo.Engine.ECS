@@ -154,25 +154,47 @@ public static class Test_SoA
     }
     
     [Test]
-    public static void Test_SoA_MemberPath()
+    public static void Test_SoA_GetEntityComponentMember()
+    {
+        var store  = new EntityStore();
+        var pos = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var entity = store.CreateEntity(pos);
+        var componentType   = typeof(Pos3SoA);
+        var pos3Info = MemberPath.Get(componentType, nameof(Pos3SoA.value));
+        IsTrue(EntityUtils.GetEntityComponentMember<Vector3>(entity, pos3Info, out var vector3, out var exception));
+        
+        AreEqual(new Vector3(11, 12, 13),           vector3);
+        AreEqual("value",                           pos3Info.path);
+        AreEqual("value",                           pos3Info.name);
+        AreEqual(typeof(Vector3),                   pos3Info.memberType);
+        AreEqual(typeof(Pos3SoA),                   pos3Info.declaringType);
+        AreEqual(typeof(Pos3SoA),                   pos3Info.componentType.Type);
+        AreEqual("get: (Pos3SoA => value)",         pos3Info.getter.Method.Name);
+        AreEqual("set: (Pos3SoA => value)",         pos3Info.setter.Method.Name);
+        NotNull ("value",                           pos3Info.memberInfo.Name);
+        AreEqual("Pos3SoA value : Vector3",         pos3Info.ToString());
+    }
+    
+    [Test]
+    public static void Test_SoA_SetEntityComponentMember()
     {
         var store  = new EntityStore();
         var pos = new Pos3SoA { value = new Vector3(11, 12, 13) };
         var entity = store.CreateEntity(pos);
         var componentType   = typeof(Pos3SoA);
         var nameInfo = MemberPath.Get(componentType, nameof(Pos3SoA.value));
-        IsTrue(EntityUtils.GetEntityComponentMember<Vector3>(entity, nameInfo, out var vector3, out var exception));
         
-        AreEqual(new Vector3(11, 12, 13),           vector3);
-        AreEqual("value",                           nameInfo.path);
-        AreEqual("value",                           nameInfo.name);
-        AreEqual(typeof(Vector3),                   nameInfo.memberType);
-        AreEqual(typeof(Pos3SoA),                   nameInfo.declaringType);
-        AreEqual(typeof(Pos3SoA),                   nameInfo.componentType.Type);
-        AreEqual("get: (Pos3SoA => value)",         nameInfo.getter.Method.Name);
-        AreEqual("set: (Pos3SoA => value)",         nameInfo.setter.Method.Name);
-        NotNull ("value",                           nameInfo.memberInfo.Name);
-        AreEqual("Pos3SoA value : Vector3",         nameInfo.ToString());
+        var newPos = new Vector3(101, 102, 103);
+        OnMemberChanged<Pos3SoA> handler = (ref Pos3SoA value, Entity entity1, string path, in Pos3SoA old) => {
+            AreEqual(1,         entity1.Id);
+            AreEqual("value",   path);
+            AreEqual(newPos,    value.value);
+            AreEqual(pos.value, old.value);
+        };
+        IsTrue(EntityUtils.SetEntityComponentMember(entity, nameInfo, newPos, handler, out _));
+        var result = entity.GetSoA<Pos3SoA>();
+        AreEqual(newPos, result.value);
+        
     }
 }
 

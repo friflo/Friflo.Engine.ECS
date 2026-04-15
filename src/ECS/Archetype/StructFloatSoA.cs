@@ -164,10 +164,11 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     }
     
     internal  override  bool GetComponentMember<TField> (int compIndex, MemberPath memberPath, out TField value, out Exception exception) {
-        var getter = (MemberPathGetter<T, TField>)memberPath.getter;
+        // var getter = (MemberPathGetter<T, TField>)memberPath.getter;
         try {
             exception = null;
-            value = getter(GetComponentFromSoA(components, compIndex, stride));
+            var component = GetComponentFromSoA(components, compIndex, stride);
+            value = Unsafe.As<T, TField>(ref component);
             return true;
         }
         catch (Exception e) {
@@ -179,13 +180,11 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     
     internal override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
     {
-        throw new NotImplementedException();
-    /*  var setter          = (MemberPathSetter<T, TField>)memberPath.setter;
-        ref var component   = ref components[entity.compIndex];
-        var oldValue        = component;
+        var component   = Unsafe.As<TField,T>(ref value);
+        var oldValue    = GetComponentFromSoA(components, entity.compIndex, stride);;
         try {
             exception = null;
-            setter(ref component, value);
+            ComponentToSoA(component, components, entity.compIndex, stride);
             if (onMemberChanged != null) {
                 ((OnMemberChanged<T>)onMemberChanged)(ref component, entity, memberPath.path, oldValue);
             }
@@ -194,7 +193,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         catch (Exception e) {
             exception = e;
             return false;
-        } */
+        }
     }
     
     // --- Utils
