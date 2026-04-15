@@ -47,8 +47,12 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
         components  = new float[ArchetypeUtils.MinCapacity * 3];
     }
     
-    internal override ref T GetComponent(int index) {
+    internal override ref T GetComponentRef(int index) {
         throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored in AoS format. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.");
+    }
+    
+    internal override T GetComponentValue(int index) {
+        return GetComponentFromSoA (components, index, stride);
     }
     
     internal override void SetComponent(int index, T component) {
@@ -141,7 +145,7 @@ internal sealed class StructFloatSoA<T> : StructHeap<T>, IComponentStash<T>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override object GetComponentDebug(int compIndex) => components[compIndex];
+    internal override object GetComponentDebug(int compIndex) => GetComponentFromSoA(components, compIndex, stride);
     
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {

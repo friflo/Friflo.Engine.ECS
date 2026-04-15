@@ -111,7 +111,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
     {
         var heap = node.archetype.heapMap[structIndex];
         if (heap != null) {
-            command.oldComponent = ((StructHeap<T>)heap).GetComponent(node.compIndex);
+            command.oldComponent = ((StructHeap<T>)heap).GetComponentValue(node.compIndex);
         }
     }
     

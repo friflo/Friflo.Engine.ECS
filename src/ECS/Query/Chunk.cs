@@ -143,7 +143,7 @@ public struct Chunk<T>
     internal Chunk(Chunk<T> chunk, int start, int length) {
         Length      = length;
         this.start  = start;
-        _components = chunk.ArchetypeComponents;
+        _components = chunk._components;
     }
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>

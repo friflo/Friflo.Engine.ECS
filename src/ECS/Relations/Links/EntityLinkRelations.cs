@@ -28,7 +28,7 @@ internal class EntityLinkRelations<TRelation> : GenericEntityRelations<TRelation
     {
         Entity target   = new Entity(store, targetId);
         int position    = FindRelationPosition(id, target, out _, out _);
-        return ref ((StructHeap<T>)heap).GetComponent(position);
+        return ref ((StructHeap<T>)heap).GetComponentRef(position);
     }
     
     internal override void AddIncomingRelations(int target, List<EntityLink> result)

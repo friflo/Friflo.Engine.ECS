@@ -130,7 +130,7 @@ public readonly struct  ComponentChanged
             case ComponentChangedAction.Update:
                 if (typeof(T) == ComponentType.Type) {
                     var entity = Entity;
-                    return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).GetComponent(entity.compIndex);
+                    return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).GetComponentValue(entity.compIndex);
                 }
                 throw TypeException("Component<T>() - expect component Type: ", typeof(T));
         }

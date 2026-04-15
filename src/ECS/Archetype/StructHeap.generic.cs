@@ -41,8 +41,12 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
         components          = new T[ArchetypeUtils.MinCapacity];
     }
     
-    internal override ref T GetComponent(int index) {
+    internal override ref T GetComponentRef(int index) {
         return ref components[index];
+    }
+    
+    internal override T GetComponentValue(int index) {
+        return components[index];
     }
     
     internal override void SetComponent(int index, T component) {

@@ -22,16 +22,28 @@ public static class Test_SoA
         var entity3 = store.CreateEntity();
         
         var pos1 = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var pos2 = new Pos3SoA { value = new Vector3(21, 22, 23) };
+        var pos3 = new Pos3SoA { value = new Vector3(31, 32, 33) };
+        store.OnComponentAdded += changed => {
+            switch (changed.EntityId) {
+                case 1: AreEqual(changed.Component<Pos3SoA>().value, pos1.value); break;
+                case 2: AreEqual(changed.Component<Pos3SoA>().value, pos2.value); break;
+            }
+        };
+        store.OnComponentRemoved += changed => {
+            switch (changed.EntityId) {
+                case 1: AreEqual(changed.OldComponent<Pos3SoA>().value, pos1.value); break;
+            }
+        };
+        
         entity1.AddComponent(pos1);
         var result1 = entity1.GetSoA<Pos3SoA>();
         AreEqual(result1.value, pos1.value);
         
-        var pos2 = new Pos3SoA { value = new Vector3(21, 22, 23) };
         entity2.AddComponent(pos2);
         var result2 = entity2.GetSoA<Pos3SoA>();
         AreEqual(result2.value, pos2.value);
         
-        var pos3 = new Pos3SoA { value = new Vector3(31, 32, 33) };
         entity3.AddComponent(pos3);
         var result3 = entity3.GetSoA<Pos3SoA>();
         AreEqual(result3.value, pos3.value);
@@ -43,6 +55,9 @@ public static class Test_SoA
         
         result3 = entity3.GetSoA<Pos3SoA>();
         AreEqual(result3.value, pos3.value);
+        
+        IsTrue(entity3.TryGetComponent(out Pos3SoA tryGet));
+        AreEqual(tryGet.value, pos3.value);
     }
 
     /// Test <see cref="StructFloatSoA{T}.ResizeComponents"/>
