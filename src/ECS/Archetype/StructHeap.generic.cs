@@ -64,7 +64,7 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
     
     internal override  void SetBatchComponent(BatchComponent[] batchComponents, int compIndex)
     {
-        this.components[compIndex] = ((BatchComponent<T>)batchComponents[structIndex]).value;
+        components[compIndex] = ((BatchComponent<T>)batchComponents[structIndex]).value;
     }
     
     // --- StructHeap

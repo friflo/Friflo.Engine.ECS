@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
@@ -133,7 +134,23 @@ public static class Test_SoA
             entitySoA.GetComponent<Pos3SoA>();
         });
         AreEqual("Component 'Pos3SoA' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e.Message);
-
+    }
+    
+    [Test]
+    public static void Test_SoA_serialize()
+    {
+        var store = new EntityStore();
+        var pos = new Pos3SoA { value = new Vector3(11, 12, 13) };
+        var entity = store.CreateEntity(pos);
+        
+        EntityConverter converter = new EntityConverter();
+        var dataEntity = converter.EntityToDataEntity(entity, null, false);
+        AreEqual("{\"Pos3SoA\":{\"value\":{\"X\":11,\"Y\":12,\"Z\":13}}}", dataEntity.components.ToString());
+        
+        var targetStore = new EntityStore();
+        var targetEntity = converter.DataEntityToEntity(dataEntity, targetStore, out var error);
+        AreEqual(pos.value, targetEntity.GetSoA<Pos3SoA>().value);
+        IsNull(error);
     }
 }
 
