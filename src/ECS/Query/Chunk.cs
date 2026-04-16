@@ -63,6 +63,10 @@ public struct Chunk<T>
         return Unsafe.As<T[], float[]>(ref _components).AsSpan();
     }
     
+    /// <summary>
+    /// The returned stride enable 32 byte aligned access for all lanes
+    /// as <see cref="SimdInfo{T}.SimdStep"/> is always a multiple of 8.
+    /// </summary>
     public int GetStrideSoA() {
         return _components.Length / SimdInfo<T>.FieldCountSoA;
     }

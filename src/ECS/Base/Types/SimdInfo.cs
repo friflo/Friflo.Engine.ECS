@@ -15,6 +15,10 @@ public static class SimdInfo<T>
     
     public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
     
+    /// <summary>
+    /// Is always a multiple of 8. The enables the stride returned from
+    /// <see cref="Chunk{T}.GetStrideSoA"/> enables access to 32 byte aligned memory for all lanes.
+    /// </summary>
     public static readonly    int     SimdStep        = SimdUtils.GetSimdStep<T>();
 }
 
@@ -59,6 +63,8 @@ internal static class SimdUtils
             if (field.Name != "value" && field.Name != "Value") {
                 continue;
             }
+            // Important Requirement!   step must always be a multiple of 8.
+            //   This ensures the stride used for SoA lanes enables 32 byte aligned access to lane[1] [2] and [3].
             if (field.FieldType == typeof(float))   { step = 32; size =  4; }
             if (field.FieldType == typeof(Vector2)) { step = 16; size =  8; }
             if (field.FieldType == typeof(Vector3)) { step =  8; size = 12; }
