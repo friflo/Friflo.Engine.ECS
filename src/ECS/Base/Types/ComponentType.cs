@@ -86,12 +86,6 @@ internal static class StructInfo<T>
     
     internal static readonly    bool    HasIndex        = SchemaTypeUtils.HasIndex(typeof(T));
     
-    internal static readonly    bool    IsSoA           = SimdUtils.IsSoA<T>();
-    
-    internal static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
-    
-    internal static readonly    int     SimdStep        = SimdUtils.GetSimdStep<T>();
-    
     // internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T)); obsolete property
 }
 
@@ -121,7 +115,7 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        switch (StructInfo<T>.FieldCountSoA)
+        switch (SimdInfo<T>.FieldCountSoA)
         {
             case 0: return new StructHeapGen<T>(StructIndex);
             case 2: return new StructSoAVector2<T>(StructIndex);

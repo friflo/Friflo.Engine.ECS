@@ -8,6 +8,17 @@ using System.Runtime.CompilerServices;
 
 namespace Friflo.Engine.ECS;
 
+public static class SimdInfo<T>
+    where T : struct
+{
+    public static readonly    bool    IsSoA           = SimdUtils.IsSoA<T>();
+    
+    public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
+    
+    public static readonly    int     SimdStep        = SimdUtils.GetSimdStep<T>();
+}
+
+
 internal static class SimdUtils
 {
     internal static bool IsSoA<T>() => GetFieldCountSoA<T>() > 0;
@@ -43,14 +54,19 @@ internal static class SimdUtils
         var type = typeof(T);
         var fields = type.GetFields();
         var step = 0;
+        var size = 0;
         foreach (var field in fields) {
             if (field.Name != "value" && field.Name != "Value") {
                 continue;
             }
-            if (field.FieldType == typeof(float))   { step = 32; }
-            if (field.FieldType == typeof(Vector2)) { step = 16; }
-            if (field.FieldType == typeof(Vector3)) { step =  8; }
-            if (field.FieldType == typeof(Vector4)) { step =  8; }
+            if (field.FieldType == typeof(float))   { step = 32; size =  4; }
+            if (field.FieldType == typeof(Vector2)) { step = 16; size =  8; }
+            if (field.FieldType == typeof(Vector3)) { step =  8; size = 12; }
+            if (field.FieldType == typeof(Vector4)) { step =  8; size = 16; }
+            
+            if (Unsafe.SizeOf<T>() != size) {
+                step = 0;
+            }
         }
         return step;
     }

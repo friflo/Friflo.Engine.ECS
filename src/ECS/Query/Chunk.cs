@@ -34,13 +34,13 @@ public struct Chunk<T>
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
     public              Span<T>     Span {
         get {
-            if (StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+            if (SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
             return new Span<T>(ArchetypeComponents, start, Length);
         } }
 
     public              T[]         ArchetypeComponents {
         get {
-            if (StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+            if (SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
             return _components;
         } }
 
@@ -58,13 +58,13 @@ public struct Chunk<T>
     
     public Span<float> GetLanesSoA()
     {
-        if (!StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
+        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
         // Reinterpret the reference
         return Unsafe.As<T[], float[]>(ref _components).AsSpan();
     }
     
     public int GetStrideSoA() {
-        return _components.Length / StructInfo<T>.FieldCountSoA;
+        return _components.Length / SimdInfo<T>.FieldCountSoA;
     }
 
     
@@ -154,7 +154,7 @@ public struct Chunk<T>
     public ref T this[int index] {
         get {
             if (index < Length) {
-                if (StructInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+                if (SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
                 return ref ArchetypeComponents[start + index];
             }
             throw new IndexOutOfRangeException();
@@ -168,7 +168,7 @@ internal class ChunkDebugView<T>
     [Browse(RootHidden)]
     public              Array      Components
         { get {
-            if (StructInfo<T>.IsSoA) {
+            if (SimdInfo<T>.IsSoA) {
                 var lanesSoA = chunk.GetLanesSoA();
                 int stride = lanesSoA.Length / 3;
                 var components = new T[chunk.Length];
