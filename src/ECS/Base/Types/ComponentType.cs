@@ -34,8 +34,6 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     
     public   readonly   Type        RelationKeyType;//  8
     
-    public   readonly   int         FieldCountSoA;  //  8
-    
     internal            int         nameSortOrder;  //  4
     #endregion
 
@@ -52,7 +50,7 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
     [ExcludeFromCodeCoverage] internal virtual  BatchComponent      CreateBatchComponent()                  => throw new InvalidOperationException();
     [ExcludeFromCodeCoverage] internal virtual  ComponentCommands   CreateComponentCommands()               => throw new InvalidOperationException();
     
-    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, Type indexValueType, int byteSize, Type relationType, Type keyType, int fieldCountSoA)
+    internal ComponentType(string componentKey, int structIndex, Type type, Type indexType, Type indexValueType, int byteSize, Type relationType, Type keyType)
         : base (componentKey, type, Component)
     {
         StructIndex     = structIndex;
@@ -62,7 +60,6 @@ public abstract class ComponentType : SchemaType, IComparable<ComponentType>
         IndexValueType  = indexValueType;
         RelationType    = relationType;
         RelationKeyType = keyType;
-        FieldCountSoA   = fieldCountSoA;
     }
     #endregion
 
@@ -89,9 +86,11 @@ internal static class StructInfo<T>
     
     internal static readonly    bool    HasIndex        = SchemaTypeUtils.HasIndex(typeof(T));
     
-    internal static readonly    bool    IsSoA           = SchemaTypeUtils.IsSoA(typeof(T));
+    internal static readonly    bool    IsSoA           = SimdUtils.IsSoA<T>();
     
-    internal static readonly    int     FieldCountSoA   = SchemaTypeUtils.GetFieldCountSoA(typeof(T));
+    internal static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
+    
+    internal static readonly    int     SimdStep        = SimdUtils.GetSimdStep<T>();
     
     // internal static readonly    bool    IsRelation  = SchemaTypeUtils.IsRelation(typeof(T)); obsolete property
 }
@@ -103,8 +102,8 @@ internal sealed class ComponentType<T> : ComponentType
     public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";
     #endregion
 
-    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType, int fieldCountSoA)
-        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, StructPadding<T>.ByteSize, null, null, fieldCountSoA)
+    internal ComponentType(string componentKey, int structIndex, Type indexType, Type indexValueType)
+        : base(componentKey, structIndex, typeof(T), indexType, indexValueType, StructPadding<T>.ByteSize, null, null)
     {
     }
     
@@ -122,7 +121,7 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        switch (FieldCountSoA)
+        switch (StructInfo<T>.FieldCountSoA)
         {
             case 0: return new StructHeapGen<T>(StructIndex);
             case 2: return new StructSoAVector2<T>(StructIndex);
@@ -152,7 +151,7 @@ internal sealed class RelationType<T> : ComponentType
 
     
     internal RelationType(string componentKey, int structIndex, Type relationType, Type keyType)
-        : base(componentKey, structIndex, typeof(T), null, null, StructPadding<T>.ByteSize, relationType, keyType, 0)
+        : base(componentKey, structIndex, typeof(T), null, null, StructPadding<T>.ByteSize, relationType, keyType)
     {
     }
     

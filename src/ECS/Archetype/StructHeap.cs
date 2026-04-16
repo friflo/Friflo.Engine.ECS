@@ -78,4 +78,23 @@ internal abstract class StructHeap : IComponentStash
         sb.Append(length);
         return sb.ToString();
     }
+    
+    /// <summary>
+    /// Calculates the required allocation capacity for a SIMD buffer.
+    /// Includes padding to the next step boundary plus a full 'Crumple Zone' for safety.
+    /// </summary>
+    /// <param name="count">The actual number of entities/elements.</param>
+    /// <param name="step">The number of elements processed per SIMD loop iteration.</param>
+    /// <returns>The total number of elements to allocate.</returns>
+    internal static int CalculateCapacity(int count, int step)
+    {
+        // Handle non-math components: Just return the count as-is.
+        if (step <= 0) return count;
+
+        // 1. Calculate the Padding (Round up to the nearest multiple of 'step')
+        int paddedCount = (count + step - 1) & ~(step - 1);
+
+        // 2. Add the Crumple Zone (One full extra 'step' of safety)
+        return paddedCount + step;
+    }
 }

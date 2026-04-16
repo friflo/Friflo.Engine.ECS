@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 
 // ReSharper disable UseCollectionExpression
@@ -65,8 +64,7 @@ internal static class SchemaUtils
         } else {
             componentKey = GetComponentKey(type);
         }
-        var fieldCountSoA = GetFieldCountSoA(type);
-        return new ComponentType<T>(componentKey, structIndex, indexType, indexValueType, fieldCountSoA);
+        return new ComponentType<T>(componentKey, structIndex, indexType, indexValueType);
     }
     
     internal static ComponentType CreateRelationType<T>(int structIndex, Type relationType, Type keyType)
@@ -221,27 +219,6 @@ internal static class SchemaUtils
             return (string) arg[0].Value;
         }
         return type.Name;
-    }
-    
-    private static int GetFieldCountSoA(Type type)
-    {
-        foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(SoAAttribute)) {
-                continue;
-            }
-            var fields = type.GetFields();
-            var dimension = 0;
-            foreach (var field in fields) {
-                if (field.Name != "value") {
-                    return 0;
-                }
-                if (field.FieldType == typeof(Vector2)) { dimension = 2; }
-                if (field.FieldType == typeof(Vector3)) { dimension = 3; }
-                if (field.FieldType == typeof(Vector4)) { dimension = 4; }
-            }
-            return dimension;
-        }
-        return 0;
     }
 }
 
