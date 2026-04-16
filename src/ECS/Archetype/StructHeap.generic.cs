@@ -30,7 +30,7 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
     internal StructHeapGen(int structIndex)
         : base (structIndex)
     {
-        components          = new T[ArchetypeUtils.MinCapacity];
+        components          = new T[CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep)];
     }
     
     internal override ref T GetComponentRef(int index) {
@@ -65,7 +65,7 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
     internal  override  Type    StructType          => typeof(T);
     
     internal override void ResizeComponents    (int capacity, int count) {
-        var newComponents   = new T[capacity];
+        var newComponents   = new T[CalcCapacity(capacity, SimdInfo<T>.SimdStep)];
         var curComponents   = components;
         var source          = new ReadOnlySpan<T>(curComponents, 0, count);
         var target          = new Span<T>(newComponents);

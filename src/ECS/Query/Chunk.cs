@@ -174,7 +174,7 @@ internal class ChunkDebugView<T>
         { get {
             if (SimdInfo<T>.IsSoA) {
                 var lanesSoA = chunk.GetLanesSoA();
-                int stride = lanesSoA.Length / 3;
+                int stride   = chunk.GetStrideSoA();
                 var components = new T[chunk.Length];
                 for (int n = 0; n < chunk.Length; n++) {
                     components[n] = GetComponentFromSoA(lanesSoA, n, stride);
@@ -185,7 +185,7 @@ internal class ChunkDebugView<T>
         } }
 
     [Browse(Never)]
-    private readonly    Chunk<T>    chunk;
+    private     Chunk<T>    chunk;
         
     internal ChunkDebugView(Chunk<T> chunk)
     {

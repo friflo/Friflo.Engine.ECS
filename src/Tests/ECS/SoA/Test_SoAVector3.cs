@@ -302,8 +302,8 @@ public static class Test_SoAVector3
             count++;
             var lanes = pos.GetLanesSoA();
             var stride = pos.GetStrideSoA();
-            AreEqual(3072, lanes.Length);
-            AreEqual(1024, stride);
+            AreEqual(3096, lanes.Length);
+            AreEqual(1032, stride);
         }
         AreEqual(1, count);
     }

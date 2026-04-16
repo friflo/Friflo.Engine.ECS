@@ -286,6 +286,26 @@ public static class Test_SoAVector2
             AreEqual(new Vector2(), entity.GetSoA<Pos2SoA>().value);
         }
     }
+    
+    /// Test <see cref="Chunk{T}.GetLanesSoA"/>
+    [Test]
+    public static void Test_SoAVector2_Query_Lanes()
+    {
+        var store = new EntityStore();
+        for (int n = 0; n < 1000; n++) {
+            store.CreateEntity(new Pos2SoA { value = new Vector2(n * 10, n * 20) });
+        }
+        var query = store.Query<Pos2SoA>();
+        int count = 0;
+        foreach (var (pos, entities) in query.Chunks) {
+            count++;
+            var lanes = pos.GetLanesSoA();
+            var stride = pos.GetStrideSoA();
+            AreEqual(2080, lanes.Length);
+            AreEqual(1040, stride);
+        }
+        AreEqual(1, count);
+    }
 }
 
 }

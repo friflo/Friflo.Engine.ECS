@@ -36,8 +36,8 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
     internal StructSoAVector3(int structIndex)
         : base (structIndex)
     {
-        stride      = ArchetypeUtils.MinCapacity;
-        components  = new float[ArchetypeUtils.MinCapacity * LaneCount];
+        stride      = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
+        components  = new float[stride * LaneCount];
     }
     
     internal override ref T GetComponentRef(int index) {
@@ -74,12 +74,12 @@ internal sealed class StructSoAVector3<T> : StructHeap<T>
     
     internal override void ResizeComponents    (int capacity, int count) {
         int srcStride   = stride;
-        stride          = capacity;
-        var dst         = new float[capacity * LaneCount];
+        stride          = CalcCapacity(capacity, SimdInfo<T>.SimdStep);
+        var dst         = new float[stride * LaneCount];
         var src         = components;
-        new ReadOnlySpan<float>(src, 0,             count).CopyTo(new Span<float>(dst, 0,            count));
-        new ReadOnlySpan<float>(src, srcStride,     count).CopyTo(new Span<float>(dst, capacity,     count));
-        new ReadOnlySpan<float>(src, srcStride * 2, count).CopyTo(new Span<float>(dst, capacity * 2, count));
+        new ReadOnlySpan<float>(src, 0,             count).CopyTo(new Span<float>(dst, 0,          count));
+        new ReadOnlySpan<float>(src, srcStride,     count).CopyTo(new Span<float>(dst, stride,     count));
+        new ReadOnlySpan<float>(src, srcStride * 2, count).CopyTo(new Span<float>(dst, stride * 2, count));
         components = dst;
     }
     

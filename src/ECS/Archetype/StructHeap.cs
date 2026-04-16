@@ -86,7 +86,7 @@ internal abstract class StructHeap : IComponentStash
     /// <param name="count">The actual number of entities/elements.</param>
     /// <param name="step">The number of elements processed per SIMD loop iteration.</param>
     /// <returns>The total number of elements to allocate.</returns>
-    internal static int CalculateCapacity(int count, int step)
+    internal static int CalcCapacity(int count, int step)
     {
         // Handle non-math components: Just return the count as-is.
         if (step <= 0) return count;
