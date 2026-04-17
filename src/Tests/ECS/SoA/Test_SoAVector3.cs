@@ -314,6 +314,41 @@ public static class Test_SoAVector3
                 That(value.value, Is.EqualTo(expect));
             }
             count++;
+            var e = Throws<InvalidOperationException>(() => { _ = positions.Span; });
+            AreEqual("Expect call for regular component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(() => { _ = positions[0]; });
+            AreEqual("Expect call for regular component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(() => { _ = positions.ArchetypeComponents; });
+            AreEqual("Expect call for regular component data.", e!.Message);
+            
+        }
+        AreEqual(1, count);
+    }
+    
+    [Test]
+    public static void Test_SoAVector3_Chunk_exceptions()
+    {
+        var store = new EntityStore();
+        store.CreateEntity(new Position());
+
+        var query = store.Query<Position>();
+        int count = 0;
+        foreach (var (positions, entities) in query.Chunks) {
+            var e = Throws<InvalidOperationException>(() => { positions.GetLanesSoA(); });
+            AreEqual("Expect call for SoA component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(()    => { positions.GetStrideSoA(); });
+            AreEqual("Expect call for SoA component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(()    => { positions.GetSoA(0); });
+            AreEqual("Expect call for SoA component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(()    => { positions.SetSoA(0, default); });
+            AreEqual("Expect call for SoA component data.", e!.Message);
+            
+            count++;
         }
         AreEqual(1, count);
     }

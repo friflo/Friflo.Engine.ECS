@@ -68,11 +68,13 @@ public struct Chunk<T>
     /// as <see cref="SimdInfo{T}.SimdStep"/> is always a multiple of 8.
     /// </summary>
     public int GetStrideSoA() {
+        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
         return _components.Length / SimdInfo<T>.FieldCountSoA;
     }
     
     public T GetSoA(int index)
     {
+        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
         var stride = _components.Length / SimdInfo<T>.FieldCountSoA;
         var lanes = Unsafe.As<T[], float[]>(ref _components);
         T result = default;
@@ -92,6 +94,7 @@ public struct Chunk<T>
     
     public void SetSoA(int index, T value)
     {
+        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
         var stride      = _components.Length / SimdInfo<T>.FieldCountSoA;
         var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref value), SimdInfo<T>.FieldCountSoA);
         var lanes       = Unsafe.As<T[], float[]>(ref _components);
