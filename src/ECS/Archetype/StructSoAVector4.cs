@@ -195,8 +195,7 @@ internal sealed class StructSoAVector4<T> : StructHeap<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void ComponentToSoA(T src, float[] dst, int index, int stride)
     {
-        ref float   component   = ref Unsafe.As<T, float>(ref src);
-        Span<float> span        = MemoryMarshal.CreateSpan(ref component, LaneCount);
+        Span<float> span        = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), LaneCount);
         dst[index]              = span[0];
         dst[index + stride]     = span[1];
         dst[index + stride * 2] = span[2];
@@ -206,11 +205,12 @@ internal sealed class StructSoAVector4<T> : StructHeap<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static T GetComponentFromSoA(float[] src, int index, int stride)
     {
-        Span<float> component = stackalloc float[LaneCount];
+        T result = default;
+        var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), LaneCount);
         component[0] = src[index];
         component[1] = src[index + stride];
         component[2] = src[index + stride * 2];
         component[3] = src[index + stride * 3];
-        return Unsafe.As<float, T>(ref component[0]);
+        return result;
     }
 }
