@@ -70,7 +70,41 @@ public struct Chunk<T>
     public int GetStrideSoA() {
         return _components.Length / SimdInfo<T>.FieldCountSoA;
     }
-
+    
+    public T GetSoA(int index)
+    {
+        var stride = _components.Length / SimdInfo<T>.FieldCountSoA;
+        var lanes = Unsafe.As<T[], float[]>(ref _components);
+        Span<float> component = stackalloc float[SimdInfo<T>.FieldCountSoA];
+        switch (SimdInfo<T>.FieldCountSoA) {
+            case 2: goto Count_2;
+            case 3: goto Count_3;
+        }
+        component[3] = lanes[index + stride * 3];
+    Count_3:
+        component[2] = lanes[index + stride * 2];
+    Count_2:
+        component[1] = lanes[index + stride];
+        component[0] = lanes[index];
+        return Unsafe.As<float, T>(ref component[0]);
+    }
+    
+    public void SetSoA(int index, T value)
+    {
+        var stride      = _components.Length / SimdInfo<T>.FieldCountSoA;
+        var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref value), SimdInfo<T>.FieldCountSoA);
+        var lanes       = Unsafe.As<T[], float[]>(ref _components);
+        switch (SimdInfo<T>.FieldCountSoA) {
+            case 2: goto Count_2;
+            case 3: goto Count_3;
+        }
+        lanes[index + stride * 3] = component[3];
+    Count_3:
+        lanes[index + stride * 2] = component[2];
+    Count_2:
+        lanes[index + stride]     = component[1];
+        lanes[index]              = component[0];
+    }
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
