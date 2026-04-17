@@ -302,7 +302,7 @@ public static class Test_SoAVector3
             var stride = positions.GetStrideSoA();
             AreEqual(3096, lanes.Length);
             AreEqual(1032, stride);
-            for (int i = 0; i < positions.Length; i++) {
+            for (int i = 0; i < entities.Length; i++) {
                 var value = positions.GetSoA(i);
                 var expect = new Vector3(i * 10, i * 20, i * 30);
                 That(value.value, Is.EqualTo(expect));

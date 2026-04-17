@@ -297,12 +297,32 @@ public static class Test_SoAVector2
         }
         var query = store.Query<Pos2SoA>();
         int count = 0;
-        foreach (var (pos, entities) in query.Chunks) {
-            count++;
-            var lanes = pos.GetLanesSoA();
-            var stride = pos.GetStrideSoA();
+        foreach (var (positions, entities) in query.Chunks) {
+            var lanes = positions.GetLanesSoA();
+            var stride = positions.GetStrideSoA();
             AreEqual(2080, lanes.Length);
             AreEqual(1040, stride);
+            for (int i = 0; i < entities.Length; i++) {
+                var value = positions.GetSoA(i);
+                var expect = new Vector2(i * 10, i * 20);
+                That(value.value, Is.EqualTo(expect));
+                
+                expect += new Vector2(100, 200);
+                value.value = expect;
+                positions.SetSoA(i, value);
+                value = positions.GetSoA(i);
+                That(value.value, Is.EqualTo(expect));
+            }
+            count++;
+            var e = Throws<InvalidOperationException>(() => { _ = positions.Span; });
+            AreEqual("Expect call for regular component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(() => { _ = positions[0]; });
+            AreEqual("Expect call for regular component data.", e!.Message);
+            
+            e = Throws<InvalidOperationException>(() => { _ = positions.ArchetypeComponents; });
+            AreEqual("Expect call for regular component data.", e!.Message);
+            
         }
         AreEqual(1, count);
     }
