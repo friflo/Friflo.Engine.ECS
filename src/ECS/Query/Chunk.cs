@@ -75,7 +75,8 @@ public struct Chunk<T>
     {
         var stride = _components.Length / SimdInfo<T>.FieldCountSoA;
         var lanes = Unsafe.As<T[], float[]>(ref _components);
-        Span<float> component = stackalloc float[SimdInfo<T>.FieldCountSoA];
+        T result = default;
+        Span<float> component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), SimdInfo<T>.FieldCountSoA);
         switch (SimdInfo<T>.FieldCountSoA) {
             case 2: goto Count_2;
             case 3: goto Count_3;
@@ -86,7 +87,7 @@ public struct Chunk<T>
     Count_2:
         component[1] = lanes[index + stride];
         component[0] = lanes[index];
-        return Unsafe.As<float, T>(ref component[0]);
+        return result;
     }
     
     public void SetSoA(int index, T value)
