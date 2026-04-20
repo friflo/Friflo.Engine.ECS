@@ -34,13 +34,13 @@ public struct Chunk<T>
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
     public              Span<T>     Span {
         get {
-            if (SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+            if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
             return new Span<T>(ArchetypeComponents, start, Length);
         } }
 
     public              T[]         ArchetypeComponents {
         get {
-            if (SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+            if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
             return _components;
         } }
 
@@ -58,7 +58,7 @@ public struct Chunk<T>
     
     public Span<float> GetLanesSoA()
     {
-        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
+        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
         // Reinterpret the reference
         return Unsafe.As<T[], float[]>(ref _components).AsSpan();
     }
@@ -68,13 +68,13 @@ public struct Chunk<T>
     /// as <see cref="SimdInfo{T}.SimdStep"/> is always a multiple of 8.
     /// </summary>
     public int GetStrideSoA() {
-        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
+        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
         return _components.Length / SimdInfo<T>.FieldCountSoA;
     }
     
     public T GetSoA(int index)
     {
-        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
+        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
         var stride = _components.Length / SimdInfo<T>.FieldCountSoA;
         var lanes = Unsafe.As<T[], float[]>(ref _components);
         T result = default;
@@ -94,7 +94,7 @@ public struct Chunk<T>
     
     public void SetSoA(int index, T value)
     {
-        if (!SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForSoAComponent();
+        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
         var stride      = _components.Length / SimdInfo<T>.FieldCountSoA;
         var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref value), SimdInfo<T>.FieldCountSoA);
         var lanes       = Unsafe.As<T[], float[]>(ref _components);
@@ -196,7 +196,7 @@ public struct Chunk<T>
     public ref T this[int index] {
         get {
             if (index < Length) {
-                if (SimdInfo<T>.IsSoA) ChunkExtensions.ExpectCallForRegularComponent();
+                if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
                 return ref ArchetypeComponents[start + index];
             }
             throw new IndexOutOfRangeException();
@@ -210,7 +210,8 @@ internal class ChunkDebugView<T>
     [Browse(RootHidden)]
     public              Array      Components
         { get {
-            if (SimdInfo<T>.IsSoA) {
+            if (SimdInfo<T>.Layout == Layout.SoA)
+            {
                 var lanesSoA = chunk.GetLanesSoA();
                 int stride   = chunk.GetStrideSoA();
                 var components = new T[chunk.Length];

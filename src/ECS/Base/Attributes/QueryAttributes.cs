@@ -7,8 +7,10 @@ using System;
 namespace Friflo.Engine.ECS;
 
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
-public sealed class SoAAttribute : Attribute {
-}
+public sealed class SoAAttribute : Attribute { }
+
+[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
+public sealed class AoSoAAttribute : Attribute { }
 
 /// <summary>
 /// Creates an additional query method for the annotated method. New method has suffix <c>...Query()</c>.<br/>

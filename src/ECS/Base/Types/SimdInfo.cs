@@ -8,10 +8,17 @@ using System.Runtime.CompilerServices;
 
 namespace Friflo.Engine.ECS;
 
+internal enum Layout
+{
+    AoS,
+    SoA,
+    AoSoA
+}
+
 public static class SimdInfo<T>
     where T : struct
 {
-    public static readonly    bool    IsSoA           = SimdUtils.IsSoA<T>();
+    internal static readonly  Layout  Layout          = SimdUtils.GetLayout<T>();
     
     public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
     
@@ -25,13 +32,17 @@ public static class SimdInfo<T>
 
 internal static class SimdUtils
 {
-    internal static bool IsSoA<T>() => GetFieldCountSoA<T>() > 0;
-    
+    internal static Layout GetLayout<T>()
+    {
+        return GetFieldCountSoA<T>() > 0 ? Layout.SoA : Layout.AoS;
+    }
+
     internal static int GetFieldCountSoA<T>()
     {
         var type = typeof(T);
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(SoAAttribute)) {
+            if (attr.AttributeType != typeof(SoAAttribute) &&
+                attr.AttributeType != typeof(AoSoAAttribute)) {
                 continue;
             }
             var fields = type.GetFields();
