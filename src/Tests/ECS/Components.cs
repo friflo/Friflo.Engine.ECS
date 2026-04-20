@@ -49,17 +49,13 @@ public struct MyComponent6 : IComponent { public int b; }
 public struct MyComponent7 : IComponent { public int b; }
 
 
-[SoA]
-public struct Pos2SoA : IComponent { public Vector2 value; }
+[SoA] public struct Pos2SoA : IComponent { public Vector2 value; }
+[SoA] public struct Pos3SoA : IComponent { public Vector3 value; }
+[SoA] public struct Pos4SoA : IComponent { public Vector4 value; }
 
-[SoA]
-public struct Pos3SoA : IComponent { public Vector3 value; }
-
-[SoA]
-public struct Pos4SoA : IComponent { public Vector4 value; }
-
-[AoSoA]
-public struct Pos4AoSoA : IComponent { public Vector4 value; }
+[AoSoA] public struct Pos2AoSoA : IComponent { public Vector2 value; }
+[AoSoA] public struct Pos3AoSoA : IComponent { public Vector3 value; }
+[AoSoA] public struct Pos4AoSoA : IComponent { public Vector4 value; }
 
 
 public struct MyPropertyComponent : IComponent

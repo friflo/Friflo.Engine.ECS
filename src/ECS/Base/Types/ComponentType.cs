@@ -129,6 +129,7 @@ internal sealed class ComponentType<T> : ComponentType
                 break;
             case Layout.AoSoA:
                 switch (SimdInfo<T>.FieldCountSoA) {
+                    case 3: return new StructAoSoAVector3<T>(StructIndex);
                     case 4: return new StructAoSoAVector4<T>(StructIndex);
                 }
                 break;
