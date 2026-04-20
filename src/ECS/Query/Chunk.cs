@@ -58,7 +58,7 @@ public struct Chunk<T>
     
     public Span<float> GetLanesSoA()
     {
-        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
+        if (SimdInfo<T>.Layout == Layout.AoS) ChunkExtensions.ExpectCallForSoAComponent();
         // Reinterpret the reference
         return Unsafe.As<T[], float[]>(ref _components).AsSpan();
     }
@@ -108,6 +108,57 @@ public struct Chunk<T>
     Count_2:
         lanes[index + stride]     = component[1];
         lanes[index]              = component[0];
+    }
+    
+    public T GetAoSoA(int index)
+    {
+        int step        = SimdInfo<T>.SimdStep;
+        int tileIndex   = index >> 3; 
+        int lane        = index & 7;  
+        int tileStart   = tileIndex << 5; 
+
+        T result = default;
+        ref float componentBase = ref Unsafe.As<T, float>(ref result);
+        var components       = Unsafe.As<T[], float[]>(ref _components);
+        switch (SimdInfo<T>.FieldCountSoA)
+        {
+            case 4: // Vector4 / Quaternion
+                Unsafe.Add(ref componentBase, 3) = components[tileStart + lane + (step * 3)];
+                goto case 3;
+            case 3: // Vector3
+                Unsafe.Add(ref componentBase, 2) = components[tileStart + lane + (step * 2)];
+                goto case 2;
+            case 2: // Vector2
+                Unsafe.Add(ref componentBase, 1) = components[tileStart + lane + step];
+                Unsafe.Add(ref componentBase, 0) = components[tileStart + lane];
+                break;
+        }
+        return result;
+    }
+    
+    public void SetAoSoA(int index, T value)
+    {
+        int step        = SimdInfo<T>.SimdStep;       
+        int tileIndex   = index >> 3; 
+        int lane        = index & 7;  
+        int tileStart   = tileIndex << 5; 
+
+        ref float valueBase = ref Unsafe.As<T, float>(ref value);
+        var components       = Unsafe.As<T[], float[]>(ref _components);
+        int baseIdx = tileStart + lane;
+        switch (SimdInfo<T>.FieldCountSoA)
+        {
+            case 4:
+                components[baseIdx + (step * 3)] = Unsafe.Add(ref valueBase, 3);
+                goto case 3;
+            case 3:
+                components[baseIdx + (step * 2)] = Unsafe.Add(ref valueBase, 2);
+                goto case 2;
+            case 2:
+                components[baseIdx + step]       = Unsafe.Add(ref valueBase, 1);
+                components[baseIdx]              = valueBase;
+                break;
+        }
     }
     
     /// <summary>
