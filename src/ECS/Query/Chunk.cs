@@ -115,12 +115,13 @@ public struct Chunk<T>
         int step        = SimdInfo<T>.SimdStep;
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
-        int tileStart   = tileIndex << 5; 
+        var fieldCount  = SimdInfo<T>.FieldCountSoA;
+        int tileStart   = tileIndex * (fieldCount * step);
 
         T result = default;
         ref float componentBase = ref Unsafe.As<T, float>(ref result);
         var components       = Unsafe.As<T[], float[]>(ref _components);
-        switch (SimdInfo<T>.FieldCountSoA)
+        switch (fieldCount)
         {
             case 4: // Vector4 / Quaternion
                 Unsafe.Add(ref componentBase, 3) = components[tileStart + lane + (step * 3)];
@@ -141,12 +142,13 @@ public struct Chunk<T>
         int step        = SimdInfo<T>.SimdStep;       
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
-        int tileStart   = tileIndex << 5; 
+        var fieldCount  = SimdInfo<T>.FieldCountSoA;
+        int tileStart   = tileIndex * (fieldCount * step);
 
         ref float valueBase = ref Unsafe.As<T, float>(ref value);
         var components       = Unsafe.As<T[], float[]>(ref _components);
         int baseIdx = tileStart + lane;
-        switch (SimdInfo<T>.FieldCountSoA)
+        switch (fieldCount)
         {
             case 4:
                 components[baseIdx + (step * 3)] = Unsafe.Add(ref valueBase, 3);
