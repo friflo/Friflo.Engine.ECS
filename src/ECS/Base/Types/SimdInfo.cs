@@ -20,7 +20,7 @@ public static class SimdInfo<T>
 {
     internal static readonly  Layout  Layout          = SimdUtils.GetLayout<T>();
     
-    public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
+    public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>(out _);
     
     /// <summary>
     /// Is always a multiple of 8. The enables the stride returned from
@@ -34,15 +34,23 @@ internal static class SimdUtils
 {
     internal static Layout GetLayout<T>()
     {
-        return GetFieldCountSoA<T>() > 0 ? Layout.SoA : Layout.AoS;
+        GetFieldCountSoA<T>(out var layout);
+        return layout;
     }
 
-    internal static int GetFieldCountSoA<T>()
+    internal static int GetFieldCountSoA<T>(out Layout layout)
     {
         var type = typeof(T);
-        foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(SoAAttribute) &&
-                attr.AttributeType != typeof(AoSoAAttribute)) {
+        layout = Layout.AoS;
+        foreach (var attr in type.CustomAttributes)
+        {
+            var attributeType = attr.AttributeType;
+            if          (attributeType == typeof(SoAAttribute)) {
+                layout = Layout.SoA;
+            } else if   (attributeType == typeof(AoSoAAttribute)) {
+                layout = Layout.AoSoA;
+            } else {
+                layout = Layout.AoS;
                 continue;
             }
             var fields = type.GetFields();

@@ -115,12 +115,23 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        switch (SimdInfo<T>.FieldCountSoA)
+        var layout = SimdInfo<T>.Layout;
+        switch (layout)
         {
-            case 0: return new StructHeapGen<T>(StructIndex);
-            case 2: return new StructSoAVector2<T>(StructIndex);
-            case 3: return new StructSoAVector3<T>(StructIndex);
-            case 4: return new StructSoAVector4<T>(StructIndex);
+            case Layout.AoS:
+                return new StructHeapGen<T>(StructIndex);
+            case Layout.SoA:
+                switch (SimdInfo<T>.FieldCountSoA) {
+                    case 2: return new StructSoAVector2<T>(StructIndex);
+                    case 3: return new StructSoAVector3<T>(StructIndex);
+                    case 4: return new StructSoAVector4<T>(StructIndex);
+                }
+                break;
+            case Layout.AoSoA:
+                switch (SimdInfo<T>.FieldCountSoA) {
+                    case 4: return new StructAoSoAVector4<T>(StructIndex);
+                }
+                break;
         }
         return null;        
     }
