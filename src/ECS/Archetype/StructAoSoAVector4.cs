@@ -74,8 +74,8 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
-        var capacity = CalcCapacity(newCapacity, 8);// Ensure it's a multiple of 8
-        var dst = new float[capacity * 4];          // Total floats = (Total Entities / 8) * 32
+        var capacity = CalcCapacity(newCapacity, SimdInfo<T>.SimdStep);
+        var dst = new float[capacity * LaneCount];
 
         // Because X, Y, Z, W for 8 entities are packed together,
         // only ONE copy operation needed for the active data.
@@ -120,7 +120,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         int fullTiles = remaining >> 3; // count / 8
 
         if (fullTiles > 0) {
-            int stride      = SimdInfo<T>.SimdStep * SimdInfo<T>.FieldCountSoA;
+            int stride      = SimdInfo<T>.SimdStep * LaneCount;
             int startTile   = (compIndexStart + i) >> 3;
             int startFloat  = startTile * stride;
             int totalFloats = fullTiles * stride;
