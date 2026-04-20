@@ -15,7 +15,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.SoA {
 
-[Ignore("")]
 public static class Test_AoSoAVector3
 {
     [Test]
@@ -301,7 +300,7 @@ public static class Test_AoSoAVector3
         foreach (var (pos, entities) in query.Chunks) {
             count++;
             var lanes  = pos.GetLanesSoA();
-            AreEqual(4128, lanes.Length);
+            AreEqual(3096, lanes.Length);
         }
         AreEqual(1, count);
     }

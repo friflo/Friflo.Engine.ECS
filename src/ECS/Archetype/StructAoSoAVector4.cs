@@ -24,7 +24,7 @@ namespace Friflo.Engine.ECS;
 internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     where T : struct
 {
-    private const   int     LaneCount = 4;
+    private const   int     FieldCount = 4;
         
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
 
@@ -37,7 +37,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         : base (structIndex)
     {
         var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
-        components  = new float[capacity * LaneCount];
+        components  = new float[capacity * FieldCount];
     }
     
     internal override ref T GetComponentRef(int index) {
@@ -68,14 +68,14 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     }
     
     // --- StructHeap
-    protected override  int     ComponentsLength    => components.Length / LaneCount;
+    protected override  int     ComponentsLength    => components.Length / FieldCount;
 
     internal  override  Type    StructType          => typeof(T);
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
         var capacity = CalcCapacity(newCapacity, SimdInfo<T>.SimdStep);
-        var dst = new float[capacity * LaneCount];
+        var dst = new float[capacity * FieldCount];
 
         // Because X, Y, Z, W for 8 entities are packed together,
         // only ONE copy operation needed for the active data.
@@ -120,7 +120,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         int fullTiles = remaining >> 3; // count / 8
 
         if (fullTiles > 0) {
-            int stride      = SimdInfo<T>.SimdStep * LaneCount;
+            int stride      = SimdInfo<T>.SimdStep * FieldCount;
             int startTile   = (compIndexStart + i) >> 3;
             int startFloat  = startTile * stride;
             int totalFloats = fullTiles * stride;
@@ -212,7 +212,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         // Offset = TileIndex * (8 lanes * 4 components)
         int tileStart = tileIndex << 5; // tileIndex * 32
 
-        Span<float> span = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), LaneCount);
+        Span<float> span = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), FieldCount);
         dst[tileStart + lane]          = span[0]; // X
         dst[tileStart + lane + 8]      = span[1]; // Y
         dst[tileStart + lane + 16]     = span[2]; // Z
@@ -228,7 +228,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         int tileStart = tileIndex << 5; // tileIndex * 32 (8 lanes * 4 components)
 
         T result = default;
-        var component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), LaneCount);
+        var component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), FieldCount);
 
         // Everything is now in a 128-byte window (2 cache lines)
         component[0] = src[tileStart + lane];      // X

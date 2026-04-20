@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -24,7 +23,7 @@ namespace Friflo.Engine.ECS;
 internal sealed class StructAoSoAVector3<T> : StructHeap<T>
     where T : struct
 {
-    private const   int     LaneCount = 3;
+    private const   int     FieldCount = 3;
         
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
 
@@ -37,7 +36,7 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
         : base (structIndex)
     {
         var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
-        components  = new float[capacity * LaneCount];
+        components  = new float[capacity * FieldCount];
     }
     
     internal override ref T GetComponentRef(int index) {
@@ -68,21 +67,19 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
     }
     
     // --- StructHeap
-    protected override  int     ComponentsLength    => components.Length / LaneCount;
+    protected override  int     ComponentsLength    => components.Length / FieldCount;
 
     internal  override  Type    StructType          => typeof(T);
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
-        var capacity = CalcCapacity(newCapacity, SimdInfo<T>.SimdStep);
-        var dst = new float[capacity * LaneCount];
-
-        // Because X, Y, Z, W for 8 entities are packed together,
-        // only ONE copy operation needed for the active data.
-        int tilesToCopy  = (count + 7) >> 3;        // How many 8-float tiles are currently used
-        int floatsToCopy = tilesToCopy << 5;        // tiles * 32
-        
-        new ReadOnlySpan<float>(components, 0, floatsToCopy).CopyTo(new Span<float>(dst, 0, floatsToCopy));
+        var capacity    = CalcCapacity(newCapacity, SimdInfo<T>.SimdStep);
+        var dst         = new float[capacity * FieldCount];
+        int tilesToCopy = (count + 7) >> 3; // Calculate how many full or partial 8-entity tiles we need to move
+        int floatsToCopy = tilesToCopy * 24; // Each tile is exactly 24 floats (8 * 3) 
+        if (floatsToCopy > 0) {
+            new ReadOnlySpan<float>(components, 0, floatsToCopy).CopyTo(new Span<float>(dst, 0, floatsToCopy));
+        }
         components = dst;
     }
     
@@ -120,7 +117,7 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
         int fullTiles = remaining >> 3; // count / 8
 
         if (fullTiles > 0) {
-            int stride      = SimdInfo<T>.SimdStep * LaneCount;
+            int stride      = SimdInfo<T>.SimdStep * FieldCount;
             int startTile   = (compIndexStart + i) >> 3;
             int startFloat  = startTile * stride;
             int totalFloats = fullTiles * stride;
@@ -205,34 +202,36 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void ComponentToSoA(T src, float[] dst, int index)
     {
-        int tileIndex = index >> 3;     // entityIndex / 8  - Find which 8-element tile we belong to
-        int lane      = index & 7;      // entityIndex % 8  - Find our position within that 8-element tile
+        // Find the tile (entityIndex / 8) and position within (entityIndex % 8)
+        int tileIndex = index >> 3; 
+        int lane      = index & 7;
         
-        // Calculate the start of this specific 8-vector tile (32 floats total for Vector4)
-        // Offset = TileIndex * (8 lanes * 4 components)
-        int tileStart = tileIndex << 5; // tileIndex * 32
+        // Each tile is 24 floats. JIT will optimize this to (index * 16) + (index * 8)
+        int tileStart = tileIndex * 24; 
+        int baseIdx   = tileStart + lane;
 
-        Span<float> span = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), LaneCount);
-        dst[tileStart + lane]          = span[0]; // X
-        dst[tileStart + lane + 8]      = span[1]; // Y
-        dst[tileStart + lane + 16]     = span[2]; // Z
+        // Grab a ref to the first float in the struct
+        ref float srcBase = ref Unsafe.As<T, float>(ref src);
+
+        // We write Z, then Y, then X to keep the write-combining buffer happy
+        dst[baseIdx + 16] = Unsafe.Add(ref srcBase, 2); // Z
+        dst[baseIdx + 8]  = Unsafe.Add(ref srcBase, 1); // Y
+        dst[baseIdx]      = srcBase;                    // X
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static T GetComponentFromSoA(float[] src, int index)
     {
-        // Same math as the setter
         int tileIndex = index >> 3;     // entityIndex / 8
         int lane      = index & 7;      // entityIndex % 8
-        int tileStart = tileIndex << 5; // tileIndex * 32 (8 lanes * 4 components)
+        int tileStart = tileIndex * 24; // (8 lanes * 3 components)
+        int baseIdx   = tileStart + lane;
 
         T result = default;
-        var component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), LaneCount);
-
-        // Everything is now in a 128-byte window (2 cache lines)
-        component[0] = src[tileStart + lane];      // X
-        component[1] = src[tileStart + lane + 8];  // Y
-        component[2] = src[tileStart + lane + 16]; // Z
+        ref float resBase = ref Unsafe.As<T, float>(ref result);
+        Unsafe.Add(ref resBase, 2) = src[baseIdx + 16]; // Z
+        Unsafe.Add(ref resBase, 1) = src[baseIdx + 8];  // Y
+        resBase                    = src[baseIdx];      // X
         return result;
     }
 }
