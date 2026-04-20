@@ -32,6 +32,8 @@ public static class SimdInfo<T>
 
 internal static class SimdUtils
 {
+    internal const int LaneWidth = 8;
+        
     internal static Layout GetLayout<T>()
     {
         GetFieldCountSoA<T>(out var layout);

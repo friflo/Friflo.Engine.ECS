@@ -112,7 +112,7 @@ public struct Chunk<T>
     
     public T GetAoSoA(int index)
     {
-        int step        = SimdInfo<T>.SimdStep;
+        int step        = SimdUtils.LaneWidth;
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
         var fieldCount  = SimdInfo<T>.FieldCountSoA;
@@ -139,7 +139,7 @@ public struct Chunk<T>
     
     public void SetAoSoA(int index, T value)
     {
-        int step        = SimdInfo<T>.SimdStep;       
+        int step        = SimdUtils.LaneWidth;       
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
         var fieldCount  = SimdInfo<T>.FieldCountSoA;

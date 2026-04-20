@@ -35,7 +35,7 @@ internal sealed class StructAoSoAVector2<T> : StructHeap<T>
     internal StructAoSoAVector2(int structIndex)
         : base (structIndex)
     {
-        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
+        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdUtils.LaneWidth);
         components  = new float[capacity * FieldCount];
     }
     

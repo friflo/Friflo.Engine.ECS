@@ -36,7 +36,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     internal StructAoSoAVector4(int structIndex)
         : base (structIndex)
     {
-        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
+        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdUtils.LaneWidth);
         components  = new float[capacity * FieldCount];
     }
     
@@ -74,7 +74,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
-        var capacity = CalcCapacity(newCapacity, SimdInfo<T>.SimdStep);
+        var capacity = CalcCapacity(newCapacity, SimdUtils.LaneWidth);
         var dst = new float[capacity * FieldCount];
 
         // Because X, Y, Z, W for 8 entities are packed together,
@@ -120,7 +120,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         int fullTiles = remaining >> 3; // count / 8
 
         if (fullTiles > 0) {
-            int stride      = SimdInfo<T>.SimdStep * FieldCount;
+            int stride      = SimdUtils.LaneWidth * FieldCount;
             int startTile   = (compIndexStart + i) >> 3;
             int startFloat  = startTile * stride;
             int totalFloats = fullTiles * stride;

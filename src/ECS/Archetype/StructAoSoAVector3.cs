@@ -35,7 +35,7 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
     internal StructAoSoAVector3(int structIndex)
         : base (structIndex)
     {
-        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
+        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdUtils.LaneWidth);
         components  = new float[capacity * FieldCount];
     }
     
@@ -73,7 +73,7 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
-        var capacity    = CalcCapacity(newCapacity, SimdInfo<T>.SimdStep);
+        var capacity    = CalcCapacity(newCapacity, SimdUtils.LaneWidth);
         var dst         = new float[capacity * FieldCount];
         int tilesToCopy = (count + 7) >> 3; // Calculate how many full or partial 8-entity tiles we need to move
         int floatsToCopy = tilesToCopy * 24; // Each tile is exactly 24 floats (8 * 3) 
@@ -117,7 +117,7 @@ internal sealed class StructAoSoAVector3<T> : StructHeap<T>
         int fullTiles = remaining >> 3; // count / 8
 
         if (fullTiles > 0) {
-            int stride      = SimdInfo<T>.SimdStep * FieldCount;
+            int stride      = SimdUtils.LaneWidth * FieldCount;
             int startTile   = (compIndexStart + i) >> 3;
             int startFloat  = startTile * stride;
             int totalFloats = fullTiles * stride;
