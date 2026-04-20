@@ -108,15 +108,29 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
     {
-        // 1. Find the starting float index in the AoSoA buffer
-        // Since each entity occupies 4 floats total within the tiled structure
-        int startFloat = compIndexStart << 2;   // entityIndexStart * 4
-        int floatCount = count << 2;            // count * 4
+        int i = 0;
+        var localComponents = components;
+        // Handle "Head" (Alignment to Tile boundary)
+        // Clear entities one by one until we hit a multiple of 8
+        while (i < count && ((compIndexStart + i) & 7) != 0) {
+            ComponentToSoA(default, localComponents, compIndexStart + i++);
+        }
+        // Now that we are tile-aligned, we can clear whole 32-float blocks
+        int remaining = count - i;
+        int fullTiles = remaining >> 3; // count / 8
 
-        // 2. Clear the entire range in one shot
-        // This works because in AoSoA, entities are laid out as:
-        // [Tile0: X0..7, Y0..7, Z0..7, W0..7][Tile1: X8..15, Y8..15...]
-        new Span<float>(components, startFloat, floatCount).Clear();
+        if (fullTiles > 0) {
+            int stride      = SimdInfo<T>.SimdStep * SimdInfo<T>.FieldCountSoA;
+            int startTile   = (compIndexStart + i) >> 3;
+            int startFloat  = startTile * stride;
+            int totalFloats = fullTiles * stride;
+            localComponents.AsSpan(startFloat, totalFloats).Clear();
+            i += fullTiles << 3;
+        }
+        // Handle "Tail" (The Remainder)
+        while (i < count) {
+            ComponentToSoA(default, localComponents, compIndexStart + i++);
+        }
     }
   
     /// <summary>

@@ -269,7 +269,7 @@ public static class Test_AoSoAVector4
     }
     
     /// Test <see cref="StructSoAVector4{T}.SetComponentsDefault"/>
-    [Test][Ignore("")]
+    [Test]
     public static void Test_AoSoAVector4_SoA_Archetype_CreateEntities()
     {
         var store = new EntityStore();
