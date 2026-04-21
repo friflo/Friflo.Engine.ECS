@@ -189,6 +189,7 @@ public struct Chunk<T>
     ///     }
     /// </code>
     /// </remarks>
+    [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
     public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
     
@@ -197,6 +198,7 @@ public struct Chunk<T>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to Vector128{TTo}.<br/>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd">Example.</a>.
     /// </summary>
+    [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
     
@@ -205,6 +207,7 @@ public struct Chunk<T>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to Vector512.<br/>
     ///  See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd">Example.</a>.
     /// </summary>
+    [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
     public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
     
@@ -213,6 +216,7 @@ public struct Chunk<T>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [Browse(Never)]
+    [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]
     public              int         StepSpan128 => 16 / StructPadding<T>.ByteSize;
     
     /// <summary>
@@ -220,6 +224,7 @@ public struct Chunk<T>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [Browse(Never)]
+    [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]
     public              int         StepSpan256 => 32 / StructPadding<T>.ByteSize;
     
     // ReSharper disable once InvalidXmlDocComment
@@ -228,6 +233,7 @@ public struct Chunk<T>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [Browse(Never)]
+    [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]
     public              int         StepSpan512 => 64 / StructPadding<T>.ByteSize;
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
