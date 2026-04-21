@@ -261,20 +261,7 @@ internal class ChunkDebugView<T>
     where T : struct, IComponent
 {
     [Browse(RootHidden)]
-    public              Array      Components
-        { get {
-            if (SimdInfo<T>.Layout == Layout.SoA)
-            {
-                var lanesSoA = chunk.GetLanesSoA();
-                int stride   = chunk.GetStrideSoA();
-                var components = new T[chunk.Length];
-                for (int n = 0; n < chunk.Length; n++) {
-                    components[n] = GetComponentFromSoA(lanesSoA, n, stride);
-                }
-                return components;
-            }
-            return chunk.Span.ToArray(); 
-        } }
+    public      Array       Components => GetComponents();
 
     [Browse(Never)]
     private     Chunk<T>    chunk;
@@ -284,14 +271,26 @@ internal class ChunkDebugView<T>
         this.chunk = chunk;
     }
     
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static T GetComponentFromSoA(Span<float> src, int index, int stride)
+    private Array GetComponents()
     {
-        Span<float> component = stackalloc float[3];
-        component[0] = src[index];
-        component[1] = src[index + stride];
-        component[2] = src[index + stride * 2];
-        return Unsafe.As<float, T>(ref component[0]);  // TODO may not be supported by Unity
+        switch (SimdInfo<T>.Layout)
+        {
+            case Layout.AoS:
+                return chunk.Span.ToArray();
+            case Layout.SoA:
+                var components = new T[chunk.Length];
+                for (int n = 0; n < chunk.Length; n++) {
+                    components[n] = chunk.GetSoA(n);
+                }
+                return components;
+            case Layout.AoSoA:
+                components = new T[chunk.Length];
+                for (int n = 0; n < chunk.Length; n++) {
+                    components[n] = chunk.GetAoSoA(n);
+                }
+                return components;
+        }
+        return null;
     }
 }
 

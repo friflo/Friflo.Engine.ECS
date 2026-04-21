@@ -81,6 +81,28 @@ public static class Test_Query
             var positions   = (Pos3SoA[])debugView.Components;
             Assert.AreEqual(2, positions.Length);
             Assert.AreEqual(new Vector3(1,2,3), positions[0].value);
+            Assert.AreEqual(new Vector3(4,5,6), positions[1].value);
+        }
+        Assert.AreEqual(1, count);
+    }
+    
+    [Test]
+    public static void Test_Query_ChunkDebugView_AoSoA()
+    {
+        var store = new EntityStore();
+        store.CreateEntity(new Pos4AoSoA { value = new Vector4(1,2,3,4) });
+        store.CreateEntity(new Pos4AoSoA { value = new Vector4(11,12,13,14) });
+        
+        var query = store.Query<Pos4AoSoA>();
+        var count = 0;
+        foreach (var chunk in query.Chunks) {
+            count++;
+            Assert.AreEqual("Pos4AoSoA[2]", chunk.Chunk1.ToString());
+            var debugView   = new ChunkDebugView<Pos4AoSoA>(chunk.Chunk1);
+            var positions   = (Pos4AoSoA[])debugView.Components;
+            Assert.AreEqual(2, positions.Length);
+            Assert.AreEqual(new Vector4(1,2,3,4),       positions[0].value);
+            Assert.AreEqual(new Vector4(11,12,13,14),   positions[1].value);
         }
         Assert.AreEqual(1, count);
     }
