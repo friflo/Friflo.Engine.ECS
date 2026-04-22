@@ -150,9 +150,9 @@ where T2 : struct
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
         var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
 
-        var chunk1      = new Chunk<T1>(chunks1.Components, count, start);
-        var chunk2      = new Chunk<T2>(chunks2.Components, count, start);
-        var entities    = new ChunkEntities(archetype,      count, start);
+        var chunk1      = new Chunk<T1>(chunks1.GetComponents(), count, start);
+        var chunk2      = new Chunk<T2>(chunks2.GetComponents(), count, start);
+        var entities    = new ChunkEntities(archetype,           count, start);
         chunks          = new Chunks<T1,T2>(chunk1, chunk2, entities);
         return true;
     SingleEntity:

@@ -22,6 +22,8 @@ internal sealed class StructHeapGen<T> : StructHeap<T>
     where T : struct
 {
     public override T[]     Components      => components;
+    
+    internal override (T[],int) GetComponents () => (components, 0);
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields

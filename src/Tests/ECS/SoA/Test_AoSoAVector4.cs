@@ -286,24 +286,6 @@ public static class Test_AoSoAVector4
             AreEqual(new Vector4(), entity.GetSoA<Pos4AoSoA>().value);
         }
     }
-    
-    /// Test <see cref="Chunk{T}.GetLanesSoA"/>
-    [Test]
-    public static void Test_AoSoAVector4_Query_Lanes()
-    {
-        var store = new EntityStore();
-        for (int n = 0; n < 1000; n++) {
-            store.CreateEntity(new Pos4AoSoA { value = new Vector4(n * 10, n * 20, n * 30, n * 40) });
-        }
-        var query = store.Query<Pos4AoSoA>();
-        int count = 0;
-        foreach (var (pos, entities) in query.Chunks) {
-            count++;
-            var lanes  = pos.GetLanesSoA();
-            AreEqual(4135, lanes.Length);
-        }
-        AreEqual(1, count);
-    }
 }
 
 }

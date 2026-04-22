@@ -53,9 +53,11 @@ public sealed class Archetype
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
     /// <summary>Return the components of the specified <typeparamref name="TComponent"/> type stored in the archetype.</summary>
-                    public              Span<TComponent>    Components<TComponent>() where TComponent : struct
-                        => new (((StructHeap<TComponent>)heapMap[StructInfo<TComponent>.Index]).Components, 0, entityCount);
-    
+                    public              Span<TComponent>    Components<TComponent>() where TComponent : struct {
+        var (components, simdOffset)= ((StructHeap<TComponent>)heapMap[StructInfo<TComponent>.Index]).GetComponents();
+        return new Span<TComponent>(components, simdOffset, entityCount);
+    }
+
     /// <summary>The <see cref="EntityStore"/> owning the archetype.</summary>
                     public              EntityStoreBase     Store           => store;
     

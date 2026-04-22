@@ -50,6 +50,8 @@ public struct Chunk<T>
     // ReSharper disable once NotAccessedField.Local
     private  readonly   int         start;                  //  4
     
+    private  readonly   int         simdOffset;             //  4
+    
     // DANGER: _components is Aliased! 
     // For [SoA] components, this T[] actually points to a float[].
     // Do not inspect in debugger without the 'SoA' flag check.
@@ -60,7 +62,7 @@ public struct Chunk<T>
     {
         if (SimdInfo<T>.Layout == Layout.AoS) ChunkExtensions.ExpectCallForSoAComponent();
         // Reinterpret the reference
-        return Unsafe.As<T[], float[]>(ref _components).AsSpan();
+        return Unsafe.As<T[], float[]>(ref _components).AsSpan(simdOffset);
     }
     
     /// <summary>
@@ -116,7 +118,7 @@ public struct Chunk<T>
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
         var fieldCount  = SimdInfo<T>.FieldCountSoA;
-        int tileStart   = tileIndex * (fieldCount * step);
+        int tileStart   = simdOffset + tileIndex * (fieldCount * step);
 
         T result = default;
         ref float componentBase = ref Unsafe.As<T, float>(ref result);
@@ -143,7 +145,7 @@ public struct Chunk<T>
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
         var fieldCount  = SimdInfo<T>.FieldCountSoA;
-        int tileStart   = tileIndex * (fieldCount * step);
+        int tileStart   = simdOffset + tileIndex * (fieldCount * step);
 
         ref float valueBase = ref Unsafe.As<T, float>(ref value);
         var components       = Unsafe.As<T[], float[]>(ref _components);
@@ -239,16 +241,18 @@ public struct Chunk<T>
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
 
-    internal Chunk(T[] components, int length, int start) {
+    internal Chunk((T[] components, int simdOffset) heap, int length, int start) {
         Length      = length;
         this.start  = start;
-        _components = components;
+        _components = heap.components;
+        simdOffset  = heap.simdOffset;
     }
     
     internal Chunk(Chunk<T> chunk, int start, int length) {
         Length      = length;
         this.start  = start;
         _components = chunk._components;
+        simdOffset  = chunk.simdOffset;
     }
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>

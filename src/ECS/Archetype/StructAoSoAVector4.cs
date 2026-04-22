@@ -27,6 +27,8 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     private const   int     FieldCount = 4;
         
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
+    
+    internal override (T[],int) GetComponents () => (Unsafe.As<float[], T[]>(ref components), simdOffset);
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
@@ -46,56 +48,54 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     }
     
     internal override T GetComponentValue(int index) {
-        return GetComponentFromSoA (components, index);
+        return GetComponentFromSoA (index);
     }
     
     internal override void SetComponent(int index, T component) {
-        ComponentToSoA(component, components, index);
+        ComponentToSoA(component, index);
     }
     
     internal override T GetSoA(int index) {
-        return GetComponentFromSoA(components, index);
+        return GetComponentFromSoA(index);
     }
     
     
     // --- StructHeap
     internal override void StashComponent(int compIndex) {
-        componentStash = GetComponentFromSoA(components, compIndex);
+        componentStash = GetComponentFromSoA(compIndex);
     }
     
     internal override  void SetBatchComponent(BatchComponent[] batchComponents, int compIndex)
     {
-        ComponentToSoA(((BatchComponent<T>)batchComponents[structIndex]).value, components, compIndex);
+        ComponentToSoA(((BatchComponent<T>)batchComponents[structIndex]).value, compIndex);
     }
     
     // --- StructHeap
-    protected override  int     ComponentsLength    => components.Length / FieldCount;
+    protected override  int     ComponentsLength    => (components.Length - simdOffset) / FieldCount;
 
     internal  override  Type    StructType          => typeof(T);
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
-        var capacity = CalcCapacity(newCapacity, SimdUtils.LaneWidth);
-        var dst = AllocateAligned(capacity * FieldCount, out simdOffset);
-
-        // Because X, Y, Z, W for 8 entities are packed together,
-        // only ONE copy operation needed for the active data.
+        var capacity    = CalcCapacity(newCapacity, SimdUtils.LaneWidth);
+        var oldOffset   = simdOffset;
+        var dst         = AllocateAligned(capacity * FieldCount, out simdOffset);
         int tilesToCopy  = (count + 7) >> 3;        // How many 8-float tiles are currently used
         int floatsToCopy = tilesToCopy << 5;        // tiles * 32
         
-        new ReadOnlySpan<float>(components, 0, floatsToCopy).CopyTo(new Span<float>(dst, 0, floatsToCopy));
+        new ReadOnlySpan<float>(components, oldOffset, floatsToCopy).CopyTo(new Span<float>(dst, simdOffset, floatsToCopy));
         components = dst;
     }
     
     internal override void MoveComponent(int from, int to)
     {
-        ComponentToSoA(GetComponentFromSoA(components, from), components, to);
+        ComponentToSoA(GetComponentFromSoA(from), to);
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
         var targetSoA       = (StructAoSoAVector4<T>)targetHeap;
-        ComponentToSoA(GetComponentFromSoA(components, sourcePos), targetSoA.components, targetPos);
+        targetSoA.ComponentToSoA(GetComponentFromSoA(sourcePos), targetPos);
     }
     
     internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
@@ -104,7 +104,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
-        ComponentToSoA(default, components, compIndex);
+        ComponentToSoA(default, compIndex);
     }
     
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
@@ -114,7 +114,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         // Handle "Head" (Alignment to Tile boundary)
         // Clear entities one by one until we hit a multiple of 8
         while (i < count && ((compIndexStart + i) & 7) != 0) {
-            ComponentToSoA(default, localComponents, compIndexStart + i++);
+            ComponentToSoA(default, compIndexStart + i++);
         }
         // Now that we are tile-aligned, we can clear whole 32-float blocks
         int remaining = count - i;
@@ -125,12 +125,12 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
             int startTile   = (compIndexStart + i) >> 3;
             int startFloat  = startTile * stride;
             int totalFloats = fullTiles * stride;
-            localComponents.AsSpan(startFloat, totalFloats).Clear();
+            localComponents.AsSpan(simdOffset + startFloat, totalFloats).Clear();
             i += fullTiles << 3;
         }
         // Handle "Tail" (The Remainder)
         while (i < count) {
-            ComponentToSoA(default, localComponents, compIndexStart + i++);
+            ComponentToSoA(default, compIndexStart + i++);
         }
     }
   
@@ -139,19 +139,19 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override object GetComponentDebug(int compIndex) => GetComponentFromSoA(components, compIndex);
+    internal override object GetComponentDebug(int compIndex) => GetComponentFromSoA(compIndex);
     
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
         var mapper = (TypeMapper<T>)writer.TypeCache.GetTypeMapper(typeof(T));
-        var value = GetComponentFromSoA(components, compIndex);
+        var value = GetComponentFromSoA(compIndex);
         return writer.WriteAsBytesMapper(value, mapper);
     }
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
         var mapper = (TypeMapper<T>)reader.TypeCache.GetTypeMapper(typeof(T));
         var value = reader.ReadMapper(mapper, json);
-        ComponentToSoA(value, components, compIndex);
+        ComponentToSoA(value, compIndex);
     }
     
     internal override  void UpdateIndex (Entity entity) {
@@ -173,7 +173,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         // var getter = (MemberPathGetter<T, TField>)memberPath.getter;
         try {
             exception = null;
-            var component = GetComponentFromSoA(components, compIndex);
+            var component = GetComponentFromSoA(compIndex);
             value = Unsafe.As<T, TField>(ref component);
             return true;
         }
@@ -187,10 +187,10 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     internal override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
     {
         var component   = Unsafe.As<TField,T>(ref value);
-        var oldValue    = GetComponentFromSoA(components, entity.compIndex);
+        var oldValue    = GetComponentFromSoA(entity.compIndex);
         try {
             exception = null;
-            ComponentToSoA(component, components, entity.compIndex);
+            ComponentToSoA(component, entity.compIndex);
             if (onMemberChanged != null) {
                 ((OnMemberChanged<T>)onMemberChanged)(ref component, entity, memberPath.path, oldValue);
             }
@@ -204,14 +204,15 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     
     // --- Utils
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void ComponentToSoA(T src, float[] dst, int index)
+    private void ComponentToSoA(T src, int index)
     {
+        float[] dst   = components;
         int tileIndex = index >> 3;     // entityIndex / 8  - Find which 8-element tile we belong to
         int lane      = index & 7;      // entityIndex % 8  - Find our position within that 8-element tile
         
         // Calculate the start of this specific 8-vector tile (32 floats total for Vector4)
         // Offset = TileIndex * (8 lanes * 4 components)
-        int tileStart = tileIndex << 5; // tileIndex * 32
+        int tileStart = simdOffset + (tileIndex << 5); // tileIndex * 32
 
         Span<float> span = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), FieldCount);
         dst[tileStart + lane]          = span[0]; // X
@@ -221,12 +222,13 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static T GetComponentFromSoA(float[] src, int index)
+    private T GetComponentFromSoA(int index)
     {
+        float[] src   = components;
         // Same math as the setter
         int tileIndex = index >> 3;     // entityIndex / 8
         int lane      = index & 7;      // entityIndex % 8
-        int tileStart = tileIndex << 5; // tileIndex * 32 (8 lanes * 4 components)
+        int tileStart = simdOffset + (tileIndex << 5); // tileIndex * 32 (8 lanes * 4 components)
 
         T result = default;
         var component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), FieldCount);

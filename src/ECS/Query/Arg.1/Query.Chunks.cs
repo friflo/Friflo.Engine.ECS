@@ -140,7 +140,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
         var heapMap     = archetype.heapMap;
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
             
-        var chunk1      = new Chunk<T1>(chunks1.Components, count, start);
+        var chunk1      = new Chunk<T1>(chunks1.GetComponents(), count, start);
         var entities    = new ChunkEntities(archetype,      count, start);
         chunks          = new Chunks<T1>(chunk1, entities);
         return true;
