@@ -38,7 +38,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
         : base (structIndex)
     {
         var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdUtils.LaneWidth);
-        components  = AllocateAligned<float>(capacity * FieldCount, out simdOffset);
+        components  = AllocateAligned(capacity * FieldCount, out simdOffset);
     }
     
     internal override ref T GetComponentRef(int index) {
@@ -76,7 +76,7 @@ internal sealed class StructAoSoAVector4<T> : StructHeap<T>
     internal override void ResizeComponents    (int newCapacity, int count)
     {
         var capacity = CalcCapacity(newCapacity, SimdUtils.LaneWidth);
-        var dst = AllocateAligned<float>(capacity * FieldCount, out simdOffset);
+        var dst = AllocateAligned(capacity * FieldCount, out simdOffset);
 
         // Because X, Y, Z, W for 8 entities are packed together,
         // only ONE copy operation needed for the active data.

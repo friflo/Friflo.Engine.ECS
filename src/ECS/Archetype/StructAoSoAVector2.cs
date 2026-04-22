@@ -37,7 +37,7 @@ internal sealed class StructAoSoAVector2<T> : StructHeap<T>
         : base (structIndex)
     {
         var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdUtils.LaneWidth);
-        components  = AllocateAligned<float>(capacity * FieldCount, out simdOffset);
+        components  = AllocateAligned(capacity * FieldCount, out simdOffset);
     }
     
     internal override ref T GetComponentRef(int index) {
@@ -75,7 +75,7 @@ internal sealed class StructAoSoAVector2<T> : StructHeap<T>
     internal override void ResizeComponents    (int newCapacity, int count)
     {
         var capacity = CalcCapacity(newCapacity, 8);
-        var dst = AllocateAligned<float>(capacity * FieldCount, out simdOffset);
+        var dst = AllocateAligned(capacity * FieldCount, out simdOffset);
 
         int tilesToCopy  = (count + 7) >> 3;
         int floatsToCopy = tilesToCopy << 4; // tiles * 16

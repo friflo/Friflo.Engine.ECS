@@ -300,7 +300,7 @@ public static class Test_AoSoAVector3
         foreach (var (pos, entities) in query.Chunks) {
             count++;
             var lanes  = pos.GetLanesSoA();
-            AreEqual(3096, lanes.Length);
+            AreEqual(3103, lanes.Length);
         }
         AreEqual(1, count);
     }

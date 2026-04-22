@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -96,5 +97,19 @@ internal abstract class StructHeap : IComponentStash
 
         // 2. Add the Crumple Zone (One full extra 'step' of safety)
         return paddedCount + step;
+    }
+    
+    internal static float[] AllocateAligned(int capacity, out int simdOffset)
+    {
+#if NET6_0_OR_GREATER
+        float[] array           = GC.AllocateArray<float>(length: capacity + 7, pinned: true);
+        var address             = (long)Marshal.UnsafeAddrOfPinnedArrayElement(array, 0);
+        int byteMisalignment    = (int)(address & 31);
+        simdOffset              = byteMisalignment == 0 ? 0 : (32 - byteMisalignment) / 4;
+        return array;
+#else
+        simdOffset = 0;
+        return new float[capacity];
+#endif
     }
 }
