@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 /// Tiled memory layout.
 /// <list type="bullet">
 ///     <item> x,y,z and w are stored in a single pinned float[] array. </item>
-///     <item> Valid data is 32-byte aligned to enable optimal access for L1 cache for vectorization load/store.</item>
+///     <item> Valid data is 32-byte aligned to enable optimal access for L1 cache and vectorization load/store.</item>
 ///     <item> The array contains padding elements at its start and at its end.</item>
 /// </list>
 /// <code>
