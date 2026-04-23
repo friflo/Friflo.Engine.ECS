@@ -28,70 +28,75 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
     
-    internal override (T[],int) GetComponents () => (Unsafe.As<float[], T[]>(ref components), 0);
+    internal override (T[],int) GetComponents () => (Unsafe.As<float[], T[]>(ref components), simdOffset);
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     private         float[] components;     //  8
+    private         int     simdOffset;     //  8
     
     internal StructSoAFloat(int structIndex)
         : base (structIndex)
     {
-        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
-        components  = new float[capacity];
+        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, 8);
+        components  = AllocateAligned(capacity, out simdOffset);
     }
     
     internal override ref T GetComponentRef(int index) {
-        throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.");
+        return ref Unsafe.As<float[], T[]>(ref components)[simdOffset + index];
     }
     
     internal override T GetComponentValue(int index) {
-        return GetComponentFromSoA (components, index);
+        return GetComponentFromSoA (index);
     }
     
     internal override void SetComponent(int index, T component) {
-        ComponentToSoA(component, components, index);
+        ComponentToSoA(component, index);
     }
     
     internal override T GetSoA(int index) {
-        return GetComponentFromSoA(components, index);
+        return Unsafe.As<float[], T[]>(ref components)[simdOffset + index];
     }
     
     
     // --- StructHeap
     internal override void StashComponent(int compIndex) {
-        componentStash = GetComponentFromSoA(components, compIndex);
+        componentStash = GetComponentFromSoA(compIndex);
     }
     
     internal override  void SetBatchComponent(BatchComponent[] batchComponents, int compIndex)
     {
-        ComponentToSoA(((BatchComponent<T>)batchComponents[structIndex]).value, components, compIndex);
+        ComponentToSoA(((BatchComponent<T>)batchComponents[structIndex]).value, compIndex);
     }
     
     // --- StructHeap
-    protected override  int     ComponentsLength    => components.Length;
+    protected override  int     ComponentsLength    => components.Length - simdOffset;
 
     internal  override  Type    StructType          => typeof(T);
     
-    internal override void ResizeComponents    (int capacity, int count) {
-        var stride          = CalcCapacity(capacity, SimdInfo<T>.SimdStep);
-        var dst         = new float[stride];
-        var src         = components;
-        new ReadOnlySpan<float>(src, 0,             count).CopyTo(new Span<float>(dst, 0,       count));
+    internal override void ResizeComponents (int newCapacity, int count)
+    {
+        var capacity    = CalcCapacity(newCapacity, 8);
+        var oldOffset   = simdOffset;
+        var dst         = AllocateAligned(capacity, out simdOffset);
+        if (count > 0) {
+            new ReadOnlySpan<float>(components, oldOffset, count).CopyTo(new Span<float>(dst, simdOffset, count));
+        }
         components = dst;
     }
     
     internal override void MoveComponent(int from, int to)
     {
         var localComponents = components;
-        localComponents[to]                     = localComponents[from];
+        var offest          = simdOffset; 
+        localComponents[offest + to] = localComponents[offest + from];
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
         var targetSoA       = (StructSoAFloat<T>)targetHeap;
         var dst             = targetSoA.components;
-        dst[targetPos] = components[sourcePos];
+        dst[targetSoA.simdOffset + targetPos] = components[simdOffset + sourcePos];
     }
     
     internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
@@ -100,12 +105,12 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     }
     
     internal  override  void SetComponentDefault (int compIndex) {
-        ComponentToSoA(default, components, compIndex);
+        ComponentToSoA(default, compIndex);
     }
     
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
     {
-        new Span<float>(components, compIndexStart,              count).Clear();
+        new Span<float>(components, simdOffset + compIndexStart, count).Clear();
     }
   
     /// <summary>
@@ -113,19 +118,19 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override object GetComponentDebug(int compIndex) => GetComponentFromSoA(components, compIndex);
+    internal override object GetComponentDebug(int compIndex) => GetComponentFromSoA(compIndex);
     
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
         var mapper = (TypeMapper<T>)writer.TypeCache.GetTypeMapper(typeof(T));
-        var value = GetComponentFromSoA(components, compIndex);
+        var value = GetComponentFromSoA(compIndex);
         return writer.WriteAsBytesMapper(value, mapper);
     }
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
         var mapper = (TypeMapper<T>)reader.TypeCache.GetTypeMapper(typeof(T));
         var value = reader.ReadMapper(mapper, json);
-        ComponentToSoA(value, components, compIndex);
+        ComponentToSoA(value, compIndex);
     }
     
     internal override  void UpdateIndex (Entity entity) {
@@ -147,7 +152,7 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
         // var getter = (MemberPathGetter<T, TField>)memberPath.getter;
         try {
             exception = null;
-            var component = GetComponentFromSoA(components, compIndex);
+            var component = GetComponentFromSoA(compIndex);
             value = Unsafe.As<T, TField>(ref component);
             return true;
         }
@@ -161,10 +166,10 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     internal override  bool SetComponentMember<TField>(Entity entity, MemberPath memberPath, TField value, Delegate onMemberChanged, out Exception exception)
     {
         var component   = Unsafe.As<TField,T>(ref value);
-        var oldValue    = GetComponentFromSoA(components, entity.compIndex);
+        var oldValue    = GetComponentFromSoA(entity.compIndex);
         try {
             exception = null;
-            ComponentToSoA(component, components, entity.compIndex);
+            ComponentToSoA(component, entity.compIndex);
             if (onMemberChanged != null) {
                 ((OnMemberChanged<T>)onMemberChanged)(ref component, entity, memberPath.path, oldValue);
             }
@@ -178,18 +183,18 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     
     // --- Utils
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void ComponentToSoA(T src, float[] dst, int index)
+    private void ComponentToSoA(T src, int index)
     {
         Span<float> span        = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), LaneCount);
-        dst[index]              = span[0];
+        components[simdOffset + index] = span[0];
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static T GetComponentFromSoA(float[] src, int index)
+    private T GetComponentFromSoA(int index)
     {
         T result = default;
         var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), LaneCount);
-        component[0] = src[index];
+        component[0]    = components[simdOffset + index];
         return result;
     }
 }

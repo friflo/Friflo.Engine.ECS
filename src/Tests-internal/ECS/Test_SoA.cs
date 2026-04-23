@@ -19,7 +19,7 @@ public static class Test_SoA
     }
     
     /// Test <see cref="Chunk{T}.GetLanesSoA"/>
-    [Test][Ignore("FLOAT_SOA")]
+    [Test]
     public static void Test_SoAFloat_Query_Lanes()
     {
         var store = new EntityStore();

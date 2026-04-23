@@ -43,11 +43,11 @@ public static class Test_SoAFloat
         };
         
         entity1.AddComponent(pos1);
-        var result1 = entity1.GetSoA<FloatComponent>();
+        var result1 = entity1.GetComponent<FloatComponent>();
         AreEqual(result1.value, pos1.value);
         
         entity2.AddComponent(pos2);
-        var result2 = entity2.GetSoA<FloatComponent>();
+        var result2 = entity2.GetComponent<FloatComponent>();
         AreEqual(result2.value, pos2.value);
         
         entity3.AddComponent(pos3);
@@ -154,11 +154,6 @@ public static class Test_SoAFloat
             entityAoS.GetSoA<Position>();
         });
         AreEqual("Component 'Position' is stored as AoS. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e!.Message);
-        
-        e = Throws<InvalidOperationException>(() => {
-            entitySoA.GetComponent<FloatComponent>();
-        });
-        AreEqual("Component 'FloatComponent' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e!.Message);
     }
     
     /// Test <see cref="StructSoAVector2{T}.Write"/>
@@ -204,7 +199,7 @@ public static class Test_SoAFloat
     }
     
     /// Test <see cref="StructSoAVector2{T}.SetComponentMember"/>
-    [Test][Ignore("FLOAT_SOA")]
+    [Test]
     public static void Test_SoAFloat_SoA_SetEntityComponentMember()
     {
         var store  = new EntityStore();
@@ -213,7 +208,7 @@ public static class Test_SoAFloat
         var componentType   = typeof(FloatComponent);
         var nameInfo = MemberPath.Get(componentType, nameof(FloatComponent.value));
         
-        var newPos = 101;
+        float newPos = 101;
         OnMemberChanged<FloatComponent> handler = (ref FloatComponent value, Entity entity1, string path, in FloatComponent old) => {
             AreEqual(1,         entity1.Id);
             AreEqual("value",   path);
@@ -287,7 +282,7 @@ public static class Test_SoAFloat
     }
     
     /// Test <see cref="Chunk{T}.GetLanesSoA"/>
-    [Test][Ignore("FLOAT_SOA")]
+    [Test]
     public static void Test_SoAFloat_Query_Lanes()
     {
         var store = new EntityStore();
@@ -297,10 +292,6 @@ public static class Test_SoAFloat
         var query = store.Query<FloatComponent>();
         int count = 0;
         foreach (var (positions, entities) in query.Chunks) {
-            var lanes = positions.GetLanesSoA();
-            var stride = positions.GetStrideSoA();
-            AreEqual(1056, lanes.Length);
-            AreEqual(1056, stride); // not relevant
             for (int i = 0; i < entities.Length; i++) {
                 var value = positions.GetSoA(i);
                 var expect = i * 10;

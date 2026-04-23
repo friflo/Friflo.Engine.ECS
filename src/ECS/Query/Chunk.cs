@@ -88,6 +88,7 @@ public struct Chunk<T>
         T result = default;
         Span<float> component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), SimdInfo<T>.FieldCountSoA);
         switch (SimdInfo<T>.FieldCountSoA) {
+            case 1: goto Count_1;
             case 2: goto Count_2;
             case 3: goto Count_3;
         }
@@ -96,7 +97,8 @@ public struct Chunk<T>
         component[2] = lanes[index + stride * 2];
     Count_2:
         component[1] = lanes[index + stride];
-        component[0] = lanes[index];
+    Count_1:
+        component[0] = lanes[index + simdOffset]; // simdOffset required for StructSoAFloat<>
         return result;
     }
     
@@ -107,6 +109,7 @@ public struct Chunk<T>
         var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref value), SimdInfo<T>.FieldCountSoA);
         var lanes       = Unsafe.As<T[], float[]>(ref _components);
         switch (SimdInfo<T>.FieldCountSoA) {
+            case 1: goto Count_1;
             case 2: goto Count_2;
             case 3: goto Count_3;
         }
@@ -115,7 +118,8 @@ public struct Chunk<T>
         lanes[index + stride * 2] = component[2];
     Count_2:
         lanes[index + stride]     = component[1];
-        lanes[index]              = component[0];
+    Count_1:
+        lanes[simdOffset + index] = component[0]; // simdOffset required for StructSoAFloat<>
     }
     
     public T GetAoSoA(int index)
