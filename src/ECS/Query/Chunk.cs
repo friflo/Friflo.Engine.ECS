@@ -58,6 +58,12 @@ public struct Chunk<T>
     [DebuggerBrowsable(Never)]
     private             T[]         _components;            //  8
     
+    /// <summary>
+    /// Returns the internal storage for component types attributes with <see cref="AoSoAAttribute"/> or <see cref="SoAAttribute"/>.<br/>
+    /// The returned Span contains valid data from element[0]. At the end are "junk" elements for padding and crumble zone.<br/>
+    /// The trailing elements enable to process the entire span with 32-byte vectorization without a remainder loop.<br/>
+    /// <b>Note:</b> Use <see cref="Length"/> for loops to process the correct number of components.
+    /// </summary>
     public Span<float> GetLanesSoA()
     {
         if (SimdInfo<T>.Layout == Layout.AoS) ChunkExtensions.ExpectCallForSoAComponent();

@@ -16,6 +16,9 @@ namespace Friflo.Engine.ECS;
 /// <remarks>
 /// Tiled memory layout.
 /// <code>
+///     // e.g. for Vector2
+///     [AoSoA] public struct Position2 : IComponent { public Vector2 value; }
+///     // layouts
 ///     Vector2:   xxxxxxxx yyyyyyyy   xxxxxxxx yyyyyyyy   ...
 ///     Vector3:   xxxxxxxx yyyyyyyy zzzzzzzz   xxxxxxxx yyyyyyyy zzzzzzzz   ...
 ///     Vector3:   xxxxxxxx yyyyyyyy zzzzzzzz wwwwwwww   xxxxxxxx yyyyyyyy zzzzzzzz wwwwwwww   ...
@@ -35,6 +38,9 @@ public sealed class AoSoAAttribute : Attribute { }
 /// <remarks>
 /// Strided memory layout.
 /// <code>
+///     // e.g. for Vector2
+///     [SoA] public struct Position2 : IComponent { public Vector2 value; }
+///     // layouts
 ///     Vector2:   xxxxxxxx xxxxxxxx ...   yyyyyyyy yyyyyyyy ...
 ///     Vector3:   xxxxxxxx xxxxxxxx ...   yyyyyyyy yyyyyyyy ...   zzzzzzzz ...
 ///     Vector3:   xxxxxxxx yyyyyyyy zzzzzzzz wwwwwwww   xxxxxxxx yyyyyyyy zzzzzzzz wwwwwwww   ...
