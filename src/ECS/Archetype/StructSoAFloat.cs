@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -24,8 +23,6 @@ namespace Friflo.Engine.ECS;
 internal sealed class StructSoAFloat<T> : StructHeap<T>
     where T : struct
 {
-    private const   int     LaneCount = 1;
-    
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
     
     internal override (T[],int) GetComponents () => (Unsafe.As<float[], T[]>(ref components), simdOffset);
@@ -185,16 +182,16 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ComponentToSoA(T src, int index)
     {
-        Span<float> span        = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), LaneCount);
-        components[simdOffset + index] = span[0];
+        ref var component               = ref Unsafe.As<T, float>(ref src);
+        components[simdOffset + index]  = component;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private T GetComponentFromSoA(int index)
     {
         T result = default;
-        var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), LaneCount);
-        component[0]    = components[simdOffset + index];
+        ref var component   = ref Unsafe.As<T, float>(ref result);
+        component           = components[simdOffset + index];
         return result;
     }
 }
