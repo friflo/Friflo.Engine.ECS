@@ -19,6 +19,24 @@ public static class Test_SoA
     }
     
     /// Test <see cref="Chunk{T}.GetLanesSoA"/>
+    [Test][Ignore("FLOAT_SOA")]
+    public static void Test_SoAFloat_Query_Lanes()
+    {
+        var store = new EntityStore();
+        for (int n = 0; n < 1000; n++) {
+            store.CreateEntity(new FloatComponent { value = n * 10 });
+        }
+        var query = store.Query<FloatComponent>();
+        int count = 0;
+        foreach (var (pos, FloatComponent) in query.Chunks) {
+            count++;
+            var lanes  = pos.GetLanesSoA();
+            Assert32ByteAligned(lanes);
+        }
+        Assert.AreEqual(1, count);
+    }
+    
+    /// Test <see cref="Chunk{T}.GetLanesSoA"/>
     [Test]
     public static void Test_AoSoAVector2_Query_Lanes()
     {
@@ -32,7 +50,6 @@ public static class Test_SoA
             count++;
             var lanes  = pos.GetLanesSoA();
             Assert32ByteAligned(lanes);
-            // AreEqual(2065, lanes.Length);
         }
         Assert.AreEqual(1, count);
     }
@@ -51,7 +68,6 @@ public static class Test_SoA
             count++;
             var lanes  = pos.GetLanesSoA();
             Assert32ByteAligned(lanes);
-            // AreEqual(3103, lanes.Length);
         }
         Assert.AreEqual(1, count);
     }
@@ -70,7 +86,6 @@ public static class Test_SoA
             count++;
             var lanes  = pos.GetLanesSoA();
             Assert32ByteAligned(lanes);
-            // AreEqual(4135, lanes.Length);
         }
         Assert.AreEqual(1, count);
     }

@@ -44,6 +44,16 @@ internal static class SimdUtils
     {
         var type = typeof(T);
         layout = Layout.AoS;
+        var fields = type.GetFields();
+        if (fields.Length == 1) {
+            var field = fields[0];
+            if (field.Name == "value" || field.Name == "Value") {
+                if (field.FieldType == typeof(float)) {
+                    layout = Layout.SoA;
+                    return 1;
+                }
+            }
+        }
         foreach (var attr in type.CustomAttributes)
         {
             var attributeType = attr.AttributeType;
@@ -55,8 +65,7 @@ internal static class SimdUtils
                 layout = Layout.AoS;
                 continue;
             }
-            var fields = type.GetFields();
-            var dimension = 0;
+    	    var dimension = 0;
             foreach (var field in fields) {
                 if (field.Name != "value" && field.Name != "Value") {
                     continue;

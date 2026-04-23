@@ -122,6 +122,7 @@ internal sealed class ComponentType<T> : ComponentType
                 return new StructHeapGen<T>(StructIndex);
             case Layout.SoA:
                 switch (SimdInfo<T>.FieldCountSoA) {
+                    case 1: return new StructSoAFloat  <T>(StructIndex);
                     case 2: return new StructSoAVector2<T>(StructIndex);
                     case 3: return new StructSoAVector3<T>(StructIndex);
                     case 4: return new StructSoAVector4<T>(StructIndex);
