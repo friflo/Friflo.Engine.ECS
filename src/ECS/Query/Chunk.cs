@@ -80,6 +80,13 @@ public struct Chunk<T>
         return _components.Length / SimdInfo<T>.FieldCountSoA;
     }
     
+    /// <summary> Only used for component types with a single <c>value</c> field of Type <c>float</c>. </summary>
+    public ref T GetSoARef(int index) {
+        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
+        var lanes = Unsafe.As<T[], float[]>(ref _components);
+        return ref Unsafe.As<float[], T[]>(ref lanes)[simdOffset + index];
+    }
+    
     public T GetSoA(int index)
     {
         if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();

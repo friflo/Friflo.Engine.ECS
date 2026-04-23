@@ -294,14 +294,17 @@ public static class Test_SoAFloat
         foreach (var (positions, entities) in query.Chunks) {
             for (int i = 0; i < entities.Length; i++) {
                 var value = positions.GetSoA(i);
+                ref var valueRef = ref positions.GetSoARef(i); 
                 var expect = i * 10;
                 That(value.value, Is.EqualTo(expect));
+                That(valueRef.value, Is.EqualTo(expect));
                 
                 expect += 100;
                 value.value = expect;
                 positions.SetSoA(i, value);
                 value = positions.GetSoA(i);
                 That(value.value, Is.EqualTo(expect));
+                That(valueRef.value, Is.EqualTo(expect));
             }
             count++;
             var e = Throws<InvalidOperationException>(() => { _ = positions.Span; });
