@@ -55,9 +55,9 @@ public class MySystem_Arg1 : QuerySystem<Position>
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position>());
         int chunkCount  = 0;
         foreach (var (position, entities) in Query.Chunks) {
-            var vectors     = position.AsSpanVector3();
+            // var vectors     = position.AsSpanVector3();
             var length      = entities.Length;
-            Mem.AreEqual(length,                    vectors.Length);
+            // Mem.AreEqual(length,                    vectors.Length);
             Mem.AreEqual(length,                    position.Length);
             Mem.AreEqual(position[0].x,             entities[0]);
             Mem.AreEqual(position[length - 1].x,    entities[length - 1]);
@@ -82,9 +82,9 @@ public class MySystem_Arg2 : QuerySystem<Position, Rotation>
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         int chunkCount  = 0;
         foreach (var (positions, rotations, entities) in Query.Chunks) {
-            var vectors     = rotations.AsSpanQuaternion();
+            // var vectors     = rotations.AsSpanQuaternion();
             var length      = entities.Length;
-            Mem.AreEqual(length,                    vectors.Length);
+            // Mem.AreEqual(length,                    vectors.Length);
             Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(positions[0].x,            entities.EntityAt(0).Id);
@@ -133,9 +133,9 @@ public class MySystem_Arg4 : QuerySystem<Position, Rotation, EntityName, Scale3>
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
         foreach (var (positions, rotation, name, scale, entities) in Query.Chunks) {
-            var vectors     = scale.AsSpanVector3();
+            // var vectors     = scale.AsSpanVector3();
             var length      = entities.Length;
-            Mem.AreEqual(length,                    vectors.Length);
+            // Mem.AreEqual(length,                    vectors.Length);
             Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    rotation.Length);
             Mem.AreEqual(length,                    name.Length);
@@ -161,9 +161,9 @@ public class MySystem_Arg5 : QuerySystem<Position, Rotation, EntityName, Scale3,
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
         foreach (var (positions, rotation, name, scale, transform, entities) in Query.Chunks) {
-            var matrix4X4   = transform.AsSpanMatrix4x4();
+            // var matrix4X4   = transform.AsSpanMatrix4x4();
             var length      = entities.Length;
-            Mem.AreEqual(length,                    matrix4X4.Length);
+            // Mem.AreEqual(length,                    matrix4X4.Length);
             Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    rotation.Length);
             Mem.AreEqual(length,                    name.Length);

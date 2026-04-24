@@ -9,6 +9,7 @@ namespace Tests.ECS.Github
     /// https://github.com/friflo/Friflo.Engine.ECS/issues/47
     public static class Test_GitHub_47
     {
+        /* CHUNK_DEPRECATED
         [Test]
         public static void Parallel_QueryJob_using_AsSpan()
         {
@@ -30,6 +31,6 @@ namespace Tests.ECS.Github
             });
             queryJob.MinParallelChunkLength = 16;
             queryJob.RunParallel();
-        }
+        } */
     }
 }

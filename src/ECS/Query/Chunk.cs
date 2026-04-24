@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -21,11 +20,6 @@ namespace Friflo.Engine.ECS;
 /// <see cref="Chunk{T}"/>'s are typically returned a <see cref="ArchetypeQuery{T1}"/>.<see cref="ArchetypeQuery{T1}.Chunks"/> enumerator.<br/>
 /// <br/>
 /// Its items can be accessed or changed with <see cref="this[int]"/> or <see cref="Span"/>.<br/>
-/// The <see cref="Chunk{T}"/> implementation also support <b>vectorization</b>
-/// of <a href="https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/vectorization-guidelines.md">Vector types</a><br/>
-/// by <see cref="AsSpan128{TTo}"/>, <see cref="AsSpan256{TTo}"/> and <see cref="AsSpan512{TTo}"/>.
-/// <br/>
-/// <br/> <i>See vectorization example</i> at <see cref="AsSpan256{TTo}"/>.
 /// </remarks>
 /// <typeparam name="T"><see cref="IComponent"/> type of a struct component.</typeparam>
 [DebuggerTypeProxy(typeof(ChunkDebugView<>))]
@@ -183,7 +177,7 @@ public struct Chunk<T>
                 break;
         }
     }
-    
+    /* CHUNK_DEPRECATED
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable safe conversion to a Vector256{TTo}.<br/>
@@ -211,7 +205,7 @@ public struct Chunk<T>
     /// </code>
     /// </remarks>
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
-    public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
+    internal              Span<TTo>  AsSpan256<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(_components, simdOffset + start, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
     
     /// <summary>
@@ -220,7 +214,7 @@ public struct Chunk<T>
     /// See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd">Example.</a>.
     /// </summary>
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
-    public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
+    internal              Span<TTo>  AsSpan128<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(_components, simdOffset + start, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
     
     /// <summary>
@@ -229,7 +223,7 @@ public struct Chunk<T>
     ///  See <a href="https://friflo.gitbook.io/friflo.engine.ecs/documentation/query-optimization#query-vectorization-simd">Example.</a>.
     /// </summary>
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
-    public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
+    internal              Span<TTo>  AsSpan512<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(_components, simdOffset + start, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
@@ -238,7 +232,7 @@ public struct Chunk<T>
     /// </summary>
     [Browse(Never)]
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]
-    public              int         StepSpan128 => 16 / StructPadding<T>.ByteSize;
+    internal              int         StepSpan128 => 16 / StructPadding<T>.ByteSize;
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan256{TTo}"/> value to a Vector256{T}.
@@ -246,7 +240,7 @@ public struct Chunk<T>
     /// </summary>
     [Browse(Never)]
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]
-    public              int         StepSpan256 => 32 / StructPadding<T>.ByteSize;
+    internal              int         StepSpan256 => 32 / StructPadding<T>.ByteSize;
     
     // ReSharper disable once InvalidXmlDocComment
     /// <summary>
@@ -255,8 +249,8 @@ public struct Chunk<T>
     /// </summary>
     [Browse(Never)]
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]
-    public              int         StepSpan512 => 64 / StructPadding<T>.ByteSize;
-
+    internal              int         StepSpan512 => 64 / StructPadding<T>.ByteSize;
+    */
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
 
@@ -323,8 +317,9 @@ internal class ChunkDebugView<T>
     }
 }
 
-public static class ChunkExtensions
+internal static class ChunkExtensions
 {
+    /* CHUNK_DEPRECATED
     public static Span<Vector3>     AsSpanVector3   (this Span <Position>  position)    => MemoryMarshal.Cast<Position, Vector3>    (position);
     public static Span<Vector3>     AsSpanVector3   (this Chunk<Position>  position)    => MemoryMarshal.Cast<Position, Vector3>    (position   .Span);
     //
@@ -336,7 +331,7 @@ public static class ChunkExtensions
     //
     public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Span <Transform> transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform);
     public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Chunk<Transform> transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform  .Span);
-    
+    */
     [DoesNotReturn]
     [MethodImpl(MethodImplOptions.NoInlining)]
     internal static void ExpectCallForRegularComponent() {
