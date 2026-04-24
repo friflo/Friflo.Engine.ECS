@@ -120,7 +120,7 @@ internal sealed class ComponentType<T> : ComponentType
         {
             case Layout.AoS:
                 if (SimdInfo<T>.FieldCountSoA == 1) {
-                    return new StructSoAFloat<T>(StructIndex);
+                    return new StructAoSFloat<T>(StructIndex);
                 }
                 return new StructHeapGen<T>(StructIndex);
             case Layout.SoA:

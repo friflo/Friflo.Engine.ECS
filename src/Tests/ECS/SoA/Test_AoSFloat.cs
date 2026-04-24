@@ -14,10 +14,10 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.SoA {
 
-public static class Test_SoAFloat
+public static class Test_AoSFloat
 {
     [Test]
-    public static void Test_SoAFloat_SoA_Add_Remove_Components()
+    public static void Test_AoSFloat_SoA_Add_Remove_Components()
     {
         var store = new EntityStore();
         var entity1 = store.CreateEntity();
@@ -68,7 +68,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.CopyComponentTo"/>
     [Test]
-    public static void Test_SoAFloat_SoA_Add_Tag()
+    public static void Test_AoSFloat_SoA_Add_Tag()
     {
         var store = new EntityStore();
         var pos1 = new FloatComponent { value = 11 };
@@ -88,7 +88,7 @@ public static class Test_SoAFloat
 
     /// Test <see cref="StructSoAVector2{T}.ResizeComponents"/>
     [Test]
-    public static void Test_SoAFloat_SoA_Check_ResizeComponents()
+    public static void Test_AoSFloat_SoA_Check_ResizeComponents()
     {
         var store = new EntityStore();
         store.ShrinkRatioThreshold = 0;
@@ -144,7 +144,7 @@ public static class Test_SoAFloat
     }
     
     [Test]
-    public static void Test_SoAFloat_SoA_Entity_exceptions()
+    public static void Test_AoSFloat_SoA_Entity_exceptions()
     {
         var store = new EntityStore();
         var entitySoA = store.CreateEntity(new FloatComponent());
@@ -159,7 +159,7 @@ public static class Test_SoAFloat
     /// Test <see cref="StructSoAVector2{T}.Write"/>
     /// Test <see cref="StructSoAVector2{T}.Read"/>
     [Test]
-    public static void Test_SoAFloat_SoA_serialize()
+    public static void Test_AoSFloat_SoA_serialize()
     {
         var store = new EntityStore();
         var pos = new FloatComponent { value = 11 };
@@ -177,7 +177,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.GetComponentMember"/>
     [Test]
-    public static void Test_SoAFloat_SoA_GetEntityComponentMember()
+    public static void Test_AoSFloat_SoA_GetEntityComponentMember()
     {
         var store  = new EntityStore();
         var pos = new FloatComponent { value = 11 };
@@ -200,7 +200,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.SetComponentMember"/>
     [Test]
-    public static void Test_SoAFloat_SoA_SetEntityComponentMember()
+    public static void Test_AoSFloat_SoA_SetEntityComponentMember()
     {
         var store  = new EntityStore();
         var pos = new FloatComponent { value = 11 };
@@ -222,7 +222,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.CopyComponent"/>
     [Test]
-    public static void Test_SoAFloat_SoA_CopyEntity()
+    public static void Test_AoSFloat_SoA_CopyEntity()
     {
         var store       = new EntityStore();
         var pos         = new FloatComponent { value = 11 };
@@ -237,7 +237,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.SetBatchComponent"/>
     [Test]
-    public static void Test_SoAFloat_SoA_Batch_CreateEntity()
+    public static void Test_AoSFloat_SoA_Batch_CreateEntity()
     {
         var store = new EntityStore();
         var batch = new CreateEntityBatch(store);
@@ -250,7 +250,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.GetComponentDebug"/>
     [Test]
-    public static void Test_SoAFloat_SoA_GetEntityComponent()
+    public static void Test_AoSFloat_SoA_GetEntityComponent()
     {
         var store = new EntityStore();
         var pos         = new FloatComponent { value = 11 };
@@ -264,7 +264,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="StructSoAVector2{T}.SetComponentsDefault"/>
     [Test]
-    public static void Test_SoAFloat_SoA_Archetype_CreateEntities()
+    public static void Test_AoSFloat_SoA_Archetype_CreateEntities()
     {
         var store = new EntityStore();
         var pos         = new FloatComponent { value = 11 };
@@ -283,7 +283,7 @@ public static class Test_SoAFloat
     
     /// Test <see cref="Chunk{T}.GetLanesSoA"/>
     [Test]
-    public static void Test_SoAFloat_Query_Lanes()
+    public static void Test_AoSFloat_Query_Lanes()
     {
         var store = new EntityStore();
         for (int n = 0; n < 1000; n++) {

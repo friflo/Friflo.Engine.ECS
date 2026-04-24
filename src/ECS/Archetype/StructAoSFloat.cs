@@ -20,7 +20,7 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructSoAFloat<T> : StructHeap<T>
+internal sealed class StructAoSFloat<T> : StructHeap<T>
     where T : struct
 {
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
@@ -32,7 +32,7 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     private         float[] components;     //  8
     private         int     simdOffset;     //  8
     
-    internal StructSoAFloat(int structIndex)
+    internal StructAoSFloat(int structIndex)
         : base (structIndex)
     {
         var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, 8);
@@ -91,7 +91,7 @@ internal sealed class StructSoAFloat<T> : StructHeap<T>
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
-        var targetSoA       = (StructSoAFloat<T>)targetHeap;
+        var targetSoA       = (StructAoSFloat<T>)targetHeap;
         var dst             = targetSoA.components;
         dst[targetSoA.simdOffset + targetPos] = components[simdOffset + sourcePos];
     }

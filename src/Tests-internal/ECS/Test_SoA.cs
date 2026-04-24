@@ -20,7 +20,7 @@ public static class Test_SoA
     
     /// Test <see cref="Chunk{T}.GetLanesSoA"/>
     [Test]
-    public static void Test_SoAFloat_Query_Lanes()
+    public static void Test_AoSFloat_Query_Lanes()
     {
         var store = new EntityStore();
         for (int n = 0; n < 1000; n++) {
