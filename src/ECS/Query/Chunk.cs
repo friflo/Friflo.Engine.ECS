@@ -35,7 +35,7 @@ public struct Chunk<T>
     public              Span<T>     Span {
         get {
             if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-            return new Span<T>(ArchetypeComponents, start, Length);
+            return new Span<T>(_components, simdOffset + start, Length);
         } }
 
     public              T[]         ArchetypeComponents {
@@ -57,6 +57,14 @@ public struct Chunk<T>
     // Do not inspect in debugger without the 'SoA' flag check.
     [DebuggerBrowsable(Never)]
     private             T[]         _components;            //  8
+    
+    public Span<T> GetComponentSpan()
+    {
+        if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
+        var components = _components;
+        var offset =  simdOffset + start;
+        return new Span<T>(components, offset, components.Length - offset);
+    }
     
     /// <summary>
     /// Returns the internal storage for component types attributes with <see cref="AoSoAAttribute"/> or <see cref="SoAAttribute"/>.<br/>
@@ -80,13 +88,6 @@ public struct Chunk<T>
         return _components.Length / SimdInfo<T>.FieldCountSoA;
     }
     
-    /// <summary> Only used for component types with a single <c>value</c> field of Type <c>float</c>. </summary>
-    public ref T GetSoARef(int index) {
-        if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
-        var lanes = Unsafe.As<T[], float[]>(ref _components);
-        return ref Unsafe.As<float[], T[]>(ref lanes)[simdOffset + index];
-    }
-    
     public T GetSoA(int index)
     {
         if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
@@ -105,7 +106,7 @@ public struct Chunk<T>
     Count_2:
         component[1] = lanes[index + stride];
     Count_1:
-        component[0] = lanes[index + simdOffset]; // simdOffset required for StructSoAFloat<>
+        component[0] = lanes[index];
         return result;
     }
     
@@ -126,7 +127,7 @@ public struct Chunk<T>
     Count_2:
         lanes[index + stride]     = component[1];
     Count_1:
-        lanes[simdOffset + index] = component[0]; // simdOffset required for StructSoAFloat<>
+        lanes[index]              = component[0];
     }
     
     public T GetAoSoA(int index)
@@ -210,7 +211,7 @@ public struct Chunk<T>
     /// </remarks>
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
     public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(_components, simdOffset + start, (Length + StructPadding<T>.PadCount256) & 0x7fff_ffe0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -219,7 +220,7 @@ public struct Chunk<T>
     /// </summary>
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(_components, simdOffset + start, (Length + StructPadding<T>.PadCount128) & 0x7fff_fff0));
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
@@ -228,7 +229,7 @@ public struct Chunk<T>
     /// </summary>
     [Obsolete("Use Vectorization or create a Span<> of ArchetypeComponents")]    
     public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(ArchetypeComponents, start, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(_components, simdOffset + start, (Length + StructPadding<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a Vector128{T}.
@@ -277,7 +278,7 @@ public struct Chunk<T>
         get {
             if (index < Length) {
                 if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-                return ref ArchetypeComponents[start + index];
+                return ref _components[simdOffset + start + index];
             }
             throw new IndexOutOfRangeException();
         }

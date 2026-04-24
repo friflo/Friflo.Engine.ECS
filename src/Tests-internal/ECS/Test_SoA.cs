@@ -9,9 +9,9 @@ namespace Internal.ECS;
 
 public static class Test_SoA
 {
-    private static unsafe void Assert32ByteAligned(Span<float> span)
+    private static unsafe void Assert32ByteAligned<T>(Span<T> span)
     {
-        fixed (float* ptr = span)
+        fixed (T* ptr = span)
         {
             bool isAligned = ((long)ptr & 31) == 0;
             Assert.IsTrue(isAligned);
@@ -30,7 +30,7 @@ public static class Test_SoA
         int count = 0;
         foreach (var (pos, FloatComponent) in query.Chunks) {
             count++;
-            var lanes  = pos.GetLanesSoA();
+            var lanes  = pos.GetComponentSpan();
             Assert32ByteAligned(lanes);
         }
         Assert.AreEqual(1, count);

@@ -292,29 +292,23 @@ public static class Test_SoAFloat
         var query = store.Query<FloatComponent>();
         int count = 0;
         foreach (var (positions, entities) in query.Chunks) {
+            var positionSpan = positions.Span;
             for (int i = 0; i < entities.Length; i++) {
-                var value = positions.GetSoA(i);
-                ref var valueRef = ref positions.GetSoARef(i); 
-                var expect = i * 10;
-                That(value.value, Is.EqualTo(expect));
-                That(valueRef.value, Is.EqualTo(expect));
+                var value = positions[i];
+                var expect = new FloatComponent { value = i * 10 };
+                That(value.value, Is.EqualTo(expect.value));
+                That(positionSpan[i].value, Is.EqualTo(expect.value));
                 
-                expect += 100;
-                value.value = expect;
-                positions.SetSoA(i, value);
-                value = positions.GetSoA(i);
-                That(value.value, Is.EqualTo(expect));
-                That(valueRef.value, Is.EqualTo(expect));
+                expect.value += 100;
+                value.value = expect.value;
+                positions[i] = value;
+                value = positions[i];
+                That(value.value, Is.EqualTo(expect.value));
             }
             count++;
-            var e = Throws<InvalidOperationException>(() => { _ = positions.Span; });
-            AreEqual("Expect call for regular component data.", e!.Message);
             
-            e = Throws<InvalidOperationException>(() => { _ = positions[0]; });
-            AreEqual("Expect call for regular component data.", e!.Message);
-            
-            e = Throws<InvalidOperationException>(() => { _ = positions.ArchetypeComponents; });
-            AreEqual("Expect call for regular component data.", e!.Message);
+            var e = Throws<InvalidOperationException>(() => { _ = positions.GetLanesSoA(); });
+            AreEqual("Expect call for SoA component data.", e!.Message);
             
         }
         AreEqual(1, count);

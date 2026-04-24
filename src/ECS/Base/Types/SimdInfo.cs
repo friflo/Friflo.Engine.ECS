@@ -49,7 +49,7 @@ internal static class SimdUtils
             var field = fields[0];
             if (field.Name == "value" || field.Name == "Value") {
                 if (field.FieldType == typeof(float)) {
-                    layout = Layout.SoA;
+                    layout = Layout.AoS;
                     return 1;
                 }
             }
