@@ -102,11 +102,12 @@ internal abstract class StructHeap : IComponentStash
     internal static float[] AllocateAligned(int capacity, out int simdOffset)
     {
 #if NET6_0_OR_GREATER
+        // capacity + 7  <= 7 floats required for simdOffset
         float[] array           = GC.AllocateArray<float>(length: capacity + 7, pinned: true);
         var address = (long)Marshal.UnsafeAddrOfPinnedArrayElement(array, 0);
         int byteMisalignment = (int)(address & 31);
         simdOffset              = byteMisalignment == 0 ? 0 : (32 - byteMisalignment) / 4;
-        return array;
+        return array; // array[simdOffset] points to the first 32-byte aligned element
 #else
         simdOffset = 0;
         return new float[capacity];
