@@ -13,9 +13,8 @@ public static partial class ChunkExtensions
         where T1 : struct
     {
         var entities    = chunks.Entities;
-        var start       = entities.Start;
         var length      = entities.Length;
-        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
+        var span1       = chunks.Chunk1.Span;
         
         unsafe {
 #pragma warning disable CS8500
@@ -46,7 +45,7 @@ public static partial class ChunkExtensions
         } */
 
         var spanIds     = entities.Archetype.EntityIds.Slice             (start, length);
-        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
+        var span1       = chunks.Chunk1.Span;
         
         unsafe {
 #pragma warning disable CS8500

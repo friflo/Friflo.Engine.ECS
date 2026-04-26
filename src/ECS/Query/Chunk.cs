@@ -26,12 +26,6 @@ namespace Friflo.Engine.ECS;
 public struct Chunk<T>
     where T : struct
 {
-    public              T[]         ArchetypeComponents {
-        get {
-            if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-            return _components;
-        } }
-
     /// <summary> Return the number of components in a <see cref="Chunk{T}"/>. </summary>
     public   readonly   int         Length;                 //  4
     

@@ -17,13 +17,12 @@ public static partial class ChunkExtensions
         where T5 : struct
     {
         var entities    = chunks.Entities;
-        var start       = entities.Start;
         var length      = entities.Length;
-        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
-        var span2       = new Span<T2>(chunks.Chunk2.ArchetypeComponents, start, length);
-        var span3       = new Span<T3>(chunks.Chunk3.ArchetypeComponents, start, length);
-        var span4       = new Span<T4>(chunks.Chunk4.ArchetypeComponents, start, length);
-        var span5       = new Span<T5>(chunks.Chunk5.ArchetypeComponents, start, length);
+        var span1       = chunks.Chunk1.Span;
+        var span2       = chunks.Chunk2.Span;
+        var span3       = chunks.Chunk3.Span;
+        var span4       = chunks.Chunk4.Span;
+        var span5       = chunks.Chunk5.Span;
         
         unsafe {
 #pragma warning disable CS8500
@@ -54,11 +53,11 @@ public static partial class ChunkExtensions
         var start       = entities.Start;
         var length      = entities.Length;
         var spanIds     = entities.Archetype.EntityIds.Slice             (start, length);
-        var span1       = new Span<T1>(chunks.Chunk1.ArchetypeComponents, start, length);
-        var span2       = new Span<T2>(chunks.Chunk2.ArchetypeComponents, start, length);
-        var span3       = new Span<T3>(chunks.Chunk3.ArchetypeComponents, start, length);
-        var span4       = new Span<T4>(chunks.Chunk4.ArchetypeComponents, start, length);
-        var span5       = new Span<T5>(chunks.Chunk5.ArchetypeComponents, start, length);
+        var span1       = chunks.Chunk1.Span;
+        var span2       = chunks.Chunk2.Span;
+        var span3       = chunks.Chunk3.Span;
+        var span4       = chunks.Chunk4.Span;
+        var span5       = chunks.Chunk5.Span;
         
         unsafe {
 #pragma warning disable CS8500
