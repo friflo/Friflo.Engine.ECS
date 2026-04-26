@@ -28,6 +28,7 @@ public static class Test_SoA
         int count = 0;
         foreach (var (pos, FloatComponent) in query.Chunks) {
             count++;
+            _ = pos.GetComponentSpan()[pos.Length]; // no exception - Span has padding
             for (long n = 0; n < repeat; n++) {
                 _ = pos[0];    
             }
@@ -48,6 +49,7 @@ public static class Test_SoA
         var query = store.Query<FloatComponent>();
         int count = 0;
         foreach (var (pos, FloatComponent) in query.Chunks) {
+            _ = pos.GetComponentSpan()[pos.Length]; // no exception - Span has padding
             count++;
             var lanes  = pos.GetComponentSpan();
             Assert32ByteAligned(lanes);
