@@ -315,13 +315,13 @@ public static class Test_SoAVector3
             }
             count++;
             var e = Throws<InvalidOperationException>(() => { _ = positions.Span; });
-            AreEqual("Expect call for regular component data.", e!.Message);
+            AreEqual("Expect call for AoS component data.", e!.Message);
             
             e = Throws<InvalidOperationException>(() => { _ = positions[0]; });
-            AreEqual("Expect call for regular component data.", e!.Message);
+            AreEqual("Expect call for AoS component data.", e!.Message);
             
             e = Throws<InvalidOperationException>(() => { _ = positions.ArchetypeComponents; });
-            AreEqual("Expect call for regular component data.", e!.Message);
+            AreEqual("Expect call for AoS component data.", e!.Message);
             
         }
         AreEqual(1, count);

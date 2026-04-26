@@ -12,9 +12,10 @@ namespace Friflo.Engine.ECS;
 
 internal enum Layout
 {
-    AoS,
-    SoA,
-    AoSoA
+                            AoS,
+    /** 32-byte aligned */  AoSSimd, 
+    /** 32-byte aligned */  SoA,
+    /** 32-byte aligned */  AoSoA
 }
 
 public static class SimdInfo<T>
@@ -38,12 +39,12 @@ internal static class SimdUtils
         
     internal static Layout GetLayout<T>()  where T : struct
     {
-        var fieldFound = GetFieldCountSoA<T>();
-        if (fieldFound == 0) {
+        var fieldCount = GetFieldCountSoA<T>();
+        if (fieldCount == 0) {
             return Layout.AoS;
         }
         var type = typeof(T);
-        return GetLayout(type);
+        return GetLayout(type, fieldCount);
     }
 
     internal static int GetFieldCountSoA<T>()
@@ -77,7 +78,7 @@ internal static class SimdUtils
         return 0;
     }
     
-    private static Layout GetLayout(Type type)
+    private static Layout GetLayout(Type type, int fieldCount)
     {
         foreach (var attr in type.CustomAttributes)
         {
@@ -88,6 +89,10 @@ internal static class SimdUtils
             if (attributeType == typeof(SoAAttribute)) {
                 return Layout.SoA;
             }
+        }
+        switch (fieldCount) {
+            case 1: return Layout.AoSSimd;
+            case 4: return Layout.AoSSimd;
         }
         return Layout.AoS;
     }
