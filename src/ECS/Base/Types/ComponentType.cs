@@ -119,8 +119,9 @@ internal sealed class ComponentType<T> : ComponentType
         switch (layout)
         {
             case Layout.AoS:
-                if (SimdInfo<T>.FieldCountSoA == 1) {
-                    return new StructAoSFloat<T>(StructIndex);
+                switch (SimdInfo<T>.FieldCountSoA) {
+                    case 1: return new StructAoSFloat<T>  (StructIndex);
+                    case 4: return new StructAoSVector4<T>(StructIndex);
                 }
                 return new StructHeapGen<T>(StructIndex);
             case Layout.SoA:

@@ -3,7 +3,9 @@
 
 // ReSharper disable CheckNamespace
 
+using System;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Friflo.Engine.ECS;
@@ -20,7 +22,7 @@ public static class SimdInfo<T>
 {
     internal static readonly  Layout  Layout          = SimdUtils.GetLayout<T>();
     
-    public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>(out _);
+    public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
     
     /// <summary>
     /// Is always a multiple of 8. The enables the stride returned from
@@ -34,76 +36,74 @@ internal static class SimdUtils
 {
     internal const int LaneWidth = 8;
         
-    internal static Layout GetLayout<T>()
+    internal static Layout GetLayout<T>()  where T : struct
     {
-        GetFieldCountSoA<T>(out var layout);
-        return layout;
+        var fieldFound = GetFieldCountSoA<T>();
+        if (fieldFound == 0) {
+            return Layout.AoS;
+        }
+        var type = typeof(T);
+        return GetLayout(type);
     }
 
-    internal static int GetFieldCountSoA<T>(out Layout layout)
+    internal static int GetFieldCountSoA<T>()
     {
-        var type = typeof(T);
-        layout = Layout.AoS;
+        var type        = typeof(T);
         var fields = type.GetFields();
-        if (fields.Length == 1) {
-            var field = fields[0];
-            if (field.Name == "value" || field.Name == "Value") {
-                if (field.FieldType == typeof(float)) {
-                    layout = Layout.AoS;
-                    return 1;
-                }
-            }
-        }
-        foreach (var attr in type.CustomAttributes)
+        foreach (var field in fields)
         {
-            var attributeType = attr.AttributeType;
-            if          (attributeType == typeof(SoAAttribute)) {
-                layout = Layout.SoA;
-            } else if   (attributeType == typeof(AoSoAAttribute)) {
-                layout = Layout.AoSoA;
-            } else {
-                layout = Layout.AoS;
-                continue;
-            }
-    	    var dimension = 0;
-            foreach (var field in fields) {
-                if (field.Name != "value" && field.Name != "Value") {
-                    continue;
-                }
-                if (field.FieldType == typeof(Vector2)) { dimension = 2; }
-                if (field.FieldType == typeof(Vector3)) { dimension = 3; }
-                if (field.FieldType == typeof(Vector4)) { dimension = 4; }
-                
+            var dimension = GetDimension(field);
+            if (dimension > 0) {
                 if (Unsafe.SizeOf<T>() != dimension * 4) {
-                    dimension = 0;
+                    return 0;
                 }
+                return dimension;
             }
-            return dimension;
         }
         return 0;
     }
     
-    internal static int  GetSimdStep<T>()
+    private static int GetDimension(FieldInfo fieldInfo)
     {
-        var type = typeof(T);
-        var fields = type.GetFields();
-        var step = 0;
-        var size = 0;
-        foreach (var field in fields) {
-            if (field.Name != "value" && field.Name != "Value") {
-                continue;
+        var fieldName = fieldInfo.Name;
+        if (fieldName != "value" && fieldName != "Value") {
+            return 0;
+        }
+        var fieldType = fieldInfo.FieldType;
+        if (fieldType == typeof(float))   return 1;
+        if (fieldType == typeof(Vector2)) return 2;
+        if (fieldType == typeof(Vector3)) return 3;
+        if (fieldType == typeof(Vector4)) return 4;
+        return 0;
+    }
+    
+    private static Layout GetLayout(Type type)
+    {
+        foreach (var attr in type.CustomAttributes)
+        {
+            var attributeType = attr.AttributeType;
+            if (attributeType == typeof(AoSoAAttribute)) {
+                return Layout.AoSoA;
             }
-            // Important Requirement!   step must always be a multiple of 8.
-            //   This ensures the stride used for SoA lanes enables 32 byte aligned access to lane[1] [2] and [3].
-            if (field.FieldType == typeof(float))   { step = 32; size =  4; }
-            if (field.FieldType == typeof(Vector2)) { step = 16; size =  8; }
-            if (field.FieldType == typeof(Vector3)) { step =  8; size = 12; }
-            if (field.FieldType == typeof(Vector4)) { step =  8; size = 16; }
-            
-            if (Unsafe.SizeOf<T>() != size) {
-                step = 0;
+            if (attributeType == typeof(SoAAttribute)) {
+                return Layout.SoA;
             }
         }
-        return step;
+        return Layout.AoS;
+    }
+    
+    internal static int  GetSimdStep<T>() where T : struct
+    {
+        var fieldCount = SimdInfo<T>.FieldCountSoA;
+        // Important Requirement!   step must always be a multiple of 8.
+        //   This ensures the stride used for SoA lanes enables 32 byte aligned access to lane[1] [2] and [3].
+        switch (fieldCount)
+        {
+            case 1: return 32;
+            case 2: return 16;
+            case 3: return  8;
+            case 4: return  8;
+        }
+        return 0;
     }
 }

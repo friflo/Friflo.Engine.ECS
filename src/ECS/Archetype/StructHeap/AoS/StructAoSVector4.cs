@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -20,9 +21,12 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
 ///   for collection.
 /// </remarks>
-internal sealed class StructAoSFloat<T> : StructHeap<T>
+internal sealed class StructAoSVector4<T> : StructHeap<T>
     where T : struct
 {
+    private const   int     FieldCount = 4;
+    private const   int     Shift      = 2; // * 4
+    
     public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
     
     internal override (T[],int) GetComponents () => (Unsafe.As<float[], T[]>(ref components), simdOffset);
@@ -32,15 +36,15 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     private         float[] components;     //  8
     private         int     simdOffset;     //  8
     
-    internal StructAoSFloat(int structIndex)
+    internal StructAoSVector4(int structIndex)
         : base (structIndex)
     {
         var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, 8);
-        components  = AllocateAligned(capacity, out simdOffset);
+        components  = AllocateAligned(capacity * FieldCount, out simdOffset);
     }
     
     internal override ref T GetComponentRef(int index) {
-        return ref Unsafe.As<float[], T[]>(ref components)[simdOffset + index];
+        return ref Unsafe.As<float[], T[]>(ref components)[simdOffset + (index << Shift)];
     }
     
     internal override T GetComponentValue(int index) {
@@ -51,8 +55,8 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
         ComponentToAoS(component, index);
     }
     
-    internal override T GetSoA(int index) {
-        return Unsafe.As<float[], T[]>(ref components)[simdOffset + index];
+    internal override T GetSoA(int index) { // todo extract exception to method
+        throw new InvalidOperationException($"Component '{typeof(T).Name}' is stored as AoS. GetSoA() requires AoSoA storage. Add attribute [AoSoA] or use GetComponent() instead.");
     }
     
     
@@ -67,7 +71,7 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     }
     
     // --- StructHeap
-    protected override  int     ComponentsLength    => components.Length - simdOffset;
+    protected override  int     ComponentsLength    => (components.Length - simdOffset) / FieldCount;
 
     internal  override  Type    StructType          => typeof(T);
     
@@ -75,7 +79,8 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     {
         var capacity    = CalcCapacity(newCapacity, 8);
         var oldOffset   = simdOffset;
-        var dst         = AllocateAligned(capacity, out simdOffset);
+        var dst         = AllocateAligned(capacity * FieldCount, out simdOffset);
+        count          *= FieldCount;
         new ReadOnlySpan<float>(components, oldOffset, count).CopyTo(new Span<float>(dst, simdOffset, count));
         components = dst;
     }
@@ -84,14 +89,14 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     {
         var localComponents = components;
         var offest          = simdOffset; 
-        localComponents[offest + to] = localComponents[offest + from];
+        localComponents[offest + (to << Shift)]     = localComponents[offest + (from << Shift)];
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
-        var targetSoA       = (StructAoSFloat<T>)targetHeap;
+        var targetSoA       = (StructAoSVector4<T>)targetHeap;
         var dst             = targetSoA.components;
-        dst[targetSoA.simdOffset + targetPos] = components[simdOffset + sourcePos];
+        dst[targetSoA.simdOffset + (targetPos << Shift)] = components[simdOffset + (sourcePos << Shift)];
     }
     
     internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
@@ -105,7 +110,7 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
     {
-        new Span<float>(components, simdOffset + compIndexStart, count).Clear();
+        new Span<float>(components, simdOffset + compIndexStart, count * FieldCount).Clear();
     }
   
     /// <summary>
@@ -180,16 +185,26 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ComponentToAoS(T src, int index)
     {
-        ref var component               = ref Unsafe.As<T, float>(ref src);
-        components[simdOffset + index]  = component;
+        Span<float> span = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), FieldCount);
+        var offset      = simdOffset + (index << Shift);
+        float[] dst     = components;
+        dst[offset]     = span[0]; // X
+        dst[offset + 1] = span[1]; // Y
+        dst[offset + 2] = span[2]; // Z
+        dst[offset + 3] = span[3]; // W
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private T GetComponentFromAoS(int index)
     {
-        T result = default;
-        ref var component   = ref Unsafe.As<T, float>(ref result);
-        component           = components[simdOffset + index];
+        T result        = default;
+        var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), FieldCount);
+        var offset      = simdOffset + (index << Shift);
+        float[] src     = components;
+        component[0]    = src[offset];       // X
+        component[1]    = src[offset + 1];   // Y
+        component[2]    = src[offset + 2];   // Z
+        component[3]    = src[offset + 3];   // W
         return result;
     }
 }
