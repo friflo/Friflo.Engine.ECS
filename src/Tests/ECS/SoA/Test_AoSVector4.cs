@@ -15,7 +15,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.SoA {
 
-[Ignore("Implement StructAoSVector4<>")]
 public static class Test_AoSVector4
 {
     [Test]
@@ -83,9 +82,9 @@ public static class Test_AoSVector4
         entity1.AddTag<General.MyTag1>();
         entity2.AddTag<General.MyTag2>();
         
-        AreEqual(pos1.value, entity1.GetSoA<Pos4>().value);
-        AreEqual(pos2.value, entity2.GetSoA<Pos4>().value);
-        AreEqual(pos3.value, entity3.GetSoA<Pos4>().value);
+        AreEqual(pos1.value, entity1.GetComponent<Pos4>().value);
+        AreEqual(pos2.value, entity2.GetComponent<Pos4>().value);
+        AreEqual(pos3.value, entity3.GetComponent<Pos4>().value);
     }
 
     /// Test <see cref="StructSoAVector4{T}.ResizeComponents"/>
@@ -104,7 +103,7 @@ public static class Test_AoSVector4
                 for (int i = 1; i < n; i++)
                 {
                     var entity = store.GetEntityById(i);
-                    var pos = entity.GetSoA<Pos4>();
+                    var pos = entity.GetComponent<Pos4>();
                     var expect = new Vector4(i,  i + 10_000, i + 20_000, i + 30_000);
                     AreEqual(expect, pos.value);
                 }
@@ -121,7 +120,7 @@ public static class Test_AoSVector4
                 foreach (var entity in query.Entities)
                 {
                     var id = entity.Id;
-                    var pos = entity.GetSoA<Pos4>();
+                    var pos = entity.GetComponent<Pos4>();
                     var expect = new Vector4(id,  id + 10_000, id + 20_000, id + 30_000);
                     AreEqual(expect, pos.value);
                 }
@@ -136,7 +135,7 @@ public static class Test_AoSVector4
                 foreach (var entity in query.Entities)
                 {
                     var id = entity.Id;
-                    var pos = entity.GetSoA<Pos4>();
+                    var pos = entity.GetComponent<Pos4>();
                     var expect = new Vector4(id,  id + 10_000, id + 20_000, id + 30_000);
                     AreEqual(expect, pos.value);
                 }
@@ -158,9 +157,9 @@ public static class Test_AoSVector4
         AreEqual("Component 'Position' is stored as AoS. GetSoA() requires SoA storage. Add [SoA] attribute or use GetComponent() instead.", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
-            entitySoA.GetComponent<Pos4>();
+            entitySoA.GetSoA<Pos4>();
         });
-        AreEqual("Component 'Pos4' is stored as SoA. GetComponent() requires AoS storage. Remove attribute [SoA] or use GetSoA() instead.", e!.Message);
+        AreEqual("Component 'Pos4' is stored as AoS. GetSoA() requires AoSoA storage. Add attribute [AoSoA] or use GetComponent() instead.", e!.Message);
     }
     
     /// Test <see cref="StructSoAVector4{T}.Write"/>
@@ -178,7 +177,7 @@ public static class Test_AoSVector4
         
         var targetStore = new EntityStore();
         var targetEntity = converter.DataEntityToEntity(dataEntity, targetStore, out var error);
-        AreEqual(pos.value, targetEntity.GetSoA<Pos4>().value);
+        AreEqual(pos.value, targetEntity.GetComponent<Pos4>().value);
         IsNull(error);
     }
     
@@ -223,7 +222,7 @@ public static class Test_AoSVector4
             AreEqual(pos.value, old.value);
         };
         IsTrue(EntityUtils.SetEntityComponentMember(entity, nameInfo, newPos, handler, out _));
-        var result = entity.GetSoA<Pos4>();
+        var result = entity.GetComponent<Pos4>();
         AreEqual(newPos, result.value);
     }
     
@@ -239,7 +238,7 @@ public static class Test_AoSVector4
         var targetEntity = target.CreateEntity();
         srcEntity.CopyEntity(targetEntity);
         
-        AreEqual(pos.value, targetEntity.GetSoA<Pos4>().value);
+        AreEqual(pos.value, targetEntity.GetComponent<Pos4>().value);
     }
     
     /// Test <see cref="StructSoAVector4{T}.SetBatchComponent"/>
@@ -252,7 +251,7 @@ public static class Test_AoSVector4
         batch.Add(pos);
         var entity = batch.CreateEntity();
         
-        AreEqual(pos.value, entity.GetSoA<Pos4>().value);
+        AreEqual(pos.value, entity.GetComponent<Pos4>().value);
     }
     
     /// Test <see cref="StructSoAVector4{T}.GetComponentDebug"/>
@@ -284,7 +283,7 @@ public static class Test_AoSVector4
         
         var entities = archetype.CreateEntities(2);
         foreach (var entity in entities) {
-            AreEqual(new Vector4(), entity.GetSoA<Pos4>().value);
+            AreEqual(new Vector4(), entity.GetComponent<Pos4>().value);
         }
     }
 }

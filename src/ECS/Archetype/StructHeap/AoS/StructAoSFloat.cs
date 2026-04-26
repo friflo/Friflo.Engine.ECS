@@ -89,7 +89,7 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
-        var targetSoA       = (StructAoSFloat<T>)targetHeap;
+        var targetSoA = (StructAoSFloat<T>)targetHeap;
         var dst             = targetSoA.components;
         dst[targetSoA.simdOffset + targetPos] = components[simdOffset + sourcePos];
     }
@@ -186,7 +186,7 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private T GetComponentFromAoS(int index)
-    {
+    { 
         T result = default;
         ref var component   = ref Unsafe.As<T, float>(ref result);
         component           = components[simdOffset + index];

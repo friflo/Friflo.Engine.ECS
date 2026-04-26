@@ -103,8 +103,8 @@ internal abstract class StructHeap : IComponentStash
     {
 #if NET6_0_OR_GREATER
         float[] array           = GC.AllocateArray<float>(length: capacity + 7, pinned: true);
-        var address             = (long)Marshal.UnsafeAddrOfPinnedArrayElement(array, 0);
-        int byteMisalignment    = (int)(address & 31);
+        var address = (long)Marshal.UnsafeAddrOfPinnedArrayElement(array, 0);
+        int byteMisalignment = (int)(address & 31);
         simdOffset              = byteMisalignment == 0 ? 0 : (32 - byteMisalignment) / 4;
         return array;
 #else

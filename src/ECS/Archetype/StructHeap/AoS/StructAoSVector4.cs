@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -44,7 +43,7 @@ internal sealed class StructAoSVector4<T> : StructHeap<T>
     }
     
     internal override ref T GetComponentRef(int index) {
-        return ref Unsafe.As<float[], T[]>(ref components)[simdOffset + (index << Shift)];
+        return ref Unsafe.As<float, T>(ref components[simdOffset + (index << Shift)]);
     }
     
     internal override T GetComponentValue(int index) {
@@ -87,16 +86,13 @@ internal sealed class StructAoSVector4<T> : StructHeap<T>
     
     internal override void MoveComponent(int from, int to)
     {
-        var localComponents = components;
-        var offest          = simdOffset; 
-        localComponents[offest + (to << Shift)]     = localComponents[offest + (from << Shift)];
+        ComponentToAoS(GetComponentFromAoS(from), to);
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap targetHeap, int targetPos)
     {
         var targetSoA       = (StructAoSVector4<T>)targetHeap;
-        var dst             = targetSoA.components;
-        dst[targetSoA.simdOffset + (targetPos << Shift)] = components[simdOffset + (sourcePos << Shift)];
+        targetSoA.ComponentToAoS(GetComponentFromAoS(sourcePos), targetPos);
     }
     
     internal override void CopyComponent(int sourcePos, StructHeap targetHeap, int targetPos, in CopyContext context, long updateIndexTypes)
@@ -185,26 +181,12 @@ internal sealed class StructAoSVector4<T> : StructHeap<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ComponentToAoS(T src, int index)
     {
-        Span<float> span = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref src), FieldCount);
-        var offset      = simdOffset + (index << Shift);
-        float[] dst     = components;
-        dst[offset]     = span[0]; // X
-        dst[offset + 1] = span[1]; // Y
-        dst[offset + 2] = span[2]; // Z
-        dst[offset + 3] = span[3]; // W
+        Unsafe.As<float, T>(ref components[simdOffset + (index << Shift)]) = src;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private T GetComponentFromAoS(int index)
     {
-        T result        = default;
-        var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), FieldCount);
-        var offset      = simdOffset + (index << Shift);
-        float[] src     = components;
-        component[0]    = src[offset];       // X
-        component[1]    = src[offset + 1];   // Y
-        component[2]    = src[offset + 2];   // Z
-        component[3]    = src[offset + 3];   // W
-        return result;
+        return Unsafe.As<float, T>(ref components[simdOffset + (index << Shift)]);
     }
 }

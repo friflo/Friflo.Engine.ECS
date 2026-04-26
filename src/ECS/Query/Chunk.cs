@@ -56,9 +56,10 @@ public struct Chunk<T>
     public Span<T> GetComponentSpan()
     {
         if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-        var components = _components;
-        var offset =  simdOffset + start;
-        return new Span<T>(components, offset, components.Length - offset);
+        float[] buffer      = Unsafe.As<T[], float[]>(ref _components);
+        int floatsPerT      = Unsafe.SizeOf<T>() / sizeof(float);
+        int startInFloats   = simdOffset + (start * floatsPerT);
+        return MemoryMarshal.Cast<float, T>(buffer.AsSpan(startInFloats));
     }
     
     /// <summary>

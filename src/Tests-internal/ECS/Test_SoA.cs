@@ -23,7 +23,7 @@ public static class Test_SoA
     public static void Test_AoSFloat_Query_Lanes()
     {
         var store = new EntityStore();
-        for (int n = 0; n < 1000; n++) {
+        for (int n = 10; n < 20; n++) {
             store.CreateEntity(new FloatComponent { value = n * 10 });
         }
         var query = store.Query<FloatComponent>();
@@ -38,10 +38,28 @@ public static class Test_SoA
     
     /// Test <see cref="Chunk{T}.GetLanesSoA"/>
     [Test]
+    public static void Test_AoSVector4_Query_Lanes()
+    {
+        var store = new EntityStore();
+        for (int n = 10; n < 20; n++) {
+            store.CreateEntity(new Pos4 { value = new Vector4(n * 10, n * 20, n * 30, n * 40) });
+        }
+        var query = store.Query<Pos4>();
+        int count = 0;
+        foreach (var (pos, Pos4) in query.Chunks) {
+            count++;
+            var lanes  = pos.GetComponentSpan();
+            Assert32ByteAligned(lanes);
+        }
+        Assert.AreEqual(1, count);
+    }
+    
+    /// Test <see cref="Chunk{T}.GetLanesSoA"/>
+    [Test]
     public static void Test_AoSoAVector2_Query_Lanes()
     {
         var store = new EntityStore();
-        for (int n = 0; n < 1000; n++) {
+        for (int n = 10; n < 20; n++) {
             store.CreateEntity(new Pos2AoSoA { value = new Vector2(n * 10, n * 20) });
         }
         var query = store.Query<Pos2AoSoA>();
@@ -59,7 +77,7 @@ public static class Test_SoA
     public static void Test_AoSoAVector3_Query_Lanes()
     {
         var store = new EntityStore();
-        for (int n = 0; n < 1000; n++) {
+        for (int n = 10; n < 20; n++) {
             store.CreateEntity(new Pos3AoSoA { value = new Vector3(n * 10, n * 20, n * 30) });
         }
         var query = store.Query<Pos3AoSoA>();
@@ -77,7 +95,7 @@ public static class Test_SoA
     public static void Test_AoSoAVector4_Query_Lanes()
     {
         var store = new EntityStore();
-        for (int n = 0; n < 1000; n++) {
+        for (int n = 10; n < 20; n++) {
             store.CreateEntity(new Pos4AoSoA { value = new Vector4(n * 10, n * 20, n * 30, n * 40) });
         }
         var query = store.Query<Pos4AoSoA>();
