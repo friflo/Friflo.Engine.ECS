@@ -26,13 +26,6 @@ namespace Friflo.Engine.ECS;
 public struct Chunk<T>
     where T : struct
 {
-    /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
-    public              Span<T>     Span {
-        get {
-            if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-            return new Span<T>(_components, simdOffset + start, Length);
-        } }
-
     public              T[]         ArchetypeComponents {
         get {
             if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
@@ -47,19 +40,50 @@ public struct Chunk<T>
     
     private  readonly   int         simdOffset;             //  4
     
-    // DANGER: _components is Aliased! 
-    // For [SoA] components, this T[] actually points to a float[].
-    // Do not inspect in debugger without the 'SoA' flag check.
+    // NOTE: _components is Aliased! (Array Reinterpretation / Type Punning) 
+    // [AoS]                    T[]
+    // [AoSSimd] [AoSoA] [SoA]  float[] 
+    // IMPORTANT: Never access directly! Use Span property or Indexer.
     [DebuggerBrowsable(Never)]
     private             T[]         _components;            //  8
     
+    /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
+    public              Span<T>     Span
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetComponentSpan().Slice(0, Length);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetComponentSpan()
     {
-        if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-        float[] buffer      = Unsafe.As<T[], float[]>(ref _components);
-        int floatsPerT      = Unsafe.SizeOf<T>() / sizeof(float);
-        int startInFloats   = simdOffset + (start * floatsPerT);
-        return MemoryMarshal.Cast<float, T>(buffer.AsSpan(startInFloats));
+        if (SimdInfo<T>.Layout == Layout.AoS) {
+            return _components.AsSpan(start);
+        }
+        if (SimdInfo<T>.Layout == Layout.AoSSimd) {
+#if NET6_0_OR_GREATER
+            float[] buffer = Unsafe.As<T[], float[]>(ref _components);
+            int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);
+            
+            // Der Startpunkt bleibt wie gehabt
+            int startIdx = simdOffset + (start * floatsPerT);
+
+            // Die Länge muss nun die Padding-Bytes am Ende einschließen.
+            // Das ist die restliche Kapazität des zugewiesenen float-Segments für diese Komponente.
+            // buffer.Length ist hier die Rettung, da es die physische Grenze ist.
+            int paddedLength = (buffer.Length - startIdx) / floatsPerT;
+
+            return MemoryMarshal.CreateSpan(
+                ref Unsafe.As<float, T>(ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(buffer), startIdx)), paddedLength);
+#else
+            if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
+            float[] buffer      = Unsafe.As<T[], float[]>(ref _components);
+            int floatsPerT      = Unsafe.SizeOf<T>() / sizeof(float);
+            int startInFloats   = simdOffset + (start * floatsPerT);
+            return MemoryMarshal.Cast<float, T>(buffer.AsSpan(startInFloats));
+#endif
+        }
+        throw ChunkExtensions.ExpectCallForAoSComponent();
     }
     
     /// <summary>
@@ -68,9 +92,10 @@ public struct Chunk<T>
     /// The trailing elements enable to process the entire span with 32-byte vectorization without a remainder loop.<br/>
     /// <b>Note:</b> Use <see cref="Length"/> for loops to process the correct number of components.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<float> GetLanesSoA()
     {
-        if (SimdInfo<T>.Layout == Layout.AoS) ChunkExtensions.ExpectCallForSoAComponent();
+        if (SimdInfo<T>.Layout != Layout.SoA && SimdInfo<T>.Layout != Layout.AoSoA) ChunkExtensions.ExpectCallForSoAComponent();
         // Reinterpret the reference
         return Unsafe.As<T[], float[]>(ref _components).AsSpan(simdOffset);
     }
@@ -79,6 +104,7 @@ public struct Chunk<T>
     /// The returned stride enable 32 byte aligned access for all lanes
     /// as <see cref="SimdInfo{T}.SimdStep"/> is always a multiple of 8.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int GetStrideSoA() {
         if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
         return _components.Length / SimdInfo<T>.FieldCountSoA;
@@ -128,6 +154,7 @@ public struct Chunk<T>
     
     public T GetAoSoA(int index)
     {
+        if (SimdInfo<T>.Layout != Layout.AoSoA) ChunkExtensions.ExpectCallForAoSoAComponent();
         int step        = SimdUtils.LaneWidth;
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
@@ -155,6 +182,7 @@ public struct Chunk<T>
     
     public void SetAoSoA(int index, T value)
     {
+        if (SimdInfo<T>.Layout != Layout.AoSoA) ChunkExtensions.ExpectCallForAoSoAComponent();
         int step        = SimdUtils.LaneWidth;       
         int tileIndex   = index >> 3; 
         int lane        = index & 7;  
@@ -271,10 +299,22 @@ public struct Chunk<T>
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>
     public ref T this[int index] {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get {
-            if (index < Length) {
-                if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-                return ref _components[simdOffset + start + index];
+            if ((uint)index < (uint)Length) {
+                if (SimdInfo<T>.Layout == Layout.AoS) {
+                    return ref _components[start + index];
+                }
+                if (SimdInfo<T>.Layout == Layout.AoSSimd) {
+#if NET6_0_OR_GREATER
+                    int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);
+                    ref float startRef = ref MemoryMarshal.GetArrayDataReference(Unsafe.As<T[], float[]>(ref _components));
+                    return ref Unsafe.As<float, T>(ref Unsafe.Add(ref startRef, simdOffset + (start + index) * floatsPerT));
+#else
+                    return ref _components[start + index];  
+#endif
+                }
+                throw ChunkExtensions.ExpectCallForAoSComponent();
             }
             throw new IndexOutOfRangeException();
         }
@@ -336,12 +376,23 @@ internal static class ChunkExtensions
     [DoesNotReturn]
     [MethodImpl(MethodImplOptions.NoInlining)]
     internal static void ExpectCallForRegularComponent() {
-        throw new InvalidOperationException("Expect call for regular component data.");
+        throw new InvalidOperationException("Expect call for AoS component data.");
     }
     
     [DoesNotReturn]
     [MethodImpl(MethodImplOptions.NoInlining)]
     internal static void ExpectCallForSoAComponent() {
         throw new InvalidOperationException("Expect call for SoA component data.");
+    }
+    
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static void ExpectCallForAoSoAComponent() {
+        throw new InvalidOperationException("Expect call for AoSoA component data.");
+    }
+    
+    [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static InvalidOperationException ExpectCallForAoSComponent() {
+        throw new InvalidOperationException("Expect call for AoS component data.");
     }
 }
