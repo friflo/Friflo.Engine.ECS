@@ -38,8 +38,7 @@ public struct Chunk<T>
     // [AoS]                    T[]
     // [AoSSimd] [AoSoA] [SoA]  float[] 
     // IMPORTANT: Never access directly! Use Span property or Indexer.
-    [DebuggerBrowsable(Never)]
-    private             T[]         _components;            //  8
+    private             object      _components;            //  8
     
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
     public              Span<T>     Span
@@ -52,26 +51,20 @@ public struct Chunk<T>
     public Span<T> GetComponentSpan()
     {
         if (SimdInfo<T>.Layout == Layout.AoS) {
-            return _components.AsSpan(start);
+            return Unsafe.As<T[]>(_components).AsSpan(start);
         }
         if (SimdInfo<T>.Layout == Layout.AoSAligned) {
 #if NET6_0_OR_GREATER
-            float[] buffer = Unsafe.As<T[], float[]>(ref _components);
-            int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);
-            
-            // Der Startpunkt bleibt wie gehabt
-            int startIdx = simdOffset + (start * floatsPerT);
-
-            // Die Länge muss nun die Padding-Bytes am Ende einschließen.
-            // Das ist die restliche Kapazität des zugewiesenen float-Segments für diese Komponente.
-            // buffer.Length ist hier die Rettung, da es die physische Grenze ist.
-            int paddedLength = (buffer.Length - startIdx) / floatsPerT;
+            if (_components == null) return Span<T>.Empty;
+            float[] buffer = Unsafe.As<object, float[]>(ref _components);   // interpret object as float[]
+            int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);            // ratio calc
+            int startIdx   = simdOffset + (start * floatsPerT);             // absolute float start
+            int paddedLength = (buffer.Length - startIdx) / floatsPerT;     // include safety padding
 
             return MemoryMarshal.CreateSpan(
                 ref Unsafe.As<float, T>(ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(buffer), startIdx)), paddedLength);
 #else
-            if (SimdInfo<T>.Layout != Layout.AoS) ChunkExtensions.ExpectCallForRegularComponent();
-            float[] buffer      = Unsafe.As<T[], float[]>(ref _components);
+            float[] buffer      = Unsafe.As<object, float[]>(ref _components);
             int floatsPerT      = Unsafe.SizeOf<T>() / sizeof(float);
             int startInFloats   = simdOffset + (start * floatsPerT);
             return MemoryMarshal.Cast<float, T>(buffer.AsSpan(startInFloats));
@@ -90,8 +83,7 @@ public struct Chunk<T>
     public Span<float> GetLanesSoA()
     {
         if (SimdInfo<T>.Layout != Layout.SoA && SimdInfo<T>.Layout != Layout.AoSoA) ChunkExtensions.ExpectCallForSoAComponent();
-        // Reinterpret the reference
-        return Unsafe.As<T[], float[]>(ref _components).AsSpan(simdOffset);
+        return Unsafe.As<object, float[]>(ref _components).AsSpan(simdOffset); // treat as float storage
     }
     
     /// <summary>
@@ -101,14 +93,15 @@ public struct Chunk<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int GetStrideSoA() {
         if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
-        return _components.Length / SimdInfo<T>.FieldCountSoA;
+        var lanes = Unsafe.As<object, float[]>(ref _components);            // cast to access Length
+        return lanes.Length / SimdInfo<T>.FieldCountSoA;                    // calc stride
     }
     
     public T GetSoA(int index)
     {
         if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
-        var stride = _components.Length / SimdInfo<T>.FieldCountSoA;
-        var lanes = Unsafe.As<T[], float[]>(ref _components);
+        var lanes  = Unsafe.As<object, float[]>(ref _components);           // access float data
+        var stride = lanes.Length / SimdInfo<T>.FieldCountSoA;
         T result = default;
         Span<float> component = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref result), SimdInfo<T>.FieldCountSoA);
         switch (SimdInfo<T>.FieldCountSoA) {
@@ -129,9 +122,9 @@ public struct Chunk<T>
     public void SetSoA(int index, T value)
     {
         if (SimdInfo<T>.Layout != Layout.SoA) ChunkExtensions.ExpectCallForSoAComponent();
-        var stride      = _components.Length / SimdInfo<T>.FieldCountSoA;
+        var lanes       = Unsafe.As<object, float[]>(ref _components);      // access float data
+        var stride      = lanes.Length / SimdInfo<T>.FieldCountSoA;
         var component   = MemoryMarshal.CreateSpan(ref Unsafe.As<T, float>(ref value), SimdInfo<T>.FieldCountSoA);
-        var lanes       = Unsafe.As<T[], float[]>(ref _components);
         switch (SimdInfo<T>.FieldCountSoA) {
             case 1: goto Count_1;
             case 2: goto Count_2;
@@ -157,7 +150,7 @@ public struct Chunk<T>
 
         T result = default;
         ref float componentBase = ref Unsafe.As<T, float>(ref result);
-        var components       = Unsafe.As<T[], float[]>(ref _components);
+        var components = Unsafe.As<object, float[]>(ref _components);       // access float data
         switch (fieldCount)
         {
             case 4: // Vector4 / Quaternion
@@ -184,7 +177,7 @@ public struct Chunk<T>
         int tileStart   = simdOffset + tileIndex * (fieldCount * step);
 
         ref float valueBase = ref Unsafe.As<T, float>(ref value);
-        var components       = Unsafe.As<T[], float[]>(ref _components);
+        var components = Unsafe.As<object, float[]>(ref _components);       // access float data
         int baseIdx = tileStart + lane;
         switch (fieldCount)
         {
@@ -277,7 +270,7 @@ public struct Chunk<T>
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
 
-    internal Chunk((T[] components, int simdOffset) heap, int length, int start) {
+    internal Chunk((object components, int simdOffset) heap, int length, int start) {
         Length      = length;
         this.start  = start;
         _components = heap.components;
@@ -297,15 +290,15 @@ public struct Chunk<T>
         get {
             if ((uint)index < (uint)Length) {
                 if (SimdInfo<T>.Layout == Layout.AoS) {
-                    return ref _components[start + index];
+                    return ref Unsafe.As<T[]>(_components)[start + index];  // cast to T[] for indexer
                 }
                 if (SimdInfo<T>.Layout == Layout.AoSAligned) {
 #if NET6_0_OR_GREATER
+                    float[] buffer = Unsafe.As<object, float[]>(ref _components);
                     int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);
-                    ref float startRef = ref MemoryMarshal.GetArrayDataReference(Unsafe.As<T[], float[]>(ref _components));
-                    return ref Unsafe.As<float, T>(ref Unsafe.Add(ref startRef, simdOffset + (start + index) * floatsPerT));
+                    return ref Unsafe.As<float, T>(ref Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(buffer), simdOffset + (start + index) * floatsPerT));
 #else
-                    return ref _components[start + index];  
+                    return ref Unsafe.As<T[]>(_components)[start + index];  
 #endif
                 }
                 throw ChunkExtensions.ExpectCallForAoSComponent();
@@ -334,6 +327,7 @@ internal class ChunkDebugView<T>
         switch (SimdInfo<T>.Layout)
         {
             case Layout.AoS:
+            case Layout.AoSAligned:
                 return chunk.Span.ToArray();
             case Layout.SoA:
                 var components = new T[chunk.Length];

@@ -25,9 +25,9 @@ internal sealed class StructAoSoAVector2<T> : StructHeap<T>
 {
     private const   int     FieldCount = 2;
         
-    public override T[]     Components      => Unsafe.As<float[], T[]>(ref components); // the ultimate cowboy move
+    public override T[]     Components      => throw new NotSupportedException();
     
-    internal override (T[],int) GetComponents () => (Unsafe.As<float[], T[]>(ref components), simdOffset);
+    internal override (object,int) GetComponents () => (components, simdOffset);
 
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields

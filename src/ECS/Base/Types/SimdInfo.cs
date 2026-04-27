@@ -76,6 +76,7 @@ internal static class SimdUtils
         if (fieldType == typeof(Vector2))   return 2;
         if (fieldType == typeof(Vector3))   return 3;
         if (fieldType == typeof(Vector4))   return 4;
+        if (fieldType == typeof(Quaternion))return 4;
         return 0;
     }
     
