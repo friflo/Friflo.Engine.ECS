@@ -72,10 +72,10 @@ internal static class SimdUtils
             return 0;
         }
         var fieldType = fieldInfo.FieldType;
-        if (fieldType == typeof(float))   return 1;
-        if (fieldType == typeof(Vector2)) return 2;
-        if (fieldType == typeof(Vector3)) return 3;
-        if (fieldType == typeof(Vector4)) return 4;
+        if (fieldType == typeof(float))     return 1;
+        if (fieldType == typeof(Vector2))   return 2;
+        if (fieldType == typeof(Vector3))   return 3;
+        if (fieldType == typeof(Vector4))   return 4;
         return 0;
     }
     
@@ -93,6 +93,7 @@ internal static class SimdUtils
         }
         switch (fieldCount) {
             case 1: return Layout.AoSAligned;
+            case 2: return Layout.AoSAligned;
             case 4: return Layout.AoSAligned;
         }
         return Layout.AoS;
