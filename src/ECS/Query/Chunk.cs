@@ -54,7 +54,7 @@ public struct Chunk<T>
         if (SimdInfo<T>.Layout == Layout.AoS) {
             return _components.AsSpan(start);
         }
-        if (SimdInfo<T>.Layout == Layout.AoSSimd) {
+        if (SimdInfo<T>.Layout == Layout.AoSAligned) {
 #if NET6_0_OR_GREATER
             float[] buffer = Unsafe.As<T[], float[]>(ref _components);
             int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);
@@ -96,7 +96,7 @@ public struct Chunk<T>
     
     /// <summary>
     /// The returned stride enable 32 byte aligned access for all lanes
-    /// as <see cref="SimdInfo{T}.SimdStep"/> is always a multiple of 8.
+    /// as <see cref="SimdInfo{T}.ComponentStep"/> is always a multiple of 8.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int GetStrideSoA() {
@@ -299,7 +299,7 @@ public struct Chunk<T>
                 if (SimdInfo<T>.Layout == Layout.AoS) {
                     return ref _components[start + index];
                 }
-                if (SimdInfo<T>.Layout == Layout.AoSSimd) {
+                if (SimdInfo<T>.Layout == Layout.AoSAligned) {
 #if NET6_0_OR_GREATER
                     int floatsPerT = Unsafe.SizeOf<T>() / sizeof(float);
                     ref float startRef = ref MemoryMarshal.GetArrayDataReference(Unsafe.As<T[], float[]>(ref _components));

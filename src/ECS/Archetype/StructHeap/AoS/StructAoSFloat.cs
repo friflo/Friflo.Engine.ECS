@@ -35,7 +35,7 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     internal StructAoSFloat(int structIndex)
         : base (structIndex)
     {
-        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, 8);
+        var capacity = SimdUtils.CalcCapacity<T>(ArchetypeUtils.MinCapacity);
         components  = AllocateAligned(capacity, out simdOffset);
     }
     
@@ -73,7 +73,7 @@ internal sealed class StructAoSFloat<T> : StructHeap<T>
     
     internal override void ResizeComponents (int newCapacity, int count)
     {
-        var capacity    = CalcCapacity(newCapacity, 8);
+        var capacity    = SimdUtils.CalcCapacity<T>(newCapacity);
         var oldOffset   = simdOffset;
         var dst         = AllocateAligned(capacity, out simdOffset);
         new ReadOnlySpan<float>(components, oldOffset, count).CopyTo(new Span<float>(dst, simdOffset, count));

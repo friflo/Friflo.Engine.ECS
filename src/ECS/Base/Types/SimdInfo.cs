@@ -10,10 +10,11 @@ using System.Runtime.CompilerServices;
 
 namespace Friflo.Engine.ECS;
 
+/// <summary> Component arrays supporting 32-byte alignment are pinned. </summary>
 internal enum Layout
 {
                             AoS,
-    /** 32-byte aligned */  AoSSimd, 
+    /** 32-byte aligned */  AoSAligned,
     /** 32-byte aligned */  SoA,
     /** 32-byte aligned */  AoSoA
 }
@@ -21,15 +22,15 @@ internal enum Layout
 public static class SimdInfo<T>
     where T : struct
 {
-    internal static readonly  Layout  Layout          = SimdUtils.GetLayout<T>();
+    internal static readonly  Layout  Layout        = SimdUtils.GetLayout<T>();
     
-    public static readonly    int     FieldCountSoA   = SimdUtils.GetFieldCountSoA<T>();
+    public static readonly    int     FieldCountSoA = SimdUtils.GetFieldCountSoA<T>();
     
     /// <summary>
     /// Is always a multiple of 8. The enables the stride returned from
-    /// <see cref="Chunk{T}.GetStrideSoA"/> enables access to 32 byte aligned memory for all lanes.
+    /// <see cref="Chunk{T}.GetComponentSpan"/> enables access to 32 byte aligned memory for all lanes.
     /// </summary>
-    public static readonly    int     SimdStep        = SimdUtils.GetSimdStep<T>();
+    public static readonly    int     ComponentStep = SimdUtils.GetComponentStep<T>();
 }
 
 
@@ -91,24 +92,49 @@ internal static class SimdUtils
             }
         }
         switch (fieldCount) {
-            case 1: return Layout.AoSSimd;
-            case 4: return Layout.AoSSimd;
+            case 1: return Layout.AoSAligned;
+            case 4: return Layout.AoSAligned;
         }
         return Layout.AoS;
     }
     
-    internal static int  GetSimdStep<T>() where T : struct
+    /// <summary> Returns the increment size used in a SIMD Loop. Unit: components </summary>
+    internal static int  GetComponentStep<T>() where T : struct
     {
         var fieldCount = SimdInfo<T>.FieldCountSoA;
-        // Important Requirement!   step must always be a multiple of 8.
-        //   This ensures the stride used for SoA lanes enables 32 byte aligned access to lane[1] [2] and [3].
+        // Important Requirement! step must always be a power of two (8, 16, 32).
         switch (fieldCount)
         {
-            case 1: return 32;
-            case 2: return 16;
-            case 3: return  8;
-            case 4: return  8;
+            case 1: return 32; // float   (SIMD increment: 32 floats)
+            case 2: return 16; // Vector2 (SIMD increment: 32 floats)
+            case 3: return 8;  // Vector3 (SIMD increment: 24 floats)
+            case 4: return 8;  // Vector4 (SIMD increment: 32 floats)
         }
-        return 0;
+        return 0; // for AoS components not used in SIMD
+    }
+    
+    /// <summary>
+    /// Calculates the required capacity for a component array. Adds additional space for types used by SIMD.
+    /// SIMD includes padding to the next step boundary plus a full 'Crumple Zone' for safety.
+    /// </summary>
+    /// <returns>The total number of components to allocate.</returns>
+    /*
+    The returned component capacity (unit: components) ensures there is enough additional space for padding + 'Crumple Zone'.
+    Crucial for the additional space is the Unroll size used in the SIMD loop created by the generator.
+    "step" (unit components) relates to the increment (unit float) of the float* pointer for float, Vector2, Vector3, Vector4 in a single SIMD iteration.
+    E.g.   factor_ptr += 8;    velocity_ptr += 32;    position_ptr += 24;
+    Generator component steps (SIMD increment):  float: 32 (32)  Vector2: 16 (32)  Vector3: 8 (24)  Vector4: 8 (32)
+    */
+    internal static int CalcCapacity<TComponent>(int count) where TComponent : struct
+    {
+        var step = SimdInfo<TComponent>.ComponentStep; // Assigned with GetComponentStep<T>()
+        // Handle non-math components: Just return the count as-is.
+        if (step <= 0) return count;
+
+        // 1. Calculate the Padding (Round up to the nearest multiple of 'step')
+        int paddedCount = (count + step - 1) & ~(step - 1);
+
+        // 2. Add the Crumple Zone (One full extra 'step' of safety)
+        return paddedCount + step;
     }
 }

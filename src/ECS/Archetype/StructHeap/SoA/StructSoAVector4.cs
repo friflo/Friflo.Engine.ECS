@@ -38,7 +38,7 @@ internal sealed class StructSoAVector4<T> : StructHeap<T>
     internal StructSoAVector4(int structIndex)
         : base (structIndex)
     {
-        stride      = CalcCapacity(ArchetypeUtils.MinCapacity, SimdInfo<T>.SimdStep);
+        stride      = SimdUtils.CalcCapacity<T>(ArchetypeUtils.MinCapacity);
         components  = new float[stride * LaneCount];
     }
     
@@ -76,7 +76,7 @@ internal sealed class StructSoAVector4<T> : StructHeap<T>
     
     internal override void ResizeComponents    (int capacity, int count) {
         int srcStride   = stride;
-        stride          = CalcCapacity(capacity, SimdInfo<T>.SimdStep);
+        stride          = SimdUtils.CalcCapacity<T>(capacity);
         var dst         = new float[stride * LaneCount];
         var src         = components;
         new ReadOnlySpan<float>(src, 0,             count).CopyTo(new Span<float>(dst, 0,          count));

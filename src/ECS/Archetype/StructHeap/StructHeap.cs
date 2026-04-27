@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Friflo.Json.Burst;
@@ -80,25 +81,6 @@ internal abstract class StructHeap : IComponentStash
         return sb.ToString();
     }
     
-    /// <summary>
-    /// Calculates the required allocation capacity for a SIMD buffer.
-    /// Includes padding to the next step boundary plus a full 'Crumple Zone' for safety.
-    /// </summary>
-    /// <param name="count">The actual number of entities/elements.</param>
-    /// <param name="step">The number of elements processed per SIMD loop iteration.</param>
-    /// <returns>The total number of elements to allocate.</returns>
-    internal static int CalcCapacity(int count, int step)
-    {
-        // Handle non-math components: Just return the count as-is.
-        if (step <= 0) return count;
-
-        // 1. Calculate the Padding (Round up to the nearest multiple of 'step')
-        int paddedCount = (count + step - 1) & ~(step - 1);
-
-        // 2. Add the Crumple Zone (One full extra 'step' of safety)
-        return paddedCount + step;
-    }
-    
     internal static float[] AllocateAligned(int capacity, out int simdOffset)
     {
 #if NET6_0_OR_GREATER
@@ -107,6 +89,7 @@ internal abstract class StructHeap : IComponentStash
         var address = (long)Marshal.UnsafeAddrOfPinnedArrayElement(array, 0);
         int byteMisalignment = (int)(address & 31);
         simdOffset              = byteMisalignment == 0 ? 0 : (32 - byteMisalignment) / 4;
+        Debug.Assert(((address + simdOffset * 4) & 31) == 0, "SIMD Alignment failed!");
         return array; // array[simdOffset] points to the first 32-byte aligned element
 #else
         simdOffset = 0;

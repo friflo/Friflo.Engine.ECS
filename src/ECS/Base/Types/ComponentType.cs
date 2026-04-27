@@ -120,7 +120,7 @@ internal sealed class ComponentType<T> : ComponentType
         {
             case Layout.AoS:
                 return new StructHeapGen<T>(StructIndex);
-            case Layout.AoSSimd:
+            case Layout.AoSAligned:
                 switch (SimdInfo<T>.FieldCountSoA) {
                     case 1: return new StructAoSFloat  <T>(StructIndex);
                     case 4: return new StructAoSVector4<T>(StructIndex);

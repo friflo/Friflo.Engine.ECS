@@ -38,7 +38,7 @@ internal sealed class StructAoSoAVector2<T> : StructHeap<T>
     internal StructAoSoAVector2(int structIndex)
         : base (structIndex)
     {
-        var capacity = CalcCapacity(ArchetypeUtils.MinCapacity, SimdUtils.LaneWidth);
+        var capacity = SimdUtils.CalcCapacity<T>(ArchetypeUtils.MinCapacity);
         components  = AllocateAligned(capacity * FieldCount, out simdOffset);
     }
     
@@ -76,7 +76,7 @@ internal sealed class StructAoSoAVector2<T> : StructHeap<T>
     
     internal override void ResizeComponents    (int newCapacity, int count)
     {
-        var capacity    = CalcCapacity(newCapacity, 8);
+        var capacity    = SimdUtils.CalcCapacity<T>(newCapacity);
         var oldOffset   = simdOffset;
         var dst         = AllocateAligned(capacity * FieldCount, out simdOffset);
 
