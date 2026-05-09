@@ -8,6 +8,8 @@ obj/
 .idea/
 .vs/
 
+*.lscache
+
 
 !**/*.meta
 src/Tests/**/*.meta
