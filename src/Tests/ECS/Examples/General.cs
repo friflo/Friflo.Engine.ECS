@@ -3,6 +3,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static Friflo.Engine.ECS.ComponentChangedAction;
 
+// ReSharper disable SuggestVarOrType_SimpleTypes
 // ReSharper disable UnusedVariable
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedParameter.Local
@@ -95,6 +96,27 @@ public static void GetUniqueEntity()
 
     var player  = store.GetUniqueEntity("Player");
     Console.WriteLine($"entity: {player}");             // > entity: id: 1  [UniqueEntity]
+}
+
+enum PlayerSingleton { Instance };
+
+struct PlayerComponent : IIndexedComponent<PlayerSingleton>
+{
+    public  string              name;
+    public  PlayerSingleton     GetIndexedValue() => PlayerSingleton.Instance;
+}
+
+[Test]
+public static void SingletonComponent()
+{
+    var store   = new EntityStore();
+    store.CreateEntity(new PlayerComponent{ name = "Player" });
+
+    var index       = store.ComponentIndex<PlayerComponent,PlayerSingleton>();
+    Entity entity   = index[PlayerSingleton.Instance][0]; // get first entity
+    
+    var playerComponent = entity.GetComponent<PlayerComponent>();
+    Console.WriteLine($"name: {playerComponent.name}");
 }
 
 
