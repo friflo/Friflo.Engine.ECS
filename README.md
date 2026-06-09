@@ -107,7 +107,7 @@ dotnet add package Friflo.Engine.ECS
 ### [Vanguard Tides](https://store.steampowered.com/app/4683140/Vanguard_Tides/)
 
 <a href="https://store.steampowered.com/app/4683140/Vanguard_Tides/"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4683140/329a7b32d98e4c0a9e8f77935b6fe313f3341a17/header.jpg" width="460" height="215"/></a>  
-![Godot](https://img.shields.io/badge/Godot-3d85c6?logo=godotengine&logoColor=white)
+![Godot](https://img.shields.io/badge/Godot-FFFFFF?logo=godotengine&logoColor=3d85c6)
 ![Steam](https://img.shields.io/badge/Steam-00ADEF?logo=steam&logoColor=white)  
 A survivors-like game exploiting the strength of ECS controlling a very high amount of AI units.  
 A Godot MultiMesh is used to enable reliable 2000 FPS.  
