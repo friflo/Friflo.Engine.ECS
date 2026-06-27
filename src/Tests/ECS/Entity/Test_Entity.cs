@@ -737,6 +737,23 @@ public static class Test_Entity
         AreEqual(count,     type.Count);
         AreEqual(capacity,  store.Capacity);
     }
+    
+    [Test]
+    public static void Test_Entity_EntityData_example()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity(new Position(), new EntityName(), new Rotation(), new Scale3(), new MyComponent1());
+        // - common component access
+        ref var pos = ref entity.GetComponent<Position>();
+        
+        // --- faster access when accessing multiple components. 
+        var data = entity.Data;
+        ref var position        = ref data.Get<Position>();
+        ref var name            = ref data.Get<EntityName>();
+        ref var rotation        = ref data.Get<Rotation>();
+        ref var scale3          = ref data.Get<Scale3>();
+        ref var myComponent1    = ref data.Get<MyComponent1>();
+    }
 }
 
 }
