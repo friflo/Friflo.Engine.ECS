@@ -140,7 +140,7 @@ Interesting note: It combines behavior trees with ECS. [more ...](https://github
 
 ### [Horse Runner DX](https://store.steampowered.com/app/2955320/Horse_Runner_DX)
 
-<a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img src="https://github.com/user-attachments/assets/94a471a1-fd02-4569-80f3-d75087b327aa" width="460" height="215"/></a>  
+<a href="https://store.steampowered.com/app/2955320/Horse_Runner_DX"><img src="https://github.com/user-attachments/assets/94a471a1-fd02-4569-80f3-d75087b327aa" width="460" height="264"/></a>  
 ![MonoGame](https://img.shields.io/badge/MonoGame-E73C00?logo=monogame&logoColor=white)
 ![Nintendo Switch](https://img.shields.io/badge/Nintendo%20Switch-E60012)
 ![Steam Deck](https://img.shields.io/badge/Steam%20Deck-171A21?logo=steamdeck&logoColor=white)
