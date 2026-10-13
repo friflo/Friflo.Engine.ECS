@@ -6,6 +6,8 @@ using Avalonia.Media;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Avalonia.Reactive;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace CustomTitleBarTemplate.Views.CustomTitleBars
@@ -125,7 +127,7 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
                 await Task.Delay(50);
             }
 
-            hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(s =>
+            hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(s =>
             {
                 if (!CustomSystemButtons) {
                     return;
@@ -149,7 +151,7 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
                             hostWindow.OffScreenMargin.Right,
                             hostWindow.OffScreenMargin.Bottom);*/
                 }
-            });
+            }));
         }
 
         private void InitializeComponent()

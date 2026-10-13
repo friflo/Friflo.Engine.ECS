@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Avalonia.Reactive;
 
 namespace CustomTitleBarTemplate.Views.CustomTitleBars
 {
@@ -99,7 +100,7 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
             }
 
             hostWindow.ExtendClientAreaTitleBarHeightHint = 44;
-            hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(s =>
+            hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(s =>
             {
                 if (s != WindowState.Maximized)
                 {
@@ -116,7 +117,7 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
                             hostWindow.OffScreenMargin.Right,
                             hostWindow.OffScreenMargin.Bottom);*/
                 }
-            });
+            }));
         }
 
         private void InitializeComponent()
