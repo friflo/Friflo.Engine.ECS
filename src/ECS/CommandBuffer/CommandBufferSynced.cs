@@ -39,29 +39,31 @@ public sealed class CommandBufferSynced : ICommandBuffer
     /// <summary>
     /// Add the <see cref="IComponent"/> with type <typeparamref name="T"/> to the entity with the passed <paramref name="entityId"/>.
     /// </summary>
-    public void AddComponent<T>(int entityId)
+    /// <returns>A reference to the component within the command buffer.</returns>
+    public ref T AddComponent<T>(int entityId)
         where T : struct, IComponent
     {
-        lock (this) { commandBuffer.AddComponent<T>(entityId); }
+        lock (this) { return ref commandBuffer.AddComponent<T>(entityId); }
     }
     
     /// <summary>
     /// Add the given <paramref name="component"/> with type <typeparamref name="T"/> to the entity with the passed <paramref name="entityId"/>.
     /// </summary>
-    public void AddComponent<T>(int entityId, in T component)
+    /// <returns>A reference to the component within the command buffer.</returns>
+    public ref T AddComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
-        lock (this) { commandBuffer.AddComponent(entityId, component); }
+        lock (this) { return ref commandBuffer.AddComponent(entityId, component); }
     }
     
     /// <summary>
     /// Set the given <paramref name="component"/> with type <typeparamref name="T"/> of the entity with the passed <paramref name="entityId"/>.
     /// </summary>
     [Obsolete("use AddComponent() instead")]
-    public void SetComponent<T>(int entityId, in T component)
+    public ref T SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
-        lock (this) { commandBuffer.SetComponent(entityId, component); }
+        lock (this) { return ref commandBuffer.SetComponent(entityId, component); }
     }
     
     /// <summary>
