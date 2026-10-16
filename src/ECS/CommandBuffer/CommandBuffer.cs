@@ -447,7 +447,7 @@ public sealed class CommandBuffer : ICommandBuffer
     /// Add the given <paramref name="component"/> with type <typeparamref name="T"/> to the entity with the passed <paramref name="entityId"/>.
     /// </summary>
     /// <returns>A reference to the component within the command buffer.</returns>
-    public ref T AddComponent<T>(int entityId, in T component)
+    public ref T AddComponent<T>(int entityId, scoped in T component)
         where T : struct, IComponent
     {
         return ref ChangeComponent(component,  entityId, ComponentChangedAction.Add);
@@ -457,7 +457,7 @@ public sealed class CommandBuffer : ICommandBuffer
     /// Obsolete. Same behavior as <c>AddComponent(int,T)</c>.
     /// </summary>
     [Obsolete("use AddComponent() instead")]
-    public ref T SetComponent<T>(int entityId, in T component)
+    public ref T SetComponent<T>(int entityId, scoped in T component)
         where T : struct, IComponent
     {
         return ref ChangeComponent(component,  entityId, ComponentChangedAction.Add);

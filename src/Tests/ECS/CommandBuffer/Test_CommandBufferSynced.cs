@@ -44,6 +44,38 @@ public static class Test_CommandBufferSynced
         AssertChanges(store);
     }
     
+    // Similar method used in https://github.com/Dzhake/Friflo.Engine.ECS
+    private static ref T Ensure<T>(this EntityData data, CommandBuffer cb) where T : struct, IComponent
+    {
+        if (data.Has<T>()) {
+            return ref data.Get<T>();
+        }
+        return ref cb.AddComponent<T>(data.Id, default);
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_ref_return()
+    {
+        var store       = new EntityStore();
+        var cb          = store.GetCommandBuffer();
+        cb.ReuseBuffer  = true;
+        var entity1 = store.CreateEntity();
+        
+        var data = entity1.Data;
+        ref var pos1 = ref data.Ensure<Position>(cb);
+        pos1.x = 1;
+        
+        ref var pos2 = ref data.Ensure<Position>(cb);
+        AreEqual(0, pos2.x);
+        
+        pos2.x = 2;
+        AreEqual(1, pos1.x);
+        
+        cb.Playback();
+        var position = entity1.GetComponent<Position>();
+        AreEqual(2, position.x);
+    }
+    
     private static void AddCommands(ICommandBuffer cb)
     {
         // --- entity
