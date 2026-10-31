@@ -45,6 +45,20 @@ public static class Test_Index
     }
     
     [Test]
+    public static void Test_Index_Modify_Component()
+    {
+        var store = new EntityStore();
+        store.OnComponentAdded   += changed => Console.WriteLine($"OnComponentAdded:   {changed.Component<IndexedName>()} Action: {changed.Action}"); 
+        store.OnComponentRemoved += changed => Console.WriteLine($"OnComponentRemoved: {changed.Component<IndexedName>()} Action: {changed.Action}"); 
+        var entity = store.CreateEntity();
+        entity.AddComponent(new IndexedName { name = "Peter" });
+        entity.AddComponent(new IndexedName { name = "Paul" });
+        // Console output
+        // OnComponentAdded:   Peter Action: Add
+        // OnComponentAdded:   Paul Action: Update
+    }
+    
+    [Test]
     public static void Test_Index_Component_Update()
     {
         var store = new EntityStore();
