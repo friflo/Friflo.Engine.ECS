@@ -138,7 +138,13 @@ internal sealed class ComponentCommands<T> : ComponentCommands, IComponentStash<
                 // case: RemoveComponent<>() was called after AddComponent<>() or SetComponent<>() on same entity
                 continue;
             }
-            ((StructHeap<T>)heap).components[node.compIndex] = command.component;
+            var structHeap  = (StructHeap<T>)heap;
+            if (StructInfo<T>.HasIndex) {
+                // case: multiple commands on same entity. Remove value indexed by a previous command. No-op if not indexed
+                structHeap.componentStash = structHeap.components[node.compIndex];
+                heap.RemoveIndex(new Entity(playback.store, command.entityId, node.revision));
+            }
+            structHeap.components[node.compIndex] = command.component;
             if (StructInfo<T>.HasIndex) {
                 heap.AddIndex(new Entity(playback.store, command.entityId, node.revision));
             }
