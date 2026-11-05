@@ -81,7 +81,10 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     
     public EntitySchema CreateSchema()
     {
-        Console.WriteLine("NativeAOT.CreateSchema()");
+        SchemaUtils.Log("NativeAOT.CreateSchema()");
+        if (SchemaUtils.RegisterComponentTypesByReflection()) {
+            return EntityStoreBase.Static.EntitySchema;
+        }
         return CreateSchemaInternal();
     }
     
