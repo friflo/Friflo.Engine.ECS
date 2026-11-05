@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Friflo.Engine.ECS;
 using Tests.ECS;
 using Tests.ECS.Index;
@@ -40,6 +40,23 @@ public class Test_AOT
         // Assert.AreEqual("Friflo.Engine.ECS",    engine.AssemblyName);
         // Assert.AreEqual(9,                      engine.Types.Length);
         // Assert.AreEqual("Tests",                test.AssemblyName);
+    }
+
+    [TestMethod]
+    public void Test_AOT_Schema_registered_types()
+    {
+        var schema = CreateSchema();
+        Assert.AreSame(schema, EntityStore.GetEntitySchema());
+        Assert.IsTrue (schema.ComponentTypeByType.ContainsKey(typeof(MyComponent1)));
+        Assert.IsFalse(schema.ComponentTypeByType.ContainsKey(typeof(MyComponent2))); // not registered
+    }
+
+    [TestMethod]
+    public void Test_AOT_CreateSchema_twice()
+    {
+        CreateSchema();
+        var e = Assert.ThrowsException<InvalidOperationException>(() => new NativeAOT().CreateSchema());
+        Assert.AreEqual("EntitySchema already created", e.Message);
     }
 
 	[TestMethod]
@@ -161,6 +178,7 @@ public class Test_AOT
     [TestMethod]
     public void Test_AOT_LinkComponents()
     {
+        CreateSchema();
         var store   = new EntityStore();
 
         var entity1 = store.CreateEntity(1);                            // link components
@@ -187,6 +205,7 @@ public class Test_AOT
     [TestMethod]
     public void Test_AOT_LinkRelations()
     {
+        CreateSchema();
         var store   = new EntityStore();
     
         var entity1 = store.CreateEntity(1);                          // link relations
@@ -217,6 +236,7 @@ public class Test_AOT
     [TestMethod]
     public void Test_AOT_Relations()
     {
+        CreateSchema();
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
     

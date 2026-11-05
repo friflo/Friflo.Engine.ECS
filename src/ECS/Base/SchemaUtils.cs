@@ -13,8 +13,21 @@ namespace Friflo.Engine.ECS;
 
 internal static class SchemaUtils
 {
+    private static bool DisableReflectionSchema => AppContext.TryGetSwitch("Friflo.Engine.ECS.DisableReflectionSchema", out bool value) && value;
+    private static bool DisableSchemaLog        => AppContext.TryGetSwitch("Friflo.Engine.ECS.DisableSchemaLog",        out bool value) && value;
+    
+    internal static void Log(string message) {
+        if (DisableSchemaLog) {
+            return;
+        }
+        Console.WriteLine(message);
+    }
+    
     [ExcludeFromCodeCoverage]
-    private static bool RegisterComponentTypesByReflection() {
+    internal static bool RegisterComponentTypesByReflection() {
+        if (DisableReflectionSchema) {
+            return false;
+        }
         if (Platform.IsUnityRuntime) {
             return true;
         }
@@ -50,7 +63,7 @@ internal static class SchemaUtils
         foreach (var dependant in dependants) {
             assemblyLoader.dependants.Add(dependant);
         }
-        Console.WriteLine(assemblyLoader);
+        Log(assemblyLoader.ToString());
         return new EntitySchema(dependants, schemaTypes);
     }
     

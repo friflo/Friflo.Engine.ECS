@@ -45,6 +45,11 @@
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
     </ItemGroup>
 
+    <!-- use the types registered with NativeAOT also when running the tests with JIT: dotnet run -->
+    <ItemGroup>
+        <RuntimeHostConfigurationOption Include="Friflo.Engine.ECS.DisableReflectionSchema" Value="true" />
+    </ItemGroup>
+
 
     <ItemGroup>
       <ProjectReference Include="..\Tests\Tests.csproj" />

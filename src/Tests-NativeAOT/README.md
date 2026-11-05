@@ -1,4 +1,4 @@
-
+﻿
 # Tests-NativeAOT
 
 
@@ -22,6 +22,27 @@ Release
 dotnet publish --runtime win-x64
 bin\Release\net8.0\win-x64\publish\Tests-NativeAOT.exe
 ```
+
+JIT
+```
+dotnet run
+```
+
+
+## Schema switches
+
+AppContext switches. Default `false`. Set before the first schema access.
+
+| Switch                                       | `true`                                                        |
+| -------------------------------------------- | ------------------------------------------------------------- |
+| `Friflo.Engine.ECS.DisableReflectionSchema`  | Use types registered with `NativeAOT` also in JIT and Unity   |
+| `Friflo.Engine.ECS.DisableSchemaLog`         | No schema console output                                      |
+
+```xml
+<RuntimeHostConfigurationOption Include="Friflo.Engine.ECS.DisableReflectionSchema" Value="true" />
+```
+Unity: call `AppContext.SetSwitch()` on startup.
+
 
 ## Make library trimmable
 
