@@ -133,6 +133,7 @@ internal sealed class ComponentReader
     
     private string ReadComponent(Entity entity, in RawComponent component)
     {
+        EntityConverter.MarkTypeMappersInUse();
         var json        = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
         var schemaType  = component.rawKey.schemaType;
         if (schemaType == unresolvedType) {

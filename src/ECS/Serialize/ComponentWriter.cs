@@ -37,6 +37,7 @@ internal sealed class ComponentWriter
     
     internal JsonValue Write(Entity entity, List<JsonValue> members, bool pretty)
     {
+        EntityConverter.MarkTypeMappersInUse();
         var archetype = entity.archetype;
         var relationTypesL0 = entity.store.nodes[entity.Id].isOwner & relationTypes.bitSet.l0;
         if (entity.ComponentCount() == 0 && relationTypesL0 == 0) {

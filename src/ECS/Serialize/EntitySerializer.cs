@@ -9,6 +9,7 @@ using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
+using Friflo.Json.Fliox.Mapper.Map;
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable UseUtf8StringLiteral
@@ -53,6 +54,19 @@ public sealed class EntitySerializer
     public void SetMapperContext<T>(T context) where T : class, IMapperContext {
         converter.SetMapperContext(context);
     } 
+    
+    /// <summary>
+    /// Adds an <see cref="ITypeMatcher"/> used to find the JSON mapper of component types. Applies to every <see cref="EntitySerializer"/>.<br/>
+    /// Call it before the first serialization: the mapper of a type is chosen when the type is used the first time.
+    /// Throws an <see cref="System.InvalidOperationException"/> if called afterwards.
+    /// </summary>
+    public static void AddTypeMatcher(ITypeMatcher matcher) => EntityConverter.AddTypeMatcher(matcher);
+    
+    /// <summary>
+    /// Adds a <see cref="TypeMapper"/> for the type it maps. Applies to every <see cref="EntitySerializer"/>.<br/>
+    /// Call it before the first serialization. Throws an <see cref="System.InvalidOperationException"/> if called afterwards.
+    /// </summary>
+    public static void AddTypeMapper(TypeMapper mapper) => EntityConverter.AddTypeMapper(mapper);
     #endregion
 
 #region write entities

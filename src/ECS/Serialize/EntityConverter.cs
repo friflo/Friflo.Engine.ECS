@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
+using Friflo.Json.Fliox.Mapper.Map;
 
 namespace Friflo.Engine.ECS.Serialize;
 
@@ -22,6 +23,52 @@ public sealed class EntityConverter
     /// An <see cref="EntityConverter"/> singleton. Must be used only from the main thread.
     /// </summary>
     public static readonly EntityConverter Default = new EntityConverter();
+    
+    private static readonly object  TypeMapperGate  = new object();
+    private static          bool    typeMappersInUse;
+    
+    /// <summary>
+    /// Adds an <see cref="ITypeMatcher"/> used to find the JSON mapper of component types.<br/>
+    /// Matchers added here are asked before the default mappers, so a matcher can replace how a component type is serialized.<br/>
+    /// Must be called before the first entity is serialized or deserialized: the mapper of a type is chosen when the type is
+    /// used the first time. Throws an <see cref="InvalidOperationException"/> if called afterwards.
+    /// </summary>
+    public static void AddTypeMatcher(ITypeMatcher matcher)
+    {
+        if (matcher == null) throw new ArgumentNullException(nameof(matcher));
+        lock (TypeMapperGate) {
+            ThrowIfTypeMappersInUse(nameof(AddTypeMatcher));
+            TypeStore.typeResolver.AddGenericTypeMatcher(matcher);
+        }
+    }
+    
+    /// <summary>
+    /// Adds a <see cref="TypeMapper"/> for exactly the type the mapper is created for.<br/>
+    /// Must be called before the first entity is serialized or deserialized. Throws an <see cref="InvalidOperationException"/>
+    /// if called afterwards.
+    /// </summary>
+    public static void AddTypeMapper(TypeMapper mapper)
+    {
+        if (mapper == null) throw new ArgumentNullException(nameof(mapper));
+        lock (TypeMapperGate) {
+            ThrowIfTypeMappersInUse(nameof(AddTypeMapper));
+            TypeStore.typeResolver.AddTypeMapper(mapper);
+        }
+    }
+    
+    private static void ThrowIfTypeMappersInUse(string method)
+    {
+        if (typeMappersInUse) {
+            throw new InvalidOperationException($"{method}() must be called before the first entity is serialized or deserialized. " +
+                                                "The JSON mapper of a type is chosen when the type is used the first time.");
+        }
+    }
+    
+    /// <summary> Called by <see cref="ComponentReader"/> / <see cref="ComponentWriter"/> before they use a mapper. </summary>
+    internal static void MarkTypeMappersInUse()
+    {
+        typeMappersInUse = true;
+    }
     
     public EntityConverter() {
         reader = new ComponentReader(TypeStore);
