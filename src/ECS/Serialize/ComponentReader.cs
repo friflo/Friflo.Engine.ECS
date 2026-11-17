@@ -328,7 +328,12 @@ internal sealed class ComponentReader
                 case JsonEvent.ObjectEnd:
                     return null;
                 case JsonEvent.ArrayStart:
-                    return ReadRawRelations(entity);
+                    var error = ReadRawRelations(entity);
+                    if (error != null) {
+                        return error;
+                    }
+                    ev = parser.NextEvent();
+                    break;
                 default:
                     return $"'components' member must be object or array. was {ev}. id: {entity.Id}, component: '{parser.key}'";
             }
